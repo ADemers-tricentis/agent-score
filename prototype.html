@@ -298,7 +298,7 @@ const SEED = {
                   {name:'trajectory_efficiency',score:.88,passed:true},
                   {name:'faithfulness',score:.95,passed:true},
                   {name:'relevance',score:.92,passed:true},
-                  {name:'recovery_diversity',score:.90,passed:true}]}},
+                  {name:'recovery_diversity',score:null,passed:true}]}},
               attr:null}]},
         { id:'run-13', label:'Run #13 — May 20', date:'2026-05-20T11:15:00Z',
           sessions:[
@@ -803,10 +803,7 @@ function heroScoreCard(s,p,r,sc,dt){
     <div class="sc-dim">
       <div class="sc-dim-row">
         <span class="sc-dim-label">Security</span>
-        <div class="sc-dim-right">
-          <span class="sc-dim-score" style="color:${sc.sec<50?'var(--fail)':sc.sec<70?'var(--partial)':'var(--text)'}">${sc.sec}</span>
-          ${dt?`<span class="sc-delta ${dt.cls}">${dt.d>0?'↑+':dt.d<0?'↓':''}${Math.abs(dt.d)}</span>`:''}
-        </div>
+        <span class="sc-dim-score" style="color:${sc.sec<50?'var(--fail)':sc.sec<70?'var(--partial)':'var(--text)'}">${sc.sec}</span>
       </div>
       <div class="sc-bar-track"><div class="sc-bar-fill ${barCls(sc.sec)}" style="width:${sc.sec}%"></div></div>
     </div>
@@ -864,8 +861,8 @@ function judgeDetailCard(name,signals,m,scoreVal){
   ${m.sigs.map(sg=>`
     <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--border);font-size:11px">
       <span style="color:var(--muted);font-family:monospace">${sg.name}</span>
-      <span style="font-weight:600;color:${sg.passed?'var(--pass)':sg.score>=.6?'var(--partial)':'var(--fail)'}">
-        ${Math.round(sg.score*100)}${sg.finding?`<span style="display:inline-block;font-size:9px;padding:1px 5px;border-radius:3px;font-weight:700;margin-left:5px;background:${sg.finding==='critical'?'#450a0a':sg.finding==='high'?'#451a03':'#271a03'};color:${sg.finding==='critical'?'#fca5a5':sg.finding==='high'?'#fed7aa':'var(--partial)'}">${sg.finding}</span>`:''}</span>
+      <span style="font-weight:600;color:${sg.score==null?'var(--muted)':sg.passed?'var(--pass)':sg.score>=.6?'var(--partial)':'var(--fail)'}">
+        ${sg.score==null?'N/A':Math.round(sg.score*100)}${sg.finding?`<span style="display:inline-block;font-size:9px;padding:1px 5px;border-radius:3px;font-weight:700;margin-left:5px;background:${sg.finding==='critical'?'#450a0a':sg.finding==='high'?'#451a03':sg.finding==='medium'?'#2a2010':'#0f1a2a'};color:${sg.finding==='critical'?'#fca5a5':sg.finding==='high'?'#fed7aa':sg.finding==='medium'?'var(--partial)':'#93c5fd'}">${sg.finding}</span>`:''}</span>
     </div>`).join('')}
 </div>`;
 }
@@ -935,18 +932,22 @@ function mdReport(s,p){
 <p><strong>Timestamp:</strong> ${s.ts} &nbsp;·&nbsp; <strong>Duration:</strong> ${fmtDur(s.dur)}</p>
 <p><strong>Verdict:</strong> <span class="${vc}">${s.verdict}</span> &nbsp;·&nbsp; <strong>Ship decision:</strong> ${shipLabel(sc.shipStatus)}</p>
 <p><strong>Artifact path:</strong> <code>${artifactPath}</code></p>
+<p class="c-muted" style="font-size:10px;font-family:monospace;line-height:1.9">raw-otlp/*.ndjson &nbsp;·&nbsp; canonical-v2.json &nbsp;·&nbsp; session-index.json<br>guard-log.ndjson &nbsp;·&nbsp; ${s.id}-*.json &nbsp;·&nbsp; ${s.id}-*.md</p>
 <h2>Security — ${sc.sec}</h2>`;
   s.scores.security.sigs.forEach(sg=>{
+    if(sg.score==null){h+=`<p><code>${sg.name}</code> → <span class="c-muted">N/A</span></p>`;return;}
     const c=sg.passed?'c-pass':sg.score>=.6?'c-partial':'c-fail';
     h+=`<p><code>${sg.name}</code> → <span class="${c}">${Math.round(sg.score*100)}</span>${sg.finding?` <strong style="color:var(--fail)">${sg.finding.toUpperCase()}</strong>`:''}</p>`;
   });
   h+=`<h2>Correctness — ${sc.cor}</h2>`;
   s.scores.correctness.sigs.forEach(sg=>{
+    if(sg.score==null){h+=`<p><code>${sg.name}</code> → <span class="c-muted">N/A</span></p>`;return;}
     const c=sg.passed?'c-pass':sg.score>=.6?'c-partial':'c-fail';
     h+=`<p><code>${sg.name}</code> → <span class="${c}">${Math.round(sg.score*100)}</span></p>`;
   });
   h+=`<h2>Quality — ${sc.qua}</h2>`;
   s.scores.quality.sigs.forEach(sg=>{
+    if(sg.score==null){h+=`<p><code>${sg.name}</code> → <span class="c-muted">N/A</span></p>`;return;}
     const c=sg.passed?'c-pass':sg.score>=.6?'c-partial':'c-fail';
     h+=`<p><code>${sg.name}</code> → <span class="${c}">${Math.round(sg.score*100)}</span></p>`;
   });
@@ -1012,8 +1013,8 @@ function renderGuard(){
 <div class="topbar"><span class="current">Guard Log</span></div>
 <div class="content fadein">
   <div class="ph"><div class="ph-title">Runtime Guard Log</div>
-    <div class="ph-sub">Synchronous <code>POST /guard/pre-tool-use</code> decisions · target &lt;50ms P95
-      <br>R1: exact-repeat block &nbsp;·&nbsp; R2: same-fingerprint-with-error warn &nbsp;·&nbsp; R3: inspect-streak warn</div></div>
+    <div class="ph-sub"><code>POST /guard/pre-tool-use</code> synchronous &lt;50ms P95 &nbsp;·&nbsp; <code>POST /guard/post-tool-use</code> fire-and-forget outcome recording
+      <br>R1: exact-repeat block &nbsp;·&nbsp; R2: same-fingerprint-with-error warn &nbsp;·&nbsp; R3: inspect-streak warn &nbsp;·&nbsp; <code>GET /internal/health/is-alive</code> liveness</div></div>
   <div class="stats">
     <div class="stat"><div class="stat-label">Total Decisions</div><div class="stat-val">${GUARD_LOG.length}</div></div>
     <div class="stat"><div class="stat-label">Allow</div><div class="stat-val c-pass">${allow}</div></div>
@@ -1078,8 +1079,8 @@ function renderMetrics(){
       <div class="stat-val c-partial">${GUARD_LOG.filter(e=>e.dec==='warn').length}</div>
       <div class="stat-sub">warns · ${GUARD_LOG.filter(e=>e.dec==='block').length} blocks</div></div>
     <div class="stat"><div class="stat-label">gen_ai.client.token.usage</div>
-      <div class="stat-val">4</div>
-      <div class="stat-sub">LLM calls / session (4 judges)</div></div>
+      <div class="stat-val">3–4</div>
+      <div class="stat-sub">LLM calls / session · Attribution conditional on non-PASS</div></div>
   </div>
   <div class="metrics-grid">
     <div class="chart-card">
