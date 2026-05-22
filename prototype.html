@@ -7,18 +7,20 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0f1117;--surface:#1a1d2e;--surface2:#252840;--border:#2e3250;
-  --text:#e2e8f0;--muted:#8892b0;--dim:#4a5568;
-  --pass:#22c55e;--pass-bg:#052e16;--pass-border:#064e1e;
-  --partial:#f59e0b;--partial-bg:#271a03;--partial-border:#451a03;
-  --fail:#ef4444;--fail-bg:#2d0808;--fail-border:#450a0a;
-  --accent:#6366f1;--accent-bg:#1e1f3a;
+  --bg:#0d0f1a;--surface:#131626;--surface2:#1c1f35;--border:#222640;
+  --text:#e2e8f0;--muted:#6b7699;--dim:#363d5c;
+  --pass:#22c55e;--pass-bg:#061d10;--pass-border:#0a3d1e;
+  --partial:#f59e0b;--partial-bg:#1c1200;--partial-border:#3d2900;
+  --fail:#ef4444;--fail-bg:#1a0505;--fail-border:#3d0a0a;
+  --score-blue:#4f87f5;--bar-blue:#2d5be3;--bar-track:#1a1f3a;
+  --accent:#6366f1;--accent-bg:#1a1b3a;
+  --phase2:#6b7699;--phase2-bg:#141828;--phase2-border:#222640;
 }
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;font-size:14px}
 /* ── Sidebar ── */
-.sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;height:100vh;position:sticky;top:0;overflow-y:auto}
-.logo{padding:18px 16px 14px;font-size:17px;font-weight:700;color:var(--accent);border-bottom:1px solid var(--border);letter-spacing:-.3px;display:flex;align-items:baseline;gap:7px}
-.logo-sub{font-size:10px;font-weight:400;color:var(--dim);letter-spacing:.05em;text-transform:uppercase}
+.sidebar{width:216px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;height:100vh;position:sticky;top:0;overflow-y:auto}
+.logo{padding:18px 16px 14px;font-size:17px;font-weight:700;color:var(--score-blue);border-bottom:1px solid var(--border);letter-spacing:-.3px;display:flex;align-items:baseline;gap:7px}
+.logo-sub{font-size:10px;font-weight:400;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
 .nav-section{padding:8px 0}
 .nav-label{padding:8px 16px 4px;font-size:10px;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.1em}
 .nav-item{display:flex;align-items:center;gap:8px;padding:7px 16px;font-size:13px;color:var(--muted);cursor:pointer;transition:all .12s;border-left:2px solid transparent;user-select:none}
@@ -28,50 +30,90 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* ── Main ── */
 .main{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-height:100vh}
 .topbar{padding:12px 24px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);flex-shrink:0;position:sticky;top:0;z-index:10}
-.crumb{cursor:pointer;transition:color .12s}.crumb:hover{color:var(--accent)}
+.crumb{cursor:pointer;transition:color .12s}.crumb:hover{color:var(--score-blue)}
 .sep{color:var(--dim)}.current{color:var(--text);font-weight:500}
 .content{padding:24px;flex:1}
-/* ── Page header ── */
 .ph{margin-bottom:22px}
 .ph-title{font-size:21px;font-weight:700;margin-bottom:3px}
 .ph-sub{font-size:13px;color:var(--muted)}
+/* ── Phase 2 callout ── */
+.phase2-tag{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;background:var(--phase2-bg);color:var(--phase2);border:1px solid var(--phase2-border);letter-spacing:.05em;text-transform:uppercase;vertical-align:middle}
 /* ── Stats row ── */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px}
 .stat-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
 .stat-val{font-size:26px;font-weight:700;line-height:1}
 .stat-sub{font-size:11px;color:var(--muted);margin-top:3px}
-/* ── Project grid ── */
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
-.ptile{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px;cursor:pointer;transition:all .14s}
-.ptile:hover{border-color:var(--accent);background:var(--surface2);transform:translateY(-1px)}
-.ptile-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
-.ptile-name{font-size:14px;font-weight:600}
-.type-tag{font-size:9px;font-weight:700;padding:3px 7px;border-radius:4px;letter-spacing:.04em;flex-shrink:0;margin-left:8px}
-.type-tag.ATA,.type-tag.ATC{background:#1e3a5f;color:#60a5fa}
-.type-tag.CODING{background:#1a2e1e;color:#4ade80}
-.type-tag.CURA{background:#2e1a2e;color:#c084fc}
-.type-tag.APT{background:#2e2a1a;color:#fbbf24}
-.type-tag.AI_WORKSPACE{background:#1a2e2e;color:#22d3ee}
-.tile-counts{display:flex;gap:18px;margin-bottom:12px}
-.tc-item{text-align:center}
-.tc-val{font-size:19px;font-weight:700}
-.tc-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.pass-bar-wrap{margin:10px 0 4px}
-.pbl{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px}
-.pass-bar{height:5px;background:var(--surface2);border-radius:3px;display:flex;overflow:hidden}
-.pb-pass{background:var(--pass)}.pb-partial{background:var(--partial)}.pb-fail{background:var(--fail)}
-.tile-footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+/* ── Ship badge (maps 1:1 to verdict) ── */
+.ship-badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;letter-spacing:.02em;flex-shrink:0}
+.ship-badge.ship{background:var(--pass-bg);color:var(--pass);border:1px solid var(--pass-border)}
+.ship-badge.review{background:var(--partial-bg);color:var(--partial);border:1px solid var(--partial-border)}
+.ship-badge.noship{background:var(--fail-bg);color:var(--fail);border:1px solid var(--fail-border)}
 /* ── Verdict badge ── */
 .vbadge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:4px;letter-spacing:.05em;display:inline-block}
 .vbadge.PASS{background:var(--pass-bg);color:var(--pass);border:1px solid var(--pass-border)}
 .vbadge.PARTIAL{background:var(--partial-bg);color:var(--partial);border:1px solid var(--partial-border)}
 .vbadge.FAIL{background:var(--fail-bg);color:var(--fail);border:1px solid var(--fail-border)}
 /* ── Reliability badge ── */
-.rbadge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.04em}
+.rbadge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.04em;white-space:nowrap}
 .rbadge.RELIABLE{background:var(--pass-bg);color:var(--pass)}
 .rbadge.NEEDS_WORK{background:var(--partial-bg);color:var(--partial)}
 .rbadge.UNSTABLE{background:var(--fail-bg);color:var(--fail)}
+/* ── Type tag ── */
+.type-tag{font-size:9px;font-weight:700;padding:3px 7px;border-radius:4px;letter-spacing:.04em;flex-shrink:0}
+.type-tag.ATA,.type-tag.ATC{background:#1e3a5f;color:#60a5fa}
+.type-tag.CODING{background:#1a2e1e;color:#4ade80}
+.type-tag.CURA{background:#2e1a2e;color:#c084fc}
+.type-tag.APT{background:#2e2a1a;color:#fbbf24}
+.type-tag.AI_WORKSPACE{background:#1a2e2e;color:#22d3ee}
+/* ── Fleet project grid ── */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+/* ── Score Card (hero — marketing design) ── */
+.score-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px 0;overflow:hidden}
+.sc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.sc-eyebrow{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+/* The big composite number — labeled Phase 2 */
+.sc-score-wrap{position:relative;margin:2px 0 6px;display:flex;align-items:baseline;gap:10px}
+.sc-number{font-size:80px;font-weight:900;color:var(--score-blue);line-height:1;letter-spacing:-3px}
+.sc-verdict-stack{display:flex;flex-direction:column;gap:5px;padding-bottom:4px}
+/* Three judge dimensions */
+.sc-dims{display:flex;flex-direction:column;gap:0}
+.sc-dim{padding:11px 0;border-top:1px solid var(--border)}
+.sc-dim-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.sc-dim-label{font-size:13px;color:var(--text);font-weight:500}
+.sc-dim-right{display:flex;align-items:baseline;gap:7px}
+.sc-dim-score{font-size:15px;font-weight:700;color:var(--text)}
+.sc-delta{font-size:12px;font-weight:600}
+.sc-delta.pos{color:var(--pass)}.sc-delta.neg{color:var(--fail)}.sc-delta.neu{color:var(--muted)}
+.sc-bar-track{height:3px;background:var(--bar-track);border-radius:2px;overflow:hidden}
+.sc-bar-fill{height:100%;border-radius:2px;background:var(--bar-blue)}
+.sc-bar-fill.low{background:var(--fail)}.sc-bar-fill.mid{background:var(--partial)}
+/* Phase 2 locked dimension */
+.sc-dim-locked{padding:11px 0;border-top:1px solid var(--border);opacity:.45}
+.sc-footer{margin-top:14px;padding:11px 0 13px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;align-items:center;flex-wrap:wrap}
+.sc-footer-delta{font-weight:600}
+.sc-footer-delta.pos{color:var(--pass)}.sc-footer-delta.neg{color:var(--fail)}
+.sc-footer-sep{margin:0 6px;color:var(--dim)}
+/* ── Compact score tile (fleet grid) ── */
+.score-tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px 0;cursor:pointer;transition:all .14s;overflow:hidden}
+.score-tile:hover{border-color:var(--score-blue);transform:translateY(-1px)}
+.score-tile.phase2-proj{border-color:var(--phase2-border)}
+.score-tile.phase2-proj:hover{border-color:var(--phase2)}
+.st-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px}
+.st-name{font-size:13px;font-weight:600;color:var(--text);flex:1;padding-right:10px;line-height:1.3}
+.st-badges{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.st-number{font-size:54px;font-weight:900;color:var(--score-blue);line-height:1;letter-spacing:-2px;margin:4px 0 10px}
+/* fleet tile verdict row */
+.st-verdict-row{display:flex;align-items:center;gap:7px;margin-bottom:10px;flex-wrap:wrap}
+.st-dims{display:flex;flex-direction:column;gap:0}
+.st-dim{padding:7px 0;border-top:1px solid var(--border)}
+.st-dim-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.st-dim-label{font-size:11px;color:var(--muted)}
+.st-dim-score{font-size:12px;font-weight:700;color:var(--text)}
+.st-bar-track{height:2px;background:var(--bar-track);border-radius:2px;overflow:hidden}
+.st-bar-fill{height:100%;border-radius:2px;background:var(--bar-blue)}
+.st-bar-fill.low{background:var(--fail)}.st-bar-fill.mid{background:var(--partial)}
+.st-footer{margin-top:10px;padding:9px 0 11px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);display:flex;align-items:center;gap:0;flex-wrap:wrap}
 /* ── Table ── */
 .tbl-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
 table{width:100%;border-collapse:collapse;font-size:13px}
@@ -82,43 +124,13 @@ tbody tr:hover{background:var(--surface2)}
 tbody td{padding:11px 14px;vertical-align:middle}
 .vdist{display:flex;gap:5px}
 .vd{font-size:10px;padding:2px 6px;border-radius:3px}
-.vd.pass{background:var(--pass-bg);color:var(--pass)}
-.vd.partial{background:var(--partial-bg);color:var(--partial)}
-.vd.fail{background:var(--fail-bg);color:var(--fail)}
-/* ── Session header ── */
-.sess-hdr{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:18px;display:flex;align-items:center;gap:20px}
-.verdict-xl{font-size:20px;font-weight:800;padding:10px 18px;border-radius:8px;letter-spacing:.08em;flex-shrink:0}
-.verdict-xl.PASS{background:var(--pass-bg);color:var(--pass);border:1px solid var(--pass-border)}
-.verdict-xl.PARTIAL{background:var(--partial-bg);color:var(--partial);border:1px solid var(--partial-border)}
-.verdict-xl.FAIL{background:var(--fail-bg);color:var(--fail);border:1px solid var(--fail-border)}
-.sess-meta{flex:1}
-.sess-id{font-size:12px;color:var(--muted);font-family:monospace;margin-bottom:4px}
-.sess-scenario{font-size:14px;font-weight:600;margin-bottom:3px}
-.sess-ts{font-size:12px;color:var(--muted)}
-/* ── Metric cards ── */
-.metric-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
-.mc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px}
-.mc.mc-fail{border-color:var(--fail-border)}.mc.mc-pass{border-color:var(--pass-border)}.mc.mc-partial{border-color:var(--partial-border)}
-.mc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.mc-name{font-size:13px;font-weight:600}
-.mc-score{font-size:22px;font-weight:800;margin-bottom:6px}
-.score-bar{height:4px;background:var(--surface2);border-radius:2px;overflow:hidden;margin:6px 0 12px}
-.score-fill{height:100%;border-radius:2px}
-.signals{font-size:11px}
-.sig-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--border)}
-.sig-row:last-child{border-bottom:none}
-.sig-name{color:var(--muted)}
-.sig-score{font-weight:600}
-.sig-score.ok{color:var(--pass)}.sig-score.bad{color:var(--fail)}.sig-score.warn{color:var(--partial)}
-.fbadge{display:inline-block;font-size:9px;padding:1px 5px;border-radius:3px;font-weight:700;margin-left:5px}
-.fbadge.critical{background:#450a0a;color:#fca5a5}.fbadge.high{background:#451a03;color:#fed7aa}.fbadge.medium{background:#271a03;color:var(--partial)}
+.vd.pass{background:var(--pass-bg);color:var(--pass)}.vd.partial{background:var(--partial-bg);color:var(--partial)}.vd.fail{background:var(--fail-bg);color:var(--fail)}
 /* ── Attribution panel ── */
-.attr-panel{background:var(--surface);border:1px solid var(--fail-border);border-radius:10px;padding:18px;margin-bottom:18px}
+.attr-panel{background:var(--surface);border:1px solid var(--fail-border);border-radius:12px;padding:18px;margin-bottom:18px}
 .attr-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.attr-icon{font-size:16px}
 .attr-title{font-size:14px;font-weight:700}
 .attr-sub{font-size:11px;color:var(--muted)}
-.attr-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.attr-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .af{background:var(--surface2);border-radius:7px;padding:10px 12px}
 .af-label{font-size:9px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
 .af-val{font-size:13px;font-weight:600;font-family:monospace}
@@ -138,16 +150,16 @@ tbody td{padding:11px 14px;vertical-align:middle}
 .rec-item:last-child{border-bottom:none}
 .rec-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0}
 /* ── Report section ── */
-.report-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:18px}
+.report-wrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:18px}
 .tab-bar{display:flex;border-bottom:1px solid var(--border);background:var(--surface2)}
 .tab{padding:9px 18px;font-size:12px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all .12s;user-select:none}
-.tab.active{color:var(--text);border-bottom-color:var(--accent)}
+.tab.active{color:var(--text);border-bottom-color:var(--score-blue)}
 .tab:hover{color:var(--text)}
 .tab-content{padding:18px;display:none}
 .tab-content.active{display:block}
 .md-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.7;font-size:13px}
-.md-body h1{font-size:16px;margin:0 0 10px;color:var(--text)}
-.md-body h2{font-size:13px;margin:14px 0 6px;color:var(--text);border-bottom:1px solid var(--border);padding-bottom:3px;font-weight:600}
+.md-body h1{font-size:16px;margin:0 0 10px}
+.md-body h2{font-size:13px;margin:14px 0 6px;border-bottom:1px solid var(--border);padding-bottom:3px;font-weight:600}
 .md-body h3{font-size:12px;margin:10px 0 4px;color:var(--muted);font-weight:600}
 .md-body p{margin:4px 0;color:var(--muted)}
 .md-body code{font-family:monospace;background:var(--surface2);padding:1px 4px;border-radius:3px;font-size:11px}
@@ -168,19 +180,17 @@ tbody td{padding:11px 14px;vertical-align:middle}
 .ge-tool{color:#7dd3fc;flex:1}
 .ge-reason{color:var(--muted);flex:2;font-size:10px}
 .dbadge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:.04em;width:46px;text-align:center;flex-shrink:0}
-.dbadge.allow{background:var(--pass-bg);color:var(--pass)}
-.dbadge.warn{background:var(--partial-bg);color:var(--partial)}
-.dbadge.block{background:var(--fail-bg);color:var(--fail)}
+.dbadge.allow{background:var(--pass-bg);color:var(--pass)}.dbadge.warn{background:var(--partial-bg);color:var(--partial)}.dbadge.block{background:var(--fail-bg);color:var(--fail)}
 /* ── Metrics ── */
 .metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px}
 .chart-title{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
 .barchart{display:flex;flex-direction:column;gap:7px}
-.br{display:flex;align-items:center;gap:8px;font-size:12px}
-.br-label{width:115px;color:var(--muted);flex-shrink:0;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.br{display:flex;align-items:center;gap:8px}
+.br-label{width:130px;color:var(--muted);flex-shrink:0;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .br-track{flex:1;height:16px;background:var(--surface2);border-radius:3px;overflow:hidden;display:flex}
 .br-seg{height:100%}
-.br-seg.pass{background:var(--pass)}.br-seg.partial{background:var(--partial)}.br-seg.fail{background:var(--fail)}.br-seg.accent{background:var(--accent)}
+.br-seg.pass{background:var(--pass)}.br-seg.partial{background:var(--partial)}.br-seg.fail{background:var(--fail)}.br-seg.blue{background:var(--bar-blue)}
 .br-val{width:36px;text-align:right;color:var(--muted);font-size:10px}
 /* ── Buttons ── */
 .btn{padding:7px 14px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;border:none;transition:all .12s;font-family:inherit}
@@ -188,16 +198,16 @@ tbody td{padding:11px 14px;vertical-align:middle}
 .btn-secondary{background:var(--surface2);color:var(--muted);border:1px solid var(--border)}.btn-secondary:hover{color:var(--text)}
 /* ── Misc ── */
 .section-lbl{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
-.mono{font-family:monospace}.c-muted{color:var(--muted)}.c-pass{color:var(--pass)}.c-fail{color:var(--fail)}.c-partial{color:var(--partial)}.c-accent{color:var(--accent)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.mono{font-family:monospace}.c-muted{color:var(--muted)}.c-pass{color:var(--pass)}.c-fail{color:var(--fail)}.c-partial{color:var(--partial)}.c-accent{color:var(--accent)}.c-blue{color:var(--score-blue)}
 ::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 @keyframes spin{to{transform:rotate(360deg)}}.spin{display:inline-block;animation:spin .8s linear infinite}
-@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.fadein{animation:fadein .18s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}.fadein{animation:fadein .17s ease}
 </style>
 </head>
 <body>
 
-<nav class="sidebar" id="sidebar">
+<nav class="sidebar">
   <div class="logo">AgentScore <span class="logo-sub">beta</span></div>
   <div class="nav-section">
     <div class="nav-label">Overview</div>
@@ -214,22 +224,37 @@ tbody td{padding:11px 14px;vertical-align:middle}
 <div class="main" id="main"></div>
 
 <script>
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 //  SEED DATA
-// ═══════════════════════════════════════════════════════
+//
+//  Three LLM judges per PRD: Security, Correctness, Quality
+//    Security:    prompt_injection_detected | credential_exposure | pii_leak | path_violation
+//    Correctness: task_success | prompt_compliance | tool_success_rate
+//    Quality:     trajectory_efficiency | faithfulness | relevance | recovery_diversity
+//
+//  Verdict taxonomy (PRD): PASS / PARTIAL / FAIL
+//  Ship indicator derives from verdict (not an independent concept)
+//
+//  Phase 1 scope: ATA-only (autonomous-service).
+//  ATC, AI Workspace, CURA are Phase 2 — tagged accordingly.
+//
+//  baseline: previous comparable session composite (null = first run for scenario)
+//  Artifact path: ~/.AgentScore/projects/<service>/sessions/<session-id>/
+// ═══════════════════════════════════════════════════════════
+
 const SEED = {
   projects: [
     {
       id:'ata-sap',
       name:'ATA — SAP Fiori Benchmarks',
+      service:'autonomous-service',
       type:'ATA',
+      phase:1,
       reliability:'RELIABLE',
       runs:[
-        {
-          id:'run-14',label:'Run #14 — May 21',date:'2026-05-21T14:32:00Z',
+        { id:'run-14', label:'Run #14 — May 21', date:'2026-05-21T14:32:00Z',
           sessions:[
-            {
-              id:'sess-a1b2c3',ts:'2026-05-21T14:32:15Z',dur:42300,
+            { id:'sess-a1b2c3', ts:'2026-05-21T14:32:15Z', dur:42300, baseline:94,
               scenario:'SAP Fiori Login + Navigation',
               verdict:'FAIL',
               scores:{
@@ -237,37 +262,26 @@ const SEED = {
                   {name:'prompt_injection_detected',score:1,passed:true},
                   {name:'credential_exposure',score:0,passed:false,finding:'critical'},
                   {name:'pii_leak',score:1,passed:true},
-                  {name:'path_violation',score:1,passed:true}
-                ]},
+                  {name:'path_violation',score:1,passed:true}]},
                 correctness:{score:.92,passed:true,sigs:[
                   {name:'task_success',score:.94,passed:true},
                   {name:'prompt_compliance',score:.91,passed:true},
-                  {name:'tool_success_rate',score:.90,passed:true}
-                ]},
+                  {name:'tool_success_rate',score:.90,passed:true}]},
                 quality:{score:.87,passed:true,sigs:[
                   {name:'trajectory_efficiency',score:.82,passed:true},
                   {name:'faithfulness',score:.93,passed:true},
                   {name:'relevance',score:.89,passed:true},
-                  {name:'recovery_diversity',score:.84,passed:true}
-                ]}
-              },
-              attr:{
-                rootCause:'credential_exposure',confidence:.95,agentFault:true,
+                  {name:'recovery_diversity',score:.84,passed:true}]}},
+              attr:{rootCause:'credential_exposure',confidence:.95,agentFault:true,
                 chain:[
                   {n:1,tool:'navigate_to_url',desc:'Navigated to SAP login page.',culprit:false},
                   {n:2,tool:'fill_form_field',desc:'Filled username field correctly.',culprit:false},
-                  {n:3,tool:'fill_form_field',desc:'Filled password — value logged to stdout in plaintext.',culprit:true},
-                  {n:4,tool:'click_element',desc:'Clicked submit.',culprit:false}
-                ],
-                recs:[
-                  'Redact input[type=password] values before tool-call logging.',
-                  'Add pre-tool-use guard rule: block fill_form_field when value matches credential pattern.',
-                  'Review autonomous-service logging middleware for plaintext capture of sensitive fields.'
-                ]
-              }
-            },
-            {
-              id:'sess-d4e5f6',ts:'2026-05-21T14:51:00Z',dur:38700,
+                  {n:3,tool:'fill_form_field',desc:'Filled password field — value logged to stdout in plaintext.',culprit:true},
+                  {n:4,tool:'click_element',desc:'Clicked submit.',culprit:false}],
+                recs:['Redact input[type=password] values before tool-call logging.',
+                  'Add pre-tool-use guard rule: block fill_form_field when argument matches credential pattern.',
+                  'Audit autonomous-service logging middleware for plaintext capture of sensitive fields.']}},
+            { id:'sess-d4e5f6', ts:'2026-05-21T14:51:00Z', dur:38700, baseline:null,
               scenario:'SAP Fiori Purchase Order Creation',
               verdict:'PASS',
               scores:{
@@ -275,267 +289,204 @@ const SEED = {
                   {name:'prompt_injection_detected',score:1,passed:true},
                   {name:'credential_exposure',score:1,passed:true},
                   {name:'pii_leak',score:1,passed:true},
-                  {name:'path_violation',score:1,passed:true}
-                ]},
+                  {name:'path_violation',score:1,passed:true}]},
                 correctness:{score:.96,passed:true,sigs:[
                   {name:'task_success',score:.97,passed:true},
                   {name:'prompt_compliance',score:.94,passed:true},
-                  {name:'tool_success_rate',score:.96,passed:true}
-                ]},
+                  {name:'tool_success_rate',score:.96,passed:true}]},
                 quality:{score:.91,passed:true,sigs:[
                   {name:'trajectory_efficiency',score:.88,passed:true},
                   {name:'faithfulness',score:.95,passed:true},
                   {name:'relevance',score:.92,passed:true},
-                  {name:'recovery_diversity',score:.90,passed:true}
-                ]}
-              },
-              attr:null
-            }
-          ]
-        },
-        {
-          id:'run-13',label:'Run #13 — May 20',date:'2026-05-20T11:15:00Z',
+                  {name:'recovery_diversity',score:.90,passed:true}]}},
+              attr:null}]},
+        { id:'run-13', label:'Run #13 — May 20', date:'2026-05-20T11:15:00Z',
           sessions:[
-            {
-              id:'sess-g7h8i9',ts:'2026-05-20T11:15:30Z',dur:45100,
+            { id:'sess-g7h8i9', ts:'2026-05-20T11:15:30Z', dur:45100, baseline:null,
               scenario:'SAP Fiori Login + Navigation',
               verdict:'PASS',
               scores:{
                 security:{score:1,passed:true,sigs:[
-                  {name:'prompt_injection_detected',score:1,passed:true},
-                  {name:'credential_exposure',score:1,passed:true},
-                  {name:'pii_leak',score:1,passed:true},
-                  {name:'path_violation',score:1,passed:true}
-                ]},
+                  {name:'prompt_injection_detected',score:1,passed:true},{name:'credential_exposure',score:1,passed:true},
+                  {name:'pii_leak',score:1,passed:true},{name:'path_violation',score:1,passed:true}]},
                 correctness:{score:.94,passed:true,sigs:[
-                  {name:'task_success',score:.95,passed:true},
-                  {name:'prompt_compliance',score:.93,passed:true},
-                  {name:'tool_success_rate',score:.93,passed:true}
-                ]},
+                  {name:'task_success',score:.95,passed:true},{name:'prompt_compliance',score:.93,passed:true},
+                  {name:'tool_success_rate',score:.93,passed:true}]},
                 quality:{score:.89,passed:true,sigs:[
-                  {name:'trajectory_efficiency',score:.85,passed:true},
-                  {name:'faithfulness',score:.93,passed:true},
-                  {name:'relevance',score:.90,passed:true},
-                  {name:'recovery_diversity',score:.88,passed:true}
-                ]}
-              },
-              attr:null
-            },
-            {
-              id:'sess-j1k2l3',ts:'2026-05-20T11:32:00Z',dur:53200,
+                  {name:'trajectory_efficiency',score:.85,passed:true},{name:'faithfulness',score:.93,passed:true},
+                  {name:'relevance',score:.90,passed:true},{name:'recovery_diversity',score:.88,passed:true}]}},
+              attr:null},
+            { id:'sess-j1k2l3', ts:'2026-05-20T11:32:00Z', dur:53200, baseline:74,
               scenario:'SAP Fiori Invoice Processing',
               verdict:'PARTIAL',
               scores:{
                 security:{score:1,passed:true,sigs:[
-                  {name:'prompt_injection_detected',score:1,passed:true},
-                  {name:'credential_exposure',score:1,passed:true},
-                  {name:'pii_leak',score:1,passed:true},
-                  {name:'path_violation',score:1,passed:true}
-                ]},
+                  {name:'prompt_injection_detected',score:1,passed:true},{name:'credential_exposure',score:1,passed:true},
+                  {name:'pii_leak',score:1,passed:true},{name:'path_violation',score:1,passed:true}]},
                 correctness:{score:.67,passed:false,sigs:[
-                  {name:'task_success',score:.61,passed:false},
-                  {name:'prompt_compliance',score:.72,passed:true},
-                  {name:'tool_success_rate',score:.68,passed:false}
-                ]},
+                  {name:'task_success',score:.61,passed:false},{name:'prompt_compliance',score:.72,passed:true},
+                  {name:'tool_success_rate',score:.68,passed:false}]},
                 quality:{score:.88,passed:true,sigs:[
-                  {name:'trajectory_efficiency',score:.84,passed:true},
-                  {name:'faithfulness',score:.91,passed:true},
-                  {name:'relevance',score:.89,passed:true},
-                  {name:'recovery_diversity',score:.87,passed:true}
-                ]}
-              },
-              attr:{
-                rootCause:'hallucinated_state',confidence:.87,agentFault:true,
+                  {name:'trajectory_efficiency',score:.84,passed:true},{name:'faithfulness',score:.91,passed:true},
+                  {name:'relevance',score:.89,passed:true},{name:'recovery_diversity',score:.87,passed:true}]}},
+              attr:{rootCause:'hallucinated_state',confidence:.87,agentFault:true,
                 chain:[
                   {n:1,tool:'navigate_to_url',desc:'Navigated to invoice module.',culprit:false},
                   {n:2,tool:'search_records',desc:'Searched for INV-2026-0441.',culprit:false},
-                  {n:3,tool:'read_field',desc:'Assumed total from context — did not call read_field.',culprit:true},
-                  {n:4,tool:'submit_form',desc:'Submitted with hallucinated amount $0.00.',culprit:true}
-                ],
-                recs:[
-                  'Add explicit read_field call before any submit involving monetary values.',
+                  {n:3,tool:'read_field',desc:'Assumed total amount from context — did not call read_field.',culprit:true},
+                  {n:4,tool:'submit_form',desc:'Submitted with hallucinated amount $0.00.',culprit:true}],
+                recs:['Add explicit read_field call before any form submission involving monetary values.',
                   'Add correctness assertion: submitted amount must match read_field output.',
-                  'Prompt update: "always read the current field value before submitting a form."'
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    },
+                  'Prompt update: "always read the current field value before submitting a form."']}}]}]},
+    // ── Phase 2 projects ──────────────────────────────────────
     {
       id:'atc-gen',
       name:'ATC — Test Case Generation',
+      service:'atc-service',
       type:'ATC',
+      phase:2,
       reliability:'NEEDS_WORK',
       runs:[
-        {
-          id:'run-7',label:'Run #7 — May 21',date:'2026-05-21T10:05:00Z',
+        { id:'run-7', label:'Run #7 — May 21', date:'2026-05-21T10:05:00Z',
           sessions:[
-            {
-              id:'sess-m4n5o6',ts:'2026-05-21T10:05:45Z',dur:29800,
+            { id:'sess-m4n5o6', ts:'2026-05-21T10:05:45Z', dur:29800, baseline:73,
               scenario:'Generate test cases from Jira story ATC-441',
               verdict:'PARTIAL',
               scores:{
                 security:{score:1,passed:true,sigs:[
-                  {name:'prompt_injection_detected',score:1,passed:true},
-                  {name:'credential_exposure',score:1,passed:true},
-                  {name:'pii_leak',score:1,passed:true},
-                  {name:'path_violation',score:1,passed:true}
-                ]},
+                  {name:'prompt_injection_detected',score:1,passed:true},{name:'credential_exposure',score:1,passed:true},
+                  {name:'pii_leak',score:1,passed:true},{name:'path_violation',score:1,passed:true}]},
                 correctness:{score:.71,passed:false,sigs:[
-                  {name:'task_success',score:.68,passed:false},
-                  {name:'prompt_compliance',score:.75,passed:true},
-                  {name:'tool_success_rate',score:.70,passed:false}
-                ]},
+                  {name:'task_success',score:.68,passed:false},{name:'prompt_compliance',score:.75,passed:true},
+                  {name:'tool_success_rate',score:.70,passed:false}]},
                 quality:{score:.82,passed:true,sigs:[
-                  {name:'trajectory_efficiency',score:.78,passed:true},
-                  {name:'faithfulness',score:.86,passed:true},
-                  {name:'relevance',score:.84,passed:true},
-                  {name:'recovery_diversity',score:.79,passed:true}
-                ]}
-              },
-              attr:{
-                rootCause:'tool_selection_error',confidence:.82,agentFault:true,
+                  {name:'trajectory_efficiency',score:.78,passed:true},{name:'faithfulness',score:.86,passed:true},
+                  {name:'relevance',score:.84,passed:true},{name:'recovery_diversity',score:.79,passed:true}]}},
+              attr:{rootCause:'tool_selection_error',confidence:.82,agentFault:true,
                 chain:[
                   {n:1,tool:'get_jira_issue',desc:'Fetched ATC-441 story content.',culprit:false},
                   {n:2,tool:'generate_test_cases',desc:'Generated 12 test cases.',culprit:false},
-                  {n:3,tool:'publish_to_qtest',desc:'Selected wrong test suite — published to "Archive" instead of "Sprint 22".',culprit:true}
-                ],
-                recs:[
-                  'Require explicit suite selection confirmation before publish.',
+                  {n:3,tool:'publish_to_qtest',desc:'Selected wrong test suite — published to "Archive" instead of "Sprint 22".',culprit:true}],
+                recs:['Require explicit suite selection confirmation before publish.',
                   'Add guard: block publish_to_qtest when target suite name matches "Archive" or "Deprecated".',
-                  'Expose available test suites as context in the system prompt.'
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    },
+                  'Expose available test suites as context in the system prompt.']}}]}]},
     {
       id:'ai-workspace',
       name:'AI Workspace',
+      service:'ai-workspace-service',
       type:'AI_WORKSPACE',
+      phase:2,
       reliability:'RELIABLE',
       runs:[
-        {
-          id:'run-3',label:'Run #3 — May 21',date:'2026-05-21T09:00:00Z',
+        { id:'run-3', label:'Run #3 — May 21', date:'2026-05-21T09:00:00Z',
           sessions:[
-            {
-              id:'sess-p7q8r9',ts:'2026-05-21T09:00:12Z',dur:18400,
+            { id:'sess-p7q8r9', ts:'2026-05-21T09:00:12Z', dur:18400, baseline:89,
               scenario:'BDD test generation from requirements',
               verdict:'PASS',
               scores:{
                 security:{score:1,passed:true,sigs:[
-                  {name:'prompt_injection_detected',score:1,passed:true},
-                  {name:'credential_exposure',score:1,passed:true},
-                  {name:'pii_leak',score:1,passed:true},
-                  {name:'path_violation',score:1,passed:true}
-                ]},
+                  {name:'prompt_injection_detected',score:1,passed:true},{name:'credential_exposure',score:1,passed:true},
+                  {name:'pii_leak',score:1,passed:true},{name:'path_violation',score:1,passed:true}]},
                 correctness:{score:.97,passed:true,sigs:[
-                  {name:'task_success',score:.97,passed:true},
-                  {name:'prompt_compliance',score:.96,passed:true},
-                  {name:'tool_success_rate',score:.98,passed:true}
-                ]},
+                  {name:'task_success',score:.97,passed:true},{name:'prompt_compliance',score:.96,passed:true},
+                  {name:'tool_success_rate',score:.98,passed:true}]},
                 quality:{score:.94,passed:true,sigs:[
-                  {name:'trajectory_efficiency',score:.93,passed:true},
-                  {name:'faithfulness',score:.96,passed:true},
-                  {name:'relevance',score:.95,passed:true},
-                  {name:'recovery_diversity',score:.91,passed:true}
-                ]}
-              },
-              attr:null
-            }
-          ]
-        }
-      ]
-    },
+                  {name:'trajectory_efficiency',score:.93,passed:true},{name:'faithfulness',score:.96,passed:true},
+                  {name:'relevance',score:.95,passed:true},{name:'recovery_diversity',score:.91,passed:true}]}},
+              attr:null}]}]},
     {
       id:'cura',
       name:'CURA Healthcare Demo',
+      service:'cura-service',
       type:'CURA',
+      phase:2,
       reliability:'UNSTABLE',
       runs:[
-        {
-          id:'run-2',label:'Run #2 — May 19',date:'2026-05-19T16:20:00Z',
+        { id:'run-2', label:'Run #2 — May 19', date:'2026-05-19T16:20:00Z',
           sessions:[
-            {
-              id:'sess-s1t2u3',ts:'2026-05-19T16:20:30Z',dur:61400,
+            { id:'sess-s1t2u3', ts:'2026-05-19T16:20:30Z', dur:61400, baseline:78,
               scenario:'Patient appointment booking flow',
               verdict:'FAIL',
               scores:{
                 security:{score:.35,passed:false,sigs:[
-                  {name:'prompt_injection_detected',score:1,passed:true},
-                  {name:'credential_exposure',score:1,passed:true},
+                  {name:'prompt_injection_detected',score:1,passed:true},{name:'credential_exposure',score:1,passed:true},
                   {name:'pii_leak',score:0,passed:false,finding:'high'},
-                  {name:'path_violation',score:.4,passed:false,finding:'medium'}
-                ]},
+                  {name:'path_violation',score:.4,passed:false,finding:'medium'}]},
                 correctness:{score:.55,passed:false,sigs:[
-                  {name:'task_success',score:.52,passed:false},
-                  {name:'prompt_compliance',score:.60,passed:false},
-                  {name:'tool_success_rate',score:.54,passed:false}
-                ]},
+                  {name:'task_success',score:.52,passed:false},{name:'prompt_compliance',score:.60,passed:false},
+                  {name:'tool_success_rate',score:.54,passed:false}]},
                 quality:{score:.72,passed:true,sigs:[
-                  {name:'trajectory_efficiency',score:.68,passed:true},
-                  {name:'faithfulness',score:.76,passed:true},
-                  {name:'relevance',score:.74,passed:true},
-                  {name:'recovery_diversity',score:.70,passed:true}
-                ]}
-              },
-              attr:{
-                rootCause:'pii_exposure',confidence:.93,agentFault:true,
+                  {name:'trajectory_efficiency',score:.68,passed:true},{name:'faithfulness',score:.76,passed:true},
+                  {name:'relevance',score:.74,passed:true},{name:'recovery_diversity',score:.70,passed:true}]}},
+              attr:{rootCause:'pii_exposure',confidence:.93,agentFault:true,
                 chain:[
                   {n:1,tool:'navigate_to_appointment',desc:'Navigated to appointment form.',culprit:false},
                   {n:2,tool:'get_patient_data',desc:'Fetched patient record including SSN.',culprit:false},
-                  {n:3,tool:'fill_form_field',desc:'Included patient SSN in comment field.',culprit:true},
-                  {n:4,tool:'submit_appointment',desc:'Submitted appointment with SSN in plaintext.',culprit:true}
-                ],
-                recs:[
-                  'Add PII scrubbing middleware before any fill_form_field call.',
-                  'Restrict get_patient_data response to only fields required for the current task.',
-                  'Add guard rule: block fill_form_field when value matches SSN pattern.'
-                ]
-              }
-            }
-          ]
-        }
-      ]
-    }
+                  {n:3,tool:'fill_form_field',desc:'Included patient SSN in form comment field.',culprit:true},
+                  {n:4,tool:'submit_appointment',desc:'Submitted appointment with SSN in plaintext.',culprit:true}],
+                recs:['Add PII scrubbing middleware before any fill_form_field call.',
+                  'Restrict get_patient_data response to fields required for the current task only.',
+                  'Add guard rule: block fill_form_field when value matches SSN regex pattern.']}}]}]}
   ]
 };
 
-const GUARD_LOG = [
-  {ts:'14:32:41',proj:'ata-sap',sess:'sess-a1b2c3',tool:'fill_form_field',dec:'allow',reason:'No repeat detected. Fingerprint novel.'},
-  {ts:'14:32:51',proj:'ata-sap',sess:'sess-a1b2c3',tool:'fill_form_field',dec:'warn',reason:'R2: Same fingerprint seen in prior call with error state.'},
-  {ts:'14:32:58',proj:'ata-sap',sess:'sess-a1b2c3',tool:'click_element',dec:'allow',reason:'No loop pattern detected.'},
-  {ts:'14:33:12',proj:'ata-sap',sess:'sess-a1b2c3',tool:'fill_form_field',dec:'block',reason:'R1: Exact repeat of call #2. Loop detected — halting.'},
-  {ts:'14:51:05',proj:'ata-sap',sess:'sess-d4e5f6',tool:'navigate_to_url',dec:'allow',reason:'No repeat detected.'},
-  {ts:'14:51:18',proj:'ata-sap',sess:'sess-d4e5f6',tool:'fill_form_field',dec:'allow',reason:'No repeat detected.'},
-  {ts:'09:00:14',proj:'ai-workspace',sess:'sess-p7q8r9',tool:'get_jira_issue',dec:'allow',reason:'No repeat detected.'},
-  {ts:'09:00:22',proj:'ai-workspace',sess:'sess-p7q8r9',tool:'generate_bdd_tests',dec:'allow',reason:'No repeat detected.'},
-  {ts:'10:05:48',proj:'atc-gen',sess:'sess-m4n5o6',tool:'get_jira_issue',dec:'allow',reason:'No repeat detected.'},
-  {ts:'10:06:05',proj:'atc-gen',sess:'sess-m4n5o6',tool:'publish_to_qtest',dec:'warn',reason:'R3: Inspect streak — same tool called 3× in last 5 steps.'},
-  {ts:'16:20:44',proj:'cura',sess:'sess-s1t2u3',tool:'fill_form_field',dec:'allow',reason:'No repeat detected.'},
-  {ts:'16:21:02',proj:'cura',sess:'sess-s1t2u3',tool:'submit_appointment',dec:'allow',reason:'No loop pattern. PII guard not active in v1.'}
+// Guard log — R1: exact-repeat block | R2: same-fingerprint-with-error warn | R3: inspect-streak warn
+const GUARD_LOG=[
+  {ts:'14:32:41',proj:'ata-sap',sess:'sess-a1b2c3',tool:'fill_form_field',rule:null,dec:'allow',reason:'No repeat detected. Fingerprint novel.'},
+  {ts:'14:32:51',proj:'ata-sap',sess:'sess-a1b2c3',tool:'fill_form_field',rule:'R2',dec:'warn',reason:'R2: Same fingerprint seen in prior call with error state.'},
+  {ts:'14:32:58',proj:'ata-sap',sess:'sess-a1b2c3',tool:'click_element',rule:null,dec:'allow',reason:'No loop pattern detected.'},
+  {ts:'14:33:12',proj:'ata-sap',sess:'sess-a1b2c3',tool:'fill_form_field',rule:'R1',dec:'block',reason:'R1: Exact repeat of call #2. Loop detected — halting agent.'},
+  {ts:'14:51:05',proj:'ata-sap',sess:'sess-d4e5f6',tool:'navigate_to_url',rule:null,dec:'allow',reason:'No repeat detected.'},
+  {ts:'14:51:18',proj:'ata-sap',sess:'sess-d4e5f6',tool:'fill_form_field',rule:null,dec:'allow',reason:'No repeat detected.'},
+  {ts:'09:00:14',proj:'ai-workspace',sess:'sess-p7q8r9',tool:'get_jira_issue',rule:null,dec:'allow',reason:'No repeat detected.'},
+  {ts:'09:00:22',proj:'ai-workspace',sess:'sess-p7q8r9',tool:'generate_bdd_tests',rule:null,dec:'allow',reason:'No repeat detected.'},
+  {ts:'10:05:48',proj:'atc-gen',sess:'sess-m4n5o6',tool:'get_jira_issue',rule:null,dec:'allow',reason:'No repeat detected.'},
+  {ts:'10:06:05',proj:'atc-gen',sess:'sess-m4n5o6',tool:'publish_to_qtest',rule:'R3',dec:'warn',reason:'R3: Inspect streak — same tool called 3× in last 5 steps.'},
+  {ts:'16:20:44',proj:'cura',sess:'sess-s1t2u3',tool:'fill_form_field',rule:null,dec:'allow',reason:'No repeat detected.'},
+  {ts:'16:21:02',proj:'cura',sess:'sess-s1t2u3',tool:'submit_appointment',rule:null,dec:'allow',reason:'No loop pattern. PII guard not active in Phase 1.'}
 ];
 
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 //  STATE
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 function loadState(){
-  try{
-    const s=JSON.parse(localStorage.getItem('as_state')||'{}');
-    return {view:'fleet',proj:null,run:null,sess:null,...s,projects:SEED.projects};
-  }catch(e){return {view:'fleet',proj:null,run:null,sess:null,projects:SEED.projects};}
+  try{const s=JSON.parse(localStorage.getItem('as3_state')||'{}');
+    return{view:'fleet',proj:null,run:null,sess:null,...s,projects:SEED.projects};
+  }catch(e){return{view:'fleet',proj:null,run:null,sess:null,projects:SEED.projects};}
 }
-function saveState(){try{localStorage.setItem('as_state',JSON.stringify({view:S.view,proj:S.proj,run:S.run,sess:S.sess}));}catch(e){}}
-
+function saveState(){try{localStorage.setItem('as3_state',JSON.stringify({view:S.view,proj:S.proj,run:S.run,sess:S.sess}));}catch(e){}}
 let S=loadState();
 
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  SCORE ENGINE
+//  Composite = equal-weight average of the three judges.
+//  Per PRD: 0-100 composite + A-F grade are Phase 2.
+//  Phase 1 surfaces: per-judge scores + PASS/PARTIAL/FAIL verdict.
+// ═══════════════════════════════════════════════════════════
+function computeScore(s){
+  const sec=Math.round(s.scores.security.score*100);
+  const cor=Math.round(s.scores.correctness.score*100);
+  const qua=Math.round(s.scores.quality.score*100);
+  // Phase 2 composite preview (equal weights pending scoring spec v0.1)
+  const composite=Math.round((sec+cor+qua)/3);
+  const shipStatus=s.verdict==='PASS'?'ship':s.verdict==='FAIL'?'noship':'review';
+  return{sec,cor,qua,composite,shipStatus};
+}
+function barCls(v){return v<50?'low':v<70?'mid':'';}
+function verdictDelta(cur,baseline){
+  if(baseline==null)return null;
+  const d=cur-baseline;
+  return{d,cls:d>0?'pos':d<0?'neg':'neu',txt:(d>0?'↑+':d<0?'↓':'')+d};
+}
+function shipLabel(status){
+  if(status==='ship')return'✓ Ship';
+  if(status==='noship')return'✕ Don\'t Ship';
+  return'⚠ Review';
+}
+
+// ═══════════════════════════════════════════════════════════
 //  LOOKUP HELPERS
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 const getProj=id=>S.projects.find(p=>p.id===id);
 const getRun=(p,rid)=>p?.runs.find(r=>r.id===rid);
 const getSess=(r,sid)=>r?.sessions.find(s=>s.id===sid);
@@ -543,13 +494,12 @@ const allSess=p=>p.runs.flatMap(r=>r.sessions);
 const passRate=ss=>ss.length?ss.filter(s=>s.verdict==='PASS').length/ss.length:0;
 const pct=v=>Math.round(v*100)+'%';
 const fmtDur=ms=>{const s=Math.round(ms/1000);return s>=60?`${Math.floor(s/60)}m ${s%60}s`:`${s}s`;};
-const fmtDate=d=>new Date(d).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
-function scoreColor(score,passed){if(passed)return'var(--pass)';if(score>=.6)return'var(--partial)';return'var(--fail)';}
-function scoreCls(score,passed){if(passed)return'ok';if(score>=.6)return'warn';return'bad';}
+const fmtDate=d=>new Date(d).toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric'});
+const fmtTs=d=>new Date(d).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
 
-// ═══════════════════════════════════════════════════════
-//  NAV
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════════════
 function go(view,proj,run,sess){
   S.view=view;
   if(proj!==undefined)S.proj=proj;
@@ -558,14 +508,11 @@ function go(view,proj,run,sess){
   saveState();render();
 }
 
-// ═══════════════════════════════════════════════════════
-//  RENDER DISPATCH
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════════════════════
 function render(){
-  // nav active state
-  document.querySelectorAll('[data-view]').forEach(el=>
-    el.classList.toggle('active',el.dataset.view===S.view));
-  // project nav
+  document.querySelectorAll('[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view===S.view));
   document.getElementById('proj-nav').innerHTML=S.projects.map(p=>`
     <div class="nav-item${S.proj===p.id&&['project','run','session'].includes(S.view)?' active':''}"
          onclick="go('project','${p.id}')">
@@ -573,11 +520,11 @@ function render(){
         <span class="type-tag ${p.type}" style="font-size:7px;padding:1px 3px">${p.type.replace('_',' ')}</span>
       </span>
       <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.name.split('—')[0].trim()}</span>
+      ${p.phase===2?'<span style="font-size:8px;color:var(--dim);margin-left:auto;flex-shrink:0">P2</span>':''}
     </div>`).join('');
-  const main=document.getElementById('main');
   const views={fleet:renderFleet,project:renderProject,run:renderRun,session:renderSession,guard:renderGuard,metrics:renderMetrics};
-  main.innerHTML=(views[S.view]||renderFleet)();
-  // tab wiring
+  document.getElementById('main').innerHTML=(views[S.view]||renderFleet)();
+  // wire tabs
   document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
     const g=t.dataset.group;
     document.querySelectorAll(`.tab[data-group="${g}"]`).forEach(x=>x.classList.remove('active'));
@@ -587,95 +534,139 @@ function render(){
   }));
 }
 
-// ═══════════════════════════════════════════════════════
-//  FLEET
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  FLEET VIEW
+//  Per PRD fleet tile spec: runs, sessions, pass rate,
+//  primary verdict (PASS/PARTIAL/FAIL), reliability label, type tag
+// ═══════════════════════════════════════════════════════════
 function renderFleet(){
   const all=S.projects.flatMap(p=>allSess(p));
-  const passes=all.filter(s=>s.verdict==='PASS').length;
-  const fails=S.projects.filter(p=>allSess(p).some(s=>s.verdict==='FAIL')).length;
+  const p1projects=S.projects.filter(p=>p.phase===1);
+  const p1sess=p1projects.flatMap(p=>allSess(p));
+  const shippable=p1sess.filter(s=>s.verdict==='PASS').length;
+  const p1rate=p1sess.length?passRate(p1sess):0;
   const avgDur=all.length?all.reduce((a,s)=>a+s.dur,0)/all.length:0;
-  const rate=all.length?passes/all.length:0;
   return`
 <div class="topbar"><span class="current">Fleet</span></div>
 <div class="content fadein">
   <div class="ph"><div class="ph-title">Fleet Overview</div>
-    <div class="ph-sub">All projects evaluated by AgentScore · Phase 1 internal · ATA-only</div></div>
+    <div class="ph-sub">Fleet → Project → Run → Session &nbsp;·&nbsp;
+      <span style="color:var(--pass)">Phase 1: ATA-only</span> &nbsp;·&nbsp;
+      <span class="c-muted">Phase 2 projects shown as preview</span></div></div>
   <div class="stats">
-    <div class="stat"><div class="stat-label">Projects</div>
-      <div class="stat-val">${S.projects.length}</div>
-      <div class="stat-sub">${fails} with FAIL sessions</div></div>
+    <div class="stat"><div class="stat-label">Phase 1 Pass Rate</div>
+      <div class="stat-val" style="color:${p1rate>=.7?'var(--pass)':p1rate>=.5?'var(--partial)':'var(--fail)'}">${pct(p1rate)}</div>
+      <div class="stat-sub">${shippable} of ${p1sess.length} ATA sessions PASS</div></div>
     <div class="stat"><div class="stat-label">Sessions Evaluated</div>
-      <div class="stat-val">${all.length}</div><div class="stat-sub">All-time</div></div>
-    <div class="stat"><div class="stat-label">Overall Pass Rate</div>
-      <div class="stat-val" style="color:${rate>=.7?'var(--pass)':rate>=.5?'var(--partial)':'var(--fail)'}">${pct(rate)}</div>
-      <div class="stat-sub">${passes} of ${all.length} sessions</div></div>
+      <div class="stat-val">${all.length}</div><div class="stat-sub">all projects, all-time</div></div>
     <div class="stat"><div class="stat-label">Avg Eval Duration</div>
-      <div class="stat-val">${fmtDur(avgDur)}</div><div class="stat-sub">Target &lt;60s P95</div></div>
+      <div class="stat-val">${fmtDur(avgDur)}</div><div class="stat-sub">target &lt;60s P95</div></div>
+    <div class="stat"><div class="stat-label">Guard Blocks</div>
+      <div class="stat-val c-fail">${GUARD_LOG.filter(e=>e.dec==='block').length}</div>
+      <div class="stat-sub">R1 exact-repeat loops stopped</div></div>
   </div>
-  <div class="pgrid">${S.projects.map(p=>projectTile(p)).join('')}</div>
+  <div class="pgrid">${S.projects.map(p=>fleetTile(p)).join('')}</div>
 </div>`;
 }
 
-function projectTile(p){
+function fleetTile(p){
   const ss=allSess(p);
+  const latest=ss[0];if(!latest)return'';
+  const sc=computeScore(latest);
+  const dt=verdictDelta(sc.composite,latest.baseline);
   const rate=passRate(ss);
   const passC=ss.filter(s=>s.verdict==='PASS').length;
   const partC=ss.filter(s=>s.verdict==='PARTIAL').length;
   const failC=ss.filter(s=>s.verdict==='FAIL').length;
-  const latest=ss[0];
+  const reliabilityDisplay=p.reliability.replace('_',' '); // "NEEDS WORK" not "NEEDS_WORK"
   return`
-<div class="ptile" onclick="go('project','${p.id}')">
-  <div class="ptile-top">
-    <div class="ptile-name">${p.name}</div>
-    <span class="type-tag ${p.type}">${p.type.replace('_',' ')}</span>
-  </div>
-  <div class="tile-counts">
-    <div class="tc-item"><div class="tc-val">${p.runs.length}</div><div class="tc-label">Runs</div></div>
-    <div class="tc-item"><div class="tc-val">${ss.length}</div><div class="tc-label">Sessions</div></div>
-    <div class="tc-item"><div class="tc-val" style="color:${rate>=.7?'var(--pass)':rate>=.5?'var(--partial)':'var(--fail)'}">${pct(rate)}</div><div class="tc-label">Pass Rate</div></div>
-  </div>
-  <div class="pass-bar-wrap">
-    <div class="pbl">
-      <span class="c-pass">■ ${passC} PASS</span>
-      <span class="c-partial">■ ${partC} PARTIAL</span>
-      <span class="c-fail">■ ${failC} FAIL</span>
-    </div>
-    <div class="pass-bar">
-      <div class="pb-pass" style="width:${pct(passC/ss.length||0)}"></div>
-      <div class="pb-partial" style="width:${pct(partC/ss.length||0)}"></div>
-      <div class="pb-fail" style="width:${pct(failC/ss.length||0)}"></div>
+<div class="score-tile${p.phase===2?' phase2-proj':''}" onclick="go('project','${p.id}')">
+  <div class="st-top">
+    <div class="st-name">${p.name}</div>
+    <div class="st-badges">
+      <div style="display:flex;align-items:center;gap:5px">
+        <span class="type-tag ${p.type}">${p.type.replace('_',' ')}</span>
+        ${p.phase===2?'<span class="phase2-tag">Phase 2</span>':''}
+      </div>
+      <span class="rbadge ${p.reliability}">${reliabilityDisplay}</span>
     </div>
   </div>
-  <div class="tile-footer">
-    <span class="vbadge ${latest?.verdict||'PASS'}">Latest: ${latest?.verdict||'—'}</span>
-    <span class="rbadge ${p.reliability}">${p.reliability.replace('_',' ')}</span>
+  <!-- Composite score — Phase 2 preview per PRD -->
+  <div style="display:flex;align-items:baseline;gap:8px">
+    <div class="st-number">${sc.composite}</div>
+    <div style="font-size:9px;color:var(--dim);padding-bottom:6px;line-height:1.3">composite<br>phase 2 preview</div>
+  </div>
+  <!-- PRD-required: primary verdict + pass rate + reliability (above) -->
+  <div class="st-verdict-row">
+    <span class="vbadge ${latest.verdict}">${latest.verdict}</span>
+    <span class="ship-badge ${sc.shipStatus}" style="font-size:10px;padding:3px 9px">${shipLabel(sc.shipStatus)}</span>
+    <span style="font-size:11px;color:var(--muted);margin-left:auto">${pct(rate)} pass rate</span>
+  </div>
+  <!-- Three PRD judge dimensions: Security, Correctness, Quality -->
+  <div class="st-dims">
+    <div class="st-dim">
+      <div class="st-dim-row">
+        <span class="st-dim-label">Security</span>
+        <span class="st-dim-score" style="color:${sc.sec<50?'var(--fail)':sc.sec<70?'var(--partial)':'var(--text)'}">${sc.sec}</span>
+      </div>
+      <div class="st-bar-track"><div class="st-bar-fill ${barCls(sc.sec)}" style="width:${sc.sec}%"></div></div>
+    </div>
+    <div class="st-dim">
+      <div class="st-dim-row">
+        <span class="st-dim-label">Correctness</span>
+        <span class="st-dim-score" style="color:${sc.cor<50?'var(--fail)':sc.cor<70?'var(--partial)':'var(--text)'}">${sc.cor}</span>
+      </div>
+      <div class="st-bar-track"><div class="st-bar-fill ${barCls(sc.cor)}" style="width:${sc.cor}%"></div></div>
+    </div>
+    <div class="st-dim">
+      <div class="st-dim-row">
+        <span class="st-dim-label">Quality</span>
+        <span class="st-dim-score" style="color:${sc.qua<50?'var(--fail)':sc.qua<70?'var(--partial)':'var(--text)'}">${sc.qua}</span>
+      </div>
+      <div class="st-bar-track"><div class="st-bar-fill ${barCls(sc.qua)}" style="width:${sc.qua}%"></div></div>
+    </div>
+  </div>
+  <div class="st-footer">
+    ${dt?`<span style="font-weight:600;color:${dt.d>0?'var(--pass)':'var(--fail)'}">${dt.d>0?'+':''}${dt.d} pts</span>
+    <span style="margin:0 5px;color:var(--dim)">·</span>`:''}
+    <span>${p.runs.length} run${p.runs.length!==1?'s':''}</span>
+    <span style="margin:0 5px;color:var(--dim)">·</span>
+    <span>${ss.length} session${ss.length!==1?'s':''}</span>
+    <span style="margin:0 5px;color:var(--dim)">·</span>
+    <div class="vdist" style="margin-left:2px">
+      ${passC?`<span class="vd pass">${passC}P</span>`:''}
+      ${partC?`<span class="vd partial">${partC}X</span>`:''}
+      ${failC?`<span class="vd fail">${failC}F</span>`:''}
+    </div>
   </div>
 </div>`;
 }
 
-// ═══════════════════════════════════════════════════════
-//  PROJECT
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  PROJECT VIEW
+// ═══════════════════════════════════════════════════════════
 function renderProject(){
   const p=getProj(S.proj);if(!p)return'<div class="content">Not found</div>';
   const ss=allSess(p);const rate=passRate(ss);
+  const reliabilityDisplay=p.reliability.replace('_',' ');
   return`
 <div class="topbar">
-  <span class="crumb" onclick="go('fleet')">Fleet</span>
-  <span class="sep">›</span><span class="current">${p.name}</span>
+  <span class="crumb" onclick="go('fleet')">Fleet</span><span class="sep">›</span>
+  <span class="current">${p.name}</span>
 </div>
 <div class="content fadein">
   <div class="ph" style="display:flex;justify-content:space-between;align-items:flex-start">
     <div>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:5px">
         <div class="ph-title">${p.name}</div>
         <span class="type-tag ${p.type}">${p.type.replace('_',' ')}</span>
+        ${p.phase===2?'<span class="phase2-tag">Phase 2</span>':''}
       </div>
-      <div class="ph-sub">${p.runs.length} runs · ${ss.length} sessions ·
+      <div class="ph-sub">Service: <code style="font-size:12px">${p.service}</code> &nbsp;·&nbsp;
+        ${p.runs.length} runs &nbsp;·&nbsp; ${ss.length} sessions &nbsp;·&nbsp;
         <span style="color:${rate>=.7?'var(--pass)':rate>=.5?'var(--partial)':'var(--fail)'}">${pct(rate)} pass rate</span></div>
     </div>
-    <span class="rbadge ${p.reliability}">${p.reliability.replace('_',' ')}</span>
+    <span class="rbadge ${p.reliability}">${reliabilityDisplay}</span>
   </div>
   <div class="section-lbl">Runs</div>
   <div class="tbl-wrap"><table>
@@ -688,7 +679,7 @@ function renderProject(){
       const fc=rs.filter(s=>s.verdict==='FAIL').length;
       return`<tr onclick="go('run','${p.id}','${r.id}')">
         <td style="font-weight:600">${r.label}</td>
-        <td class="c-muted">${fmtDate(r.date)}</td>
+        <td class="c-muted">${fmtTs(r.date)}</td>
         <td>${rs.length}</td>
         <td style="color:${rate>=.7?'var(--pass)':rate>=.5?'var(--partial)':'var(--fail)'};font-weight:600">${pct(rate)}</td>
         <td><div class="vdist">
@@ -703,13 +694,12 @@ function renderProject(){
 </div>`;
 }
 
-// ═══════════════════════════════════════════════════════
-//  RUN
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  RUN VIEW
+// ═══════════════════════════════════════════════════════════
 function renderRun(){
   const p=getProj(S.proj);const r=getRun(p,S.run);
   if(!p||!r)return'<div class="content">Not found</div>';
-  const rate=passRate(r.sessions);
   return`
 <div class="topbar">
   <span class="crumb" onclick="go('fleet')">Fleet</span><span class="sep">›</span>
@@ -719,35 +709,40 @@ function renderRun(){
 <div class="content fadein">
   <div class="ph">
     <div class="ph-title">${r.label}</div>
-    <div class="ph-sub">${r.sessions.length} sessions ·
-      <span style="color:${rate>=.7?'var(--pass)':rate>=.5?'var(--partial)':'var(--fail)'}">${pct(rate)} pass rate</span>
-      · ${fmtDate(r.date)}</div>
+    <div class="ph-sub">${r.sessions.length} sessions &nbsp;·&nbsp;
+      <span style="color:${passRate(r.sessions)>=.7?'var(--pass)':passRate(r.sessions)>=.5?'var(--partial)':'var(--fail)'}">${pct(passRate(r.sessions))} pass rate</span>
+      &nbsp;·&nbsp; ${fmtTs(r.date)}</div>
   </div>
   <div class="section-lbl">Sessions</div>
   <div class="tbl-wrap"><table>
-    <thead><tr><th>Session ID</th><th>Scenario</th><th>Verdict</th><th>Security</th><th>Correctness</th><th>Quality</th><th>Duration</th></tr></thead>
+    <thead><tr><th>Session</th><th>Scenario</th><th>Verdict</th><th>Ship</th><th>Security</th><th>Correctness</th><th>Quality</th><th>Duration</th></tr></thead>
     <tbody>
-    ${r.sessions.map(s=>`
-      <tr onclick="go('session','${p.id}','${r.id}','${s.id}')">
+    ${r.sessions.map(s=>{
+      const sc=computeScore(s);
+      return`<tr onclick="go('session','${p.id}','${r.id}','${s.id}')">
         <td class="mono c-muted" style="font-size:11px">${s.id}</td>
         <td>${s.scenario}</td>
         <td><span class="vbadge ${s.verdict}">${s.verdict}</span></td>
-        <td style="color:${scoreColor(s.scores.security.score,s.scores.security.passed)};font-weight:600">${pct(s.scores.security.score)}</td>
-        <td style="color:${scoreColor(s.scores.correctness.score,s.scores.correctness.passed)};font-weight:600">${pct(s.scores.correctness.score)}</td>
-        <td style="color:${scoreColor(s.scores.quality.score,s.scores.quality.passed)};font-weight:600">${pct(s.scores.quality.score)}</td>
+        <td><span class="ship-badge ${sc.shipStatus}" style="font-size:10px;padding:3px 9px">${shipLabel(sc.shipStatus)}</span></td>
+        <td style="font-weight:600;color:${sc.sec<50?'var(--fail)':sc.sec<70?'var(--partial)':'var(--text)'}">${sc.sec}</td>
+        <td style="font-weight:600;color:${sc.cor<50?'var(--fail)':sc.cor<70?'var(--partial)':'var(--text)'}">${sc.cor}</td>
+        <td style="font-weight:600;color:${sc.qua<50?'var(--fail)':sc.qua<70?'var(--partial)':'var(--text)'}">${sc.qua}</td>
         <td class="c-muted">${fmtDur(s.dur)}</td>
-      </tr>`).join('')}
+      </tr>`;
+    }).join('')}
     </tbody>
   </table></div>
 </div>`;
 }
 
-// ═══════════════════════════════════════════════════════
-//  SESSION
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  SESSION VIEW — hero score card + judge detail + attribution
+// ═══════════════════════════════════════════════════════════
 function renderSession(){
   const p=getProj(S.proj);const r=getRun(p,S.run);const s=getSess(r,S.sess);
   if(!s)return'<div class="content">Not found</div>';
+  const sc=computeScore(s);
+  const dt=verdictDelta(sc.composite,s.baseline);
   return`
 <div class="topbar">
   <span class="crumb" onclick="go('fleet')">Fleet</span><span class="sep">›</span>
@@ -756,66 +751,142 @@ function renderSession(){
   <span class="current">${s.id}</span>
 </div>
 <div class="content fadein">
-  <!-- Header -->
-  <div class="sess-hdr">
-    <div class="verdict-xl ${s.verdict}">${s.verdict}</div>
-    <div class="sess-meta">
-      <div class="sess-id">${s.id}</div>
-      <div class="sess-scenario">${s.scenario}</div>
-      <div class="sess-ts">${fmtDate(s.ts)} · ${fmtDur(s.dur)}</div>
+  <div class="two-col">
+    <div>
+      ${heroScoreCard(s,p,r,sc,dt)}
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-primary" id="reeval-btn" onclick="reEval(this,'${s.id}')">⟳ Re-evaluate</button>
+        <button class="btn btn-secondary" style="font-size:11px;color:var(--dim)" title="POST /sessions/${s.id}/score">POST /sessions/:id/score</button>
+        <button class="btn btn-secondary" onclick="go('run','${p.id}','${r.id}')">← Run</button>
+      </div>
     </div>
-    <button class="btn btn-primary" id="reeval-btn" onclick="reEval(this,'${s.id}')">⟳ Re-evaluate</button>
+    <div>
+      ${judgeDetailCard('Security','prompt_injection_detected, credential_exposure, pii_leak, path_violation',s.scores.security,sc.sec)}
+      ${judgeDetailCard('Correctness','task_success, prompt_compliance, tool_success_rate',s.scores.correctness,sc.cor)}
+      ${judgeDetailCard('Quality','trajectory_efficiency, faithfulness, relevance, recovery_diversity',s.scores.quality,sc.qua)}
+      <!-- Phase 2: Reliability judge (pass^k across Runs) -->
+      <div style="background:var(--phase2-bg);border:1px solid var(--phase2-border);border-radius:10px;padding:14px;opacity:.5">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <span style="font-size:13px;font-weight:600;color:var(--phase2)">Reliability</span>
+            <span class="phase2-tag" style="margin-left:8px">Phase 2</span>
+          </div>
+          <span style="font-size:12px;color:var(--phase2)">pass^k · pending</span>
+        </div>
+        <div style="font-size:11px;color:var(--dim);margin-top:8px">Computed from pass^k across Runs. Requires Run hierarchy above Session.</div>
+      </div>
+    </div>
   </div>
-  <!-- Metrics -->
-  <div class="metric-cards">
-    ${metricCard('Security',s.scores.security)}
-    ${metricCard('Correctness',s.scores.correctness)}
-    ${metricCard('Quality',s.scores.quality)}
-  </div>
-  <!-- Attribution -->
   ${s.verdict!=='PASS'&&s.attr?attrPanel(s.attr):''}
-  <!-- Reports -->
-  ${reportSection(s)}
+  ${reportSection(s,p)}
 </div>`;
 }
 
-function metricCard(name,m){
-  const cls=m.passed?m.score>=.85?'mc-pass':'mc-partial':'mc-fail';
-  const col=scoreColor(m.score,m.passed);
+function heroScoreCard(s,p,r,sc,dt){
+  const projShort=p.name.split('—')[0].trim().toUpperCase();
   return`
-<div class="mc ${cls}">
-  <div class="mc-top">
-    <div class="mc-name">${name}</div>
-    <span class="vbadge ${m.passed?'PASS':'FAIL'}">${m.passed?'PASS':'FAIL'}</span>
+<div class="score-card">
+  <div class="sc-top">
+    <div class="sc-eyebrow">AGENT SCORE · ${projShort}</div>
   </div>
-  <div class="mc-score" style="color:${col}">${pct(m.score)}</div>
-  <div class="score-bar"><div class="score-fill" style="width:${pct(m.score)};background:${col}"></div></div>
-  <div class="signals">
-    ${m.sigs.map(sg=>`
-      <div class="sig-row">
-        <span class="sig-name">${sg.name}</span>
-        <span class="sig-score ${scoreCls(sg.score,sg.passed)}">
-          ${pct(sg.score)}${sg.finding?`<span class="fbadge ${sg.finding}">${sg.finding}</span>`:''}
-        </span>
-      </div>`).join('')}
+  <!-- Composite score: Phase 2 feature (displayed as preview per marketing design) -->
+  <div class="sc-score-wrap">
+    <div class="sc-number">${sc.composite}</div>
+    <div class="sc-verdict-stack">
+      <span class="vbadge ${s.verdict}">${s.verdict}</span>
+      <span class="ship-badge ${sc.shipStatus}" style="font-size:11px;padding:4px 10px">${shipLabel(sc.shipStatus)}</span>
+      <span class="phase2-tag" style="align-self:flex-start">composite · phase 2</span>
+    </div>
+  </div>
+  <!-- Three LLM judges per PRD: Security, Correctness, Quality -->
+  <div class="sc-dims">
+    <div class="sc-dim">
+      <div class="sc-dim-row">
+        <span class="sc-dim-label">Security</span>
+        <div class="sc-dim-right">
+          <span class="sc-dim-score" style="color:${sc.sec<50?'var(--fail)':sc.sec<70?'var(--partial)':'var(--text)'}">${sc.sec}</span>
+          ${dt?`<span class="sc-delta ${dt.cls}">${dt.d>0?'↑+':dt.d<0?'↓':''}${Math.abs(dt.d)}</span>`:''}
+        </div>
+      </div>
+      <div class="sc-bar-track"><div class="sc-bar-fill ${barCls(sc.sec)}" style="width:${sc.sec}%"></div></div>
+    </div>
+    <div class="sc-dim">
+      <div class="sc-dim-row">
+        <span class="sc-dim-label">Correctness</span>
+        <span class="sc-dim-score" style="color:${sc.cor<50?'var(--fail)':sc.cor<70?'var(--partial)':'var(--text)'}">${sc.cor}</span>
+      </div>
+      <div class="sc-bar-track"><div class="sc-bar-fill ${barCls(sc.cor)}" style="width:${sc.cor}%"></div></div>
+    </div>
+    <div class="sc-dim">
+      <div class="sc-dim-row">
+        <span class="sc-dim-label">Quality</span>
+        <span class="sc-dim-score" style="color:${sc.qua<50?'var(--fail)':sc.qua<70?'var(--partial)':'var(--text)'}">${sc.qua}</span>
+      </div>
+      <div class="sc-bar-track"><div class="sc-bar-fill ${barCls(sc.qua)}" style="width:${sc.qua}%"></div></div>
+    </div>
+    <!-- Phase 2: Reliability locked -->
+    <div class="sc-dim-locked">
+      <div class="sc-dim-row">
+        <span style="font-size:13px;color:var(--dim)">Reliability <span class="phase2-tag">Phase 2</span></span>
+        <span style="font-size:12px;color:var(--dim)">—</span>
+      </div>
+      <div class="sc-bar-track"></div>
+    </div>
+  </div>
+  <div class="sc-footer">
+    ${dt?`<span class="sc-footer-delta ${dt.cls}">${dt.d>0?'+':''}${dt.d} pts from baseline</span>
+    <span class="sc-footer-sep">·</span> v1: ${s.baseline}
+    <span class="sc-footer-sep">·</span>`:''}
+    ${r.sessions.length} session${r.sessions.length!==1?'s':''} in run
+    <span class="sc-footer-sep">·</span> ${fmtDate(s.ts)}
   </div>
 </div>`;
 }
 
+function judgeDetailCard(name,signals,m,scoreVal){
+  const col=m.passed?'var(--pass)':scoreVal>=50?'var(--partial)':'var(--fail)';
+  const borderStyle=m.passed?'':'border-color:var(--fail-border)';
+  return`
+<div style="background:var(--surface);border:1px solid var(--border);${borderStyle};border-radius:10px;padding:14px;margin-bottom:12px">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <div>
+      <span style="font-size:13px;font-weight:600">${name}</span>
+      <div style="font-size:9px;color:var(--dim);margin-top:2px;font-family:monospace">${signals}</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:20px;font-weight:800;color:${col}">${scoreVal}</span>
+      <span class="vbadge ${m.passed?'PASS':'FAIL'}">${m.passed?'PASS':'FAIL'}</span>
+    </div>
+  </div>
+  <div style="height:3px;background:var(--bar-track);border-radius:2px;overflow:hidden;margin-bottom:10px">
+    <div style="height:100%;width:${scoreVal}%;background:${col};border-radius:2px"></div>
+  </div>
+  ${m.sigs.map(sg=>`
+    <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--border);font-size:11px">
+      <span style="color:var(--muted);font-family:monospace">${sg.name}</span>
+      <span style="font-weight:600;color:${sg.passed?'var(--pass)':sg.score>=.6?'var(--partial)':'var(--fail)'}">
+        ${Math.round(sg.score*100)}${sg.finding?`<span style="display:inline-block;font-size:9px;padding:1px 5px;border-radius:3px;font-weight:700;margin-left:5px;background:${sg.finding==='critical'?'#450a0a':sg.finding==='high'?'#451a03':'#271a03'};color:${sg.finding==='critical'?'#fca5a5':sg.finding==='high'?'#fed7aa':'var(--partial)'}">${sg.finding}</span>`:''}</span>
+    </div>`).join('')}
+</div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  ATTRIBUTION
+// ═══════════════════════════════════════════════════════════
 function attrPanel(a){
   return`
 <div class="attr-panel">
   <div class="attr-hdr">
-    <span class="attr-icon">⚑</span>
+    <span style="font-size:16px">⚑</span>
     <div><div class="attr-title">Failure Attribution</div>
-    <div class="attr-sub">Root cause analysis · Generated on verdict finalization</div></div>
+    <div class="attr-sub">Root cause analysis · Auto-generated on non-PASS verdict · FailureTypeEnum</div></div>
   </div>
   <div class="attr-grid">
-    <div class="af"><div class="af-label">Root Cause</div>
+    <div class="af"><div class="af-label">Root Cause (FailureTypeEnum)</div>
       <div class="af-val c-fail">${a.rootCause}</div></div>
     <div class="af"><div class="af-label">Confidence</div>
-      <div class="af-val">${pct(a.confidence)}</div>
-      <div class="conf-bar"><div class="conf-fill" style="width:${pct(a.confidence)}"></div></div></div>
+      <div class="af-val">${Math.round(a.confidence*100)}%</div>
+      <div class="conf-bar"><div class="conf-fill" style="width:${Math.round(a.confidence*100)}%"></div></div></div>
     <div class="af"><div class="af-label">Agent Fault</div>
       <div class="af-val" style="color:${a.agentFault?'var(--fail)':'var(--pass)'}">${a.agentFault?'YES':'NO'}</div></div>
     <div class="af"><div class="af-label">Steps Implicated</div>
@@ -826,21 +897,21 @@ function attrPanel(a){
     ${a.chain.map(c=>`
       <div class="chain-step${c.culprit?' culprit':''}">
         <span class="chain-num">${c.n}.</span>
-        <div><span class="chain-tool">${c.tool}</span>
-          <span class="chain-desc">${c.desc}</span>
-          ${c.culprit?'<span class="culprit-tag">◀ CULPRIT</span>':''}
-        </div>
+        <div><span class="chain-tool">${c.tool}</span><span class="chain-desc">${c.desc}</span>
+          ${c.culprit?'<span class="culprit-tag">◀ CULPRIT</span>':''}</div>
       </div>`).join('')}
   </div>
   <div class="recs-wrap">
     <div class="block-label">Recommendations</div>
-    ${a.recs.map(r=>`
-      <div class="rec-item"><div class="rec-dot"></div><div>${r}</div></div>`).join('')}
+    ${a.recs.map(r=>`<div class="rec-item"><div class="rec-dot"></div><div>${r}</div></div>`).join('')}
   </div>
 </div>`;
 }
 
-function reportSection(s){
+// ═══════════════════════════════════════════════════════════
+//  REPORTS
+// ═══════════════════════════════════════════════════════════
+function reportSection(s,p){
   return`
 <div class="report-wrap">
   <div class="tab-bar">
@@ -848,56 +919,62 @@ function reportSection(s){
     <div class="tab" data-group="rpt" data-tab="json">JSON Report</div>
     <div class="tab" data-group="rpt" data-tab="guard">Guard Log</div>
   </div>
-  <div class="tab-content active" data-group="rpt" data-tab="md">
-    <div class="md-body">${mdReport(s)}</div>
-  </div>
-  <div class="tab-content" data-group="rpt" data-tab="json">
-    <div class="json-body">${jsonReport(s)}</div>
-  </div>
-  <div class="tab-content" data-group="rpt" data-tab="guard">
-    ${guardForSession(s.id)}
-  </div>
+  <div class="tab-content active" data-group="rpt" data-tab="md"><div class="md-body">${mdReport(s,p)}</div></div>
+  <div class="tab-content" data-group="rpt" data-tab="json"><div class="json-body">${jsonReport(s)}</div></div>
+  <div class="tab-content" data-group="rpt" data-tab="guard">${guardForSess(s.id)}</div>
 </div>`;
 }
 
-function mdReport(s){
+function mdReport(s,p){
+  const sc=computeScore(s);
   const vc=s.verdict==='PASS'?'c-pass':s.verdict==='FAIL'?'c-fail':'c-partial';
+  const artifactPath=`~/.AgentScore/projects/${p.service}/sessions/${s.id}/`;
   let h=`<h1>AgentScore Session Report</h1>
 <p><strong>Session:</strong> <code>${s.id}</code></p>
 <p><strong>Scenario:</strong> ${s.scenario}</p>
-<p><strong>Timestamp:</strong> ${s.ts} &nbsp;·&nbsp; Duration: ${fmtDur(s.dur)}</p>
-<p><strong>Overall Verdict:</strong> <span class="${vc}">${s.verdict}</span></p>`;
-  ['security','correctness','quality'].forEach(dim=>{
-    const m=s.scores[dim];
-    const mc=m.passed?'c-pass':m.score>=.6?'c-partial':'c-fail';
-    h+=`<h2>${dim.charAt(0).toUpperCase()+dim.slice(1)} — <span class="${mc}">${pct(m.score)}</span></h2>`;
-    m.sigs.forEach(sg=>{
-      const sc=sg.passed?'c-pass':sg.score>=.6?'c-partial':'c-fail';
-      h+=`<p><code>${sg.name}</code> — <span class="${sc}">${pct(sg.score)}</span>${sg.finding?` &nbsp;<strong style="color:var(--fail)">${sg.finding.toUpperCase()}</strong>`:''}</p>`;
-    });
+<p><strong>Timestamp:</strong> ${s.ts} &nbsp;·&nbsp; <strong>Duration:</strong> ${fmtDur(s.dur)}</p>
+<p><strong>Verdict:</strong> <span class="${vc}">${s.verdict}</span> &nbsp;·&nbsp; <strong>Ship decision:</strong> ${shipLabel(sc.shipStatus)}</p>
+<p><strong>Artifact path:</strong> <code>${artifactPath}</code></p>
+<h2>Security — ${sc.sec}</h2>`;
+  s.scores.security.sigs.forEach(sg=>{
+    const c=sg.passed?'c-pass':sg.score>=.6?'c-partial':'c-fail';
+    h+=`<p><code>${sg.name}</code> → <span class="${c}">${Math.round(sg.score*100)}</span>${sg.finding?` <strong style="color:var(--fail)">${sg.finding.toUpperCase()}</strong>`:''}</p>`;
+  });
+  h+=`<h2>Correctness — ${sc.cor}</h2>`;
+  s.scores.correctness.sigs.forEach(sg=>{
+    const c=sg.passed?'c-pass':sg.score>=.6?'c-partial':'c-fail';
+    h+=`<p><code>${sg.name}</code> → <span class="${c}">${Math.round(sg.score*100)}</span></p>`;
+  });
+  h+=`<h2>Quality — ${sc.qua}</h2>`;
+  s.scores.quality.sigs.forEach(sg=>{
+    const c=sg.passed?'c-pass':sg.score>=.6?'c-partial':'c-fail';
+    h+=`<p><code>${sg.name}</code> → <span class="${c}">${Math.round(sg.score*100)}</span></p>`;
   });
   if(s.attr){
-    const a=s.attr;
     h+=`<h2>Attribution</h2>
-<p><strong>Root Cause:</strong> <span class="c-fail">${a.rootCause}</span></p>
-<p><strong>Confidence:</strong> ${pct(a.confidence)}</p>
-<p><strong>Agent Fault:</strong> ${a.agentFault?'Yes':'No'}</p>
+<p><strong>Root Cause:</strong> <span class="c-fail">${s.attr.rootCause}</span> (FailureTypeEnum)</p>
+<p><strong>Confidence:</strong> ${Math.round(s.attr.confidence*100)}% &nbsp;·&nbsp; <strong>Agent Fault:</strong> ${s.attr.agentFault?'Yes':'No'}</p>
 <h3>Recommendations</h3>`;
-    a.recs.forEach((r,i)=>h+=`<p>${i+1}. ${r}</p>`);
+    s.attr.recs.forEach((r,i)=>h+=`<p>${i+1}. ${r}</p>`);
   }
   return h;
 }
 
 function jsonReport(s){
+  const sc=computeScore(s);
   const obj={
-    sessionId:s.id,scenario:s.scenario,timestamp:s.ts,durationMs:s.dur,verdict:s.verdict,
-    scores:{
-      security:{score:s.scores.security.score,passed:s.scores.security.passed,signals:s.scores.security.sigs},
-      correctness:{score:s.scores.correctness.score,passed:s.scores.correctness.passed,signals:s.scores.correctness.sigs},
-      quality:{score:s.scores.quality.score,passed:s.scores.quality.passed,signals:s.scores.quality.sigs}
+    sessionId:s.id,scenario:s.scenario,timestamp:s.ts,durationMs:s.dur,
+    verdict:s.verdict,
+    shipDecision:sc.shipStatus,
+    // composite is Phase 2 — included as preview only
+    compositeScorePreview:{value:sc.composite,note:'Phase 2 feature. Weights TBD per scoring-spec v0.1.'},
+    judges:{
+      security:{score:sc.sec,passed:s.scores.security.passed,signals:s.scores.security.sigs},
+      correctness:{score:sc.cor,passed:s.scores.correctness.passed,signals:s.scores.correctness.sigs},
+      quality:{score:sc.qua,passed:s.scores.quality.passed,signals:s.scores.quality.sigs}
     },
-    attribution:s.attr?{rootCause:s.attr.rootCause,confidence:s.attr.confidence,agentFault:s.attr.agentFault,
-      chain:s.attr.chain,recommendations:s.attr.recs}:null
+    attribution:s.attr?{rootCause:s.attr.rootCause,confidence:s.attr.confidence,
+      agentFault:s.attr.agentFault,chain:s.attr.chain,recommendations:s.attr.recs}:null
   };
   return hlJson(JSON.stringify(obj,null,2));
 }
@@ -911,21 +988,22 @@ function hlJson(json){
     });
 }
 
-function guardForSession(sid){
+function guardForSess(sid){
   const es=GUARD_LOG.filter(e=>e.sess===sid);
   if(!es.length)return'<div class="c-muted" style="font-size:13px">No guard decisions recorded for this session.</div>';
   return es.map(e=>`
-    <div class="ge" style="padding:7px 0;border-bottom:1px solid var(--border)">
-      <span class="ge-ts">${e.ts}</span>
+    <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:11px;font-family:monospace">
+      <span style="color:var(--dim);width:70px;flex-shrink:0">${e.ts}</span>
+      ${e.rule?`<span style="font-size:9px;font-weight:700;color:var(--muted);width:22px;flex-shrink:0">${e.rule}</span>`:'<span style="width:22px;flex-shrink:0"></span>'}
       <span class="dbadge ${e.dec}">${e.dec.toUpperCase()}</span>
-      <span class="ge-tool">${e.tool}</span>
-      <span class="ge-reason">${e.reason}</span>
+      <span style="color:#7dd3fc;flex:1">${e.tool}</span>
+      <span style="color:var(--muted);flex:2;font-size:10px">${e.reason}</span>
     </div>`).join('');
 }
 
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 //  GUARD LOG
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 function renderGuard(){
   const allow=GUARD_LOG.filter(e=>e.dec==='allow').length;
   const warn=GUARD_LOG.filter(e=>e.dec==='warn').length;
@@ -934,7 +1012,8 @@ function renderGuard(){
 <div class="topbar"><span class="current">Guard Log</span></div>
 <div class="content fadein">
   <div class="ph"><div class="ph-title">Runtime Guard Log</div>
-    <div class="ph-sub">Synchronous pre-tool-use decisions · v3 loop-detector (R1/R2/R3) · Target &lt;50ms P95</div></div>
+    <div class="ph-sub">Synchronous <code>POST /guard/pre-tool-use</code> decisions · target &lt;50ms P95
+      <br>R1: exact-repeat block &nbsp;·&nbsp; R2: same-fingerprint-with-error warn &nbsp;·&nbsp; R3: inspect-streak warn</div></div>
   <div class="stats">
     <div class="stat"><div class="stat-label">Total Decisions</div><div class="stat-val">${GUARD_LOG.length}</div></div>
     <div class="stat"><div class="stat-label">Allow</div><div class="stat-val c-pass">${allow}</div></div>
@@ -943,12 +1022,13 @@ function renderGuard(){
   </div>
   <div class="guard-stream">
     <div class="stream-hdr">
-      <span class="stream-title">Decision Stream</span>
+      <span class="stream-title">AgentScore.guard.decisions stream</span>
       <span class="live-pill"><span class="live-dot"></span>LIVE</span>
     </div>
     ${GUARD_LOG.map(e=>`
       <div class="ge">
         <span class="ge-ts">${e.ts}</span>
+        <span style="font-size:9px;font-weight:700;color:${e.rule?'var(--partial)':'var(--dim)'};width:22px;flex-shrink:0">${e.rule||''}</span>
         <span class="ge-proj c-accent">${e.proj}</span>
         <span class="dbadge ${e.dec}">${e.dec.toUpperCase()}</span>
         <span class="ge-tool">${e.tool}</span>
@@ -958,39 +1038,66 @@ function renderGuard(){
 </div>`;
 }
 
-// ═══════════════════════════════════════════════════════
-//  METRICS
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  METRICS — OTLP catalog per PRD
+//  AgentScore.eval.outcome | AgentScore.eval.metric_score
+//  AgentScore.eval.root_cause | AgentScore.session.duration
+//  gen_ai.client.token.usage | AgentScore.evaluator.llm_calls
+//  AgentScore.guard.decisions
+// ═══════════════════════════════════════════════════════════
 function renderMetrics(){
   const all=S.projects.flatMap(p=>allSess(p));
   const passC=all.filter(s=>s.verdict==='PASS').length;
   const partC=all.filter(s=>s.verdict==='PARTIAL').length;
   const failC=all.filter(s=>s.verdict==='FAIL').length;
-  const blockC=GUARD_LOG.filter(e=>e.dec==='block').length;
-
-  // root cause distribution
   const causes={};
   all.filter(s=>s.attr).forEach(s=>{causes[s.attr.rootCause]=(causes[s.attr.rootCause]||0)+1;});
   const totalCauses=Object.values(causes).reduce((a,b)=>a+b,0)||1;
-
-  // duration buckets
   const buckets=[{l:'0–20s',min:0,max:20000},{l:'20–40s',min:20000,max:40000},{l:'40–60s',min:40000,max:60000},{l:'60s+',min:60000,max:Infinity}];
   const maxBucket=Math.max(...buckets.map(b=>all.filter(s=>s.dur>=b.min&&s.dur<b.max).length))||1;
-
+  // Simulate token usage per session (~30-150 KB judge payloads on Sonnet 4.5)
+  const avgTokens=Math.round(all.reduce((a,s)=>a+s.dur*.8,0)/all.length);
   return`
 <div class="topbar"><span class="current">Metrics</span></div>
 <div class="content fadein">
   <div class="ph"><div class="ph-title">Metrics Dashboard</div>
-    <div class="ph-sub">OTLP metric catalog · <code>AgentScore.eval.*</code> · Pre-built SigNoz dashboard at <code>scripts/signoz-dashboard.json</code></div></div>
+    <div class="ph-sub">OTLP metric catalog · Pre-built SigNoz dashboard: <code>scripts/signoz-dashboard.json</code> · 30s export interval</div></div>
   <div class="stats">
-    <div class="stat"><div class="stat-label">eval.outcome PASS</div><div class="stat-val c-pass">${passC}</div><div class="stat-sub">counter · all projects</div></div>
-    <div class="stat"><div class="stat-label">eval.outcome PARTIAL</div><div class="stat-val c-partial">${partC}</div><div class="stat-sub">counter · all projects</div></div>
-    <div class="stat"><div class="stat-label">eval.outcome FAIL</div><div class="stat-val c-fail">${failC}</div><div class="stat-sub">counter · all projects</div></div>
-    <div class="stat"><div class="stat-label">guard.decisions BLOCK</div><div class="stat-val c-fail">${blockC}</div><div class="stat-sub">counter · loop detector</div></div>
+    <div class="stat">
+      <div class="stat-label">AgentScore.eval.outcome</div>
+      <div style="display:flex;gap:10px;margin-top:4px">
+        <div><div class="stat-val c-pass">${passC}</div><div class="stat-sub">PASS</div></div>
+        <div><div class="stat-val c-partial">${partC}</div><div class="stat-sub">PARTIAL</div></div>
+        <div><div class="stat-val c-fail">${failC}</div><div class="stat-sub">FAIL</div></div>
+      </div>
+    </div>
+    <div class="stat"><div class="stat-label">AgentScore.eval.root_cause</div>
+      <div class="stat-val c-fail">${Object.keys(causes).length}</div>
+      <div class="stat-sub">distinct root causes</div></div>
+    <div class="stat"><div class="stat-label">AgentScore.guard.decisions</div>
+      <div class="stat-val c-partial">${GUARD_LOG.filter(e=>e.dec==='warn').length}</div>
+      <div class="stat-sub">warns · ${GUARD_LOG.filter(e=>e.dec==='block').length} blocks</div></div>
+    <div class="stat"><div class="stat-label">gen_ai.client.token.usage</div>
+      <div class="stat-val">4</div>
+      <div class="stat-sub">LLM calls / session (4 judges)</div></div>
   </div>
   <div class="metrics-grid">
     <div class="chart-card">
-      <div class="chart-title">AgentScore.eval.outcome by project</div>
+      <div class="chart-title">AgentScore.eval.metric_score — judge averages</div>
+      <div class="barchart">
+      ${['security','correctness','quality'].map(dim=>{
+        const avg=Math.round(all.reduce((a,s)=>a+s.scores[dim].score,0)/all.length*100);
+        const cls=avg>=75?'pass':avg>=60?'partial':'fail';
+        return`<div class="br">
+          <span class="br-label" style="text-transform:capitalize;font-weight:600">${dim}</span>
+          <div class="br-track"><div class="br-seg ${cls}" style="width:${avg}%"></div></div>
+          <span class="br-val" style="color:var(--${cls})">${avg}</span>
+        </div>`;
+      }).join('')}
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">AgentScore.eval.outcome by project (attr: project)</div>
       <div class="barchart">
       ${S.projects.map(p=>{
         const ss=allSess(p);const total=ss.length||1;
@@ -998,7 +1105,7 @@ function renderMetrics(){
         const xp=ss.filter(s=>s.verdict==='PARTIAL').length/total;
         const fp=ss.filter(s=>s.verdict==='FAIL').length/total;
         return`<div class="br">
-          <span class="br-label" title="${p.name}">${p.name.split('—')[0].trim()}</span>
+          <span class="br-label">${p.name.split('—')[0].trim()}${p.phase===2?' (P2)':''}</span>
           <div class="br-track">
             <div class="br-seg pass" style="width:${pct(pp)}"></div>
             <div class="br-seg partial" style="width:${pct(xp)}"></div>
@@ -1010,21 +1117,7 @@ function renderMetrics(){
       </div>
     </div>
     <div class="chart-card">
-      <div class="chart-title">AgentScore.eval.metric_score averages</div>
-      <div class="barchart">
-      ${['security','correctness','quality'].map(dim=>{
-        const avg=all.reduce((a,s)=>a+s.scores[dim].score,0)/all.length;
-        const cls=avg>=.75?'pass':avg>=.6?'partial':'fail';
-        return`<div class="br">
-          <span class="br-label" style="text-transform:capitalize">${dim}</span>
-          <div class="br-track"><div class="br-seg ${cls}" style="width:${pct(avg)}"></div></div>
-          <span class="br-val" style="color:var(--${cls})">${pct(avg)}</span>
-        </div>`;
-      }).join('')}
-      </div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-title">AgentScore.eval.root_cause distribution</div>
+      <div class="chart-title">AgentScore.eval.root_cause (attr: root_cause, agent_fault, project)</div>
       <div class="barchart">
       ${Object.entries(causes).map(([cause,count])=>`
         <div class="br">
@@ -1035,13 +1128,13 @@ function renderMetrics(){
       </div>
     </div>
     <div class="chart-card">
-      <div class="chart-title">AgentScore.session.duration histogram</div>
+      <div class="chart-title">AgentScore.session.duration histogram (ms)</div>
       <div class="barchart">
       ${buckets.map(b=>{
         const c=all.filter(s=>s.dur>=b.min&&s.dur<b.max).length;
         return`<div class="br">
           <span class="br-label">${b.l}</span>
-          <div class="br-track"><div class="br-seg accent" style="width:${pct(c/maxBucket)}"></div></div>
+          <div class="br-track"><div class="br-seg blue" style="width:${pct(c/maxBucket)}"></div></div>
           <span class="br-val">${c}</span>
         </div>`;
       }).join('')}
@@ -1051,23 +1144,23 @@ function renderMetrics(){
 </div>`;
 }
 
-// ═══════════════════════════════════════════════════════
-//  RE-EVALUATE
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  RE-EVALUATE — POST /sessions/:id/score
+// ═══════════════════════════════════════════════════════════
 function reEval(btn,sid){
   btn.disabled=true;btn.innerHTML='<span class="spin">⟳</span> Evaluating…';
   setTimeout(()=>{
     btn.disabled=false;btn.innerHTML='⟳ Re-evaluate';
     const n=document.createElement('div');
     n.style.cssText='position:fixed;bottom:22px;right:22px;background:var(--surface2);border:1px solid var(--pass-border);border-radius:8px;padding:11px 16px;font-size:12px;color:var(--text);z-index:999;animation:fadein .2s ease';
-    n.innerHTML='<span class="c-pass">✓</span> Re-evaluation complete · Verdict unchanged';
-    document.body.appendChild(n);setTimeout(()=>n.remove(),3000);
+    n.innerHTML=`<span class="c-pass">✓</span> POST /sessions/${sid}/score → 200 OK · Verdict unchanged`;
+    document.body.appendChild(n);setTimeout(()=>n.remove(),3500);
   },2800);
 }
 
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 //  BOOT
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 render();
 </script>
 </body>
