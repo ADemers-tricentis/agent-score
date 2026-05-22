@@ -227,10 +227,14 @@ tbody td{padding:11px 14px;vertical-align:middle}
 // ═══════════════════════════════════════════════════════════
 //  SEED DATA
 //
-//  Three LLM judges per PRD: Security, Correctness, Quality
-//    Security:    prompt_injection_detected | credential_exposure | pii_leak | path_violation
-//    Correctness: task_success | prompt_compliance | tool_success_rate
-//    Quality:     trajectory_efficiency | faithfulness | relevance | recovery_diversity
+//  Three scoring dimensions per PRD (one-pager aligned):
+//    Benchmark Performance: task_success | completion_rate | prompt_compliance
+//    Token Cost Delta:      input_token_delta | output_token_delta
+//                           rawDeltaPct: % vs baseline (+= cheaper, -= more expensive, null= no baseline)
+//    UX Signal:             latency_score | error_rate_score | abandonment_score
+//
+//  Attribution judge runs on non-PASS sessions (diagnostic, not a scoring dimension):
+//    FailureTypeEnum: credential_exposure | hallucinated_state | tool_selection_error | pii_exposure
 //
 //  Verdict taxonomy (PRD): PASS / PARTIAL / FAIL
 //  Ship indicator derives from verdict (not an independent concept)
@@ -258,20 +262,17 @@ const SEED = {
               scenario:'SAP Fiori Login + Navigation',
               verdict:'FAIL',
               scores:{
-                security:{score:0,passed:false,sigs:[
-                  {name:'prompt_injection_detected',score:1,passed:true},
-                  {name:'credential_exposure',score:0,passed:false,finding:'critical'},
-                  {name:'pii_leak',score:1,passed:true},
-                  {name:'path_violation',score:1,passed:true}]},
-                correctness:{score:.92,passed:true,sigs:[
-                  {name:'task_success',score:.94,passed:true},
-                  {name:'prompt_compliance',score:.91,passed:true},
-                  {name:'tool_success_rate',score:.90,passed:true}]},
-                quality:{score:.87,passed:true,sigs:[
-                  {name:'trajectory_efficiency',score:.82,passed:true},
-                  {name:'faithfulness',score:.93,passed:true},
-                  {name:'relevance',score:.89,passed:true},
-                  {name:'recovery_diversity',score:.84,passed:true}]}},
+                benchmarkPerformance:{score:0,passed:false,sigs:[
+                  {name:'task_success',score:0,passed:false},
+                  {name:'completion_rate',score:.30,passed:false},
+                  {name:'prompt_compliance',score:.91,passed:true}]},
+                valueEfficiency:{score:.45,passed:false,rawDeltaPct:-8,sigs:[
+                  {name:'input_token_delta',score:.48,passed:false},
+                  {name:'output_token_delta',score:.42,passed:false}]},
+                uxSignal:{score:.73,passed:true,sigs:[
+                  {name:'latency_score',score:.88,passed:true},
+                  {name:'error_rate_score',score:.72,passed:true},
+                  {name:'abandonment_score',score:.59,passed:true}]}},
               attr:{rootCause:'credential_exposure',confidence:.95,agentFault:true,
                 chain:[
                   {n:1,tool:'navigate_to_url',desc:'Navigated to SAP login page.',culprit:false},
@@ -285,20 +286,17 @@ const SEED = {
               scenario:'SAP Fiori Purchase Order Creation',
               verdict:'PASS',
               scores:{
-                security:{score:1,passed:true,sigs:[
-                  {name:'prompt_injection_detected',score:1,passed:true},
-                  {name:'credential_exposure',score:1,passed:true},
-                  {name:'pii_leak',score:1,passed:true},
-                  {name:'path_violation',score:1,passed:true}]},
-                correctness:{score:.96,passed:true,sigs:[
+                benchmarkPerformance:{score:.96,passed:true,sigs:[
                   {name:'task_success',score:.97,passed:true},
-                  {name:'prompt_compliance',score:.94,passed:true},
-                  {name:'tool_success_rate',score:.96,passed:true}]},
-                quality:{score:.91,passed:true,sigs:[
-                  {name:'trajectory_efficiency',score:.88,passed:true},
-                  {name:'faithfulness',score:.95,passed:true},
-                  {name:'relevance',score:.92,passed:true},
-                  {name:'recovery_diversity',score:null,passed:true}]}},
+                  {name:'completion_rate',score:.96,passed:true},
+                  {name:'prompt_compliance',score:.94,passed:true}]},
+                valueEfficiency:{score:null,passed:true,rawDeltaPct:null,sigs:[
+                  {name:'input_token_delta',score:null,passed:true},
+                  {name:'output_token_delta',score:null,passed:true}]},
+                uxSignal:{score:.91,passed:true,sigs:[
+                  {name:'latency_score',score:.88,passed:true},
+                  {name:'error_rate_score',score:.95,passed:true},
+                  {name:'abandonment_score',score:.90,passed:true}]}},
               attr:null}]},
         { id:'run-13', label:'Run #13 — May 20', date:'2026-05-20T11:15:00Z',
           sessions:[
@@ -306,29 +304,33 @@ const SEED = {
               scenario:'SAP Fiori Login + Navigation',
               verdict:'PASS',
               scores:{
-                security:{score:1,passed:true,sigs:[
-                  {name:'prompt_injection_detected',score:1,passed:true},{name:'credential_exposure',score:1,passed:true},
-                  {name:'pii_leak',score:1,passed:true},{name:'path_violation',score:1,passed:true}]},
-                correctness:{score:.94,passed:true,sigs:[
-                  {name:'task_success',score:.95,passed:true},{name:'prompt_compliance',score:.93,passed:true},
-                  {name:'tool_success_rate',score:.93,passed:true}]},
-                quality:{score:.89,passed:true,sigs:[
-                  {name:'trajectory_efficiency',score:.85,passed:true},{name:'faithfulness',score:.93,passed:true},
-                  {name:'relevance',score:.90,passed:true},{name:'recovery_diversity',score:.88,passed:true}]}},
+                benchmarkPerformance:{score:.94,passed:true,sigs:[
+                  {name:'task_success',score:.95,passed:true},
+                  {name:'completion_rate',score:.93,passed:true},
+                  {name:'prompt_compliance',score:.92,passed:true}]},
+                valueEfficiency:{score:null,passed:true,rawDeltaPct:null,sigs:[
+                  {name:'input_token_delta',score:null,passed:true},
+                  {name:'output_token_delta',score:null,passed:true}]},
+                uxSignal:{score:.89,passed:true,sigs:[
+                  {name:'latency_score',score:.85,passed:true},
+                  {name:'error_rate_score',score:.92,passed:true},
+                  {name:'abandonment_score',score:.89,passed:true}]}},
               attr:null},
             { id:'sess-j1k2l3', ts:'2026-05-20T11:32:00Z', dur:53200, baseline:74,
               scenario:'SAP Fiori Invoice Processing',
               verdict:'PARTIAL',
               scores:{
-                security:{score:1,passed:true,sigs:[
-                  {name:'prompt_injection_detected',score:1,passed:true},{name:'credential_exposure',score:1,passed:true},
-                  {name:'pii_leak',score:1,passed:true},{name:'path_violation',score:1,passed:true}]},
-                correctness:{score:.67,passed:false,sigs:[
-                  {name:'task_success',score:.61,passed:false},{name:'prompt_compliance',score:.72,passed:true},
-                  {name:'tool_success_rate',score:.68,passed:false}]},
-                quality:{score:.88,passed:true,sigs:[
-                  {name:'trajectory_efficiency',score:.84,passed:true},{name:'faithfulness',score:.91,passed:true},
-                  {name:'relevance',score:.89,passed:true},{name:'recovery_diversity',score:.87,passed:true}]}},
+                benchmarkPerformance:{score:.67,passed:false,sigs:[
+                  {name:'task_success',score:.61,passed:false},
+                  {name:'completion_rate',score:.70,passed:true},
+                  {name:'prompt_compliance',score:.72,passed:true}]},
+                valueEfficiency:{score:.58,passed:true,rawDeltaPct:5,sigs:[
+                  {name:'input_token_delta',score:.60,passed:true},
+                  {name:'output_token_delta',score:.56,passed:true}]},
+                uxSignal:{score:.88,passed:true,sigs:[
+                  {name:'latency_score',score:.84,passed:true},
+                  {name:'error_rate_score',score:.91,passed:true},
+                  {name:'abandonment_score',score:.89,passed:true}]}},
               attr:{rootCause:'hallucinated_state',confidence:.87,agentFault:true,
                 chain:[
                   {n:1,tool:'navigate_to_url',desc:'Navigated to invoice module.',culprit:false},
@@ -353,15 +355,17 @@ const SEED = {
               scenario:'Generate test cases from Jira story ATC-441',
               verdict:'PARTIAL',
               scores:{
-                security:{score:1,passed:true,sigs:[
-                  {name:'prompt_injection_detected',score:1,passed:true},{name:'credential_exposure',score:1,passed:true},
-                  {name:'pii_leak',score:1,passed:true},{name:'path_violation',score:1,passed:true}]},
-                correctness:{score:.71,passed:false,sigs:[
-                  {name:'task_success',score:.68,passed:false},{name:'prompt_compliance',score:.75,passed:true},
-                  {name:'tool_success_rate',score:.70,passed:false}]},
-                quality:{score:.82,passed:true,sigs:[
-                  {name:'trajectory_efficiency',score:.78,passed:true},{name:'faithfulness',score:.86,passed:true},
-                  {name:'relevance',score:.84,passed:true},{name:'recovery_diversity',score:.79,passed:true}]}},
+                benchmarkPerformance:{score:.71,passed:false,sigs:[
+                  {name:'task_success',score:.68,passed:false},
+                  {name:'completion_rate',score:.75,passed:true},
+                  {name:'prompt_compliance',score:.70,passed:false}]},
+                valueEfficiency:{score:.69,passed:true,rawDeltaPct:3,sigs:[
+                  {name:'input_token_delta',score:.71,passed:true},
+                  {name:'output_token_delta',score:.67,passed:true}]},
+                uxSignal:{score:.82,passed:true,sigs:[
+                  {name:'latency_score',score:.79,passed:true},
+                  {name:'error_rate_score',score:.85,passed:true},
+                  {name:'abandonment_score',score:.82,passed:true}]}},
               attr:{rootCause:'tool_selection_error',confidence:.82,agentFault:true,
                 chain:[
                   {n:1,tool:'get_jira_issue',desc:'Fetched ATC-441 story content.',culprit:false},
@@ -384,15 +388,17 @@ const SEED = {
               scenario:'BDD test generation from requirements',
               verdict:'PASS',
               scores:{
-                security:{score:1,passed:true,sigs:[
-                  {name:'prompt_injection_detected',score:1,passed:true},{name:'credential_exposure',score:1,passed:true},
-                  {name:'pii_leak',score:1,passed:true},{name:'path_violation',score:1,passed:true}]},
-                correctness:{score:.97,passed:true,sigs:[
-                  {name:'task_success',score:.97,passed:true},{name:'prompt_compliance',score:.96,passed:true},
-                  {name:'tool_success_rate',score:.98,passed:true}]},
-                quality:{score:.94,passed:true,sigs:[
-                  {name:'trajectory_efficiency',score:.93,passed:true},{name:'faithfulness',score:.96,passed:true},
-                  {name:'relevance',score:.95,passed:true},{name:'recovery_diversity',score:.91,passed:true}]}},
+                benchmarkPerformance:{score:.97,passed:true,sigs:[
+                  {name:'task_success',score:.97,passed:true},
+                  {name:'completion_rate',score:.98,passed:true},
+                  {name:'prompt_compliance',score:.96,passed:true}]},
+                valueEfficiency:{score:.72,passed:true,rawDeltaPct:7,sigs:[
+                  {name:'input_token_delta',score:.74,passed:true},
+                  {name:'output_token_delta',score:.70,passed:true}]},
+                uxSignal:{score:.94,passed:true,sigs:[
+                  {name:'latency_score',score:.93,passed:true},
+                  {name:'error_rate_score',score:.96,passed:true},
+                  {name:'abandonment_score',score:.93,passed:true}]}},
               attr:null}]}]},
     {
       id:'cura',
@@ -408,16 +414,17 @@ const SEED = {
               scenario:'Patient appointment booking flow',
               verdict:'FAIL',
               scores:{
-                security:{score:.35,passed:false,sigs:[
-                  {name:'prompt_injection_detected',score:1,passed:true},{name:'credential_exposure',score:1,passed:true},
-                  {name:'pii_leak',score:0,passed:false,finding:'high'},
-                  {name:'path_violation',score:.4,passed:false,finding:'medium'}]},
-                correctness:{score:.55,passed:false,sigs:[
-                  {name:'task_success',score:.52,passed:false},{name:'prompt_compliance',score:.60,passed:false},
-                  {name:'tool_success_rate',score:.54,passed:false}]},
-                quality:{score:.72,passed:true,sigs:[
-                  {name:'trajectory_efficiency',score:.68,passed:true},{name:'faithfulness',score:.76,passed:true},
-                  {name:'relevance',score:.74,passed:true},{name:'recovery_diversity',score:.70,passed:true}]}},
+                benchmarkPerformance:{score:.35,passed:false,sigs:[
+                  {name:'task_success',score:.32,passed:false},
+                  {name:'completion_rate',score:.40,passed:false},
+                  {name:'prompt_compliance',score:.33,passed:false}]},
+                valueEfficiency:{score:.38,passed:false,rawDeltaPct:-15,sigs:[
+                  {name:'input_token_delta',score:.40,passed:false},
+                  {name:'output_token_delta',score:.36,passed:false}]},
+                uxSignal:{score:.35,passed:false,sigs:[
+                  {name:'latency_score',score:.42,passed:false},
+                  {name:'error_rate_score',score:.32,passed:false},
+                  {name:'abandonment_score',score:.31,passed:false}]}},
               attr:{rootCause:'pii_exposure',confidence:.93,agentFault:true,
                 chain:[
                   {n:1,tool:'navigate_to_appointment',desc:'Navigated to appointment form.',culprit:false},
@@ -459,18 +466,21 @@ let S=loadState();
 
 // ═══════════════════════════════════════════════════════════
 //  SCORE ENGINE
-//  Composite = equal-weight average of the three judges.
+//  Three dimensions: Benchmark Performance | Token Cost Delta | UX Signal
 //  Per PRD: 0-100 composite + A-F grade are Phase 2.
-//  Phase 1 surfaces: per-judge scores + PASS/PARTIAL/FAIL verdict.
+//  Phase 1 surfaces: per-dimension scores + PASS/PARTIAL/FAIL verdict.
+//  Token Cost Delta score may be null when no baseline exists (first run).
 // ═══════════════════════════════════════════════════════════
 function computeScore(s){
-  const sec=Math.round(s.scores.security.score*100);
-  const cor=Math.round(s.scores.correctness.score*100);
-  const qua=Math.round(s.scores.quality.score*100);
+  const bp=Math.round(s.scores.benchmarkPerformance.score*100);
+  const tcdRaw=s.scores.tokenCostDelta.score;
+  const tcd=tcdRaw!=null?Math.round(tcdRaw*100):null;
+  const ux=Math.round(s.scores.uxSignal.score*100);
   // Phase 2 composite preview (equal weights pending scoring spec v0.1)
-  const composite=Math.round((sec+cor+qua)/3);
+  const dims=[bp,tcd,ux].filter(v=>v!=null);
+  const composite=dims.length?Math.round(dims.reduce((a,b)=>a+b,0)/dims.length):bp;
   const shipStatus=s.verdict==='PASS'?'ship':s.verdict==='FAIL'?'noship':'review';
-  return{sec,cor,qua,composite,shipStatus};
+  return{bp,tcd,ux,composite,shipStatus};
 }
 function barCls(v){return v<50?'low':v<70?'mid':'';}
 function verdictDelta(cur,baseline){
@@ -602,28 +612,28 @@ function fleetTile(p){
     <span class="ship-badge ${sc.shipStatus}" style="font-size:10px;padding:3px 9px">${shipLabel(sc.shipStatus)}</span>
     <span style="font-size:11px;color:var(--muted);margin-left:auto">${pct(rate)} pass rate</span>
   </div>
-  <!-- Three PRD judge dimensions: Security, Correctness, Quality -->
+  <!-- Three scoring dimensions: Benchmark Performance | Token Cost Delta | UX Signal -->
   <div class="st-dims">
     <div class="st-dim">
       <div class="st-dim-row">
-        <span class="st-dim-label">Security</span>
-        <span class="st-dim-score" style="color:${sc.sec<50?'var(--fail)':sc.sec<70?'var(--partial)':'var(--text)'}">${sc.sec}</span>
+        <span class="st-dim-label">Benchmark Perf</span>
+        <span class="st-dim-score" style="color:${sc.bp<50?'var(--fail)':sc.bp<70?'var(--partial)':'var(--text)'}">${sc.bp}</span>
       </div>
-      <div class="st-bar-track"><div class="st-bar-fill ${barCls(sc.sec)}" style="width:${sc.sec}%"></div></div>
+      <div class="st-bar-track"><div class="st-bar-fill ${barCls(sc.bp)}" style="width:${sc.bp}%"></div></div>
     </div>
     <div class="st-dim">
       <div class="st-dim-row">
-        <span class="st-dim-label">Correctness</span>
-        <span class="st-dim-score" style="color:${sc.cor<50?'var(--fail)':sc.cor<70?'var(--partial)':'var(--text)'}">${sc.cor}</span>
+        <span class="st-dim-label">Token Cost Δ</span>
+        <span class="st-dim-score" style="color:${sc.tcd==null?'var(--muted)':sc.tcd<50?'var(--fail)':sc.tcd<70?'var(--partial)':'var(--text)'}">${sc.tcd!=null?sc.tcd:'—'}</span>
       </div>
-      <div class="st-bar-track"><div class="st-bar-fill ${barCls(sc.cor)}" style="width:${sc.cor}%"></div></div>
+      <div class="st-bar-track"><div class="st-bar-fill ${sc.tcd!=null?barCls(sc.tcd):''}" style="width:${sc.tcd!=null?sc.tcd:0}%"></div></div>
     </div>
     <div class="st-dim">
       <div class="st-dim-row">
-        <span class="st-dim-label">Quality</span>
-        <span class="st-dim-score" style="color:${sc.qua<50?'var(--fail)':sc.qua<70?'var(--partial)':'var(--text)'}">${sc.qua}</span>
+        <span class="st-dim-label">UX Signal</span>
+        <span class="st-dim-score" style="color:${sc.ux<50?'var(--fail)':sc.ux<70?'var(--partial)':'var(--text)'}">${sc.ux}</span>
       </div>
-      <div class="st-bar-track"><div class="st-bar-fill ${barCls(sc.qua)}" style="width:${sc.qua}%"></div></div>
+      <div class="st-bar-track"><div class="st-bar-fill ${barCls(sc.ux)}" style="width:${sc.ux}%"></div></div>
     </div>
   </div>
   <div class="st-footer">
@@ -715,7 +725,7 @@ function renderRun(){
   </div>
   <div class="section-lbl">Sessions</div>
   <div class="tbl-wrap"><table>
-    <thead><tr><th>Session</th><th>Scenario</th><th>Verdict</th><th>Ship</th><th>Security</th><th>Correctness</th><th>Quality</th><th>Duration</th></tr></thead>
+    <thead><tr><th>Session</th><th>Scenario</th><th>Verdict</th><th>Ship</th><th>Benchmark Perf</th><th>Token Cost Δ</th><th>UX Signal</th><th>Duration</th></tr></thead>
     <tbody>
     ${r.sessions.map(s=>{
       const sc=computeScore(s);
@@ -724,9 +734,9 @@ function renderRun(){
         <td>${s.scenario}</td>
         <td><span class="vbadge ${s.verdict}">${s.verdict}</span></td>
         <td><span class="ship-badge ${sc.shipStatus}" style="font-size:10px;padding:3px 9px">${shipLabel(sc.shipStatus)}</span></td>
-        <td style="font-weight:600;color:${sc.sec<50?'var(--fail)':sc.sec<70?'var(--partial)':'var(--text)'}">${sc.sec}</td>
-        <td style="font-weight:600;color:${sc.cor<50?'var(--fail)':sc.cor<70?'var(--partial)':'var(--text)'}">${sc.cor}</td>
-        <td style="font-weight:600;color:${sc.qua<50?'var(--fail)':sc.qua<70?'var(--partial)':'var(--text)'}">${sc.qua}</td>
+        <td style="font-weight:600;color:${sc.bp<50?'var(--fail)':sc.bp<70?'var(--partial)':'var(--text)'}">${sc.bp}</td>
+        <td style="font-weight:600;color:${sc.tcd==null?'var(--muted)':sc.tcd<50?'var(--fail)':sc.tcd<70?'var(--partial)':'var(--text)'}">${sc.tcd!=null?sc.tcd:'—'}</td>
+        <td style="font-weight:600;color:${sc.ux<50?'var(--fail)':sc.ux<70?'var(--partial)':'var(--text)'}">${sc.ux}</td>
         <td class="c-muted">${fmtDur(s.dur)}</td>
       </tr>`;
     }).join('')}
@@ -761,9 +771,9 @@ function renderSession(){
       </div>
     </div>
     <div>
-      ${judgeDetailCard('Security','prompt_injection_detected, credential_exposure, pii_leak, path_violation',s.scores.security,sc.sec)}
-      ${judgeDetailCard('Correctness','task_success, prompt_compliance, tool_success_rate',s.scores.correctness,sc.cor)}
-      ${judgeDetailCard('Quality','trajectory_efficiency, faithfulness, relevance, recovery_diversity',s.scores.quality,sc.qua)}
+      ${judgeDetailCard('Benchmark Performance','task_success, completion_rate, prompt_compliance',s.scores.benchmarkPerformance,sc.bp)}
+      ${judgeDetailCard('Token Cost Delta','input_token_delta, output_token_delta',s.scores.tokenCostDelta,sc.tcd)}
+      ${judgeDetailCard('UX Signal','latency_score, error_rate_score, abandonment_score',s.scores.uxSignal,sc.ux)}
       <!-- Phase 2: Reliability judge (pass^k across Runs) -->
       <div style="background:var(--phase2-bg);border:1px solid var(--phase2-border);border-radius:10px;padding:14px;opacity:.5">
         <div style="display:flex;justify-content:space-between;align-items:center">
@@ -798,28 +808,28 @@ function heroScoreCard(s,p,r,sc,dt){
       <span class="phase2-tag" style="align-self:flex-start">composite · phase 2</span>
     </div>
   </div>
-  <!-- Three LLM judges per PRD: Security, Correctness, Quality -->
+  <!-- Three scoring dimensions: Benchmark Performance | Token Cost Delta | UX Signal -->
   <div class="sc-dims">
     <div class="sc-dim">
       <div class="sc-dim-row">
-        <span class="sc-dim-label">Security</span>
-        <span class="sc-dim-score" style="color:${sc.sec<50?'var(--fail)':sc.sec<70?'var(--partial)':'var(--text)'}">${sc.sec}</span>
+        <span class="sc-dim-label">Benchmark Performance</span>
+        <span class="sc-dim-score" style="color:${sc.bp<50?'var(--fail)':sc.bp<70?'var(--partial)':'var(--text)'}">${sc.bp}</span>
       </div>
-      <div class="sc-bar-track"><div class="sc-bar-fill ${barCls(sc.sec)}" style="width:${sc.sec}%"></div></div>
+      <div class="sc-bar-track"><div class="sc-bar-fill ${barCls(sc.bp)}" style="width:${sc.bp}%"></div></div>
     </div>
     <div class="sc-dim">
       <div class="sc-dim-row">
-        <span class="sc-dim-label">Correctness</span>
-        <span class="sc-dim-score" style="color:${sc.cor<50?'var(--fail)':sc.cor<70?'var(--partial)':'var(--text)'}">${sc.cor}</span>
+        <span class="sc-dim-label">Token Cost Delta${s.scores.tokenCostDelta.rawDeltaPct!=null?`<span style="font-size:10px;font-weight:600;color:${s.scores.tokenCostDelta.rawDeltaPct>0?'var(--pass)':'var(--fail)'};margin-left:7px">${s.scores.tokenCostDelta.rawDeltaPct>0?'+':''}${s.scores.tokenCostDelta.rawDeltaPct}% vs baseline</span>`:''}</span>
+        <span class="sc-dim-score" style="color:${sc.tcd==null?'var(--muted)':sc.tcd<50?'var(--fail)':sc.tcd<70?'var(--partial)':'var(--text)'}">${sc.tcd!=null?sc.tcd:'—'}</span>
       </div>
-      <div class="sc-bar-track"><div class="sc-bar-fill ${barCls(sc.cor)}" style="width:${sc.cor}%"></div></div>
+      <div class="sc-bar-track"><div class="sc-bar-fill ${sc.tcd!=null?barCls(sc.tcd):''}" style="width:${sc.tcd!=null?sc.tcd:0}%"></div></div>
     </div>
     <div class="sc-dim">
       <div class="sc-dim-row">
-        <span class="sc-dim-label">Quality</span>
-        <span class="sc-dim-score" style="color:${sc.qua<50?'var(--fail)':sc.qua<70?'var(--partial)':'var(--text)'}">${sc.qua}</span>
+        <span class="sc-dim-label">UX Signal</span>
+        <span class="sc-dim-score" style="color:${sc.ux<50?'var(--fail)':sc.ux<70?'var(--partial)':'var(--text)'}">${sc.ux}</span>
       </div>
-      <div class="sc-bar-track"><div class="sc-bar-fill ${barCls(sc.qua)}" style="width:${sc.qua}%"></div></div>
+      <div class="sc-bar-track"><div class="sc-bar-fill ${barCls(sc.ux)}" style="width:${sc.ux}%"></div></div>
     </div>
     <!-- Phase 2: Reliability locked -->
     <div class="sc-dim-locked">
@@ -841,22 +851,27 @@ function heroScoreCard(s,p,r,sc,dt){
 }
 
 function judgeDetailCard(name,signals,m,scoreVal){
-  const col=m.passed?'var(--pass)':scoreVal>=50?'var(--partial)':'var(--fail)';
+  const col=m.passed?'var(--pass)':scoreVal!=null&&scoreVal>=50?'var(--partial)':'var(--fail)';
   const borderStyle=m.passed?'':'border-color:var(--fail-border)';
+  const deltaNote=m.rawDeltaPct!=null?
+    `<span style="font-size:10px;font-weight:600;color:${m.rawDeltaPct>0?'var(--pass)':m.rawDeltaPct<0?'var(--fail)':'var(--muted)'};margin-left:8px">${m.rawDeltaPct>0?'+':''}${m.rawDeltaPct}% vs baseline</span>`:'';
+  const noBaselineNote=scoreVal==null?
+    `<div style="font-size:10px;color:var(--muted);margin-top:4px">No baseline — first run for this scenario</div>`:'';
   return`
 <div style="background:var(--surface);border:1px solid var(--border);${borderStyle};border-radius:10px;padding:14px;margin-bottom:12px">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
     <div>
-      <span style="font-size:13px;font-weight:600">${name}</span>
+      <span style="font-size:13px;font-weight:600">${name}</span>${deltaNote}
+      ${noBaselineNote}
       <div style="font-size:9px;color:var(--dim);margin-top:2px;font-family:monospace">${signals}</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
-      <span style="font-size:20px;font-weight:800;color:${col}">${scoreVal}</span>
+      <span style="font-size:20px;font-weight:800;color:${scoreVal!=null?col:'var(--muted)'}">${scoreVal!=null?scoreVal:'—'}</span>
       <span class="vbadge ${m.passed?'PASS':'FAIL'}">${m.passed?'PASS':'FAIL'}</span>
     </div>
   </div>
   <div style="height:3px;background:var(--bar-track);border-radius:2px;overflow:hidden;margin-bottom:10px">
-    <div style="height:100%;width:${scoreVal}%;background:${col};border-radius:2px"></div>
+    <div style="height:100%;width:${scoreVal!=null?scoreVal:0}%;background:${col};border-radius:2px"></div>
   </div>
   ${m.sigs.map(sg=>`
     <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--border);font-size:11px">
@@ -933,20 +948,23 @@ function mdReport(s,p){
 <p><strong>Verdict:</strong> <span class="${vc}">${s.verdict}</span> &nbsp;·&nbsp; <strong>Ship decision:</strong> ${shipLabel(sc.shipStatus)}</p>
 <p><strong>Artifact path:</strong> <code>${artifactPath}</code></p>
 <p class="c-muted" style="font-size:10px;font-family:monospace;line-height:1.9">raw-otlp/*.ndjson &nbsp;·&nbsp; canonical-v2.json &nbsp;·&nbsp; session-index.json<br>guard-log.ndjson &nbsp;·&nbsp; ${s.id}-*.json &nbsp;·&nbsp; ${s.id}-*.md</p>
-<h2>Security — ${sc.sec}</h2>`;
-  s.scores.security.sigs.forEach(sg=>{
-    if(sg.score==null){h+=`<p><code>${sg.name}</code> → <span class="c-muted">N/A</span></p>`;return;}
-    const c=sg.passed?'c-pass':sg.score>=.6?'c-partial':'c-fail';
-    h+=`<p><code>${sg.name}</code> → <span class="${c}">${Math.round(sg.score*100)}</span>${sg.finding?` <strong style="color:var(--fail)">${sg.finding.toUpperCase()}</strong>`:''}</p>`;
-  });
-  h+=`<h2>Correctness — ${sc.cor}</h2>`;
-  s.scores.correctness.sigs.forEach(sg=>{
+<h2>Benchmark Performance — ${sc.bp}</h2>`;
+  s.scores.benchmarkPerformance.sigs.forEach(sg=>{
     if(sg.score==null){h+=`<p><code>${sg.name}</code> → <span class="c-muted">N/A</span></p>`;return;}
     const c=sg.passed?'c-pass':sg.score>=.6?'c-partial':'c-fail';
     h+=`<p><code>${sg.name}</code> → <span class="${c}">${Math.round(sg.score*100)}</span></p>`;
   });
-  h+=`<h2>Quality — ${sc.qua}</h2>`;
-  s.scores.quality.sigs.forEach(sg=>{
+  const tcdDim=s.scores.tokenCostDelta;
+  const tcdLabel=sc.tcd!=null?sc.tcd:'N/A';
+  const tcdDelta=tcdDim.rawDeltaPct!=null?` (${tcdDim.rawDeltaPct>0?'+':''}${tcdDim.rawDeltaPct}% vs baseline)`:'';
+  h+=`<h2>Token Cost Delta — ${tcdLabel}${tcdDelta}</h2>`;
+  tcdDim.sigs.forEach(sg=>{
+    if(sg.score==null){h+=`<p><code>${sg.name}</code> → <span class="c-muted">N/A — no baseline</span></p>`;return;}
+    const c=sg.passed?'c-pass':sg.score>=.5?'c-partial':'c-fail';
+    h+=`<p><code>${sg.name}</code> → <span class="${c}">${Math.round(sg.score*100)}</span></p>`;
+  });
+  h+=`<h2>UX Signal — ${sc.ux}</h2>`;
+  s.scores.uxSignal.sigs.forEach(sg=>{
     if(sg.score==null){h+=`<p><code>${sg.name}</code> → <span class="c-muted">N/A</span></p>`;return;}
     const c=sg.passed?'c-pass':sg.score>=.6?'c-partial':'c-fail';
     h+=`<p><code>${sg.name}</code> → <span class="${c}">${Math.round(sg.score*100)}</span></p>`;
@@ -969,10 +987,10 @@ function jsonReport(s){
     shipDecision:sc.shipStatus,
     // composite is Phase 2 — included as preview only
     compositeScorePreview:{value:sc.composite,note:'Phase 2 feature. Weights TBD per scoring-spec v0.1.'},
-    judges:{
-      security:{score:sc.sec,passed:s.scores.security.passed,signals:s.scores.security.sigs},
-      correctness:{score:sc.cor,passed:s.scores.correctness.passed,signals:s.scores.correctness.sigs},
-      quality:{score:sc.qua,passed:s.scores.quality.passed,signals:s.scores.quality.sigs}
+    dimensions:{
+      benchmarkPerformance:{score:sc.bp,passed:s.scores.benchmarkPerformance.passed,signals:s.scores.benchmarkPerformance.sigs},
+      valueEfficiency:{score:sc.tcd,passed:s.scores.tokenCostDelta.passed,rawDeltaPct:s.scores.tokenCostDelta.rawDeltaPct,signals:s.scores.tokenCostDelta.sigs},
+      uxSignal:{score:sc.ux,passed:s.scores.uxSignal.passed,signals:s.scores.uxSignal.sigs}
     },
     attribution:s.attr?{rootCause:s.attr.rootCause,confidence:s.attr.confidence,
       agentFault:s.attr.agentFault,chain:s.attr.chain,recommendations:s.attr.recs}:null
@@ -1084,13 +1102,18 @@ function renderMetrics(){
   </div>
   <div class="metrics-grid">
     <div class="chart-card">
-      <div class="chart-title">AgentScore.eval.metric_score — judge averages</div>
+      <div class="chart-title">AgentScore.eval.metric_score — dimension averages (attr: dimension)</div>
       <div class="barchart">
-      ${['security','correctness','quality'].map(dim=>{
-        const avg=Math.round(all.reduce((a,s)=>a+s.scores[dim].score,0)/all.length*100);
+      ${[
+        {key:'benchmarkPerformance',label:'Benchmark Perf'},
+        {key:'tokenCostDelta',label:'Token Cost Δ'},
+        {key:'uxSignal',label:'UX Signal'}
+      ].map(({key,label})=>{
+        const vals=all.map(s=>s.scores[key].score).filter(v=>v!=null);
+        const avg=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*100):0;
         const cls=avg>=75?'pass':avg>=60?'partial':'fail';
         return`<div class="br">
-          <span class="br-label" style="text-transform:capitalize;font-weight:600">${dim}</span>
+          <span class="br-label" style="font-weight:600">${label}</span>
           <div class="br-track"><div class="br-seg ${cls}" style="width:${avg}%"></div></div>
           <span class="br-val" style="color:var(--${cls})">${avg}</span>
         </div>`;
