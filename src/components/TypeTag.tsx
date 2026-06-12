@@ -1,13 +1,13 @@
 import Tag from "@tricentis/aura/components/Tag.js";
 import type { ProjectType } from "../types";
 
-const COLORS: Record<ProjectType, { bg: string; color: string }> = {
-  ATA: { bg: "#1a1b3a", color: "#818cf8" },
-  ATC: { bg: "#1a2e1a", color: "#4ade80" },
-  CURA: { bg: "#2e1a2e", color: "#c084fc" },
-  AI_WORKSPACE: { bg: "#1a2a2e", color: "#38bdf8" },
-  CODING: { bg: "#2e2a1a", color: "#fbbf24" },
-  APT: { bg: "#2e1a1a", color: "#f87171" },
+const COLORS: Record<ProjectType, { muiColor: string; hex: string }> = {
+  ATA: { muiColor: "primary", hex: "#818cf8" },
+  ATC: { muiColor: "success", hex: "#4ade80" },
+  CURA: { muiColor: "secondary", hex: "#c084fc" },
+  AI_WORKSPACE: { muiColor: "info", hex: "#38bdf8" },
+  CODING: { muiColor: "warning", hex: "#fbbf24" },
+  APT: { muiColor: "error", hex: "#f87171" },
 };
 
 const LABELS: Record<ProjectType, string> = {
@@ -24,18 +24,18 @@ interface Props {
 }
 
 export default function TypeTag({ type }: Props) {
-  const { bg, color } = COLORS[type];
+  const { muiColor, hex } = COLORS[type];
   return (
     <Tag
       label={LABELS[type]}
       sx={{
-        bgcolor: bg,
-        color,
+        bgcolor: `rgba(var(--mui-palette-${muiColor}-mainChannel) / 0.12)`,
+        border: `1px solid rgba(var(--mui-palette-${muiColor}-mainChannel) / 0.3)`,
         fontWeight: 600,
         fontSize: "0.68rem",
         letterSpacing: "0.03em",
         height: 20,
-        border: `1px solid ${color}22`,
+        "& .MuiChip-label": { color: hex },
       }}
     />
   );

@@ -285,7 +285,7 @@ function TricentisTab() {
               Inline verdict preview
             </Typography>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, p: 1, border: "1px solid", borderColor: "divider", borderRadius: 1, bgcolor: "background.paper" }}>
-              <Box sx={{ width: 32, height: 32, borderRadius: 1, bgcolor: "#14532d", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Box sx={{ width: 32, height: 32, borderRadius: 1, bgcolor: "rgba(var(--mui-palette-success-mainChannel) / 0.15)", border: "1px solid rgba(var(--mui-palette-success-mainChannel) / 0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Typography sx={{ fontWeight: 800, color: "#4ade80", fontSize: "0.9rem" }}>A</Typography>
               </Box>
               <Box>

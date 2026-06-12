@@ -121,7 +121,7 @@ export default function LLMJudgesView({ navigate }: Props) {
                 border: "1px solid",
                 borderColor: always ? "divider" : "warning.dark",
                 borderRadius: 1.5,
-                bgcolor: always ? "transparent" : "#1f1400",
+                bgcolor: always ? "transparent" : "rgba(var(--mui-palette-warning-mainChannel) / 0.08)",
               }}
             >
               <Typography variant="caption" sx={{ fontWeight: 700, display: "block", mb: 0.25 }}>

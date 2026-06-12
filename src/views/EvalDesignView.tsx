@@ -41,22 +41,22 @@ const CAT_CONFIG = {
   nightmare: {
     label: "Nightmare",
     color: "error" as const,
-    bg: "#2e0a0a",
-    border: "#5c1a1a",
+    bg: "rgba(var(--mui-palette-error-mainChannel) / 0.08)",
+    border: "rgba(var(--mui-palette-error-mainChannel) / 0.3)",
     desc: "Adversarial inputs, edge conditions, failure modes",
   },
   reality: {
     label: "Reality",
     color: "primary" as const,
-    bg: "#0d1a2e",
-    border: "#1a3a5c",
+    bg: "rgba(var(--mui-palette-primary-mainChannel) / 0.08)",
+    border: "rgba(var(--mui-palette-primary-mainChannel) / 0.3)",
     desc: "Scenarios where the agent is expected to succeed reliably",
   },
   dream: {
     label: "Dream",
     color: "success" as const,
-    bg: "#0a1f0a",
-    border: "#1a3d1a",
+    bg: "rgba(var(--mui-palette-success-mainChannel) / 0.08)",
+    border: "rgba(var(--mui-palette-success-mainChannel) / 0.3)",
     desc: "Stretch scenarios that probe capabilities beyond current expectations",
   },
 };
@@ -124,7 +124,7 @@ export default function EvalDesignView({ projectId, navigate }: Props) {
               border: "1px solid",
               borderColor: status === "observation_ready" ? "warning.dark" : "divider",
               borderRadius: 2,
-              bgcolor: status === "observation_ready" ? "#1f1700" : "transparent",
+              bgcolor: status === "observation_ready" ? "rgba(var(--mui-palette-warning-mainChannel) / 0.08)" : "transparent",
             }}
           >
             <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
@@ -292,7 +292,7 @@ function ConfirmedDesignBanner({ design }: { design: ReturnType<typeof getEvalDe
       }}
     >
       {/* Banner header */}
-      <Box sx={{ px: 2.5, py: 1.5, bgcolor: "#0a1f0a", display: "flex", alignItems: "center", gap: 1.5 }}>
+      <Box sx={{ px: 2.5, py: 1.5, bgcolor: "rgba(var(--mui-palette-success-mainChannel) / 0.1)", display: "flex", alignItems: "center", gap: 1.5 }}>
         <ChipStatus status="Passed" />
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
           Scoring runs against these dimensions and calibration scenarios on every session.
@@ -894,7 +894,7 @@ function SuggestedDimensionCard({ dim, confirmed = false }: { dim: SuggestedDime
         border: "1px solid",
         borderColor: confirmed ? "success.dark" : "divider",
         borderRadius: 1.5,
-        bgcolor: confirmed ? "#0a1f0a" : "transparent",
+        bgcolor: confirmed ? "rgba(var(--mui-palette-success-mainChannel) / 0.1)" : "transparent",
       }}
     >
       <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 2 }}>
