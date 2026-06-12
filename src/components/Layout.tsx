@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
 import IconButton from "@mui/material/IconButton";
 import SvgIcon from "@mui/material/SvgIcon";
-import { useTheme, useColorScheme } from "@mui/material/styles";
+import { useColorScheme } from "@mui/material/styles";
 import NavRail from "@tricentis/aura/components/NavRail.js";
 import IconAgentsOutlined from "@tricentis/aura/components/IconAgentsOutlined.js";
 import IconRunPrivatelyOutlined from "@tricentis/aura/components/IconRunPrivatelyOutlined.js";
@@ -38,11 +38,8 @@ function projectIcon(type: ProjectType): ReactElement {
 }
 
 export default function Layout({ view, navigate, children }: Props) {
-  const theme = useTheme();
   const { mode, setMode } = useColorScheme();
   const isDark = (mode ?? "dark") === "dark";
-  const borderColor = isDark ? "#222640" : theme.palette.divider;
-  const surfaceBg = isDark ? "#131626" : theme.palette.background.paper;
 
   const breadcrumbs = buildBreadcrumbs(view);
 
@@ -119,8 +116,9 @@ export default function Layout({ view, navigate, children }: Props) {
             px: 2,
             display: "flex",
             alignItems: "center",
-            bgcolor: surfaceBg,
-            borderBottom: `1px solid ${borderColor}`,
+            bgcolor: "background.paper",
+            borderBottom: "1px solid",
+            borderColor: "divider",
             flexShrink: 0,
             gap: 2,
           }}
@@ -135,7 +133,7 @@ export default function Layout({ view, navigate, children }: Props) {
               sx={{
                 fontWeight: 700,
                 letterSpacing: "-0.02em",
-                color: isDark ? "#e2e8f0" : "text.primary",
+                color: "text.primary",
                 mr: 0.75,
               }}
             >
@@ -147,7 +145,7 @@ export default function Layout({ view, navigate, children }: Props) {
                 px: 0.6,
                 py: 0.1,
                 borderRadius: 0.5,
-                bgcolor: isDark ? "#1a1b3a" : "primary.light",
+                bgcolor: "action.selected",
                 color: "primary.main",
                 fontWeight: 700,
                 fontSize: "0.6rem",
@@ -208,7 +206,7 @@ export default function Layout({ view, navigate, children }: Props) {
         </Box>
 
         {/* Content */}
-        <Box sx={{ flex: 1, overflow: "auto", bgcolor: isDark ? "#0d0f1a" : "background.default" }}>
+        <Box sx={{ flex: 1, overflow: "auto", bgcolor: "background.default" }}>
           {children}
         </Box>
       </Box>
