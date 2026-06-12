@@ -2,37 +2,55 @@
 
 **Know if your AI agent is ready to ship.**
 
-AgentScore evaluates AI agent sessions with parallel LLM judges (Security, Correctness, Quality) plus a conditional Attribution judge on failure. Every session produces an evidence-backed PASS / PARTIAL / FAIL verdict and, on failure, a structured root-cause attribution.
+AgentScore evaluates AI agent sessions with parallel judges (Benchmark Performance, Value Efficiency, UX Signal) plus a conditional Attribution judge on failure. Every session produces an evidence-backed PASS / PARTIAL / FAIL verdict and, on failure, a structured root-cause attribution.
 
 > Phase 1 scope: ATA (`autonomous-service`) only. Phase 2 extends to ATC, AI Workspace, CURA, and external agents.
 
 ---
 
-## Prototype
+## Setup
 
-`prototype.html` is a self-contained interactive prototype covering the full product surface:
+### Prerequisites
 
-- **Fleet view** — project tiles with pass rate, primary verdict, reliability label, and type tag
-- **Project / Run / Session hierarchy** — Fleet > Project > Run > Session
-- **Session score card** — Security, Correctness, Quality judge scores; PASS/PARTIAL/FAIL verdict; Ship/Review/Don't Ship indicator; composite score (Phase 2 preview)
-- **Attribution panel** — root cause (FailureTypeEnum), confidence, evidence chain, recommendations (non-PASS sessions only)
-- **Guard log** — `POST /guard/pre-tool-use` decisions with R1/R2/R3 rule annotations
-- **Metrics dashboard** — all 7 OTLP metrics from the catalog
-- **Session reports** — Markdown and JSON tabs with full artifact path
+- Node.js ≥ 20
+- pnpm ≥ 10
+- The `aura-ui` design system repo cloned at `../Tricentis/aura-ui` relative to this directory (the React prototype resolves `@tricentis/aura` from that path via a Vite alias)
 
-Open `prototype.html` directly in a browser. State persists in `localStorage`.
+```bash
+pnpm install
+node_modules/.bin/vite          # dev server at http://localhost:5173
+```
+
+> **Note:** `pnpm dev` triggers a pre-run install check that may block on esbuild's build script approval in pnpm v11. Run `pnpm approve-builds` once to unblock it, or use `node_modules/.bin/vite` directly.
+
+---
+
+## Prototype views
+
+The React prototype (`src/`) covers the full product surface across seven views:
+
+- **Fleet** — project tiles with pass rate, primary verdict, reliability label, and type tag
+- **Project** — runs table with pass rate and latest verdict per run; Evaluation Design entry point
+- **Run** — sessions table with per-dimension scores and verdict
+- **Session** — composite score meter, Benchmark Performance / Value Efficiency / UX Signal dimension bars, safety override alert, Attribution panel, Markdown and JSON report tabs
+- **Evaluation Design** — per-project view with three tabs:
+  - *Observation-Based* — Measurement Recommendation surfaced from shadow-mode sessions (suggested dimensions, thresholds, seed calibration set from real failure patterns)
+  - *Spec-Based* — paste an agent description, generate a ranked list of evaluation questions, select and confirm
+  - *Calibration Set* — Nightmares / Reality / Dreams browser with completeness warning when nightmare scenarios are absent
+- **Guard Log** — filterable decision stream with R1/R2/R3 rule annotations and allow/warn/block breakdown
+- **Metrics** — all 7 OTLP metrics from the catalog with live counts from mock data
 
 ---
 
 ## Evaluation pipeline
 
-Three concurrent LLM judges over the canonical session trace:
+Three concurrent judges over the canonical session trace:
 
-| Judge | Signals |
+| Dimension | Signals |
 |---|---|
-| **Security** | `prompt_injection_detected`, `credential_exposure`, `pii_leak`, `path_violation` |
-| **Correctness** | `task_success`, `prompt_compliance`, `tool_success_rate` |
-| **Quality** | `trajectory_efficiency`, `faithfulness`, `relevance`, `recovery_diversity` |
+| **Benchmark Performance** | `task_success`, `completion_rate`, `prompt_compliance` |
+| **Value Efficiency** | `value_cost_ratio`, `p95_tail_cost` |
+| **UX Signal** | `latency_score`, `error_rate_score`, `abandonment_score` |
 
 On any non-PASS session, a conditional **Attribution** judge runs and outputs: `rootCause` (FailureTypeEnum), `confidence`, `agentFault`, evidence `chain`, `recommendations`.
 
@@ -87,10 +105,10 @@ S3 best-effort mirror with `tracePath` redacted. Failure logs to stderr only; ne
 | Metric | Type | Description |
 |---|---|---|
 | `AgentScore.eval.outcome` | counter | Session count by verdict (attrs: `verdict`, `project`) |
-| `AgentScore.eval.metric_score` | gauge | Per-signal score 0..1, NaN when N/A (attrs: `metric`, `category`, `passed`, `severity`, `project`) |
+| `AgentScore.eval.metric_score` | gauge | Per-dimension score 0..1, N/A when not applicable (attrs: `dimension`, `project`) |
 | `AgentScore.eval.root_cause` | counter | Attribution distribution, non-PASS only (attrs: `root_cause`, `agent_fault`, `project`) |
-| `AgentScore.session.duration` | histogram | Session wall-clock latency (ms) |
-| `gen_ai.client.token.usage` | histogram | Token consumption, OTel GenAI semconv (attrs: `gen_ai.token.type`, `AgentScore.role`, `project`) |
+| `AgentScore.session.duration` | histogram | Session wall-clock latency (ms); primary input to UX Signal |
+| `gen_ai.client.token.usage` | histogram | Token consumption per task; primary input to Value Efficiency (attrs: `gen_ai.token.type`, `AgentScore.role`, `project`) |
 | `AgentScore.evaluator.llm_calls` | counter | LLM judge calls per session (attr: `project`) — 3–4 depending on verdict |
 | `AgentScore.guard.decisions` | counter | Runtime guard decision stream (attrs: `decision`, `project`) |
 
