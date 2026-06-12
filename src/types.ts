@@ -93,7 +93,21 @@ export type View =
   | { name: "session"; projectId: string; runId: string; sessionId: string }
   | { name: "eval-design"; projectId: string }
   | { name: "guard-log" }
-  | { name: "metrics" };
+  | { name: "metrics" }
+  | { name: "llm-judges" }
+  | { name: "add-judge" };
+
+export type LLMProvider = "Anthropic" | "AWS Bedrock" | "OpenAI-compatible";
+
+export interface LLMJudge {
+  id: string;
+  name: string;
+  description: string;
+  provider: LLMProvider;
+  model: string;
+  createdAt: string;
+  status: "live" | "error";
+}
 
 // ── Evaluation Design types ──────────────────────────────────────────────────
 

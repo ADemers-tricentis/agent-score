@@ -8,6 +8,8 @@ import SessionView from "./views/SessionView";
 import GuardLogView from "./views/GuardLogView";
 import MetricsView from "./views/MetricsView";
 import EvalDesignView from "./views/EvalDesignView";
+import LLMJudgesView from "./views/LLMJudgesView";
+import AddJudgeView from "./views/AddJudgeView";
 
 export default function App() {
   const [view, setView] = useState<View>({ name: "fleet" });
@@ -35,6 +37,10 @@ export default function App() {
         return <GuardLogView navigate={setView} />;
       case "metrics":
         return <MetricsView />;
+      case "llm-judges":
+        return <LLMJudgesView navigate={setView} />;
+      case "add-judge":
+        return <AddJudgeView navigate={setView} />;
     }
   }
 

@@ -107,6 +107,12 @@ export default function Layout({ view, navigate, children }: Props) {
           <ButtonBase sx={navItemStyle(view.name === "metrics")} onClick={() => navigate({ name: "metrics" })}>
             Metrics
           </ButtonBase>
+          <ButtonBase
+            sx={navItemStyle(view.name === "llm-judges" || view.name === "add-judge")}
+            onClick={() => navigate({ name: "llm-judges" })}
+          >
+            LLM Judges
+          </ButtonBase>
         </Box>
 
         <Box sx={{ px: 1.5, pt: 2 }}>
@@ -118,31 +124,47 @@ export default function Layout({ view, navigate, children }: Props) {
           </Typography>
           {PROJECTS.map((p) => {
             const active = "projectId" in view && view.projectId === p.id;
+            const evalDesignActive = view.name === "eval-design" && "projectId" in view && view.projectId === p.id;
             return (
-              <ButtonBase
-                key={p.id}
-                sx={navItemStyle(active)}
-                onClick={() => navigate({ name: "project", projectId: p.id })}
-              >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1, width: "100%" }}>
-                  <Box
+              <Box key={p.id}>
+                <ButtonBase
+                  sx={navItemStyle(active && view.name === "project")}
+                  onClick={() => navigate({ name: "project", projectId: p.id })}
+                >
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, width: "100%" }}>
+                    <Box
+                      sx={{
+                        width: 6,
+                        height: 6,
+                        borderRadius: "50%",
+                        bgcolor: reliabilityColor(p.reliability),
+                        flexShrink: 0,
+                      }}
+                    />
+                    <Typography
+                      variant="body2"
+                      noWrap
+                      sx={{ fontWeight: active ? 600 : 400, color: "inherit", fontSize: "0.8125rem" }}
+                    >
+                      {p.name}
+                    </Typography>
+                  </Box>
+                </ButtonBase>
+                {active && (
+                  <ButtonBase
                     sx={{
-                      width: 6,
-                      height: 6,
-                      borderRadius: "50%",
-                      bgcolor: reliabilityColor(p.reliability),
-                      flexShrink: 0,
+                      ...navItemStyle(evalDesignActive),
+                      pl: 3.5,
+                      fontSize: "0.775rem",
                     }}
-                  />
-                  <Typography
-                    variant="body2"
-                    noWrap
-                    sx={{ fontWeight: active ? 600 : 400, color: "inherit", fontSize: "0.8125rem" }}
+                    onClick={() => navigate({ name: "eval-design", projectId: p.id })}
                   >
-                    {p.name}
-                  </Typography>
-                </Box>
-              </ButtonBase>
+                    <Typography variant="caption" sx={{ color: "inherit", fontSize: "0.775rem", fontWeight: evalDesignActive ? 600 : 400 }}>
+                      Evaluation Design
+                    </Typography>
+                  </ButtonBase>
+                )}
+              </Box>
             );
           })}
         </Box>
@@ -225,5 +247,9 @@ function buildBreadcrumbs(view: View): { label: string; onClick?: () => void }[]
       return [{ label: "Guard Log" }];
     case "metrics":
       return [{ label: "Metrics" }];
+    case "llm-judges":
+      return [{ label: "LLM Judges" }];
+    case "add-judge":
+      return [{ label: "LLM Judges" }, { label: "Add Judge" }];
   }
 }

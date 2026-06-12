@@ -102,11 +102,112 @@ export default function EvalDesignView({ projectId, navigate }: Props) {
           </Typography>
           <DesignStatusChip status={status} />
         </Box>
-        <Typography variant="body2" sx={{ color: "text.secondary", maxWidth: 620 }}>
-          Define what to measure before you score. A benchmark that only tests what you expect to pass
-          will produce a PASS verdict on an agent that isn't ready.
+        <Typography variant="body2" sx={{ color: "text.secondary", maxWidth: 700 }}>
+          The hardest part of agent evaluation is not running it — it is deciding what to evaluate.
+          A benchmark built only around expected successes will produce a PASS on an agent that is not
+          production-ready. AgentScore provides two paths to a structured evaluation design: start from
+          observed behavior, or start from a description of what the agent is supposed to do. Both
+          produce the same output.
         </Typography>
       </Box>
+
+      {/* Two-path explainer — shown until a design is confirmed */}
+      {status !== "confirmed" && (
+        <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, mb: 3 }}>
+          <Paper
+            sx={{
+              p: 2,
+              border: "1px solid",
+              borderColor: status === "observation_ready" ? "warning.dark" : "divider",
+              borderRadius: 2,
+              bgcolor: status === "observation_ready" ? "#1f1700" : "transparent",
+            }}
+          >
+            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
+              Observation-Based
+              {status === "observation_ready" && (
+                <Chip label="Ready" color="warning" size="small" sx={{ ml: 1, height: 18, fontSize: "0.6rem", fontWeight: 700 }} />
+              )}
+            </Typography>
+            <Typography variant="body2" sx={{ color: "text.secondary", mb: 1.5 }}>
+              Run the agent in shadow mode. AgentScore watches tool call distribution, session shape,
+              output variance, context grounding, and failure clustering. After 10+ sessions it
+              surfaces a Measurement Recommendation derived entirely from observed behavior.
+            </Typography>
+            <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 600, display: "block", mb: 0.5 }}>
+              Produces
+            </Typography>
+            {[
+              "Suggested dimensions to score, with directionality defined",
+              "Thresholds derived from the agent's observed baseline — not generic defaults",
+              "Seed calibration set seeded from real failure patterns (nightmares first)",
+            ].map((item) => (
+              <Box key={item} sx={{ display: "flex", gap: 0.75, mb: 0.4 }}>
+                <Typography variant="caption" sx={{ color: "warning.main", fontWeight: 700, flexShrink: 0 }}>›</Typography>
+                <Typography variant="caption" sx={{ color: "text.secondary" }}>{item}</Typography>
+              </Box>
+            ))}
+            <Typography variant="caption" sx={{ color: "text.disabled", display: "block", mt: 1.5, fontStyle: "italic" }}>
+              Best for agents with existing production or shadow-mode traffic.
+            </Typography>
+          </Paper>
+
+          <Paper
+            sx={{
+              p: 2,
+              border: "1px solid",
+              borderColor: "divider",
+              borderRadius: 2,
+            }}
+          >
+            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
+              Spec-Based
+            </Typography>
+            <Typography variant="body2" sx={{ color: "text.secondary", mb: 1.5 }}>
+              Paste a description of what the agent is supposed to do. AgentScore returns a prioritized
+              list of evaluation questions across applicable categories, each with a task definition,
+              required data, candidate measure, and directionality. Select which to pursue.
+            </Typography>
+            <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 600, display: "block", mb: 0.5 }}>
+              Produces
+            </Typography>
+            {[
+              "Ranked evaluation questions filtered to categories you select",
+              "Task definitions with required data and candidate measures",
+              "Nightmare scenarios generated from stated failure modes and risk areas",
+            ].map((item) => (
+              <Box key={item} sx={{ display: "flex", gap: 0.75, mb: 0.4 }}>
+                <Typography variant="caption" sx={{ color: "primary.main", fontWeight: 700, flexShrink: 0 }}>›</Typography>
+                <Typography variant="caption" sx={{ color: "text.secondary" }}>{item}</Typography>
+              </Box>
+            ))}
+            <Typography variant="caption" sx={{ color: "text.disabled", display: "block", mt: 1.5, fontStyle: "italic" }}>
+              Best for new agents or when specific risk categories need coverage.
+            </Typography>
+          </Paper>
+        </Box>
+      )}
+
+      {/* Output definition — shown until confirmed */}
+      {status !== "confirmed" && (
+        <Alert severity="info" icon={false} sx={{ mb: 3, "& .MuiAlert-message": { width: "100%" } }}>
+          <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.5 }}>
+            Both paths produce the same output: a confirmed evaluation design
+          </Typography>
+          <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+            {[
+              { label: "Dimensions", detail: "What to score, with directionality (↑ or ↓)" },
+              { label: "Thresholds", detail: "Minimum passing score per dimension" },
+              { label: "Calibration set", detail: "Nightmares · Reality · Dreams" },
+            ].map(({ label, detail }) => (
+              <Box key={label}>
+                <Typography variant="caption" sx={{ fontWeight: 700, color: "text.primary", display: "block" }}>{label}</Typography>
+                <Typography variant="caption" sx={{ color: "text.secondary" }}>{detail}</Typography>
+              </Box>
+            ))}
+          </Box>
+        </Alert>
+      )}
 
       {/* Confirmed design summary — shown when confirmed */}
       {status === "confirmed" && design && (
@@ -282,6 +383,7 @@ function ObservationTab({
             "Tool call distribution — which tools the agent calls, how often, in what sequences",
             "Session shape — length, step count, retry frequency, error rate, abandonment patterns",
             "Output variance — whether the agent produces different outputs on equivalent inputs",
+            "Context grounding — whether RAG-retrieved data, injected state, or system context appears in tool calls and outputs",
             "Failure clustering — sessions grouped by failure type, where the agent struggles",
           ].map((item) => (
             <Typography key={item} component="li" variant="body2" sx={{ color: "text.secondary", mb: 0.5 }}>
@@ -389,17 +491,54 @@ It receives test execution logs, environment metadata, and a dependency graph. I
 
 Primary concerns: accuracy on ambiguous cases, avoiding false positives that blame healthy components, and staying within latency budget for CI-blocking use.`;
 
+const SHOWCASE_CATEGORIES = [
+  { key: "Benchmark Performance", desc: "Did the agent do the right thing?" },
+  { key: "Value Efficiency", desc: "Was the cost worth the output?" },
+  { key: "UX Signal", desc: "Fast, reliable, low error rate?" },
+  { key: "Harmony", desc: "Output consistent with provided context?" },
+  { key: "Stability", desc: "Consistent across equivalent inputs?" },
+  { key: "Agency", desc: "Tool selection and planning efficiency?" },
+];
+
+const RISK_AREAS = [
+  "Credential / secret exposure",
+  "Hallucinated state or facts",
+  "Wrong tool selection",
+  "PII leakage",
+  "Path / permission violation",
+  "Latency / cost overrun",
+];
+
 function SpecTab({ status }: { projectId: string; status: string }) {
   const [specText, setSpecText] = useState(status === "no_design" ? PLACEHOLDER_SPEC : "");
+  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
+    new Set(["Benchmark Performance", "Value Efficiency", "UX Signal"])
+  );
+  const [selectedRisks, setSelectedRisks] = useState<Set<string>>(new Set());
   const [generated, setGenerated] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [questions, setQuestions] = useState<EvalQuestion[]>([]);
   const [confirmed, setConfirmed] = useState(false);
 
+  function toggleCategory(key: string) {
+    setSelectedCategories((prev) => {
+      const next = new Set(prev);
+      next.has(key) ? next.delete(key) : next.add(key);
+      return next;
+    });
+  }
+
+  function toggleRisk(key: string) {
+    setSelectedRisks((prev) => {
+      const next = new Set(prev);
+      next.has(key) ? next.delete(key) : next.add(key);
+      return next;
+    });
+  }
+
   function handleGenerate() {
-    if (!specText.trim()) return;
+    if (!specText.trim() || selectedCategories.size === 0) return;
     setGenerating(true);
-    // Simulate a brief generation delay
     setTimeout(() => {
       setQuestions(SPEC_GENERATED_QUESTIONS.map((q) => ({ ...q, selected: q.riskLevel === "high" })));
       setGenerating(false);
@@ -420,6 +559,50 @@ function SpecTab({ status }: { projectId: string; status: string }) {
 
       {!generated ? (
         <>
+          <Paper sx={{ p: 2, mb: 2.5, border: "1px solid", borderColor: "primary.dark", borderRadius: 1.5, bgcolor: "action.hover" }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
+              What should we focus on?
+            </Typography>
+            <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 1.5 }}>
+              Select the evaluation categories and risk areas most relevant to this agent. This constrains output to questions you can actually act on.
+            </Typography>
+
+            <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", mb: 0.75 }}>
+              Evaluation categories
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75, mb: 2 }}>
+              {SHOWCASE_CATEGORIES.map(({ key, desc }) => (
+                <Chip
+                  key={key}
+                  label={key}
+                  size="small"
+                  variant={selectedCategories.has(key) ? "filled" : "outlined"}
+                  color={selectedCategories.has(key) ? "primary" : "default"}
+                  onClick={() => toggleCategory(key)}
+                  sx={{ cursor: "pointer", fontWeight: selectedCategories.has(key) ? 700 : 400, fontSize: "0.72rem" }}
+                  title={desc}
+                />
+              ))}
+            </Box>
+
+            <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", mb: 0.75 }}>
+              Risk areas to probe (optional)
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75 }}>
+              {RISK_AREAS.map((r) => (
+                <Chip
+                  key={r}
+                  label={r}
+                  size="small"
+                  variant={selectedRisks.has(r) ? "filled" : "outlined"}
+                  color={selectedRisks.has(r) ? "error" : "default"}
+                  onClick={() => toggleRisk(r)}
+                  sx={{ cursor: "pointer", fontWeight: selectedRisks.has(r) ? 700 : 400, fontSize: "0.72rem" }}
+                />
+              ))}
+            </Box>
+          </Paper>
+
           <TextField
             multiline
             minRows={8}
@@ -439,13 +622,20 @@ function SpecTab({ status }: { projectId: string; status: string }) {
               <LinearProgress />
             </Box>
           )}
-          <Button
-            variant="contained"
-            disabled={!specText.trim() || generating}
-            onClick={handleGenerate}
-          >
-            Generate evaluation questions
-          </Button>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <Button
+              variant="contained"
+              disabled={!specText.trim() || generating || selectedCategories.size === 0}
+              onClick={handleGenerate}
+            >
+              Generate evaluation questions
+            </Button>
+            {selectedCategories.size === 0 && (
+              <Typography variant="caption" sx={{ color: "warning.main" }}>
+                Select at least one category above.
+              </Typography>
+            )}
+          </Box>
         </>
       ) : (
         <>

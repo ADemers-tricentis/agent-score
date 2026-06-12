@@ -1,4 +1,4 @@
-import type { Project, GuardLogEntry, EvalDesign } from "../types";
+import type { Project, GuardLogEntry, EvalDesign, LLMJudge } from "../types";
 
 export const PROJECTS: Project[] = [
   {
@@ -879,3 +879,35 @@ export const SPEC_GENERATED_QUESTIONS = [
 export function getEvalDesign(projectId: string): EvalDesign | undefined {
   return EVAL_DESIGNS[projectId];
 }
+
+// ── LLM Judges mock data ──────────────────────────────────────────────────────
+
+export const LLM_JUDGES: LLMJudge[] = [
+  {
+    id: "j1",
+    name: "Sonnet-strict",
+    description: "Primary judge for correctness and quality evaluation. Strict rubric, high accuracy.",
+    provider: "Anthropic",
+    model: "claude-sonnet-4-6",
+    createdAt: "2026-05-28",
+    status: "live",
+  },
+  {
+    id: "j2",
+    name: "Bedrock-haiku-fast",
+    description: "Low-latency judge for guard-layer pre-checks. Speed-optimized.",
+    provider: "AWS Bedrock",
+    model: "us.anthropic.claude-haiku-4-5-20251001",
+    createdAt: "2026-06-01",
+    status: "live",
+  },
+  {
+    id: "j3",
+    name: "Attribution-opus",
+    description: "High-capability judge used exclusively for attribution on FAIL sessions.",
+    provider: "Anthropic",
+    model: "claude-opus-4-8",
+    createdAt: "2026-06-05",
+    status: "live",
+  },
+];

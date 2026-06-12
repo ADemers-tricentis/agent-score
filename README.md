@@ -2,6 +2,8 @@
 
 **Know if your AI agent is ready to ship.**
 
+> **PRD:** [AgentScore PRD (Draft)](https://tricentis.atlassian.net/wiki/x/xAAIyQ) — Confluence
+
 AgentScore evaluates AI agent sessions with parallel judges (Benchmark Performance, Value Efficiency, UX Signal) plus a conditional Attribution judge on failure. Every session produces an evidence-backed PASS / PARTIAL / FAIL verdict and, on failure, a structured root-cause attribution.
 
 > Phase 1 scope: ATA (`autonomous-service`) only. Phase 2 extends to ATC, AI Workspace, CURA, and external agents.
