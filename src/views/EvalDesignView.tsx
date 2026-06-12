@@ -555,14 +555,20 @@ const RISK_AREAS = [
 ];
 
 function SpecTab({ status }: { projectId: string; status: string }) {
-  const [specText, setSpecText] = useState(status === "no_design" ? PLACEHOLDER_SPEC : "");
+  const [specText, setSpecText] = useState(PLACEHOLDER_SPEC);
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
-    new Set(["Benchmark Performance", "Value Efficiency", "UX Signal"])
+    new Set(["Benchmark Performance", "Value Efficiency", "UX Signal", "Agency", "Harmony", "Stability"])
   );
-  const [selectedRisks, setSelectedRisks] = useState<Set<string>>(new Set());
-  const [generated, setGenerated] = useState(false);
+  const [selectedRisks, setSelectedRisks] = useState<Set<string>>(
+    new Set(["Hallucinated state or facts", "Wrong tool selection"])
+  );
+  const [generated, setGenerated] = useState(status === "no_design");
   const [generating, setGenerating] = useState(false);
-  const [questions, setQuestions] = useState<EvalQuestion[]>([]);
+  const [questions, setQuestions] = useState<EvalQuestion[]>(
+    status === "no_design"
+      ? SPEC_GENERATED_QUESTIONS.map((q) => ({ ...q, selected: q.riskLevel === "high" }))
+      : []
+  );
   const [confirmed, setConfirmed] = useState(false);
 
   function toggleCategory(key: string) {
