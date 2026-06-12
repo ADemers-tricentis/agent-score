@@ -2,8 +2,8 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
 import MenuItem from "@mui/material/MenuItem";
+import ChipSubtle from "@tricentis/aura/components/ChipSubtle.js";
 import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
@@ -155,10 +155,9 @@ export default function GuardLogView({ navigate: _navigate }: Props) {
                   </TableCell>
                   <TableCell>
                     {entry.rule ? (
-                      <Chip
+                      <ChipSubtle
                         label={entry.rule}
                         color={RULE_CONFIG[entry.rule].color}
-                        size="small"
                         sx={{ fontWeight: 700, fontSize: "0.68rem", height: 20 }}
                       />
                     ) : (
@@ -166,10 +165,9 @@ export default function GuardLogView({ navigate: _navigate }: Props) {
                     )}
                   </TableCell>
                   <TableCell>
-                    <Chip
+                    <ChipSubtle
                       label={decCfg.label}
                       color={decCfg.color}
-                      size="small"
                       sx={{ fontWeight: 700, fontSize: "0.68rem", height: 20 }}
                     />
                   </TableCell>
@@ -209,7 +207,7 @@ export default function GuardLogView({ navigate: _navigate }: Props) {
               sx={{ p: 1.5, flex: "1 1 280px", border: "1px solid", borderColor: "divider", borderRadius: 1.5 }}
             >
               <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
-                <Chip label={rule} color={RULE_CONFIG[rule as GuardRule & string].color} size="small" sx={{ fontWeight: 700, fontSize: "0.68rem", height: 20 }} />
+                <ChipSubtle label={rule} color={RULE_CONFIG[rule as GuardRule & string].color} sx={{ fontWeight: 700, fontSize: "0.68rem", height: 20 }} />
               </Box>
               <Typography variant="caption" sx={{ color: "text.secondary" }}>{desc}</Typography>
             </Paper>

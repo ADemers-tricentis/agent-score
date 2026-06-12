@@ -1,4 +1,4 @@
-import Chip from "@mui/material/Chip";
+import Tag from "@tricentis/aura/components/Tag.js";
 import type { ProjectType } from "../types";
 
 const COLORS: Record<ProjectType, { bg: string; color: string }> = {
@@ -26,9 +26,8 @@ interface Props {
 export default function TypeTag({ type }: Props) {
   const { bg, color } = COLORS[type];
   return (
-    <Chip
+    <Tag
       label={LABELS[type]}
-      size="small"
       sx={{
         bgcolor: bg,
         color,

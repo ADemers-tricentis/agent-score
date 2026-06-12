@@ -2,8 +2,9 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
-import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
+import Tag from "@tricentis/aura/components/Tag.js";
+import ChipSubtle from "@tricentis/aura/components/ChipSubtle.js";
 import type { View } from "../types";
 import { PROJECTS, projectPassRate, projectLatestVerdict } from "../data/mock";
 import VerdictBadge from "../components/VerdictBadge";
@@ -78,9 +79,8 @@ export default function FleetView({ navigate }: Props) {
                   </Box>
                   <Box sx={{ display: "flex", gap: 0.75, flexWrap: "wrap", justifyContent: "flex-end" }}>
                     <TypeTag type={project.type} />
-                    <Chip
+                    <Tag
                       label={`Phase ${project.phase}`}
-                      size="small"
                       sx={{ height: 20, fontSize: "0.65rem", fontWeight: 600, color: "text.disabled" }}
                     />
                   </Box>
@@ -91,11 +91,9 @@ export default function FleetView({ navigate }: Props) {
                 {/* Stats row */}
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1.5, flexWrap: "wrap" }}>
                   <VerdictBadge verdict={verdict} />
-                  <Chip
+                  <ChipSubtle
                     label={rel.label}
                     color={rel.color}
-                    size="small"
-                    variant="outlined"
                     sx={{ height: 20, fontSize: "0.65rem", fontWeight: 600 }}
                   />
                   <Typography variant="caption" sx={{ color: "text.secondary", ml: "auto" }}>

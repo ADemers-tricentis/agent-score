@@ -3,8 +3,8 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import ButtonBase from "@mui/material/ButtonBase";
-import Chip from "@mui/material/Chip";
 import Table from "@mui/material/Table";
+import Tag from "@tricentis/aura/components/Tag.js";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
@@ -135,11 +135,9 @@ export default function RunView({ projectId, runId, navigate }: Props) {
                       {session.scenario}
                     </Typography>
                     {session.safetyOverride && (
-                      <Chip
+                      <Tag
                         label="Safety"
-                        size="small"
-                        color="error"
-                        sx={{ height: 18, fontSize: "0.6rem", fontWeight: 700 }}
+                        sx={{ height: 18, fontSize: "0.6rem", fontWeight: 700, bgcolor: "error.main", "& .MuiChip-label": { color: "white" } }}
                       />
                     )}
                   </Box>

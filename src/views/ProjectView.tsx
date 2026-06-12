@@ -3,8 +3,8 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
 import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
+import ChipStatus from "@tricentis/aura/components/ChipStatus.js";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -121,20 +121,15 @@ export default function ProjectView({ projectId, navigate }: Props) {
             <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
               Evaluation Design
             </Typography>
-            {evalStatusColor ? (
-              <Chip
-                label={evalStatusLabel}
-                color={evalStatusColor as "success" | "warning"}
-                size="small"
-                sx={{ fontWeight: 700, fontSize: "0.68rem" }}
-              />
-            ) : (
-              <Chip
-                label={evalStatusLabel}
-                size="small"
-                sx={{ fontWeight: 600, fontSize: "0.68rem", color: "text.disabled" }}
-              />
-            )}
+            <ChipStatus
+              status={
+                evalDesign?.status === "confirmed"
+                  ? "Passed"
+                  : evalDesign?.status === "observation_ready"
+                  ? "Pending"
+                  : "Draft"
+              }
+            />
           </Box>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
             {evalDesign?.status === "confirmed"

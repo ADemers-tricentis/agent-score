@@ -6,6 +6,9 @@ import Button from "@mui/material/Button";
 import ButtonBase from "@mui/material/ButtonBase";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
+import ChipStatus from "@tricentis/aura/components/ChipStatus.js";
+import ChipSubtle from "@tricentis/aura/components/ChipSubtle.js";
+import Tag from "@tricentis/aura/components/Tag.js";
 import Alert from "@mui/material/Alert";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -126,7 +129,7 @@ export default function EvalDesignView({ projectId, navigate }: Props) {
             <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
               Observation-Based
               {status === "observation_ready" && (
-                <Chip label="Ready" color="warning" size="small" sx={{ ml: 1, height: 18, fontSize: "0.6rem", fontWeight: 700 }} />
+                <ChipStatus status="Ready" sx={{ ml: 1 }} />
               )}
             </Typography>
             <Typography variant="body2" sx={{ color: "text.secondary", mb: 1.5 }}>
@@ -226,7 +229,7 @@ export default function EvalDesignView({ projectId, navigate }: Props) {
               <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
                 Observation-Based
                 {status === "observation_ready" && (
-                  <Chip label="Ready" color="warning" size="small" sx={{ height: 18, fontSize: "0.6rem", fontWeight: 700 }} />
+                  <ChipStatus status="Ready" />
                 )}
               </Box>
             }
@@ -269,9 +272,9 @@ export default function EvalDesignView({ projectId, navigate }: Props) {
 // ── Design status chip ────────────────────────────────────────────────────────
 
 function DesignStatusChip({ status }: { status: string }) {
-  if (status === "confirmed") return <Chip label="Confirmed" color="success" size="small" sx={{ fontWeight: 700 }} />;
-  if (status === "observation_ready") return <Chip label="Recommendation Ready" color="warning" size="small" sx={{ fontWeight: 700 }} />;
-  return <Chip label="No Design" size="small" sx={{ fontWeight: 600, color: "text.disabled" }} />;
+  if (status === "confirmed") return <ChipStatus status="Passed" />;
+  if (status === "observation_ready") return <ChipStatus status="Pending" />;
+  return <ChipStatus status="Draft" />;
 }
 
 // ── Confirmed design banner ───────────────────────────────────────────────────
@@ -281,52 +284,87 @@ function ConfirmedDesignBanner({ design }: { design: ReturnType<typeof getEvalDe
   const nm = design.calibrationSet.filter((s) => s.category === "nightmare").length;
   const re = design.calibrationSet.filter((s) => s.category === "reality").length;
   const dr = design.calibrationSet.filter((s) => s.category === "dream").length;
+  const allThree = nm > 0 && re > 0 && dr > 0;
 
   return (
     <Paper
       sx={{
-        p: 2,
         mb: 2.5,
         border: "1px solid",
         borderColor: "success.dark",
         borderRadius: 2,
-        bgcolor: "#0a1f0a",
+        overflow: "hidden",
       }}
     >
-      <Box sx={{ display: "flex", alignItems: "flex-start", gap: 3, flexWrap: "wrap" }}>
-        <Box>
-          <Typography variant="caption" sx={{ color: "text.disabled", display: "block", mb: 0.5 }}>
-            Scoring dimensions
-          </Typography>
-          <Box sx={{ display: "flex", gap: 0.75, flexWrap: "wrap" }}>
-            {design.confirmedDimensions.map((d) => (
-              <Chip
-                key={d.name}
-                label={`${d.name} (≥${d.suggestedThreshold})`}
-                size="small"
-                color="success"
-                variant="outlined"
-                sx={{ fontSize: "0.68rem", fontWeight: 600 }}
+      {/* Banner header */}
+      <Box sx={{ px: 2.5, py: 1.5, bgcolor: "#0a1f0a", display: "flex", alignItems: "center", gap: 1.5 }}>
+        <ChipStatus status="Passed" />
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+          Scoring runs against these dimensions and calibration scenarios on every session.
+          Nothing gates a deploy until you act on the verdict.
+        </Typography>
+      </Box>
+
+      <Divider sx={{ borderColor: "success.dark" }} />
+
+      {/* Dimensions table */}
+      <Box sx={{ px: 2.5, pt: 2, pb: 1.5 }}>
+        <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", mb: 1.5 }}>
+          Scoring dimensions
+        </Typography>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+          {design.confirmedDimensions.map((d) => (
+            <Box
+              key={d.name}
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "180px 80px 60px 1fr",
+                gap: 2,
+                alignItems: "center",
+                py: 0.75,
+                px: 1,
+                borderRadius: 1,
+                bgcolor: "action.hover",
+              }}
+            >
+              <Typography variant="body2" sx={{ fontWeight: 700 }}>{d.name}</Typography>
+              <ChipSubtle
+                label={DIRECTIONALITY_LABEL[d.directionality]}
+                sx={{ height: 18, fontSize: "0.6rem", fontWeight: 600 }}
               />
-            ))}
+              <Box sx={{ textAlign: "center" }}>
+                <Typography variant="caption" sx={{ color: "text.disabled", display: "block", fontSize: "0.58rem" }}>pass if ≥</Typography>
+                <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "success.main", lineHeight: 1 }}>{d.suggestedThreshold}</Typography>
+              </Box>
+              <Typography variant="caption" sx={{ color: "text.secondary" }}>{d.rationale}</Typography>
+            </Box>
+          ))}
+        </Box>
+      </Box>
+
+      <Divider sx={{ borderColor: "divider" }} />
+
+      {/* Calibration summary */}
+      <Box sx={{ px: 2.5, py: 1.5, display: "flex", alignItems: "center", gap: 3, flexWrap: "wrap" }}>
+        <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+          Calibration set
+        </Typography>
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+            <Box sx={{ width: 8, height: 8, borderRadius: "50%", bgcolor: "error.main" }} />
+            <Typography variant="caption" sx={{ fontWeight: 700 }}>{nm} nightmare{nm !== 1 ? "s" : ""}</Typography>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+            <Box sx={{ width: 8, height: 8, borderRadius: "50%", bgcolor: "primary.main" }} />
+            <Typography variant="caption" sx={{ fontWeight: 700 }}>{re} reality</Typography>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+            <Box sx={{ width: 8, height: 8, borderRadius: "50%", bgcolor: "success.main" }} />
+            <Typography variant="caption" sx={{ fontWeight: 700 }}>{dr} dream{dr !== 1 ? "s" : ""}</Typography>
           </Box>
         </Box>
-        <Box>
-          <Typography variant="caption" sx={{ color: "text.disabled", display: "block", mb: 0.5 }}>
-            Calibration set
-          </Typography>
-          <Box sx={{ display: "flex", gap: 1.5 }}>
-            <Typography variant="caption" sx={{ color: "error.light", fontWeight: 700 }}>
-              {nm} nightmares
-            </Typography>
-            <Typography variant="caption" sx={{ color: "primary.light", fontWeight: 700 }}>
-              {re} reality
-            </Typography>
-            <Typography variant="caption" sx={{ color: "success.light", fontWeight: 700 }}>
-              {dr} dreams
-            </Typography>
-          </Box>
-        </Box>
+        {!allThree && <ChipStatus status="Pending" />}
+        {allThree && <ChipStatus status="Passed" />}
       </Box>
     </Paper>
   );
@@ -339,14 +377,7 @@ function CalibrationCoverageBadge({ scenarios }: { scenarios: CalibrationScenari
   const hasReality = scenarios.some((s) => s.category === "reality");
   const hasDreams = scenarios.some((s) => s.category === "dream");
   const complete = hasNightmares && hasReality && hasDreams;
-  return (
-    <Chip
-      label={complete ? "Complete" : "Incomplete"}
-      color={complete ? "success" : "warning"}
-      size="small"
-      sx={{ height: 18, fontSize: "0.6rem", fontWeight: 700 }}
-    />
-  );
+  return <ChipStatus status={complete ? "Passed" : "Pending"} />;
 }
 
 // ── Observation-Based tab ─────────────────────────────────────────────────────
@@ -396,12 +427,26 @@ function ObservationTab({
   }
 
   if (status === "confirmed") {
+    const dims = design?.confirmedDimensions ?? [];
     return (
       <Box>
-        <Alert severity="success">
-          This design is confirmed. Dimensions and calibration set are active. You can update the
-          calibration set in the Calibration Set tab.
+        <Alert severity="success" sx={{ mb: 2.5 }}>
+          This design was confirmed via the observation-based path. Scoring is active against the
+          dimensions and calibration set below. To add or adjust calibration scenarios, use the{" "}
+          <strong>Calibration Set</strong> tab.
         </Alert>
+        {dims.length > 0 && (
+          <>
+            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>
+              Active dimensions
+            </Typography>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+              {dims.map((d) => (
+                <SuggestedDimensionCard key={d.name} dim={d} confirmed />
+              ))}
+            </Box>
+          </>
+        )}
       </Box>
     );
   }
@@ -707,10 +752,28 @@ function CalibrationSetTab({
   if (status === "no_design" || !design || design.calibrationSet.length === 0) {
     return (
       <Box>
-        <Alert severity="info" sx={{ mb: 2 }}>
-          No calibration set yet. Use the Observation-Based or Spec-Based tab to generate one.
+        <Alert severity="info" sx={{ mb: 2.5 }}>
+          No calibration set yet. Use the <strong>Observation-Based</strong> or{" "}
+          <strong>Spec-Based</strong> tab to generate one.
         </Alert>
-        <NightmareWarning hasNightmares={false} />
+        <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 1.5 }}>
+          {(["nightmare", "reality", "dream"] as const).map((cat) => {
+            const cfg = CAT_CONFIG[cat];
+            const purpose = {
+              nightmare: "Adversarial inputs, edge conditions, failure modes. Sourced from real failure patterns in shadow-mode traffic.",
+              reality: "Scenarios the agent should complete reliably. Establishes the performance baseline.",
+              dream: "Stretch scenarios beyond current expectations. Detects improvement over time.",
+            }[cat];
+            return (
+              <Paper key={cat} sx={{ p: 2, border: `1px solid ${cfg.border}`, bgcolor: cfg.bg, borderRadius: 1.5, opacity: 0.6 }}>
+                <Tag label={cfg.label} sx={{ bgcolor: `${cfg.color}.main`, color: "white", fontWeight: 700, fontSize: "0.68rem", mb: 1, "& .MuiChip-label": { color: "white" } }} />
+                <Typography variant="caption" sx={{ color: "text.secondary", lineHeight: 1.5, display: "block" }}>
+                  {purpose}
+                </Typography>
+              </Paper>
+            );
+          })}
+        </Box>
       </Box>
     );
   }
@@ -722,38 +785,53 @@ function CalibrationSetTab({
 
   return (
     <Box>
-      {!hasNightmares && <NightmareWarning hasNightmares={false} />}
-
-      {/* Coverage summary */}
-      <Box sx={{ display: "flex", gap: 1.5, mb: 3, flexWrap: "wrap" }}>
+      {/* Category taxonomy explainer */}
+      <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 1.5, mb: 2.5 }}>
         {(["nightmare", "reality", "dream"] as const).map((cat) => {
           const count = design.calibrationSet.filter((s) => s.category === cat).length;
           const cfg = CAT_CONFIG[cat];
+          const purpose = {
+            nightmare: "Tests whether the agent fails gracefully. Sources adversarial inputs, edge cases, and failure modes — including scenarios the agent has already struggled with in production.",
+            reality: "Establishes the performance baseline. Scenarios the agent should complete reliably. A PASS here is necessary but not sufficient for production readiness.",
+            dream: "Detects capability improvement over time. Stretch scenarios beyond current expectations — prevents evaluation from only measuring regression.",
+          }[cat];
           return (
             <Paper
               key={cat}
               sx={{
-                px: 2,
-                py: 1,
+                p: 2,
                 border: `1px solid ${cfg.border}`,
                 bgcolor: cfg.bg,
                 borderRadius: 1.5,
-                minWidth: 110,
               }}
             >
-              <Typography variant="caption" sx={{ color: "text.disabled", display: "block" }}>
-                {cfg.label}
-              </Typography>
-              <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.2, color: `${cfg.color}.main` }}>
-                {count}
-              </Typography>
-              <Typography variant="caption" sx={{ color: "text.disabled", fontSize: "0.6rem" }}>
-                {cfg.desc}
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+                <Tag label={cfg.label} sx={{ bgcolor: `${cfg.color}.main`, color: "white", fontWeight: 700, fontSize: "0.68rem", "& .MuiChip-label": { color: "white" } }} />
+                <Typography variant="h6" sx={{ fontWeight: 700, color: `${cfg.color}.main`, lineHeight: 1, ml: "auto" }}>
+                  {count}
+                </Typography>
+              </Box>
+              <Typography variant="caption" sx={{ color: "text.secondary", lineHeight: 1.5 }}>
+                {purpose}
               </Typography>
             </Paper>
           );
         })}
       </Box>
+
+      {/* PASS-on-Reality-only warning */}
+      {!hasNightmares && (
+        <Alert severity="warning" sx={{ mb: 2.5 }}>
+          <Typography variant="body2" sx={{ fontWeight: 700, mb: 0.25 }}>
+            No nightmare scenarios — this calibration set is incomplete
+          </Typography>
+          <Typography variant="body2">
+            A PASS verdict on a Reality-only calibration set does not mean the agent is production-ready.
+            It means it did what was expected in the cases that were tested. Add adversarial inputs, edge
+            conditions, and failure modes before using this design to gate a deploy.
+          </Typography>
+        </Alert>
+      )}
 
       {/* Category sections */}
       {nightmares.length > 0 && (
@@ -782,11 +860,9 @@ function CalibrationSection({
   return (
     <Box sx={{ mb: 3 }}>
       <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.5 }}>
-        <Chip
+        <Tag
           label={title}
-          color={cfg.color}
-          size="small"
-          sx={{ fontWeight: 700, fontSize: "0.7rem" }}
+          sx={{ bgcolor: `${cfg.color}.main`, color: "white", fontWeight: 700, fontSize: "0.7rem", "& .MuiChip-label": { color: "white" } }}
         />
         <Typography variant="caption" sx={{ color: "text.secondary" }}>
           {cfg.desc}
@@ -803,10 +879,10 @@ function CalibrationSection({
 
 // ── Shared sub-components ─────────────────────────────────────────────────────
 
-function SuggestedDimensionCard({ dim }: { dim: SuggestedDimension }) {
+function SuggestedDimensionCard({ dim, confirmed = false }: { dim: SuggestedDimension; confirmed?: boolean }) {
   const sourceLabel: Record<string, string> = {
-    observed_failure: "sourced from failures",
-    observed_behavior: "sourced from behavior",
+    observed_failure: "from observed failures",
+    observed_behavior: "from observed behavior",
     spec_derived: "spec-derived",
   };
 
@@ -815,45 +891,38 @@ function SuggestedDimensionCard({ dim }: { dim: SuggestedDimension }) {
       sx={{
         p: 2,
         border: "1px solid",
-        borderColor: "divider",
+        borderColor: confirmed ? "success.dark" : "divider",
         borderRadius: 1.5,
+        bgcolor: confirmed ? "#0a1f0a" : "transparent",
       }}
     >
       <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 2 }}>
         <Box sx={{ flex: 1 }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.75 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.75, flexWrap: "wrap" }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
               {dim.name}
             </Typography>
-            <Chip
+            <ChipSubtle
               label={DIRECTIONALITY_LABEL[dim.directionality]}
-              size="small"
-              sx={{
-                height: 18,
-                fontSize: "0.6rem",
-                fontWeight: 600,
-                bgcolor: "action.selected",
-                color: "text.secondary",
-              }}
+              sx={{ height: 18, fontSize: "0.6rem", fontWeight: 600 }}
             />
-            <Chip
+            <ChipSubtle
               label={sourceLabel[dim.source]}
-              size="small"
-              variant="outlined"
-              sx={{ height: 18, fontSize: "0.6rem", fontWeight: 600, color: "text.disabled" }}
+              sx={{ height: 18, fontSize: "0.6rem", color: "text.disabled" }}
             />
           </Box>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
             {dim.rationale}
           </Typography>
         </Box>
-        <Box sx={{ textAlign: "right", flexShrink: 0 }}>
+        <Box sx={{ textAlign: "right", flexShrink: 0, minWidth: 72 }}>
           <Typography variant="caption" sx={{ color: "text.disabled", display: "block" }}>
-            Suggested threshold
+            {confirmed ? "Pass threshold" : "Suggested threshold"}
           </Typography>
           <Typography variant="h6" sx={{ fontWeight: 700, color: "success.main", lineHeight: 1.2 }}>
             {dim.suggestedThreshold}
           </Typography>
+          <Typography variant="caption" sx={{ color: "text.disabled", fontSize: "0.6rem" }}>out of 100</Typography>
         </Box>
       </Box>
     </Paper>
@@ -885,11 +954,9 @@ function ScenarioCard({
         )}
         <Box sx={{ flex: 1 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
-            <Chip
+            <Tag
               label={cfg.label}
-              color={cfg.color}
-              size="small"
-              sx={{ height: 18, fontSize: "0.6rem", fontWeight: 700 }}
+              sx={{ bgcolor: `${cfg.color}.main`, height: 18, fontSize: "0.6rem", fontWeight: 700, "& .MuiChip-label": { color: "white", px: 0.75 } }}
             />
             <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
               {scenario.title}
@@ -975,21 +1042,17 @@ function EvalQuestionCard({
               <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 700 }}>
                 #{question.rank}
               </Typography>
-              <Chip
+              <Tag
                 label={question.showcaseCategory}
-                size="small"
-                sx={{ height: 18, fontSize: "0.6rem", fontWeight: 600, bgcolor: "action.selected" }}
-              />
-              <Chip
-                label={`${question.riskLevel} risk`}
-                color={RISK_COLOR[question.riskLevel]}
-                size="small"
                 sx={{ height: 18, fontSize: "0.6rem", fontWeight: 600 }}
               />
-              <Chip
+              <ChipSubtle
+                label={`${question.riskLevel} risk`}
+                color={RISK_COLOR[question.riskLevel]}
+                sx={{ height: 18, fontSize: "0.6rem", fontWeight: 600 }}
+              />
+              <ChipSubtle
                 label={DIRECTIONALITY_LABEL[question.directionality]}
-                size="small"
-                variant="outlined"
                 sx={{ height: 18, fontSize: "0.6rem", color: "text.disabled" }}
               />
             </Box>
@@ -1045,18 +1108,3 @@ function EvalQuestionCard({
   );
 }
 
-function NightmareWarning({ hasNightmares }: { hasNightmares: boolean }) {
-  if (hasNightmares) return null;
-  return (
-    <Alert severity="warning" sx={{ mb: 2 }}>
-      <Typography variant="body2" sx={{ fontWeight: 600 }}>
-        No nightmare scenarios in this calibration set
-      </Typography>
-      <Typography variant="body2">
-        A PASS verdict on a Reality-only calibration set does not mean the agent is production-ready — it
-        means it did what was expected in the cases that were tested. Add adversarial inputs, edge
-        conditions, and failure modes before using this design to gate a deploy.
-      </Typography>
-    </Alert>
-  );
-}

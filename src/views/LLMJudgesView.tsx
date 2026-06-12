@@ -2,8 +2,10 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
+import ChipStatus from "@tricentis/aura/components/ChipStatus.js";
+import ChipSubtle from "@tricentis/aura/components/ChipSubtle.js";
+import Tag from "@tricentis/aura/components/Tag.js";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -70,11 +72,9 @@ export default function LLMJudgesView({ navigate }: Props) {
                   )}
                 </TableCell>
                 <TableCell>
-                  <Chip
+                  <ChipSubtle
                     label={judge.provider}
-                    size="small"
                     color={PROVIDER_COLOR[judge.provider]}
-                    variant="outlined"
                     sx={{ fontSize: "0.7rem", fontWeight: 600 }}
                   />
                 </TableCell>
@@ -84,12 +84,7 @@ export default function LLMJudgesView({ navigate }: Props) {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Chip
-                    label={judge.status === "live" ? "Live" : "Error"}
-                    size="small"
-                    color={judge.status === "live" ? "success" : "error"}
-                    sx={{ fontSize: "0.7rem", fontWeight: 700 }}
-                  />
+                  <ChipStatus status={judge.status === "live" ? "Active" : "Failed"} />
                 </TableCell>
                 <TableCell>
                   <Typography variant="caption" sx={{ color: "text.disabled" }}>
@@ -135,11 +130,15 @@ export default function LLMJudgesView({ navigate }: Props) {
               <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>
                 {desc}
               </Typography>
-              <Chip
+              <Tag
                 label={always ? "Always" : "Conditional"}
-                size="small"
-                color={always ? "default" : "warning"}
-                sx={{ mt: 0.75, height: 16, fontSize: "0.58rem", fontWeight: 700 }}
+                sx={{
+                  mt: 0.75,
+                  height: 16,
+                  fontSize: "0.58rem",
+                  fontWeight: 700,
+                  ...(always ? {} : { bgcolor: "warning.main", "& .MuiChip-label": { color: "white" } }),
+                }}
               />
             </Paper>
           ))}

@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
+import Tag from "@tricentis/aura/components/Tag.js";
 import { PROJECTS, GUARD_LOG } from "../data/mock";
 
 export default function MetricsView() {
@@ -197,9 +197,8 @@ function MetricCard({ name, type, description, children }: {
         >
           {name}
         </Typography>
-        <Chip
+        <Tag
           label={type}
-          size="small"
           sx={{
             height: 18,
             fontSize: "0.6rem",

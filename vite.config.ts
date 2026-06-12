@@ -8,6 +8,16 @@ const ICONS_ROOT = path.resolve(AURA_ROOT, "node_modules/@tricentis/mui-icons");
 export default defineConfig({
   plugins: [react()],
   resolve: {
+    // Force all packages to share a single copy of these — prevents the
+    // dual-context bug where aura-ui's bundled MUI and our MUI are separate
+    // React context instances, causing theme.vars to be undefined in aura components.
+    dedupe: [
+      "react",
+      "react-dom",
+      "@mui/material",
+      "@emotion/react",
+      "@emotion/styled",
+    ],
     alias: [
       {
         find: /^@tricentis\/aura\//,

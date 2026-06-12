@@ -3,8 +3,9 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
+import Tag from "@tricentis/aura/components/Tag.js";
+import ChipSubtle from "@tricentis/aura/components/ChipSubtle.js";
 import Alert from "@mui/material/Alert";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -76,11 +77,9 @@ export default function SessionView({ projectId, runId, sessionId, navigate }: P
           icon={false}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.25 }}>
-            <Chip
+            <Tag
               label={`Safety Override — ${session.safetyOverride.severity}`}
-              color="error"
-              size="small"
-              sx={{ fontWeight: 700, fontSize: "0.68rem" }}
+              sx={{ bgcolor: "error.main", fontWeight: 700, fontSize: "0.68rem", "& .MuiChip-label": { color: "white" } }}
             />
             <Typography variant="caption" sx={{ fontFamily: "monospace", color: "error.main", fontWeight: 600 }}>
               {session.safetyOverride.signal}
@@ -212,11 +211,9 @@ function AttributionPanel({ attr }: { attr: Attribution }) {
         <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
           Attribution
         </Typography>
-        <Chip
+        <ChipSubtle
           label={attr.rootCause.replace(/_/g, " ")}
           color="error"
-          size="small"
-          variant="outlined"
           sx={{ fontWeight: 600, fontSize: "0.68rem", fontFamily: "monospace" }}
         />
         <Typography variant="caption" sx={{ color: "text.secondary", ml: "auto" }}>
@@ -266,7 +263,7 @@ function AttributionPanel({ attr }: { attr: Attribution }) {
                 {step.tool}
               </Typography>
               {step.culprit && (
-                <Chip label="culprit" color="error" size="small" sx={{ ml: 1, height: 16, fontSize: "0.6rem", fontWeight: 700 }} />
+                <Tag label="culprit" sx={{ ml: 1, height: 16, bgcolor: "error.main", fontSize: "0.6rem", fontWeight: 700, "& .MuiChip-label": { color: "white", px: 0.75 } }} />
               )}
               <Typography variant="caption" sx={{ display: "block", color: "text.secondary", mt: 0.25 }}>
                 {step.desc}

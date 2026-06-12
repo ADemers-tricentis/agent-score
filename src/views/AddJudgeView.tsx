@@ -13,7 +13,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Alert from "@mui/material/Alert";
 import Divider from "@mui/material/Divider";
-import Chip from "@mui/material/Chip";
+import ChipStatus from "@tricentis/aura/components/ChipStatus.js";
 import type { View, LLMProvider } from "../types";
 
 interface Props {
@@ -286,12 +286,8 @@ export default function AddJudgeView({ navigate }: Props) {
             >
               {connection === "testing" ? "Testing…" : "⚡ Test connection"}
             </Button>
-            {connection === "ok" && (
-              <Chip label="Connection OK" color="success" size="small" sx={{ fontWeight: 700, fontSize: "0.7rem" }} />
-            )}
-            {connection === "error" && (
-              <Chip label="Auth failed" color="error" size="small" sx={{ fontWeight: 700, fontSize: "0.7rem" }} />
-            )}
+            {connection === "ok" && <ChipStatus status="Passed" />}
+            {connection === "error" && <ChipStatus status="Failed" />}
           </Box>
 
           {connection === "error" && (
