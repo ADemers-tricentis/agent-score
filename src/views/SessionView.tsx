@@ -4,16 +4,21 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
+import TextField from "@mui/material/TextField";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Tag from "@tricentis/aura/components/Tag.js";
 import ChipSubtle from "@tricentis/aura/components/ChipSubtle.js";
 import Alert from "@mui/material/Alert";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import type { View, Session, Attribution } from "../types";
-import { getProject, getRun, getSession } from "../data/mock";
+import AuraTabPanel from "@tricentis/aura/components/TabPanel.js";
+import type { View, Session, Attribution, ShipDecision } from "../types";
+import { getProject, getRun, getSession, sessionCompositeScore, sessionGrade } from "../data/mock";
 import VerdictBadge from "../components/VerdictBadge";
 import ScoreBar from "../components/ScoreBar";
 import ScoreMeter from "../components/ScoreMeter";
+import GradeChip from "../components/GradeChip";
 
 interface Props {
   projectId: string;
@@ -34,15 +39,13 @@ function shipLabel(verdict: string) {
   return { text: "Don't Ship", color: "error.main" };
 }
 
-function compositeScore(s: Session): number {
-  const bp = s.scores.benchmarkPerformance.score;
-  const ve = s.scores.valueEfficiency?.score ?? bp;
-  const ux = s.scores.uxSignal.score;
-  return Math.round((bp * 0.5 + ve * 0.25 + ux * 0.25));
-}
-
 export default function SessionView({ projectId, runId, sessionId, navigate }: Props) {
   const [reportTab, setReportTab] = useState(0);
+  const [decisionOpen, setDecisionOpen] = useState(false);
+  const [decisionChoice, setDecisionChoice] = useState<"Ship" | "Hold" | "Reject">("Ship");
+  const [decisionRationale, setDecisionRationale] = useState("");
+  const [recordedDecision, setRecordedDecision] = useState<ShipDecision | null>(null);
+
   const project = getProject(projectId);
   const run = getRun(projectId, runId);
   const session = getSession(projectId, runId, sessionId);
@@ -52,11 +55,27 @@ export default function SessionView({ projectId, runId, sessionId, navigate }: P
   }
 
   const ship = shipLabel(session.verdict);
-  const composite = compositeScore(session);
+  const composite = sessionCompositeScore(session);
+  const grade = sessionGrade(composite);
+  const existingDecision = recordedDecision ?? session.shipDecision;
+
+  function handleRecordDecision() {
+    if (!decisionRationale.trim()) return;
+    setRecordedDecision({
+      decision: decisionChoice,
+      rationale: decisionRationale,
+      author: "a.demers@tricentis.com",
+      ts: new Date().toISOString(),
+      overridesVerdict: decisionChoice === "Ship" && session!.verdict !== "PASS" ||
+                        decisionChoice === "Reject" && session!.verdict === "PASS",
+    });
+    setDecisionOpen(false);
+    setDecisionRationale("");
+  }
 
   return (
     <Box sx={{ p: 3, maxWidth: 1100 }}>
-      {/* Breadcrumb nav */}
+      {/* Breadcrumb */}
       <Box sx={{ display: "flex", gap: 0.5, alignItems: "center", mb: 2 }}>
         <Button size="small" onClick={() => navigate({ name: "fleet" })} sx={{ color: "text.disabled" }}>Fleet</Button>
         <Typography sx={{ color: "text.disabled" }}>/</Typography>
@@ -69,13 +88,16 @@ export default function SessionView({ projectId, runId, sessionId, navigate }: P
         </Button>
       </Box>
 
+      {/* ATC beta notice */}
+      {session.atcBeta && (
+        <Alert severity="info" sx={{ mb: 2, fontSize: "0.8rem" }}>
+          <strong>ATC Beta:</strong> Verdict and dimension scores are informational signals only in Phase 2 — not CI gates. Use them to calibrate and improve the agent.
+        </Alert>
+      )}
+
       {/* Safety override alert */}
       {session.safetyOverride && (
-        <Alert
-          severity="error"
-          sx={{ mb: 2 }}
-          icon={false}
-        >
+        <Alert severity="error" sx={{ mb: 2 }} icon={false}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.25 }}>
             <Tag
               label={`Safety Override — ${session.safetyOverride.severity}`}
@@ -85,9 +107,7 @@ export default function SessionView({ projectId, runId, sessionId, navigate }: P
               {session.safetyOverride.signal}
             </Typography>
           </Box>
-          <Typography variant="body2" sx={{ mt: 0.5 }}>
-            {session.safetyOverride.detail}
-          </Typography>
+          <Typography variant="body2" sx={{ mt: 0.5 }}>{session.safetyOverride.detail}</Typography>
           <Typography variant="caption" sx={{ color: "error.light", mt: 0.25, display: "block" }}>
             {session.safetyOverride.severity === "Critical"
               ? "Verdict forced to FAIL regardless of dimension scores."
@@ -102,17 +122,17 @@ export default function SessionView({ projectId, runId, sessionId, navigate }: P
           {/* Score card */}
           <Paper sx={{ p: 2.5, mb: 2, border: "1px solid", borderColor: "divider", borderRadius: 2 }}>
             <Box sx={{ display: "flex", alignItems: "flex-start", gap: 3 }}>
-              {/* Meter */}
-              <ScoreMeter score={composite} size={112} />
+              <Box sx={{ position: "relative" }}>
+                <ScoreMeter score={composite} size={112} />
+                <Box sx={{ position: "absolute", bottom: -6, right: -6 }}>
+                  <GradeChip grade={grade} size="medium" />
+                </Box>
+              </Box>
 
-              {/* Verdict + meta */}
               <Box sx={{ flex: 1 }}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
                   <VerdictBadge verdict={session.verdict} size="medium" />
-                  <Typography
-                    variant="subtitle1"
-                    sx={{ fontWeight: 700, color: ship.color }}
-                  >
+                  <Typography variant="subtitle1" sx={{ fontWeight: 700, color: ship.color }}>
                     {ship.text}
                   </Typography>
                   {session.baseline != null && (
@@ -146,10 +166,113 @@ export default function SessionView({ projectId, runId, sessionId, navigate }: P
             <ScoreBar label="Benchmark Performance" dimension={session.scores.benchmarkPerformance} />
             <ScoreBar label="Value Efficiency" dimension={session.scores.valueEfficiency} />
             <ScoreBar label="UX Signal" dimension={session.scores.uxSignal} />
+            {session.scores.harmony && (
+              <ScoreBar label="Harmony" dimension={session.scores.harmony} />
+            )}
+            {session.scores.stability && (
+              <ScoreBar label="Stability" dimension={session.scores.stability} />
+            )}
+            {session.scores.agency && (
+              <ScoreBar label="Agency" dimension={session.scores.agency} />
+            )}
           </Paper>
 
           {/* Attribution */}
           {session.attr && <AttributionPanel attr={session.attr} />}
+
+          {/* Decision log */}
+          <Paper sx={{ p: 2.5, mt: 2, border: "1px solid", borderColor: existingDecision ? "primary.dark" : "divider", borderRadius: 2 }}>
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: existingDecision || decisionOpen ? 2 : 0 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                Shipping Decision
+              </Typography>
+              {!existingDecision && !decisionOpen && (
+                <Button size="small" variant="outlined" onClick={() => setDecisionOpen(true)}>
+                  Record decision
+                </Button>
+              )}
+              {existingDecision && !decisionOpen && (
+                <Button size="small" variant="text" sx={{ color: "text.secondary", fontSize: "0.7rem" }} onClick={() => { setDecisionOpen(true); setDecisionChoice(existingDecision.decision); setDecisionRationale(existingDecision.rationale); }}>
+                  Edit
+                </Button>
+              )}
+            </Box>
+
+            {existingDecision && !decisionOpen && (
+              <Box>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
+                  <Tag
+                    label={existingDecision.decision}
+                    sx={{
+                      bgcolor: existingDecision.decision === "Ship" ? "success.dark" : existingDecision.decision === "Hold" ? "warning.dark" : "error.dark",
+                      fontWeight: 700,
+                      "& .MuiChip-label": { color: "white" },
+                    }}
+                  />
+                  {existingDecision.overridesVerdict && (
+                    <ChipSubtle label="overrides verdict" color="warning" sx={{ fontSize: "0.65rem" }} />
+                  )}
+                  <Typography variant="caption" sx={{ color: "text.disabled", ml: "auto" }}>
+                    {new Date(existingDecision.ts).toLocaleString()} · {existingDecision.author}
+                  </Typography>
+                </Box>
+                <Typography variant="body2" sx={{ color: "text.secondary", fontStyle: "italic" }}>
+                  "{existingDecision.rationale}"
+                </Typography>
+              </Box>
+            )}
+
+            {!existingDecision && !decisionOpen && (
+              <Typography variant="body2" sx={{ color: "text.disabled" }}>
+                No decision recorded. Record a shipping decision to document rationale for the team.
+              </Typography>
+            )}
+
+            {decisionOpen && (
+              <Box>
+                <Typography variant="caption" sx={{ color: "text.disabled", display: "block", mb: 1, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  Decision
+                </Typography>
+                <ToggleButtonGroup
+                  value={decisionChoice}
+                  exclusive
+                  onChange={(_, v) => v && setDecisionChoice(v)}
+                  size="small"
+                  sx={{ mb: 2 }}
+                >
+                  <ToggleButton value="Ship" sx={{ fontSize: "0.75rem", px: 2, "&.Mui-selected": { bgcolor: "success.dark", color: "success.light" } }}>
+                    Ship
+                  </ToggleButton>
+                  <ToggleButton value="Hold" sx={{ fontSize: "0.75rem", px: 2, "&.Mui-selected": { bgcolor: "warning.dark", color: "warning.light" } }}>
+                    Hold
+                  </ToggleButton>
+                  <ToggleButton value="Reject" sx={{ fontSize: "0.75rem", px: 2, "&.Mui-selected": { bgcolor: "error.dark", color: "error.light" } }}>
+                    Reject
+                  </ToggleButton>
+                </ToggleButtonGroup>
+
+                <TextField
+                  multiline
+                  rows={3}
+                  fullWidth
+                  size="small"
+                  placeholder="Rationale — why this decision was made, what the team considered, any caveats..."
+                  value={decisionRationale}
+                  onChange={(e) => setDecisionRationale(e.target.value)}
+                  sx={{ mb: 1.5 }}
+                />
+
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  <Button size="small" variant="contained" onClick={handleRecordDecision} disabled={!decisionRationale.trim()}>
+                    Save decision
+                  </Button>
+                  <Button size="small" variant="outlined" color="inherit" sx={{ color: "text.secondary" }} onClick={() => { setDecisionOpen(false); setDecisionRationale(""); }}>
+                    Cancel
+                  </Button>
+                </Box>
+              </Box>
+            )}
+          </Paper>
         </Box>
 
         {/* Right column — report */}
@@ -162,36 +285,22 @@ export default function SessionView({ projectId, runId, sessionId, navigate }: P
             <Tab label="Markdown" sx={{ minHeight: 40, fontSize: "0.75rem" }} />
             <Tab label="JSON" sx={{ minHeight: 40, fontSize: "0.75rem" }} />
           </Tabs>
-          <Box sx={{ p: 2, maxHeight: 520, overflow: "auto" }}>
-            {reportTab === 0 ? (
-              <Typography
-                component="pre"
-                sx={{
-                  fontFamily: "monospace",
-                  fontSize: "0.72rem",
-                  color: "text.secondary",
-                  whiteSpace: "pre-wrap",
-                  wordBreak: "break-word",
-                  m: 0,
-                }}
-              >
-                {generateMarkdownReport(project.name, run.label, session, composite)}
-              </Typography>
-            ) : (
-              <Typography
-                component="pre"
-                sx={{
-                  fontFamily: "monospace",
-                  fontSize: "0.72rem",
-                  color: "text.secondary",
-                  whiteSpace: "pre-wrap",
-                  m: 0,
-                }}
-              >
-                {JSON.stringify(sessionToJson(session, composite), null, 2)}
-              </Typography>
-            )}
-          </Box>
+          <AuraTabPanel value={reportTab} index={0} sx={{ p: 2, maxHeight: 520, overflow: "auto" }}>
+            <Typography
+              component="pre"
+              sx={{ fontFamily: "monospace", fontSize: "0.72rem", color: "text.secondary", whiteSpace: "pre-wrap", wordBreak: "break-word", m: 0 }}
+            >
+              {generateMarkdownReport(project.name, run.label, session, composite, grade)}
+            </Typography>
+          </AuraTabPanel>
+          <AuraTabPanel value={reportTab} index={1} sx={{ p: 2, maxHeight: 520, overflow: "auto" }}>
+            <Typography
+              component="pre"
+              sx={{ fontFamily: "monospace", fontSize: "0.72rem", color: "text.secondary", whiteSpace: "pre-wrap", m: 0 }}
+            >
+              {JSON.stringify(sessionToJson(session, composite, grade), null, 2)}
+            </Typography>
+          </AuraTabPanel>
           <Divider />
           <Box sx={{ px: 2, py: 1 }}>
             <Typography variant="caption" sx={{ color: "text.disabled", fontFamily: "monospace" }}>
@@ -221,7 +330,6 @@ function AttributionPanel({ attr }: { attr: Attribution }) {
         </Typography>
       </Box>
 
-      {/* Chain */}
       <Box sx={{ mb: 2 }}>
         <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", display: "block", mb: 1 }}>
           Evidence Chain
@@ -275,7 +383,6 @@ function AttributionPanel({ attr }: { attr: Attribution }) {
 
       <Divider sx={{ mb: 1.5 }} />
 
-      {/* Recommendations */}
       <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", display: "block", mb: 1 }}>
         Recommendations
       </Typography>
@@ -293,7 +400,7 @@ function AttributionPanel({ attr }: { attr: Attribution }) {
   );
 }
 
-function generateMarkdownReport(projectName: string, runLabel: string, s: Session, composite: number): string {
+function generateMarkdownReport(projectName: string, runLabel: string, s: Session, composite: number, grade: string): string {
   const lines = [
     `# Session Report`,
     ``,
@@ -306,15 +413,20 @@ function generateMarkdownReport(projectName: string, runLabel: string, s: Sessio
     ``,
     `## Verdict: ${s.verdict}`,
     ``,
-    `Composite score: **${composite}/100**`,
+    `Composite score: **${composite}/100 · Grade ${grade}**`,
     ``,
     `| Dimension | Score |`,
     `|---|---|`,
     `| Benchmark Performance | ${s.scores.benchmarkPerformance.score} |`,
     `| Value Efficiency | ${s.scores.valueEfficiency?.score ?? "N/A"} |`,
     `| UX Signal | ${s.scores.uxSignal.score} |`,
-    ``,
   ];
+
+  if (s.scores.harmony) lines.push(`| Harmony | ${s.scores.harmony.score} |`);
+  if (s.scores.stability) lines.push(`| Stability | ${s.scores.stability.score} |`);
+  if (s.scores.agency) lines.push(`| Agency | ${s.scores.agency.score} |`);
+
+  lines.push(``);
 
   if (s.safetyOverride) {
     lines.push(`## ⚠️ Safety Override`);
@@ -343,7 +455,7 @@ function generateMarkdownReport(projectName: string, runLabel: string, s: Sessio
   return lines.join("\n");
 }
 
-function sessionToJson(s: Session, composite: number) {
+function sessionToJson(s: Session, composite: number, grade: string) {
   return {
     sessionId: s.id,
     ts: s.ts,
@@ -351,13 +463,18 @@ function sessionToJson(s: Session, composite: number) {
     scenario: s.scenario,
     verdict: s.verdict,
     compositeScore: composite,
+    grade,
     baseline: s.baseline,
     safetyOverride: s.safetyOverride ?? null,
     scores: {
       benchmarkPerformance: s.scores.benchmarkPerformance,
       valueEfficiency: s.scores.valueEfficiency,
       uxSignal: s.scores.uxSignal,
+      harmony: s.scores.harmony ?? null,
+      stability: s.scores.stability ?? null,
+      agency: s.scores.agency ?? null,
     },
     attribution: s.attr ?? null,
+    shipDecision: s.shipDecision ?? null,
   };
 }

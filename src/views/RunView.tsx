@@ -1,17 +1,27 @@
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import ButtonBase from "@mui/material/ButtonBase";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Table from "@mui/material/Table";
 import Tag from "@tricentis/aura/components/Tag.js";
+import ChipSubtle from "@tricentis/aura/components/ChipSubtle.js";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Divider from "@mui/material/Divider";
 import type { View } from "../types";
-import { getProject, getRun, runPassRate } from "../data/mock";
+import { getProject, getRun, runPassRate, sessionCompositeScore, sessionGrade } from "../data/mock";
 import VerdictBadge from "../components/VerdictBadge";
+import GradeChip from "../components/GradeChip";
 
 interface Props {
   projectId: string;
@@ -35,11 +45,40 @@ function fmtTs(ts: string): string {
 }
 
 export default function RunView({ projectId, runId, navigate }: Props) {
+  const [exportOpen, setExportOpen] = useState(false);
+  const [exportSelected, setExportSelected] = useState<Set<string>>(new Set());
+  const [exported, setExported] = useState(false);
+
   const project = getProject(projectId);
   const run = getRun(projectId, runId);
   if (!run || !project) return <Box sx={{ p: 3 }}><Typography>Run not found.</Typography></Box>;
 
   const passRate = runPassRate(run.sessions);
+  const avgComposite = run.sessions.length
+    ? Math.round(run.sessions.reduce((sum, s) => sum + sessionCompositeScore(s), 0) / run.sessions.length)
+    : 0;
+
+  const otherRuns = project.runs.filter((r) => r.id !== runId);
+
+  function openExport() {
+    setExportSelected(new Set(run!.sessions.filter((s) => s.verdict === "FAIL" || s.verdict === "PARTIAL").map((s) => s.id)));
+    setExported(false);
+    setExportOpen(true);
+  }
+
+  function toggleExportSession(id: string) {
+    setExportSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function handleExport() {
+    setExported(true);
+    setTimeout(() => setExportOpen(false), 1500);
+  }
 
   return (
     <Box sx={{ p: 3, maxWidth: 960 }}>
@@ -55,9 +94,34 @@ export default function RunView({ projectId, runId, navigate }: Props) {
 
       {/* Run header */}
       <Paper sx={{ p: 2.5, mb: 3, border: "1px solid", borderColor: "divider", borderRadius: 2 }}>
-        <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>
-          {run.label}
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", mb: 0.5 }}>
+          <Typography variant="h6" sx={{ fontWeight: 700 }}>
+            {run.label}
+          </Typography>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            {otherRuns.length > 0 && (
+              <Button
+                size="small"
+                variant="outlined"
+                color="inherit"
+                sx={{ color: "text.secondary" }}
+                onClick={() =>
+                  navigate({
+                    name: "compare-runs",
+                    projectId,
+                    runIdA: runId,
+                    runIdB: otherRuns[0].id,
+                  })
+                }
+              >
+                Compare with {otherRuns[0].label}
+              </Button>
+            )}
+            <Button size="small" variant="outlined" color="primary" onClick={openExport}>
+              Export as calibration case
+            </Button>
+          </Box>
+        </Box>
         <Typography variant="caption" sx={{ color: "text.secondary" }}>
           {run.date} · {run.sessions.length} sessions
         </Typography>
@@ -96,6 +160,15 @@ export default function RunView({ projectId, runId, navigate }: Props) {
               {run.sessions.filter((s) => s.verdict === "FAIL").length}
             </Typography>
           </Box>
+          <Box>
+            <Typography variant="caption" sx={{ color: "text.disabled", display: "block" }}>Avg Score</Typography>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mt: 0.25 }}>
+              <GradeChip grade={sessionGrade(avgComposite)} size="small" />
+              <Typography variant="subtitle2" sx={{ fontWeight: 700, fontFamily: "monospace" }}>
+                {avgComposite}/100
+              </Typography>
+            </Box>
+          </Box>
         </Box>
       </Paper>
 
@@ -110,6 +183,7 @@ export default function RunView({ projectId, runId, navigate }: Props) {
               <TableCell sx={{ fontWeight: 600, color: "text.secondary" }}>Scenario</TableCell>
               <TableCell sx={{ fontWeight: 600, color: "text.secondary" }}>Time</TableCell>
               <TableCell sx={{ fontWeight: 600, color: "text.secondary" }}>Duration</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: "text.secondary" }}>Score</TableCell>
               <TableCell sx={{ fontWeight: 600, color: "text.secondary" }}>BP</TableCell>
               <TableCell sx={{ fontWeight: 600, color: "text.secondary" }}>VE</TableCell>
               <TableCell sx={{ fontWeight: 600, color: "text.secondary" }}>UX</TableCell>
@@ -153,6 +227,21 @@ export default function RunView({ projectId, runId, navigate }: Props) {
                   </Typography>
                 </TableCell>
                 <TableCell>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                    {(() => {
+                      const comp = sessionCompositeScore(session);
+                      return (
+                        <>
+                          <GradeChip grade={sessionGrade(comp)} size="small" />
+                          <Typography variant="caption" sx={{ fontWeight: 700, fontFamily: "monospace" }}>
+                            {comp}
+                          </Typography>
+                        </>
+                      );
+                    })()}
+                  </Box>
+                </TableCell>
+                <TableCell>
                   <Typography variant="caption" sx={{ fontWeight: 600, color: scoreColor(session.scores.benchmarkPerformance.score) }}>
                     {session.scores.benchmarkPerformance.score}
                   </Typography>
@@ -175,6 +264,58 @@ export default function RunView({ projectId, runId, navigate }: Props) {
           </TableBody>
         </Table>
       </Paper>
+
+      {/* Export calibration case dialog */}
+      <Dialog open={exportOpen} onClose={() => setExportOpen(false)} maxWidth="sm" fullWidth>
+        <DialogTitle sx={{ fontWeight: 700 }}>Export as Calibration Case</DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
+            Select sessions to include in the calibration case. Non-PASS sessions are pre-selected as they typically yield the most useful calibration scenarios.
+          </Typography>
+          <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", mb: 1 }}>
+            Sessions
+          </Typography>
+          {run.sessions.map((s) => (
+            <Box key={s.id} sx={{ display: "flex", alignItems: "center", mb: 0.5 }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    size="small"
+                    checked={exportSelected.has(s.id)}
+                    onChange={() => toggleExportSession(s.id)}
+                  />
+                }
+                label={
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Typography variant="body2">{s.scenario}</Typography>
+                    <VerdictBadge verdict={s.verdict} />
+                  </Box>
+                }
+                sx={{ m: 0 }}
+              />
+            </Box>
+          ))}
+          <Divider sx={{ my: 2 }} />
+          <Typography variant="caption" sx={{ color: "text.disabled", display: "block" }}>
+            Destination: ~/.AgentScore/projects/{project.service}/calibration-cases/{run.id}/
+          </Typography>
+          {exported && (
+            <ChipSubtle label="Exported!" color="success" sx={{ mt: 1 }} />
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setExportOpen(false)} color="inherit" sx={{ color: "text.secondary" }}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleExport}
+            disabled={exportSelected.size === 0 || exported}
+          >
+            {exported ? "Exported" : `Export ${exportSelected.size} session${exportSelected.size !== 1 ? "s" : ""}`}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

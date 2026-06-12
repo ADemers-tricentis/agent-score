@@ -10,6 +10,8 @@ import MetricsView from "./views/MetricsView";
 import EvalDesignView from "./views/EvalDesignView";
 import LLMJudgesView from "./views/LLMJudgesView";
 import AddJudgeView from "./views/AddJudgeView";
+import IntegrationsView from "./views/IntegrationsView";
+import CompareRunsView from "./views/CompareRunsView";
 
 export default function App() {
   const [view, setView] = useState<View>({ name: "fleet" });
@@ -41,6 +43,17 @@ export default function App() {
         return <LLMJudgesView navigate={setView} />;
       case "add-judge":
         return <AddJudgeView navigate={setView} />;
+      case "integrations":
+        return <IntegrationsView />;
+      case "compare-runs":
+        return (
+          <CompareRunsView
+            projectId={view.projectId}
+            runIdA={view.runIdA}
+            runIdB={view.runIdB}
+            navigate={setView}
+          />
+        );
     }
   }
 

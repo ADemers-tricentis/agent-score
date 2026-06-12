@@ -42,6 +42,14 @@ export interface SafetyOverride {
   detail: string;
 }
 
+export interface ShipDecision {
+  decision: "Ship" | "Hold" | "Reject";
+  rationale: string;
+  author: string;
+  ts: string;
+  overridesVerdict: boolean;
+}
+
 export interface Session {
   id: string;
   ts: string;
@@ -54,8 +62,13 @@ export interface Session {
     benchmarkPerformance: DimensionScore;
     valueEfficiency: DimensionScore | null;
     uxSignal: DimensionScore;
+    harmony?: DimensionScore;
+    stability?: DimensionScore;
+    agency?: DimensionScore;
   };
   attr?: Attribution;
+  shipDecision?: ShipDecision;
+  atcBeta?: boolean;
 }
 
 export interface Run {
@@ -91,11 +104,13 @@ export type View =
   | { name: "project"; projectId: string }
   | { name: "run"; projectId: string; runId: string }
   | { name: "session"; projectId: string; runId: string; sessionId: string }
+  | { name: "compare-runs"; projectId: string; runIdA: string; runIdB: string }
   | { name: "eval-design"; projectId: string }
   | { name: "guard-log" }
   | { name: "metrics" }
   | { name: "llm-judges" }
-  | { name: "add-judge" };
+  | { name: "add-judge" }
+  | { name: "integrations" };
 
 export type LLMProvider = "Anthropic" | "AWS Bedrock" | "OpenAI-compatible";
 

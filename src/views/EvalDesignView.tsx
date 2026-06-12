@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import ButtonBase from "@mui/material/ButtonBase";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
+import AuraTabPanel from "@tricentis/aura/components/TabPanel.js";
 import ChipStatus from "@tricentis/aura/components/ChipStatus.js";
 import ChipSubtle from "@tricentis/aura/components/ChipSubtle.js";
 import Tag from "@tricentis/aura/components/Tag.js";
@@ -249,21 +250,15 @@ export default function EvalDesignView({ projectId, navigate }: Props) {
           />
         </Tabs>
 
-        <Box sx={{ p: 3 }}>
-          {activeTab === 0 && (
-            <ObservationTab
-              projectId={projectId}
-              design={design}
-              status={status}
-            />
-          )}
-          {activeTab === 1 && (
-            <SpecTab projectId={projectId} status={status} />
-          )}
-          {activeTab === 2 && (
-            <CalibrationSetTab design={design} status={status} />
-          )}
-        </Box>
+        <AuraTabPanel value={activeTab} index={0} sx={{ p: 3 }}>
+          <ObservationTab projectId={projectId} design={design} status={status} />
+        </AuraTabPanel>
+        <AuraTabPanel value={activeTab} index={1} sx={{ p: 3 }}>
+          <SpecTab projectId={projectId} status={status} />
+        </AuraTabPanel>
+        <AuraTabPanel value={activeTab} index={2} sx={{ p: 3 }}>
+          <CalibrationSetTab design={design} status={status} />
+        </AuraTabPanel>
       </Paper>
     </Box>
   );

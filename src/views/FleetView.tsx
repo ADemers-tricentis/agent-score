@@ -6,10 +6,11 @@ import Divider from "@mui/material/Divider";
 import Tag from "@tricentis/aura/components/Tag.js";
 import ChipSubtle from "@tricentis/aura/components/ChipSubtle.js";
 import type { View } from "../types";
-import { PROJECTS, projectPassRate, projectLatestVerdict } from "../data/mock";
+import { PROJECTS, projectPassRate, projectLatestVerdict, projectCompositeScore, sessionGrade } from "../data/mock";
 import VerdictBadge from "../components/VerdictBadge";
 import TypeTag from "../components/TypeTag";
 import ScoreBar from "../components/ScoreBar";
+import GradeChip from "../components/GradeChip";
 
 interface Props {
   navigate: (v: View) => void;
@@ -46,6 +47,9 @@ export default function FleetView({ navigate }: Props) {
           const rel = reliabilityConfig(project.reliability);
           const totalSessions = project.runs.flatMap((r) => r.sessions).length;
           const latestSession = project.runs[0]?.sessions[0];
+          const composite = projectCompositeScore(project);
+          const grade = sessionGrade(composite);
+          const isAtcBeta = project.type === "ATC";
 
           return (
             <ButtonBase
@@ -90,12 +94,22 @@ export default function FleetView({ navigate }: Props) {
 
                 {/* Stats row */}
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1.5, flexWrap: "wrap" }}>
+                  <GradeChip grade={grade} size="small" />
+                  <Typography variant="caption" sx={{ fontWeight: 700, fontFamily: "monospace" }}>
+                    {composite}/100
+                  </Typography>
                   <VerdictBadge verdict={verdict} />
                   <ChipSubtle
                     label={rel.label}
                     color={rel.color}
                     sx={{ height: 20, fontSize: "0.65rem", fontWeight: 600 }}
                   />
+                  {isAtcBeta && (
+                    <Tag
+                      label="ATC beta"
+                      sx={{ height: 20, fontSize: "0.63rem", fontWeight: 700, bgcolor: "primary.dark", "& .MuiChip-label": { color: "primary.light" } }}
+                    />
+                  )}
                   <Typography variant="caption" sx={{ color: "text.secondary", ml: "auto" }}>
                     {passRate}% pass · {totalSessions} sessions
                   </Typography>

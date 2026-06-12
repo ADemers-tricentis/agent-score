@@ -10,10 +10,13 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import ChipSubtle from "@tricentis/aura/components/ChipSubtle.js";
+import Alert from "@mui/material/Alert";
 import type { View } from "../types";
-import { getProject, runPassRate, getEvalDesign } from "../data/mock";
+import { getProject, runPassRate, getEvalDesign, computePassK, projectCompositeScore, sessionGrade } from "../data/mock";
 import VerdictBadge from "../components/VerdictBadge";
 import TypeTag from "../components/TypeTag";
+import GradeChip from "../components/GradeChip";
 
 interface Props {
   projectId: string;
@@ -24,6 +27,11 @@ export default function ProjectView({ projectId, navigate }: Props) {
   const project = getProject(projectId);
   const evalDesign = getEvalDesign(projectId);
   if (!project) return <Box sx={{ p: 3 }}><Typography>Project not found.</Typography></Box>;
+
+  const passK = computePassK(project);
+  const composite = projectCompositeScore(project);
+  const grade = sessionGrade(composite);
+  const canCompare = project.runs.length >= 2;
 
   const evalStatusLabel = evalDesign?.status === "confirmed"
     ? "Confirmed"
@@ -40,13 +48,16 @@ export default function ProjectView({ projectId, navigate }: Props) {
   return (
     <Box sx={{ p: 3, maxWidth: 960 }}>
       {/* Back */}
-      <Button
-        size="small"
-        onClick={() => navigate({ name: "fleet" })}
-        sx={{ mb: 2, color: "text.secondary" }}
-      >
+      <Button size="small" onClick={() => navigate({ name: "fleet" })} sx={{ mb: 2, color: "text.secondary" }}>
         ← Fleet
       </Button>
+
+      {/* ATC beta notice */}
+      {project.type === "ATC" && (
+        <Alert severity="info" sx={{ mb: 2, fontSize: "0.8rem" }}>
+          <strong>ATC Beta:</strong> ATC sessions are surfaced as informational signals in Phase 2. Verdicts and scores help calibrate evaluation design but are not CI gates.
+        </Alert>
+      )}
 
       {/* Project header */}
       <Paper sx={{ p: 2.5, mb: 3, border: "1px solid", borderColor: "divider", borderRadius: 2 }}>
@@ -67,7 +78,16 @@ export default function ProjectView({ projectId, navigate }: Props) {
           </Box>
         </Box>
         <Divider sx={{ my: 1.5 }} />
-        <Box sx={{ display: "flex", gap: 3 }}>
+        <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap", alignItems: "flex-start" }}>
+          <Box>
+            <Typography variant="caption" sx={{ color: "text.disabled", display: "block" }}>Score</Typography>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mt: 0.25 }}>
+              <GradeChip grade={grade} size="small" />
+              <Typography variant="subtitle2" sx={{ fontWeight: 700, fontFamily: "monospace" }}>
+                {composite}/100
+              </Typography>
+            </Box>
+          </Box>
           <Box>
             <Typography variant="caption" sx={{ color: "text.disabled", display: "block" }}>Runs</Typography>
             <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>{project.runs.length}</Typography>
@@ -95,6 +115,40 @@ export default function ProjectView({ projectId, navigate }: Props) {
               {project.reliability.replace("_", " ")}
             </Typography>
           </Box>
+          {passK >= 0 && (
+            <Box>
+              <Typography variant="caption" sx={{ color: "text.disabled", display: "block" }}>Pass^k (multi-run)</Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mt: 0.25 }}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{ fontWeight: 700, color: passK >= 75 ? "success.main" : passK >= 50 ? "warning.main" : "error.main" }}
+                >
+                  {passK}%
+                </Typography>
+                <ChipSubtle label="consistent" color="default" sx={{ fontSize: "0.6rem", height: 18 }} />
+              </Box>
+            </Box>
+          )}
+          {canCompare && (
+            <Box sx={{ ml: "auto", alignSelf: "center" }}>
+              <Button
+                size="small"
+                variant="outlined"
+                color="inherit"
+                sx={{ color: "text.secondary" }}
+                onClick={() =>
+                  navigate({
+                    name: "compare-runs",
+                    projectId,
+                    runIdA: project.runs[0].id,
+                    runIdB: project.runs[1].id,
+                  })
+                }
+              >
+                Compare runs
+              </Button>
+            </Box>
+          )}
         </Box>
       </Paper>
 

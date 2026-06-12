@@ -4,126 +4,113 @@
 
 > **PRD:** [AgentScore PRD (Draft)](https://tricentis.atlassian.net/wiki/x/xAAIyQ) — Confluence
 
-AgentScore evaluates AI agent sessions with parallel judges (Benchmark Performance, Value Efficiency, UX Signal) plus a conditional Attribution judge on failure. Every session produces an evidence-backed PASS / PARTIAL / FAIL verdict and, on failure, a structured root-cause attribution.
-
-> Phase 1 scope: ATA (`autonomous-service`) only. Phase 2 extends to ATC, AI Workspace, CURA, and external agents.
+AI agents fail in ways unit tests can't catch: they hallucinate context, select the wrong tool, repeat themselves in loops, or expose credentials they were never meant to touch. AgentScore gives every agent session an evidence-backed verdict — PASS, PARTIAL, or FAIL — with a composite 0–100 score, an A–F grade, a Ship / Review / Don't Ship recommendation, and on failure, a root-cause attribution that points to the exact tool call that went wrong.
 
 ---
 
-## Setup
+## The problem
 
-### Prerequisites
+Testing AI agents with deterministic assertions misses the failure modes that matter. An agent can pass every assertion and still:
 
-- Node.js ≥ 20
-- pnpm ≥ 10
-- The `aura-ui` design system repo cloned at `../Tricentis/aura-ui` relative to this directory (the React prototype resolves `@tricentis/aura` from that path via a Vite alias)
+- Hallucinate a fact not present in the provided context (Harmony failure)
+- Reach the right answer using 3× more tool calls than necessary (Agency failure)
+- Produce different answers to semantically equivalent questions in the same sprint (Stability failure)
+- Pass locally but regress when the same scenario is run again in CI (Reliability failure)
+- Include raw credentials in its output (Safety override → forced FAIL)
+
+AgentScore catches these by running parallel LLM judges over the canonical session trace, not the final output.
+
+---
+
+## How it works
+
+Each session is evaluated across up to six dimensions by parallel judges:
+
+| Dimension | What it measures |
+|---|---|
+| **Benchmark Performance** | Did the agent complete the task correctly? (`task_success`, `completion_rate`, `prompt_compliance`) |
+| **Value Efficiency** | Did it stay within cost budget? (`value_cost_ratio`, `p95_tail_cost`) |
+| **UX Signal** | Was it fast and reliable enough for the end user? (`latency_score`, `error_rate_score`, `abandonment_score`) |
+| **Harmony** *(Phase 2)* | Did the output stay grounded in the context it was given? (`context_grounding`, `spec_adherence`, `hallucination_rate`) |
+| **Stability** *(Phase 2)* | Does it produce consistent answers across semantically equivalent inputs? (`cross_variant_consistency`, `noise_robustness`) |
+| **Agency** *(Phase 2)* | Did it choose tools efficiently and recover from failures? (`tool_selection_accuracy`, `planning_efficiency`) |
+
+Scores combine into a **composite 0–100** with an **A–F grade**. Any non-PASS session triggers a conditional Attribution judge that outputs a structured root cause, confidence level, evidence chain, and actionable recommendations.
+
+### Safety override
+
+If a safety signal fires (credential exposure, PII leak, prompt injection, path violation), the verdict is overridden regardless of dimension scores — Critical signals force FAIL, High signals force PARTIAL.
+
+### Reliability (pass^k)
+
+Reliability is computed across Runs, not within a single Run. It measures what fraction of scenarios pass consistently every time they're run — catching agents that look fine in isolation but regress under repetition.
+
+### Runtime guard
+
+Before each tool call, a synchronous guard check (<50ms P95) detects:
+- **R1** — exact repeat with identical arguments → block
+- **R2** — same fingerprint that previously returned an error → warn
+- **R3** — inspect-family tool called ≥3× consecutively without an action step → warn
+
+---
+
+## Prototype
 
 ```bash
 pnpm install
-node_modules/.bin/vite          # dev server at http://localhost:5173
+pnpm dev
 ```
 
-> **Note:** `pnpm dev` triggers a pre-run install check that may block on esbuild's build script approval in pnpm v11. Run `pnpm approve-builds` once to unblock it, or use `node_modules/.bin/vite` directly.
+Requires the `aura-ui` design system repo cloned at `../Tricentis/aura-ui`.
+
+### Views
+
+- **Fleet** — all projects with grade, composite score, verdict, reliability, and ATC beta label
+- **Project** — run history, pass^k (multi-run consistency), Compare Runs button, Evaluation Design status
+- **Run** — session table with composite scores; Export as calibration case; Compare with prior run
+- **Session** — full score breakdown (3–6 dimension bars), Attribution panel, Shipping Decision log, Markdown/JSON report export
+- **Compare Runs** — side-by-side run diff with per-scenario score deltas across all dimensions
+- **Evaluation Design** — three paths: Observation-Based (from shadow sessions), Spec-Based (generate from agent description), Calibration Set (Nightmares / Reality / Dreams)
+- **Integrations** — Tosca Test API, Tosca Cloud review panel, AI Workspace live monitoring, AI Workspace version scoring, qTest AI Chat inline verdict card, GitHub Actions / Azure DevOps / Jenkins CI checks, Python SDK, TypeScript SDK, MCP server
+- **Guard Log** — live decision stream with R1/R2/R3 annotations
+- **Metrics** — OTLP metric catalog with live session counts
+- **LLM Judges** — judge configuration (provider, model, role)
 
 ---
 
-## Prototype views
+## Calibration taxonomy
 
-The React prototype (`src/`) covers the full product surface across seven views:
+Every project's evaluation design is anchored by three scenario types:
 
-- **Fleet** — project tiles with pass rate, primary verdict, reliability label, and type tag
-- **Project** — runs table with pass rate and latest verdict per run; Evaluation Design entry point
-- **Run** — sessions table with per-dimension scores and verdict
-- **Session** — composite score meter, Benchmark Performance / Value Efficiency / UX Signal dimension bars, safety override alert, Attribution panel, Markdown and JSON report tabs
-- **Evaluation Design** — per-project view with three tabs:
-  - *Observation-Based* — Measurement Recommendation surfaced from shadow-mode sessions (suggested dimensions, thresholds, seed calibration set from real failure patterns)
-  - *Spec-Based* — paste an agent description, generate a ranked list of evaluation questions, select and confirm
-  - *Calibration Set* — Nightmares / Reality / Dreams browser with completeness warning when nightmare scenarios are absent
-- **Guard Log** — filterable decision stream with R1/R2/R3 rule annotations and allow/warn/block breakdown
-- **Metrics** — all 7 OTLP metrics from the catalog with live counts from mock data
-
----
-
-## Evaluation pipeline
-
-Three concurrent judges over the canonical session trace:
-
-| Dimension | Signals |
+| Category | Purpose |
 |---|---|
-| **Benchmark Performance** | `task_success`, `completion_rate`, `prompt_compliance` |
-| **Value Efficiency** | `value_cost_ratio`, `p95_tail_cost` |
-| **UX Signal** | `latency_score`, `error_rate_score`, `abandonment_score` |
+| **Nightmares** | Adversarial cases sourced from real failure patterns — the agent must handle these before shipping |
+| **Reality** | Baseline happy-path scenarios representative of production traffic |
+| **Dreams** | Stretch goals that define what excellent looks like |
 
-On any non-PASS session, a conditional **Attribution** judge runs and outputs: `rootCause` (FailureTypeEnum), `confidence`, `agentFault`, evidence `chain`, `recommendations`.
-
-**FailureTypeEnum:** `credential_exposure` · `hallucinated_state` · `tool_selection_error` · `pii_exposure`
+A calibration set without Nightmare scenarios is flagged as incomplete — agents that haven't been tested against their known failure modes shouldn't ship.
 
 ---
 
-## Runtime guard
+## Shipping decisions
 
-Synchronous `POST /guard/pre-tool-use` decision returned in <50ms P95.
+Teams record a formal shipping decision on any session that diverges from the auto-verdict:
 
-| Rule | Behavior |
-|---|---|
-| R1 | Exact-repeat detected → **block** |
-| R2 | Same fingerprint with prior error → **warn** |
-| R3 | Inspect streak (same tool ≥3× in last 5 steps) → **warn** |
+- **Ship** — proceeding despite PARTIAL (with rationale)
+- **Hold** — blocking despite PASS (e.g., adjacent risk, incomplete calibration)
+- **Reject** — permanent rejection with documented reasoning
 
-Fire-and-forget outcome recording: `POST /guard/post-tool-use`
+Decision log entries are stored with the session record and surfaced in the JSON/Markdown report.
 
 ---
 
-## HTTP endpoints
+## Phase 2 integrations
 
-| Endpoint | Description |
-|---|---|
-| `POST /guard/pre-tool-use` | Synchronous loop-detection decision, <50ms P95 |
-| `POST /guard/post-tool-use` | Fire-and-forget outcome recording |
-| `POST /sessions/:id/score` | Re-evaluate a finalized session |
-| `GET /internal/health/is-alive` | Liveness |
+AgentScore surfaces inside the tools teams already use:
 
----
-
-## Artifacts
-
-Each session writes to `~/.AgentScore/projects/<service>/sessions/<session-id>/`:
-
-```
-raw-otlp/*.ndjson
-canonical-v2.json
-session-index.json
-guard-log.ndjson
-<session-id>-<ts>.json
-<session-id>-<ts>.md
-```
-
-S3 best-effort mirror with `tracePath` redacted. Failure logs to stderr only; never blocks finalization.
-
----
-
-## OTLP metrics
-
-| Metric | Type | Description |
-|---|---|---|
-| `AgentScore.eval.outcome` | counter | Session count by verdict (attrs: `verdict`, `project`) |
-| `AgentScore.eval.metric_score` | gauge | Per-dimension score 0..1, N/A when not applicable (attrs: `dimension`, `project`) |
-| `AgentScore.eval.root_cause` | counter | Attribution distribution, non-PASS only (attrs: `root_cause`, `agent_fault`, `project`) |
-| `AgentScore.session.duration` | histogram | Session wall-clock latency (ms); primary input to UX Signal |
-| `gen_ai.client.token.usage` | histogram | Token consumption per task; primary input to Value Efficiency (attrs: `gen_ai.token.type`, `AgentScore.role`, `project`) |
-| `AgentScore.evaluator.llm_calls` | counter | LLM judge calls per session (attr: `project`) — 3–4 depending on verdict |
-| `AgentScore.guard.decisions` | counter | Runtime guard decision stream (attrs: `decision`, `project`) |
-
-Pre-built SigNoz dashboard: `scripts/signoz-dashboard.json`
-
----
-
-## Phase 2 (planned Q4 2026)
-
-- Reliability as a fourth scoring dimension (`pass^k` across Runs)
-- 0–100 composite score and A–F grade
-- ATC integration + qTest inline verdict card
-- Tosca Cloud review panel
-- PR check integration (GitHub Actions, Azure DevOps, Jenkins)
-- Python / TypeScript SDK for LangGraph and OpenAI Agents SDK
-- MCP server exposing `evaluate_session` and `guard_tool_call`
+- **qTest AI Chat** — inline verdict card with grade and top failing dimension
+- **Tosca Cloud** — verdict in the review panel without leaving Tosca
+- **AI Workspace** — live session streaming + automatic version scoring (grade-gated model upgrades)
+- **GitHub Actions / Azure DevOps / Jenkins** — PR checks that block merge on FAIL
+- **MCP server** — `evaluate_session` and `guard_tool_call` as MCP tools for any compatible agent framework
+- **Python / TypeScript SDKs** — two-line wrapper for LangGraph, OpenAI Agents SDK, and custom loops

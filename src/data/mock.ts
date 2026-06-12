@@ -37,6 +37,28 @@ export const PROJECTS: Project[] = [
                 passed: true,
                 sigs: ["latency_score: 0.81", "error_rate_score: 0.94", "abandonment_score: 1.0"],
               },
+              harmony: {
+                score: 86,
+                passed: true,
+                sigs: ["context_grounding: 0.91", "spec_adherence: 0.88", "hallucination_rate: 0.04"],
+              },
+              stability: {
+                score: 83,
+                passed: true,
+                sigs: ["cross_variant_consistency: 0.87", "noise_robustness: 0.88", "format_consistency: 0.91"],
+              },
+              agency: {
+                score: 79,
+                passed: true,
+                sigs: ["tool_selection_accuracy: 0.88", "planning_efficiency: 0.82", "avg_tool_calls_to_resolution: 4.2"],
+              },
+            },
+            shipDecision: {
+              decision: "Ship",
+              rationale: "All six dimensions pass threshold. Payment workflow regression is clean. Proceeding with v2.4.2 release.",
+              author: "a.demers@tricentis.com",
+              ts: "2026-06-12T11:45:00Z",
+              overridesVerdict: false,
             },
           },
           {
@@ -101,6 +123,21 @@ export const PROJECTS: Project[] = [
                 passed: true,
                 sigs: ["latency_score: 0.94", "error_rate_score: 0.98", "abandonment_score: 1.0"],
               },
+              harmony: {
+                score: 91,
+                passed: true,
+                sigs: ["context_grounding: 0.94", "spec_adherence: 0.92", "hallucination_rate: 0.02"],
+              },
+              stability: {
+                score: 88,
+                passed: true,
+                sigs: ["cross_variant_consistency: 0.91", "noise_robustness: 0.93", "format_consistency: 0.94"],
+              },
+              agency: {
+                score: 85,
+                passed: true,
+                sigs: ["tool_selection_accuracy: 0.92", "planning_efficiency: 0.89", "avg_tool_calls_to_resolution: 3.1"],
+              },
             },
           },
         ],
@@ -158,6 +195,7 @@ export const PROJECTS: Project[] = [
             dur: 52000,
             scenario: "Generate test cases – login flow",
             verdict: "FAIL",
+            atcBeta: true,
             baseline: 72,
             safetyOverride: {
               signal: "credential_exposure",
@@ -202,6 +240,7 @@ export const PROJECTS: Project[] = [
             dur: 39700,
             scenario: "Generate test cases – checkout flow",
             verdict: "PARTIAL",
+            atcBeta: true,
             baseline: null,
             scores: {
               benchmarkPerformance: {
@@ -270,6 +309,21 @@ export const PROJECTS: Project[] = [
                 passed: true,
                 sigs: ["latency_score: 0.91", "error_rate_score: 0.96", "abandonment_score: 1.0"],
               },
+              harmony: {
+                score: 89,
+                passed: true,
+                sigs: ["context_grounding: 0.92", "spec_adherence: 0.90", "hallucination_rate: 0.03"],
+              },
+              stability: {
+                score: 84,
+                passed: true,
+                sigs: ["cross_variant_consistency: 0.88", "noise_robustness: 0.87", "format_consistency: 0.90"],
+              },
+              agency: {
+                score: 77,
+                passed: true,
+                sigs: ["tool_selection_accuracy: 0.84", "planning_efficiency: 0.81", "avg_tool_calls_to_resolution: 4.8"],
+              },
             },
           },
           {
@@ -294,6 +348,21 @@ export const PROJECTS: Project[] = [
                 score: 90,
                 passed: true,
                 sigs: ["latency_score: 0.93", "error_rate_score: 0.97", "abandonment_score: 1.0"],
+              },
+              harmony: {
+                score: 93,
+                passed: true,
+                sigs: ["context_grounding: 0.95", "spec_adherence: 0.94", "hallucination_rate: 0.01"],
+              },
+              stability: {
+                score: 90,
+                passed: true,
+                sigs: ["cross_variant_consistency: 0.93", "noise_robustness: 0.92", "format_consistency: 0.95"],
+              },
+              agency: {
+                score: 82,
+                passed: true,
+                sigs: ["tool_selection_accuracy: 0.89", "planning_efficiency: 0.86", "avg_tool_calls_to_resolution: 3.7"],
               },
             },
           },
@@ -950,6 +1019,52 @@ export const SPEC_GENERATED_QUESTIONS = [
 
 export function getEvalDesign(projectId: string): EvalDesign | undefined {
   return EVAL_DESIGNS[projectId];
+}
+
+export function sessionCompositeScore(s: import("../types").Session): number {
+  const dims: { score: number; weight: number }[] = [
+    { score: s.scores.benchmarkPerformance.score, weight: 35 },
+    { score: s.scores.valueEfficiency?.score ?? s.scores.benchmarkPerformance.score, weight: 20 },
+    { score: s.scores.uxSignal.score, weight: 15 },
+  ];
+  if (s.scores.harmony) dims.push({ score: s.scores.harmony.score, weight: 15 });
+  if (s.scores.stability) dims.push({ score: s.scores.stability.score, weight: 10 });
+  if (s.scores.agency) dims.push({ score: s.scores.agency.score, weight: 5 });
+  const totalWeight = dims.reduce((sum, d) => sum + d.weight, 0);
+  const weightedSum = dims.reduce((sum, d) => sum + d.score * d.weight, 0);
+  return Math.round(weightedSum / totalWeight);
+}
+
+export function sessionGrade(score: number): "A" | "B" | "C" | "D" | "F" {
+  if (score >= 90) return "A";
+  if (score >= 80) return "B";
+  if (score >= 70) return "C";
+  if (score >= 60) return "D";
+  return "F";
+}
+
+export function projectCompositeScore(project: import("../types").Project): number {
+  const sessions = project.runs[0]?.sessions ?? [];
+  if (!sessions.length) return 0;
+  const scores = sessions.map(sessionCompositeScore);
+  return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+}
+
+export function computePassK(project: import("../types").Project): number {
+  const scenarioCounts: Record<string, { total: number; passed: number }> = {};
+  for (const run of project.runs) {
+    for (const session of run.sessions) {
+      if (!scenarioCounts[session.scenario]) {
+        scenarioCounts[session.scenario] = { total: 0, passed: 0 };
+      }
+      scenarioCounts[session.scenario].total++;
+      if (session.verdict === "PASS") scenarioCounts[session.scenario].passed++;
+    }
+  }
+  const multiRunScenarios = Object.values(scenarioCounts).filter((s) => s.total > 1);
+  if (!multiRunScenarios.length) return -1;
+  const consistentlyPassing = multiRunScenarios.filter((s) => s.passed === s.total).length;
+  return Math.round((consistentlyPassing / multiRunScenarios.length) * 100);
 }
 
 // ── LLM Judges mock data ──────────────────────────────────────────────────────

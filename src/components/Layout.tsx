@@ -2,7 +2,9 @@ import type { ReactNode, ReactElement } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
-import { useTheme } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import SvgIcon from "@mui/material/SvgIcon";
+import { useTheme, useColorScheme } from "@mui/material/styles";
 import NavRail from "@tricentis/aura/components/NavRail.js";
 import IconAgentsOutlined from "@tricentis/aura/components/IconAgentsOutlined.js";
 import IconRunPrivatelyOutlined from "@tricentis/aura/components/IconRunPrivatelyOutlined.js";
@@ -14,6 +16,7 @@ import IconAgentSimOutlined from "@tricentis/aura/components/IconAgentSimOutline
 import IconAgentPersonalOutlined from "@tricentis/aura/components/IconAgentPersonalOutlined.js";
 import IconDeveloperModeOutlined from "@tricentis/aura/components/IconDeveloperModeOutlined.js";
 import IconDistributionConstantOutlined from "@tricentis/aura/components/IconDistributionConstantOutlined.js";
+import IconConnectionOutlined from "@tricentis/aura/components/IconConnectionOutlined.js";
 import type { View, ProjectType } from "../types";
 import { PROJECTS } from "../data/mock";
 
@@ -36,7 +39,8 @@ function projectIcon(type: ProjectType): ReactElement {
 
 export default function Layout({ view, navigate, children }: Props) {
   const theme = useTheme();
-  const isDark = theme.palette.mode === "dark";
+  const { mode, setMode } = useColorScheme();
+  const isDark = (mode ?? "dark") === "dark";
   const borderColor = isDark ? "#222640" : theme.palette.divider;
   const surfaceBg = isDark ? "#131626" : theme.palette.background.paper;
 
@@ -73,6 +77,13 @@ export default function Layout({ view, navigate, children }: Props) {
       icon: <IconArtificialIntelligenceOutlined />,
       selected: view.name === "llm-judges" || view.name === "add-judge",
       onClick: () => navigate({ name: "llm-judges" }),
+    },
+    {
+      id: "integrations",
+      text: "Integrations",
+      icon: <IconConnectionOutlined />,
+      selected: view.name === "integrations",
+      onClick: () => navigate({ name: "integrations" }),
     },
     { id: "div-projects", variant: "divider" as const },
     ...PROJECTS.map((p) => ({
@@ -148,7 +159,7 @@ export default function Layout({ view, navigate, children }: Props) {
           </ButtonBase>
 
           {/* Breadcrumbs */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flex: 1 }}>
             {breadcrumbs.map((crumb, i) => (
               <Box key={i} sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                 {i > 0 && (
@@ -177,6 +188,23 @@ export default function Layout({ view, navigate, children }: Props) {
               </Box>
             ))}
           </Box>
+          {/* Mode toggle */}
+          <IconButton
+            size="small"
+            onClick={() => setMode(isDark ? "light" : "dark")}
+            sx={{ color: "text.secondary", flexShrink: 0 }}
+            title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            <SvgIcon fontSize="small">
+              {isDark ? (
+                /* Sun */
+                <path d="M12 7a5 5 0 1 0 0 10A5 5 0 0 0 12 7zm0-5a1 1 0 0 1 1 1v1a1 1 0 0 1-2 0V3a1 1 0 0 1 1-1zm0 17a1 1 0 0 1 1 1v1a1 1 0 0 1-2 0v-1a1 1 0 0 1 1-1zm9-9h1a1 1 0 0 1 0 2h-1a1 1 0 0 1 0-2zM3 11H2a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2zm14.66-6.07.71-.71a1 1 0 0 1 1.41 1.41l-.71.71a1 1 0 0 1-1.41-1.41zm-12.73 12.73-.71.71a1 1 0 1 1-1.41-1.41l.71-.71a1 1 0 0 1 1.41 1.41zm12.02.71.71.71a1 1 0 0 1-1.41 1.41l-.71-.71a1 1 0 0 1 1.41-1.41zM4.93 6.34l-.71-.71A1 1 0 0 1 5.63 4.22l.71.71a1 1 0 0 1-1.41 1.41z" />
+              ) : (
+                /* Moon */
+                <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z" />
+              )}
+            </SvgIcon>
+          </IconButton>
         </Box>
 
         {/* Content */}
@@ -208,5 +236,9 @@ function buildBreadcrumbs(view: View): { label: string; onClick?: () => void }[]
       return [{ label: "LLM Judges" }];
     case "add-judge":
       return [{ label: "LLM Judges" }, { label: "Add Judge" }];
+    case "integrations":
+      return [{ label: "Integrations" }];
+    case "compare-runs":
+      return [{ label: "Fleet" }, { label: "Project" }, { label: "Compare Runs" }];
   }
 }
