@@ -81,13 +81,7 @@ export default function FleetView({ navigate }: Props) {
                       {project.service}
                     </Typography>
                   </Box>
-                  <Box sx={{ display: "flex", gap: 0.75, flexWrap: "wrap", justifyContent: "flex-end" }}>
-                    <TypeTag type={project.type} />
-                    <Tag
-                      label={`Phase ${project.phase}`}
-                      sx={{ height: 20, fontSize: "0.65rem", fontWeight: 600, color: "text.disabled" }}
-                    />
-                  </Box>
+                  <TypeTag type={project.type} />
                 </Box>
 
                 <Divider sx={{ mb: 1.5 }} />

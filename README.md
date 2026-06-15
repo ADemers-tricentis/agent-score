@@ -31,9 +31,9 @@ Each session is evaluated across up to six dimensions by parallel judges:
 | **Benchmark Performance** | Did the agent complete the task correctly? (`task_success`, `completion_rate`, `prompt_compliance`) |
 | **Value Efficiency** | Did it stay within cost budget? (`value_cost_ratio`, `p95_tail_cost`) |
 | **UX Signal** | Was it fast and reliable enough for the end user? (`latency_score`, `error_rate_score`, `abandonment_score`) |
-| **Harmony** *(Phase 2)* | Did the output stay grounded in the context it was given? (`context_grounding`, `spec_adherence`, `hallucination_rate`) |
-| **Stability** *(Phase 2)* | Does it produce consistent answers across semantically equivalent inputs? (`cross_variant_consistency`, `noise_robustness`) |
-| **Agency** *(Phase 2)* | Did it choose tools efficiently and recover from failures? (`tool_selection_accuracy`, `planning_efficiency`) |
+| **Harmony** | Did the output stay grounded in the context it was given? (`context_grounding`, `spec_adherence`, `hallucination_rate`) |
+| **Stability** | Does it produce consistent answers across semantically equivalent inputs? (`cross_variant_consistency`, `noise_robustness`) |
+| **Agency** | Did it choose tools efficiently and recover from failures? (`tool_selection_accuracy`, `planning_efficiency`) |
 
 Scores combine into a **composite 0–100** with an **A–F grade**. Any non-PASS session triggers a conditional Attribution judge that outputs a structured root cause, confidence level, evidence chain, and actionable recommendations.
 
@@ -61,11 +61,11 @@ pnpm install
 pnpm dev
 ```
 
-Requires the `aura-ui` design system repo cloned at `../Tricentis/aura-ui`.
+Requires the `aura-ui` design system repo cloned at `../Tricentis/aura-ui`. Built with React, Vite, and the Aura design system. Supports light and dark mode — toggle in the topbar.
 
 ### Views
 
-- **Fleet** — all projects with grade, composite score, verdict, reliability, and ATC beta label
+- **Fleet** — all projects with A–F grade, composite 0–100 score, verdict, reliability, and ATC beta label
 - **Project** — run history, pass^k (multi-run consistency), Compare Runs button, Evaluation Design status
 - **Run** — session table with composite scores; Export as calibration case; Compare with prior run
 - **Session** — full score breakdown (3–6 dimension bars), Attribution panel, Shipping Decision log, Markdown/JSON report export

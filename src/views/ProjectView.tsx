@@ -72,9 +72,6 @@ export default function ProjectView({ projectId, navigate }: Props) {
           </Box>
           <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
             <TypeTag type={project.type} />
-            <Typography variant="caption" sx={{ color: "text.secondary" }}>
-              Phase {project.phase}
-            </Typography>
           </Box>
         </Box>
         <Divider sx={{ my: 1.5 }} />
