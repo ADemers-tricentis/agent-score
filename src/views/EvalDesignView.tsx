@@ -531,7 +531,7 @@ function ConfirmedDesignBanner({ design, mode }: { design: ReturnType<typeof get
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
           {design.confirmedDimensions.map((d) => (
-            <Box key={d.name} sx={{ display: "grid", gridTemplateColumns: "180px 80px 60px 1fr", gap: 2, alignItems: "center", py: 0.75, px: 1, borderRadius: 1, bgcolor: "action.hover" }}>
+            <Box key={d.name} sx={{ display: "grid", gridTemplateColumns: mode === "guided" ? "180px 60px 1fr" : "180px 80px 60px 1fr", gap: 2, alignItems: "center", py: 0.75, px: 1, borderRadius: 1, bgcolor: "action.hover" }}>
               <Typography variant="body2" sx={{ fontWeight: 700 }}>
                 {mode === "guided" ? GUIDED_CATEGORY_LABELS[d.name] ?? d.name : d.name}
               </Typography>
