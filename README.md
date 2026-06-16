@@ -70,7 +70,7 @@ Requires the `aura-ui` design system repo cloned at `../Tricentis/aura-ui`. Buil
 - **Run** — session table with composite scores; Export as calibration case; Compare with prior run
 - **Session** — full score breakdown (3–6 dimension bars), Attribution panel, Shipping Decision log, Markdown/JSON report export
 - **Compare Runs** — side-by-side run diff with per-scenario score deltas across all dimensions
-- **Evaluation Design** — three paths: Observation-Based (from shadow sessions), Spec-Based (generate from agent description), Calibration Set (Nightmares / Reality / Dreams)
+- **Evaluation Design** — path selection (observation-based, spec-based, or both), Guided and Expert modes, Calibration Set (Nightmares / Reality / Dreams)
 - **Integrations** — Tosca Test API, Tosca Cloud review panel, AI Workspace live monitoring, AI Workspace version scoring, qTest AI Chat inline verdict card, GitHub Actions / Azure DevOps / Jenkins CI checks, Python SDK, TypeScript SDK, MCP server
 - **Guard Log** — live decision stream with R1/R2/R3 annotations
 - **Metrics** — OTLP metric catalog with live session counts
@@ -78,17 +78,50 @@ Requires the `aura-ui` design system repo cloned at `../Tricentis/aura-ui`. Buil
 
 ---
 
-## Calibration taxonomy
+## Evaluation Design
 
-Every project's evaluation design is anchored by three scenario types:
+The hardest part of agent evaluation is deciding what to test, not running it. AgentScore provides two paths to a confirmed evaluation design and two modes for different user personas.
 
-| Category | Purpose |
+### Paths — choose one or both
+
+| Path | How it works |
 |---|---|
-| **Nightmares** | Adversarial cases sourced from real failure patterns — the agent must handle these before shipping |
-| **Reality** | Baseline happy-path scenarios representative of production traffic |
-| **Dreams** | Stretch goals that define what excellent looks like |
+| **Observation-Based** | Run the agent in shadow mode. AgentScore watches tool call distribution, session shape, output variance, context grounding, and failure clustering. After 10+ sessions it surfaces a Measurement Recommendation derived from observed behavior. |
+| **Spec-Based** | Write what the agent is supposed to do. AgentScore systematizes the spec into a permissible/impermissible behavior taxonomy (ASSERT-style), then generates stratified eval cases with judge criteria and policy citations — across task type, persona, environment, and tool availability dimensions. |
 
-A calibration set without Nightmare scenarios is flagged as incomplete — agents that haven't been tested against their known failure modes shouldn't ship.
+Both paths produce the same output: confirmed scoring dimensions with thresholds, and a calibration set.
+
+### Modes — Guided and Expert
+
+The Evaluation Design view has a **Guided / Expert** toggle that changes the entire interface:
+
+| | Guided | Expert |
+|---|---|---|
+| **Spec input** | Three plain-text fields: what it does, what it must never do, what you're worried about | Full YAML spec: purpose, tools, success criteria, failure modes, constraints, edge cases |
+| **Generation progress** | Four plain steps in natural language | ASSERT 4-stage pipeline: Systematization → Taxonomization → Test-Set Generation → Scoring Setup |
+| **Taxonomy** | "What it should do" / "What it must never do" | "Permissible" / "Impermissible" behavior classes with counts |
+| **Eval question cards** | Category labels in plain English, simplified expanded view (what we'll do / how we measure it) | Full ASSERT fields: test dimensions, judge criteria, candidate measure, spec citation |
+| **Calibration categories** | Hard Cases / Normal Cases / Stretch Goals | Nightmare / Reality / Dream |
+
+### Spec-Based eval structure (Expert)
+
+Each generated eval question includes:
+
+- **Behavior class** — `permissible` (testing that the agent should do something) or `impermissible` (testing that it must never do something)
+- **Test dimensions** — task type, persona, environment, tool availability
+- **Judge criteria** — what an LLM judge checks in the full tool call trace, not just the output
+- **Candidate measure** — the specific metric and threshold
+- **Spec citation** — which clause in the spec grounds this eval
+
+### Calibration taxonomy
+
+| Category | Expert label | Guided label | Purpose |
+|---|---|---|---|
+| **Nightmare** | Nightmare | Hard Cases | Adversarial cases from real failure patterns — the agent must handle these before shipping |
+| **Reality** | Reality | Normal Cases | Baseline scenarios representative of production traffic |
+| **Dream** | Dream | Stretch Goals | Stretch goals that define what excellent looks like |
+
+A calibration set without Nightmare / Hard Cases scenarios is flagged as incomplete.
 
 ---
 
