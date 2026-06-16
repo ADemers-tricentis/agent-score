@@ -167,9 +167,13 @@ export interface EvalQuestion {
   rank: number;
   showcaseCategory: ShowcaseCategory;
   question: string;
+  behaviorClass: "permissible" | "impermissible";
   taskDefinition: string;
+  testDimensions: string[];
   requiredData: string;
   candidateMeasure: string;
+  judgeCriteria: string;
+  specCitation: string;
   directionality: Directionality;
   riskLevel: "high" | "medium" | "low";
   selected: boolean;

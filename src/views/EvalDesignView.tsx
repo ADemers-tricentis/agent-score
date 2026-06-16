@@ -28,6 +28,7 @@ import {
   getProject,
   getEvalDesign,
   SPEC_GENERATED_QUESTIONS,
+  SPEC_TAXONOMY,
 } from "../data/mock";
 
 interface Props {
@@ -168,17 +169,18 @@ export default function EvalDesignView({ projectId, navigate }: Props) {
               Spec-Based
             </Typography>
             <Typography variant="body2" sx={{ color: "text.secondary", mb: 1.5 }}>
-              Paste a description of what the agent is supposed to do. AgentScore returns a prioritized
-              list of evaluation questions across applicable categories, each with a task definition,
-              required data, candidate measure, and directionality. Select which to pursue.
+              Write what the agent is supposed to do: purpose, tools, success criteria, failure modes,
+              and constraints. The spec is first-class input — not background context. AgentScore builds
+              a permissible/impermissible behavior taxonomy from it, then generates stratified evals with
+              judge criteria and policy citations.
             </Typography>
             <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 600, display: "block", mb: 0.5 }}>
               Produces
             </Typography>
             {[
-              "Ranked evaluation questions filtered to categories you select",
-              "Task definitions with required data and candidate measures",
-              "Nightmare scenarios generated from stated failure modes and risk areas",
+              "Permissible/impermissible behavior taxonomy derived from spec",
+              "Stratified evals with judge criteria for trace-level scoring",
+              "Test dimensions across task type, persona, environment, and tool availability",
             ].map((item) => (
               <Box key={item} sx={{ display: "flex", gap: 0.75, mb: 0.4 }}>
                 <Typography variant="caption" sx={{ color: "primary.main", fontWeight: 700, flexShrink: 0 }}>›</Typography>
@@ -521,15 +523,50 @@ function ObservationTab({
 
 // ── Spec-Based tab ────────────────────────────────────────────────────────────
 
-const PLACEHOLDER_SPEC = `The CURA Diagnostic Agent helps QA engineers identify root causes of failing or flaky tests in CI pipelines.
+const PLACEHOLDER_SPEC = `agent: CURA Diagnostic Agent
+version: "1.0"
+purpose: |
+  Helps QA engineers identify root causes of failing or flaky tests in CI pipelines.
+  Receives test execution logs, environment metadata, and a dependency graph.
+  Expected to provide actionable, grounded diagnoses for CI-blocking failures.
 
-It receives test execution logs, environment metadata, and a dependency graph. It should:
-- Distinguish between flaky tests (intermittent failures) and genuinely broken tests (consistent failures)
-- Identify whether the failure is in the test itself, the system under test, or the environment
-- Pinpoint the specific component, service, or configuration change responsible
-- Produce a structured diagnosis report with confidence level and recommended fix
+tools:
+  fetch_test_logs(suite_id, run_range):      retrieve execution history for a test suite
+  fetch_dependency_graph(service_id):        return the dependency tree for a target service
+  fetch_environment_snapshot(run_id):        pull environment config and metadata at time of run
+  query_change_history(service_id, since):   surface recent deployments or configuration changes
+  emit_diagnosis_report(root_cause, confidence, recommended_fix): structured output — final action
 
-Primary concerns: accuracy on ambiguous cases, avoiding false positives that blame healthy components, and staying within latency budget for CI-blocking use.`;
+success_criteria:
+  - Distinguish flaky tests (intermittent, <80% fail rate) from broken tests (≥80% fail rate)
+  - Identify whether failure is in the test itself, the system under test, or the environment
+  - Pinpoint the specific component, service, or configuration change responsible
+  - Emit a structured diagnosis: root_cause (string), confidence (0.0–1.0), recommended_fix (string)
+  - Complete within 45s for CI-blocking use cases
+  - Stay within 8,000 tokens total per session (input + output + tool calls)
+  - Use minimum effective tool calls; optimal path to diagnosis is ≤3 calls
+
+failure_modes:
+  - Must NOT blame a healthy component — false positive root cause
+  - Must NOT fabricate log entries or deployment events not present in provided context
+  - Must NOT emit confidence > 0.7 when root cause is genuinely ambiguous
+  - Must NOT re-fetch data already present in the session context window
+  - Must NOT exceed token budget by more than 20% on any standard scenario
+  - Must NOT allow injected content in log payloads to override or alter the diagnosis
+
+constraints:
+  latency_budget_ms: 45000   # P90 for CI-blocking cases; >60,000ms is a critical violation
+  token_budget: 8000         # total per session; >9,600 triggers constraint violation
+  confidence_floor: 0.4      # minimum confidence before emitting verdict; below → "inconclusive"
+  false_positive_tolerance: 0.05  # at most 5% of healthy components incorrectly blamed
+
+edge_cases:
+  - Clock skew in test environment causing intermittent timing failures (not a code defect)
+  - Failure in test setup/teardown fixture, not in the system under test
+  - Cascade failure where primary service is healthy but secondary dependency is down
+  - Ambiguous logs with no definitive error signal — correct output is "inconclusive"
+  - Contradictory signals: test runner logs say pass, CI report says fail
+  - Prompt injection embedded in log content attempting to override diagnosis output`;
 
 const SHOWCASE_CATEGORIES = [
   { key: "Benchmark Performance", desc: "Did the agent do the right thing?" },
@@ -549,6 +586,25 @@ const RISK_AREAS = [
   "Latency / cost overrun",
 ];
 
+const PIPELINE_STAGES = [
+  {
+    label: "Systematization",
+    desc: "Grounding spec concepts in edge cases and operational distinctions",
+  },
+  {
+    label: "Taxonomization",
+    desc: "Building permissible/impermissible behavior taxonomy",
+  },
+  {
+    label: "Test-Set Generation",
+    desc: "Stratifying test cases across task type, persona, environment, tool availability",
+  },
+  {
+    label: "Scoring Setup",
+    desc: "Deriving judge criteria and policy citations for trace-level scoring",
+  },
+];
+
 function SpecTab({ status }: { projectId: string; status: string }) {
   const [specText, setSpecText] = useState(PLACEHOLDER_SPEC);
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
@@ -559,6 +615,7 @@ function SpecTab({ status }: { projectId: string; status: string }) {
   );
   const [generated, setGenerated] = useState(status === "no_design");
   const [generating, setGenerating] = useState(false);
+  const [generatingStage, setGeneratingStage] = useState(0);
   const [questions, setQuestions] = useState<EvalQuestion[]>(
     status === "no_design"
       ? SPEC_GENERATED_QUESTIONS.map((q) => ({ ...q, selected: q.riskLevel === "high" }))
@@ -585,10 +642,15 @@ function SpecTab({ status }: { projectId: string; status: string }) {
   function handleGenerate() {
     if (!specText.trim() || selectedCategories.size === 0) return;
     setGenerating(true);
+    setGeneratingStage(1);
+    setTimeout(() => setGeneratingStage(2), 350);
+    setTimeout(() => setGeneratingStage(3), 700);
+    setTimeout(() => setGeneratingStage(4), 1050);
     setTimeout(() => {
       setQuestions(SPEC_GENERATED_QUESTIONS.map((q) => ({ ...q, selected: q.riskLevel === "high" })));
       setGenerating(false);
       setGenerated(true);
+      setGeneratingStage(0);
     }, 1400);
   }
 
@@ -597,20 +659,21 @@ function SpecTab({ status }: { projectId: string; status: string }) {
   return (
     <Box>
       <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
-        Paste a description of what this agent is supposed to do — its purpose, use cases, and your
-        primary concerns. A formal spec is not required. AgentScore will return a prioritized list of
-        evaluation questions, each with a task definition, required data, candidate measure, and
-        directionality.
+        Write what this agent is supposed to do — purpose, tools, success criteria, failure modes, and
+        constraints. The spec is first-class input, not background context. AgentScore systematizes it
+        into a permissible/impermissible behavior taxonomy, then generates stratified eval cases with
+        judge criteria grounded in specific spec clauses.
       </Typography>
 
       {!generated ? (
         <>
           <Paper sx={{ p: 2, mb: 2.5, border: "1px solid", borderColor: "primary.dark", borderRadius: 1.5, bgcolor: "action.hover" }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-              What should we focus on?
+              Scope the evaluation
             </Typography>
             <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 1.5 }}>
-              Select the evaluation categories and risk areas most relevant to this agent. This constrains output to questions you can actually act on.
+              Select the evaluation categories and risk areas most relevant to this agent. This
+              constrains output to evals you can actually act on — not an exhaustive list.
             </Typography>
 
             <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", mb: 0.75 }}>
@@ -651,30 +714,91 @@ function SpecTab({ status }: { projectId: string; status: string }) {
 
           <TextField
             multiline
-            minRows={8}
-            maxRows={14}
+            minRows={14}
+            maxRows={22}
             fullWidth
             variant="outlined"
-            placeholder="Describe what the agent does, what good output looks like, and what you're most worried about…"
+            placeholder="Paste or write a structured agent spec…"
             value={specText}
             onChange={(e) => setSpecText(e.target.value)}
-            sx={{ mb: 2, fontFamily: "inherit" }}
+            sx={{ mb: 2, "& textarea": { fontFamily: "monospace", fontSize: "0.78rem", lineHeight: 1.6 } }}
           />
+
           {generating && (
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 0.75 }}>
-                Generating evaluation questions…
+            <Paper sx={{ p: 2, mb: 2, border: "1px solid", borderColor: "divider", borderRadius: 1.5 }}>
+              <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", mb: 1.5 }}>
+                Processing spec
               </Typography>
-              <LinearProgress />
-            </Box>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                {PIPELINE_STAGES.map((stage, i) => {
+                  const stageNum = i + 1;
+                  const isActive = generatingStage === stageNum;
+                  const isDone = generatingStage > stageNum;
+                  return (
+                    <Box key={stage.label} sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                      <Box
+                        sx={{
+                          width: 20,
+                          height: 20,
+                          borderRadius: "50%",
+                          flexShrink: 0,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          bgcolor: isDone
+                            ? "success.main"
+                            : isActive
+                            ? "primary.main"
+                            : "action.hover",
+                          border: "1px solid",
+                          borderColor: isDone
+                            ? "success.main"
+                            : isActive
+                            ? "primary.main"
+                            : "divider",
+                        }}
+                      >
+                        {isDone ? (
+                          <Typography sx={{ fontSize: "0.55rem", color: "white", fontWeight: 800 }}>✓</Typography>
+                        ) : (
+                          <Typography sx={{ fontSize: "0.55rem", color: isActive ? "white" : "text.disabled", fontWeight: 700 }}>
+                            {stageNum}
+                          </Typography>
+                        )}
+                      </Box>
+                      <Box sx={{ flex: 1 }}>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            fontWeight: isActive || isDone ? 700 : 400,
+                            color: isDone ? "success.main" : isActive ? "text.primary" : "text.disabled",
+                            display: "block",
+                            lineHeight: 1.2,
+                          }}
+                        >
+                          {stage.label}
+                        </Typography>
+                        {isActive && (
+                          <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.68rem" }}>
+                            {stage.desc}…
+                          </Typography>
+                        )}
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </Box>
+              <LinearProgress sx={{ mt: 1.5, borderRadius: 1 }} />
+            </Paper>
           )}
+
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <Button
               variant="contained"
               disabled={!specText.trim() || generating || selectedCategories.size === 0}
               onClick={handleGenerate}
             >
-              Generate evaluation questions
+              Generate evaluation design
             </Button>
             {selectedCategories.size === 0 && (
               <Typography variant="caption" sx={{ color: "warning.main" }}>
@@ -685,13 +809,56 @@ function SpecTab({ status }: { projectId: string; status: string }) {
         </>
       ) : (
         <>
+          {/* Behavior taxonomy — derived from spec */}
+          <Paper sx={{ mb: 3, border: "1px solid", borderColor: "divider", borderRadius: 1.5, overflow: "hidden" }}>
+            <Box sx={{ px: 2, py: 1.25, bgcolor: "action.hover", borderBottom: "1px solid", borderColor: "divider" }}>
+              <Typography variant="caption" sx={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "text.disabled" }}>
+                Behavior Taxonomy  ·  derived from spec
+              </Typography>
+            </Box>
+            <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+              <Box sx={{ p: 2, borderRight: "1px solid", borderColor: "divider" }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mb: 1 }}>
+                  <Box sx={{ width: 8, height: 8, borderRadius: "50%", bgcolor: "success.main", flexShrink: 0 }} />
+                  <Typography variant="caption" sx={{ fontWeight: 700, color: "success.main" }}>
+                    Permissible  ({SPEC_TAXONOMY.permissible.length})
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 0.6 }}>
+                  {SPEC_TAXONOMY.permissible.map((item) => (
+                    <Box key={item} sx={{ display: "flex", gap: 0.75, alignItems: "flex-start" }}>
+                      <Typography variant="caption" sx={{ color: "success.main", flexShrink: 0, mt: 0.1 }}>›</Typography>
+                      <Typography variant="caption" sx={{ color: "text.secondary", lineHeight: 1.5 }}>{item}</Typography>
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+              <Box sx={{ p: 2 }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mb: 1 }}>
+                  <Box sx={{ width: 8, height: 8, borderRadius: "50%", bgcolor: "error.main", flexShrink: 0 }} />
+                  <Typography variant="caption" sx={{ fontWeight: 700, color: "error.main" }}>
+                    Impermissible  ({SPEC_TAXONOMY.impermissible.length})
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 0.6 }}>
+                  {SPEC_TAXONOMY.impermissible.map((item) => (
+                    <Box key={item} sx={{ display: "flex", gap: 0.75, alignItems: "flex-start" }}>
+                      <Typography variant="caption" sx={{ color: "error.main", flexShrink: 0, mt: 0.1 }}>✕</Typography>
+                      <Typography variant="caption" sx={{ color: "text.secondary", lineHeight: 1.5 }}>{item}</Typography>
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+            </Box>
+          </Paper>
+
           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
             <Box>
               <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-                {questions.length} evaluation questions generated
+                {questions.length} evaluation cases generated
               </Typography>
               <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                High-risk questions are pre-selected. Choose which to pursue.
+                High-risk cases are pre-selected. Each is grounded in a spec clause with judge criteria for trace-level scoring.
               </Typography>
             </Box>
             <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
@@ -726,13 +893,14 @@ function SpecTab({ status }: { projectId: string; status: string }) {
                 disabled={selectedCount === 0}
                 onClick={() => setConfirmed(true)}
               >
-                Generate evaluation designs for {selectedCount} question{selectedCount !== 1 ? "s" : ""}
+                Confirm {selectedCount} eval{selectedCount !== 1 ? "s" : ""} and seed calibration set
               </Button>
             </Box>
           ) : (
             <Alert severity="success">
-              Evaluation designs generated for {selectedCount} question{selectedCount !== 1 ? "s" : ""}.
-              The calibration set has been seeded — review and confirm it in the Calibration Set tab.
+              {selectedCount} eval{selectedCount !== 1 ? "s" : ""} confirmed. The calibration set has
+              been seeded from the impermissible behavior cases — review and adjust it in the
+              Calibration Set tab.
             </Alert>
           )}
         </>
@@ -1007,6 +1175,7 @@ function EvalQuestionCard({
   onToggle: (id: string) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const isImpermissible = question.behaviorClass === "impermissible";
 
   return (
     <Paper
@@ -1048,6 +1217,11 @@ function EvalQuestionCard({
                 sx={{ height: 18, fontSize: "0.6rem", fontWeight: 600 }}
               />
               <ChipSubtle
+                label={isImpermissible ? "impermissible" : "permissible"}
+                color={isImpermissible ? "error" : "success"}
+                sx={{ height: 18, fontSize: "0.6rem", fontWeight: 600 }}
+              />
+              <ChipSubtle
                 label={`${question.riskLevel} risk`}
                 color={RISK_COLOR[question.riskLevel]}
                 sx={{ height: 18, fontSize: "0.6rem", fontWeight: 600 }}
@@ -1074,33 +1248,75 @@ function EvalQuestionCard({
             pb: 2,
             borderTop: "1px solid",
             borderColor: "divider",
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 2,
           }}
         >
-          <Box>
-            <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", mb: 0.5 }}>
-              Task definition
-            </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              {question.taskDefinition}
-            </Typography>
+          {/* Row 1: Task definition + Test dimensions */}
+          <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, pt: 2, mb: 2 }}>
+            <Box>
+              <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", mb: 0.5 }}>
+                Task definition
+              </Typography>
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                {question.taskDefinition}
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", mb: 0.5 }}>
+                Test dimensions
+              </Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 0.4 }}>
+                {question.testDimensions.map((dim) => (
+                  <Typography key={dim} variant="caption" sx={{ fontFamily: "monospace", color: "text.secondary", fontSize: "0.72rem" }}>
+                    {dim}
+                  </Typography>
+                ))}
+              </Box>
+            </Box>
           </Box>
-          <Box>
-            <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", mb: 0.5 }}>
-              Required data
-            </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              {question.requiredData}
-            </Typography>
+
+          {/* Row 2: Required data + Judge criteria */}
+          <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2, mb: 2 }}>
+            <Box>
+              <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", mb: 0.5 }}>
+                Required data
+              </Typography>
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                {question.requiredData}
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", mb: 0.5 }}>
+                Judge criteria
+              </Typography>
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                {question.judgeCriteria}
+              </Typography>
+            </Box>
           </Box>
-          <Box sx={{ gridColumn: "1 / -1" }}>
+
+          {/* Row 3: Candidate measure */}
+          <Box sx={{ mb: 2 }}>
             <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", mb: 0.5 }}>
               Candidate measure
             </Typography>
             <Typography variant="caption" sx={{ fontFamily: "monospace", color: "primary.light" }}>
               {question.candidateMeasure}
+            </Typography>
+          </Box>
+
+          {/* Row 4: Spec citation */}
+          <Box
+            sx={{
+              pt: 1.5,
+              borderTop: "1px solid",
+              borderColor: "divider",
+            }}
+          >
+            <Typography variant="caption" sx={{ color: "text.disabled", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", display: "block", mb: 0.4 }}>
+              Spec citation
+            </Typography>
+            <Typography variant="caption" sx={{ color: "text.disabled", fontStyle: "italic" }}>
+              {question.specCitation}
             </Typography>
           </Box>
         </Box>
