@@ -17,6 +17,7 @@ import IconAgentPersonalOutlined from "@tricentis/aura/components/IconAgentPerso
 import IconDeveloperModeOutlined from "@tricentis/aura/components/IconDeveloperModeOutlined.js";
 import IconDistributionConstantOutlined from "@tricentis/aura/components/IconDistributionConstantOutlined.js";
 import IconConnectionOutlined from "@tricentis/aura/components/IconConnectionOutlined.js";
+import IconFileTableAdvancedOutlined from "@tricentis/aura/components/IconFileTableAdvancedOutlined.js";
 import type { View, ProjectType } from "../types";
 import { PROJECTS } from "../data/mock";
 
@@ -74,6 +75,13 @@ export default function Layout({ view, navigate, children }: Props) {
       icon: <IconArtificialIntelligenceOutlined />,
       selected: view.name === "llm-judges" || view.name === "add-judge",
       onClick: () => navigate({ name: "llm-judges" }),
+    },
+    {
+      id: "profiles",
+      text: "Profiles",
+      icon: <IconFileTableAdvancedOutlined />,
+      selected: view.name === "profiles" || view.name === "profile",
+      onClick: () => navigate({ name: "profiles" }),
     },
     {
       id: "integrations",
@@ -238,5 +246,11 @@ function buildBreadcrumbs(view: View): { label: string; onClick?: () => void }[]
       return [{ label: "Integrations" }];
     case "compare-runs":
       return [{ label: "Fleet" }, { label: "Project" }, { label: "Compare Runs" }];
+    case "add-agent":
+      return [{ label: "Fleet" }, { label: "Add Agent" }];
+    case "profiles":
+      return [{ label: "Profiles" }];
+    case "profile":
+      return [{ label: "Profiles" }, { label: "Profile" }];
   }
 }

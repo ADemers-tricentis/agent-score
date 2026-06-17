@@ -86,6 +86,7 @@ export interface Project {
   phase: 1 | 2;
   reliability: Reliability;
   runs: Run[];
+  adoptedProfileId?: string;
 }
 
 export interface GuardLogEntry {
@@ -110,7 +111,10 @@ export type View =
   | { name: "metrics" }
   | { name: "llm-judges" }
   | { name: "add-judge" }
-  | { name: "integrations" };
+  | { name: "integrations" }
+  | { name: "add-agent" }
+  | { name: "profiles" }
+  | { name: "profile"; profileId: string };
 
 export type LLMProvider = "Anthropic" | "AWS Bedrock" | "OpenAI-compatible";
 
@@ -185,4 +189,44 @@ export interface EvalDesign {
   confirmedDimensions: SuggestedDimension[];
   calibrationSet: CalibrationScenario[];
   measurementRecommendation?: MeasurementRecommendation;
+}
+
+// ── Scoring Profiles ─────────────────────────────────────────────────────────
+
+export type VerdictBandKey = "ship" | "ship_note" | "review" | "block_rec";
+
+export interface ProfileEntry {
+  id: string;
+  evalSlug: string;
+  evalName: string;
+  dimension: ShowcaseCategory;
+  threshold: number;
+  weight: number;
+  enabled: boolean;
+  question: string;
+  taskDefinition: string;
+  judgeCriteria: string;
+  behaviorClass: "permissible" | "impermissible";
+  riskLevel: "high" | "medium" | "low";
+  directionality: Directionality;
+}
+
+export interface ProfileVersion {
+  id: string;
+  version: number;
+  dimensionWeights: Partial<Record<ShowcaseCategory, number>>;
+  verdictBands: Record<VerdictBandKey, number>;
+  entries: ProfileEntry[];
+  createdAt: string;
+}
+
+export interface ScoringProfile {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  agentType: ProjectType;
+  status: "active" | "archived";
+  versions: ProfileVersion[];
+  createdAt: string;
 }

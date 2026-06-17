@@ -2,7 +2,13 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
+import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
+import SvgIcon from "@mui/material/SvgIcon";
+
+function AddIcon() {
+  return <SvgIcon><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" /></SvgIcon>;
+}
 import Tag from "@tricentis/aura/components/Tag.js";
 import ChipSubtle from "@tricentis/aura/components/ChipSubtle.js";
 import type { View } from "../types";
@@ -25,13 +31,22 @@ function reliabilityConfig(r: string) {
 export default function FleetView({ navigate }: Props) {
   return (
     <Box sx={{ p: 3 }}>
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>
-          Fleet
-        </Typography>
-        <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          {PROJECTS.length} projects · {PROJECTS.filter((p) => p.phase === 1).length} Phase 1 · {PROJECTS.filter((p) => p.phase === 2).length} Phase 2
-        </Typography>
+      <Box sx={{ mb: 3, display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
+        <Box>
+          <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>
+            Fleet
+          </Typography>
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            {PROJECTS.length} projects · {PROJECTS.filter((p) => p.phase === 1).length} Phase 1 · {PROJECTS.filter((p) => p.phase === 2).length} Phase 2
+          </Typography>
+        </Box>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => navigate({ name: "add-agent" })}
+        >
+          Add Agent
+        </Button>
       </Box>
 
       <Box

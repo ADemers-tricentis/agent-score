@@ -13,7 +13,8 @@ import TableRow from "@mui/material/TableRow";
 import ChipSubtle from "@tricentis/aura/components/ChipSubtle.js";
 import Alert from "@mui/material/Alert";
 import type { View } from "../types";
-import { getProject, runPassRate, getEvalDesign, computePassK, projectCompositeScore, sessionGrade } from "../data/mock";
+import Chip from "@mui/material/Chip";
+import { getProject, runPassRate, getEvalDesign, computePassK, projectCompositeScore, sessionGrade, getAdoptedProfile } from "../data/mock";
 import VerdictBadge from "../components/VerdictBadge";
 import TypeTag from "../components/TypeTag";
 import GradeChip from "../components/GradeChip";
@@ -26,6 +27,9 @@ interface Props {
 export default function ProjectView({ projectId, navigate }: Props) {
   const project = getProject(projectId);
   const evalDesign = getEvalDesign(projectId);
+  const adoptedProfileResult = project?.adoptedProfileId ? getAdoptedProfile(projectId) : null;
+  const adoptedProfile = adoptedProfileResult?.profile ?? null;
+  const adoptedProfileVersion = adoptedProfileResult?.version ?? null;
   if (!project) return <Box sx={{ p: 3 }}><Typography>Project not found.</Typography></Box>;
 
   const passK = computePassK(project);
@@ -149,57 +153,103 @@ export default function ProjectView({ projectId, navigate }: Props) {
         </Box>
       </Paper>
 
-      {/* Evaluation Design card */}
-      <Paper
-        sx={{
-          p: 2,
-          mb: 3,
-          border: "1px solid",
-          borderColor: evalDesign?.status === "confirmed"
-            ? "success.dark"
-            : evalDesign?.status === "observation_ready"
-            ? "warning.dark"
-            : "divider",
-          borderRadius: 2,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 2,
-        }}
-      >
-        <Box>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-              Evaluation Design
-            </Typography>
-            <ChipStatus
-              status={
-                evalDesign?.status === "confirmed"
-                  ? "Passed"
-                  : evalDesign?.status === "observation_ready"
-                  ? "Pending"
-                  : "Draft"
-              }
-            />
-          </Box>
-          <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            {evalDesign?.status === "confirmed"
-              ? `${evalDesign.confirmedDimensions.length} dimensions confirmed · ${evalDesign.calibrationSet.length} calibration scenarios`
+      {/* Scoring profile / Evaluation Design card */}
+      {adoptedProfile && adoptedProfileVersion ? (() => {
+        const latestVersion = adoptedProfileVersion;
+        const enabledEntries = latestVersion.entries.filter((e) => e.enabled);
+        const dimensions = [...new Set(enabledEntries.map((e) => e.dimension))];
+        return (
+          <Paper
+            sx={{
+              p: 2,
+              mb: 3,
+              border: "1px solid",
+              borderColor: "success.dark",
+              borderRadius: 2,
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 2 }}>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                    Scoring Profile
+                  </Typography>
+                  <Chip label={`v${latestVersion.version}`} size="small" sx={{ height: 18, fontSize: "0.65rem", fontFamily: "monospace" }} />
+                  <ChipStatus status="Passed" />
+                </Box>
+                <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>
+                  {adoptedProfile.name} · {enabledEntries.length} evals across {dimensions.length} dimensions
+                </Typography>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {dimensions.map((d) => (
+                    <Chip key={d} label={d} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.68rem" }} />
+                  ))}
+                </Box>
+              </Box>
+              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 1, flexShrink: 0 }}>
+                <Box sx={{ display: "flex", gap: 0.75 }}>
+                  {(["ship", "ship_note", "review", "block_rec"] as const).map((k) => (
+                    <Typography key={k} variant="caption" sx={{ color: "text.disabled", whiteSpace: "nowrap" }}>
+                      {k === "ship" ? "Ship" : k === "ship_note" ? "Ship†" : k === "review" ? "Review" : "Block"} ≥{latestVersion.verdictBands[k]}
+                    </Typography>
+                  ))}
+                </Box>
+              </Box>
+            </Box>
+          </Paper>
+        );
+      })() : (
+        <Paper
+          sx={{
+            p: 2,
+            mb: 3,
+            border: "1px solid",
+            borderColor: evalDesign?.status === "confirmed"
+              ? "success.dark"
               : evalDesign?.status === "observation_ready"
-              ? `Observation-based recommendation ready — ${evalDesign.measurementRecommendation?.shadowSessionCount} shadow sessions analyzed`
-              : "No evaluation design yet. Define what to measure before scoring begins."}
-          </Typography>
-        </Box>
-        <Button
-          variant={evalDesign?.status === "confirmed" ? "outlined" : "contained"}
-          color={evalDesign?.status === "confirmed" ? "inherit" : "primary"}
-          size="small"
-          onClick={() => navigate({ name: "eval-design", projectId })}
-          sx={evalDesign?.status === "confirmed" ? { color: "text.secondary" } : {}}
+              ? "warning.dark"
+              : "divider",
+            borderRadius: 2,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 2,
+          }}
         >
-          {evalDesign?.status === "confirmed" ? "View design" : evalDesign?.status === "observation_ready" ? "Review recommendation" : "Set up evaluation design"}
-        </Button>
-      </Paper>
+          <Box>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                Evaluation Design
+              </Typography>
+              <ChipStatus
+                status={
+                  evalDesign?.status === "confirmed"
+                    ? "Passed"
+                    : evalDesign?.status === "observation_ready"
+                    ? "Pending"
+                    : "Draft"
+                }
+              />
+            </Box>
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              {evalDesign?.status === "confirmed"
+                ? `${evalDesign.confirmedDimensions.length} dimensions confirmed · ${evalDesign.calibrationSet.length} calibration scenarios`
+                : evalDesign?.status === "observation_ready"
+                ? `Observation-based recommendation ready — ${evalDesign.measurementRecommendation?.shadowSessionCount} shadow sessions analyzed`
+                : "No evaluation design yet. Define what to measure before scoring begins."}
+            </Typography>
+          </Box>
+          <Button
+            variant={evalDesign?.status === "confirmed" ? "outlined" : "contained"}
+            color={evalDesign?.status === "confirmed" ? "inherit" : "primary"}
+            size="small"
+            onClick={() => navigate({ name: "eval-design", projectId })}
+            sx={evalDesign?.status === "confirmed" ? { color: "text.secondary" } : {}}
+          >
+            {evalDesign?.status === "confirmed" ? "View design" : evalDesign?.status === "observation_ready" ? "Review recommendation" : "Set up evaluation design"}
+          </Button>
+        </Paper>
+      )}
 
       {/* Runs */}
       <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1.5 }}>
