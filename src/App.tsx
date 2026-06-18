@@ -15,6 +15,7 @@ import CompareRunsView from "./views/CompareRunsView";
 import AddAgentView from "./views/AddAgentView";
 import ProfilesView from "./views/ProfilesView";
 import ProfileDetailView from "./views/ProfileDetailView";
+import AddProfileView from "./views/AddProfileView";
 
 export default function App() {
   const [view, setView] = useState<View>({ name: "fleet" });
@@ -54,6 +55,8 @@ export default function App() {
         return <ProfilesView navigate={setView} />;
       case "profile":
         return <ProfileDetailView profileId={view.profileId} navigate={setView} />;
+      case "add-profile":
+        return <AddProfileView navigate={setView} />;
       case "compare-runs":
         return (
           <CompareRunsView

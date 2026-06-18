@@ -114,7 +114,8 @@ export type View =
   | { name: "integrations" }
   | { name: "add-agent" }
   | { name: "profiles" }
-  | { name: "profile"; profileId: string };
+  | { name: "profile"; profileId: string }
+  | { name: "add-profile" };
 
 export type LLMProvider = "Anthropic" | "AWS Bedrock" | "OpenAI-compatible";
 

@@ -795,6 +795,11 @@ export function addProfile(profile: ScoringProfile) {
   PROFILES.push(profile);
 }
 
+export function updateProfile(updated: ScoringProfile) {
+  const idx = PROFILES.findIndex((p) => p.id === updated.id);
+  if (idx !== -1) PROFILES[idx] = updated;
+}
+
 // ── Evaluation Design mock data ───────────────────────────────────────────────
 
 export const EVAL_DESIGNS: Record<string, EvalDesign> = {

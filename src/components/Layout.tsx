@@ -252,5 +252,7 @@ function buildBreadcrumbs(view: View): { label: string; onClick?: () => void }[]
       return [{ label: "Profiles" }];
     case "profile":
       return [{ label: "Profiles" }, { label: "Profile" }];
+    case "add-profile":
+      return [{ label: "Profiles" }, { label: "New Profile" }];
   }
 }
