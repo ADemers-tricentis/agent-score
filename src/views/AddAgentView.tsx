@@ -28,7 +28,7 @@ import type {
   Run,
   Verdict,
 } from "../types";
-import { addProject, addProfile, PROFILES } from "../data/mock";
+import { addProject, addProfile, PROFILES, LLM_JUDGES } from "../data/mock";
 import TypeTag from "../components/TypeTag";
 
 interface Props {
@@ -38,7 +38,7 @@ interface Props {
 type Mode = "guided" | "expert";
 type DataSource = "langfuse" | "s3" | "langsmith" | "datadog";
 
-const STEPS = ["Connect", "Select Agent", "Profile", "Test Cases", "Launch"];
+const STEPS = ["Connect", "Select Agent", "Profile", "Judge", "Test Cases", "Launch"];
 
 const CONNECT_STAGES = [
   "Authenticating credentials…",
@@ -500,6 +500,9 @@ export default function AddAgentView({ navigate }: Props) {
   const [profileVersion, setProfileVersion] = useState<ProfileVersion | null>(null);
   const [selectedProfileId, setSelectedProfileId] = useState<string | "generate" | null>(null);
 
+  // Judge step state
+  const [selectedJudgeId, setSelectedJudgeId] = useState<string>("j1");
+
   // Test cases + shared
   const [testCases, setTestCases] = useState<CalibrationScenario[]>([]);
   const [basics, setBasics] = useState<{ name: string; type: ProjectType; service: string }>({ name: "", type: "ATA", service: "" });
@@ -581,6 +584,22 @@ export default function AddAgentView({ navigate }: Props) {
     });
   }
 
+  // ── Judge helpers ────────────────────────────────────────────────────────────
+
+  function autoSelectJudgeId(agentType: ProjectType): string {
+    if (agentType === "CODING" || agentType === "ATC") return "j3";
+    if (agentType === "APT") return "j2";
+    return "j1";
+  }
+
+  function judgeAutoReason(agentType: ProjectType): string {
+    if (agentType === "CODING" || agentType === "ATC")
+      return "Your agent performs code-level reasoning. Claude Opus 4.8 provides the highest evaluation accuracy for complex output assessment.";
+    if (agentType === "APT")
+      return "Your agent is evaluated on performance metrics. Claude Haiku 4.5 provides fast, low-latency judging optimized for throughput.";
+    return "Claude Sonnet 4.6 provides a strong balance of accuracy and cost for general-purpose agent evaluation.";
+  }
+
   // ── Event handlers ──────────────────────────────────────────────────────────
 
   function handleAgentSelect(agent: DiscoveredAgent) {
@@ -596,6 +615,7 @@ export default function AddAgentView({ navigate }: Props) {
     const name = friendlyName.trim() || inferredAgent.suggestedFriendlyName;
     const newBasics = { name, type: inferredAgent.agentType, service: slugify(inferredAgent.traceName) };
     setBasics(newBasics);
+    setSelectedJudgeId(autoSelectJudgeId(inferredAgent.agentType));
 
     if (profileChoice === "suggest") {
       const matched = PROFILES.find((p) => p.agentType === inferredAgent.agentType) ?? PROFILES[0];
@@ -1130,6 +1150,105 @@ export default function AddAgentView({ navigate }: Props) {
     );
   }
 
+  function renderStepJudge() {
+    const reason = judgeAutoReason(basics.type);
+    const autoId = autoSelectJudgeId(basics.type);
+    const selectedJudge = LLM_JUDGES.find((j) => j.id === selectedJudgeId) ?? LLM_JUDGES[0];
+
+    const providerColor: Record<string, string> = {
+      Anthropic: "#cc785c",
+      "AWS Bedrock": "#e67e22",
+      "OpenAI-compatible": "#74aa9c",
+    };
+
+    function JudgeCard({ judge, selected, onSelect }: { judge: typeof LLM_JUDGES[0]; selected: boolean; onSelect: () => void }) {
+      const isAuto = judge.id === autoId;
+      return (
+        <Paper
+          variant="outlined"
+          onClick={onSelect}
+          sx={{
+            p: 2,
+            borderRadius: 1.5,
+            cursor: "pointer",
+            border: "1px solid",
+            borderColor: selected ? "primary.main" : "divider",
+            bgcolor: selected ? "rgba(var(--mui-palette-primary-mainChannel) / 0.04)" : "background.paper",
+            transition: "border-color 0.15s, background-color 0.15s",
+            "&:hover": { borderColor: selected ? "primary.main" : "primary.light" },
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 1 }}>
+            <Box sx={{ flex: 1 }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>{judge.name}</Typography>
+                {isAuto && (
+                  <Chip label="Auto-selected" size="small" color="primary" sx={{ height: 18, fontSize: "0.62rem" }} />
+                )}
+                {judge.status === "live" && (
+                  <Chip label="live" size="small" sx={{ height: 18, fontSize: "0.62rem", bgcolor: "success.light", color: "success.dark" }} />
+                )}
+              </Box>
+              <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 1 }}>
+                {judge.description}
+              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Typography variant="caption" sx={{ fontFamily: "monospace", fontSize: "0.7rem", bgcolor: "action.hover", px: 0.75, py: 0.25, borderRadius: 0.5 }}>
+                  {judge.model}
+                </Typography>
+                <Typography variant="caption" sx={{ color: providerColor[judge.provider] ?? "text.secondary", fontWeight: 600, fontSize: "0.7rem" }}>
+                  {judge.provider}
+                </Typography>
+              </Box>
+            </Box>
+            <Box sx={{ width: 18, height: 18, borderRadius: "50%", border: "2px solid", borderColor: selected ? "primary.main" : "divider", bgcolor: selected ? "primary.main" : "transparent", flexShrink: 0, mt: 0.25, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {selected && <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "primary.contrastText" }} />}
+            </Box>
+          </Box>
+        </Paper>
+      );
+    }
+
+    return (
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+        <Alert severity="info" sx={{ borderRadius: 1.5 }}>
+          AgentScore analyzed your agent&apos;s traces and inferred the best judge for evaluating it. You can override this selection at any time.
+        </Alert>
+
+        <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1.5, border: "1px solid", borderColor: "primary.light", bgcolor: "rgba(var(--mui-palette-primary-mainChannel) / 0.03)" }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>Why this judge?</Typography>
+          <Typography variant="body2" sx={{ color: "text.secondary", mb: 1.5 }}>{reason}</Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Typography variant="caption" sx={{ color: "text.disabled" }}>Inferred from agent type:</Typography>
+            <TypeTag type={basics.type} />
+          </Box>
+        </Paper>
+
+        <Box>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1.5 }}>Select judge</Typography>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+            {LLM_JUDGES.map((judge) => (
+              <JudgeCard
+                key={judge.id}
+                judge={judge}
+                selected={selectedJudge.id === judge.id}
+                onSelect={() => setSelectedJudgeId(judge.id)}
+              />
+            ))}
+          </Box>
+          <Button
+            variant="text"
+            size="small"
+            sx={{ mt: 1.5, color: "text.secondary" }}
+            onClick={() => navigate({ name: "add-judge" })}
+          >
+            + Configure a new judge
+          </Button>
+        </Box>
+      </Box>
+    );
+  }
+
   function renderStep2() {
     const byCategory = {
       nightmare: testCases.filter((s) => s.category === "nightmare"),
@@ -1198,8 +1317,9 @@ export default function AddAgentView({ navigate }: Props) {
             <ReviewRow label="Friendly name" value={basics.name} />
             <ReviewRow label="Trace name" value={inferredAgent?.traceName ?? basics.service} mono />
             <ReviewRow label="Type" value={<TypeTag type={basics.type} />} />
-            <ReviewRow label="Source" value={dataSource === "langfuse" ? "Langfuse" : "S3"} />
+            <ReviewRow label="Source" value={dataSource === "langfuse" ? "Langfuse" : dataSource === "langsmith" ? "LangSmith" : dataSource === "datadog" ? "Datadog LLM Obs" : "S3"} />
             {inferredAgent && <ReviewRow label="Sessions seen" value={`${discoveredAgents.find(a => a.traceName === inferredAgent.traceName)?.sessionCount.toLocaleString() ?? "—"} before onboarding`} />}
+            <ReviewRow label="LLM judge" value={(() => { const j = LLM_JUDGES.find(j => j.id === selectedJudgeId) ?? LLM_JUDGES[0]; return `${j.name} (${j.model})`; })()} mono />
           </Box>
         </Paper>
 
@@ -1260,13 +1380,15 @@ export default function AddAgentView({ navigate }: Props) {
   const stepTitles = [
     "Connect your trace store",
     "Configure scoring profile",
+    "Select LLM judge",
     "Review test cases",
     "Review & start monitoring",
   ];
 
   const stepSubtitles = [
-    "Connect to Langfuse or S3, then select the agent you want to monitor.",
+    "Connect to Langfuse, LangSmith, Datadog, or S3, then select the agent you want to monitor.",
     "Choose an existing profile or generate one. Adjust evals, weights, and verdict bands.",
+    "AgentScore auto-selected a judge based on your agent's traces. Override if needed.",
     "Calibration scenarios cover hard, normal, and stretch test cases.",
     "Everything looks good. Start monitoring to begin scoring sessions.",
   ];
@@ -1303,8 +1425,9 @@ export default function AddAgentView({ navigate }: Props) {
           <>
             {step === 0 && renderStep0()}
             {step === 1 && renderStep1()}
-            {step === 2 && renderStep2()}
-            {step === 3 && renderStep3()}
+            {step === 2 && renderStepJudge()}
+            {step === 3 && renderStep2()}
+            {step === 4 && renderStep3()}
           </>
         )}
       </Box>
@@ -1326,11 +1449,16 @@ export default function AddAgentView({ navigate }: Props) {
               </Button>
             )}
             {step === 2 && (
-              <Button variant="contained" onClick={() => setStep(3)} disabled={!testCasesValid}>
+              <Button variant="contained" onClick={() => setStep(3)}>
                 Next
               </Button>
             )}
             {step === 3 && (
+              <Button variant="contained" onClick={() => setStep(4)} disabled={!testCasesValid}>
+                Next
+              </Button>
+            )}
+            {step === 4 && (
               <Button variant="contained" onClick={handleLaunch}>
                 Start monitoring
               </Button>
