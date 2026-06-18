@@ -15,8 +15,6 @@ import Switch from "@mui/material/Switch";
 import LinearProgress from "@mui/material/LinearProgress";
 import IconButton from "@mui/material/IconButton";
 import SvgIcon from "@mui/material/SvgIcon";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import type {
   View,
   ProjectType,
@@ -38,7 +36,7 @@ interface Props {
 }
 
 type Mode = "guided" | "expert";
-type DataSource = "langfuse" | "s3";
+type DataSource = "langfuse" | "s3" | "langsmith" | "datadog";
 
 const STEPS = ["Connect", "Select Agent", "Profile", "Test Cases", "Launch"];
 
@@ -259,7 +257,6 @@ function ExpandLessIcon() { return <SvgIcon fontSize="small"><path d="M12 8 6 14
 function ArrowBackIcon() { return <SvgIcon><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" /></SvgIcon>; }
 function SparkleIcon() { return <SvgIcon fontSize="small"><path d="M12 2a.75.75 0 0 1 .728.568l.63 2.625 2.625.63a.75.75 0 0 1 0 1.454l-2.625.63-.63 2.625a.75.75 0 0 1-1.456 0l-.63-2.625-2.625-.63a.75.75 0 0 1 0-1.454l2.625-.63.63-2.625A.75.75 0 0 1 12 2zm-6 11a.5.5 0 0 1 .485.379l.42 1.75 1.75.42a.5.5 0 0 1 0 .97l-1.75.42-.42 1.75a.5.5 0 0 1-.97 0l-.42-1.75-1.75-.42a.5.5 0 0 1 0-.97l1.75-.42.42-1.75A.5.5 0 0 1 6 13zm9 1a.5.5 0 0 1 .485.379l.285 1.19 1.19.285a.5.5 0 0 1 0 .97l-1.19.285-.285 1.19a.5.5 0 0 1-.97 0l-.285-1.19-1.19-.285a.5.5 0 0 1 0-.97l1.19-.285.285-1.19A.5.5 0 0 1 15 14z" /></SvgIcon>; }
 function CheckIcon() { return <SvgIcon fontSize="small" sx={{ color: "success.main" }}><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></SvgIcon>; }
-function StorageIcon() { return <SvgIcon><path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z" /></SvgIcon>; }
 
 // ── Generation helpers ────────────────────────────────────────────────────────
 
@@ -480,6 +477,8 @@ export default function AddAgentView({ navigate }: Props) {
   const [dataSource, setDataSource] = useState<DataSource>("langfuse");
   const [langfuseCreds, setLangfuseCreds] = useState({ secretKey: "", publicKey: "", baseUrl: "https://cloud.langfuse.com" });
   const [s3Creds, setS3Creds] = useState({ accessKeyId: "", secretAccessKey: "", region: "us-east-1", bucket: "" });
+  const [langsmithCreds, setLangsmithCreds] = useState({ apiKey: "" });
+  const [datadogCreds, setDatadogCreds] = useState({ apiKey: "", appKey: "" });
   const [connecting, setConnecting] = useState(false);
   const [connectStage, setConnectStage] = useState(0);
   const [discoveredAgents, setDiscoveredAgents] = useState<DiscoveredAgent[]>([]);
@@ -511,9 +510,11 @@ export default function AddAgentView({ navigate }: Props) {
 
   // ── Derived validity ────────────────────────────────────────────────────────
 
-  const connectCredsValid = dataSource === "langfuse"
-    ? langfuseCreds.secretKey.trim().length > 0 && langfuseCreds.publicKey.trim().length > 0
-    : s3Creds.accessKeyId.trim().length > 0 && s3Creds.secretAccessKey.trim().length > 0 && s3Creds.bucket.trim().length > 0;
+  const connectCredsValid =
+    dataSource === "langfuse" ? langfuseCreds.secretKey.trim().length > 0 && langfuseCreds.publicKey.trim().length > 0 :
+    dataSource === "s3" ? s3Creds.accessKeyId.trim().length > 0 && s3Creds.secretAccessKey.trim().length > 0 && s3Creds.bucket.trim().length > 0 :
+    dataSource === "langsmith" ? langsmithCreds.apiKey.trim().length > 0 :
+    datadogCreds.apiKey.trim().length > 0 && datadogCreds.appKey.trim().length > 0;
 
   const step1Valid = inferredAgent !== null && friendlyName.trim().length > 0 && profileChoice !== null;
   const profileValid = profileVersion !== null && profileVersion.entries.some((e) => e.enabled);
@@ -532,9 +533,9 @@ export default function AddAgentView({ navigate }: Props) {
           setTimeout(() => {
             setDiscoveredAgents(MOCK_DISCOVERED_AGENTS);
             setConnecting(false);
-          }, 400);
+          }, 900);
         }
-      }, i * 500);
+      }, i * 1100);
     });
   }
 
@@ -557,9 +558,9 @@ export default function AddAgentView({ navigate }: Props) {
             setInferredAgent(inferred);
             setFriendlyName(inferred.suggestedFriendlyName);
             setAnalyzing(false);
-          }, 400);
+          }, 900);
         }
-      }, i * 450);
+      }, i * 1200);
     });
   }
 
@@ -662,9 +663,9 @@ export default function AddAgentView({ navigate }: Props) {
           setTimeout(() => {
             const runs = generateMockRuns(inferredAgent?.relevantDimensions ?? ["Benchmark Performance", "UX Signal"]);
             handleCreate(runs);
-          }, 600);
+          }, 1000);
         }
-      }, i * 520);
+      }, i * 1300);
     });
   }
 
@@ -707,66 +708,121 @@ export default function AddAgentView({ navigate }: Props) {
 
     return (
       <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-        {/* Source toggle */}
+        {/* Source selector */}
         <Box>
           <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>Where are your traces?</Typography>
-          <ToggleButtonGroup value={dataSource} exclusive onChange={(_, v) => { if (v) setDataSource(v); }} sx={{ gap: 1 }}>
-            <ToggleButton value="langfuse" sx={{ px: 3, py: 1.5, borderRadius: "8px !important", flexDirection: "column", gap: 0.5, textTransform: "none", minWidth: 160 }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Langfuse</Typography>
-              <Typography variant="caption" sx={{ color: "text.secondary" }}>LLM observability platform</Typography>
-            </ToggleButton>
-            <ToggleButton value="s3" sx={{ px: 3, py: 1.5, borderRadius: "8px !important", flexDirection: "column", gap: 0.5, textTransform: "none", minWidth: 160 }}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                <StorageIcon />
-                <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Blob Storage (S3)</Typography>
-              </Box>
-              <Typography variant="caption" sx={{ color: "text.secondary" }}>AWS S3 or compatible</Typography>
-            </ToggleButton>
-          </ToggleButtonGroup>
+          <Box sx={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 1 }}>
+            {([
+              { value: "langfuse", label: "Langfuse", sub: "LLM observability" },
+              { value: "langsmith", label: "LangSmith", sub: "LangChain tracing" },
+              { value: "datadog", label: "Datadog LLM Obs.", sub: "DD LLM observability" },
+              { value: "s3", label: "Blob Storage (S3)", sub: "AWS S3 or compatible" },
+            ] as { value: DataSource; label: string; sub: string }[]).map(({ value, label, sub }) => (
+              <Paper
+                key={value}
+                variant="outlined"
+                onClick={() => { setDataSource(value); setDiscoveredAgents([]); setSelectedTraceAgent(null); setInferredAgent(null); }}
+                sx={{
+                  p: 1.5,
+                  cursor: "pointer",
+                  borderRadius: 1.5,
+                  borderColor: dataSource === value ? "primary.main" : "divider",
+                  borderWidth: dataSource === value ? 2 : 1,
+                  bgcolor: dataSource === value ? "rgba(var(--mui-palette-primary-mainChannel) / 0.06)" : "background.paper",
+                  "&:hover": { borderColor: "primary.main", bgcolor: "action.hover" },
+                  transition: "all 0.15s",
+                }}
+              >
+                <Typography variant="body2" sx={{ fontWeight: 700 }}>{label}</Typography>
+                <Typography variant="caption" sx={{ color: "text.secondary" }}>{sub}</Typography>
+              </Paper>
+            ))}
+          </Box>
         </Box>
 
         {/* Credential fields */}
-        {dataSource === "langfuse" ? (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        {dataSource === "langfuse" && (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Langfuse credentials</Typography>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-              <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Secret Key <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-                <TextField fullWidth size="small" type="password" placeholder="sk-lf-…" value={langfuseCreds.secretKey} onChange={(e) => setLangfuseCreds((c) => ({ ...c, secretKey: e.target.value }))} />
-              </Box>
-              <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Public Key <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-                <TextField fullWidth size="small" placeholder="pk-lf-…" value={langfuseCreds.publicKey} onChange={(e) => setLangfuseCreds((c) => ({ ...c, publicKey: e.target.value }))} />
-              </Box>
-              <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Base URL</Typography>
-                <TextField fullWidth size="small" placeholder="https://cloud.langfuse.com" value={langfuseCreds.baseUrl} onChange={(e) => setLangfuseCreds((c) => ({ ...c, baseUrl: e.target.value }))} />
-                <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Leave as default for Langfuse Cloud. Change for self-hosted instances.</Typography>
-              </Box>
+            <Alert severity="info" sx={{ borderRadius: 1.5, py: 0.5 }}>
+              Find your keys in <strong>Langfuse → Project Settings → API Keys</strong>. Each project has its own key pair — make sure you're using the keys for the project that contains your agent traces.
+            </Alert>
+            <Box>
+              <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Secret Key <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
+              <TextField fullWidth size="small" type="password" placeholder="sk-lf-…" value={langfuseCreds.secretKey} onChange={(e) => setLangfuseCreds((c) => ({ ...c, secretKey: e.target.value }))} />
+              <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Used for server-side API access. Never expose this in client-side code.</Typography>
+            </Box>
+            <Box>
+              <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Public Key <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
+              <TextField fullWidth size="small" placeholder="pk-lf-…" value={langfuseCreds.publicKey} onChange={(e) => setLangfuseCreds((c) => ({ ...c, publicKey: e.target.value }))} />
+              <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Used together with the Secret Key to authenticate API requests.</Typography>
+            </Box>
+            <Box>
+              <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Base URL</Typography>
+              <TextField fullWidth size="small" placeholder="https://cloud.langfuse.com" value={langfuseCreds.baseUrl} onChange={(e) => setLangfuseCreds((c) => ({ ...c, baseUrl: e.target.value }))} />
+              <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Leave as default for Langfuse Cloud. Change to your host for self-hosted instances (e.g. <Box component="span" sx={{ fontFamily: "monospace" }}>https://langfuse.mycompany.com</Box>).</Typography>
             </Box>
           </Box>
-        ) : (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        )}
+
+        {dataSource === "langsmith" && (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>LangSmith credentials</Typography>
+            <Alert severity="info" sx={{ borderRadius: 1.5, py: 0.5 }}>
+              Find your key in <strong>LangSmith → Settings → API Keys</strong>. Keys are scoped to your organization — any key with read access to your tracing project will work.
+            </Alert>
+            <Box>
+              <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>API Key <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
+              <TextField fullWidth size="small" type="password" placeholder="ls__…" value={langsmithCreds.apiKey} onChange={(e) => setLangsmithCreds({ apiKey: e.target.value })} />
+              <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Used to authenticate read access to your LangSmith traces. Never share this key.</Typography>
+            </Box>
+          </Box>
+        )}
+
+        {dataSource === "datadog" && (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Datadog credentials</Typography>
+            <Alert severity="info" sx={{ borderRadius: 1.5, py: 0.5 }}>
+              Both keys are required. Find them in <strong>Datadog → Organization Settings</strong> under <strong>API Keys</strong> and <strong>Application Keys</strong>. The application key determines what data the API key can access — ensure it has LLM Observability read permissions.
+            </Alert>
+            <Box>
+              <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>DD API Key <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
+              <TextField fullWidth size="small" type="password" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value={datadogCreds.apiKey} onChange={(e) => setDatadogCreds((c) => ({ ...c, apiKey: e.target.value }))} />
+              <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Identifies your Datadog organization. Found under <Box component="span" sx={{ fontFamily: "monospace" }}>Organization Settings → API Keys</Box>.</Typography>
+            </Box>
+            <Box>
+              <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>DD Application Key <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
+              <TextField fullWidth size="small" type="password" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value={datadogCreds.appKey} onChange={(e) => setDatadogCreds((c) => ({ ...c, appKey: e.target.value }))} />
+              <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Scopes what the API key can access. Found under <Box component="span" sx={{ fontFamily: "monospace" }}>Organization Settings → Application Keys</Box>.</Typography>
+            </Box>
+          </Box>
+        )}
+
+        {dataSource === "s3" && (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>AWS credentials</Typography>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+            <Alert severity="info" sx={{ borderRadius: 1.5, py: 0.5 }}>
+              AgentScore needs read access to the S3 bucket where your agent traces are stored. Create a dedicated IAM user with <strong>s3:GetObject</strong> and <strong>s3:ListBucket</strong> permissions scoped to that bucket, then generate an access key for it under <strong>IAM → Users → Security credentials</strong>.
+            </Alert>
+            <Box>
+              <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>S3 Bucket Name <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
+              <TextField fullWidth size="small" placeholder="my-agent-traces-bucket" value={s3Creds.bucket} onChange={(e) => setS3Creds((c) => ({ ...c, bucket: e.target.value }))} />
+              <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>The bucket containing your trace files. Must be accessible with the credentials below.</Typography>
+            </Box>
+            <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1.5 }}>
               <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>S3 Bucket Name <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-                <TextField fullWidth size="small" placeholder="my-agent-traces-bucket" value={s3Creds.bucket} onChange={(e) => setS3Creds((c) => ({ ...c, bucket: e.target.value }))} />
-              </Box>
-              <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1.5 }}>
-                <Box>
-                  <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>AWS Access Key ID <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-                  <TextField fullWidth size="small" placeholder="AKIA…" value={s3Creds.accessKeyId} onChange={(e) => setS3Creds((c) => ({ ...c, accessKeyId: e.target.value }))} />
-                </Box>
-                <Box>
-                  <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>AWS Secret Access Key <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-                  <TextField fullWidth size="small" type="password" placeholder="wJalrXUtn…" value={s3Creds.secretAccessKey} onChange={(e) => setS3Creds((c) => ({ ...c, secretAccessKey: e.target.value }))} />
-                </Box>
+                <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>AWS Access Key ID <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
+                <TextField fullWidth size="small" placeholder="AKIA…" value={s3Creds.accessKeyId} onChange={(e) => setS3Creds((c) => ({ ...c, accessKeyId: e.target.value }))} />
               </Box>
               <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Region</Typography>
-                <TextField fullWidth size="small" placeholder="us-east-1" value={s3Creds.region} onChange={(e) => setS3Creds((c) => ({ ...c, region: e.target.value }))} />
+                <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>AWS Secret Access Key <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
+                <TextField fullWidth size="small" type="password" placeholder="wJalrXUtn…" value={s3Creds.secretAccessKey} onChange={(e) => setS3Creds((c) => ({ ...c, secretAccessKey: e.target.value }))} />
               </Box>
+            </Box>
+            <Box>
+              <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Region</Typography>
+              <TextField fullWidth size="small" placeholder="us-east-1" value={s3Creds.region} onChange={(e) => setS3Creds((c) => ({ ...c, region: e.target.value }))} />
+              <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>The AWS region where the bucket is hosted (e.g. <Box component="span" sx={{ fontFamily: "monospace" }}>us-east-1</Box>, <Box component="span" sx={{ fontFamily: "monospace" }}>eu-west-2</Box>).</Typography>
             </Box>
           </Box>
         )}
