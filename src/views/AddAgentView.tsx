@@ -36,7 +36,8 @@ interface Props {
 }
 
 type Mode = "guided" | "expert";
-type DataSource = "langfuse" | "langsmith" | "datadog";
+type DataSource = "langfuse" | "langsmith" | "datadog" | "database";
+type DatabaseType = "clickhouse" | "postgres";
 
 const STEPS = ["Connect", "Select Agent", "Profile", "Judge", "Test Cases", "Launch"];
 
@@ -476,8 +477,11 @@ export default function AddAgentView({ navigate }: Props) {
   // Connect step state
   const [dataSource, setDataSource] = useState<DataSource>("langfuse");
   const [langfuseCreds, setLangfuseCreds] = useState({ secretKey: "", publicKey: "", baseUrl: "https://cloud.langfuse.com" });
-const [langsmithCreds, setLangsmithCreds] = useState({ apiKey: "" });
+  const [langsmithCreds, setLangsmithCreds] = useState({ apiKey: "" });
   const [datadogCreds, setDatadogCreds] = useState({ apiKey: "", appKey: "" });
+  const [dbType, setDbType] = useState<DatabaseType>("clickhouse");
+  const [clickhouseCreds, setClickhouseCreds] = useState({ host: "", port: "8443", username: "default", password: "", database: "default" });
+  const [postgresCreds, setPostgresCreds] = useState({ host: "", port: "5432", database: "", username: "", password: "", sslMode: "require" });
   const [connecting, setConnecting] = useState(false);
   const [connectStage, setConnectStage] = useState(0);
   const [discoveredAgents, setDiscoveredAgents] = useState<DiscoveredAgent[]>([]);
@@ -515,7 +519,9 @@ const [langsmithCreds, setLangsmithCreds] = useState({ apiKey: "" });
   const connectCredsValid =
     dataSource === "langfuse" ? langfuseCreds.secretKey.trim().length > 0 && langfuseCreds.publicKey.trim().length > 0 :
     dataSource === "langsmith" ? langsmithCreds.apiKey.trim().length > 0 :
-    datadogCreds.apiKey.trim().length > 0 && datadogCreds.appKey.trim().length > 0;
+    dataSource === "datadog" ? datadogCreds.apiKey.trim().length > 0 && datadogCreds.appKey.trim().length > 0 :
+    dataSource === "database" && dbType === "clickhouse" ? clickhouseCreds.host.trim().length > 0 && clickhouseCreds.password.trim().length > 0 :
+    postgresCreds.host.trim().length > 0 && postgresCreds.database.trim().length > 0 && postgresCreds.username.trim().length > 0 && postgresCreds.password.trim().length > 0;
 
   const step1Valid = inferredAgent !== null && friendlyName.trim().length > 0 && profileChoice !== null;
   const profileValid = profileVersion !== null && profileVersion.entries.some((e) => e.enabled);
@@ -734,6 +740,7 @@ const [langsmithCreds, setLangsmithCreds] = useState({ apiKey: "" });
               { value: "langfuse", label: "Langfuse", sub: "LLM observability" },
               { value: "langsmith", label: "LangSmith", sub: "LangChain tracing" },
               { value: "datadog", label: "Datadog LLM Obs.", sub: "DD LLM observability" },
+              { value: "database", label: "Database", sub: "ClickHouse or Postgres" },
             ] as { value: DataSource; label: string; sub: string }[]).map(({ value, label, sub }) => (
               <Paper
                 key={value}
@@ -812,6 +819,125 @@ const [langsmithCreds, setLangsmithCreds] = useState({ apiKey: "" });
               <TextField fullWidth size="small" type="password" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value={datadogCreds.appKey} onChange={(e) => setDatadogCreds((c) => ({ ...c, appKey: e.target.value }))} />
               <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Scopes what the API key can access. Found under <Box component="span" sx={{ fontFamily: "monospace" }}>Organization Settings → Application Keys</Box>.</Typography>
             </Box>
+          </Box>
+        )}
+
+        {dataSource === "database" && (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <Box>
+              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>Database engine</Typography>
+              <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1 }}>
+                {([
+                  { value: "clickhouse", label: "ClickHouse", sub: "Cloud or self-hosted" },
+                  { value: "postgres", label: "PostgreSQL", sub: "Self-hosted or managed" },
+                ] as { value: DatabaseType; label: string; sub: string }[]).map(({ value, label, sub }) => (
+                  <Paper
+                    key={value}
+                    variant="outlined"
+                    onClick={() => setDbType(value)}
+                    sx={{
+                      p: 1.5,
+                      cursor: "pointer",
+                      borderRadius: 1.5,
+                      borderColor: dbType === value ? "primary.main" : "divider",
+                      borderWidth: dbType === value ? 2 : 1,
+                      bgcolor: dbType === value ? "rgba(var(--mui-palette-primary-mainChannel) / 0.06)" : "background.paper",
+                      "&:hover": { borderColor: "primary.main", bgcolor: "action.hover" },
+                      transition: "all 0.15s",
+                    }}
+                  >
+                    <Typography variant="body2" sx={{ fontWeight: 700 }}>{label}</Typography>
+                    <Typography variant="caption" sx={{ color: "text.secondary" }}>{sub}</Typography>
+                  </Paper>
+                ))}
+              </Box>
+            </Box>
+
+            {dbType === "clickhouse" && (
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>ClickHouse credentials</Typography>
+                <Alert severity="info" sx={{ borderRadius: 1.5, py: 0.5 }}>
+                  AgentScore connects over the native HTTP interface (port 8443 for HTTPS). Create a read-only user scoped to your traces table, or use your existing credentials if connecting to a dev instance.
+                </Alert>
+                <Box sx={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 1.5, alignItems: "start" }}>
+                  <Box>
+                    <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Host <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
+                    <TextField fullWidth size="small" placeholder="abc123.us-east-1.aws.clickhouse.cloud" value={clickhouseCreds.host} onChange={(e) => setClickhouseCreds((c) => ({ ...c, host: e.target.value }))} />
+                    <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Hostname only — no protocol or trailing slash.</Typography>
+                  </Box>
+                  <Box sx={{ width: 90 }}>
+                    <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Port</Typography>
+                    <TextField fullWidth size="small" value={clickhouseCreds.port} onChange={(e) => setClickhouseCreds((c) => ({ ...c, port: e.target.value }))} />
+                  </Box>
+                </Box>
+                <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1.5 }}>
+                  <Box>
+                    <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Username</Typography>
+                    <TextField fullWidth size="small" placeholder="default" value={clickhouseCreds.username} onChange={(e) => setClickhouseCreds((c) => ({ ...c, username: e.target.value }))} />
+                  </Box>
+                  <Box>
+                    <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Password <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
+                    <TextField fullWidth size="small" type="password" placeholder="••••••••" value={clickhouseCreds.password} onChange={(e) => setClickhouseCreds((c) => ({ ...c, password: e.target.value }))} />
+                  </Box>
+                </Box>
+                <Box>
+                  <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Database</Typography>
+                  <TextField fullWidth size="small" placeholder="default" value={clickhouseCreds.database} onChange={(e) => setClickhouseCreds((c) => ({ ...c, database: e.target.value }))} />
+                  <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>The database containing your traces table. Leave as <Box component="span" sx={{ fontFamily: "monospace" }}>default</Box> if unsure.</Typography>
+                </Box>
+              </Box>
+            )}
+
+            {dbType === "postgres" && (
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>PostgreSQL credentials</Typography>
+                <Alert severity="info" sx={{ borderRadius: 1.5, py: 0.5 }}>
+                  AgentScore connects over the standard PostgreSQL wire protocol. Use a read-only role scoped to your traces schema. SSL is required by default — disable only on local dev instances.
+                </Alert>
+                <Box sx={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 1.5, alignItems: "start" }}>
+                  <Box>
+                    <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Host <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
+                    <TextField fullWidth size="small" placeholder="db.mycompany.com" value={postgresCreds.host} onChange={(e) => setPostgresCreds((c) => ({ ...c, host: e.target.value }))} />
+                  </Box>
+                  <Box sx={{ width: 90 }}>
+                    <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Port</Typography>
+                    <TextField fullWidth size="small" value={postgresCreds.port} onChange={(e) => setPostgresCreds((c) => ({ ...c, port: e.target.value }))} />
+                  </Box>
+                </Box>
+                <Box>
+                  <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Database <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
+                  <TextField fullWidth size="small" placeholder="traces" value={postgresCreds.database} onChange={(e) => setPostgresCreds((c) => ({ ...c, database: e.target.value }))} />
+                </Box>
+                <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1.5 }}>
+                  <Box>
+                    <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Username <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
+                    <TextField fullWidth size="small" placeholder="agentscore_reader" value={postgresCreds.username} onChange={(e) => setPostgresCreds((c) => ({ ...c, username: e.target.value }))} />
+                  </Box>
+                  <Box>
+                    <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Password <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
+                    <TextField fullWidth size="small" type="password" placeholder="••••••••" value={postgresCreds.password} onChange={(e) => setPostgresCreds((c) => ({ ...c, password: e.target.value }))} />
+                  </Box>
+                </Box>
+                <Box>
+                  <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>SSL mode</Typography>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    select
+                    value={postgresCreds.sslMode}
+                    onChange={(e) => setPostgresCreds((c) => ({ ...c, sslMode: e.target.value }))}
+                    SelectProps={{ native: true }}
+                  >
+                    <option value="require">require</option>
+                    <option value="verify-full">verify-full</option>
+                    <option value="verify-ca">verify-ca</option>
+                    <option value="prefer">prefer</option>
+                    <option value="disable">disable</option>
+                  </TextField>
+                  <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}><Box component="span" sx={{ fontFamily: "monospace" }}>require</Box> enforces TLS without certificate verification. Use <Box component="span" sx={{ fontFamily: "monospace" }}>verify-full</Box> in production.</Typography>
+                </Box>
+              </Box>
+            )}
           </Box>
         )}
 
@@ -1285,7 +1411,7 @@ const [langsmithCreds, setLangsmithCreds] = useState({ apiKey: "" });
             <ReviewRow label="Friendly name" value={basics.name} />
             <ReviewRow label="Trace name" value={inferredAgent?.traceName ?? basics.service} mono />
             <ReviewRow label="Type" value={<TypeTag type={basics.type} />} />
-            <ReviewRow label="Source" value={dataSource === "langfuse" ? "Langfuse" : dataSource === "langsmith" ? "LangSmith" : "Datadog LLM Obs"} />
+            <ReviewRow label="Source" value={dataSource === "langfuse" ? "Langfuse" : dataSource === "langsmith" ? "LangSmith" : dataSource === "datadog" ? "Datadog LLM Obs" : dbType === "clickhouse" ? "ClickHouse" : "PostgreSQL"} />
             {inferredAgent && <ReviewRow label="Sessions seen" value={`${discoveredAgents.find(a => a.traceName === inferredAgent.traceName)?.sessionCount.toLocaleString() ?? "—"} before onboarding`} />}
             <ReviewRow label="LLM judge" value={(() => { const j = LLM_JUDGES.find(j => j.id === selectedJudgeId) ?? LLM_JUDGES[0]; return `${j.name} (${j.model})`; })()} mono />
           </Box>
@@ -1354,7 +1480,7 @@ const [langsmithCreds, setLangsmithCreds] = useState({ apiKey: "" });
   ];
 
   const stepSubtitles = [
-    "Connect to Langfuse, LangSmith, or Datadog, then select the agent you want to monitor.",
+    "Connect to Langfuse, LangSmith, Datadog, or a database, then select the agent you want to monitor.",
     "Choose an existing profile or generate one. Adjust evals, weights, and verdict bands.",
     "AgentScore auto-selected a judge based on your agent's traces. Override if needed.",
     "Calibration scenarios cover hard, normal, and stretch test cases.",
