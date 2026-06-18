@@ -36,7 +36,7 @@ interface Props {
 }
 
 type Mode = "guided" | "expert";
-type DataSource = "langfuse" | "s3" | "langsmith" | "datadog";
+type DataSource = "langfuse" | "langsmith" | "datadog";
 
 const STEPS = ["Connect", "Select Agent", "Profile", "Judge", "Test Cases", "Launch"];
 
@@ -476,8 +476,7 @@ export default function AddAgentView({ navigate }: Props) {
   // Connect step state
   const [dataSource, setDataSource] = useState<DataSource>("langfuse");
   const [langfuseCreds, setLangfuseCreds] = useState({ secretKey: "", publicKey: "", baseUrl: "https://cloud.langfuse.com" });
-  const [s3Creds, setS3Creds] = useState({ accessKeyId: "", secretAccessKey: "", region: "us-east-1", bucket: "" });
-  const [langsmithCreds, setLangsmithCreds] = useState({ apiKey: "" });
+const [langsmithCreds, setLangsmithCreds] = useState({ apiKey: "" });
   const [datadogCreds, setDatadogCreds] = useState({ apiKey: "", appKey: "" });
   const [connecting, setConnecting] = useState(false);
   const [connectStage, setConnectStage] = useState(0);
@@ -515,7 +514,6 @@ export default function AddAgentView({ navigate }: Props) {
 
   const connectCredsValid =
     dataSource === "langfuse" ? langfuseCreds.secretKey.trim().length > 0 && langfuseCreds.publicKey.trim().length > 0 :
-    dataSource === "s3" ? s3Creds.accessKeyId.trim().length > 0 && s3Creds.secretAccessKey.trim().length > 0 && s3Creds.bucket.trim().length > 0 :
     dataSource === "langsmith" ? langsmithCreds.apiKey.trim().length > 0 :
     datadogCreds.apiKey.trim().length > 0 && datadogCreds.appKey.trim().length > 0;
 
@@ -736,7 +734,6 @@ export default function AddAgentView({ navigate }: Props) {
               { value: "langfuse", label: "Langfuse", sub: "LLM observability" },
               { value: "langsmith", label: "LangSmith", sub: "LangChain tracing" },
               { value: "datadog", label: "Datadog LLM Obs.", sub: "DD LLM observability" },
-              { value: "s3", label: "Blob Storage (S3)", sub: "AWS S3 or compatible" },
             ] as { value: DataSource; label: string; sub: string }[]).map(({ value, label, sub }) => (
               <Paper
                 key={value}
@@ -814,35 +811,6 @@ export default function AddAgentView({ navigate }: Props) {
               <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>DD Application Key <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
               <TextField fullWidth size="small" type="password" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value={datadogCreds.appKey} onChange={(e) => setDatadogCreds((c) => ({ ...c, appKey: e.target.value }))} />
               <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Scopes what the API key can access. Found under <Box component="span" sx={{ fontFamily: "monospace" }}>Organization Settings → Application Keys</Box>.</Typography>
-            </Box>
-          </Box>
-        )}
-
-        {dataSource === "s3" && (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>AWS credentials</Typography>
-            <Alert severity="info" sx={{ borderRadius: 1.5, py: 0.5 }}>
-              AgentScore needs read access to the S3 bucket where your agent traces are stored. Create a dedicated IAM user with <strong>s3:GetObject</strong> and <strong>s3:ListBucket</strong> permissions scoped to that bucket, then generate an access key for it under <strong>IAM → Users → Security credentials</strong>.
-            </Alert>
-            <Box>
-              <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>S3 Bucket Name <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-              <TextField fullWidth size="small" placeholder="my-agent-traces-bucket" value={s3Creds.bucket} onChange={(e) => setS3Creds((c) => ({ ...c, bucket: e.target.value }))} />
-              <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>The bucket containing your trace files. Must be accessible with the credentials below.</Typography>
-            </Box>
-            <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1.5 }}>
-              <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>AWS Access Key ID <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-                <TextField fullWidth size="small" placeholder="AKIA…" value={s3Creds.accessKeyId} onChange={(e) => setS3Creds((c) => ({ ...c, accessKeyId: e.target.value }))} />
-              </Box>
-              <Box>
-                <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>AWS Secret Access Key <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-                <TextField fullWidth size="small" type="password" placeholder="wJalrXUtn…" value={s3Creds.secretAccessKey} onChange={(e) => setS3Creds((c) => ({ ...c, secretAccessKey: e.target.value }))} />
-              </Box>
-            </Box>
-            <Box>
-              <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Region</Typography>
-              <TextField fullWidth size="small" placeholder="us-east-1" value={s3Creds.region} onChange={(e) => setS3Creds((c) => ({ ...c, region: e.target.value }))} />
-              <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>The AWS region where the bucket is hosted (e.g. <Box component="span" sx={{ fontFamily: "monospace" }}>us-east-1</Box>, <Box component="span" sx={{ fontFamily: "monospace" }}>eu-west-2</Box>).</Typography>
             </Box>
           </Box>
         )}
@@ -1317,7 +1285,7 @@ export default function AddAgentView({ navigate }: Props) {
             <ReviewRow label="Friendly name" value={basics.name} />
             <ReviewRow label="Trace name" value={inferredAgent?.traceName ?? basics.service} mono />
             <ReviewRow label="Type" value={<TypeTag type={basics.type} />} />
-            <ReviewRow label="Source" value={dataSource === "langfuse" ? "Langfuse" : dataSource === "langsmith" ? "LangSmith" : dataSource === "datadog" ? "Datadog LLM Obs" : "S3"} />
+            <ReviewRow label="Source" value={dataSource === "langfuse" ? "Langfuse" : dataSource === "langsmith" ? "LangSmith" : "Datadog LLM Obs"} />
             {inferredAgent && <ReviewRow label="Sessions seen" value={`${discoveredAgents.find(a => a.traceName === inferredAgent.traceName)?.sessionCount.toLocaleString() ?? "—"} before onboarding`} />}
             <ReviewRow label="LLM judge" value={(() => { const j = LLM_JUDGES.find(j => j.id === selectedJudgeId) ?? LLM_JUDGES[0]; return `${j.name} (${j.model})`; })()} mono />
           </Box>
@@ -1386,7 +1354,7 @@ export default function AddAgentView({ navigate }: Props) {
   ];
 
   const stepSubtitles = [
-    "Connect to Langfuse, LangSmith, Datadog, or S3, then select the agent you want to monitor.",
+    "Connect to Langfuse, LangSmith, or Datadog, then select the agent you want to monitor.",
     "Choose an existing profile or generate one. Adjust evals, weights, and verdict bands.",
     "AgentScore auto-selected a judge based on your agent's traces. Override if needed.",
     "Calibration scenarios cover hard, normal, and stretch test cases.",
