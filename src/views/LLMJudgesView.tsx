@@ -109,8 +109,8 @@ export default function LLMJudgesView({ navigate }: Props) {
         </Typography>
         <Box sx={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1.5 }}>
           {[
-            { label: "Correctness", desc: "Benchmark Performance score", always: true },
-            { label: "Quality", desc: "UX Signal score", always: true },
+            { label: "Correctness", desc: "Correctness score", always: true },
+            { label: "Quality", desc: "Relevance score", always: true },
             { label: "Security", desc: "Safety verdict override layer", always: true },
             { label: "Attribution", desc: "Root cause on non-PASS sessions", always: false },
           ].map(({ label, desc, always }) => (

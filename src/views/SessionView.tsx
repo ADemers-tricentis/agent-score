@@ -163,17 +163,17 @@ export default function SessionView({ projectId, runId, sessionId, navigate }: P
             <Divider sx={{ my: 2 }} />
 
             {/* Dimension scores */}
-            <ScoreBar label="Benchmark Performance" dimension={session.scores.benchmarkPerformance} />
-            <ScoreBar label="Value Efficiency" dimension={session.scores.valueEfficiency} />
-            <ScoreBar label="UX Signal" dimension={session.scores.uxSignal} />
+            <ScoreBar label="Correctness" dimension={session.scores.benchmarkPerformance} />
+            <ScoreBar label="Efficiency" dimension={session.scores.valueEfficiency} />
+            <ScoreBar label="Relevance" dimension={session.scores.uxSignal} />
             {session.scores.harmony && (
-              <ScoreBar label="Harmony" dimension={session.scores.harmony} />
+              <ScoreBar label="Safety" dimension={session.scores.harmony} />
             )}
             {session.scores.stability && (
-              <ScoreBar label="Stability" dimension={session.scores.stability} />
+              <ScoreBar label="Consistency" dimension={session.scores.stability} />
             )}
             {session.scores.agency && (
-              <ScoreBar label="Agency" dimension={session.scores.agency} />
+              <ScoreBar label="Tool Use" dimension={session.scores.agency} />
             )}
           </Paper>
 
@@ -417,14 +417,14 @@ function generateMarkdownReport(projectName: string, runLabel: string, s: Sessio
     ``,
     `| Dimension | Score |`,
     `|---|---|`,
-    `| Benchmark Performance | ${s.scores.benchmarkPerformance.score} |`,
-    `| Value Efficiency | ${s.scores.valueEfficiency?.score ?? "N/A"} |`,
-    `| UX Signal | ${s.scores.uxSignal.score} |`,
+    `| Correctness | ${s.scores.benchmarkPerformance.score} |`,
+    `| Efficiency | ${s.scores.valueEfficiency?.score ?? "N/A"} |`,
+    `| Relevance | ${s.scores.uxSignal.score} |`,
   ];
 
-  if (s.scores.harmony) lines.push(`| Harmony | ${s.scores.harmony.score} |`);
-  if (s.scores.stability) lines.push(`| Stability | ${s.scores.stability.score} |`);
-  if (s.scores.agency) lines.push(`| Agency | ${s.scores.agency.score} |`);
+  if (s.scores.harmony) lines.push(`| Safety | ${s.scores.harmony.score} |`);
+  if (s.scores.stability) lines.push(`| Consistency | ${s.scores.stability.score} |`);
+  if (s.scores.agency) lines.push(`| Tool Use | ${s.scores.agency.score} |`);
 
   lines.push(``);
 

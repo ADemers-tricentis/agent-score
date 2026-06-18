@@ -1,9 +1,11 @@
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
+import Slider from "@mui/material/Slider";
 import ChipStatus from "@tricentis/aura/components/ChipStatus.js";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -14,7 +16,7 @@ import ChipSubtle from "@tricentis/aura/components/ChipSubtle.js";
 import Alert from "@mui/material/Alert";
 import type { View } from "../types";
 import Chip from "@mui/material/Chip";
-import { getProject, runPassRate, getEvalDesign, computePassK, projectCompositeScore, sessionGrade, getAdoptedProfile } from "../data/mock";
+import { getProject, runPassRate, getEvalDesign, computePassK, projectCompositeScore, sessionGrade, getAdoptedProfile, updateProject } from "../data/mock";
 import VerdictBadge from "../components/VerdictBadge";
 import TypeTag from "../components/TypeTag";
 import GradeChip from "../components/GradeChip";
@@ -30,7 +32,17 @@ export default function ProjectView({ projectId, navigate }: Props) {
   const adoptedProfileResult = project?.adoptedProfileId ? getAdoptedProfile(projectId) : null;
   const adoptedProfile = adoptedProfileResult?.profile ?? null;
   const adoptedProfileVersion = adoptedProfileResult?.version ?? null;
+
+  const [sampleRate, setSampleRate] = useState<number>(project?.traceSampleRate ?? 100);
+  const [sampleSaved, setSampleSaved] = useState(false);
+
   if (!project) return <Box sx={{ p: 3 }}><Typography>Project not found.</Typography></Box>;
+
+  function handleSampleSave() {
+    updateProject({ ...project!, traceSampleRate: sampleRate });
+    setSampleSaved(true);
+    setTimeout(() => setSampleSaved(false), 2000);
+  }
 
   const passK = computePassK(project);
   const composite = projectCompositeScore(project);
@@ -250,6 +262,65 @@ export default function ProjectView({ projectId, navigate }: Props) {
           </Button>
         </Paper>
       )}
+
+      {/* Trace sampling */}
+      <Paper sx={{ p: 2.5, mb: 3, border: "1px solid", borderColor: "divider", borderRadius: 2 }}>
+        <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 2, mb: 2 }}>
+          <Box>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Trace sampling</Typography>
+            <Typography variant="body2" sx={{ color: "text.secondary", mt: 0.25 }}>
+              Limit the percentage of incoming traces submitted for evaluation. Reduce to control cost; set to 100% for full coverage.
+            </Typography>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexShrink: 0 }}>
+            <Typography
+              variant="h5"
+              sx={{ fontFamily: "monospace", fontWeight: 800, color: sampleRate < 50 ? "warning.main" : "text.primary", minWidth: 64, textAlign: "right" }}
+            >
+              {sampleRate}%
+            </Typography>
+          </Box>
+        </Box>
+        <Box sx={{ px: 1, mb: 2 }}>
+          <Slider
+            value={sampleRate}
+            onChange={(_, v) => { setSampleRate(v as number); setSampleSaved(false); }}
+            min={1}
+            max={100}
+            step={1}
+            marks={[
+              { value: 10, label: "10%" },
+              { value: 25, label: "25%" },
+              { value: 50, label: "50%" },
+              { value: 75, label: "75%" },
+              { value: 100, label: "100%" },
+            ]}
+            valueLabelDisplay="auto"
+            valueLabelFormat={(v) => `${v}%`}
+          />
+        </Box>
+        {sampleRate < 100 && (
+          <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 1.5 }}>
+            At {sampleRate}%, roughly {sampleRate} out of every 100 traces will be evaluated. The rest are ingested but not scored.
+          </Typography>
+        )}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={handleSampleSave}
+            disabled={sampleRate === (project.traceSampleRate ?? 100)}
+          >
+            Save
+          </Button>
+          {sampleSaved && (
+            <Typography variant="caption" sx={{ color: "success.main" }}>Saved</Typography>
+          )}
+          {sampleRate !== (project.traceSampleRate ?? 100) && !sampleSaved && (
+            <Typography variant="caption" sx={{ color: "text.disabled" }}>Unsaved changes</Typography>
+          )}
+        </Box>
+      </Paper>
 
       {/* Runs */}
       <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1.5 }}>

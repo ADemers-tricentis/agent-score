@@ -33,9 +33,9 @@ const PROJECT_TYPE_OPTIONS: ProjectType[] = ["ATA", "ATC", "CURA", "AI_WORKSPACE
 
 const VERDICT_LABELS: Record<VerdictBandKey, string> = {
   ship: "Ship",
-  ship_note: "Ship w/ note",
+  ship_note: "Ship with notes",
   review: "Review",
-  block_rec: "Block (rec)",
+  block_rec: "Block",
 };
 
 const VERDICT_COLORS: Record<VerdictBandKey, string> = {

@@ -60,9 +60,9 @@ export default function MetricsView() {
           description="Per-dimension score 0-100 for latest sessions"
         >
           <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-            <DimScore label="Benchmark Performance" value={avgBP} />
-            <DimScore label="Value Efficiency" value={avgVE} />
-            <DimScore label="UX Signal" value={avgUX} />
+            <DimScore label="Correctness" value={avgBP} />
+            <DimScore label="Efficiency" value={avgVE} />
+            <DimScore label="Relevance" value={avgUX} />
           </Box>
         </MetricCard>
 
@@ -91,7 +91,7 @@ export default function MetricsView() {
         <MetricCard
           name="evalclaw.session.duration"
           type="histogram"
-          description="Session wall-clock latency in ms; primary UX Signal input"
+          description="Session wall-clock latency in ms; primary Relevance input"
         >
           <Box sx={{ display: "flex", gap: 2 }}>
             <Box>
@@ -117,7 +117,7 @@ export default function MetricsView() {
         <MetricCard
           name="gen_ai.client.token.usage"
           type="histogram"
-          description="Token consumption per task; P95 tail cost input for Value Efficiency"
+          description="Token consumption per task; P95 tail cost input for Efficiency"
         >
           <Box sx={{ display: "flex", gap: 2 }}>
             <Box>

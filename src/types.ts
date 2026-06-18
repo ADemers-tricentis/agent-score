@@ -87,6 +87,7 @@ export interface Project {
   reliability: Reliability;
   runs: Run[];
   adoptedProfileId?: string;
+  traceSampleRate?: number;
 }
 
 export interface GuardLogEntry {
@@ -134,12 +135,17 @@ export interface LLMJudge {
 export type CalibrationCategory = "nightmare" | "reality" | "dream";
 export type Directionality = "higher_is_better" | "lower_is_better";
 export type ShowcaseCategory =
-  | "Benchmark Performance"
-  | "Value Efficiency"
-  | "UX Signal"
-  | "Harmony"
-  | "Stability"
-  | "Agency";
+  | "Safety"
+  | "Correctness"
+  | "Relevance"
+  | "Efficiency"
+  | "Consistency"
+  | "Tool Use"
+  | "Instruction Following"
+  | "Groundedness"
+  | "Transparency"
+  | "Robustness"
+  | "Communication";
 
 export interface CalibrationScenario {
   id: string;

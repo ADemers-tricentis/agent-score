@@ -73,12 +73,17 @@ const CAT_CONFIG = {
 };
 
 const GUIDED_CATEGORY_LABELS: Record<ShowcaseCategory, string> = {
-  "Benchmark Performance": "Getting the right answer",
-  "Value Efficiency": "Cost & speed",
-  "UX Signal": "Reliability",
-  "Harmony": "Staying grounded",
-  "Stability": "Consistency",
-  "Agency": "Smart decisions",
+  "Correctness": "Getting the right answer",
+  "Efficiency": "Cost & speed",
+  "Relevance": "Reliability",
+  "Safety": "Staying grounded",
+  "Consistency": "Consistency",
+  "Tool Use": "Smart decisions",
+  "Instruction Following": "Following instructions",
+  "Groundedness": "Grounded in context",
+  "Transparency": "Transparent reasoning",
+  "Robustness": "Robust to edge cases",
+  "Communication": "Clear communication",
 };
 
 const DIRECTIONALITY_LABEL: Record<string, string> = {
@@ -153,12 +158,17 @@ const GUIDED_DEFAULTS = {
 };
 
 const SHOWCASE_CATEGORIES = [
-  { key: "Benchmark Performance", desc: "Did the agent do the right thing?" },
-  { key: "Value Efficiency", desc: "Was the cost worth the output?" },
-  { key: "UX Signal", desc: "Fast, reliable, low error rate?" },
-  { key: "Harmony", desc: "Output consistent with provided context?" },
-  { key: "Stability", desc: "Consistent across equivalent inputs?" },
-  { key: "Agency", desc: "Tool selection and planning efficiency?" },
+  { key: "Correctness", desc: "Did the agent do the right thing?" },
+  { key: "Efficiency", desc: "Was the cost worth the output?" },
+  { key: "Relevance", desc: "Fast, reliable, low error rate?" },
+  { key: "Safety", desc: "Output consistent with provided context?" },
+  { key: "Consistency", desc: "Consistent across equivalent inputs?" },
+  { key: "Tool Use", desc: "Tool selection and planning efficiency?" },
+  { key: "Instruction Following", desc: "Did the agent follow instructions?" },
+  { key: "Groundedness", desc: "Grounded in provided context?" },
+  { key: "Transparency", desc: "Transparent in its reasoning?" },
+  { key: "Robustness", desc: "Robust to adversarial inputs?" },
+  { key: "Communication", desc: "Clear and effective communication?" },
 ];
 
 const RISK_AREAS = [
@@ -723,7 +733,7 @@ function SpecTab({ status, mode }: { projectId: string; status: string; mode: Mo
   const [guidedFailures, setGuidedFailures] = useState(GUIDED_DEFAULTS.failures);
   const [guidedConcerns, setGuidedConcerns] = useState(GUIDED_DEFAULTS.concerns);
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
-    new Set(["Benchmark Performance", "Value Efficiency", "UX Signal", "Agency", "Harmony", "Stability"])
+    new Set(["Correctness", "Efficiency", "Relevance", "Tool Use", "Safety", "Consistency"])
   );
   const [selectedRisks, setSelectedRisks] = useState<Set<string>>(
     new Set(["Hallucinated state or facts", "Wrong tool selection"])

@@ -128,17 +128,17 @@ export default function FleetView({ navigate }: Props) {
                 {latestSession && (
                   <Box>
                     <ScoreBar
-                      label="Benchmark Performance"
+                      label="Correctness"
                       dimension={latestSession.scores.benchmarkPerformance}
                       compact
                     />
                     <ScoreBar
-                      label="Value Efficiency"
+                      label="Efficiency"
                       dimension={latestSession.scores.valueEfficiency}
                       compact
                     />
                     <ScoreBar
-                      label="UX Signal"
+                      label="Relevance"
                       dimension={latestSession.scores.uxSignal}
                       compact
                     />

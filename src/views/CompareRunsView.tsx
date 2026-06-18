@@ -172,32 +172,32 @@ function ScenarioMatch({
         <Divider sx={{ mb: 1.5 }} />
 
         <DimCompare
-          label="Benchmark Performance"
+          label="Correctness"
           scoreA={sessionA?.scores.benchmarkPerformance.score}
           scoreB={sessionB?.scores.benchmarkPerformance.score}
         />
         <DimCompare
-          label="Value Efficiency"
+          label="Efficiency"
           scoreA={sessionA?.scores.valueEfficiency?.score}
           scoreB={sessionB?.scores.valueEfficiency?.score}
         />
         <DimCompare
-          label="UX Signal"
+          label="Relevance"
           scoreA={sessionA?.scores.uxSignal.score}
           scoreB={sessionB?.scores.uxSignal.score}
         />
         <DimCompare
-          label="Harmony"
+          label="Safety"
           scoreA={sessionA?.scores.harmony?.score}
           scoreB={sessionB?.scores.harmony?.score}
         />
         <DimCompare
-          label="Stability"
+          label="Consistency"
           scoreA={sessionA?.scores.stability?.score}
           scoreB={sessionB?.scores.stability?.score}
         />
         <DimCompare
-          label="Agency"
+          label="Tool Use"
           scoreA={sessionA?.scores.agency?.score}
           scoreB={sessionB?.scores.agency?.score}
         />
