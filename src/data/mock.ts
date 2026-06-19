@@ -8,6 +8,7 @@ export const PROJECTS: Project[] = [
     type: "ATA",
     phase: 1,
     reliability: "RELIABLE",
+    traceSampleRate: 75,
     adoptedProfileId: "prof-1",
     llmJudgeId: "j1",
     fingerprintMatchedAt: "2026-05-01T09:30:00Z",
@@ -196,6 +197,7 @@ export const PROJECTS: Project[] = [
     type: "ATC",
     phase: 2,
     reliability: "NEEDS_WORK",
+    traceSampleRate: 50,
     runs: [
       {
         id: "r3",
@@ -293,6 +295,7 @@ export const PROJECTS: Project[] = [
     type: "AI_WORKSPACE",
     phase: 2,
     reliability: "RELIABLE",
+    traceSampleRate: 25,
     runs: [
       {
         id: "r4",
@@ -498,6 +501,7 @@ export const PROJECTS: Project[] = [
     type: "APT",
     phase: 1,
     reliability: "RELIABLE",
+    traceSampleRate: 10,
     runs: [
       {
         id: "r6",
