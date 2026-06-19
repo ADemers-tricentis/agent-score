@@ -77,7 +77,7 @@ const MOCK_API_KEY = "as_live_k9x2mPqR7vNjL4tY8wCdZ3hF";
 
 const FRAMEWORKS = ["LangChain", "LangGraph", "CrewAI", "AutoGen", "OpenAI Agents", "LlamaIndex", "Pydantic AI", "Google ADK"];
 
-const NEW_AGENT_STEPS = ["API Key & Setup", "Waiting for traces"];
+const NEW_AGENT_STEPS = ["API Key & Setup", "Waiting for traces", "Suggested Evals"];
 
 const INGEST_PIPELINE_STAGES = [
   "Trace received",
@@ -96,6 +96,16 @@ interface DiscoveredAgent {
   lastSeen: string;
 }
 
+interface DetectedEval {
+  id: string;
+  name: string;
+  dimension: ShowcaseCategory;
+  description: string;
+  detectedFrom: string;
+  confidence: number;
+  enabled: boolean;
+}
+
 interface InferredAgentData {
   traceName: string;
   suggestedFriendlyName: string;
@@ -104,6 +114,22 @@ interface InferredAgentData {
   inferredMetrics: string[];
   relevantDimensions: ShowcaseCategory[];
 }
+
+const DETECTED_EVALS_MOCK: DetectedEval[] = [
+  { id: "de-1", name: "Task Completion Rate", dimension: "Correctness", description: "Measures whether the agent successfully completes tasks end-to-end without errors or unexpected halts.", detectedFrom: "tool call sequences", confidence: 0.94, enabled: true },
+  { id: "de-2", name: "Tool Call Efficiency", dimension: "Tool Use", description: "Checks that the agent uses the minimum necessary tool calls to complete each task without redundant fetches.", detectedFrom: "span tree analysis", confidence: 0.89, enabled: true },
+  { id: "de-3", name: "Session Completion", dimension: "Relevance", description: "Tracks sessions that complete without unexpected termination, timeouts, or unhandled error states.", detectedFrom: "session metadata", confidence: 0.97, enabled: true },
+  { id: "de-4", name: "Token Budget Compliance", dimension: "Efficiency", description: "Monitors whether sessions stay within the token usage envelope typical for this agent's task type.", detectedFrom: "token counters in traces", confidence: 0.91, enabled: true },
+  { id: "de-5", name: "Response Consistency", dimension: "Consistency", description: "Detects output drift across sessions with similar inputs — flags when behavior is non-deterministic.", detectedFrom: "output clustering", confidence: 0.78, enabled: false },
+];
+
+const DETECTED_EVALS_FROM_DESC: DetectedEval[] = [
+  { id: "de-d1", name: "Task Success Rate", dimension: "Correctness", description: "Verifies the agent completes its primary task correctly across representative inputs from your description.", detectedFrom: "your agent description", confidence: 0.95, enabled: true },
+  { id: "de-d2", name: "Prohibited Behavior Check", dimension: "Safety", description: "Specifically tests for the behaviors you said should never happen.", detectedFrom: "your agent description", confidence: 1.0, enabled: true },
+  { id: "de-d3", name: "Ambiguity Handling", dimension: "Correctness", description: "Tests that the agent doesn't proceed confidently when inputs are unclear or underspecified.", detectedFrom: "your agent description", confidence: 0.88, enabled: true },
+  { id: "de-d4", name: "Hallucination Resistance", dimension: "Safety", description: "Checks that the agent doesn't fabricate information when grounding evidence is insufficient.", detectedFrom: "your agent description", confidence: 0.92, enabled: true },
+  { id: "de-d5", name: "Token Efficiency", dimension: "Efficiency", description: "Monitors session token usage against an estimated budget derived from your described use case.", detectedFrom: "your agent description", confidence: 0.82, enabled: true },
+];
 
 const MOCK_DISCOVERED_AGENTS: DiscoveredAgent[] = [
   { id: "da-1", traceName: "payment-processor-agent", sessionCount: 1240, lastSeen: "2 hours ago" },
@@ -540,6 +566,14 @@ export default function AddAgentView({ navigate }: Props) {
   const [traceReady, setTraceReady] = useState(false);
   const [apiKeyCopied, setApiKeyCopied] = useState(false);
 
+  // Eval suggestions step state (new-agent path)
+  const [detectedEvals, setDetectedEvals] = useState<DetectedEval[]>(DETECTED_EVALS_MOCK);
+  const [evalsDescribeMode, setEvalsDescribeMode] = useState(false);
+  const [agentDescText, setAgentDescText] = useState("");
+  const [evalsGenerating, setEvalsGenerating] = useState(false);
+  const [evalsGenStage, setEvalsGenStage] = useState(0);
+  const [evalsBuiltFromDesc, setEvalsBuiltFromDesc] = useState(false);
+
   // ── Derived validity ────────────────────────────────────────────────────────
 
   const connectCredsValid =
@@ -748,6 +782,24 @@ export default function AddAgentView({ navigate }: Props) {
     navigate({ name: "project", projectId });
   }
 
+  function handleDescribeNewAgent() {
+    setEvalsGenerating(true);
+    setEvalsGenStage(0);
+    PIPELINE_STAGES.forEach((_, i) => {
+      setTimeout(() => {
+        setEvalsGenStage(i);
+        if (i === PIPELINE_STAGES.length - 1) {
+          setTimeout(() => {
+            setDetectedEvals(DETECTED_EVALS_FROM_DESC);
+            setEvalsBuiltFromDesc(true);
+            setEvalsDescribeMode(false);
+            setEvalsGenerating(false);
+          }, 400);
+        }
+      }, i * 450);
+    });
+  }
+
   function runTraceIngest() {
     setTimeout(() => {
       INGEST_PIPELINE_STAGES.forEach((_, i) => {
@@ -937,6 +989,115 @@ export default function AddAgentView({ navigate }: Props) {
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75, alignItems: "center" }}>
           <Typography variant="caption" sx={{ color: "text.disabled", mr: 0.5 }}>Works with:</Typography>
           {FRAMEWORKS.map((f) => <Chip key={f} label={f} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.65rem" }} />)}
+        </Box>
+      </Box>
+    );
+  }
+
+  function renderEvalSuggestions() {
+    if (evalsGenerating) {
+      return <LoadingOverlay title="Building profile from your description…" stages={PIPELINE_STAGES} currentStage={evalsGenStage} />;
+    }
+
+    const enabledCount = detectedEvals.filter((e) => e.enabled).length;
+
+    return (
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+        <Box>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.75 }}>
+            <SparkleIcon />
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              We recognized {detectedEvals.length} evals for your agent
+            </Typography>
+          </Box>
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            AgentScore analyzed your traces and matched them to known behavioral patterns. Toggle any evals off before continuing.
+          </Typography>
+        </Box>
+
+        {evalsBuiltFromDesc && (
+          <Alert severity="success" sx={{ borderRadius: 1.5 }}>
+            <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.25 }}>Profile rebuilt from your description</Typography>
+            <Typography variant="caption">These evals were generated from what you told us and are tuned to your agent's specific purpose and risk areas.</Typography>
+          </Alert>
+        )}
+
+        <Alert severity="info" sx={{ borderRadius: 1.5 }}>
+          AgentScore will keep learning from your traces over time — as it sees more sessions, it will refine these evals and suggest new ones automatically.
+        </Alert>
+
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+          {detectedEvals.map((ev) => (
+            <Paper
+              key={ev.id}
+              variant="outlined"
+              sx={{
+                p: 1.75,
+                borderRadius: 1.5,
+                borderColor: ev.enabled ? "primary.light" : "divider",
+                bgcolor: ev.enabled ? "rgba(var(--mui-palette-primary-mainChannel) / 0.04)" : "background.paper",
+                transition: "all 0.15s",
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1.5 }}>
+                <Switch
+                  checked={ev.enabled}
+                  onChange={() => setDetectedEvals((es) => es.map((e) => e.id === ev.id ? { ...e, enabled: !e.enabled } : e))}
+                  size="small"
+                  sx={{ mt: 0.25, flexShrink: 0 }}
+                />
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>{ev.name}</Typography>
+                    <Chip label={ev.dimension} size="small" color="primary" variant="outlined" sx={{ height: 18, fontSize: "0.62rem" }} />
+                    <Chip label={`${Math.round(ev.confidence * 100)}% match`} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.62rem", color: "text.secondary" }} />
+                  </Box>
+                  <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mt: 0.25 }}>{ev.description}</Typography>
+                  <Typography variant="caption" sx={{ color: "text.disabled", display: "block", mt: 0.5 }}>Detected from {ev.detectedFrom}</Typography>
+                </Box>
+              </Box>
+            </Paper>
+          ))}
+        </Box>
+
+        <Typography variant="caption" sx={{ color: "text.secondary" }}>
+          {enabledCount} of {detectedEvals.length} evals selected
+        </Typography>
+
+        <Box sx={{ borderTop: "1px solid", borderColor: "divider", pt: 2 }}>
+          <Button
+            size="small"
+            variant="text"
+            sx={{ color: "text.secondary", textDecoration: "underline" }}
+            onClick={() => setEvalsDescribeMode((v) => !v)}
+          >
+            {evalsDescribeMode ? "Hide" : "Evals don't look right? Describe your agent instead"}
+          </Button>
+          <Collapse in={evalsDescribeMode}>
+            <Box sx={{ mt: 1.5, p: 2, border: 1, borderColor: "divider", borderRadius: 1.5, display: "flex", flexDirection: "column", gap: 2 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Describe your agent</Typography>
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                Tell us what your agent does, what it should never do, and what you're most worried about. AgentScore will build a custom eval profile from scratch.
+              </Typography>
+              <TextField
+                fullWidth
+                multiline
+                minRows={4}
+                placeholder="e.g. My agent reads customer support tickets and routes them to the right team. It should never miscategorize a billing issue as a technical issue. I'm most worried about it fabricating a resolution when the issue is still open."
+                value={agentDescText}
+                onChange={(e) => setAgentDescText(e.target.value)}
+              />
+              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                <Button
+                  variant="contained"
+                  disabled={agentDescText.trim().length === 0}
+                  onClick={handleDescribeNewAgent}
+                >
+                  Build profile
+                </Button>
+              </Box>
+            </Box>
+          </Collapse>
         </Box>
       </Box>
     );
@@ -1736,9 +1897,10 @@ export default function AddAgentView({ navigate }: Props) {
         <Box sx={{ maxWidth: 860, mx: "auto" }}>
           {newStep === 0 && renderNewAgentSetup()}
           {newStep === 1 && renderWaiting()}
+          {newStep === 2 && renderEvalSuggestions()}
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 4, pt: 3, borderTop: "1px solid", borderColor: "divider", maxWidth: 860, mx: "auto" }}>
-          <Button variant="outlined" onClick={() => { if (newStep === 0) { setEntryMode(null); } else { setNewStep(0); } }}>Back</Button>
+          <Button variant="outlined" onClick={() => { if (newStep === 0) { setEntryMode(null); } else { setNewStep((s) => s - 1); } }}>Back</Button>
           <Box>
             {newStep === 0 && (
               <Button variant="contained" onClick={() => { setNewStep(1); runTraceIngest(); }}>
@@ -1746,6 +1908,11 @@ export default function AddAgentView({ navigate }: Props) {
               </Button>
             )}
             {newStep === 1 && traceReady && (
+              <Button variant="contained" onClick={() => setNewStep(2)}>
+                Continue
+              </Button>
+            )}
+            {newStep === 2 && !evalsGenerating && (
               <Button variant="contained" onClick={() => navigate({ name: "fleet" })}>
                 View fleet
               </Button>
