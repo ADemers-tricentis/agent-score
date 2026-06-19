@@ -13,6 +13,7 @@ import AddJudgeView from "./views/AddJudgeView";
 import IntegrationsView from "./views/IntegrationsView";
 import CompareRunsView from "./views/CompareRunsView";
 import AddAgentView from "./views/AddAgentView";
+import AgentSettingsView from "./views/AgentSettingsView";
 import ProfilesView from "./views/ProfilesView";
 import ProfileDetailView from "./views/ProfileDetailView";
 import AddProfileView from "./views/AddProfileView";
@@ -26,6 +27,8 @@ export default function App() {
         return <FleetView navigate={setView} />;
       case "project":
         return <ProjectView projectId={view.projectId} navigate={setView} />;
+      case "agent-settings":
+        return <AgentSettingsView projectId={view.projectId} navigate={setView} />;
       case "run":
         return <RunView projectId={view.projectId} runId={view.runId} navigate={setView} />;
       case "session":

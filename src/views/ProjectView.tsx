@@ -2,7 +2,6 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import ButtonBase from "@mui/material/ButtonBase";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Slider from "@mui/material/Slider";
@@ -214,6 +213,15 @@ export default function ProjectView({ projectId, navigate }: Props) {
             </Box>
           )}
           <Box sx={{ ml: "auto", alignSelf: "center", display: "flex", gap: 1 }}>
+            <Button
+              size="small"
+              variant="outlined"
+              color="inherit"
+              onClick={() => navigate({ name: "agent-settings", projectId })}
+              sx={{ color: "text.secondary" }}
+            >
+              Settings
+            </Button>
             <Button
               size="small"
               variant="contained"
@@ -447,7 +455,14 @@ export default function ProjectView({ projectId, navigate }: Props) {
       })()}
 
       <Paper sx={{ border: "1px solid", borderColor: "divider", borderRadius: 2, overflow: "hidden" }}>
-        <Table size="small">
+        <Table size="small" sx={{ tableLayout: "fixed", width: "100%" }}>
+          <colgroup>
+            <col />
+            <col style={{ width: "120px" }} />
+            <col style={{ width: "80px" }} />
+            <col style={{ width: "95px" }} />
+            <col style={{ width: "130px" }} />
+          </colgroup>
           <TableHead>
             <TableRow>
               <TableCell sx={{ fontWeight: 600, color: "text.secondary" }}>Run</TableCell>
@@ -464,12 +479,10 @@ export default function ProjectView({ projectId, navigate }: Props) {
               return (
                 <TableRow
                   key={run.id}
-                  component={ButtonBase}
+                  hover={!run.inProgress}
                   onClick={() => !run.inProgress && navigate({ name: "run", projectId, runId: run.id })}
                   sx={{
-                    display: "table-row",
                     cursor: run.inProgress ? "default" : "pointer",
-                    "&:hover": { bgcolor: run.inProgress ? undefined : "action.hover" },
                     "&:last-child td": { borderBottom: 0 },
                   }}
                 >
@@ -479,10 +492,10 @@ export default function ProjectView({ projectId, navigate }: Props) {
                         {run.label}
                       </Typography>
                       {run.inProgress && (
-                        <Chip label="In progress" size="small" color="primary" sx={{ height: 18, fontSize: "0.62rem" }} />
+                        <Chip label="In progress" size="small" color="primary" sx={{ height: 18, fontSize: "0.62rem", flexShrink: 0 }} />
                       )}
                       {run.regradedWithProfileVersion && (
-                        <Chip label={`Regraded v${run.regradedWithProfileVersion}`} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.62rem", color: "text.secondary" }} />
+                        <Chip label={`Regraded v${run.regradedWithProfileVersion}`} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.62rem", color: "text.secondary", flexShrink: 0 }} />
                       )}
                     </Box>
                   </TableCell>
@@ -493,12 +506,12 @@ export default function ProjectView({ projectId, navigate }: Props) {
                   </TableCell>
                   <TableCell>
                     <Typography variant="body2" sx={{ color: run.inProgress ? "text.disabled" : undefined }}>
-                      {run.inProgress ? "—" : run.sessions.length}
+                      {run.inProgress ? "-" : run.sessions.length}
                     </Typography>
                   </TableCell>
                   <TableCell>
                     {run.inProgress ? (
-                      <Typography variant="body2" sx={{ color: "text.disabled" }}>—</Typography>
+                      <Typography variant="body2" sx={{ color: "text.disabled" }}>-</Typography>
                     ) : (
                       <Typography
                         variant="body2"
@@ -510,7 +523,7 @@ export default function ProjectView({ projectId, navigate }: Props) {
                   </TableCell>
                   <TableCell>
                     {run.inProgress ? (
-                      <Typography variant="body2" sx={{ color: "text.disabled" }}>—</Typography>
+                      <Typography variant="body2" sx={{ color: "text.disabled" }}>-</Typography>
                     ) : (
                       <VerdictBadge verdict={latestVerdict} />
                     )}
@@ -528,7 +541,7 @@ export default function ProjectView({ projectId, navigate }: Props) {
           <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2 }}>Activity</Typography>
           <Box sx={{ position: "relative" }}>
             {/* vertical connector line */}
-            <Box sx={{ position: "absolute", left: 6, top: 12, bottom: 12, width: 1, bgcolor: "divider" }} />
+            <Box sx={{ position: "absolute", left: 6, top: 12, bottom: 12, width: "1px", bgcolor: "divider" }} />
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
               {[...project.events].sort((a, b) => b.ts.localeCompare(a.ts)).map((ev) => {
                 const kindCfg = EVENT_KIND_CONFIG[ev.kind] ?? { label: ev.kind, color: "text.secondary" };

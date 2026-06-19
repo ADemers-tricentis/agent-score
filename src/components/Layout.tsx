@@ -228,13 +228,15 @@ function buildBreadcrumbs(view: View): { label: string; onClick?: () => void }[]
     case "fleet":
       return [{ label: "Fleet" }];
     case "project":
-      return [{ label: "Fleet" }, { label: "Project" }];
+      return [{ label: "Fleet" }, { label: "Agent" }];
+    case "agent-settings":
+      return [{ label: "Fleet" }, { label: "Agent" }, { label: "Settings" }];
     case "run":
-      return [{ label: "Fleet" }, { label: "Project" }, { label: "Run" }];
+      return [{ label: "Fleet" }, { label: "Agent" }, { label: "Run" }];
     case "session":
-      return [{ label: "Fleet" }, { label: "Project" }, { label: "Run" }, { label: "Session" }];
+      return [{ label: "Fleet" }, { label: "Agent" }, { label: "Run" }, { label: "Session" }];
     case "eval-design":
-      return [{ label: "Fleet" }, { label: "Project" }, { label: "Evaluation Design" }];
+      return [{ label: "Fleet" }, { label: "Agent" }, { label: "Evaluation Design" }];
     case "guard-log":
       return [{ label: "Guard Log" }];
     case "metrics":
@@ -246,7 +248,7 @@ function buildBreadcrumbs(view: View): { label: string; onClick?: () => void }[]
     case "integrations":
       return [{ label: "Integrations" }];
     case "compare-runs":
-      return [{ label: "Fleet" }, { label: "Project" }, { label: "Compare Runs" }];
+      return [{ label: "Fleet" }, { label: "Agent" }, { label: "Compare Runs" }];
     case "add-agent":
       return [{ label: "Fleet" }, { label: "Add Agent" }];
     case "profiles":

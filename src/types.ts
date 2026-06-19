@@ -112,6 +112,7 @@ export interface Project {
   reliability: Reliability;
   runs: Run[];
   adoptedProfileId?: string;
+  llmJudgeId?: string;
   traceSampleRate?: number;
   fingerprintMatchedAt?: string;
   fingerprintConfidence?: number;
@@ -133,6 +134,7 @@ export interface GuardLogEntry {
 export type View =
   | { name: "fleet" }
   | { name: "project"; projectId: string }
+  | { name: "agent-settings"; projectId: string }
   | { name: "run"; projectId: string; runId: string }
   | { name: "session"; projectId: string; runId: string; sessionId: string }
   | { name: "compare-runs"; projectId: string; runIdA: string; runIdB: string }

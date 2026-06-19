@@ -12,6 +12,7 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Switch from "@mui/material/Switch";
+import Slider from "@mui/material/Slider";
 import LinearProgress from "@mui/material/LinearProgress";
 import IconButton from "@mui/material/IconButton";
 import SvgIcon from "@mui/material/SvgIcon";
@@ -612,6 +613,7 @@ export default function AddAgentView({ navigate }: Props) {
   const [detectedTraceName, setDetectedTraceName] = useState("");
   const [inferredAgentDesc, setInferredAgentDesc] = useState("");
   const [newAgentFriendlyName, setNewAgentFriendlyName] = useState("");
+  const [newAgentSampleRate, setNewAgentSampleRate] = useState(100);
 
   // Eval suggestions step state (new-agent path)
   const [detectedEvals, setDetectedEvals] = useState<DetectedEval[]>(DETECTED_EVALS_MOCK);
@@ -826,6 +828,7 @@ export default function AddAgentView({ navigate }: Props) {
       reliability: "NEEDS_WORK",
       runs,
       adoptedProfileId: profileId,
+      ...(entryMode === "new" ? { traceSampleRate: newAgentSampleRate } : {}),
     };
     addProfile(newProfile);
     addProject(newProject);
@@ -1799,6 +1802,17 @@ export default function AddAgentView({ navigate }: Props) {
           </Typography>
         </Box>
 
+        {/* Learning banner */}
+        <Alert
+          severity="info"
+          sx={{ borderRadius: 1.5 }}
+        >
+          <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.25 }}>Starts configured, keeps improving</Typography>
+          <Typography variant="body2">
+            The evals, scoring profile, and judge below are based on your first traces. As more sessions arrive, AgentScore will refine coverage, rebalance weights, and sharpen judge selection automatically - no manual reconfiguration needed.
+          </Typography>
+        </Alert>
+
         {/* Agent identity */}
         <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1.5, borderColor: "primary.light", bgcolor: "rgba(var(--mui-palette-primary-mainChannel) / 0.03)" }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.5 }}>
@@ -2070,6 +2084,49 @@ export default function AddAgentView({ navigate }: Props) {
           <Typography variant="caption" sx={{ color: "text.secondary" }}>
             {testCases.filter((s) => s.confirmed).length} of {testCases.length} test cases selected
           </Typography>
+        </Box>
+
+        <Divider />
+
+        {/* 5. Trace Sampling */}
+        <Box>
+          <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 2, mb: 2 }}>
+            <Box>
+              <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Trace sampling</Typography>
+              <Typography variant="body2" sx={{ color: "text.secondary", mt: 0.25 }}>
+                Limit the percentage of incoming traces submitted for evaluation. Reduce to control cost; set to 100% for full coverage.
+              </Typography>
+            </Box>
+            <Typography
+              variant="h5"
+              sx={{ fontFamily: "monospace", fontWeight: 800, color: newAgentSampleRate < 50 ? "warning.main" : "text.primary", minWidth: 64, textAlign: "right", flexShrink: 0 }}
+            >
+              {newAgentSampleRate}%
+            </Typography>
+          </Box>
+          <Box sx={{ px: 1 }}>
+            <Slider
+              value={newAgentSampleRate}
+              onChange={(_, v) => setNewAgentSampleRate(v as number)}
+              min={1}
+              max={100}
+              step={1}
+              marks={[
+                { value: 10, label: "10%" },
+                { value: 25, label: "25%" },
+                { value: 50, label: "50%" },
+                { value: 75, label: "75%" },
+                { value: 100, label: "100%" },
+              ]}
+              valueLabelDisplay="auto"
+              valueLabelFormat={(v) => `${v}%`}
+            />
+          </Box>
+          {newAgentSampleRate < 100 && (
+            <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mt: 1 }}>
+              At {newAgentSampleRate}%, roughly {newAgentSampleRate} out of every 100 traces will be evaluated. The rest are ingested but not scored.
+            </Typography>
+          )}
         </Box>
       </Box>
     );
