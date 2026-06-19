@@ -6,6 +6,8 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Slider from "@mui/material/Slider";
+import LinearProgress from "@mui/material/LinearProgress";
+import Tooltip from "@mui/material/Tooltip";
 import ChipStatus from "@tricentis/aura/components/ChipStatus.js";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -14,12 +16,28 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import ChipSubtle from "@tricentis/aura/components/ChipSubtle.js";
 import Alert from "@mui/material/Alert";
-import type { View } from "../types";
+import type { View, Run, ActivityEventKind } from "../types";
 import Chip from "@mui/material/Chip";
-import { getProject, runPassRate, getEvalDesign, computePassK, projectCompositeScore, sessionGrade, getAdoptedProfile, updateProject } from "../data/mock";
+import { getProject, runPassRate, getEvalDesign, computePassK, projectCompositeScore, sessionGrade, getAdoptedProfile, updateProject, isScorePreliminary, addRunToProject } from "../data/mock";
 import VerdictBadge from "../components/VerdictBadge";
 import TypeTag from "../components/TypeTag";
 import GradeChip from "../components/GradeChip";
+
+const SCORE_STAGES = [
+  "Fetching recent traces…",
+  "Running eval suite…",
+  "Aggregating dimension scores…",
+  "Finalizing run report…",
+];
+
+const EVENT_KIND_CONFIG: Record<ActivityEventKind, { label: string; color: string }> = {
+  profile_adopted:        { label: "Profile matched",    color: "primary.main" },
+  run_completed:          { label: "Run completed",      color: "success.main" },
+  milestone_reached:      { label: "Milestone",          color: "warning.main" },
+  decision_override:      { label: "Override",           color: "error.main" },
+  profile_version_changed:{ label: "Profile updated",    color: "info.main" },
+  regrade_completed:      { label: "Regraded",           color: "text.secondary" },
+};
 
 interface Props {
   projectId: string;
@@ -35,8 +53,14 @@ export default function ProjectView({ projectId, navigate }: Props) {
 
   const [sampleRate, setSampleRate] = useState<number>(project?.traceSampleRate ?? 100);
   const [sampleSaved, setSampleSaved] = useState(false);
+  const [isScoringNow, setIsScoringNow] = useState(false);
+  const [scoringStage, setScoringStage] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   if (!project) return <Box sx={{ p: 3 }}><Typography>Project not found.</Typography></Box>;
+
+  // re-read after refresh
+  void refreshKey;
 
   function handleSampleSave() {
     updateProject({ ...project!, traceSampleRate: sampleRate });
@@ -44,10 +68,48 @@ export default function ProjectView({ projectId, navigate }: Props) {
     setTimeout(() => setSampleSaved(false), 2000);
   }
 
+  function handleScoreNow() {
+    setIsScoringNow(true);
+    setScoringStage(0);
+    SCORE_STAGES.forEach((_, i) => {
+      setTimeout(() => {
+        setScoringStage(i);
+        if (i === SCORE_STAGES.length - 1) {
+          setTimeout(() => {
+            const lastRun = project.runs[0];
+            const now = new Date();
+            const clamp = (v: number) => Math.max(20, Math.min(100, Math.round(v)));
+            const newRun: Run = {
+              id: `r-od-${Date.now()}`,
+              label: `On-demand run · ${now.toLocaleDateString()}`,
+              date: now.toISOString().slice(0, 10),
+              sessions: (lastRun?.sessions ?? []).map((s, idx) => ({
+                ...s,
+                id: `s-od-${idx}-${Date.now()}`,
+                ts: now.toISOString(),
+                scores: {
+                  ...s.scores,
+                  benchmarkPerformance: { ...s.scores.benchmarkPerformance, score: clamp(s.scores.benchmarkPerformance.score + Math.round((Math.random() - 0.45) * 10)) },
+                  uxSignal: { ...s.scores.uxSignal, score: clamp(s.scores.uxSignal.score + Math.round((Math.random() - 0.45) * 8)) },
+                  ...(s.scores.valueEfficiency ? { valueEfficiency: { ...s.scores.valueEfficiency, score: clamp(s.scores.valueEfficiency.score + Math.round((Math.random() - 0.45) * 8)) } } : {}),
+                },
+              })),
+            };
+            addRunToProject(projectId, newRun);
+            setIsScoringNow(false);
+            setRefreshKey((k) => k + 1);
+          }, 600);
+        }
+      }, i * 700);
+    });
+  }
+
   const passK = computePassK(project);
   const composite = projectCompositeScore(project);
   const grade = sessionGrade(composite);
   const canCompare = project.runs.length >= 2;
+  const isPreliminary = isScorePreliminary(project);
+  const confidenceDelta = Math.round(composite * 0.05);
 
   const evalStatusLabel = evalDesign?.status === "confirmed"
     ? "Confirmed"
@@ -94,11 +156,20 @@ export default function ProjectView({ projectId, navigate }: Props) {
         <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap", alignItems: "flex-start" }}>
           <Box>
             <Typography variant="caption" sx={{ color: "text.disabled", display: "block" }}>Score</Typography>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mt: 0.25 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mt: 0.25, flexWrap: "wrap" }}>
               <GradeChip grade={grade} size="small" />
               <Typography variant="subtitle2" sx={{ fontWeight: 700, fontFamily: "monospace" }}>
                 {composite}/100
               </Typography>
+              {isPreliminary ? (
+                <Tooltip title="Score is based on fewer than 30 sessions. Run more evals to reach a stable grade." arrow>
+                  <Chip label="Preliminary" size="small" color="warning" sx={{ height: 18, fontSize: "0.62rem", cursor: "help" }} />
+                </Tooltip>
+              ) : (
+                <Typography variant="caption" sx={{ color: "text.disabled", fontFamily: "monospace" }}>
+                  ± {confidenceDelta}
+                </Typography>
+              )}
             </Box>
           </Box>
           <Box>
@@ -142,8 +213,16 @@ export default function ProjectView({ projectId, navigate }: Props) {
               </Box>
             </Box>
           )}
-          {canCompare && (
-            <Box sx={{ ml: "auto", alignSelf: "center" }}>
+          <Box sx={{ ml: "auto", alignSelf: "center", display: "flex", gap: 1 }}>
+            <Button
+              size="small"
+              variant="contained"
+              onClick={handleScoreNow}
+              disabled={isScoringNow}
+            >
+              {isScoringNow ? "Scoring…" : "Score now"}
+            </Button>
+            {canCompare && (
               <Button
                 size="small"
                 variant="outlined"
@@ -160,8 +239,8 @@ export default function ProjectView({ projectId, navigate }: Props) {
               >
                 Compare runs
               </Button>
-            </Box>
-          )}
+            )}
+          </Box>
         </Box>
       </Paper>
 
@@ -192,11 +271,23 @@ export default function ProjectView({ projectId, navigate }: Props) {
                 <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>
                   {adoptedProfile.name} · {enabledEntries.length} evals across {dimensions.length} dimensions
                 </Typography>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mb: 1 }}>
                   {dimensions.map((d) => (
                     <Chip key={d} label={d} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.68rem" }} />
                   ))}
                 </Box>
+                {project.fingerprintMatchedAt ? (
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+                    <Typography variant="caption" sx={{ color: "text.disabled" }}>
+                      Auto-matched {new Date(project.fingerprintMatchedAt).toLocaleDateString()} · {Math.round((project.fingerprintConfidence ?? 0) * 100)}% confidence · {project.fingerprintSessionCount ?? 0} sessions analyzed
+                    </Typography>
+                    <Button size="small" variant="text" sx={{ fontSize: "0.68rem", p: 0, minWidth: 0, color: "text.secondary", textDecoration: "underline" }} onClick={() => navigate({ name: "profiles" })}>
+                      Override
+                    </Button>
+                  </Box>
+                ) : (
+                  <Typography variant="caption" sx={{ color: "text.disabled" }}>Fingerprint not yet matched</Typography>
+                )}
               </Box>
               <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 1, flexShrink: 0 }}>
                 <Box sx={{ display: "flex", gap: 0.75 }}>
@@ -322,10 +413,39 @@ export default function ProjectView({ projectId, navigate }: Props) {
         </Box>
       </Paper>
 
+      {/* Scoring animation (Gap 5) */}
+      {isScoringNow && (
+        <Paper sx={{ p: 2.5, mb: 3, border: "1px solid", borderColor: "primary.main", borderRadius: 2 }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>Scoring in progress…</Typography>
+          <LinearProgress sx={{ borderRadius: 1, height: 6, mb: 2 }} />
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
+            {SCORE_STAGES.map((label, i) => (
+              <Box key={label} sx={{ display: "flex", alignItems: "center", gap: 1.5, opacity: i <= scoringStage ? 1 : 0.3, transition: "opacity 0.3s" }}>
+                <Box sx={{ width: 7, height: 7, borderRadius: "50%", bgcolor: i < scoringStage ? "success.main" : i === scoringStage ? "primary.main" : "divider", flexShrink: 0, transition: "background-color 0.3s" }} />
+                <Typography variant="caption" sx={{ color: i <= scoringStage ? "text.primary" : "text.disabled" }}>{label}</Typography>
+              </Box>
+            ))}
+          </Box>
+        </Paper>
+      )}
+
       {/* Runs */}
       <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1.5 }}>
         Runs
       </Typography>
+
+      {/* Regrade notice (Gap 8) */}
+      {project.runs.some((r) => r.regradedWithProfileVersion) && (() => {
+        const regradeVersion = project.runs.find((r) => r.regradedWithProfileVersion)?.regradedWithProfileVersion;
+        const regradeEvent = project.events?.find((e) => e.kind === "profile_version_changed");
+        return (
+          <Alert severity="info" sx={{ mb: 1.5, borderRadius: 1.5 }}>
+            Profile updated to v{regradeVersion}
+            {regradeEvent ? ` on ${new Date(regradeEvent.ts).toLocaleDateString()}` : ""}. Earlier runs were re-evaluated against the new version so your trend stays a fair comparison.
+          </Alert>
+        );
+      })()}
+
       <Paper sx={{ border: "1px solid", borderColor: "divider", borderRadius: 2, overflow: "hidden" }}>
         <Table size="small">
           <TableHead>
@@ -354,9 +474,14 @@ export default function ProjectView({ projectId, navigate }: Props) {
                   }}
                 >
                   <TableCell>
-                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                      {run.label}
-                    </Typography>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                        {run.label}
+                      </Typography>
+                      {run.regradedWithProfileVersion && (
+                        <Chip label={`Regraded v${run.regradedWithProfileVersion}`} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.62rem", color: "text.secondary" }} />
+                      )}
+                    </Box>
                   </TableCell>
                   <TableCell>
                     <Typography variant="body2" sx={{ color: "text.secondary" }}>
@@ -386,6 +511,40 @@ export default function ProjectView({ projectId, navigate }: Props) {
           </TableBody>
         </Table>
       </Paper>
+
+      {/* Activity log (Gap 6) */}
+      {project.events && project.events.length > 0 && (
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2 }}>Activity</Typography>
+          <Box sx={{ position: "relative" }}>
+            {/* vertical connector line */}
+            <Box sx={{ position: "absolute", left: 6, top: 12, bottom: 12, width: 1, bgcolor: "divider" }} />
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {[...project.events].sort((a, b) => b.ts.localeCompare(a.ts)).map((ev) => {
+                const kindCfg = EVENT_KIND_CONFIG[ev.kind] ?? { label: ev.kind, color: "text.secondary" };
+                return (
+                  <Box key={ev.id} sx={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
+                    <Box sx={{ width: 13, height: 13, borderRadius: "50%", bgcolor: kindCfg.color, flexShrink: 0, mt: 0.4, zIndex: 1 }} />
+                    <Box sx={{ flex: 1 }}>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+                        <Typography variant="body2" sx={{ fontWeight: 600 }}>{ev.title}</Typography>
+                        <Chip label={kindCfg.label} size="small" variant="outlined" sx={{ height: 16, fontSize: "0.6rem" }} />
+                        {ev.author && ev.author !== "system" && (
+                          <Typography variant="caption" sx={{ color: "text.disabled" }}>{ev.author}</Typography>
+                        )}
+                      </Box>
+                      <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mt: 0.25 }}>{ev.detail}</Typography>
+                      <Typography variant="caption" sx={{ color: "text.disabled", display: "block", mt: 0.25 }}>
+                        {new Date(ev.ts).toLocaleString()}
+                      </Typography>
+                    </Box>
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 }

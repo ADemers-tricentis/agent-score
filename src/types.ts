@@ -65,6 +65,12 @@ export interface Session {
     harmony?: DimensionScore;
     stability?: DimensionScore;
     agency?: DimensionScore;
+    // Extended dimensions (Gap 2)
+    groundedness?: DimensionScore;
+    instructionFollowing?: DimensionScore;
+    transparency?: DimensionScore;
+    robustness?: DimensionScore;
+    communication?: DimensionScore;
   };
   attr?: Attribution;
   shipDecision?: ShipDecision;
@@ -76,6 +82,24 @@ export interface Run {
   label: string;
   date: string;
   sessions: Session[];
+  regradedWithProfileVersion?: number;
+}
+
+export type ActivityEventKind =
+  | "profile_adopted"
+  | "run_completed"
+  | "milestone_reached"
+  | "decision_override"
+  | "profile_version_changed"
+  | "regrade_completed";
+
+export interface ActivityEvent {
+  id: string;
+  kind: ActivityEventKind;
+  ts: string;
+  title: string;
+  detail: string;
+  author?: string;
 }
 
 export interface Project {
@@ -88,6 +112,10 @@ export interface Project {
   runs: Run[];
   adoptedProfileId?: string;
   traceSampleRate?: number;
+  fingerprintMatchedAt?: string;
+  fingerprintConfidence?: number;
+  fingerprintSessionCount?: number;
+  events?: ActivityEvent[];
 }
 
 export interface GuardLogEntry {
@@ -202,10 +230,13 @@ export interface EvalDesign {
 
 export type VerdictBandKey = "ship" | "ship_note" | "review" | "block_rec";
 
+export type EvalKind = "library_metric" | "llm_judge" | "hybrid" | "decision_tree";
+
 export interface ProfileEntry {
   id: string;
   evalSlug: string;
   evalName: string;
+  evalKind: EvalKind;
   dimension: ShowcaseCategory;
   threshold: number;
   weight: number;

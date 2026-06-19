@@ -175,6 +175,21 @@ export default function SessionView({ projectId, runId, sessionId, navigate }: P
             {session.scores.agency && (
               <ScoreBar label="Tool Use" dimension={session.scores.agency} />
             )}
+            {session.scores.groundedness && (
+              <ScoreBar label="Groundedness" dimension={session.scores.groundedness} />
+            )}
+            {session.scores.instructionFollowing && (
+              <ScoreBar label="Instruction Following" dimension={session.scores.instructionFollowing} />
+            )}
+            {session.scores.transparency && (
+              <ScoreBar label="Transparency" dimension={session.scores.transparency} />
+            )}
+            {session.scores.robustness && (
+              <ScoreBar label="Robustness" dimension={session.scores.robustness} />
+            )}
+            {session.scores.communication && (
+              <ScoreBar label="Communication" dimension={session.scores.communication} />
+            )}
           </Paper>
 
           {/* Attribution */}
