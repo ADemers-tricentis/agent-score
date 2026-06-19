@@ -83,6 +83,7 @@ export interface Run {
   date: string;
   sessions: Session[];
   regradedWithProfileVersion?: number;
+  inProgress?: boolean;
 }
 
 export type ActivityEventKind =

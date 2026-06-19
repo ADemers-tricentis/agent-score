@@ -465,11 +465,11 @@ export default function ProjectView({ projectId, navigate }: Props) {
                 <TableRow
                   key={run.id}
                   component={ButtonBase}
-                  onClick={() => navigate({ name: "run", projectId, runId: run.id })}
+                  onClick={() => !run.inProgress && navigate({ name: "run", projectId, runId: run.id })}
                   sx={{
                     display: "table-row",
-                    cursor: "pointer",
-                    "&:hover": { bgcolor: "action.hover" },
+                    cursor: run.inProgress ? "default" : "pointer",
+                    "&:hover": { bgcolor: run.inProgress ? undefined : "action.hover" },
                     "&:last-child td": { borderBottom: 0 },
                   }}
                 >
@@ -478,6 +478,9 @@ export default function ProjectView({ projectId, navigate }: Props) {
                       <Typography variant="body2" sx={{ fontWeight: 600 }}>
                         {run.label}
                       </Typography>
+                      {run.inProgress && (
+                        <Chip label="In progress" size="small" color="primary" sx={{ height: 18, fontSize: "0.62rem" }} />
+                      )}
                       {run.regradedWithProfileVersion && (
                         <Chip label={`Regraded v${run.regradedWithProfileVersion}`} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.62rem", color: "text.secondary" }} />
                       )}
@@ -489,21 +492,28 @@ export default function ProjectView({ projectId, navigate }: Props) {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography variant="body2">{run.sessions.length}</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontWeight: 600,
-                        color: passRate >= 75 ? "success.main" : passRate >= 50 ? "warning.main" : "error.main",
-                      }}
-                    >
-                      {passRate}%
+                    <Typography variant="body2" sx={{ color: run.inProgress ? "text.disabled" : undefined }}>
+                      {run.inProgress ? "—" : run.sessions.length}
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <VerdictBadge verdict={latestVerdict} />
+                    {run.inProgress ? (
+                      <Typography variant="body2" sx={{ color: "text.disabled" }}>—</Typography>
+                    ) : (
+                      <Typography
+                        variant="body2"
+                        sx={{ fontWeight: 600, color: passRate >= 75 ? "success.main" : passRate >= 50 ? "warning.main" : "error.main" }}
+                      >
+                        {passRate}%
+                      </Typography>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {run.inProgress ? (
+                      <Typography variant="body2" sx={{ color: "text.disabled" }}>—</Typography>
+                    ) : (
+                      <VerdictBadge verdict={latestVerdict} />
+                    )}
                   </TableCell>
                 </TableRow>
               );

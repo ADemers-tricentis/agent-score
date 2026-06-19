@@ -78,7 +78,7 @@ const MOCK_API_KEY = "as_live_k9x2mPqR7vNjL4tY8wCdZ3hF";
 
 const FRAMEWORKS = ["LangChain", "LangGraph", "CrewAI", "AutoGen", "OpenAI Agents", "LlamaIndex", "Pydantic AI", "Google ADK"];
 
-const NEW_AGENT_STEPS = ["API Key & Setup", "Waiting for traces", "Suggested Evals"];
+const NEW_AGENT_STEPS = ["API Key & Setup", "Waiting for traces", "Suggested Evals", "Profile", "Judge", "Test Cases", "Launch"];
 
 const INGEST_PIPELINE_STAGES = [
   "Trace received",
@@ -756,7 +756,10 @@ export default function AddAgentView({ navigate }: Props) {
         setLaunchStage(i);
         if (i === LAUNCH_STAGES.length - 1) {
           setTimeout(() => {
-            const runs = generateMockRuns(inferredAgent?.relevantDimensions ?? ["Correctness", "Relevance"]);
+            const dims = inferredAgent?.relevantDimensions ?? ["Correctness", "Relevance"];
+            const runs: Run[] = entryMode === "new"
+              ? [{ id: `r-${Date.now()}`, label: "Run #1 — collecting sessions", date: new Date().toISOString(), sessions: [], inProgress: true }]
+              : generateMockRuns(dims);
             handleCreate(runs);
           }, 1000);
         }
@@ -793,13 +796,13 @@ export default function AddAgentView({ navigate }: Props) {
     navigate({ name: "project", projectId });
   }
 
-  function handleCreateFromNewAgent() {
-    const agentName = "Discovered Agent";
-    const projectId = `p-${Date.now()}`;
-    const profileId = `prof-${Date.now()}`;
+  function initSharedStepsFromNewAgent() {
+    const name = "Discovered Agent";
+    const type: ProjectType = "ATA";
+    setBasics({ name, type, service: slugify(name) });
+    setSelectedJudgeId(autoSelectJudgeId(type));
     const enabledEvals = detectedEvals.filter((e) => e.enabled);
-    const dims = [...new Set(enabledEvals.map((e) => e.dimension))];
-    const entries: ProfileEntry[] = enabledEvals.map((e, i) => ({
+    const entries: ProfileEntry[] = enabledEvals.map((e) => ({
       id: uid("pe"),
       evalKind: "llm_judge" as EvalKind,
       evalSlug: slugify(e.name),
@@ -815,6 +818,7 @@ export default function AddAgentView({ navigate }: Props) {
       riskLevel: "medium" as const,
       directionality: "higher_is_better" as const,
     }));
+    const dims = [...new Set(entries.map((e) => e.dimension))];
     const dimensionWeights: Partial<Record<ShowcaseCategory, number>> = {};
     for (const d of dims) dimensionWeights[d] = 1.0;
     const pv: ProfileVersion = {
@@ -825,30 +829,9 @@ export default function AddAgentView({ navigate }: Props) {
       entries,
       createdAt: new Date().toISOString(),
     };
-    const newProfile: ScoringProfile = {
-      id: profileId,
-      slug: slugify(agentName),
-      name: `${agentName} Scoring Profile`,
-      description: agentDescText.slice(0, 200) || "Auto-generated from trace analysis.",
-      agentType: "ATA",
-      status: "active",
-      versions: [pv],
-      createdAt: new Date().toISOString(),
-    };
-    const runs = generateMockRuns(dims.length > 0 ? dims : ["Correctness", "Relevance"]);
-    const newProject: Project = {
-      id: projectId,
-      name: agentName,
-      service: slugify(agentName),
-      type: "ATA",
-      phase: 1,
-      reliability: "NEEDS_WORK",
-      runs,
-      adoptedProfileId: profileId,
-    };
-    addProfile(newProfile);
-    addProject(newProject);
-    navigate({ name: "project", projectId });
+    setProfileVersion(pv);
+    setSelectedProfileId("generate");
+    setTestCases(generateCalibrationScenarios(name, mode, agentDescText || "AI agent", agentDescText || ""));
   }
 
   function handleDescribeNewAgent() {
@@ -1861,7 +1844,7 @@ export default function AddAgentView({ navigate }: Props) {
             <ReviewRow label="Friendly name" value={basics.name} />
             <ReviewRow label="Trace name" value={inferredAgent?.traceName ?? basics.service} mono />
             <ReviewRow label="Type" value={<TypeTag type={basics.type} />} />
-            <ReviewRow label="Source" value={dataSource === "langfuse" ? "Langfuse" : dataSource === "langsmith" ? "LangSmith" : dataSource === "datadog" ? "Datadog LLM Obs" : dbType === "clickhouse" ? "ClickHouse" : "PostgreSQL"} />
+            <ReviewRow label="Source" value={entryMode === "new" ? "AgentScore OTel ingest" : dataSource === "langfuse" ? "Langfuse" : dataSource === "langsmith" ? "LangSmith" : dataSource === "datadog" ? "Datadog LLM Obs" : dbType === "clickhouse" ? "ClickHouse" : "PostgreSQL"} />
             {inferredAgent && <ReviewRow label="Sessions seen" value={`${discoveredAgents.find(a => a.traceName === inferredAgent.traceName)?.sessionCount.toLocaleString() ?? "—"} before onboarding`} />}
             <ReviewRow label="LLM judge" value={(() => { const j = LLM_JUDGES.find(j => j.id === selectedJudgeId) ?? LLM_JUDGES[0]; return `${j.name} (${j.model})`; })()} mono />
           </Box>
@@ -1967,27 +1950,47 @@ export default function AddAgentView({ navigate }: Props) {
           {newStep === 0 && renderNewAgentSetup()}
           {newStep === 1 && renderWaiting()}
           {newStep === 2 && renderEvalSuggestions()}
+          {newStep === 3 && renderStep1()}
+          {newStep === 4 && renderStepJudge()}
+          {newStep === 5 && renderStep2()}
+          {newStep === 6 && (launching ? (
+            <LoadingOverlay title={`Setting up ${basics.name || "your agent"}…`} stages={LAUNCH_STAGES} currentStage={launchStage} />
+          ) : renderStep3())}
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 4, pt: 3, borderTop: "1px solid", borderColor: "divider", maxWidth: 860, mx: "auto" }}>
-          <Button variant="outlined" onClick={() => { if (newStep === 0) { setEntryMode(null); } else { setNewStep((s) => s - 1); } }}>Back</Button>
-          <Box>
-            {newStep === 0 && (
-              <Button variant="contained" onClick={() => { setNewStep(1); runTraceIngest(); }}>
-                I&apos;ve configured my exporter
-              </Button>
-            )}
-            {newStep === 1 && traceReady && (
-              <Button variant="contained" onClick={() => setNewStep(2)}>
-                Continue
-              </Button>
-            )}
-            {newStep === 2 && !evalsGenerating && (
-              <Button variant="contained" onClick={handleCreateFromNewAgent}>
-                Go to agent
-              </Button>
-            )}
+        {!launching && (
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 4, pt: 3, borderTop: "1px solid", borderColor: "divider", maxWidth: 860, mx: "auto" }}>
+            <Button variant="outlined" onClick={() => { if (newStep === 0) { setEntryMode(null); } else { setNewStep((s) => s - 1); } }}>Back</Button>
+            <Box>
+              {newStep === 0 && (
+                <Button variant="contained" onClick={() => { setNewStep(1); runTraceIngest(); }}>
+                  I&apos;ve configured my exporter
+                </Button>
+              )}
+              {newStep === 1 && traceReady && (
+                <Button variant="contained" onClick={() => setNewStep(2)}>
+                  Continue
+                </Button>
+              )}
+              {newStep === 2 && !evalsGenerating && (
+                <Button variant="contained" onClick={() => { initSharedStepsFromNewAgent(); setNewStep(3); }}>
+                  Continue
+                </Button>
+              )}
+              {newStep === 3 && profileValid && (
+                <Button variant="contained" onClick={() => setNewStep(4)}>Next</Button>
+              )}
+              {newStep === 4 && (
+                <Button variant="contained" onClick={() => setNewStep(5)}>Next</Button>
+              )}
+              {newStep === 5 && testCasesValid && (
+                <Button variant="contained" onClick={() => setNewStep(6)}>Next</Button>
+              )}
+              {newStep === 6 && (
+                <Button variant="contained" onClick={handleLaunch}>Start monitoring</Button>
+              )}
+            </Box>
           </Box>
-        </Box>
+        )}
       </Box>
     );
   }
