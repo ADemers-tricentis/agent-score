@@ -488,7 +488,7 @@ export default function ProjectView({ projectId, navigate }: Props) {
                   </TableCell>
                   <TableCell>
                     <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                      {run.date}
+                      {new Date(run.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" })}
                     </Typography>
                   </TableCell>
                   <TableCell>
