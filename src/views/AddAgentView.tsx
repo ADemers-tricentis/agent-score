@@ -73,6 +73,20 @@ const LAUNCH_STAGES = [
   "Compiling run report…",
 ];
 
+const MOCK_API_KEY = "as_live_k9x2mPqR7vNjL4tY8wCdZ3hF";
+
+const FRAMEWORKS = ["LangChain", "LangGraph", "CrewAI", "AutoGen", "OpenAI Agents", "LlamaIndex", "Pydantic AI", "Google ADK"];
+
+const NEW_AGENT_STEPS = ["API Key & Setup", "Waiting for traces"];
+
+const INGEST_PIPELINE_STAGES = [
+  "Trace received",
+  "Parked in private inbox",
+  "Agent recognized from behavior",
+  "Re-homed to agent profile",
+  "Ready to score",
+];
+
 // ── Mock data ─────────────────────────────────────────────────────────────────
 
 interface DiscoveredAgent {
@@ -519,6 +533,13 @@ export default function AddAgentView({ navigate }: Props) {
   const [launching, setLaunching] = useState(false);
   const [launchStage, setLaunchStage] = useState(0);
 
+  // Entry mode state
+  const [entryMode, setEntryMode] = useState<"existing" | "new" | null>(null);
+  const [newStep, setNewStep] = useState(0);
+  const [traceStage, setTraceStage] = useState(-1);
+  const [traceReady, setTraceReady] = useState(false);
+  const [apiKeyCopied, setApiKeyCopied] = useState(false);
+
   // ── Derived validity ────────────────────────────────────────────────────────
 
   const connectCredsValid =
@@ -725,6 +746,200 @@ export default function AddAgentView({ navigate }: Props) {
     addProfile(newProfile);
     addProject(newProject);
     navigate({ name: "project", projectId });
+  }
+
+  function runTraceIngest() {
+    setTimeout(() => {
+      INGEST_PIPELINE_STAGES.forEach((_, i) => {
+        setTimeout(() => {
+          setTraceStage(i);
+          if (i === INGEST_PIPELINE_STAGES.length - 1) {
+            setTimeout(() => setTraceReady(true), 1200);
+          }
+        }, i * 1400);
+      });
+    }, 3000);
+  }
+
+  // ── Entry mode renderers ──────────────────────────────────────────────────
+
+  function renderEntryChoice() {
+    return (
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
+        <Box>
+          <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>How would you like to add an agent?</Typography>
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            Onboard once — every agent you run after that is automatic.
+          </Typography>
+        </Box>
+        <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
+          <Paper variant="outlined" onClick={() => setEntryMode("new")} sx={{ p: 3, borderRadius: 2, cursor: "pointer", "&:hover": { borderColor: "primary.main", bgcolor: "action.hover" }, transition: "all 0.15s" }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.75 }}>Evaluate new agent</Typography>
+            <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
+              One API key. Point your existing OTel exporter at AgentScore. No SDK, no per-agent setup, no field mapping.
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {FRAMEWORKS.map((f) => (
+                <Chip key={f} label={f} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.65rem" }} />
+              ))}
+            </Box>
+          </Paper>
+          <Paper variant="outlined" onClick={() => setEntryMode("existing")} sx={{ p: 3, borderRadius: 2, cursor: "pointer", "&:hover": { borderColor: "primary.main", bgcolor: "action.hover" }, transition: "all 0.15s" }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.75 }}>Use existing traces</Typography>
+            <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
+              Connect to Langfuse, LangSmith, Datadog, or a database to score agents from stored traces.
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {(["Langfuse", "LangSmith", "Datadog LLM Obs", "ClickHouse", "PostgreSQL"] as string[]).map((s) => (
+                <Chip key={s} label={s} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.65rem" }} />
+              ))}
+            </Box>
+          </Paper>
+        </Box>
+      </Box>
+    );
+  }
+
+  function renderNewAgentSetup() {
+    const endpoint = "https://ingest.agentscore.io/otel/v1/traces";
+    const envSnippet = `OTEL_EXPORTER_OTLP_ENDPOINT=https://ingest.agentscore.io\nOTEL_EXPORTER_OTLP_HEADERS="Authorization=Bearer ${MOCK_API_KEY}"\nOTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf`;
+    const pythonSnippet = `from opentelemetry.sdk.trace.export import BatchSpanProcessor\nfrom opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter\n\nexporter = OTLPSpanExporter(\n    endpoint="${endpoint}",\n    headers={"Authorization": "Bearer ${MOCK_API_KEY}"},\n)\ntracer_provider.add_span_processor(BatchSpanProcessor(exporter))`;
+    return (
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+        <Alert severity="success" sx={{ borderRadius: 1.5 }}>
+          <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.25 }}>Your API key is ready</Typography>
+          <Typography variant="caption">
+            One tenant, one key. Every agent you run after this is automatically recognized and scored — no additional setup needed.
+          </Typography>
+        </Alert>
+
+        <Box>
+          <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>Your API key</Typography>
+          <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 1 }}>
+            One key per tenant. Authenticates all trace ingestion — no per-agent keys required.
+          </Typography>
+          <Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1.5, display: "flex", alignItems: "center", gap: 1 }}>
+            <Typography variant="body2" sx={{ flex: 1, fontFamily: "monospace", fontSize: "0.85rem", userSelect: "all" }}>
+              {MOCK_API_KEY}
+            </Typography>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => {
+                navigator.clipboard?.writeText(MOCK_API_KEY);
+                setApiKeyCopied(true);
+                setTimeout(() => setApiKeyCopied(false), 2000);
+              }}
+            >
+              {apiKeyCopied ? "Copied!" : "Copy"}
+            </Button>
+          </Paper>
+        </Box>
+
+        <Box>
+          <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>Configure your OTel exporter</Typography>
+          <Typography variant="body2" sx={{ color: "text.secondary", mb: 1.5 }}>
+            Add AgentScore as an OTLP/HTTP exporter in your existing telemetry setup. If your framework already instruments traces, you&apos;re done in seconds — no SDK, no field mapping, no per-agent configuration.
+          </Typography>
+          <Paper variant="outlined" sx={{ borderRadius: 1.5, overflow: "hidden", mb: 2 }}>
+            <Box sx={{ p: 2, borderBottom: "1px solid", borderColor: "divider", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <Box>
+                <Typography variant="caption" sx={{ fontWeight: 700, color: "text.disabled", textTransform: "uppercase", letterSpacing: 0.5, display: "block" }}>Ingest endpoint</Typography>
+                <Typography variant="body2" sx={{ fontFamily: "monospace", mt: 0.5 }}>{endpoint}</Typography>
+              </Box>
+              <Chip label="OTLP/HTTP" size="small" sx={{ height: 20, fontSize: "0.65rem" }} />
+            </Box>
+            <Box sx={{ p: 2 }}>
+              <Typography variant="caption" sx={{ fontWeight: 700, color: "text.disabled", textTransform: "uppercase", letterSpacing: 0.5, display: "block" }}>Authorization header</Typography>
+              <Typography variant="body2" sx={{ fontFamily: "monospace", mt: 0.5 }}>
+                {"Authorization: Bearer "}{MOCK_API_KEY}
+              </Typography>
+            </Box>
+          </Paper>
+
+          <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>Environment variables (any OTel-compatible framework)</Typography>
+          <Paper variant="outlined" sx={{ p: 2, borderRadius: 1.5, bgcolor: "rgba(0,0,0,0.025)", mb: 2 }}>
+            <Typography component="pre" variant="caption" sx={{ fontFamily: "monospace", display: "block", whiteSpace: "pre-wrap", lineHeight: 1.8, m: 0 }}>
+              {envSnippet}
+            </Typography>
+          </Paper>
+
+          <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>Python — LangChain, LangGraph, or any OTel-instrumented agent</Typography>
+          <Paper variant="outlined" sx={{ p: 2, borderRadius: 1.5, bgcolor: "rgba(0,0,0,0.025)" }}>
+            <Typography component="pre" variant="caption" sx={{ fontFamily: "monospace", display: "block", whiteSpace: "pre-wrap", lineHeight: 1.8, m: 0 }}>
+              {pythonSnippet}
+            </Typography>
+          </Paper>
+        </Box>
+
+        <Box>
+          <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.75 }}>Works with every framework</Typography>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75 }}>
+            {FRAMEWORKS.map((f) => (
+              <Chip key={f} label={f} size="small" variant="outlined" sx={{ height: 22, fontSize: "0.7rem" }} />
+            ))}
+          </Box>
+          <Typography variant="caption" sx={{ color: "text.disabled", mt: 1, display: "block" }}>
+            Any agent that emits OpenTelemetry traces is supported. We identify agents by their behavior — tools, model, handoffs — not by how they label themselves.
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
+
+  function renderWaiting() {
+    return (
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+        <Box>
+          <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>Waiting for your first trace…</Typography>
+          <Typography variant="body2" sx={{ color: "text.secondary", maxWidth: 560 }}>
+            Run your agent once. We&apos;ll receive the trace, identify the agent from its tools, model, and handoffs, then make it ready to score — automatically. No one lifts a finger.
+          </Typography>
+        </Box>
+
+        <Paper variant="outlined" sx={{ p: 3, borderRadius: 1.5 }}>
+          <LinearProgress sx={{ borderRadius: 1, height: 6, mb: 3 }} />
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.75 }}>
+            {INGEST_PIPELINE_STAGES.map((label, i) => {
+              const done = traceReady || (traceStage >= 0 && i < traceStage);
+              const active = !traceReady && i === traceStage;
+              return (
+                <Box key={label} sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                  <Box sx={{
+                    width: 10, height: 10, borderRadius: "50%", flexShrink: 0,
+                    bgcolor: done ? "success.main" : active ? "primary.main" : "divider",
+                    transition: "background-color 0.4s",
+                  }} />
+                  <Typography variant="body2" sx={{ color: (done || active) ? "text.primary" : "text.disabled", transition: "color 0.4s", flex: 1 }}>
+                    {label}
+                  </Typography>
+                  {done && <CheckIcon />}
+                </Box>
+              );
+            })}
+          </Box>
+          {traceStage === -1 && (
+            <Typography variant="caption" sx={{ color: "text.disabled", mt: 2, display: "block" }}>
+              Waiting for your first trace. This usually takes less than a minute after your agent runs.
+            </Typography>
+          )}
+        </Paper>
+
+        {traceReady && (
+          <Alert severity="success" sx={{ borderRadius: 1.5 }}>
+            <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.25 }}>Agent ready!</Typography>
+            <Typography variant="caption">
+              Your agent was recognized from its behavior and added to your fleet. Known agents are matched automatically — brand new ones are created on the spot.
+            </Typography>
+          </Alert>
+        )}
+
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75, alignItems: "center" }}>
+          <Typography variant="caption" sx={{ color: "text.disabled", mr: 0.5 }}>Works with:</Typography>
+          {FRAMEWORKS.map((f) => <Chip key={f} label={f} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.65rem" }} />)}
+        </Box>
+      </Box>
+    );
   }
 
   // ── Step renderers ──────────────────────────────────────────────────────────
@@ -1494,10 +1709,57 @@ export default function AddAgentView({ navigate }: Props) {
 
   const activeStepForStepper = launching ? STEPS.length : isGenerating ? 1 : step;
 
+  if (!entryMode) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}>
+          <Button startIcon={<ArrowBackIcon />} variant="text" size="small" onClick={() => navigate({ name: "fleet" })} sx={{ color: "text.secondary", mr: 1 }}>Fleet</Button>
+          <Typography variant="h6" sx={{ fontWeight: 700 }}>Add Agent</Typography>
+        </Box>
+        <Box sx={{ maxWidth: 860, mx: "auto" }}>
+          {renderEntryChoice()}
+        </Box>
+      </Box>
+    );
+  }
+
+  if (entryMode === "new") {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}>
+          <Button startIcon={<ArrowBackIcon />} variant="text" size="small" onClick={() => { setEntryMode(null); setNewStep(0); setTraceStage(-1); setTraceReady(false); }} sx={{ color: "text.secondary", mr: 1 }}>Back</Button>
+          <Typography variant="h6" sx={{ fontWeight: 700 }}>Add Agent</Typography>
+        </Box>
+        <Stepper activeStep={newStep} sx={{ mb: 4 }}>
+          {NEW_AGENT_STEPS.map((label) => <Step key={label}><StepLabel>{label}</StepLabel></Step>)}
+        </Stepper>
+        <Box sx={{ maxWidth: 860, mx: "auto" }}>
+          {newStep === 0 && renderNewAgentSetup()}
+          {newStep === 1 && renderWaiting()}
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 4, pt: 3, borderTop: "1px solid", borderColor: "divider", maxWidth: 860, mx: "auto" }}>
+          <Button variant="outlined" onClick={() => { if (newStep === 0) { setEntryMode(null); } else { setNewStep(0); } }}>Back</Button>
+          <Box>
+            {newStep === 0 && (
+              <Button variant="contained" onClick={() => { setNewStep(1); runTraceIngest(); }}>
+                I&apos;ve configured my exporter
+              </Button>
+            )}
+            {newStep === 1 && traceReady && (
+              <Button variant="contained" onClick={() => navigate({ name: "fleet" })}>
+                View fleet
+              </Button>
+            )}
+          </Box>
+        </Box>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ p: 3 }}>
       <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}>
-        <Button startIcon={<ArrowBackIcon />} variant="text" size="small" onClick={() => navigate({ name: "fleet" })} sx={{ color: "text.secondary", mr: 1 }} disabled={launching}>Fleet</Button>
+        <Button startIcon={<ArrowBackIcon />} variant="text" size="small" onClick={() => setEntryMode(null)} sx={{ color: "text.secondary", mr: 1 }} disabled={launching}>Back</Button>
         <Typography variant="h6" sx={{ fontWeight: 700 }}>Add Agent</Typography>
       </Box>
 
@@ -1533,8 +1795,8 @@ export default function AddAgentView({ navigate }: Props) {
 
       {!connecting && !analyzing && !launching && (
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 4, pt: 3, borderTop: "1px solid", borderColor: "divider", maxWidth: 860, mx: "auto" }}>
-          <Button variant="outlined" onClick={() => step === 0 ? navigate({ name: "fleet" }) : setStep((s) => s - 1)}>
-            {step === 0 ? "Cancel" : "Back"}
+          <Button variant="outlined" onClick={() => step === 0 ? setEntryMode(null) : setStep((s) => s - 1)}>
+            Back
           </Button>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             {step === 0 && (

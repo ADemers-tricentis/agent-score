@@ -93,7 +93,8 @@ export default function Layout({ view, navigate, children }: Props) {
     { id: "div-projects", variant: "divider" as const },
     ...PROJECTS.map((p) => ({
       id: p.id,
-      text: p.name,
+      text: p.name.length > 22 ? p.name.slice(0, 21) + "…" : p.name,
+      tooltipText: p.name,
       icon: projectIcon(p.type),
       selected: isProjectActive(p.id) && view.name === "project",
       onClick: () => navigate({ name: "project", projectId: p.id }),
@@ -113,7 +114,7 @@ export default function Layout({ view, navigate, children }: Props) {
 
   return (
     <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
-      <NavRail items={navItems} isChangeSelectedDisabled />
+      <NavRail items={navItems} isChangeSelectedDisabled open width={280} />
 
       {/* Main area */}
       <Box sx={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
