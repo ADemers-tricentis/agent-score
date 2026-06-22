@@ -95,6 +95,27 @@ export default function SessionView({ projectId, runId, sessionId, navigate }: P
         </Alert>
       )}
 
+      {/* Worst-dimension gate notice (Q2) */}
+      {(() => {
+        if (session.verdict === "PASS") return null;
+        const dimScores = [
+          { label: "Correctness", score: session.scores.benchmarkPerformance.score },
+          { label: "Efficiency", score: session.scores.valueEfficiency?.score ?? null },
+          { label: "Relevance", score: session.scores.uxSignal.score },
+          { label: "Safety", score: session.scores.harmony?.score ?? null },
+          { label: "Consistency", score: session.scores.stability?.score ?? null },
+          { label: "Tool Use", score: session.scores.agency?.score ?? null },
+        ].filter((d): d is { label: string; score: number } => d.score !== null && d.score < 55);
+        if (dimScores.length === 0) return null;
+        return (
+          <Alert severity="warning" sx={{ mb: 2, fontSize: "0.8rem" }}>
+            <strong>Verdict capped by worst-dimension gate:</strong>{" "}
+            {dimScores.map((d) => `${d.label} (${d.score})`).join(", ")}{" "}
+            {dimScores.length === 1 ? "scores" : "score"} below threshold - composite verdict cannot exceed Review regardless of overall score.
+          </Alert>
+        );
+      })()}
+
       {/* Safety override alert */}
       {session.safetyOverride && (
         <Alert severity="error" sx={{ mb: 2 }} icon={false}>

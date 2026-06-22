@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -312,8 +313,29 @@ export default function CompareRunsView({ projectId, runIdA, runIdB, navigate }:
                 </Typography>
               </TableCell>
             </TableRow>
+            <TableRow>
+              <TableCell sx={{ color: "text.disabled" }}>Significance</TableCell>
+              <TableCell colSpan={2}>
+                <Typography variant="caption" sx={{ color: "text.disabled" }}>
+                  Paired comparison · {Math.min(runA.sessions.length, runB.sessions.length)} matched sessions
+                </Typography>
+              </TableCell>
+              <TableCell>
+                {(() => {
+                  const d = Math.abs(avgA - avgB);
+                  const n = Math.min(runA.sessions.length, runB.sessions.length);
+                  if (n < 3) return <Chip label="Too few sessions" size="small" variant="outlined" sx={{ fontSize: "0.62rem", color: "text.disabled" }} />;
+                  if (d >= 10) return <Chip label="Likely significant" size="small" color="success" sx={{ fontSize: "0.62rem" }} />;
+                  if (d >= 5) return <Chip label="May be noise" size="small" color="warning" sx={{ fontSize: "0.62rem" }} />;
+                  return <Chip label="Within noise" size="small" variant="outlined" sx={{ fontSize: "0.62rem", color: "text.secondary" }} />;
+                })()}
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
+        <Typography variant="caption" sx={{ color: "text.disabled", display: "block", px: 2, py: 1 }}>
+          Significance: deltas ≥10 pts likely significant; &lt;5 pts likely within noise. Increase session count to narrow confidence intervals.
+        </Typography>
       </Paper>
 
       {/* Per-scenario comparison */}

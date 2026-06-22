@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -36,6 +37,7 @@ function latestVersion(profile: ScoringProfile): ProfileVersion {
 
 export default function ProfilesView({ navigate }: Props) {
   const profiles = PROFILES;
+  const [clonedId, setClonedId] = useState<string | null>(null);
 
   return (
     <Box sx={{ p: 3 }}>
@@ -87,6 +89,7 @@ export default function ProfilesView({ navigate }: Props) {
                 <TableCell sx={{ fontWeight: 600, color: "text.secondary" }}>Dimensions</TableCell>
                 <TableCell sx={{ fontWeight: 600, color: "text.secondary" }}>Status</TableCell>
                 <TableCell sx={{ fontWeight: 600, color: "text.secondary" }}>Created</TableCell>
+                <TableCell sx={{ fontWeight: 600, color: "text.secondary" }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -161,6 +164,21 @@ export default function ProfilesView({ navigate }: Props) {
                       <Typography variant="body2" sx={{ color: "text.secondary" }}>
                         {new Date(profile.createdAt).toLocaleDateString()}
                       </Typography>
+                    </TableCell>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        color="inherit"
+                        sx={{ fontSize: "0.68rem", color: clonedId === profile.id ? "success.main" : "text.secondary", minWidth: 64 }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setClonedId(profile.id);
+                          setTimeout(() => setClonedId(null), 2000);
+                        }}
+                      >
+                        {clonedId === profile.id ? "Cloned!" : "Clone"}
+                      </Button>
                     </TableCell>
                   </TableRow>
                 );

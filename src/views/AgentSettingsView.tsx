@@ -350,6 +350,9 @@ export default function AgentSettingsView({ projectId, navigate }: Props) {
             valueLabelFormat={(v) => `${v}%`}
           />
         </Box>
+        <Alert severity="info" sx={{ mt: 2, fontSize: "0.78rem" }}>
+          <strong>Smart override:</strong> Sessions with errors, timeouts, or Runtime Guard triggers are always evaluated at 100% regardless of this setting - these are the highest-signal events.
+        </Alert>
       </Paper>
 
       <Divider sx={{ mb: 3 }} />

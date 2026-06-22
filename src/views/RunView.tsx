@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -9,6 +9,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Checkbox from "@mui/material/Checkbox";
+import Chip from "@mui/material/Chip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Table from "@mui/material/Table";
 import Tag from "@tricentis/aura/components/Tag.js";
@@ -18,7 +19,7 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Divider from "@mui/material/Divider";
-import type { View } from "../types";
+import type { View, Session } from "../types";
 import { getProject, getRun, runPassRate, sessionCompositeScore, sessionGrade } from "../data/mock";
 import VerdictBadge from "../components/VerdictBadge";
 import GradeChip from "../components/GradeChip";
@@ -44,10 +45,24 @@ function fmtTs(ts: string): string {
   });
 }
 
+const DIM_FILTERS = ["Correctness", "Efficiency", "Relevance", "Safety", "Consistency", "Tool Use"] as const;
+type DimFilter = (typeof DIM_FILTERS)[number];
+
+function getDimScore(s: Session, dim: DimFilter): number | null {
+  if (dim === "Correctness") return s.scores.benchmarkPerformance.score;
+  if (dim === "Efficiency") return s.scores.valueEfficiency?.score ?? null;
+  if (dim === "Relevance") return s.scores.uxSignal.score;
+  if (dim === "Safety") return s.scores.harmony?.score ?? null;
+  if (dim === "Consistency") return s.scores.stability?.score ?? null;
+  if (dim === "Tool Use") return s.scores.agency?.score ?? null;
+  return null;
+}
+
 export default function RunView({ projectId, runId, navigate }: Props) {
   const [exportOpen, setExportOpen] = useState(false);
   const [exportSelected, setExportSelected] = useState<Set<string>>(new Set());
   const [exported, setExported] = useState(false);
+  const [dimFilter, setDimFilter] = useState<DimFilter | null>(null);
 
   const project = getProject(projectId);
   const run = getRun(projectId, runId);
@@ -57,6 +72,18 @@ export default function RunView({ projectId, runId, navigate }: Props) {
   const avgComposite = run.sessions.length
     ? Math.round(run.sessions.reduce((sum, s) => sum + sessionCompositeScore(s), 0) / run.sessions.length)
     : 0;
+
+  const n = run.sessions.length;
+  const p = passRate / 100;
+  const ci95 = n > 1 ? Math.ceil(1.96 * Math.sqrt((p * (1 - p)) / n) * 100) : 0;
+
+  const filteredSessions = useMemo(() => {
+    if (!dimFilter) return run.sessions;
+    return run.sessions.filter((s) => {
+      const score = getDimScore(s, dimFilter);
+      return score !== null && score < 55;
+    });
+  }, [run.sessions, dimFilter]);
 
   const otherRuns = project.runs.filter((r) => r.id !== runId);
 
@@ -128,15 +155,22 @@ export default function RunView({ projectId, runId, navigate }: Props) {
         <Box sx={{ display: "flex", gap: 3, mt: 1.5 }}>
           <Box>
             <Typography variant="caption" sx={{ color: "text.disabled", display: "block" }}>Pass Rate</Typography>
-            <Typography
-              variant="subtitle2"
-              sx={{
-                fontWeight: 700,
-                color: passRate >= 75 ? "success.main" : passRate >= 50 ? "warning.main" : "error.main",
-              }}
-            >
-              {passRate}%
-            </Typography>
+            <Box sx={{ display: "flex", alignItems: "baseline", gap: 0.5 }}>
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  fontWeight: 700,
+                  color: passRate >= 75 ? "success.main" : passRate >= 50 ? "warning.main" : "error.main",
+                }}
+              >
+                {passRate}%
+              </Typography>
+              {ci95 > 0 && (
+                <Typography variant="caption" sx={{ color: "text.disabled", fontFamily: "monospace" }}>
+                  ± {ci95}pp
+                </Typography>
+              )}
+            </Box>
           </Box>
           <Box>
             <Typography variant="caption" sx={{ color: "text.disabled", display: "block" }}>Sessions</Typography>
@@ -173,9 +207,46 @@ export default function RunView({ projectId, runId, navigate }: Props) {
       </Paper>
 
       {/* Sessions table */}
-      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1.5 }}>
-        Sessions
-      </Typography>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1.5, flexWrap: "wrap", gap: 1 }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+          Sessions
+          {dimFilter && (
+            <Typography component="span" variant="caption" sx={{ color: "text.secondary", ml: 1 }}>
+              — {filteredSessions.length} failing {dimFilter}
+            </Typography>
+          )}
+        </Typography>
+        <Box sx={{ display: "flex", gap: 0.75, flexWrap: "wrap", alignItems: "center" }}>
+          <Typography variant="caption" sx={{ color: "text.disabled" }}>Filter by failed dimension:</Typography>
+          {DIM_FILTERS.map((d) => {
+            const failCount = run.sessions.filter((s) => {
+              const score = getDimScore(s, d);
+              return score !== null && score < 55;
+            }).length;
+            if (failCount === 0) return null;
+            return (
+              <Chip
+                key={d}
+                label={`${d} (${failCount})`}
+                size="small"
+                variant={dimFilter === d ? "filled" : "outlined"}
+                color={dimFilter === d ? "error" : "default"}
+                onClick={() => setDimFilter(dimFilter === d ? null : d)}
+                sx={{ fontSize: "0.65rem", cursor: "pointer" }}
+              />
+            );
+          })}
+          {dimFilter && (
+            <Chip
+              label="Clear"
+              size="small"
+              variant="outlined"
+              onClick={() => setDimFilter(null)}
+              sx={{ fontSize: "0.65rem", cursor: "pointer", color: "text.secondary" }}
+            />
+          )}
+        </Box>
+      </Box>
       <Paper sx={{ border: "1px solid", borderColor: "divider", borderRadius: 2, overflow: "hidden" }}>
         <Table size="small">
           <TableHead>
@@ -191,7 +262,7 @@ export default function RunView({ projectId, runId, navigate }: Props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {run.sessions.map((session) => (
+            {filteredSessions.map((session) => (
               <TableRow
                 key={session.id}
                 component={ButtonBase}

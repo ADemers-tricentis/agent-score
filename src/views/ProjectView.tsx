@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import LinearProgress from "@mui/material/LinearProgress";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Tooltip from "@mui/material/Tooltip";
 import ChipStatus from "@tricentis/aura/components/ChipStatus.js";
 import Table from "@mui/material/Table";
@@ -52,6 +54,7 @@ export default function ProjectView({ projectId, navigate }: Props) {
   const [isScoringNow, setIsScoringNow] = useState(false);
   const [scoringStage, setScoringStage] = useState(0);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [scoreWindow, setScoreWindow] = useState<"7d" | "30d" | "all">("all");
 
   if (!project) return <Box sx={{ p: 3 }}><Typography>Project not found.</Typography></Box>;
 
@@ -66,7 +69,7 @@ export default function ProjectView({ projectId, navigate }: Props) {
         setScoringStage(i);
         if (i === SCORE_STAGES.length - 1) {
           setTimeout(() => {
-            const lastRun = project.runs[0];
+            const lastRun = project!.runs[0];
             const now = new Date();
             const clamp = (v: number) => Math.max(20, Math.min(100, Math.round(v)));
             const newRun: Run = {
@@ -93,6 +96,15 @@ export default function ProjectView({ projectId, navigate }: Props) {
       }, i * 700);
     });
   }
+
+  const runs = project?.runs ?? [];
+  const filteredRuns = useMemo(() => {
+    if (scoreWindow === "all") return runs;
+    const mostRecent = runs[0]?.date ? new Date(runs[0].date) : new Date();
+    const cutoff = new Date(mostRecent);
+    cutoff.setDate(cutoff.getDate() - (scoreWindow === "7d" ? 7 : 30));
+    return runs.filter((r) => new Date(r.date) >= cutoff);
+  }, [runs, scoreWindow]);
 
   const passK = computePassK(project);
   const composite = projectCompositeScore(project);
@@ -203,24 +215,29 @@ export default function ProjectView({ projectId, navigate }: Props) {
               </Box>
             </Box>
           )}
-          <Box sx={{ ml: "auto", alignSelf: "center", display: "flex", gap: 1 }}>
-            <Button
-              size="small"
-              variant="outlined"
-              color="inherit"
-              onClick={() => navigate({ name: "agent-settings", projectId })}
-              sx={{ color: "text.secondary" }}
-            >
-              Settings
-            </Button>
-            <Button
-              size="small"
-              variant="contained"
-              onClick={handleScoreNow}
-              disabled={isScoringNow}
-            >
-              {isScoringNow ? "Scoring…" : "Score now"}
-            </Button>
+          <Box sx={{ ml: "auto", alignSelf: "flex-start", display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 0.5 }}>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <Button
+                size="small"
+                variant="outlined"
+                color="inherit"
+                onClick={() => navigate({ name: "agent-settings", projectId })}
+                sx={{ color: "text.secondary" }}
+              >
+                Settings
+              </Button>
+              <Button
+                size="small"
+                variant="contained"
+                onClick={handleScoreNow}
+                disabled={isScoringNow}
+              >
+                {isScoringNow ? "Scoring…" : "Score now"}
+              </Button>
+            </Box>
+            <Typography variant="caption" sx={{ color: "text.disabled", fontSize: "0.67rem" }}>
+              Auto-scores daily · Next: 02:00 UTC
+            </Typography>
             {canCompare && (
               <Button
                 size="small"
@@ -391,9 +408,21 @@ export default function ProjectView({ projectId, navigate }: Props) {
       )}
 
       {/* Runs */}
-      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1.5 }}>
-        Runs
-      </Typography>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1.5 }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+          Runs
+        </Typography>
+        <ToggleButtonGroup
+          value={scoreWindow}
+          exclusive
+          onChange={(_, v) => v && setScoreWindow(v)}
+          size="small"
+        >
+          <ToggleButton value="7d" sx={{ fontSize: "0.68rem", px: 1.5, py: 0.4, lineHeight: 1.4 }}>Last 7d</ToggleButton>
+          <ToggleButton value="30d" sx={{ fontSize: "0.68rem", px: 1.5, py: 0.4, lineHeight: 1.4 }}>Last 30d</ToggleButton>
+          <ToggleButton value="all" sx={{ fontSize: "0.68rem", px: 1.5, py: 0.4, lineHeight: 1.4 }}>All</ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
 
       {/* Regrade notice (Gap 8) */}
       {project.runs.some((r) => r.regradedWithProfileVersion) && (() => {
@@ -426,7 +455,13 @@ export default function ProjectView({ projectId, navigate }: Props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {project.runs.map((run) => {
+            {filteredRuns.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={5} sx={{ textAlign: "center", py: 3, color: "text.disabled" }}>
+                No runs in this window.
+              </TableCell>
+            </TableRow>
+          ) : filteredRuns.map((run) => {
               const passRate = runPassRate(run.sessions);
               const latestVerdict = run.sessions[0]?.verdict ?? "FAIL";
               return (
