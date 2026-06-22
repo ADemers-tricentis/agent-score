@@ -248,7 +248,10 @@ function generateMockRuns(dimensions: ShowcaseCategory[]): Run[] {
 
 // ── Reusable helpers ──────────────────────────────────────────────────────────
 
-const EXPERT_PLACEHOLDER = `agent: My Agent
+type SpecFormat = "yaml" | "json" | "markdown";
+
+const EXPERT_PLACEHOLDER: Record<SpecFormat, string> = {
+  yaml: `agent: My Agent
 version: "1.0"
 purpose: |
   Brief description of what the agent does.
@@ -267,7 +270,51 @@ constraints:
   token_budget: 6000
 
 edge_cases:
-  - Unusual scenario to handle gracefully`;
+  - Unusual scenario to handle gracefully`,
+
+  json: `{
+  "agent": "My Agent",
+  "version": "1.0",
+  "purpose": "Brief description of what the agent does.",
+  "tools": {
+    "tool_name(param)": "description"
+  },
+  "success_criteria": [
+    "What the agent must do correctly"
+  ],
+  "failure_modes": [
+    "What the agent must never do"
+  ],
+  "constraints": {
+    "latency_budget_ms": 30000,
+    "token_budget": 6000
+  },
+  "edge_cases": [
+    "Unusual scenario to handle gracefully"
+  ]
+}`,
+
+  markdown: `# My Agent
+
+## Purpose
+Brief description of what the agent does.
+
+## Tools
+- \`tool_name(param)\`: description
+
+## Success Criteria
+- What the agent must do correctly
+
+## Failure Modes
+- What the agent must never do
+
+## Constraints
+- Latency budget: 30000ms
+- Token budget: 6000 tokens
+
+## Edge Cases
+- Unusual scenario to handle gracefully`,
+};
 
 const CAT_CONFIG = {
   nightmare: { label: "Nightmare", guidedLabel: "Hard Cases", color: "error" as const, bg: "rgba(var(--mui-palette-error-mainChannel) / 0.08)", border: "rgba(var(--mui-palette-error-mainChannel) / 0.3)", desc: "Adversarial inputs and edge conditions", guidedDesc: "Tricky situations where things could go wrong" },
@@ -586,6 +633,7 @@ export default function AddAgentView({ navigate }: Props) {
   const [describeOverride, setDescribeOverride] = useState(false);
   const [guided, setGuided] = useState({ purpose: "", failures: "", concerns: "" });
   const [expertSpec, setExpertSpec] = useState("");
+  const [specFormat, setSpecFormat] = useState<SpecFormat>("yaml");
   const [isGenerating, setIsGenerating] = useState(false);
   const [pipelineStage, setPipelineStage] = useState(0);
   const [profileVersion, setProfileVersion] = useState<ProfileVersion | null>(null);
@@ -618,7 +666,6 @@ export default function AddAgentView({ navigate }: Props) {
   // Eval suggestions step state (new-agent path)
   const [detectedEvals, setDetectedEvals] = useState<DetectedEval[]>(DETECTED_EVALS_MOCK);
   const [evalsDescribeMode, setEvalsDescribeMode] = useState(false);
-  const [agentDescText, setAgentDescText] = useState("");
   const [evalsGenerating, setEvalsGenerating] = useState(false);
   const [evalsGenStage, setEvalsGenStage] = useState(0);
   const [evalsBuiltFromDesc, setEvalsBuiltFromDesc] = useState(false);
@@ -872,7 +919,9 @@ export default function AddAgentView({ navigate }: Props) {
     };
     setProfileVersion(pv);
     setSelectedProfileId("generate");
-    setTestCases(generateCalibrationScenarios(name, mode, agentDescText || "AI agent", agentDescText || "").map((s) => ({ ...s, confirmed: true })));
+    const descPurpose = mode === "guided" ? guided.purpose : expertSpec;
+    const descConcerns = mode === "guided" ? guided.concerns : expertSpec;
+    setTestCases(generateCalibrationScenarios(name, mode, descPurpose || "AI agent", descConcerns || "").map((s) => ({ ...s, confirmed: true })));
   }
 
   function handleDescribeNewAgent() {
@@ -1174,22 +1223,46 @@ export default function AddAgentView({ navigate }: Props) {
           </Button>
           <Collapse in={evalsDescribeMode}>
             <Box sx={{ mt: 1.5, p: 2, border: 1, borderColor: "divider", borderRadius: 1.5, display: "flex", flexDirection: "column", gap: 2 }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Describe your agent</Typography>
-              <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                Tell us what your agent does, what it should never do, and what you're most worried about. AgentScore will build a custom eval profile from scratch.
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                minRows={4}
-                placeholder="e.g. My agent reads customer support tickets and routes them to the right team. It should never miscategorize a billing issue as a technical issue. I'm most worried about it fabricating a resolution when the issue is still open."
-                value={agentDescText}
-                onChange={(e) => setAgentDescText(e.target.value)}
-              />
+              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Describe your agent</Typography>
+                <Box sx={{ display: "flex", gap: 0.5 }}>
+                  {(["guided", "expert"] as Mode[]).map((m) => (
+                    <Button key={m} size="small" variant={mode === m ? "contained" : "outlined"} onClick={() => setMode(m)} sx={{ textTransform: "capitalize", minWidth: 72 }}>{m}</Button>
+                  ))}
+                </Box>
+              </Box>
+              {mode === "guided" ? (
+                <>
+                  <Box>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>What does your agent do?</Typography>
+                    <TextField fullWidth multiline minRows={2} placeholder="e.g. It reads customer support tickets and routes them to the right team." value={guided.purpose} onChange={(e) => setGuided((g) => ({ ...g, purpose: e.target.value }))} />
+                  </Box>
+                  <Box>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>What should it never do?</Typography>
+                    <TextField fullWidth multiline minRows={2} placeholder="e.g. It should never miscategorize a billing issue as a technical issue." value={guided.failures} onChange={(e) => setGuided((g) => ({ ...g, failures: e.target.value }))} />
+                  </Box>
+                  <Box>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>What are you most worried about?</Typography>
+                    <TextField fullWidth multiline minRows={2} placeholder="e.g. Fabricating a resolution when the issue is still open." value={guided.concerns} onChange={(e) => setGuided((g) => ({ ...g, concerns: e.target.value }))} />
+                  </Box>
+                </>
+              ) : (
+                <Box>
+                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 0.5 }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Agent spec</Typography>
+                    <Box sx={{ display: "flex", gap: 0.5 }}>
+                      {(["yaml", "json", "markdown"] as SpecFormat[]).map((f) => (
+                        <Button key={f} size="small" variant={specFormat === f ? "contained" : "outlined"} onClick={() => setSpecFormat(f)} sx={{ textTransform: "uppercase", minWidth: 64, fontSize: "0.7rem", py: 0.25 }}>{f}</Button>
+                      ))}
+                    </Box>
+                  </Box>
+                  <TextField fullWidth multiline minRows={10} placeholder={EXPERT_PLACEHOLDER[specFormat]} value={expertSpec} onChange={(e) => setExpertSpec(e.target.value)} slotProps={{ htmlInput: { style: { fontFamily: "monospace", fontSize: "0.82rem" } } }} />
+                </Box>
+              )}
               <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                 <Button
                   variant="contained"
-                  disabled={agentDescText.trim().length === 0}
+                  disabled={mode === "guided" ? guided.purpose.trim().length === 0 : expertSpec.trim().length === 0}
                   onClick={handleDescribeNewAgent}
                 >
                   Build profile
@@ -1702,8 +1775,15 @@ export default function AddAgentView({ navigate }: Props) {
                     </>
                   ) : (
                     <Box>
-                      <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>Agent spec (YAML)</Typography>
-                      <TextField fullWidth multiline minRows={12} placeholder={EXPERT_PLACEHOLDER} value={expertSpec} onChange={(e) => setExpertSpec(e.target.value)} slotProps={{ htmlInput: { style: { fontFamily: "monospace", fontSize: "0.82rem" } } }} />
+                      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 0.5 }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Agent spec</Typography>
+                        <Box sx={{ display: "flex", gap: 0.5 }}>
+                          {(["yaml", "json", "markdown"] as SpecFormat[]).map((f) => (
+                            <Button key={f} size="small" variant={specFormat === f ? "contained" : "outlined"} onClick={() => setSpecFormat(f)} sx={{ textTransform: "uppercase", minWidth: 64, fontSize: "0.7rem", py: 0.25 }}>{f}</Button>
+                          ))}
+                        </Box>
+                      </Box>
+                      <TextField fullWidth multiline minRows={12} placeholder={EXPERT_PLACEHOLDER[specFormat]} value={expertSpec} onChange={(e) => setExpertSpec(e.target.value)} slotProps={{ htmlInput: { style: { fontFamily: "monospace", fontSize: "0.82rem" } } }} />
                     </Box>
                   )}
                   <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -1890,20 +1970,44 @@ export default function AddAgentView({ navigate }: Props) {
             </Button>
             <Collapse in={evalsDescribeMode}>
               <Box sx={{ mt: 1.5, p: 2, border: 1, borderColor: "divider", borderRadius: 1.5, display: "flex", flexDirection: "column", gap: 2 }}>
-                <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Describe your agent</Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  Tell us what your agent does, what it should never do, and what you're most worried about. AgentScore will rebuild the evals from scratch.
-                </Typography>
-                <TextField
-                  fullWidth
-                  multiline
-                  minRows={4}
-                  placeholder="e.g. My agent reads customer support tickets and routes them to the right team. It should never miscategorize a billing issue as a technical issue. I'm most worried about it fabricating a resolution when the issue is still open."
-                  value={agentDescText}
-                  onChange={(e) => setAgentDescText(e.target.value)}
-                />
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Describe your agent</Typography>
+                  <Box sx={{ display: "flex", gap: 0.5 }}>
+                    {(["guided", "expert"] as Mode[]).map((m) => (
+                      <Button key={m} size="small" variant={mode === m ? "contained" : "outlined"} onClick={() => setMode(m)} sx={{ textTransform: "capitalize", minWidth: 72 }}>{m}</Button>
+                    ))}
+                  </Box>
+                </Box>
+                {mode === "guided" ? (
+                  <>
+                    <Box>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>What does your agent do?</Typography>
+                      <TextField fullWidth multiline minRows={2} placeholder="e.g. It reads customer support tickets and routes them to the right team." value={guided.purpose} onChange={(e) => setGuided((g) => ({ ...g, purpose: e.target.value }))} />
+                    </Box>
+                    <Box>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>What should it never do?</Typography>
+                      <TextField fullWidth multiline minRows={2} placeholder="e.g. It should never miscategorize a billing issue as a technical issue." value={guided.failures} onChange={(e) => setGuided((g) => ({ ...g, failures: e.target.value }))} />
+                    </Box>
+                    <Box>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>What are you most worried about?</Typography>
+                      <TextField fullWidth multiline minRows={2} placeholder="e.g. Fabricating a resolution when the issue is still open." value={guided.concerns} onChange={(e) => setGuided((g) => ({ ...g, concerns: e.target.value }))} />
+                    </Box>
+                  </>
+                ) : (
+                  <Box>
+                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 0.5 }}>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Agent spec</Typography>
+                      <Box sx={{ display: "flex", gap: 0.5 }}>
+                        {(["yaml", "json", "markdown"] as SpecFormat[]).map((f) => (
+                          <Button key={f} size="small" variant={specFormat === f ? "contained" : "outlined"} onClick={() => setSpecFormat(f)} sx={{ textTransform: "uppercase", minWidth: 64, fontSize: "0.7rem", py: 0.25 }}>{f}</Button>
+                        ))}
+                      </Box>
+                    </Box>
+                    <TextField fullWidth multiline minRows={10} placeholder={EXPERT_PLACEHOLDER[specFormat]} value={expertSpec} onChange={(e) => setExpertSpec(e.target.value)} slotProps={{ htmlInput: { style: { fontFamily: "monospace", fontSize: "0.82rem" } } }} />
+                  </Box>
+                )}
                 <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                  <Button variant="contained" disabled={agentDescText.trim().length === 0} onClick={handleDescribeNewAgent}>
+                  <Button variant="contained" disabled={mode === "guided" ? guided.purpose.trim().length === 0 : expertSpec.trim().length === 0} onClick={handleDescribeNewAgent}>
                     Rebuild evals
                   </Button>
                 </Box>
@@ -2009,8 +2113,15 @@ export default function AddAgentView({ navigate }: Props) {
                       </>
                     ) : (
                       <Box>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>Agent spec (YAML)</Typography>
-                        <TextField fullWidth multiline minRows={12} placeholder={EXPERT_PLACEHOLDER} value={expertSpec} onChange={(e) => setExpertSpec(e.target.value)} slotProps={{ htmlInput: { style: { fontFamily: "monospace", fontSize: "0.82rem" } } }} />
+                        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 0.5 }}>
+                          <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Agent spec</Typography>
+                          <Box sx={{ display: "flex", gap: 0.5 }}>
+                            {(["yaml", "json", "markdown"] as SpecFormat[]).map((f) => (
+                              <Button key={f} size="small" variant={specFormat === f ? "contained" : "outlined"} onClick={() => setSpecFormat(f)} sx={{ textTransform: "uppercase", minWidth: 64, fontSize: "0.7rem", py: 0.25 }}>{f}</Button>
+                            ))}
+                          </Box>
+                        </Box>
+                        <TextField fullWidth multiline minRows={12} placeholder={EXPERT_PLACEHOLDER[specFormat]} value={expertSpec} onChange={(e) => setExpertSpec(e.target.value)} slotProps={{ htmlInput: { style: { fontFamily: "monospace", fontSize: "0.82rem" } } }} />
                       </Box>
                     )}
                     <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
