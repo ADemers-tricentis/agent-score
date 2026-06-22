@@ -38,25 +38,6 @@ interface Props {
 }
 
 type Mode = "guided" | "expert";
-type DataSource = "langfuse" | "langsmith" | "datadog" | "database";
-type DatabaseType = "clickhouse" | "postgres";
-
-const STEPS = ["Connect", "Select Agent", "Profile", "Judge", "Test Cases", "Launch"];
-
-const CONNECT_STAGES = [
-  "Authenticating credentials…",
-  "Scanning trace namespaces…",
-  "Indexing agent sessions…",
-  "Organizing by agent name…",
-];
-
-const ANALYZE_STAGES = [
-  "Fetching trace history…",
-  "Parsing tool calls and sessions…",
-  "Identifying agent behavior patterns…",
-  "Inferring purpose and metrics…",
-  "Building profile suggestion…",
-];
 
 const PIPELINE_STAGES = [
   "Analyzing agent description…",
@@ -91,13 +72,6 @@ const INGEST_PIPELINE_STAGES = [
 
 // ── Mock data ─────────────────────────────────────────────────────────────────
 
-interface DiscoveredAgent {
-  id: string;
-  traceName: string;
-  sessionCount: number;
-  lastSeen: string;
-}
-
 interface DetectedEval {
   id: string;
   name: string;
@@ -106,15 +80,6 @@ interface DetectedEval {
   detectedFrom: string;
   confidence: number;
   enabled: boolean;
-}
-
-interface InferredAgentData {
-  traceName: string;
-  suggestedFriendlyName: string;
-  description: string;
-  agentType: ProjectType;
-  inferredMetrics: string[];
-  relevantDimensions: ShowcaseCategory[];
 }
 
 const DETECTED_EVALS_MOCK: DetectedEval[] = [
@@ -133,56 +98,6 @@ const DETECTED_EVALS_FROM_DESC: DetectedEval[] = [
   { id: "de-d5", name: "Token Efficiency", dimension: "Efficiency", description: "Monitors session token usage against an estimated budget derived from your described use case.", detectedFrom: "your agent description", confidence: 0.82, enabled: true },
 ];
 
-const MOCK_DISCOVERED_AGENTS: DiscoveredAgent[] = [
-  { id: "da-1", traceName: "payment-processor-agent", sessionCount: 1240, lastSeen: "2 hours ago" },
-  { id: "da-2", traceName: "order-fulfillment-orchestrator", sessionCount: 893, lastSeen: "5 minutes ago" },
-  { id: "da-3", traceName: "customer-support-bot-v2", sessionCount: 3421, lastSeen: "just now" },
-  { id: "da-4", traceName: "qa-regression-runner", sessionCount: 542, lastSeen: "1 day ago" },
-  { id: "da-5", traceName: "cura-diagnostic-assistant", sessionCount: 287, lastSeen: "3 hours ago" },
-];
-
-const MOCK_INFERRED: Record<string, InferredAgentData> = {
-  "payment-processor-agent": {
-    traceName: "payment-processor-agent",
-    suggestedFriendlyName: "Payment Processor",
-    description: "Handles end-to-end payment workflows including transaction validation, fraud screening, and settlement routing across Stripe, PayPal, and internal ledger integrations.",
-    agentType: "ATA",
-    inferredMetrics: ["Transaction success rate", "Fraud detection accuracy", "Settlement latency (P90)", "Tool call efficiency", "Error recovery rate"],
-    relevantDimensions: ["Correctness", "Safety", "Efficiency", "Tool Use"],
-  },
-  "order-fulfillment-orchestrator": {
-    traceName: "order-fulfillment-orchestrator",
-    suggestedFriendlyName: "Order Fulfillment",
-    description: "Orchestrates multi-step order fulfillment: inventory checks, warehouse routing, shipping label generation, and delivery tracking coordination.",
-    agentType: "ATA",
-    inferredMetrics: ["Order completion rate", "Routing accuracy", "SLA compliance", "Step efficiency", "Rollback success"],
-    relevantDimensions: ["Correctness", "Tool Use", "Consistency", "Efficiency"],
-  },
-  "customer-support-bot-v2": {
-    traceName: "customer-support-bot-v2",
-    suggestedFriendlyName: "Customer Support Bot",
-    description: "Handles Tier-1 customer queries including account issues, refund requests, and product FAQs. Escalates to human agents on unresolved high-priority tickets.",
-    agentType: "AI_WORKSPACE",
-    inferredMetrics: ["Resolution rate", "Escalation rate", "Response relevance", "Hallucination rate", "Tone consistency"],
-    relevantDimensions: ["Correctness", "Safety", "Relevance", "Consistency"],
-  },
-  "qa-regression-runner": {
-    traceName: "qa-regression-runner",
-    suggestedFriendlyName: "QA Regression Runner",
-    description: "Executes automated regression suites against staging environments. Determines pass/fail verdicts, identifies flaky tests, and generates failure summaries.",
-    agentType: "ATA",
-    inferredMetrics: ["Test completion rate", "Flake detection accuracy", "Failure attribution accuracy", "Suite coverage", "Run duration (P90)"],
-    relevantDimensions: ["Correctness", "Consistency", "Tool Use", "Efficiency"],
-  },
-  "cura-diagnostic-assistant": {
-    traceName: "cura-diagnostic-assistant",
-    suggestedFriendlyName: "CURA Diagnostic",
-    description: "Root cause analysis agent that diagnoses CI/CD test failures. Classifies failures as flaky, broken, or cascading and identifies the responsible component.",
-    agentType: "CURA",
-    inferredMetrics: ["Root cause accuracy", "False positive rate", "Grounding score", "Diagnosis latency", "Injection resistance"],
-    relevantDimensions: ["Correctness", "Safety", "Tool Use", "Efficiency"],
-  },
-};
 
 // ── Mock run generator ────────────────────────────────────────────────────────
 
@@ -606,28 +521,7 @@ function LoadingOverlay({ title, stages, currentStage }: { title: string; stages
 // ── Main view ─────────────────────────────────────────────────────────────────
 
 export default function AddAgentView({ navigate }: Props) {
-  const [step, setStep] = useState(0);
   const [mode, setMode] = useState<Mode>("guided");
-
-  // Connect step state
-  const [dataSource, setDataSource] = useState<DataSource>("langfuse");
-  const [langfuseCreds, setLangfuseCreds] = useState({ secretKey: "", publicKey: "", baseUrl: "https://cloud.langfuse.com" });
-  const [langsmithCreds, setLangsmithCreds] = useState({ apiKey: "" });
-  const [datadogCreds, setDatadogCreds] = useState({ apiKey: "", appKey: "" });
-  const [dbType, setDbType] = useState<DatabaseType>("clickhouse");
-  const [clickhouseCreds, setClickhouseCreds] = useState({ host: "", port: "8443", username: "default", password: "", database: "default" });
-  const [postgresCreds, setPostgresCreds] = useState({ host: "", port: "5432", database: "", username: "", password: "", sslMode: "require" });
-  const [connecting, setConnecting] = useState(false);
-  const [connectStage, setConnectStage] = useState(0);
-  const [discoveredAgents, setDiscoveredAgents] = useState<DiscoveredAgent[]>([]);
-
-  // Select agent step state
-  const [selectedTraceAgent, setSelectedTraceAgent] = useState<DiscoveredAgent | null>(null);
-  const [analyzing, setAnalyzing] = useState(false);
-  const [analyzeStage, setAnalyzeStage] = useState(0);
-  const [inferredAgent, setInferredAgent] = useState<InferredAgentData | null>(null);
-  const [friendlyName, setFriendlyName] = useState("");
-  const [profileChoice, setProfileChoice] = useState<"suggest" | "generate" | null>(null);
 
   // Profile step state
   const [describeOverride, setDescribeOverride] = useState(false);
@@ -650,8 +544,6 @@ export default function AddAgentView({ navigate }: Props) {
   const [launching, setLaunching] = useState(false);
   const [launchStage, setLaunchStage] = useState(0);
 
-  // Entry mode state
-  const [entryMode, setEntryMode] = useState<"existing" | "new" | null>(null);
   const [newStep, setNewStep] = useState(0);
   const [traceStage, setTraceStage] = useState(-1);
   const [traceReady, setTraceReady] = useState(false);
@@ -672,60 +564,11 @@ export default function AddAgentView({ navigate }: Props) {
 
   // ── Derived validity ────────────────────────────────────────────────────────
 
-  const connectCredsValid =
-    dataSource === "langfuse" ? langfuseCreds.secretKey.trim().length > 0 && langfuseCreds.publicKey.trim().length > 0 :
-    dataSource === "langsmith" ? langsmithCreds.apiKey.trim().length > 0 :
-    dataSource === "datadog" ? datadogCreds.apiKey.trim().length > 0 && datadogCreds.appKey.trim().length > 0 :
-    dataSource === "database" && dbType === "clickhouse" ? clickhouseCreds.host.trim().length > 0 && clickhouseCreds.password.trim().length > 0 :
-    postgresCreds.host.trim().length > 0 && postgresCreds.database.trim().length > 0 && postgresCreds.username.trim().length > 0 && postgresCreds.password.trim().length > 0;
-
-  const step1Valid = inferredAgent !== null && friendlyName.trim().length > 0 && profileChoice !== null;
   const profileValid = profileVersion !== null && profileVersion.entries.some((e) => e.enabled);
   const testCasesValid = testCases.some((s) => s.confirmed);
 
 
   // ── Stage runners ───────────────────────────────────────────────────────────
-
-  function runConnect() {
-    setConnecting(true);
-    setConnectStage(0);
-    CONNECT_STAGES.forEach((_, i) => {
-      setTimeout(() => {
-        setConnectStage(i);
-        if (i === CONNECT_STAGES.length - 1) {
-          setTimeout(() => {
-            setDiscoveredAgents(MOCK_DISCOVERED_AGENTS);
-            setConnecting(false);
-          }, 900);
-        }
-      }, i * 1100);
-    });
-  }
-
-  function runAnalyze(agent: DiscoveredAgent) {
-    setAnalyzing(true);
-    setAnalyzeStage(0);
-    ANALYZE_STAGES.forEach((_, i) => {
-      setTimeout(() => {
-        setAnalyzeStage(i);
-        if (i === ANALYZE_STAGES.length - 1) {
-          setTimeout(() => {
-            const inferred = MOCK_INFERRED[agent.traceName] ?? {
-              traceName: agent.traceName,
-              suggestedFriendlyName: agent.traceName.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" "),
-              description: `Agent discovered from traces (${agent.sessionCount} sessions). Purpose inferred from tool call patterns.`,
-              agentType: "ATA" as ProjectType,
-              inferredMetrics: ["Task success rate", "Tool call efficiency", "Error recovery rate"],
-              relevantDimensions: ["Correctness", "Tool Use", "Efficiency"] as ShowcaseCategory[],
-            };
-            setInferredAgent(inferred);
-            setFriendlyName(inferred.suggestedFriendlyName);
-            setAnalyzing(false);
-          }, 900);
-        }
-      }, i * 1200);
-    });
-  }
 
   function runGeneration(name: string, _type: ProjectType, purpose: string, failures: string, concerns: string) {
     setIsGenerating(true);
@@ -761,37 +604,6 @@ export default function AddAgentView({ navigate }: Props) {
   }
 
   // ── Event handlers ──────────────────────────────────────────────────────────
-
-  function handleAgentSelect(agent: DiscoveredAgent) {
-    setSelectedTraceAgent(agent);
-    setInferredAgent(null);
-    setFriendlyName("");
-    setProfileChoice(null);
-    runAnalyze(agent);
-  }
-
-  function handleContinueToProfile() {
-    if (!inferredAgent) return;
-    const name = friendlyName.trim() || inferredAgent.suggestedFriendlyName;
-    const newBasics = { name, type: inferredAgent.agentType, service: slugify(inferredAgent.traceName) };
-    setBasics(newBasics);
-    setSelectedJudgeId(autoSelectJudgeId(inferredAgent.agentType));
-
-    if (profileChoice === "suggest") {
-      const matched = PROFILES.find((p) => p.agentType === inferredAgent.agentType) ?? PROFILES[0];
-      if (matched) {
-        const latest = matched.versions.reduce((a, b) => b.version > a.version ? b : a, matched.versions[0]);
-        setSelectedProfileId(matched.id);
-        setProfileVersion(latest);
-        setTestCases(generateCalibrationScenarios(name, mode, inferredAgent.description, inferredAgent.description));
-      }
-      setStep(1);
-    } else {
-      setSelectedProfileId("generate");
-      setStep(1);
-      runGeneration(name, inferredAgent.agentType, inferredAgent.description, "", inferredAgent.inferredMetrics.join(", "));
-    }
-  }
 
   function handleSelectProfile(id: string | "generate") {
     setSelectedProfileId(id);
@@ -841,10 +653,7 @@ export default function AddAgentView({ navigate }: Props) {
         setLaunchStage(i);
         if (i === LAUNCH_STAGES.length - 1) {
           setTimeout(() => {
-            const dims = inferredAgent?.relevantDimensions ?? ["Correctness", "Relevance"];
-            const runs: Run[] = entryMode === "new"
-              ? [{ id: `r-${Date.now()}`, label: "Run #1 - collecting sessions", date: new Date().toISOString(), sessions: [], inProgress: true }]
-              : generateMockRuns(dims);
+            const runs: Run[] = [{ id: `r-${Date.now()}`, label: "Run #1 - collecting sessions", date: new Date().toISOString(), sessions: [], inProgress: true }];
             handleCreate(runs);
           }, 1000);
         }
@@ -860,7 +669,7 @@ export default function AddAgentView({ navigate }: Props) {
       id: profileId,
       slug: slugify(basics.name),
       name: `${basics.name} Scoring Profile`,
-      description: inferredAgent?.description.slice(0, 200) ?? "",
+      description: inferredAgentDesc.slice(0, 200),
       agentType: basics.type,
       status: "active",
       versions: [profileVersion],
@@ -875,7 +684,7 @@ export default function AddAgentView({ navigate }: Props) {
       reliability: "NEEDS_WORK",
       runs,
       adoptedProfileId: profileId,
-      ...(entryMode === "new" ? { traceSampleRate: newAgentSampleRate } : {}),
+      traceSampleRate: newAgentSampleRate,
     };
     addProfile(newProfile);
     addProject(newProject);
@@ -959,45 +768,6 @@ export default function AddAgentView({ navigate }: Props) {
         }, i * 1400);
       });
     }, 3000);
-  }
-
-  // ── Entry mode renderers ──────────────────────────────────────────────────
-
-  function renderEntryChoice() {
-    return (
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
-        <Box>
-          <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>How would you like to add an agent?</Typography>
-          <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            Onboard once — every agent you run after that is automatic.
-          </Typography>
-        </Box>
-        <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
-          <Paper variant="outlined" onClick={() => setEntryMode("new")} sx={{ p: 3, borderRadius: 2, cursor: "pointer", "&:hover": { borderColor: "primary.main", bgcolor: "action.hover" }, transition: "all 0.15s" }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.75 }}>Evaluate new agent</Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
-              One API key. Point your existing OTel exporter at AgentScore. No SDK, no per-agent setup, no field mapping.
-            </Typography>
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-              {FRAMEWORKS.map((f) => (
-                <Chip key={f} label={f} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.65rem" }} />
-              ))}
-            </Box>
-          </Paper>
-          <Paper variant="outlined" onClick={() => setEntryMode("existing")} sx={{ p: 3, borderRadius: 2, cursor: "pointer", "&:hover": { borderColor: "primary.main", bgcolor: "action.hover" }, transition: "all 0.15s" }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.75 }}>Use existing traces</Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
-              Connect to Langfuse, LangSmith, Datadog, or a database to score agents already in production.
-            </Typography>
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-              {(["Langfuse", "LangSmith", "Datadog LLM Obs", "ClickHouse", "PostgreSQL"] as string[]).map((s) => (
-                <Chip key={s} label={s} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.65rem" }} />
-              ))}
-            </Box>
-          </Paper>
-        </Box>
-      </Box>
-    );
   }
 
   function renderNewAgentSetup() {
@@ -1276,579 +1046,6 @@ export default function AddAgentView({ navigate }: Props) {
   }
 
   // ── Step renderers ──────────────────────────────────────────────────────────
-
-  function renderStep0() {
-    // Sub-state: connecting loading
-    if (connecting) {
-      return <LoadingOverlay title="Connecting to your trace store…" stages={CONNECT_STAGES} currentStage={connectStage} />;
-    }
-
-    return (
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-        {/* Source selector */}
-        <Box>
-          <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>Where are your traces?</Typography>
-          <Box sx={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 1 }}>
-            {([
-              { value: "langfuse", label: "Langfuse", sub: "LLM observability" },
-              { value: "langsmith", label: "LangSmith", sub: "LangChain tracing" },
-              { value: "datadog", label: "Datadog LLM Obs.", sub: "DD LLM observability" },
-              { value: "database", label: "Database", sub: "ClickHouse or Postgres" },
-            ] as { value: DataSource; label: string; sub: string }[]).map(({ value, label, sub }) => (
-              <Paper
-                key={value}
-                variant="outlined"
-                onClick={() => { setDataSource(value); setDiscoveredAgents([]); setSelectedTraceAgent(null); setInferredAgent(null); }}
-                sx={{
-                  p: 1.5,
-                  cursor: "pointer",
-                  borderRadius: 1.5,
-                  borderColor: dataSource === value ? "primary.main" : "divider",
-                  borderWidth: dataSource === value ? 2 : 1,
-                  bgcolor: dataSource === value ? "rgba(var(--mui-palette-primary-mainChannel) / 0.06)" : "background.paper",
-                  "&:hover": { borderColor: "primary.main", bgcolor: "action.hover" },
-                  transition: "all 0.15s",
-                }}
-              >
-                <Typography variant="body2" sx={{ fontWeight: 700 }}>{label}</Typography>
-                <Typography variant="caption" sx={{ color: "text.secondary" }}>{sub}</Typography>
-              </Paper>
-            ))}
-          </Box>
-        </Box>
-
-        {/* Credential fields */}
-        {dataSource === "langfuse" && (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Langfuse credentials</Typography>
-            <Alert severity="info" sx={{ borderRadius: 1.5, py: 0.5 }}>
-              Find your keys in <strong>Langfuse → Project Settings → API Keys</strong>. Each project has its own key pair — make sure you're using the keys for the project that contains your agent traces.
-            </Alert>
-            <Box>
-              <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Secret Key <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-              <TextField fullWidth size="small" type="password" placeholder="sk-lf-…" value={langfuseCreds.secretKey} onChange={(e) => setLangfuseCreds((c) => ({ ...c, secretKey: e.target.value }))} />
-              <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Used for server-side API access. Never expose this in client-side code.</Typography>
-            </Box>
-            <Box>
-              <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Public Key <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-              <TextField fullWidth size="small" placeholder="pk-lf-…" value={langfuseCreds.publicKey} onChange={(e) => setLangfuseCreds((c) => ({ ...c, publicKey: e.target.value }))} />
-              <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Used together with the Secret Key to authenticate API requests.</Typography>
-            </Box>
-            <Box>
-              <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Base URL</Typography>
-              <TextField fullWidth size="small" placeholder="https://cloud.langfuse.com" value={langfuseCreds.baseUrl} onChange={(e) => setLangfuseCreds((c) => ({ ...c, baseUrl: e.target.value }))} />
-              <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Leave as default for Langfuse Cloud. Change to your host for self-hosted instances (e.g. <Box component="span" sx={{ fontFamily: "monospace" }}>https://langfuse.mycompany.com</Box>).</Typography>
-            </Box>
-          </Box>
-        )}
-
-        {dataSource === "langsmith" && (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>LangSmith credentials</Typography>
-            <Alert severity="info" sx={{ borderRadius: 1.5, py: 0.5 }}>
-              Find your key in <strong>LangSmith → Settings → API Keys</strong>. Keys are scoped to your organization — any key with read access to your tracing project will work.
-            </Alert>
-            <Box>
-              <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>API Key <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-              <TextField fullWidth size="small" type="password" placeholder="ls__…" value={langsmithCreds.apiKey} onChange={(e) => setLangsmithCreds({ apiKey: e.target.value })} />
-              <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Used to authenticate read access to your LangSmith traces. Never share this key.</Typography>
-            </Box>
-          </Box>
-        )}
-
-        {dataSource === "datadog" && (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Datadog credentials</Typography>
-            <Alert severity="info" sx={{ borderRadius: 1.5, py: 0.5 }}>
-              Both keys are required. Find them in <strong>Datadog → Organization Settings</strong> under <strong>API Keys</strong> and <strong>Application Keys</strong>. The application key determines what data the API key can access — ensure it has LLM Observability read permissions.
-            </Alert>
-            <Box>
-              <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>DD API Key <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-              <TextField fullWidth size="small" type="password" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value={datadogCreds.apiKey} onChange={(e) => setDatadogCreds((c) => ({ ...c, apiKey: e.target.value }))} />
-              <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Identifies your Datadog organization. Found under <Box component="span" sx={{ fontFamily: "monospace" }}>Organization Settings → API Keys</Box>.</Typography>
-            </Box>
-            <Box>
-              <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>DD Application Key <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-              <TextField fullWidth size="small" type="password" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value={datadogCreds.appKey} onChange={(e) => setDatadogCreds((c) => ({ ...c, appKey: e.target.value }))} />
-              <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Scopes what the API key can access. Found under <Box component="span" sx={{ fontFamily: "monospace" }}>Organization Settings → Application Keys</Box>.</Typography>
-            </Box>
-          </Box>
-        )}
-
-        {dataSource === "database" && (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <Box>
-              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>Database engine</Typography>
-              <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1 }}>
-                {([
-                  { value: "clickhouse", label: "ClickHouse", sub: "Cloud or self-hosted" },
-                  { value: "postgres", label: "PostgreSQL", sub: "Self-hosted or managed" },
-                ] as { value: DatabaseType; label: string; sub: string }[]).map(({ value, label, sub }) => (
-                  <Paper
-                    key={value}
-                    variant="outlined"
-                    onClick={() => setDbType(value)}
-                    sx={{
-                      p: 1.5,
-                      cursor: "pointer",
-                      borderRadius: 1.5,
-                      borderColor: dbType === value ? "primary.main" : "divider",
-                      borderWidth: dbType === value ? 2 : 1,
-                      bgcolor: dbType === value ? "rgba(var(--mui-palette-primary-mainChannel) / 0.06)" : "background.paper",
-                      "&:hover": { borderColor: "primary.main", bgcolor: "action.hover" },
-                      transition: "all 0.15s",
-                    }}
-                  >
-                    <Typography variant="body2" sx={{ fontWeight: 700 }}>{label}</Typography>
-                    <Typography variant="caption" sx={{ color: "text.secondary" }}>{sub}</Typography>
-                  </Paper>
-                ))}
-              </Box>
-            </Box>
-
-            {dbType === "clickhouse" && (
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>ClickHouse credentials</Typography>
-                <Alert severity="info" sx={{ borderRadius: 1.5, py: 0.5 }}>
-                  AgentScore connects over the native HTTP interface (port 8443 for HTTPS). Create a read-only user scoped to your traces table, or use your existing credentials if connecting to a dev instance.
-                </Alert>
-                <Box sx={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 1.5, alignItems: "start" }}>
-                  <Box>
-                    <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Host <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-                    <TextField fullWidth size="small" placeholder="abc123.us-east-1.aws.clickhouse.cloud" value={clickhouseCreds.host} onChange={(e) => setClickhouseCreds((c) => ({ ...c, host: e.target.value }))} />
-                    <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>Hostname only — no protocol or trailing slash.</Typography>
-                  </Box>
-                  <Box sx={{ width: 90 }}>
-                    <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Port</Typography>
-                    <TextField fullWidth size="small" value={clickhouseCreds.port} onChange={(e) => setClickhouseCreds((c) => ({ ...c, port: e.target.value }))} />
-                  </Box>
-                </Box>
-                <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1.5 }}>
-                  <Box>
-                    <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Username</Typography>
-                    <TextField fullWidth size="small" placeholder="default" value={clickhouseCreds.username} onChange={(e) => setClickhouseCreds((c) => ({ ...c, username: e.target.value }))} />
-                  </Box>
-                  <Box>
-                    <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Password <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-                    <TextField fullWidth size="small" type="password" placeholder="••••••••" value={clickhouseCreds.password} onChange={(e) => setClickhouseCreds((c) => ({ ...c, password: e.target.value }))} />
-                  </Box>
-                </Box>
-                <Box>
-                  <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Database</Typography>
-                  <TextField fullWidth size="small" placeholder="default" value={clickhouseCreds.database} onChange={(e) => setClickhouseCreds((c) => ({ ...c, database: e.target.value }))} />
-                  <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>The database containing your traces table. Leave as <Box component="span" sx={{ fontFamily: "monospace" }}>default</Box> if unsure.</Typography>
-                </Box>
-              </Box>
-            )}
-
-            {dbType === "postgres" && (
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>PostgreSQL credentials</Typography>
-                <Alert severity="info" sx={{ borderRadius: 1.5, py: 0.5 }}>
-                  AgentScore connects over the standard PostgreSQL wire protocol. Use a read-only role scoped to your traces schema. SSL is required by default — disable only on local dev instances.
-                </Alert>
-                <Box sx={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 1.5, alignItems: "start" }}>
-                  <Box>
-                    <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Host <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-                    <TextField fullWidth size="small" placeholder="db.mycompany.com" value={postgresCreds.host} onChange={(e) => setPostgresCreds((c) => ({ ...c, host: e.target.value }))} />
-                  </Box>
-                  <Box sx={{ width: 90 }}>
-                    <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Port</Typography>
-                    <TextField fullWidth size="small" value={postgresCreds.port} onChange={(e) => setPostgresCreds((c) => ({ ...c, port: e.target.value }))} />
-                  </Box>
-                </Box>
-                <Box>
-                  <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Database <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-                  <TextField fullWidth size="small" placeholder="traces" value={postgresCreds.database} onChange={(e) => setPostgresCreds((c) => ({ ...c, database: e.target.value }))} />
-                </Box>
-                <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1.5 }}>
-                  <Box>
-                    <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Username <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-                    <TextField fullWidth size="small" placeholder="agentscore_reader" value={postgresCreds.username} onChange={(e) => setPostgresCreds((c) => ({ ...c, username: e.target.value }))} />
-                  </Box>
-                  <Box>
-                    <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>Password <Box component="span" sx={{ color: "error.main" }}>*</Box></Typography>
-                    <TextField fullWidth size="small" type="password" placeholder="••••••••" value={postgresCreds.password} onChange={(e) => setPostgresCreds((c) => ({ ...c, password: e.target.value }))} />
-                  </Box>
-                </Box>
-                <Box>
-                  <Typography variant="caption" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>SSL mode</Typography>
-                  <TextField
-                    fullWidth
-                    size="small"
-                    select
-                    value={postgresCreds.sslMode}
-                    onChange={(e) => setPostgresCreds((c) => ({ ...c, sslMode: e.target.value }))}
-                    SelectProps={{ native: true }}
-                  >
-                    <option value="require">require</option>
-                    <option value="verify-full">verify-full</option>
-                    <option value="verify-ca">verify-ca</option>
-                    <option value="prefer">prefer</option>
-                    <option value="disable">disable</option>
-                  </TextField>
-                  <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}><Box component="span" sx={{ fontFamily: "monospace" }}>require</Box> enforces TLS without certificate verification. Use <Box component="span" sx={{ fontFamily: "monospace" }}>verify-full</Box> in production.</Typography>
-                </Box>
-              </Box>
-            )}
-          </Box>
-        )}
-
-        {/* Connect button */}
-        <Box>
-          <Button variant="contained" onClick={runConnect} disabled={!connectCredsValid}>
-            Connect & discover agents
-          </Button>
-        </Box>
-
-        {/* Agent list — shown once discovered */}
-        {discoveredAgents.length > 0 && (
-          <>
-            <Divider />
-            <Box>
-              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>
-                {discoveredAgents.length} agents found
-              </Typography>
-              <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 1.5 }}>
-                Select an agent to start monitoring.
-              </Typography>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                {discoveredAgents.map((agent) => (
-                  <Paper
-                    key={agent.id}
-                    variant="outlined"
-                    onClick={() => handleAgentSelect(agent)}
-                    sx={{
-                      p: 1.5,
-                      borderRadius: 1.5,
-                      cursor: "pointer",
-                      borderColor: selectedTraceAgent?.id === agent.id ? "primary.main" : "divider",
-                      bgcolor: selectedTraceAgent?.id === agent.id ? "rgba(var(--mui-palette-primary-mainChannel) / 0.06)" : "background.paper",
-                      "&:hover": { borderColor: "primary.main", bgcolor: "action.hover" },
-                      transition: "all 0.15s",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 2,
-                    }}
-                  >
-                    <Box sx={{ flex: 1, minWidth: 0 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 600, fontFamily: "monospace" }}>{agent.traceName}</Typography>
-                      <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                        {agent.sessionCount.toLocaleString()} sessions · last seen {agent.lastSeen}
-                      </Typography>
-                    </Box>
-                    {selectedTraceAgent?.id === agent.id && <CheckIcon />}
-                  </Paper>
-                ))}
-              </Box>
-            </Box>
-
-            {/* Inline analysis loading + inferred result */}
-            {analyzing && (
-              <Box sx={{ py: 2 }}>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1.5 }}>
-                  <LinearProgress sx={{ flex: 1, borderRadius: 1, height: 4 }} />
-                  <Typography variant="caption" sx={{ color: "text.secondary", flexShrink: 0 }}>Loading traces…</Typography>
-                </Box>
-                {ANALYZE_STAGES.map((label, i) => (
-                  <Box key={label} sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 0.5, opacity: i <= analyzeStage ? 1 : 0.3, transition: "opacity 0.3s" }}>
-                    <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: i < analyzeStage ? "success.main" : i === analyzeStage ? "primary.main" : "divider", flexShrink: 0 }} />
-                    <Typography variant="caption" sx={{ color: i <= analyzeStage ? "text.primary" : "text.disabled" }}>{label}</Typography>
-                  </Box>
-                ))}
-              </Box>
-            )}
-
-            {inferredAgent && !analyzing && (
-              <>
-                <Divider />
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
-                  <Box>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>Inferred agent details</Typography>
-                    <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                      The following was inferred from your traces. Review and adjust before continuing.
-                    </Typography>
-                  </Box>
-
-                  {/* Inferred info card */}
-                  <Paper variant="outlined" sx={{ p: 2, borderRadius: 1.5 }}>
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                        <Chip icon={<SparkleIcon />} label="LLM inferred" size="small" color="primary" variant="outlined" sx={{ height: 20, fontSize: "0.62rem" }} />
-                        <Typography variant="caption" sx={{ color: "text.disabled", fontFamily: "monospace" }}>{inferredAgent.traceName}</Typography>
-                      </Box>
-                      <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-                        <TypeTag type={inferredAgent.agentType} />
-                        <Typography variant="caption" sx={{ color: "text.secondary" }}>agent type</Typography>
-                      </Box>
-                      <Box>
-                        <Typography variant="caption" sx={{ fontWeight: 700, color: "text.disabled", textTransform: "uppercase", letterSpacing: 0.5, display: "block", mb: 0.5 }}>Description</Typography>
-                        <Typography variant="body2" sx={{ color: "text.secondary" }}>{inferredAgent.description}</Typography>
-                      </Box>
-                      <Box>
-                        <Typography variant="caption" sx={{ fontWeight: 700, color: "text.disabled", textTransform: "uppercase", letterSpacing: 0.5, display: "block", mb: 0.75 }}>Relevant metrics</Typography>
-                        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75 }}>
-                          {inferredAgent.inferredMetrics.map((m) => (
-                            <Chip key={m} label={m} size="small" variant="outlined" sx={{ height: 22, fontSize: "0.68rem" }} />
-                          ))}
-                        </Box>
-                      </Box>
-                      <Box>
-                        <Typography variant="caption" sx={{ fontWeight: 700, color: "text.disabled", textTransform: "uppercase", letterSpacing: 0.5, display: "block", mb: 0.75 }}>Suggested dimensions</Typography>
-                        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75 }}>
-                          {inferredAgent.relevantDimensions.map((d) => (
-                            <Chip key={d} label={d} size="small" color="primary" sx={{ height: 22, fontSize: "0.68rem" }} />
-                          ))}
-                        </Box>
-                      </Box>
-                    </Box>
-                  </Paper>
-
-                  {/* Friendly name */}
-                  <Box>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>Friendly name</Typography>
-                    <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 1 }}>
-                      This is how the agent will appear in AgentScore. The original trace name (<Box component="span" sx={{ fontFamily: "monospace" }}>{inferredAgent.traceName}</Box>) is preserved alongside it.
-                    </Typography>
-                    <TextField
-                      fullWidth
-                      size="small"
-                      value={friendlyName}
-                      onChange={(e) => setFriendlyName(e.target.value)}
-                      placeholder={inferredAgent.suggestedFriendlyName}
-                    />
-                  </Box>
-
-                  {/* Profile choice */}
-                  <Box>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>How should we build the scoring profile?</Typography>
-                    <Box sx={{ display: "flex", gap: 1.5 }}>
-                      <Paper
-                        variant="outlined"
-                        onClick={() => setProfileChoice("suggest")}
-                        sx={{ p: 2, borderRadius: 1.5, cursor: "pointer", flex: 1, borderColor: profileChoice === "suggest" ? "primary.main" : "divider", bgcolor: profileChoice === "suggest" ? "rgba(var(--mui-palette-primary-mainChannel) / 0.06)" : "background.paper", "&:hover": { borderColor: "primary.main" }, transition: "all 0.15s" }}
-                      >
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mb: 0.5 }}>
-                          <SparkleIcon />
-                          <Typography variant="body2" sx={{ fontWeight: 700 }}>Suggest an existing profile</Typography>
-                        </Box>
-                        <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                          Match your agent to an existing eval profile based on its type and use cases.
-                        </Typography>
-                      </Paper>
-                      <Paper
-                        variant="outlined"
-                        onClick={() => setProfileChoice("generate")}
-                        sx={{ p: 2, borderRadius: 1.5, cursor: "pointer", flex: 1, borderColor: profileChoice === "generate" ? "primary.main" : "divider", borderStyle: profileChoice === "generate" ? "solid" : "dashed", bgcolor: profileChoice === "generate" ? "rgba(var(--mui-palette-primary-mainChannel) / 0.06)" : "transparent", "&:hover": { borderColor: "primary.main" }, transition: "all 0.15s" }}
-                      >
-                        <Typography variant="body2" sx={{ fontWeight: 700, mb: 0.5 }}>Generate a custom profile</Typography>
-                        <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                          Build a tailored eval profile from your agent's inferred use cases and patterns.
-                        </Typography>
-                      </Paper>
-                    </Box>
-                  </Box>
-                </Box>
-              </>
-            )}
-          </>
-        )}
-      </Box>
-    );
-  }
-
-  function renderStep1() {
-    // Inline generation progress at top of profile step
-    const byDimension = new Map<ShowcaseCategory, ProfileEntry[]>();
-    if (profileVersion) {
-      for (const entry of profileVersion.entries) {
-        if (!byDimension.has(entry.dimension)) byDimension.set(entry.dimension, []);
-        byDimension.get(entry.dimension)!.push(entry);
-      }
-    }
-    const enabledCount = profileVersion?.entries.filter((e) => e.enabled).length ?? 0;
-    const sortedProfiles = [...PROFILES].sort((a, b) => (a.agentType === basics.type ? 0 : 1) - (b.agentType === basics.type ? 0 : 1));
-
-    return (
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        {/* Profile picker */}
-        <Box>
-          <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
-            {sortedProfiles.some((p) => p.agentType === basics.type) ? "Suggested profile" : "Select a profile"}
-          </Typography>
-          <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 1.25 }}>
-            Choose an existing profile to start from, or generate one from your agent's description.
-          </Typography>
-          <Box sx={{ display: "flex", gap: 1.5, overflowX: "auto", pb: 1.5, pt: 1 }}>
-            {sortedProfiles.map((p) => (
-              <ProfilePickerCard key={p.id} profile={p} isSelected={selectedProfileId === p.id} isRecommended={p.agentType === basics.type} onClick={() => handleSelectProfile(p.id)} />
-            ))}
-            <GeneratePickerCard isSelected={selectedProfileId === "generate"} onClick={() => handleSelectProfile("generate")} />
-          </Box>
-        </Box>
-
-        {/* Generation progress */}
-        {isGenerating && (
-          <Box sx={{ py: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 0.5 }}>
-              <LinearProgress sx={{ flex: 1, borderRadius: 1, height: 4 }} />
-              <Typography variant="caption" sx={{ color: "text.secondary", flexShrink: 0 }}>Generating…</Typography>
-            </Box>
-            {PIPELINE_STAGES.map((label, i) => (
-              <Box key={label} sx={{ display: "flex", alignItems: "center", gap: 1.5, opacity: i <= pipelineStage ? 1 : 0.3, transition: "opacity 0.3s" }}>
-                <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: i < pipelineStage ? "success.main" : i === pipelineStage ? "primary.main" : "divider", flexShrink: 0 }} />
-                <Typography variant="caption" sx={{ color: i <= pipelineStage ? "text.primary" : "text.disabled" }}>{label}</Typography>
-              </Box>
-            ))}
-          </Box>
-        )}
-
-        {/* Profile config */}
-        {profileVersion && !isGenerating && (
-          <>
-            <Divider />
-            <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
-              <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {enabledCount} of {profileVersion.entries.length} evals enabled across {byDimension.size} dimensions
-              </Typography>
-              <Box sx={{ display: "flex", gap: 1 }}>
-                <Button size="small" variant="text" onClick={() => setProfileVersion((pv) => pv ? { ...pv, entries: pv.entries.map((e) => ({ ...e, enabled: true })) } : pv)}>Enable all</Button>
-                <Button size="small" variant="text" onClick={() => setProfileVersion((pv) => pv ? { ...pv, entries: pv.entries.map((e) => ({ ...e, enabled: false })) } : pv)}>Disable all</Button>
-              </Box>
-            </Box>
-
-            {[...byDimension.entries()].map(([dim, entries]) => (
-              <DimensionSection key={dim} dimension={dim} entries={entries} weight={profileVersion.dimensionWeights[dim] ?? 1.0} mode={mode} onWeightChange={(v) => updateDimensionWeight(dim, v)} onEntryToggle={(id) => updateEntry(id, { enabled: !profileVersion.entries.find((e) => e.id === id)?.enabled })} onEntryThreshold={(id, v) => updateEntry(id, { threshold: v })} onEntryWeight={(id, v) => updateEntry(id, { weight: v })} />
-            ))}
-
-            <Box sx={{ mt: 1 }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.75 }}>Verdict bands</Typography>
-              <Paper variant="outlined" sx={{ borderRadius: 1.5, overflow: "hidden" }}>
-                {VERDICT_BAND_CONFIG.map(({ key, label, color }, i) => (
-                  <Box key={key} sx={{ display: "flex", alignItems: "center", gap: 2, px: 2, py: 1, borderBottom: i < VERDICT_BAND_CONFIG.length - 1 ? "1px solid" : "none", borderColor: "divider" }}>
-                    <Typography variant="body2" sx={{ fontWeight: 600, color, width: 120, flexShrink: 0 }}>{label}</Typography>
-                    <Typography variant="caption" sx={{ color: "text.secondary", flex: 1 }}>score ≥</Typography>
-                    <TextField size="small" type="number" value={profileVersion.verdictBands[key]} onChange={(e) => { const v = parseInt(e.target.value); if (!isNaN(v) && v >= 0 && v <= 100) updateVerdictBand(key, v); }} slotProps={{ htmlInput: { min: 0, max: 100, step: 5, style: { textAlign: "center", padding: "4px 8px", width: 64 } } }} sx={{ "& .MuiOutlinedInput-root": { fontSize: "0.85rem" } }} />
-                  </Box>
-                ))}
-                <Box sx={{ display: "flex", alignItems: "center", gap: 2, px: 2, py: 1, bgcolor: "rgba(var(--mui-palette-error-mainChannel) / 0.06)" }}>
-                  <Typography variant="body2" sx={{ fontWeight: 600, color: "error.dark", width: 120, flexShrink: 0 }}>Block</Typography>
-                  <Typography variant="caption" sx={{ color: "text.secondary" }}>score &lt; {profileVersion.verdictBands.block_rec} (automatic)</Typography>
-                </Box>
-              </Paper>
-            </Box>
-
-            {/* "Not quite right" describe override */}
-            <Box sx={{ mt: 1 }}>
-              <Button
-                size="small"
-                variant="text"
-                sx={{ color: "text.secondary", textDecoration: "underline" }}
-                onClick={() => setDescribeOverride((v) => !v)}
-              >
-                {describeOverride ? "Hide" : "Profile not quite right? Describe your agent instead"}
-              </Button>
-              <Collapse in={describeOverride}>
-                <Box sx={{ mt: 1.5, p: 2, border: 1, borderColor: "divider", borderRadius: 1.5, display: "flex", flexDirection: "column", gap: 2 }}>
-                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Describe your agent</Typography>
-                    <Box sx={{ display: "flex", gap: 0.5 }}>
-                      {(["guided", "expert"] as Mode[]).map((m) => (
-                        <Button key={m} size="small" variant={mode === m ? "contained" : "outlined"} onClick={() => setMode(m)} sx={{ textTransform: "capitalize", minWidth: 72 }}>{m}</Button>
-                      ))}
-                    </Box>
-                  </Box>
-                  {mode === "guided" ? (
-                    <>
-                      <Box>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>What does {basics.name || "your agent"} do?</Typography>
-                        <TextField fullWidth multiline minRows={2} placeholder="e.g. It reads test logs and diagnoses whether failures are flaky or genuinely broken." value={guided.purpose} onChange={(e) => setGuided((g) => ({ ...g, purpose: e.target.value }))} />
-                      </Box>
-                      <Box>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>What should it never do?</Typography>
-                        <TextField fullWidth multiline minRows={2} placeholder="e.g. It should never blame the wrong component or fabricate a root cause." value={guided.failures} onChange={(e) => setGuided((g) => ({ ...g, failures: e.target.value }))} />
-                      </Box>
-                      <Box>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>What are you most worried about?</Typography>
-                        <TextField fullWidth multiline minRows={2} placeholder="e.g. Confident wrong answers when the problem is somewhere unexpected." value={guided.concerns} onChange={(e) => setGuided((g) => ({ ...g, concerns: e.target.value }))} />
-                      </Box>
-                    </>
-                  ) : (
-                    <Box>
-                      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 0.5 }}>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Agent spec</Typography>
-                        <Box sx={{ display: "flex", gap: 0.5 }}>
-                          {(["yaml", "json", "markdown"] as SpecFormat[]).map((f) => (
-                            <Button key={f} size="small" variant={specFormat === f ? "contained" : "outlined"} onClick={() => setSpecFormat(f)} sx={{ textTransform: "uppercase", minWidth: 64, fontSize: "0.7rem", py: 0.25 }}>{f}</Button>
-                          ))}
-                        </Box>
-                      </Box>
-                      <TextField fullWidth multiline minRows={12} placeholder={EXPERT_PLACEHOLDER[specFormat]} value={expertSpec} onChange={(e) => setExpertSpec(e.target.value)} slotProps={{ htmlInput: { style: { fontFamily: "monospace", fontSize: "0.82rem" } } }} />
-                    </Box>
-                  )}
-                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                    <Button
-                      variant="contained"
-                      onClick={handleDescribeRegenerate}
-                      disabled={mode === "guided" ? guided.purpose.trim().length === 0 : expertSpec.trim().length === 0}
-                    >
-                      Regenerate profile
-                    </Button>
-                  </Box>
-                </Box>
-              </Collapse>
-            </Box>
-          </>
-        )}
-      </Box>
-    );
-  }
-
-  function renderStepJudge() {
-    const reason = judgeAutoReason(basics.type);
-    const autoJudgeId = autoSelectJudgeId(basics.type);
-    const selectedJudge = LLM_JUDGES.find((j) => j.id === selectedJudgeId) ?? LLM_JUDGES[0];
-
-    return (
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-        <Alert severity="info" sx={{ borderRadius: 1.5 }}>
-          AgentScore analyzed your agent&apos;s traces and inferred the best judge for evaluating it. You can override this selection at any time.
-        </Alert>
-
-        <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1.5, border: "1px solid", borderColor: "primary.light", bgcolor: "rgba(var(--mui-palette-primary-mainChannel) / 0.03)" }}>
-          <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>Why this judge?</Typography>
-          <Typography variant="body2" sx={{ color: "text.secondary", mb: 1.5 }}>{reason}</Typography>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Typography variant="caption" sx={{ color: "text.disabled" }}>Inferred from agent type:</Typography>
-            <TypeTag type={basics.type} />
-          </Box>
-        </Paper>
-
-        <Box>
-          <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1.5 }}>Select judge</Typography>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-            {LLM_JUDGES.map((judge) => (
-              <JudgeCard
-                key={judge.id}
-                judge={judge}
-                selected={selectedJudge.id === judge.id}
-                onSelect={() => setSelectedJudgeId(judge.id)}
-                autoJudgeId={autoJudgeId}
-              />
-            ))}
-          </Box>
-          <Button
-            variant="text"
-            size="small"
-            sx={{ mt: 1.5, color: "text.secondary" }}
-            onClick={() => navigate({ name: "add-judge" })}
-          >
-            + Configure a new judge
-          </Button>
-        </Box>
-      </Box>
-    );
-  }
 
   function renderNewAgentLaunch() {
     if (evalsGenerating) {
@@ -2243,274 +1440,39 @@ export default function AddAgentView({ navigate }: Props) {
     );
   }
 
-  function renderStep2() {
-    const byCategory = {
-      nightmare: testCases.filter((s) => s.category === "nightmare"),
-      reality: testCases.filter((s) => s.category === "reality"),
-      dream: testCases.filter((s) => s.category === "dream"),
-    } as const;
-
-    return (
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            {testCases.filter((s) => s.confirmed).length} of {testCases.length} selected
-          </Typography>
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <Button size="small" variant="text" onClick={() => setTestCases((ts) => ts.map((s) => ({ ...s, confirmed: true })))}>Select all</Button>
-            <Button size="small" variant="text" onClick={() => setTestCases((ts) => ts.map((s) => ({ ...s, confirmed: false })))}>Clear</Button>
-          </Box>
-        </Box>
-        {(["nightmare", "reality", "dream"] as const).map((cat) => {
-          const config = CAT_CONFIG[cat];
-          return (
-            <Box key={cat}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-                <Typography variant="overline" sx={{ color: `${config.color}.main`, fontWeight: 700, letterSpacing: 1 }}>{config.guidedLabel}</Typography>
-                <Typography variant="caption" sx={{ color: "text.disabled" }}>— {config.guidedDesc}</Typography>
-              </Box>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                {byCategory[cat].map((sc) => (
-                  <ScenarioCard key={sc.id} scenario={sc} onToggle={() => setTestCases((ts) => ts.map((s) => s.id === sc.id ? { ...s, confirmed: !s.confirmed } : s))} />
-                ))}
-              </Box>
-            </Box>
-          );
-        })}
-      </Box>
-    );
-  }
-
-  function renderStep3() {
-    if (!profileVersion) return null;
-    const enabledEntries = profileVersion.entries.filter((e) => e.enabled);
-    const usedDimensions = [...new Set(enabledEntries.map((e) => e.dimension))];
-    const selectedScenarios = testCases.filter((s) => s.confirmed);
-
-    // Mock initial session data for "immediately show data"
-    const mockScores = [
-      { label: "Correctness", score: 81 },
-      { label: "Safety", score: 94 },
-      { label: "Tool Use", score: 76 },
-      { label: "Efficiency", score: 68 },
-    ].filter((s) => usedDimensions.includes(s.label as ShowcaseCategory));
-
-    const overallScore = Math.round(mockScores.reduce((sum, s) => sum + s.score, 0) / Math.max(mockScores.length, 1));
-    const verdict = overallScore >= profileVersion.verdictBands.ship ? "Ship" : overallScore >= profileVersion.verdictBands.ship_note ? "Ship with notes" : overallScore >= profileVersion.verdictBands.review ? "Review" : "Block";
-
-    return (
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <Alert severity="info" sx={{ borderRadius: 1.5 }}>
-          Review the details below. Click <strong>Start monitoring</strong> to publish the scoring profile and add the agent to your fleet.
-        </Alert>
-
-        {/* Agent summary */}
-        <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1.5 }}>
-          <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>Agent</Typography>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            <ReviewRow label="Friendly name" value={basics.name} />
-            <ReviewRow label="Trace name" value={inferredAgent?.traceName ?? basics.service} mono />
-            <ReviewRow label="Type" value={<TypeTag type={basics.type} />} />
-            <ReviewRow label="Source" value={entryMode === "new" ? "AgentScore OTel ingest" : dataSource === "langfuse" ? "Langfuse" : dataSource === "langsmith" ? "LangSmith" : dataSource === "datadog" ? "Datadog LLM Obs" : dbType === "clickhouse" ? "ClickHouse" : "PostgreSQL"} />
-            {inferredAgent && <ReviewRow label="Sessions seen" value={`${discoveredAgents.find(a => a.traceName === inferredAgent.traceName)?.sessionCount.toLocaleString() ?? "—"} before onboarding`} />}
-            <ReviewRow label="LLM judge" value={(() => { const j = LLM_JUDGES.find(j => j.id === selectedJudgeId) ?? LLM_JUDGES[0]; return `${j.name} (${j.model})`; })()} mono />
-          </Box>
-        </Paper>
-
-        {/* Scoring profile summary */}
-        <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1.5 }}>
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1.5 }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Scoring profile</Typography>
-            <Chip label="v1" size="small" sx={{ height: 20, fontSize: "0.68rem", fontFamily: "monospace" }} />
-          </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            <ReviewRow label="Evals" value={`${enabledEntries.length} enabled`} />
-            <ReviewRow label="Dimensions" value={<Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>{usedDimensions.map((d) => <Chip key={d} label={d} size="small" sx={{ height: 20, fontSize: "0.68rem" }} />)}</Box>} />
-            <ReviewRow label="Test cases" value={`${selectedScenarios.length} (${selectedScenarios.filter(s => s.category === "nightmare").length} hard · ${selectedScenarios.filter(s => s.category === "reality").length} normal · ${selectedScenarios.filter(s => s.category === "dream").length} stretch)`} />
-          </Box>
-        </Paper>
-
-        {/* Initial data preview */}
-        <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1.5, border: "1px solid", borderColor: "primary.main", bgcolor: "rgba(var(--mui-palette-primary-mainChannel) / 0.03)" }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.5 }}>
-            <SparkleIcon />
-            <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Initial data — first 5 sessions scored</Typography>
-          </Box>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
-            <Box sx={{ textAlign: "center", px: 2 }}>
-              <Typography variant="h4" sx={{ fontWeight: 800, fontFamily: "monospace", color: overallScore >= profileVersion.verdictBands.review ? "success.main" : "warning.main" }}>{overallScore}</Typography>
-              <Typography variant="caption" sx={{ color: "text.secondary" }}>overall score</Typography>
-            </Box>
-            <Box sx={{ flex: 1 }}>
-              <Chip
-                label={verdict}
-                size="small"
-                color={verdict === "Ship" ? "success" : verdict === "Review" ? "warning" : "error"}
-                sx={{ mb: 1 }}
-              />
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-                {mockScores.map(({ label, score }) => (
-                  <Box key={label} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Typography variant="caption" sx={{ width: 180, flexShrink: 0, color: "text.secondary" }}>{label}</Typography>
-                    <Box sx={{ flex: 1, height: 6, bgcolor: "action.hover", borderRadius: 1, overflow: "hidden" }}>
-                      <Box sx={{ width: `${score}%`, height: "100%", bgcolor: score >= 80 ? "success.main" : score >= 60 ? "warning.main" : "error.main", borderRadius: 1, transition: "width 0.5s" }} />
-                    </Box>
-                    <Typography variant="caption" sx={{ fontFamily: "monospace", fontWeight: 600, width: 28, textAlign: "right" }}>{score}</Typography>
-                  </Box>
-                ))}
-              </Box>
-            </Box>
-          </Box>
-          <Alert severity="info" sx={{ borderRadius: 1, py: 0.5 }}>
-            These scores are based on existing traces. Metrics will continue to improve as more sessions are ingested and evaluated.
-          </Alert>
-        </Paper>
-      </Box>
-    );
-  }
-
-  // ── Step content dispatch ─────────────────────────────────────────────────
-
-  const stepTitles = [
-    "Connect your trace store",
-    "Configure scoring profile",
-    "Select LLM judge",
-    "Review test cases",
-    "Review & start monitoring",
-  ];
-
-  const stepSubtitles = [
-    "Connect to Langfuse, LangSmith, Datadog, or a database, then select the agent you want to monitor.",
-    "Choose an existing profile or generate one. Adjust evals, weights, and verdict bands.",
-    "AgentScore auto-selected a judge based on your agent's traces. Override if needed.",
-    "Calibration scenarios cover hard, normal, and stretch test cases.",
-    "Everything looks good. Start monitoring to begin scoring sessions.",
-  ];
-
-  const activeStepForStepper = launching ? STEPS.length : isGenerating ? 1 : step;
-
-  if (!entryMode) {
-    return (
-      <Box sx={{ p: 3 }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}>
-          <Button startIcon={<ArrowBackIcon />} variant="text" size="small" onClick={() => navigate({ name: "fleet" })} sx={{ color: "text.secondary", mr: 1 }}>Fleet</Button>
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>Add Agent</Typography>
-        </Box>
-        <Box sx={{ maxWidth: 860, mx: "auto" }}>
-          {renderEntryChoice()}
-        </Box>
-      </Box>
-    );
-  }
-
-  if (entryMode === "new") {
-    return (
-      <Box sx={{ p: 3 }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}>
-          <Button startIcon={<ArrowBackIcon />} variant="text" size="small" onClick={() => { setEntryMode(null); setNewStep(0); setTraceStage(-1); setTraceReady(false); }} sx={{ color: "text.secondary", mr: 1 }}>Back</Button>
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>Add Agent</Typography>
-        </Box>
-        <Stepper activeStep={newStep} sx={{ mb: 4 }}>
-          {NEW_AGENT_STEPS.map((label) => <Step key={label}><StepLabel>{label}</StepLabel></Step>)}
-        </Stepper>
-        <Box sx={{ maxWidth: 860, mx: "auto" }}>
-          {newStep === 0 && renderNewAgentSetup()}
-          {newStep === 1 && renderWaiting()}
-          {newStep === 2 && (launching ? (
-            <LoadingOverlay title={`Setting up ${basics.name || "your agent"}…`} stages={LAUNCH_STAGES} currentStage={launchStage} />
-          ) : renderNewAgentLaunch())}
-        </Box>
-        {!launching && (
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 4, pt: 3, borderTop: "1px solid", borderColor: "divider", maxWidth: 860, mx: "auto" }}>
-            <Button variant="outlined" onClick={() => { if (newStep === 0) { setEntryMode(null); } else { setNewStep((s) => s - 1); } }}>Back</Button>
-            <Box>
-              {newStep === 0 && (
-                <Button variant="contained" onClick={() => { setNewStep(1); runTraceIngest(); }}>
-                  I&apos;ve configured my exporter
-                </Button>
-              )}
-              {newStep === 1 && traceReady && (
-                <Button variant="contained" onClick={() => { initSharedStepsFromNewAgent(); setNewStep(2); }}>
-                  Continue
-                </Button>
-              )}
-              {newStep === 2 && !evalsGenerating && (
-                <Button variant="contained" onClick={handleLaunch}>Start monitoring</Button>
-              )}
-            </Box>
-          </Box>
-        )}
-      </Box>
-    );
-  }
 
   return (
     <Box sx={{ p: 3 }}>
       <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}>
-        <Button startIcon={<ArrowBackIcon />} variant="text" size="small" onClick={() => setEntryMode(null)} sx={{ color: "text.secondary", mr: 1 }} disabled={launching}>Back</Button>
+        <Button startIcon={<ArrowBackIcon />} variant="text" size="small" onClick={() => navigate({ name: "fleet" })} sx={{ color: "text.secondary", mr: 1 }}>Fleet</Button>
         <Typography variant="h6" sx={{ fontWeight: 700 }}>Add Agent</Typography>
       </Box>
-
-      <Stepper activeStep={activeStepForStepper} sx={{ mb: 4 }}>
-        {STEPS.map((label) => <Step key={label}><StepLabel>{label}</StepLabel></Step>)}
+      <Stepper activeStep={newStep} sx={{ mb: 4 }}>
+        {NEW_AGENT_STEPS.map((label) => <Step key={label}><StepLabel>{label}</StepLabel></Step>)}
       </Stepper>
-
-      {!connecting && !launching && (
-        <Box sx={{ mb: 3 }}>
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>{stepTitles[step]}</Typography>
-          <Typography variant="body2" sx={{ color: "text.secondary", mt: 0.5 }}>{stepSubtitles[step]}</Typography>
-          <Divider sx={{ mt: 2 }} />
-        </Box>
-      )}
-
       <Box sx={{ maxWidth: 860, mx: "auto" }}>
-        {launching ? (
-          <LoadingOverlay
-            title={`Setting up ${basics.name || "your agent"}…`}
-            stages={LAUNCH_STAGES}
-            currentStage={launchStage}
-          />
-        ) : (
-          <>
-            {step === 0 && renderStep0()}
-            {step === 1 && renderStep1()}
-            {step === 2 && renderStepJudge()}
-            {step === 3 && renderStep2()}
-            {step === 4 && renderStep3()}
-          </>
-        )}
+        {newStep === 0 && renderNewAgentSetup()}
+        {newStep === 1 && renderWaiting()}
+        {newStep === 2 && (launching ? (
+          <LoadingOverlay title={`Setting up ${basics.name || "your agent"}…`} stages={LAUNCH_STAGES} currentStage={launchStage} />
+        ) : renderNewAgentLaunch())}
       </Box>
-
-      {!connecting && !analyzing && !launching && (
+      {!launching && (
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 4, pt: 3, borderTop: "1px solid", borderColor: "divider", maxWidth: 860, mx: "auto" }}>
-          <Button variant="outlined" onClick={() => step === 0 ? setEntryMode(null) : setStep((s) => s - 1)}>
-            Back
-          </Button>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            {step === 0 && (
-              <Button variant="contained" onClick={handleContinueToProfile} disabled={!step1Valid}>
+          <Button variant="outlined" onClick={() => { if (newStep === 0) { navigate({ name: "fleet" }); } else { setNewStep((s) => s - 1); } }}>Back</Button>
+          <Box>
+            {newStep === 0 && (
+              <Button variant="contained" onClick={() => { setNewStep(1); runTraceIngest(); }}>
+                I&apos;ve configured my exporter
+              </Button>
+            )}
+            {newStep === 1 && traceReady && (
+              <Button variant="contained" onClick={() => { initSharedStepsFromNewAgent(); setNewStep(2); }}>
                 Continue
               </Button>
             )}
-            {step === 1 && (
-              <Button variant="contained" onClick={() => setStep(2)} disabled={!profileValid || isGenerating}>
-                Next
-              </Button>
-            )}
-            {step === 2 && (
-              <Button variant="contained" onClick={() => setStep(3)}>
-                Next
-              </Button>
-            )}
-            {step === 3 && (
-              <Button variant="contained" onClick={() => setStep(4)} disabled={!testCasesValid}>
-                Next
-              </Button>
-            )}
-            {step === 4 && (
-              <Button variant="contained" onClick={handleLaunch}>
-                Start monitoring
-              </Button>
+            {newStep === 2 && !evalsGenerating && (
+              <Button variant="contained" onClick={handleLaunch}>Start monitoring</Button>
             )}
           </Box>
         </Box>
