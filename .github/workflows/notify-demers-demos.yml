@@ -1,0 +1,30 @@
+name: Notify demers-demos
+
+# When a watched folder changes on main, tell demers-demos to sync this repo
+# into its mirrored directories. demers-demos then opens + auto-merges a PR.
+#
+# Requires DEMERS_DEMOS_DISPATCH_TOKEN: a PAT that can send repository_dispatch
+# to Tricentis-PM-Tools/demers-demos.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'agent-score/**'
+      - 'agent-score-marketing/**'
+
+permissions:
+  contents: read
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger demers-demos subtree sync
+        env:
+          GH_TOKEN: ${{ secrets.DEMERS_DEMOS_DISPATCH_TOKEN }}
+        run: |
+          gh api --method POST repos/Tricentis-PM-Tools/demers-demos/dispatches \
+            --input - <<EOF
+          {"event_type":"sync-agent-score","client_payload":{"sha":"${{ github.sha }}"}}
+          EOF
