@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgentScore - Know if your AI agent is ready to ship</title>
+  <meta name="description" content="AgentScore surfaces a composite 0-100 score, an A-F grade, and a Ship/Review/Block verdict for every AI agent run - so your team can move confidently without guessing.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Tricentis brand palette */
+      --navy:          #1b365d;   /* dark sections, headings */
+      --navy-deep:     #12264a;   /* deeper navy for hover/borders */
+      --navy-mid:      #254a7a;   /* midtone navy */
+      --primary:       #004c97;   /* links, secondary actions */
+      --orange:        #ff6c0e;   /* primary CTA, accent */
+      --orange-dark:   #e55c00;   /* CTA hover */
+      --teal:          #0087ae;   /* subheads, accents */
+      --teal-light:    #59c8e6;   /* dark-section accent links */
+      --yellow:        #d2d755;   /* bullet markers, decorative */
+
+      /* Neutrals */
+      --white:         #ffffff;
+      --bg-light:      #f4f7fb;   /* alternate light sections */
+      --bg-mid:        #e8eef6;   /* borders, dividers */
+      --text-dark:     #1b365d;   /* headings */
+      --text-body:     #343941;   /* body copy */
+      --text-muted:    #6b7a8d;   /* secondary text */
+      --border-light:  #dce5f0;
+
+      /* Semantic verdict colors */
+      --ship:          #1a8a5a;
+      --ship-bg:       #e8f7f0;
+      --ship-border:   #b3dfc9;
+      --review:        #b35a00;
+      --review-bg:     #fff3e6;
+      --review-border: #ffd0a0;
+      --block:         #c0392b;
+      --block-bg:      #fde8e6;
+      --block-border:  #f5b8b3;
+
+      /* Card (on dark bg) */
+      --card-dark:     rgba(255,255,255,0.06);
+      --card-dark-border: rgba(255,255,255,0.12);
+
+      --radius:        10px;
+      --radius-sm:     7px;
+      --radius-xs:     5px;
+      --max-w:         1160px;
+      --font:          'Open Sans', Calibri, Tahoma, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--font);
+      background: var(--white);
+      color: var(--text-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 100;
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      background: var(--white);
+      border-bottom: 1px solid var(--border-light);
+      box-shadow: 0 1px 4px rgba(27,54,93,0.08);
+    }
+
+    .nav-inner {
+      max-width: var(--max-w);
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--navy);
+      letter-spacing: -0.01em;
+    }
+
+    .logo-mark {
+      width: 30px; height: 30px;
+      background: var(--primary);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: white;
+    }
+
+    .nav-badge {
+      font-size: 0.64rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: #e8eef6;
+      color: var(--primary);
+      border: 1px solid #c5d4e8;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-body);
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--orange); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 20px;
+      border-radius: var(--radius-xs);
+      font-family: var(--font);
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s, color 0.15s, transform 0.1s, border-color 0.15s;
+      text-decoration: none;
+    }
+
+    .btn-orange {
+      background: var(--orange);
+      color: white;
+    }
+    .btn-orange:hover { background: var(--orange-dark); transform: translateY(-1px); }
+
+    .btn-navy {
+      background: var(--navy);
+      color: white;
+    }
+    .btn-navy:hover { background: var(--navy-deep); transform: translateY(-1px); }
+
+    .btn-outline-white {
+      background: transparent;
+      color: white;
+      border: 2px solid rgba(255,255,255,0.5);
+    }
+    .btn-outline-white:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+    .btn-outline-navy {
+      background: transparent;
+      color: var(--navy);
+      border: 2px solid var(--navy);
+    }
+    .btn-outline-navy:hover { background: var(--navy); color: white; }
+
+    .btn-lg {
+      padding: 13px 28px;
+      font-size: 0.975rem;
+      border-radius: var(--radius-sm);
+    }
+
+    /* ── Shared ── */
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    section { padding: 88px 0; }
+
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--teal);
+      margin-bottom: 12px;
+    }
+
+    .section-eyebrow-light {
+      color: var(--teal-light);
+    }
+
+    h2 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+    }
+
+    h2.on-dark { color: white; }
+
+    .section-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 540px;
+      line-height: 1.75;
+      margin-bottom: 3rem;
+    }
+
+    .section-lead.on-dark { color: rgba(255,255,255,0.72); }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      padding: 100px 2rem 80px;
+      display: flex;
+      align-items: center;
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle geometric accent */
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 700px; height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(89,200,230,0.10) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    #hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -80px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,108,14,0.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 440px;
+      gap: 4rem;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--teal-light);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
+    }
+
+    .eyebrow-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--teal-light);
+      animation: dot-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes dot-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.35; transform: scale(0.7); }
+    }
+
+    h1 {
+      font-size: 3.6rem;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      color: white;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 .accent { color: var(--orange); }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.75;
+      margin-bottom: 2.25rem;
+      max-width: 480px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .hero-tag {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      padding: 4px 11px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+    }
+
+    /* ── Score card (on dark hero) ── */
+    .ui-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: var(--radius);
+      padding: 22px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .card-project {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 5px;
+    }
+
+    .card-tags { display: flex; gap: 6px; }
+
+    .ctag {
+      font-size: 0.64rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .ctag-ata    { background: rgba(167,139,250,0.18); color: #c4b5fd; border: 1px solid rgba(167,139,250,0.3); }
+    .ctag-stable { background: rgba(26,138,90,0.2);   color: #6ee7b7; border: 1px solid rgba(26,138,90,0.35); }
+
+    .verdict-chip {
+      padding: 5px 13px;
+      border-radius: 5px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+    }
+    .verdict-ship   { background: rgba(26,138,90,0.18);   color: #6ee7b7; border: 1px solid rgba(26,138,90,0.4); }
+    .verdict-review { background: rgba(179,90,0,0.18);    color: #fbbf24; border: 1px solid rgba(179,90,0,0.4); }
+    .verdict-block  { background: rgba(192,57,43,0.18);   color: #fca5a5; border: 1px solid rgba(192,57,43,0.4); }
+
+    .score-block {
+      text-align: center;
+      padding: 12px 0 16px;
+    }
+
+    .score-num {
+      font-size: 4.25rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--teal-light);
+      letter-spacing: -0.04em;
+    }
+
+    .score-denom { font-size: 1.5rem; color: rgba(255,255,255,0.35); font-weight: 300; margin-left: 2px; }
+
+    .score-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .grade-pill {
+      width: 38px; height: 38px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: rgba(89,200,230,0.15);
+      color: var(--teal-light);
+      border: 1.5px solid rgba(89,200,230,0.35);
+    }
+
+    .conf-label { font-size: 0.76rem; color: rgba(255,255,255,0.4); }
+
+    .ui-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 4px 0 14px; }
+
+    .dim-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 8px;
+    }
+
+    .dim-lbl {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.55);
+      width: 100px;
+      flex-shrink: 0;
+    }
+
+    .dim-track {
+      flex: 1;
+      height: 5px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .dim-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(to right, #0087ae, #59c8e6);
+    }
+
+    .dim-val {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.8);
+      width: 22px;
+      text-align: right;
+    }
+
+    .card-foot {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 12px;
+      margin-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .foot-stat { font-size: 0.69rem; color: rgba(255,255,255,0.35); }
+    .foot-stat strong { color: rgba(255,255,255,0.6); }
+    .foot-passk { font-size: 0.69rem; font-weight: 700; color: #6ee7b7; }
+
+    /* ── Problem ── */
+    #problem { background: var(--white); }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .problem-card {
+      padding: 28px;
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-light);
+      box-shadow: 0 2px 8px rgba(27,54,93,0.06);
+    }
+
+    .prob-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: var(--block-bg);
+      border: 1px solid var(--block-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .problem-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .problem-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ── How it works ── */
+    #how-it-works { background: var(--bg-light); }
+
+    .center { text-align: center; }
+    .center .section-lead { margin: 0 auto 3.5rem; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      position: relative;
+    }
+
+    .steps::after {
+      content: '';
+      position: absolute;
+      height: 2px;
+      top: 27px;
+      left: 12.5%;
+      right: 12.5%;
+      background: linear-gradient(to right,
+        transparent 0%,
+        var(--bg-mid) 8%,
+        var(--bg-mid) 92%,
+        transparent 100%);
+      z-index: 0;
+    }
+
+    .step { text-align: center; padding: 0 1.5rem; }
+
+    .step-num {
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      font-size: 1.05rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 2px 8px rgba(0,76,151,0.12);
+    }
+
+    .step h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+    .step p { font-size: 0.86rem; color: var(--text-muted); line-height: 1.65; }
+
+    /* ── Capabilities ── */
+    #capabilities { background: var(--white); }
+
+    .caps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .cap-card {
+      padding: 28px;
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-light);
+      box-shadow: 0 2px 8px rgba(27,54,93,0.05);
+      transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+    }
+    .cap-card:hover {
+      box-shadow: 0 6px 20px rgba(27,54,93,0.12);
+      border-color: #c5d4e8;
+      transform: translateY(-2px);
+    }
+
+    .cap-icon {
+      width: 46px; height: 46px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .ci-blue   { background: #e8eef8; border: 1px solid #c5d4e8; }
+    .ci-amber  { background: #fff3e6; border: 1px solid #ffd0a0; }
+    .ci-red    { background: #fde8e6; border: 1px solid #f5b8b3; }
+    .ci-green  { background: #e8f7f0; border: 1px solid #b3dfc9; }
+    .ci-purple { background: #f0ecff; border: 1px solid #d0c4ff; }
+    .ci-teal   { background: #e4f6fc; border: 1px solid #a8dff0; }
+
+    .cap-card h3 { font-size: 1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
+    .cap-card p  { font-size: 0.875rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* ── Dimensions ── */
+    #dimensions { background: var(--bg-light); }
+    #dimensions h2 { margin-bottom: 0.5rem; }
+    #dimensions .section-lead { margin: 0 auto 3rem; }
+
+    .dim-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      text-align: left;
+    }
+
+    .dim-card {
+      padding: 20px;
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-light);
+      box-shadow: 0 1px 4px rgba(27,54,93,0.05);
+    }
+
+    .dim-cat {
+      font-size: 0.62rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 7px;
+    }
+    .dim-cat.core     { color: var(--primary); }
+    .dim-cat.extended { color: var(--text-muted); }
+
+    .dim-name { font-size: 0.9rem; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
+    .dim-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* Verdict strip */
+    .verdict-strip {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2.5rem;
+      justify-content: center;
+    }
+
+    .vs-item {
+      flex: 1;
+      max-width: 340px;
+      padding: 20px 22px;
+      border-radius: var(--radius-sm);
+      border-left: 4px solid;
+    }
+    .vs-ship   { background: var(--ship-bg);   border-color: var(--ship); }
+    .vs-review { background: var(--review-bg);  border-color: var(--review); }
+    .vs-block  { background: var(--block-bg);   border-color: var(--block); }
+
+    .vs-label {
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+    .vs-ship   .vs-label { color: var(--ship); }
+    .vs-review .vs-label { color: var(--review); }
+    .vs-block  .vs-label { color: var(--block); }
+
+    .vs-threshold {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+    .vs-ship   .vs-threshold { color: var(--ship); }
+    .vs-review .vs-threshold { color: var(--review); }
+    .vs-block  .vs-threshold { color: var(--block); }
+
+    .vs-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.55; }
+
+    /* ── Scenarios ── */
+    #scenarios { background: var(--white); }
+
+    .scenarios-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .scenario-card {
+      padding: 28px;
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-light);
+      box-shadow: 0 2px 8px rgba(27,54,93,0.05);
+    }
+
+    .persona-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .persona-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: #e8eef8;
+      border: 1px solid #c5d4e8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .persona-name { font-size: 0.875rem; font-weight: 700; color: var(--text-dark); }
+    .persona-role { font-size: 0.76rem; color: var(--text-muted); }
+
+    .scenario-q {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.45;
+      margin-bottom: 12px;
+      color: var(--text-dark);
+    }
+
+    .scenario-body {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .scenario-outcome {
+      margin-top: 16px;
+      padding: 11px 14px;
+      background: var(--ship-bg);
+      border-left: 3px solid var(--ship);
+      border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+      font-size: 0.82rem;
+      color: var(--ship);
+      font-weight: 600;
+      line-height: 1.55;
+    }
+
+    /* ── CTA (dark navy) ── */
+    #cta {
+      background: var(--navy);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #cta::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(89,200,230,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    #cta .container { position: relative; z-index: 1; }
+
+    #cta h2 { color: white; margin-bottom: 1rem; }
+    #cta .section-lead { color: rgba(255,255,255,0.65); margin: 0 auto 2.5rem; }
+
+    .cta-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .cta-meta { font-size: 0.82rem; color: rgba(255,255,255,0.4); }
+    .cta-meta a { color: var(--teal-light); }
+
+    /* ── Footer ── */
+    footer {
+      padding: 32px 2rem;
+      background: var(--navy-deep);
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: white;
+    }
+
+    .footer-copy { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+
+    /* ── Access Modal ── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 38, 74, 0.72);
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 580px;
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 36px 40px;
+      position: relative;
+      transform: translateY(16px) scale(0.98);
+      transition: transform 0.22s ease;
+      box-shadow: 0 24px 64px rgba(18,38,74,0.35);
+    }
+
+    .modal-backdrop.open .modal { transform: none; }
+
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 1.4rem;
+      line-height: 1;
+      padding: 4px;
+      transition: color 0.15s;
+    }
+    .modal-close:hover { color: var(--text-dark); }
+
+    .modal-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 4px;
+      letter-spacing: -0.015em;
+    }
+
+    .modal-sub {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 16px;
+    }
+
+    .form-group.full { grid-column: 1 / -1; }
+
+    .form-group label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: 0.01em;
+    }
+
+    .form-group label .req { color: var(--orange); margin-left: 2px; }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      font-family: var(--font);
+      font-size: 0.875rem;
+      color: var(--text-body);
+      background: var(--white);
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--radius-xs);
+      padding: 9px 12px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      width: 100%;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0,76,151,0.1);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 76px; line-height: 1.55; }
+
+    .form-group select { cursor: pointer; }
+
+    .form-divider {
+      height: 1px;
+      background: var(--border-light);
+      margin: 20px 0 20px;
+    }
+
+    .form-auto-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .auto-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .auto-chip {
+      font-size: 0.72rem;
+      padding: 3px 9px;
+      background: var(--bg-light);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    .modal-submit {
+      width: 100%;
+      padding: 13px;
+      font-size: 0.975rem;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: none;
+      background: var(--orange);
+      color: white;
+      font-family: var(--font);
+      transition: background 0.15s, transform 0.1s;
+    }
+    .modal-submit:hover:not(:disabled) { background: var(--orange-dark); transform: translateY(-1px); }
+    .modal-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .form-error {
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: var(--block-bg);
+      border: 1px solid var(--block-border);
+      border-radius: var(--radius-xs);
+      font-size: 0.82rem;
+      color: var(--block);
+      display: none;
+    }
+
+    .modal-success {
+      text-align: center;
+      padding: 24px 0 8px;
+    }
+
+    .modal-success-icon {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: var(--ship-bg);
+      border: 2px solid var(--ship-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .modal-success h3 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .modal-success p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    @media (max-width: 600px) {
+      .modal { padding: 28px 22px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    /* ── Reveal animations ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+    }
+
+    @media (max-width: 900px) {
+      h1 { font-size: 2.75rem; }
+      h2 { font-size: 2rem; }
+      .problem-grid,
+      .caps-grid { grid-template-columns: 1fr 1fr; }
+      .dim-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps { grid-template-columns: 1fr 1fr; gap: 2.5rem 0; }
+      .steps::after { display: none; }
+      .scenarios-grid { grid-template-columns: 1fr; }
+      .verdict-strip { flex-direction: column; align-items: center; }
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2.2rem; }
+      .problem-grid,
+      .caps-grid { grid-template-columns: 1fr; }
+      .dim-grid { grid-template-columns: 1fr 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .nav-links a:not(:last-child) { display: none; }
+      section { padding: 64px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <div class="logo-mark">A</div>
+        AgentScore
+        <span class="nav-badge">Internal Alpha</span>
+      </div>
+      <div class="nav-links">
+        <a href="#capabilities">Features</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#scenarios">Use cases</a>
+        <a href="#" class="btn btn-orange js-open-modal">Request access</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Hero (dark navy) ── -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <span class="eyebrow-dot"></span>
+          Phase 1 &middot; Internal pilot &middot; Tricentis
+        </div>
+        <h1>Your agent is live.<br>But what should you <span class="accent">even be testing?</span></h1>
+        <p class="hero-sub">
+          Most teams have no idea what to evaluate - and that's the real problem.
+          AgentScore watches your agent in shadow mode, identifies what matters
+          based on how it actually behaves, and builds your evaluation design
+          from observed sessions.
+        </p>
+        <div class="hero-actions">
+          <a href="#eval-design" class="btn btn-orange btn-lg">See how it works</a>
+          <a href="#" class="btn btn-outline-white btn-lg js-open-modal">Request access</a>
+        </div>
+        <div class="hero-tags">
+          <span class="hero-tag">Observation-based eval design</span>
+          <span class="hero-tag">11 quality dimensions</span>
+          <span class="hero-tag">LLM-as-judge</span>
+          <span class="hero-tag">Runtime Guard</span>
+          <span class="hero-tag">Attribution</span>
+        </div>
+      </div>
+
+      <!-- Score card mockup -->
+      <div class="hero-visual">
+        <div class="ui-card">
+          <div class="card-head">
+            <div>
+              <div class="card-project">ATA Regression Suite</div>
+              <div class="card-tags">
+                <span class="ctag ctag-ata">ATA</span>
+                <span class="ctag ctag-stable">Reliable</span>
+              </div>
+            </div>
+            <div class="verdict-chip verdict-ship">SHIP</div>
+          </div>
+
+          <div class="score-block">
+            <div>
+              <span class="score-num" id="scoreNum">88</span><span class="score-denom"> / 100</span>
+            </div>
+            <div class="score-meta">
+              <div class="grade-pill">B</div>
+              <span class="conf-label">&#177;4 confidence</span>
+            </div>
+          </div>
+
+          <div class="ui-divider"></div>
+
+          <div class="dim-row">
+            <span class="dim-lbl">Correctness</span>
+            <div class="dim-track"><div class="dim-fill" style="width:91%"></div></div>
+            <span class="dim-val">91</span>
+          </div>
+          <div class="dim-row">
+            <span class="dim-lbl">Efficiency</span>
+            <div class="dim-track"><div class="dim-fill" style="width:82%"></div></div>
+            <span class="dim-val">82</span>
+          </div>
+          <div class="dim-row">
+            <span class="dim-lbl">Relevance</span>
+            <div class="dim-track"><div class="dim-fill" style="width:86%"></div></div>
+            <span class="dim-val">86</span>
+          </div>
+          <div class="dim-row">
+            <span class="dim-lbl">Harmony</span>
+            <div class="dim-track"><div class="dim-fill" style="width:88%"></div></div>
+            <span class="dim-val">88</span>
+          </div>
+          <div class="dim-row">
+            <span class="dim-lbl">Stability</span>
+            <div class="dim-track"><div class="dim-fill" style="width:85%"></div></div>
+            <span class="dim-val">85</span>
+          </div>
+          <div class="dim-row">
+            <span class="dim-lbl">Agency</span>
+            <div class="dim-track"><div class="dim-fill" style="width:87%"></div></div>
+            <span class="dim-val">87</span>
+          </div>
+
+          <div class="card-foot">
+            <span class="foot-stat"><strong>3 runs</strong> &middot; 9 sessions</span>
+            <span class="foot-passk">Pass^k 0.97</span>
+            <span class="foot-stat"><strong>48</strong> traces</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Problem ── -->
+  <section id="problem">
+    <div class="container">
+      <div class="section-eyebrow">The challenge</div>
+      <h2>Evaluating AI agents is hard.<br>Starting from scratch is harder.</h2>
+      <p class="section-lead">
+        Evaluating an AI agent isn't like writing unit tests. There's no obvious spec to derive from,
+        no single failure mode to cover first. Most teams either skip evals entirely or write ones
+        that miss what actually goes wrong.
+      </p>
+      <div class="problem-grid">
+        <div class="problem-card reveal">
+          <div class="prob-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <line x1="9" y1="3" x2="9" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/>
+            </svg>
+          </div>
+          <h3>The blank-page problem</h3>
+          <p>You know your domain. You don't know what to measure. Writing evaluation criteria from scratch requires AI expertise most practitioners don't have - and don't need to have.</p>
+        </div>
+        <div class="problem-card reveal">
+          <div class="prob-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <h3>Testing the wrong things</h3>
+          <p>Generic evals miss agent-specific failure modes. An ATA agent and an AI Workspace agent fail in completely different ways - a one-size-fits-all eval misses both.</p>
+        </div>
+        <div class="problem-card reveal">
+          <div class="prob-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+          <h3>No signal once you do</h3>
+          <p>Even teams with evals lack a cross-session signal. Scores change, models get updated, prompts get tweaked - and there's no structured way to know if anything got better or worse.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Eval Design (featured) ── -->
+  <section id="eval-design" style="background:var(--navy);padding:96px 0;">
+    <div class="container">
+      <div class="section-eyebrow section-eyebrow-light">The solution</div>
+      <h2 class="on-dark" style="max-width:640px">AgentScore figures out what to test by watching your agent work.</h2>
+      <p class="section-lead on-dark">Connect your agent in shadow mode. AgentScore observes real sessions - which tools it calls, where it hesitates, what patterns emerge. After 20 sessions it surfaces a <strong style="color:white">Measurement Recommendation</strong>: specific evaluation dimensions and calibration scenarios matched to your agent's actual behaviour. You review it and confirm. Scoring only begins after a human approves.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:3rem">
+
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius);padding:28px" class="reveal">
+          <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:#fca5a5;margin-bottom:12px">Nightmare</div>
+          <div style="font-size:1rem;font-weight:700;color:white;margin-bottom:10px">Edge cases &amp; adversarial inputs</div>
+          <p style="font-size:0.86rem;color:rgba(255,255,255,0.6);line-height:1.65">The inputs most likely to break your agent: malformed data, boundary conditions, error states, prompt injection attempts. AgentScore identifies these from patterns in your observed failures.</p>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius);padding:28px" class="reveal">
+          <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:#6ee7b7;margin-bottom:12px">Reality</div>
+          <div style="font-size:1rem;font-weight:700;color:white;margin-bottom:10px">Normal, expected inputs</div>
+          <p style="font-size:0.86rem;color:rgba(255,255,255,0.6);line-height:1.65">The baseline your agent should handle reliably. AgentScore calibrates these from the happy-path sessions it has already observed - the inputs your agent actually sees in production.</p>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius);padding:28px" class="reveal">
+          <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:#fbbf24;margin-bottom:12px">Dream</div>
+          <div style="font-size:1rem;font-weight:700;color:white;margin-bottom:10px">Stretch goals</div>
+          <p style="font-size:0.86rem;color:rgba(255,255,255,0.6);line-height:1.65">The scenarios that define what excellent looks like for your agent type. Not required to ship, but tracked - so you know whether quality is improving over time.</p>
+        </div>
+
+      </div>
+
+      <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(89,200,230,0.25);border-radius:var(--radius);padding:28px 32px;display:flex;align-items:center;gap:24px" class="reveal">
+        <div style="flex-shrink:0">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#59c8e6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+          </svg>
+        </div>
+        <div>
+          <div style="font-size:0.9rem;font-weight:700;color:white;margin-bottom:4px">Human confirmation required</div>
+          <div style="font-size:0.86rem;color:rgba(255,255,255,0.58);line-height:1.6">AgentScore generates the measurement recommendation - but scoring never starts until a practitioner reviews and confirms it. You stay in control of what gets measured and why.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How it works ── -->
+  <section id="how-it-works">
+    <div class="container">
+      <div class="center">
+        <div class="section-eyebrow">How it works</div>
+        <h2>Connect once. AgentScore takes it from there.</h2>
+        <p class="section-lead">No eval expertise required. AgentScore observes first, then tells you what to measure - based on how your agent actually behaves.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-num">1</div>
+          <h3>Connect</h3>
+          <p>Instrument your agent with OpenTelemetry. Traces flow to AgentScore automatically. No changes to your agent's code.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">2</div>
+          <h3>Observe</h3>
+          <p>AgentScore watches 20+ sessions in shadow mode - tool calls, retrieval patterns, where it struggles - and builds a Measurement Recommendation from what it finds.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">3</div>
+          <h3>Confirm</h3>
+          <p>You review the proposed dimensions and calibration scenarios. Confirm what fits. Scoring only begins after a practitioner approves the design.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">4</div>
+          <h3>Score &amp; act</h3>
+          <p>LLM judges evaluate every session and produce a composite 0-100. Ship, Review, or Block - with full attribution when the score falls.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Capabilities ── -->
+  <section id="capabilities">
+    <div class="container">
+      <div class="section-eyebrow">Capabilities</div>
+      <h2>From "I don't know what to measure"<br>to a score your team can act on.</h2>
+      <p class="section-lead">AgentScore handles the hard parts - eval design, scoring, regression tracking, and attribution - so practitioners can focus on the domain work they actually know.</p>
+      <div class="caps-grid">
+
+        <div class="cap-card reveal">
+          <div class="cap-icon ci-green">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a8a5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 11l3 3L22 4"/>
+              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+            </svg>
+          </div>
+          <h3>Observation-based eval design</h3>
+          <p>AgentScore watches your agent in shadow mode and generates a Measurement Recommendation - specific dimensions and calibration scenarios based on what it actually observed. No eval expertise required to get started.</p>
+        </div>
+
+        <div class="cap-card reveal">
+          <div class="cap-icon ci-blue">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#004c97" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h3>Composite scoring</h3>
+          <p>A single 0-100 score and A-F grade per run, derived as a weighted average across enabled quality dimensions. Interpretable without an AI background. Marked Preliminary until 30 sessions and 3 runs complete.</p>
+        </div>
+
+        <div class="cap-card reveal">
+          <div class="cap-icon ci-amber">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b35a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <h3>Regression detection</h3>
+          <p>Score delta vs. the prior run is surfaced for every dimension. Significant drops are flagged so your team catches regressions before practitioners notice anything is wrong.</p>
+        </div>
+
+        <div class="cap-card reveal">
+          <div class="cap-icon ci-red">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </div>
+          <h3>Root cause attribution</h3>
+          <p>When a score falls, attribution narrows it to the specific dimension, session, and tool call chain - with root cause category, confidence score, and remediation recommendations.</p>
+        </div>
+
+        <div class="cap-card reveal">
+          <div class="cap-icon ci-purple">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="M3 9h18M9 21V9"/>
+            </svg>
+          </div>
+          <h3>Scoring profiles</h3>
+          <p>Named, versioned profiles define which dimensions to score, their weights, and verdict band thresholds. Shared across agents of the same type. Historical runs are re-graded when a profile changes.</p>
+        </div>
+
+        <div class="cap-card reveal">
+          <div class="cap-icon ci-teal">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0087ae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3>Runtime Guard</h3>
+          <p>Pre-tool-use safety evaluation catches prompt injection, credential exposure, PII leaks, and path violations before they reach your agent's environment. Guard decisions are logged and searchable.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Dimensions ── -->
+  <section id="dimensions">
+    <div class="container center">
+      <div class="section-eyebrow">Quality dimensions</div>
+      <h2>11 dimensions. Every angle covered.</h2>
+      <p class="section-lead">Each scoring profile activates the dimensions relevant to the agent type. All 11 are available; none are required. Profiles are versioned so history stays comparable.</p>
+      <div class="dim-grid" style="text-align:left">
+        <div class="dim-card reveal">
+          <div class="dim-cat core">Core</div>
+          <div class="dim-name">Correctness</div>
+          <div class="dim-desc">Does the agent get the right answer on its primary task, across standard and adversarial inputs?</div>
+        </div>
+        <div class="dim-card reveal">
+          <div class="dim-cat core">Core</div>
+          <div class="dim-name">Efficiency</div>
+          <div class="dim-desc">Does it deliver value per token spend - and is that ratio trending up or down since the last run?</div>
+        </div>
+        <div class="dim-card reveal">
+          <div class="dim-cat core">Core</div>
+          <div class="dim-name">Relevance</div>
+          <div class="dim-desc">Is the output clear and useful to the practitioner who has to act on it - not just technically correct?</div>
+        </div>
+        <div class="dim-card reveal">
+          <div class="dim-cat extended">Extended</div>
+          <div class="dim-name">Harmony</div>
+          <div class="dim-desc">Does the agent ground its outputs in provided context without hallucinating facts or violating spec?</div>
+        </div>
+        <div class="dim-card reveal">
+          <div class="dim-cat extended">Extended</div>
+          <div class="dim-name">Stability</div>
+          <div class="dim-desc">Does it produce equivalent answers when the same task arrives in different formats or phrasings?</div>
+        </div>
+        <div class="dim-card reveal">
+          <div class="dim-cat extended">Extended</div>
+          <div class="dim-name">Agency</div>
+          <div class="dim-desc">Does it select the right tools, plan efficiently, and complete tasks using the minimum necessary steps?</div>
+        </div>
+        <div class="dim-card reveal">
+          <div class="dim-cat extended">Extended</div>
+          <div class="dim-name">Groundedness</div>
+          <div class="dim-desc">Does every factual claim trace back to an explicit tool response or input artifact?</div>
+        </div>
+        <div class="dim-card reveal">
+          <div class="dim-cat extended">Extended</div>
+          <div class="dim-name">Instruction Following</div>
+          <div class="dim-desc">Does the agent execute instructions precisely - including edge cases and underspecified inputs?</div>
+        </div>
+        <div class="dim-card reveal">
+          <div class="dim-cat extended">Extended</div>
+          <div class="dim-name">Transparency</div>
+          <div class="dim-desc">Does it explain its reasoning in a way that gives practitioners visibility into how it reached an answer?</div>
+        </div>
+        <div class="dim-card reveal">
+          <div class="dim-cat extended">Extended</div>
+          <div class="dim-name">Robustness</div>
+          <div class="dim-desc">Does it handle adversarial inputs, malformed data, and prompt injection without failing silently?</div>
+        </div>
+        <div class="dim-card reveal">
+          <div class="dim-cat extended">Extended</div>
+          <div class="dim-name">Communication</div>
+          <div class="dim-desc">Is the output language appropriate for the practitioner's expertise level - not just technically accurate?</div>
+        </div>
+      </div>
+
+      <!-- Verdict strip -->
+      <div class="verdict-strip">
+        <div class="vs-item vs-ship">
+          <div>
+            <div class="vs-label">Ship</div>
+            <div class="vs-threshold">Score &ge; 85</div>
+            <div class="vs-desc">Agent is performing at or above threshold. Cleared for the next deployment gate.</div>
+          </div>
+        </div>
+        <div class="vs-item vs-review">
+          <div>
+            <div class="vs-label">Review</div>
+            <div class="vs-threshold">55 &le; Score &lt; 85</div>
+            <div class="vs-desc">Performance is acceptable but not strong. Human review recommended before shipping.</div>
+          </div>
+        </div>
+        <div class="vs-item vs-block">
+          <div>
+            <div class="vs-label">Block</div>
+            <div class="vs-threshold">Score &lt; 55</div>
+            <div class="vs-desc">Agent is underperforming against its profile. Remediation required before next run.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Scenarios ── -->
+  <section id="scenarios">
+    <div class="container">
+      <div class="section-eyebrow">Use cases</div>
+      <h2>Four questions practitioners ask every day.</h2>
+      <p class="section-lead">AgentScore is built around real decisions - not abstract metrics. Here's how it plays out in practice.</p>
+      <div class="scenarios-grid">
+
+        <div class="scenario-card reveal">
+          <div class="persona-row">
+            <div class="persona-avatar">PK</div>
+            <div>
+              <div class="persona-name">Priya &middot; QA Engineer</div>
+              <div class="persona-role">Financial services &middot; ATC agent</div>
+            </div>
+          </div>
+          <div class="scenario-q">"Can I trust this agent to generate my test cases?"</div>
+          <div class="scenario-body">After two weeks of shadow mode, AgentScore surfaces a Measurement Recommendation: the agent's outputs cluster around the happy path - nightmare coverage is below 10%. Priya confirms the gap, and scoring now tracks the edge conditions she was worried about.</div>
+          <div class="scenario-outcome">She has a clear answer: strong on happy-path generation, unreliable on error states. She knows exactly what to use it for and what to review manually.</div>
+        </div>
+
+        <div class="scenario-card reveal">
+          <div class="persona-row">
+            <div class="persona-avatar">MR</div>
+            <div>
+              <div class="persona-name">Marco &middot; Test Lead</div>
+              <div class="persona-role">Enterprise &middot; ATA regression suite</div>
+            </div>
+          </div>
+          <div class="scenario-q">"Something changed - is the agent still working?"</div>
+          <div class="scenario-body">Two runs came back PARTIAL this week. Attribution narrows it to a specific module: new test data format triggered the wrong tool selection, causing downstream assertion failures. The call chain shows exactly where it went wrong.</div>
+          <div class="scenario-outcome">Marco files a one-line ticket. The AI Ops engineer has a fix in the next run - no week-long debugging session required.</div>
+        </div>
+
+        <div class="scenario-card reveal">
+          <div class="persona-row">
+            <div class="persona-avatar">AR</div>
+            <div>
+              <div class="persona-name">Aisha &middot; AI Lead</div>
+              <div class="persona-role">Platform team &middot; LLM upgrade</div>
+            </div>
+          </div>
+          <div class="scenario-q">"We upgraded the model - did it get better or worse?"</div>
+          <div class="scenario-body">Upgrade from Claude Sonnet 4.5 to 4.6. Run comparison: composite moved from 74 to 81. Correctness up 12 points. Relevance dropped 3 - the new model is more verbose, which the Relevance eval penalises. Delta is positive overall.</div>
+          <div class="scenario-outcome">Aisha approves the upgrade and notes the verbosity signal for the next calibration review. Decision backed by data, not intuition.</div>
+        </div>
+
+        <div class="scenario-card reveal">
+          <div class="persona-row">
+            <div class="persona-avatar">LN</div>
+            <div>
+              <div class="persona-name">Lena &middot; Product Lead</div>
+              <div class="persona-role">Support team &middot; CURA diagnostic agent</div>
+            </div>
+          </div>
+          <div class="scenario-q">"Is the agent ready to go from shadow to production?"</div>
+          <div class="scenario-body">6 weeks, 4 scoring runs. Composite 79, grade C, verdict Review. Correctness is strong (88) but Relevance drags the composite (61). Top failing dimension: response clarity - correct, but written for experts, not frontline support staff.</div>
+          <div class="scenario-outcome">Lena has a specific remediation target: rewrite the system prompt to simplify output language. Clear criteria for the go-live decision.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA (dark navy) ── -->
+  <section id="cta">
+    <div class="container">
+      <div class="section-eyebrow section-eyebrow-light">Phase 1 &middot; Internal</div>
+      <h2 class="on-dark">Stop guessing what to test.<br>Let AgentScore figure it out.</h2>
+      <p class="section-lead on-dark">Phase 1 is live for internal Tricentis teams. Connect your agent, and AgentScore will tell you what to evaluate - based on what it observes. No eval expertise required to get started.</p>
+      <div class="cta-actions">
+        <a href="#" class="btn btn-orange btn-lg js-open-modal">Request access</a>
+      </div>
+      <p class="cta-meta">
+        Phase 2 (closed external beta) planned for Q4 2026 &middot;
+        Lead PM: <a href="mailto:a.demers@tricentis.com">Andrew Demers</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <div class="logo-mark" style="width:26px;height:26px;font-size:12px">A</div>
+        AgentScore &middot; Tricentis
+      </div>
+      <div class="footer-copy">Internal use only &middot; Phase 1 &middot; 2026</div>
+    </div>
+  </footer>
+
+  <!-- ── Access Request Modal ── -->
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal" id="accessModal">
+      <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+
+      <div id="modalForm">
+        <div class="modal-title" id="modalTitle">Request access to AgentScore</div>
+        <p class="modal-sub">Tell us about your agent and your team. We use this to prioritise onboarding and tailor the setup to your use case.</p>
+
+        <!-- To activate email delivery:
+             1. Go to formspree.io and create a free account
+             2. Create a new form - copy the form ID (e.g. xyzabcde)
+             3. Replace YOUR_FORMSPREE_ID below with that ID
+             The form will then email a.demers@tricentis.com on every submission. -->
+        <form id="accessForm" novalidate>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="f_name">Full name <span class="req">*</span></label>
+              <input id="f_name" name="name" type="text" required placeholder="Jane Smith" autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="f_email">Work email <span class="req">*</span></label>
+              <input id="f_email" name="email" type="email" required placeholder="you@tricentis.com" autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="f_team">Tricentis product <span class="req">*</span></label>
+              <select id="f_team" name="product" required>
+                <option value="" disabled selected>Select&hellip;</option>
+                <option>Tosca</option>
+                <option>qTest</option>
+                <option>NeoLoad</option>
+                <option>AI Workspace</option>
+                <option>Platform / Core Engineering</option>
+                <option>Sales / Solutions Engineering</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="f_role">Your role <span class="req">*</span></label>
+              <select id="f_role" name="role" required>
+                <option value="" disabled selected>Select&hellip;</option>
+                <option>QA Engineer / SDET</option>
+                <option>Test Lead / Test Manager</option>
+                <option>AI Ops / Prompt Engineer</option>
+                <option>Software Engineer</option>
+                <option>Engineering Manager</option>
+                <option>Product Manager</option>
+                <option>Solutions Engineer</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="f_agent_type">Agent type</label>
+              <select id="f_agent_type" name="agent_type">
+                <option value="" disabled selected>Select&hellip;</option>
+                <option>ATA - Autonomous Test Agent</option>
+                <option>ATC - Automated Test Creation</option>
+                <option>AI Workspace agent</option>
+                <option>APT - Performance Test Agent</option>
+                <option>Custom / homegrown agent</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="f_stage">Agent maturity</label>
+              <select id="f_stage" name="stage">
+                <option value="" disabled selected>Select&hellip;</option>
+                <option>Exploring - no agent yet</option>
+                <option>In active development</option>
+                <option>Running in shadow mode</option>
+                <option>Live - limited users</option>
+                <option>Live - broad production use</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="modal-submit" id="submitBtn">Send request</button>
+          <div class="form-error" id="formError">Something went wrong - please email <a href="mailto:a.demers@tricentis.com">a.demers@tricentis.com</a> directly.</div>
+        </form>
+      </div>
+
+      <div class="modal-success" id="modalSuccess" style="display:none">
+        <div class="modal-success-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1a8a5a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h3>Request sent</h3>
+        <p>Thanks - Andrew will be in touch to get your agent connected.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── Scroll reveal ──
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    // ── Score counter ──
+    function countUp(el, to, ms) {
+      const start = performance.now();
+      (function tick(now) {
+        const t = Math.min((now - start) / ms, 1);
+        el.textContent = Math.round(to * (1 - Math.pow(1 - t, 3)));
+        if (t < 1) requestAnimationFrame(tick);
+      })(start);
+    }
+    const scoreEl = document.getElementById('scoreNum');
+    if (scoreEl) {
+      const heroObs = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) { countUp(scoreEl, 88, 1100); heroObs.disconnect(); }
+      }, { threshold: 0.5 });
+      heroObs.observe(scoreEl);
+    }
+
+    // ── Modal ──
+    const backdrop  = document.getElementById('modalBackdrop');
+    const closeBtn  = document.getElementById('modalClose');
+    const form      = document.getElementById('accessForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const formError = document.getElementById('formError');
+    const success   = document.getElementById('modalSuccess');
+
+    // Collect browser context once
+    function getBrowserContext() {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const ua = navigator.userAgent;
+      // Simple OS sniff from UA
+      const os = /Windows/.test(ua) ? 'Windows'
+               : /Mac OS X/.test(ua) ? 'macOS'
+               : /Linux/.test(ua) ? 'Linux'
+               : /iPhone|iPad/.test(ua) ? 'iOS'
+               : /Android/.test(ua) ? 'Android'
+               : 'Unknown OS';
+      return {
+        submitted_at:  new Date().toISOString(),
+        timezone:      tz,
+        language:      navigator.language,
+        os:            os,
+        screen:        `${screen.width}x${screen.height}`,
+        viewport:      `${window.innerWidth}x${window.innerHeight}`,
+        referrer:      document.referrer || 'direct',
+        user_agent:    ua,
+      };
+    }
+
+    function openModal() {
+      backdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      backdrop.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.js-open-modal').forEach(el => {
+      el.addEventListener('click', e => { e.preventDefault(); openModal(); });
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', e => { if (e.target === backdrop) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    // ── Form submission ──
+    const FORMSPREE_ID = 'xojoekqn';
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      formError.style.display = 'none';
+
+      // Validate required fields
+      const required = form.querySelectorAll('[required]');
+      let valid = true;
+      required.forEach(el => {
+        el.style.borderColor = '';
+        if (!el.value.trim()) { el.style.borderColor = 'var(--block)'; valid = false; }
+      });
+      if (!valid) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+
+      const ctx = getBrowserContext();
+      const fields = Object.fromEntries(new FormData(form));
+      const payload = { ...fields, ...ctx };
+
+      try {
+        const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error(res.statusText);
+        document.getElementById('modalForm').style.display = 'none';
+        success.style.display = 'block';
+      } catch (err) {
+        formError.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Try again';
+      }
+    });
+  </script>
+</body>
+</html>

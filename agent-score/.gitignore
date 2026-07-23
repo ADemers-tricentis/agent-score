@@ -1,0 +1,7 @@
+*.md
+!README.md
+.remember/
+.DS_Store
+node_modules/
+dist/
+.claude/worktrees/

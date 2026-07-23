@@ -1,0 +1,20 @@
+{
+  "name": "agent-score",
+  "description": "Skills for instrumenting applications with OpenTelemetry to send traces to Tricentis Agent Score.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Tricentis",
+    "email": "support@tricentis.com"
+  },
+  "homepage": "https://agent-score.product.tricentis.com",
+  "license": "MIT",
+  "keywords": [
+    "agent-score",
+    "tricentis",
+    "opentelemetry",
+    "otel",
+    "tracing",
+    "observability",
+    "llm"
+  ]
+}
