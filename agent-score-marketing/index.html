@@ -752,6 +752,61 @@
       line-height: 1.55;
     }
 
+    /* ── FAQ ── */
+    #faq { background: var(--bg-light); }
+    #faq .section-lead { margin: 0 auto 2.5rem; }
+
+    .faq-cat {
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--primary);
+      margin: 2rem 0 0.75rem;
+    }
+    .faq-cat:first-of-type { margin-top: 0; }
+
+    .faq-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .faq-item {
+      background: var(--white);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      box-shadow: 0 1px 4px rgba(27,54,93,0.05);
+      overflow: hidden;
+    }
+
+    .faq-item summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 16px 20px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+
+    .faq-toggle {
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .faq-item[open] .faq-toggle-open  { display: none; }
+    .faq-item:not([open]) .faq-toggle-close { display: none; }
+
+    .faq-answer {
+      padding: 0 20px 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
     /* ── CTA (dark navy) ── */
     #cta {
       background: var(--navy);
@@ -1076,6 +1131,7 @@
         <a href="#capabilities">Features</a>
         <a href="#how-it-works">How it works</a>
         <a href="#scenarios">Use cases</a>
+        <a href="#faq">FAQ</a>
         <a href="#" class="btn btn-orange js-open-modal">Request access</a>
       </div>
     </div>
@@ -1524,6 +1580,75 @@
           <div class="scenario-outcome">Lena has a specific remediation target: rewrite the system prompt to simplify output language. Clear criteria for the go-live decision.</div>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ── -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-eyebrow">FAQ</div>
+      <h2>Answers to what teams ask first.</h2>
+      <p class="section-lead">The questions that come up most when teams look at AgentScore for the first time.</p>
+
+      <div class="faq-cat">Product &amp; positioning</div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>What is AgentScore?<span class="faq-toggle faq-toggle-open">+</span><span class="faq-toggle faq-toggle-close">&minus;</span></summary>
+          <div class="faq-answer">Most teams can prove their tests are solid and their code coverage is high - but that doesn't answer whether the <em>agent</em> doing the work is actually good at its job. AgentScore ingests your agent's traces and builds a scoring profile across a set of quality dimensions, giving you a clear ship/review/block verdict and flagging drift the moment something regresses.</div>
+        </details>
+        <details class="faq-item">
+          <summary>How does this fit with AI Workspace?<span class="faq-toggle faq-toggle-open">+</span><span class="faq-toggle faq-toggle-close">&minus;</span></summary>
+          <div class="faq-answer">AgentScore stands on its own, and AI Workspace is the fastest path to get it in front of users today - if you're building an agent there, you get scoring with almost no setup. Over time it can grow into its own dedicated surface alongside AI Workspace, with results feeding into the broader Tricentis platform story as that takes shape.</div>
+        </details>
+      </div>
+
+      <div class="faq-cat">Who it's for</div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Who is AgentScore built for?<span class="faq-toggle faq-toggle-open">+</span><span class="faq-toggle faq-toggle-close">&minus;</span></summary>
+          <div class="faq-answer">Today, the engineering or team lead responsible for an agent, who needs a fast answer to "did this change make it better or worse?" Longer term, the target is the domain expert - someone who understands their field deeply, like a tester or a legal reviewer, and can build or guide an agent without needing to be an AI engineer to know if it's working.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Do I have to use AI Workspace to use AgentScore?<span class="faq-toggle faq-toggle-open">+</span><span class="faq-toggle faq-toggle-close">&minus;</span></summary>
+          <div class="faq-answer">Not by design. AgentScore connects through a standard OpenTelemetry exporter, so any agent that emits traces can plug in, regardless of platform or model. AI Workspace is simply the first place it's available.</div>
+        </details>
+        <details class="faq-item">
+          <summary>What are teams doing today instead?<span class="faq-toggle faq-toggle-open">+</span><span class="faq-toggle faq-toggle-close">&minus;</span></summary>
+          <div class="faq-answer">Mostly nothing structured. AI-savvy teams hand-roll their own evals; everyone else relies on spot checks, an ad hoc LLM-as-judge, or plain intuition. AgentScore replaces "we're going on vibes" with a repeatable, comparable signal.</div>
+        </details>
+      </div>
+
+      <div class="faq-cat">How it works</div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>What's the difference between a trace and a scoring run?<span class="faq-toggle faq-toggle-open">+</span><span class="faq-toggle faq-toggle-close">&minus;</span></summary>
+          <div class="faq-answer">A trace is a single end-to-end interaction with your agent - every tool call and span it took to get there. AgentScore ingests traces continuously. A scoring run is the periodic evaluation step that analyzes a batch of collected traces and produces a composite score, so you get a meaningful signal without paying to evaluate every single interaction.</div>
+        </details>
+        <details class="faq-item">
+          <summary>What does a scoring run actually do?<span class="faq-toggle faq-toggle-open">+</span><span class="faq-toggle faq-toggle-close">&minus;</span></summary>
+          <div class="faq-answer">Based on your agent's inputs, outputs, and tool calls, AgentScore automatically determines which evals apply and runs them - then returns a composite 0-100 score, a letter grade, and a plain-language ship/review/block verdict, with a full breakdown of why.</div>
+        </details>
+        <details class="faq-item">
+          <summary>What's actually novel here, if the underlying evals already exist?<span class="faq-toggle faq-toggle-open">+</span><span class="faq-toggle faq-toggle-close">&minus;</span></summary>
+          <div class="faq-answer">The individual evals aren't the hard part - many are well understood and open source. The hard part is automatically figuring out which evals apply to a given agent based on how it actually behaves, running the right ones, and rolling the result into a single, trustworthy score.</div>
+        </details>
+        <details class="faq-item">
+          <summary>If an agent isn't ready to ship, does AgentScore tell me why?<span class="faq-toggle faq-toggle-open">+</span><span class="faq-toggle faq-toggle-close">&minus;</span></summary>
+          <div class="faq-answer">Yes. When a run falls short, an attribution pass pinpoints the exact trace and root cause - a credential exposure, a bad tool call, a specific failure category - and recommends what to fix. Fix it, re-run, and confirm the score clears the bar.</div>
+        </details>
+      </div>
+
+      <div class="faq-cat">Pricing &amp; fit</div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>How is AgentScore priced?<span class="faq-toggle faq-toggle-open">+</span><span class="faq-toggle faq-toggle-close">&minus;</span></summary>
+          <div class="faq-answer">Seats are free, and so is trace ingestion - pricing shouldn't discourage adoption or thorough instrumentation. You're charged per completed scoring run, so you only pay when you get a usable result back.</div>
+        </details>
+        <details class="faq-item">
+          <summary>Does it replace tools like Datadog or NeoLoad?<span class="faq-toggle faq-toggle-open">+</span><span class="faq-toggle faq-toggle-close">&minus;</span></summary>
+          <div class="faq-answer">No - it's complementary. If you're already doing AI monitoring or trace collection elsewhere, AgentScore layers on top of that instrumentation rather than replacing it.</div>
+        </details>
       </div>
     </div>
   </section>
