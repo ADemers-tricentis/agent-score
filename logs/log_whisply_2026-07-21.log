@@ -1,0 +1,23 @@
+2026-07-21 11:28:57,603 INFO [process_files]: Provided parameters for processing: {'output_dir': '/Users/a.demers/dev/whisply/transcriptions', 'file_language': None, 'model': 'large-v3-turbo', 'device': 'mlx', 'annotate': False, 'num_speakers': None, 'translate': False, 'subtitle': False, 'sub_length': 5}
+2026-07-21 11:28:57,603 INFO [_process_path]: Adding file: /Users/a.demers/Downloads/Recording July 21 2026 1920x1080.mp4
+2026-07-21 11:28:57,604 INFO [get_filepaths]: Total valid files to process: 1
+2026-07-21 11:28:57,604 INFO [process_files]: Processing files: [PosixPath('/Users/a.demers/Downloads/Recording_July_21_2026_1920x1080.mp4')]
+2026-07-21 11:29:01,643 INFO [detect_language]: Detecting language of file: Recording_July_21_2026_1920x1080_converted.wav
+2026-07-21 11:29:07,436 INFO [detect_language]: Detected language 'en' with probability 0.42
+2026-07-21 11:29:07,436 INFO [process_files]: Transcribing file: Recording_July_21_2026_1920x1080_converted.wav
+2026-07-21 11:29:13,435 INFO [transcribe_with_mlx_whisper]: 👨‍💻 Transcription started with 🍎 mlx-whisper for Recording_July_21_2026_1920x1080_converted.wav
+2026-07-21 11:30:39,527 INFO [process_files]: Provided parameters for processing: {'output_dir': '/Users/a.demers/dev/whisply/transcriptions', 'file_language': None, 'model': 'large-v3-turbo', 'device': 'mlx', 'annotate': True, 'num_speakers': None, 'translate': False, 'subtitle': False, 'sub_length': 5}
+2026-07-21 11:30:39,527 ERROR [_process_path]: Path "/Users/a.demers/Downloads/Recording July 21 2026 1920x1080.mp4" does not exist or is not accessible.
+2026-07-21 11:30:39,529 WARNING [get_filepaths]: No valid files found for processing. Please check the provided path: "/Users/a.demers/Downloads/Recording July 21 2026 1920x1080.mp4".
+2026-07-21 11:30:39,530 INFO [process_files]: Processing files: []
+2026-07-21 11:31:08,860 INFO [process_files]: Provided parameters for processing: {'output_dir': '/Users/a.demers/dev/whisply/transcriptions', 'file_language': None, 'model': 'large-v3-turbo', 'device': 'mlx', 'annotate': True, 'num_speakers': None, 'translate': False, 'subtitle': False, 'sub_length': 5}
+2026-07-21 11:31:08,861 INFO [_process_path]: Adding file: /Users/a.demers/Downloads/Recording_July_21_2026_1920x1080.mp4
+2026-07-21 11:31:08,861 INFO [get_filepaths]: Total valid files to process: 1
+2026-07-21 11:31:08,861 INFO [process_files]: Processing files: [PosixPath('/Users/a.demers/Downloads/Recording_July_21_2026_1920x1080.mp4')]
+2026-07-21 11:31:10,149 INFO [detect_language]: Detecting language of file: Recording_July_21_2026_1920x1080_converted.wav
+2026-07-21 11:31:15,488 INFO [detect_language]: Detected language 'en' with probability 0.42
+2026-07-21 11:31:15,488 INFO [process_files]: Transcribing file: Recording_July_21_2026_1920x1080_converted.wav
+2026-07-21 11:31:18,760 INFO [transcribe_with_mlx_whisper]: 👨‍💻 Transcription started with 🍎 mlx-whisper for Recording_July_21_2026_1920x1080_converted.wav
+2026-07-21 11:32:08,104 INFO [log_applied_quirks]: Applied quirks (see `speechbrain.utils.quirks`): [disable_jit_profiling, allow_tf32]
+2026-07-21 11:32:08,104 INFO [log_applied_quirks]: Excluded quirks specified by the `SB_DISABLE_QUIRKS` environment (comma-separated list): []
+2026-07-21 11:33:17,714 INFO [transcribe_with_mlx_whisper]: 👨‍💻 Transcription ended in 118.95 sec.
