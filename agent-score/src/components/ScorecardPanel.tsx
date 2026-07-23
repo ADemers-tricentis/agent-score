@@ -1,0 +1,168 @@
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import Chip from "@mui/material/Chip";
+import SvgIcon from "@mui/material/SvgIcon";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import type { Run, ProfileVersion } from "../types";
+import { DIMENSION_ORDER, DIMENSION_DOT_COLOR, averageDimensionScore } from "../data/dimensions";
+import GradeChip from "./GradeChip";
+
+interface Props {
+  run: Run | undefined;
+  profileVersion: ProfileVersion | null;
+  composite: number;
+  grade: "A" | "B" | "C" | "D" | "F";
+  isPreliminary: boolean;
+  confidenceDelta: number;
+  isScoringNow: boolean;
+  hasEnoughTraces: boolean;
+  tracesNeeded: number;
+  totalSessions: number;
+}
+
+type EvalStatus = "pass" | "fail" | "skip";
+
+function StatusIcon({ status }: { status: EvalStatus }) {
+  if (status === "pass") {
+    return (
+      <SvgIcon sx={{ fontSize: "1.1rem", color: "success.main" }}>
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+      </SvgIcon>
+    );
+  }
+  if (status === "fail") {
+    return (
+      <SvgIcon sx={{ fontSize: "1.1rem", color: "error.main" }}>
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+      </SvgIcon>
+    );
+  }
+  return <Typography sx={{ color: "text.disabled" }}>—</Typography>;
+}
+
+export default function ScorecardPanel({ run, profileVersion, composite, grade, isPreliminary, confidenceDelta, isScoringNow, hasEnoughTraces, tracesNeeded, totalSessions }: Props) {
+  const sessions = run?.sessions ?? [];
+  const enabledEntries = (profileVersion?.entries ?? []).filter((e) => e.enabled);
+
+  const evalStatus = new Map<string, { status: EvalStatus; mean: number | null }>();
+  enabledEntries.forEach((entry) => {
+    const mean = averageDimensionScore(entry.dimension, sessions);
+    const status: EvalStatus = mean == null ? "skip" : mean / 100 >= entry.threshold ? "pass" : "fail";
+    evalStatus.set(entry.id, { status, mean });
+  });
+
+  const scoredCount = [...evalStatus.values()].filter((v) => v.status === "pass").length;
+  const failedCount = [...evalStatus.values()].filter((v) => v.status === "fail").length;
+  const skippedCount = [...evalStatus.values()].filter((v) => v.status === "skip").length;
+  const failRate = enabledEntries.length > 0 ? failedCount / enabledEntries.length : 0;
+
+  const dimensionsPresent = DIMENSION_ORDER.filter((d) => enabledEntries.some((e) => e.dimension === d));
+
+  return (
+    <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1.5 }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 2 }}>
+        <Box>
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Scorecard</Typography>
+          <Typography variant="caption" sx={{ color: "text.secondary" }}>Headline grade and per-point scores from the latest run</Typography>
+        </Box>
+        {isScoringNow ? (
+          <Chip label="Running" size="small" color="warning" variant="outlined" sx={{ fontSize: "0.68rem" }} />
+        ) : run ? (
+          <Chip label={run.label} size="small" variant="outlined" sx={{ fontSize: "0.68rem", color: "text.secondary" }} />
+        ) : null}
+      </Box>
+
+      <Box sx={{ display: "flex", alignItems: "center", gap: 2.5, mb: 2 }}>
+        {hasEnoughTraces ? (
+          <GradeChip grade={grade} size="large" />
+        ) : (
+          <Box sx={{ width: 48, height: 48, borderRadius: "50%", border: "2px dashed", borderColor: "divider", display: "flex", alignItems: "center", justifyContent: "center", color: "text.disabled", fontSize: "1.3rem", flexShrink: 0 }}>
+            ?
+          </Box>
+        )}
+        <Box>
+          <Chip label={isPreliminary ? "Provisional" : "Final"} size="small" sx={{ height: 20, fontSize: "0.65rem", mb: 0.5 }} />
+          {hasEnoughTraces ? (
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              {composite}/100 · ± {confidenceDelta} SE
+            </Typography>
+          ) : (
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              Score will be provisional until {tracesNeeded - totalSessions} more traces are collected.
+            </Typography>
+          )}
+        </Box>
+      </Box>
+
+      {hasEnoughTraces && (
+        <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+          <Chip label={`${scoredCount} scored`} size="small" color="success" variant="outlined" sx={{ fontSize: "0.68rem" }} />
+          <Chip label={`${skippedCount} skipped`} size="small" variant="outlined" sx={{ fontSize: "0.68rem", color: "text.secondary" }} />
+          <Chip label={`${failedCount} failed`} size="small" color="error" variant="outlined" sx={{ fontSize: "0.68rem" }} />
+        </Box>
+      )}
+
+      {hasEnoughTraces && failedCount > 0 && (
+        <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1.25, p: 1.5, mb: 2, borderRadius: 1.5, border: "1px solid", borderColor: "warning.light", bgcolor: "rgba(var(--mui-palette-warning-mainChannel) / 0.08)" }}>
+          <SvgIcon sx={{ fontSize: "1.1rem", color: "warning.main", mt: 0.15, flexShrink: 0 }}>
+            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+          </SvgIcon>
+          <Box>
+            <Typography variant="body2" sx={{ fontWeight: 700 }}>Provisional — high failure rate</Typography>
+            <Typography variant="caption" sx={{ color: "text.secondary" }}>
+              {Math.round(failRate * 100)}% of evals are failing — the ship/block verdict is withheld until the failures below are addressed.
+            </Typography>
+          </Box>
+        </Box>
+      )}
+
+      {hasEnoughTraces && dimensionsPresent.length === 0 && (
+        <Typography variant="body2" sx={{ color: "text.disabled" }}>No scoring profile adopted — adopt one to see per-eval results.</Typography>
+      )}
+
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+        {hasEnoughTraces && dimensionsPresent.map((dim) => {
+          const entries = enabledEntries.filter((e) => e.dimension === dim);
+          return (
+            <Box key={dim}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+                <Box sx={{ width: 8, height: 8, borderRadius: "50%", bgcolor: DIMENSION_DOT_COLOR[dim], flexShrink: 0 }} />
+                <Typography variant="body2" sx={{ fontWeight: 700 }}>{dim}</Typography>
+              </Box>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem" }}>Eval</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem", width: 60 }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem", width: 70 }}>Mean</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem", width: 70 }}>Target</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem", width: 70 }}>Trend</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {entries.map((entry) => {
+                    const result = evalStatus.get(entry.id)!;
+                    return (
+                      <TableRow key={entry.id} sx={{ "&:last-child td": { borderBottom: 0 } }}>
+                        <TableCell sx={{ fontSize: "0.8rem" }}>{entry.evalName}</TableCell>
+                        <TableCell><StatusIcon status={result.status} /></TableCell>
+                        <TableCell sx={{ fontSize: "0.8rem", fontFamily: "monospace" }}>{result.mean != null ? `${Math.round(result.mean)}%` : "—"}</TableCell>
+                        <TableCell sx={{ fontSize: "0.8rem", fontFamily: "monospace", color: "text.secondary" }}>{Math.round(entry.threshold * 100)}%</TableCell>
+                        <TableCell sx={{ fontSize: "0.8rem", color: "text.disabled" }}>—</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </Box>
+          );
+        })}
+      </Box>
+    </Paper>
+  );
+}
