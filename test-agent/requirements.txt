@@ -1,1 +1,4 @@
-anthropic>=0.40.0
+anthropic
+langfuse
+gspread
+flask

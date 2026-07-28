@@ -1,3 +1,5 @@
 .DS_Store
 logs/
 node_modules/
+test-agent/.env
+test-agent/venv
