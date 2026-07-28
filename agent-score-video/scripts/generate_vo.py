@@ -27,7 +27,7 @@ LINES = {
     "of guessing what to test, it watches your agent work, reading the Open "
     "Telemetry traces it already emits, and figures out what actually matters, "
     "before you write a single eval, and before anything ships. It's the "
-    "shared evaluation layer for every agent on the team.",
+    "shared grading layer for every agent on the team.",
     "vo4": "Every session gets scored across six dimensions: correctness, "
     "efficiency, relevance, safety, consistency, and tool use, rolled into one "
     "composite grade, A through F. Each session gets a clear pass, partial, or "
