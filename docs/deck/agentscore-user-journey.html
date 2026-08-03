@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>AgentScore — Product Journey (onboarding to first scored run)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --navy-deep: #12264a;
+    --navy-mid: #254a7a;
+    --primary: #004c97;
+    --teal: #0087ae;
+    --teal-light: #59c8e6;
+    --orange: #ff6c0e;
+    --white: #ffffff;
+    --review: #2fbf78;
+    --text-dim: #7f93b8;
+    --text-body: #c3cee0;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--navy-deep);
+    color: var(--white);
+    font-family: "Open Sans", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    overflow: hidden; /* the whole diagram is scaled to fit — no scrolling */
+  }
+  .canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1920px;
+    height: 1150px;
+    background: var(--navy-deep);
+    overflow: hidden;
+    transform-origin: top left;
+  }
+  /* Fits the fixed 1920x1150 canvas entirely inside the viewport (both
+     width and height), centered, whatever the window's aspect ratio.
+     Scale + explicit centering offset are computed in JS (below) rather
+     than via flexbox, since flexbox centers based on the pre-transform
+     layout box — with a child this much larger than the viewport, that
+     produced an off-center, clipped result instead of a true fit. */
+  .scale-wrap {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .abs { position: absolute; }
+  .header-title { left: 100px; top: 60px; display: flex; align-items: center; gap: 14px; }
+  .header-title .brand { font-size: 38px; font-weight: 800; letter-spacing: -0.5px; color: var(--white); }
+  .beta { font-size: 15px; font-weight: 700; color: var(--orange); border: 2px solid var(--orange); border-radius: 6px; padding: 2px 10px; letter-spacing: 1px; }
+  .header-desc { left: 100px; top: 110px; font-size: 20px; color: var(--teal-light); }
+  .header-rule { left: 100px; top: 150px; right: 100px; border-top: 1px solid var(--navy-mid); }
+  .header-tag { right: 100px; top: 66px; font-size: 14px; color: var(--text-dim); }
+
+  .phase-label { position: absolute; font-size: 17px; font-weight: 700; letter-spacing: 2px; }
+
+  .card {
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.045);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card .head { display: flex; align-items: center; gap: 12px; }
+  .card .num {
+    width: 38px; height: 38px; border-radius: 50%; color: var(--white);
+    font-size: 17px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .card .title { font-size: 21px; font-weight: 700; color: var(--white); }
+  .card .tagline { font-size: 14px; color: var(--teal-light); font-style: italic; }
+  .card .rule { border-top: 1px solid var(--navy-mid); margin: 2px 0 4px; }
+  .card .bullets { display: flex; flex-direction: column; gap: 7px; }
+  .card .bullet { display: flex; gap: 7px; font-size: 13.5px; color: var(--text-body); line-height: 1.4; }
+  .card .bullet .dot { flex-shrink: 0; }
+
+  .onboard-c { border: 2.5px solid var(--primary); }
+  .onboard-n { background: var(--primary); }
+  .onboard-dot { color: var(--primary); }
+  .collect-c { border: 2.5px solid var(--teal); }
+  .collect-n { background: var(--teal); }
+  .collect-dot { color: var(--teal); }
+  .score-c { border: 2.5px solid var(--orange); }
+  .score-n { background: var(--orange); }
+  .score-dot { color: var(--orange); }
+  .review-c { border: 2.5px solid var(--review); }
+  .review-n { background: var(--review); }
+  .review-dot { color: var(--review); }
+
+  .connector { position: absolute; width: 30px; height: 4px; background: var(--orange); }
+  .row-arrow { position: absolute; font-size: 24px; color: var(--navy-mid); }
+
+  .chip-label { position: absolute; width: 320px; text-align: center; font-size: 14px; color: var(--text-dim); }
+  .chips { position: absolute; width: 320px; display: flex; justify-content: center; gap: 10px; }
+  .chip { padding: 7px 16px; border-radius: 20px; font-size: 14px; font-weight: 700; }
+  .chip.ship { color: #0f6b3f; background: #bff4d8; }
+  .chip.hold { color: #a34400; background: #ffe1bf; }
+  .chip.reject { color: #96271a; background: #ffd0cb; }
+
+  .loop-note {
+    position: absolute; text-align: center; font-size: 14px; color: var(--text-dim);
+    border-top: 2px dashed #4a5a78; padding-top: 12px;
+  }
+
+  .legend { left: 100px; bottom: 34px; display: flex; gap: 30px; align-items: center; }
+  .legend .item { display: flex; align-items: center; gap: 8px; }
+  .legend .swatch { width: 13px; height: 13px; border-radius: 3px; }
+  .legend .txt { font-size: 13px; color: var(--text-body); }
+  .footer-tag { right: 100px; bottom: 34px; font-size: 13px; color: var(--text-dim); }
+</style>
+</head>
+<body>
+<div class="scale-wrap">
+  <div class="canvas">
+    <div class="abs header-title">
+      <span class="brand">AgentScore</span>
+      <span class="beta">BETA</span>
+    </div>
+    <div class="abs header-desc">Product journey — onboarding to first scored run</div>
+    <div class="abs header-rule"></div>
+    <div class="abs header-tag">Real UI click-path (agent-score) — not a deck diagram</div>
+
+    <!-- Row 1 phase label -->
+    <div class="abs phase-label" style="left:180px; top:176px; color:var(--primary);">ONBOARD</div>
+
+    <!-- Row 1 cards -->
+    <div class="abs card onboard-c" style="left:180px; top:210px;">
+      <div class="head"><div class="num onboard-n">1</div><div class="title">Fleet</div></div>
+      <div class="tagline">Every agent, one status board.</div>
+      <div class="rule"></div>
+      <div class="bullets">
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>A–F grade + 0–100 composite</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Verdict &amp; reliability (pass^k)</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Not a config screen</span></div>
+      </div>
+    </div>
+
+    <div class="abs card onboard-c" style="left:530px; top:210px;">
+      <div class="head"><div class="num onboard-n">2</div><div class="title">Setup</div></div>
+      <div class="tagline">Copy-paste, not a build.</div>
+      <div class="rule"></div>
+      <div class="bullets">
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>One tenant API key, not per-agent</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>OTLP endpoint + auth header shown inline</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Or: paste an install instruction for your coding agent</span></div>
+      </div>
+    </div>
+
+    <div class="abs card onboard-c" style="left:880px; top:210px;">
+      <div class="head"><div class="num onboard-n">3</div><div class="title">Waiting for traces</div></div>
+      <div class="tagline">Nobody names it yet.</div>
+      <div class="rule"></div>
+      <div class="bullets">
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Received → parked → recognized from behavior → ready</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Known agents matched automatically</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Brand-new ones created on the spot</span></div>
+      </div>
+    </div>
+
+    <div class="abs card onboard-c" style="left:1230px; top:210px;">
+      <div class="head"><div class="num onboard-n">4</div><div class="title">Name your agent</div></div>
+      <div class="tagline">Confirm, don't invent.</div>
+      <div class="rule"></div>
+      <div class="bullets">
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Name &amp; type pre-filled from detection</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>One field to edit, not create from scratch</span></div>
+      </div>
+    </div>
+
+    <div class="abs card onboard-c" style="left:1580px; top:210px;">
+      <div class="head"><div class="num onboard-n">5</div><div class="title">Launch</div></div>
+      <div class="tagline">One click, five steps behind it.</div>
+      <div class="rule"></div>
+      <div class="bullets">
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Registers agent → connects OTel → provisions profile</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Opens Run #1 — already collecting</span></div>
+      </div>
+    </div>
+
+    <!-- Row 1 connectors -->
+    <div class="abs connector" style="left:500px; top:368px;"></div>
+    <div class="abs connector" style="left:850px; top:368px;"></div>
+    <div class="abs connector" style="left:1200px; top:368px;"></div>
+    <div class="abs connector" style="left:1550px; top:368px;"></div>
+
+    <div class="abs row-arrow" style="left:326px; top:538px;">↓</div>
+
+    <!-- Row 2 phase labels -->
+    <div class="abs phase-label" style="left:180px; top:576px; color:var(--teal);">COLLECT &amp; CONFIGURE</div>
+    <div class="abs phase-label" style="left:880px; top:576px; color:var(--orange);">SCORE</div>
+    <div class="abs phase-label" style="left:1230px; top:576px; color:var(--review);">REVIEW &amp; DECIDE</div>
+
+    <!-- Row 2 cards -->
+    <div class="abs card collect-c" style="left:180px; top:610px;">
+      <div class="head"><div class="num collect-n">6</div><div class="title">Project overview</div></div>
+      <div class="tagline">Nothing scored on thin data.</div>
+      <div class="rule"></div>
+      <div class="bullets">
+        <div class="bullet"><span class="dot collect-dot">•</span><span>Run #1 sits open, in progress</span></div>
+        <div class="bullet"><span class="dot collect-dot">•</span><span>Needs enough traces before scoring unlocks</span></div>
+        <div class="bullet"><span class="dot collect-dot">•</span><span>"Simulate traces" — demo helper only</span></div>
+      </div>
+    </div>
+
+    <div class="abs card collect-c" style="left:530px; top:610px;">
+      <div class="head"><div class="num collect-n">7</div><div class="title">Scoring tab</div></div>
+      <div class="tagline">Configure the bar, in plain language.</div>
+      <div class="rule"></div>
+      <div class="bullets">
+        <div class="bullet"><span class="dot collect-dot">•</span><span>Describe agent: Guided fields or Expert spec</span></div>
+        <div class="bullet"><span class="dot collect-dot">•</span><span>Compare runs once a 2nd run exists</span></div>
+        <div class="bullet"><span class="dot collect-dot">•</span><span>Auto-scores daily · next 02:00 UTC</span></div>
+      </div>
+    </div>
+
+    <div class="abs card score-c" style="left:880px; top:610px;">
+      <div class="head"><div class="num score-n">8</div><div class="title">Score now</div></div>
+      <div class="tagline">On demand, or on schedule — not either/or.</div>
+      <div class="rule"></div>
+      <div class="bullets">
+        <div class="bullet"><span class="dot score-dot">•</span><span>Disabled until enough traces are in</span></div>
+        <div class="bullet"><span class="dot score-dot">•</span><span>Parallel LLM judges score each eval</span></div>
+        <div class="bullet"><span class="dot score-dot">•</span><span>A real scoring pass, not a placeholder</span></div>
+      </div>
+    </div>
+
+    <div class="abs card review-c" style="left:1230px; top:610px;">
+      <div class="head"><div class="num review-n">9</div><div class="title">Run view</div></div>
+      <div class="tagline">The audit trail.</div>
+      <div class="rule"></div>
+      <div class="bullets">
+        <div class="bullet"><span class="dot review-dot">•</span><span>Every session's composite score, listed</span></div>
+        <div class="bullet"><span class="dot review-dot">•</span><span>Export as calibration case</span></div>
+        <div class="bullet"><span class="dot review-dot">•</span><span>Compare with the prior run</span></div>
+      </div>
+    </div>
+
+    <div class="abs card review-c" style="left:1580px; top:610px;">
+      <div class="head"><div class="num review-n">10</div><div class="title">Session view</div></div>
+      <div class="tagline">The why, not just the what.</div>
+      <div class="rule"></div>
+      <div class="bullets">
+        <div class="bullet"><span class="dot review-dot">•</span><span>3–6 dimension bars (agent-type dependent)</span></div>
+        <div class="bullet"><span class="dot review-dot">•</span><span>Attribution: root cause + evidence + confidence</span></div>
+        <div class="bullet"><span class="dot review-dot">•</span><span>Ship / Hold / Reject + Markdown/JSON export</span></div>
+      </div>
+    </div>
+
+    <!-- Row 2 connectors -->
+    <div class="abs connector" style="left:500px; top:768px;"></div>
+    <div class="abs connector" style="left:850px; top:768px;"></div>
+    <div class="abs connector" style="left:1200px; top:768px;"></div>
+    <div class="abs connector" style="left:1550px; top:768px;"></div>
+
+    <!-- Outcome chips -->
+    <div class="abs chip-label" style="left:1580px; top:948px;">the decision this feeds</div>
+    <div class="abs chips" style="left:1580px; top:978px;">
+      <span class="chip ship">Ship</span>
+      <span class="chip hold">Hold</span>
+      <span class="chip reject">Reject</span>
+    </div>
+
+    <!-- Loop-back -->
+    <div class="abs loop-note" style="left:530px; top:988px; width:1050px;">
+      ← next scoring cycle — daily, or triggered on demand
+    </div>
+
+    <!-- Footer -->
+    <div class="abs legend">
+      <div class="item"><div class="swatch" style="background:var(--primary);"></div><span class="txt">ONBOARD</span></div>
+      <div class="item"><div class="swatch" style="background:var(--teal);"></div><span class="txt">COLLECT &amp; CONFIGURE</span></div>
+      <div class="item"><div class="swatch" style="background:var(--orange);"></div><span class="txt">SCORE</span></div>
+      <div class="item"><div class="swatch" style="background:var(--review);"></div><span class="txt">REVIEW &amp; DECIDE</span></div>
+    </div>
+    <div class="abs footer-tag">AgentScore · Tricentis · prototype (agent-score, mock data)</div>
+  </div>
+</div>
+<script>
+  // Scale the fixed 1920x1150 canvas to fit inside the current window on
+  // both axes (not just width), so the whole diagram is always visible
+  // with no scrolling, however the window is sized or resized.
+  function fitCanvas() {
+    var canvas = document.querySelector(".canvas");
+    var scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1150);
+    var left = (window.innerWidth - 1920 * scale) / 2;
+    var top = (window.innerHeight - 1150 * scale) / 2;
+    canvas.style.transform = "translate(" + left + "px, " + top + "px) scale(" + scale + ")";
+  }
+  fitCanvas();
+  window.addEventListener("resize", fitCanvas);
+</script>
+</body>
+</html>
