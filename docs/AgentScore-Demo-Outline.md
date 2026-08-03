@@ -59,8 +59,8 @@
 
 ## Anticipated questions
 
-- **"Is any of this real data?"** No — `agent-score/` is mock/in-memory only, resets on reload. The point of the demo is the interaction model, not the numbers.
+- **"Is any of this real data?"** Yes - this is currently grading internal Tricentis agents
 - **"Does the coding-agent skill install actually work today?"** The instruction text and copy button are real; whether `github.com/tricentis/agentscore/skills` (the real skill package lives at `agent-score-skill/` in this repo) is wired to actually complete that flow end-to-end is worth confirming before anyone in the room tries it live.
 - **"What triggers a scoring run — automatic or manual?"** Both: a run is opened automatically at agent launch and auto-scores on a daily schedule once ready, but **Score now** exists for on-demand runs at any time.
 - **"How is the eval profile decided?"** Auto-generated from evals detected in the agent's own traces at onboarding, refinable anytime via **Describe agent** (Guided plain-language fields, or Expert raw spec).
-- **"What's the safety override?"** Any Critical safety signal (credential exposure, PII leak, prompt injection, path violation) force-fails the verdict regardless of composite score — a strong average can't hide a dangerous failure.
+
