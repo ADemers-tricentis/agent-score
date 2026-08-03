@@ -12,6 +12,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import SvgIcon from "@mui/material/SvgIcon";
 import Chip from "@mui/material/Chip";
+import Tooltip from "@mui/material/Tooltip";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Divider from "@mui/material/Divider";
@@ -247,7 +248,9 @@ export default function AgentDetailView({ projectId, navigate }: Props) {
 
           {/* P95 Latency */}
           <Paper variant="outlined" sx={{ p: 2, borderRadius: 1.5 }}>
-            <Typography variant="overline" sx={{ color: "text.disabled", letterSpacing: 0.8, fontSize: "0.65rem", display: "block", mb: 0.5 }}>P95 Latency</Typography>
+            <Tooltip title="How long the slowest 5% of runs took to finish - a better gauge of user-facing pain than the average." arrow placement="top">
+              <Typography variant="overline" sx={{ color: "text.disabled", letterSpacing: 0.8, fontSize: "0.65rem", display: "block", mb: 0.5, width: "fit-content", cursor: "help" }}>P95 Latency</Typography>
+            </Tooltip>
             {hasEnoughTraces && p95DurMs != null ? (
               <>
                 <Typography variant="h5" sx={{ fontWeight: 700, my: 0.5 }}>

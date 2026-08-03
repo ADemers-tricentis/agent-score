@@ -61,6 +61,9 @@ export default function Layout({ view, navigate, children }: Props) {
   const activeProjectId = "projectId" in view ? view.projectId : null;
   const activeProject = PROJECTS.find((p) => p.id === activeProjectId);
 
+  const advancedViewNames = ["guard-log", "metrics", "llm-judges", "add-judge", "dimensions", "profiles", "profile", "add-profile"];
+  const isAdvancedView = advancedViewNames.includes(view.name);
+
   const navItems = [
     {
       id: "home",
@@ -77,46 +80,55 @@ export default function Layout({ view, navigate, children }: Props) {
       onClick: () => navigate({ name: "agents" }),
     },
     {
-      id: "guard-log",
-      text: "Guard Log",
-      icon: <IconRunPrivatelyOutlined />,
-      selected: view.name === "guard-log",
-      onClick: () => navigate({ name: "guard-log" }),
-    },
-    {
-      id: "metrics",
-      text: "Metrics",
-      icon: <IconCellularDataOutlined />,
-      selected: view.name === "metrics",
-      onClick: () => navigate({ name: "metrics" }),
-    },
-    {
-      id: "llm-judges",
-      text: "LLM Judges",
-      icon: <IconArtificialIntelligenceOutlined />,
-      selected: view.name === "llm-judges" || view.name === "add-judge",
-      onClick: () => navigate({ name: "llm-judges" }),
-    },
-    {
-      id: "dimensions",
-      text: "Dimensions",
-      icon: <IconComponentsOutlined />,
-      selected: view.name === "dimensions",
-      onClick: () => navigate({ name: "dimensions" }),
-    },
-    {
-      id: "profiles",
-      text: "Profiles",
-      icon: <IconFileTableAdvancedOutlined />,
-      selected: view.name === "profiles" || view.name === "profile",
-      onClick: () => navigate({ name: "profiles" }),
-    },
-    {
       id: "integrations",
       text: "Integrations",
       icon: <IconConnectionOutlined />,
       selected: view.name === "integrations",
       onClick: () => navigate({ name: "integrations" }),
+    },
+    {
+      id: "advanced",
+      text: "Advanced",
+      icon: <IconDeveloperModeOutlined />,
+      tooltipText: "Developer settings - judges, guard rules, and raw metrics",
+      selected: isAdvancedView,
+      items: [
+        {
+          id: "guard-log",
+          text: "Guard Log",
+          icon: <IconRunPrivatelyOutlined />,
+          selected: view.name === "guard-log",
+          onClick: () => navigate({ name: "guard-log" }),
+        },
+        {
+          id: "metrics",
+          text: "Metrics",
+          icon: <IconCellularDataOutlined />,
+          selected: view.name === "metrics",
+          onClick: () => navigate({ name: "metrics" }),
+        },
+        {
+          id: "llm-judges",
+          text: "LLM Judges",
+          icon: <IconArtificialIntelligenceOutlined />,
+          selected: view.name === "llm-judges" || view.name === "add-judge",
+          onClick: () => navigate({ name: "llm-judges" }),
+        },
+        {
+          id: "dimensions",
+          text: "Dimensions",
+          icon: <IconComponentsOutlined />,
+          selected: view.name === "dimensions",
+          onClick: () => navigate({ name: "dimensions" }),
+        },
+        {
+          id: "profiles",
+          text: "Profiles",
+          icon: <IconFileTableAdvancedOutlined />,
+          selected: view.name === "profiles" || view.name === "profile",
+          onClick: () => navigate({ name: "profiles" }),
+        },
+      ],
     },
   ];
 

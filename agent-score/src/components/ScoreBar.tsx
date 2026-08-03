@@ -96,6 +96,11 @@ export default function ScoreBar({ label, dimension, compact = false }: Props) {
             N/A
           </Typography>
         </Box>
+        {!compact && DIMENSION_QUESTION[label] && (
+          <Typography variant="caption" sx={{ display: "block", color: "text.disabled", fontSize: "0.7rem", mb: 0.5 }}>
+            {DIMENSION_QUESTION[label]}
+          </Typography>
+        )}
         <LinearProgress variant="determinate" value={0} sx={{ height: 6, borderRadius: 3, opacity: 0.3 }} />
       </Box>
     );
@@ -126,6 +131,11 @@ export default function ScoreBar({ label, dimension, compact = false }: Props) {
           </Typography>
         </Box>
       </Box>
+      {!compact && DIMENSION_QUESTION[label] && (
+        <Typography variant="caption" sx={{ display: "block", color: "text.disabled", fontSize: "0.7rem", mb: 0.5 }}>
+          {DIMENSION_QUESTION[label]}
+        </Typography>
+      )}
       <LinearProgress
         variant="determinate"
         value={dimension.score}

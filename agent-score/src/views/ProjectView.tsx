@@ -441,7 +441,9 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
             )}
             {hasEnoughTraces && passK >= 0 && (
               <Box sx={{ mt: 1.5, pt: 1.5, borderTop: "1px solid", borderColor: "divider", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <Typography variant="caption" sx={{ color: "text.disabled" }}>Pass^k</Typography>
+                <Tooltip title="Of the scenarios run more than once, the share that passed every single time. Low reliability means the agent works sometimes but not consistently." arrow placement="top">
+                  <Typography variant="caption" sx={{ color: "text.disabled", cursor: "help" }}>Reliability</Typography>
+                </Tooltip>
                 <Typography variant="caption" sx={{ fontWeight: 700, color: passK >= 75 ? "success.main" : passK >= 50 ? "warning.main" : "error.main" }}>
                   {passK}%
                 </Typography>
@@ -465,7 +467,9 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
 
           {/* P95 Latency */}
           <Paper variant="outlined" sx={{ p: 2, borderRadius: 1.5 }}>
-            <Typography variant="overline" sx={{ color: "text.disabled", letterSpacing: 0.8, fontSize: "0.65rem", display: "block", mb: 0.5 }}>P95 Latency</Typography>
+            <Tooltip title="How long the slowest 5% of runs took to finish - a better gauge of user-facing pain than the average." arrow placement="top">
+              <Typography variant="overline" sx={{ color: "text.disabled", letterSpacing: 0.8, fontSize: "0.65rem", display: "block", mb: 0.5, width: "fit-content", cursor: "help" }}>P95 Latency</Typography>
+            </Tooltip>
             {hasEnoughTraces && p95DurMs != null ? (
               <>
                 <Typography variant="h5" sx={{ fontWeight: 700, my: 0.5 }}>

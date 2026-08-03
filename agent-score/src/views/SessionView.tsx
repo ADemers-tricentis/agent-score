@@ -15,6 +15,7 @@ import Tab from "@mui/material/Tab";
 import AuraTabPanel from "@tricentis/aura/components/TabPanel.js";
 import type { View, Session, Attribution, ShipDecision } from "../types";
 import { getProject, getRun, getSession, sessionCompositeScore, sessionGrade } from "../data/mock";
+import { ROOT_CAUSE_LABEL, SAFETY_SIGNAL_LABEL } from "../data/dimensions";
 import VerdictBadge from "../components/VerdictBadge";
 import ScoreBar from "../components/ScoreBar";
 import ScoreMeter from "../components/ScoreMeter";
@@ -124,8 +125,8 @@ export default function SessionView({ projectId, runId, sessionId, navigate }: P
               label={`Safety Override — ${session.safetyOverride.severity}`}
               sx={{ bgcolor: "error.main", fontWeight: 700, fontSize: "0.68rem", "& .MuiChip-label": { color: "white" } }}
             />
-            <Typography variant="caption" sx={{ fontFamily: "monospace", color: "error.main", fontWeight: 600 }}>
-              {session.safetyOverride.signal}
+            <Typography variant="caption" sx={{ color: "error.main", fontWeight: 600 }}>
+              {SAFETY_SIGNAL_LABEL[session.safetyOverride.signal] ?? session.safetyOverride.signal}
             </Typography>
           </Box>
           <Typography variant="body2" sx={{ mt: 0.5 }}>{session.safetyOverride.detail}</Typography>
@@ -357,9 +358,9 @@ function AttributionPanel({ attr }: { attr: Attribution }) {
           Attribution
         </Typography>
         <ChipSubtle
-          label={attr.rootCause.replace(/_/g, " ")}
+          label={ROOT_CAUSE_LABEL[attr.rootCause] ?? attr.rootCause.replace(/_/g, " ")}
           color="error"
-          sx={{ fontWeight: 600, fontSize: "0.68rem", fontFamily: "monospace" }}
+          sx={{ fontWeight: 600, fontSize: "0.68rem" }}
         />
         <Typography variant="caption" sx={{ color: "text.secondary", ml: "auto" }}>
           {Math.round(attr.confidence * 100)}% confidence · {attr.agentFault ? "agent fault" : "external factor"}
@@ -466,7 +467,7 @@ function generateMarkdownReport(projectName: string, runLabel: string, s: Sessio
 
   if (s.safetyOverride) {
     lines.push(`## ⚠️ Safety Override`);
-    lines.push(`**Signal:** \`${s.safetyOverride.signal}\`  `);
+    lines.push(`**Signal:** ${SAFETY_SIGNAL_LABEL[s.safetyOverride.signal] ?? s.safetyOverride.signal}  `);
     lines.push(`**Severity:** ${s.safetyOverride.severity}  `);
     lines.push(s.safetyOverride.detail);
     lines.push(``);
@@ -474,7 +475,7 @@ function generateMarkdownReport(projectName: string, runLabel: string, s: Sessio
 
   if (s.attr) {
     lines.push(`## Attribution`);
-    lines.push(`**Root Cause:** \`${s.attr.rootCause}\`  `);
+    lines.push(`**Root Cause:** ${ROOT_CAUSE_LABEL[s.attr.rootCause] ?? s.attr.rootCause}  `);
     lines.push(`**Confidence:** ${Math.round(s.attr.confidence * 100)}%  `);
     lines.push(``);
     lines.push(`### Evidence Chain`);
