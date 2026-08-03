@@ -6,15 +6,13 @@ import type { View } from "../view";
 import type { ScoringRun } from "../types";
 import { useAgents } from "../data/useAgents";
 import { listAgentScoringRuns } from "../data/mock";
-import KpiCards from "./home/KpiCards";
-import AttentionTable from "./home/AttentionTable";
-import VerdictDistribution from "./home/VerdictDistribution";
-import RecentScoringRunsTable from "./home/RecentScoringRunsTable";
+import KpiSummaryLine from "./home/KpiSummaryLine";
+import InboxSection from "./home/InboxSection";
 
 /**
- * Home dashboard (REQ-054 through REQ-058). Fetches scoring runs for every
- * agent once, in one shared effect, and hands the merged result down to the
- * KPI cards and the recent-runs table so neither has to fetch on its own.
+ * Home: a triage inbox rather than a dashboard — see
+ * plans/2026-08-03-agentscore-app-home-inbox.md. Still fetches scoring runs
+ * for every agent once, in one shared effect, to feed the summary line.
  */
 export default function HomeView({ navigate }: { navigate: (v: View) => void }) {
   const agents = useAgents();
@@ -33,31 +31,21 @@ export default function HomeView({ navigate }: { navigate: (v: View) => void }) 
   }, [agents]);
 
   return (
-    <Box sx={{ p: 3, maxWidth: 1200 }}>
-      <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 2 }}>
-        <Box>
-          <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>
-            Home
-          </Typography>
-          <Typography variant="body2" sx={{ color: "text.secondary", mb: 3 }}>
-            Activity across all agents · last 7 days
-          </Typography>
-        </Box>
+    <Box sx={{ p: 3, maxWidth: 900 }}>
+      <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 2, mb: 0.5 }}>
+        <Typography variant="h5" sx={{ fontWeight: 700 }}>
+          Home
+        </Typography>
         <Button variant="contained" onClick={() => navigate({ name: "add-agent" })}>
           Add Agent
         </Button>
       </Box>
 
       <Box sx={{ mb: 3 }}>
-        <KpiCards agents={agents} runs={runs} />
+        <KpiSummaryLine agents={agents} runs={runs} />
       </Box>
 
-      <Box sx={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 2, mb: 3, alignItems: "start" }}>
-        <AttentionTable agents={agents} navigate={navigate} />
-        <VerdictDistribution agents={agents} />
-      </Box>
-
-      <RecentScoringRunsTable runs={runs} agents={agents} navigate={navigate} />
+      <InboxSection navigate={navigate} />
     </Box>
   );
 }
