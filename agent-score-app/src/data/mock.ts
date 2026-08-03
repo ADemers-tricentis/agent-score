@@ -1,5 +1,6 @@
 import type {
   Agent,
+  AgentInboxGroup,
   AgentSettingsData,
   AgentType,
   Attribution,
@@ -9,9 +10,12 @@ import type {
   DimensionScore,
   FingerprintMatch,
   Golden,
+  InboxItem,
+  InboxSeverity,
   JudgeInfo,
   LabelingCandidate,
   Readiness,
+  RestingAgentSummary,
   ScoringProfileSummary,
   ScoringRun,
   ScoringRunDetail,
@@ -610,6 +614,12 @@ for (const agentId of Object.keys(TRACES)) {
     note: i === 0 ? undefined : "Verdict should have been Passed — the tool error was transient.",
   }));
 }
+// Regression Test Agent is the cleanest seeded agent (Ship, Grade A, no
+// safety issues, no FAIL sessions in its latest run) — give it an empty
+// labeling queue too so the Home inbox's "shipping cleanly" resting state
+// has a real example rather than every ready agent always having at least
+// its 2 seeded labeling candidates.
+LABELING_QUEUE["agt_ata_regression"] = [];
 
 // --- Agent settings, per agent -------------------------------------------------
 
@@ -764,4 +774,133 @@ export async function getFingerprintMatch(agentId: string): Promise<FingerprintM
   const agent = AGENTS.find((a) => a.agent_id === agentId);
   if (!agent || agent.traceCount < 1) return null;
   return { profileName: profileSummaryFor(agent.agentType).name, confidence: 78, sessionCount: agent.traceCount };
+}
+
+// --- Home inbox ---------------------------------------------------------------
+// Aggregates across every agent into "things that need a human decision"
+// (see plans/2026-08-03-agentscore-app-home-inbox.md). Priority order for an
+// agent's single topReason line: a Critical safety override outranks a High
+// one, which outranks a FAIL session, which outranks a PARTIAL session, which
+// outranks a labeling-queue candidate.
+
+interface RankedReason {
+  rank: number;
+  reason: string;
+}
+
+// A bare PARTIAL session (no safety override) reads as "pending, low
+// confidence" — the same ambiguous state the labeling queue already exists
+// to resolve. Only FAIL and safety overrides represent an unambiguous
+// "review this" decision at the session level; PARTIAL-without-override is
+// intentionally left out of the inbox rather than double-counted.
+function sessionReason(session: Session): RankedReason | null {
+  if (session.safetyOverride?.severity === "Critical") {
+    return { rank: 0, reason: session.attribution?.rootCause ?? session.safetyOverride.detail };
+  }
+  if (session.safetyOverride?.severity === "High") {
+    return { rank: 1, reason: session.attribution?.rootCause ?? session.safetyOverride.detail };
+  }
+  if (session.verdict === "FAIL") {
+    return { rank: 2, reason: session.attribution?.rootCause ?? "Failed a scoring session" };
+  }
+  return null;
+}
+
+function sessionRank(session: Session): number {
+  return sessionReason(session)?.rank ?? 99;
+}
+
+// A run can carry a dozen-plus non-PASS sessions across its full history — an
+// inbox needs to read as "a few things to look at," not a re-listing of every
+// session that ever missed. Cap what surfaces per agent; the rest is a single
+// "+N more" count pointing at the Scoring tab rather than N more rows.
+const MAX_SESSION_ITEMS_PER_AGENT = 3;
+
+export async function listInboxGroups(): Promise<AgentInboxGroup[]> {
+  const agents = await listAgents();
+
+  const groups = await Promise.all(
+    agents.map(async (agent): Promise<AgentInboxGroup | null> => {
+      const readiness = await getAgentReadiness(agent.agent_id);
+      if (!readiness.ready) return null; // onboarding, not actionable — see listRestingAgents
+
+      const [latestRuns, labelingCandidates] = await Promise.all([
+        listAgentScoringRuns(agent.agent_id, { limit: 1 }),
+        listLabelingQueue(agent.agent_id),
+      ]);
+      const latestRun = latestRuns[0];
+      const runDetail = latestRun ? await getScoringRun(agent.agent_id, latestRun.id) : null;
+      const sessions = runDetail?.sessions ?? [];
+      const flaggedSessions = sessions
+        .filter((s) => s.verdict === "FAIL" || s.safetyOverride)
+        .sort((a, b) => sessionRank(a) - sessionRank(b) || new Date(b.ts).getTime() - new Date(a.ts).getTime());
+      const shownSessions = flaggedSessions.slice(0, MAX_SESSION_ITEMS_PER_AGENT);
+      const hiddenSessionCount = flaggedSessions.length - shownSessions.length;
+
+      const items: InboxItem[] = [
+        ...shownSessions.map(
+          (session): InboxItem => ({
+            kind: "session",
+            agentId: agent.agent_id,
+            runId: latestRun!.id,
+            runLabel: latestRun!.label,
+            session,
+          }),
+        ),
+        ...labelingCandidates.map(
+          (candidate): InboxItem => ({ kind: "labeling", agentId: agent.agent_id, candidate }),
+        ),
+      ];
+      if (items.length === 0) return null;
+
+      const ranked = [
+        ...flaggedSessions.map(sessionReason).filter((r): r is RankedReason => r !== null),
+        ...labelingCandidates.map((c): RankedReason => ({ rank: 4, reason: c.reason })),
+      ].sort((a, b) => a.rank - b.rank);
+
+      const severity: InboxSeverity = flaggedSessions.some((s) => s.safetyOverride?.severity === "Critical")
+        ? "critical"
+        : "warning";
+
+      return {
+        agentId: agent.agent_id,
+        agentName: agent.name,
+        agentType: agent.agentType,
+        severity,
+        topReason: ranked[0]?.reason ?? "Needs review",
+        items,
+        hiddenSessionCount,
+      };
+    }),
+  );
+
+  return groups
+    .filter((g): g is AgentInboxGroup => g !== null)
+    .sort((a, b) => {
+      if (a.severity !== b.severity) return a.severity === "critical" ? -1 : 1;
+      return b.items.length - a.items.length;
+    });
+}
+
+export async function listRestingAgents(): Promise<RestingAgentSummary[]> {
+  const [agents, groups] = await Promise.all([listAgents(), listInboxGroups()]);
+  const flaggedIds = new Set(groups.map((g) => g.agentId));
+
+  return Promise.all(
+    agents
+      .filter((a) => !flaggedIds.has(a.agent_id))
+      .map(async (agent): Promise<RestingAgentSummary> => {
+        const readiness = await getAgentReadiness(agent.agent_id);
+        return readiness.ready
+          ? { agentId: agent.agent_id, agentName: agent.name, agentType: agent.agentType, status: "ship" }
+          : {
+              agentId: agent.agent_id,
+              agentName: agent.name,
+              agentType: agent.agentType,
+              status: "onboarding",
+              captured: readiness.captured,
+              threshold: readiness.threshold,
+            };
+      }),
+  );
 }

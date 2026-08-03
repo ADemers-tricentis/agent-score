@@ -224,3 +224,45 @@ export interface DescribeAgentGuidedInput {
   neverDo: string;
   mainConcern: string;
 }
+
+// --- Home inbox --------------------------------------------------------------
+
+export type InboxSeverity = "critical" | "warning";
+
+export interface InboxSessionItem {
+  kind: "session";
+  agentId: string;
+  runId: string;
+  runLabel: string;
+  session: Session;
+}
+
+export interface InboxLabelingItem {
+  kind: "labeling";
+  agentId: string;
+  candidate: LabelingCandidate;
+}
+
+export type InboxItem = InboxSessionItem | InboxLabelingItem;
+
+export interface AgentInboxGroup {
+  agentId: string;
+  agentName: string;
+  agentType: AgentType;
+  severity: InboxSeverity;
+  /** Plain-language summary of the single worst item. */
+  topReason: string;
+  items: InboxItem[];
+  /** Flagged sessions from the latest run beyond the small cap surfaced in `items`. */
+  hiddenSessionCount: number;
+}
+
+export interface RestingAgentSummary {
+  agentId: string;
+  agentName: string;
+  agentType: AgentType;
+  status: "ship" | "onboarding";
+  /** Only present when status === "onboarding". */
+  captured?: number;
+  threshold?: number;
+}
