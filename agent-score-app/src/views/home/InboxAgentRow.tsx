@@ -22,7 +22,15 @@ function ChevronIcon({ open }: { open: boolean }) {
 }
 
 /** One flagged session inline: score + scenario, a safety alert if present, a trimmed root-cause line, and the ship decision control. */
-function SessionItemCard({ item, onActionTaken }: { item: Extract<InboxItem, { kind: "session" }>; onActionTaken: () => void }) {
+function SessionItemCard({
+  item,
+  onActionTaken,
+  navigate,
+}: {
+  item: Extract<InboxItem, { kind: "session" }>;
+  onActionTaken: () => void;
+  navigate: (v: View) => void;
+}) {
   const { session } = item;
   return (
     <Paper sx={{ p: 2, border: "1px solid", borderColor: "divider", borderRadius: 2, display: "flex", flexDirection: "column", gap: 1.5 }}>
@@ -56,6 +64,17 @@ function SessionItemCard({ item, onActionTaken }: { item: Extract<InboxItem, { k
           <Typography variant="caption" sx={{ color: "text.disabled" }}>
             ({session.attribution.confidence}% confidence)
           </Typography>
+          <Button
+            size="small"
+            variant="text"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate({ name: "session-detail", agentId: item.agentId, runId: item.runId, sessionId: session.id });
+            }}
+            sx={{ color: "primary.main", fontSize: "0.72rem", minWidth: 0, py: 0 }}
+          >
+            View trace →
+          </Button>
         </Box>
       )}
 
@@ -151,7 +170,7 @@ export default function InboxAgentRow({
         <Box sx={{ px: 2, pb: 2.5, pt: 0.5, bgcolor: "action.hover", display: "flex", flexDirection: "column", gap: 1.5 }}>
           {group.items.map((item) =>
             item.kind === "session" ? (
-              <SessionItemCard key={item.session.id} item={item} onActionTaken={onActionTaken} />
+              <SessionItemCard key={item.session.id} item={item} onActionTaken={onActionTaken} navigate={navigate} />
             ) : (
               <LabelingItemCard key={item.candidate.id} item={item} onActionTaken={onActionTaken} />
             ),

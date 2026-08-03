@@ -8,11 +8,14 @@ import { useAgents } from "../data/useAgents";
 import { listAgentScoringRuns } from "../data/mock";
 import KpiSummaryLine from "./home/KpiSummaryLine";
 import InboxSection from "./home/InboxSection";
+import VerdictDistribution from "./home/VerdictDistribution";
+import RecentScoringRunsTable from "./home/RecentScoringRunsTable";
 
 /**
  * Home: a triage inbox rather than a dashboard — see
  * plans/2026-08-03-agentscore-app-home-inbox.md. Still fetches scoring runs
- * for every agent once, in one shared effect, to feed the summary line.
+ * for every agent once, in one shared effect, to feed the summary line and
+ * the activity panels below the inbox.
  */
 export default function HomeView({ navigate }: { navigate: (v: View) => void }) {
   const agents = useAgents();
@@ -31,7 +34,7 @@ export default function HomeView({ navigate }: { navigate: (v: View) => void }) 
   }, [agents]);
 
   return (
-    <Box sx={{ p: 3, maxWidth: 900 }}>
+    <Box sx={{ p: 3, maxWidth: 1200 }}>
       <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 2, mb: 0.5 }}>
         <Typography variant="h5" sx={{ fontWeight: 700 }}>
           Home
@@ -45,7 +48,17 @@ export default function HomeView({ navigate }: { navigate: (v: View) => void }) 
         <KpiSummaryLine agents={agents} runs={runs} />
       </Box>
 
-      <InboxSection navigate={navigate} />
+      <Box sx={{ maxWidth: 900 }}>
+        <InboxSection navigate={navigate} />
+      </Box>
+
+      <Typography variant="overline" sx={{ color: "text.disabled", fontSize: "0.68rem", letterSpacing: 1, display: "block", mt: 4, mb: 1.5 }}>
+        Activity
+      </Typography>
+      <Box sx={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 2, alignItems: "start" }}>
+        <RecentScoringRunsTable runs={runs} agents={agents} navigate={navigate} />
+        <VerdictDistribution agents={agents} />
+      </Box>
     </Box>
   );
 }
