@@ -8,7 +8,6 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import ChipStatus from "@tricentis/aura/components/ChipStatus.js";
 import type { ScoringProfile, ProfileVersion, View } from "../types";
 import { DIMENSION_ORDER } from "../data/dimensions";
 
@@ -39,9 +38,8 @@ export default function ScoringProfilePanel({ profile, version, navigate }: Prop
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 2 }}>
         <Box>
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Scoring profile</Typography>
-          <Typography variant="caption" sx={{ color: "text.secondary" }}>Adopted profile version scored against this agent</Typography>
+          <Typography variant="caption" sx={{ color: "text.secondary" }}>The rules this agent is being scored against</Typography>
         </Box>
-        <Chip label={`adopt #${version.version}`} size="small" variant="outlined" sx={{ fontSize: "0.68rem" }} />
       </Box>
 
       <Paper variant="outlined" sx={{ p: 1.75, borderRadius: 1.5, mb: 2.5, bgcolor: "rgba(var(--mui-palette-primary-mainChannel) / 0.03)" }}>
@@ -55,10 +53,10 @@ export default function ScoringProfilePanel({ profile, version, navigate }: Prop
           </Button>
         </Box>
         <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 1 }}>
-          Weights · {weightsLine}
+          How much each area counts toward the final score · {weightsLine}
         </Typography>
         <Typography variant="caption" sx={{ color: "text.disabled" }}>
-          To change evals or thresholds, publish a new profile version in the eval catalog, then pin it here.
+          To change what's measured, publish a new profile version, then pin it here.
         </Typography>
       </Paper>
 
@@ -75,18 +73,26 @@ export default function ScoringProfilePanel({ profile, version, navigate }: Prop
                 <TableHead>
                   <TableRow>
                     <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem" }}>Eval</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem", width: 60 }}>Thr</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem", width: 80 }}>Threshold</TableCell>
                     <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem", width: 60 }}>Weight</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem", width: 90 }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem", width: 90 }}>In scoring?</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {entries.map((entry) => (
                     <TableRow key={entry.id} sx={{ "&:last-child td": { borderBottom: 0 } }}>
-                      <TableCell sx={{ fontSize: "0.8rem" }}>{entry.evalSlug}</TableCell>
+                      <TableCell sx={{ fontSize: "0.8rem" }}>{entry.evalName}</TableCell>
                       <TableCell sx={{ fontSize: "0.8rem", fontFamily: "monospace" }}>{entry.threshold}</TableCell>
                       <TableCell sx={{ fontSize: "0.8rem", fontFamily: "monospace" }}>{entry.weight}</TableCell>
-                      <TableCell><ChipStatus status={entry.enabled ? "Passed" : "Failed"} /></TableCell>
+                      <TableCell>
+                        <Chip
+                          label={entry.enabled ? "Yes" : "No"}
+                          size="small"
+                          variant="outlined"
+                          color={entry.enabled ? "success" : "default"}
+                          sx={{ height: 20, fontSize: "0.68rem" }}
+                        />
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

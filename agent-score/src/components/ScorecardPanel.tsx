@@ -142,9 +142,8 @@ export default function ScorecardPanel({ run, profileVersion, composite, grade, 
                   <TableRow>
                     <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem" }}>Eval</TableCell>
                     <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem", width: 60 }}>Status</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem", width: 70 }}>Mean</TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem", width: 70 }}>Score</TableCell>
                     <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem", width: 70 }}>Target</TableCell>
-                    <TableCell sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.72rem", width: 70 }}>Trend</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -156,7 +155,6 @@ export default function ScorecardPanel({ run, profileVersion, composite, grade, 
                         <TableCell><StatusIcon status={result.status} /></TableCell>
                         <TableCell sx={{ fontSize: "0.8rem", fontFamily: "monospace" }}>{result.mean != null ? `${Math.round(result.mean)}%` : "—"}</TableCell>
                         <TableCell sx={{ fontSize: "0.8rem", fontFamily: "monospace", color: "text.secondary" }}>{Math.round(entry.threshold * 100)}%</TableCell>
-                        <TableCell sx={{ fontSize: "0.8rem", color: "text.disabled" }}>—</TableCell>
                       </TableRow>
                     );
                   })}
