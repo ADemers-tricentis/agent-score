@@ -1,5 +1,6 @@
 .DS_Store
 logs/
 node_modules/
+.vite/
 test-agent/.env
 test-agent/venv
