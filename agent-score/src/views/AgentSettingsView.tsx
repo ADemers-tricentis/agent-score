@@ -13,6 +13,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import TextField from "@mui/material/TextField";
 import SvgIcon from "@mui/material/SvgIcon";
+import Tooltip from "@mui/material/Tooltip";
 import type { View, VerdictBandKey } from "../types";
 import {
   getProject,
@@ -46,6 +47,14 @@ const EVAL_KIND_LABEL: Record<string, string> = {
   llm_judge: "LLM Judge",
   hybrid: "Hybrid",
   decision_tree: "Decision Tree",
+};
+
+// Plain-language explanation of how each eval kind computes its result.
+const EVAL_KIND_DESCRIPTION: Record<string, string> = {
+  library_metric: "Computed directly from the trace data, like a formula - no AI judgment involved.",
+  llm_judge: "An AI model reads the session and judges whether it meets the criteria.",
+  hybrid: "Combines a calculated metric with AI judgment.",
+  decision_tree: "Follows a fixed set of rules to reach a result, not AI judgment.",
 };
 
 export default function AgentSettingsView({ projectId, navigate }: Props) {
@@ -258,13 +267,15 @@ export default function AgentSettingsView({ projectId, navigate }: Props) {
                           <Box sx={{ flex: 1, minWidth: 0 }}>
                             <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, flexWrap: "wrap" }}>
                               <Typography variant="caption" sx={{ fontWeight: 600 }}>{entry.evalName}</Typography>
-                              <Chip
-                                label={EVAL_KIND_LABEL[entry.evalKind] ?? entry.evalKind}
-                                size="small"
-                                color={EVAL_KIND_COLOR[entry.evalKind] ?? "default"}
-                                variant="outlined"
-                                sx={{ height: 16, fontSize: "0.6rem" }}
-                              />
+                              <Tooltip title={EVAL_KIND_DESCRIPTION[entry.evalKind] ?? ""} arrow placement="top">
+                                <Chip
+                                  label={EVAL_KIND_LABEL[entry.evalKind] ?? entry.evalKind}
+                                  size="small"
+                                  color={EVAL_KIND_COLOR[entry.evalKind] ?? "default"}
+                                  variant="outlined"
+                                  sx={{ height: 16, fontSize: "0.6rem", cursor: "help" }}
+                                />
+                              </Tooltip>
                               <Chip
                                 label={`weight ${entry.weight}x`}
                                 size="small"
@@ -294,7 +305,7 @@ export default function AgentSettingsView({ projectId, navigate }: Props) {
       <Paper sx={{ p: 2.5, mb: 3, border: "1px solid", borderColor: "divider", borderRadius: 2 }}>
         <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>Verdict Bands</Typography>
         <Typography variant="body2" sx={{ color: "text.secondary", mb: 2.5 }}>
-          Composite score thresholds that map to verdict labels. Each band must be lower than the one above it.
+          The score cutoffs that decide whether a result is labeled Ship, Review, or Block. Each cutoff must be lower than the one above it.
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
           {VERDICT_BANDS.map(({ key, label, color }) => (
@@ -384,19 +395,19 @@ export default function AgentSettingsView({ projectId, navigate }: Props) {
         </Paper>
       </Box>
 
-      {/* Langfuse provisioning */}
+      {/* Trace storage */}
       <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: 3, mb: 3 }}>
         <Box>
-          <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>Langfuse provisioning</Typography>
+          <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>Trace storage</Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            Each agent is 1:1 with a Langfuse project. State machine: provisioning - active, or failed with a retry action.
+            Each agent gets its own private storage for traces. It moves from setting up to active automatically; if setup fails, you can retry.
           </Typography>
         </Box>
         <Paper sx={{ p: 2.5, border: "1px solid", borderColor: "divider", borderRadius: 2 }}>
           <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
             <Box>
               <Typography variant="overline" sx={{ color: "text.disabled", fontSize: "0.62rem", letterSpacing: 1, display: "block" }}>
-                PROVISIONING STATUS
+                STATUS
               </Typography>
               <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mt: 0.25 }}>
                 <Box sx={{ width: 8, height: 8, borderRadius: "50%", bgcolor: "success.main", flexShrink: 0 }} />
@@ -405,7 +416,7 @@ export default function AgentSettingsView({ projectId, navigate }: Props) {
             </Box>
             <Box>
               <Typography variant="overline" sx={{ color: "text.disabled", fontSize: "0.62rem", letterSpacing: 1, display: "block" }}>
-                LANGFUSE PROJECT
+                STORAGE ID
               </Typography>
               <Typography variant="body2" sx={{ fontFamily: "monospace", mt: 0.25 }}>
                 {`lf-${project.id}-${project.service.slice(0, 6)}`}

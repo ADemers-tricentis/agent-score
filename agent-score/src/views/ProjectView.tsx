@@ -1203,14 +1203,14 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
                       {toAdd.map((entry) => (
                         <Box key={entry.id} sx={{ display: "flex", alignItems: "center", gap: 1, p: 1, borderRadius: 1, bgcolor: "rgba(var(--mui-palette-success-mainChannel) / 0.08)", border: "1px solid", borderColor: "success.light" }}>
-                          <Typography variant="caption" sx={{ color: "success.dark", fontWeight: 700, width: 48, flexShrink: 0 }}>+ ADD</Typography>
+                          <Typography variant="caption" sx={{ color: "success.dark", fontWeight: 700, width: 56, flexShrink: 0 }}>Add</Typography>
                           <Typography variant="caption" sx={{ fontWeight: 600 }}>{entry.evalName}</Typography>
                           <Chip label={entry.dimension} size="small" color="success" variant="outlined" sx={{ height: 16, fontSize: "0.6rem", ml: "auto" }} />
                         </Box>
                       ))}
                       {toRemove.map((entry) => (
                         <Box key={entry.id} sx={{ display: "flex", alignItems: "center", gap: 1, p: 1, borderRadius: 1, bgcolor: "rgba(var(--mui-palette-error-mainChannel) / 0.06)", border: "1px solid", borderColor: "error.light" }}>
-                          <Typography variant="caption" sx={{ color: "error.dark", fontWeight: 700, width: 48, flexShrink: 0 }}>- REM</Typography>
+                          <Typography variant="caption" sx={{ color: "error.dark", fontWeight: 700, width: 56, flexShrink: 0 }}>Remove</Typography>
                           <Typography variant="caption" sx={{ fontWeight: 600 }}>{entry.evalName}</Typography>
                           <Chip label={entry.dimension} size="small" color="error" variant="outlined" sx={{ height: 16, fontSize: "0.6rem", ml: "auto" }} />
                         </Box>
@@ -1219,7 +1219,7 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
                         const cur = currentEntries.find((c) => c.evalSlug === entry.evalSlug)!;
                         return (
                           <Box key={entry.id} sx={{ display: "flex", alignItems: "center", gap: 1, p: 1, borderRadius: 1, bgcolor: "rgba(var(--mui-palette-warning-mainChannel) / 0.08)", border: "1px solid", borderColor: "warning.light" }}>
-                            <Typography variant="caption" sx={{ color: "warning.dark", fontWeight: 700, width: 48, flexShrink: 0 }}>~ ADJ</Typography>
+                            <Typography variant="caption" sx={{ color: "warning.dark", fontWeight: 700, width: 56, flexShrink: 0 }}>Adjust</Typography>
                             <Typography variant="caption" sx={{ fontWeight: 600 }}>{entry.evalName}</Typography>
                             <Typography variant="caption" sx={{ color: "text.secondary", ml: "auto" }}>weight {cur.weight} → {entry.weight}</Typography>
                           </Box>
@@ -1289,9 +1289,9 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
                 </Box>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
                   {evalDesign?.status === "confirmed"
-                    ? `${evalDesign.confirmedDimensions.length} dimensions confirmed · ${evalDesign.calibrationSet.length} calibration scenarios`
+                    ? `${evalDesign.confirmedDimensions.length} areas confirmed to measure · ${evalDesign.calibrationSet.length} test scenarios defined`
                     : evalDesign?.status === "observation_ready"
-                    ? `Observation-based recommendation ready - ${evalDesign.measurementRecommendation?.shadowSessionCount} shadow sessions analyzed`
+                    ? `We watched ${evalDesign.measurementRecommendation?.shadowSessionCount} real sessions and have a recommendation ready`
                     : "No evals configured. Set up evaluation design to define what to measure."}
                 </Typography>
               </Box>
