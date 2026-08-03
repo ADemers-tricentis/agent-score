@@ -3,6 +3,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import SvgIcon from "@mui/material/SvgIcon";
+import Tooltip from "@mui/material/Tooltip";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -88,9 +89,11 @@ export default function ScorecardPanel({ run, profileVersion, composite, grade, 
         <Box>
           <Chip label={isPreliminary ? "Provisional" : "Final"} size="small" sx={{ height: 20, fontSize: "0.65rem", mb: 0.5 }} />
           {hasEnoughTraces ? (
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              {composite}/100 · ± {confidenceDelta} SE
-            </Typography>
+            <Tooltip title={`With more sessions, this score could reasonably land anywhere from ${Math.max(0, composite - confidenceDelta)} to ${Math.min(100, composite + confidenceDelta)}. More sessions narrow this range.`} arrow placement="top">
+              <Typography variant="body2" sx={{ color: "text.secondary", width: "fit-content", cursor: "help" }}>
+                {composite}/100 · ± {confidenceDelta}
+              </Typography>
+            </Tooltip>
           ) : (
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
               Score will be provisional until {tracesNeeded - totalSessions} more traces are collected.

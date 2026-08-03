@@ -548,6 +548,7 @@ export default function AddAgentView({ navigate }: Props) {
   const [traceReady, setTraceReady] = useState(false);
   const [apiKeyCopied, setApiKeyCopied] = useState(false);
   const [agentInstrCopied, setAgentInstrCopied] = useState(false);
+  const [showManualSetup, setShowManualSetup] = useState(false);
 
   // New-agent trace detection state
   const [detectedTraceName, setDetectedTraceName] = useState("");
@@ -863,39 +864,46 @@ export default function AddAgentView({ navigate }: Props) {
         </Box>
 
         <Box>
-          <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>Configure your OTel exporter</Typography>
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 0.5 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Manual setup</Typography>
+            <Button size="small" onClick={() => setShowManualSetup((v) => !v)}>
+              {showManualSetup ? "Hide" : "Show"} details
+            </Button>
+          </Box>
           <Typography variant="body2" sx={{ color: "text.secondary", mb: 1.5 }}>
-            Add AgentScore as an OTLP/HTTP exporter in your existing telemetry setup. If your framework already instruments traces, you&apos;re done in seconds — no SDK, no field mapping, no per-agent configuration.
+            For an engineer wiring this up directly: add AgentScore as an OTLP/HTTP exporter in your existing telemetry setup. If your framework already instruments traces, you&apos;re done in seconds.
           </Typography>
-          <Paper variant="outlined" sx={{ borderRadius: 1.5, overflow: "hidden", mb: 2 }}>
-            <Box sx={{ p: 2, borderBottom: "1px solid", borderColor: "divider", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-              <Box>
-                <Typography variant="caption" sx={{ fontWeight: 700, color: "text.disabled", textTransform: "uppercase", letterSpacing: 0.5, display: "block" }}>Ingest endpoint</Typography>
-                <Typography variant="body2" sx={{ fontFamily: "monospace", mt: 0.5 }}>{endpoint}</Typography>
+          <Collapse in={showManualSetup}>
+            <Paper variant="outlined" sx={{ borderRadius: 1.5, overflow: "hidden", mb: 2 }}>
+              <Box sx={{ p: 2, borderBottom: "1px solid", borderColor: "divider", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <Box>
+                  <Typography variant="caption" sx={{ fontWeight: 700, color: "text.disabled", textTransform: "uppercase", letterSpacing: 0.5, display: "block" }}>Ingest endpoint</Typography>
+                  <Typography variant="body2" sx={{ fontFamily: "monospace", mt: 0.5 }}>{endpoint}</Typography>
+                </Box>
+                <Chip label="OTLP/HTTP" size="small" sx={{ height: 20, fontSize: "0.65rem" }} />
               </Box>
-              <Chip label="OTLP/HTTP" size="small" sx={{ height: 20, fontSize: "0.65rem" }} />
-            </Box>
-            <Box sx={{ p: 2 }}>
-              <Typography variant="caption" sx={{ fontWeight: 700, color: "text.disabled", textTransform: "uppercase", letterSpacing: 0.5, display: "block" }}>Authorization header</Typography>
-              <Typography variant="body2" sx={{ fontFamily: "monospace", mt: 0.5 }}>
-                {"Authorization: Bearer "}{MOCK_API_KEY}
+              <Box sx={{ p: 2 }}>
+                <Typography variant="caption" sx={{ fontWeight: 700, color: "text.disabled", textTransform: "uppercase", letterSpacing: 0.5, display: "block" }}>Authorization header</Typography>
+                <Typography variant="body2" sx={{ fontFamily: "monospace", mt: 0.5 }}>
+                  {"Authorization: Bearer "}{MOCK_API_KEY}
+                </Typography>
+              </Box>
+            </Paper>
+
+            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>Environment variables (any OTel-compatible framework)</Typography>
+            <Paper variant="outlined" sx={{ p: 2, borderRadius: 1.5, bgcolor: "rgba(0,0,0,0.025)", mb: 2 }}>
+              <Typography component="pre" variant="caption" sx={{ fontFamily: "monospace", display: "block", whiteSpace: "pre-wrap", lineHeight: 1.8, m: 0 }}>
+                {envSnippet}
               </Typography>
-            </Box>
-          </Paper>
+            </Paper>
 
-          <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>Environment variables (any OTel-compatible framework)</Typography>
-          <Paper variant="outlined" sx={{ p: 2, borderRadius: 1.5, bgcolor: "rgba(0,0,0,0.025)", mb: 2 }}>
-            <Typography component="pre" variant="caption" sx={{ fontFamily: "monospace", display: "block", whiteSpace: "pre-wrap", lineHeight: 1.8, m: 0 }}>
-              {envSnippet}
-            </Typography>
-          </Paper>
-
-          <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>Python — LangChain, LangGraph, or any OTel-instrumented agent</Typography>
-          <Paper variant="outlined" sx={{ p: 2, borderRadius: 1.5, bgcolor: "rgba(0,0,0,0.025)" }}>
-            <Typography component="pre" variant="caption" sx={{ fontFamily: "monospace", display: "block", whiteSpace: "pre-wrap", lineHeight: 1.8, m: 0 }}>
-              {pythonSnippet}
-            </Typography>
-          </Paper>
+            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>Python — LangChain, LangGraph, or any OTel-instrumented agent</Typography>
+            <Paper variant="outlined" sx={{ p: 2, borderRadius: 1.5, bgcolor: "rgba(0,0,0,0.025)" }}>
+              <Typography component="pre" variant="caption" sx={{ fontFamily: "monospace", display: "block", whiteSpace: "pre-wrap", lineHeight: 1.8, m: 0 }}>
+                {pythonSnippet}
+              </Typography>
+            </Paper>
+          </Collapse>
         </Box>
 
         <Box>

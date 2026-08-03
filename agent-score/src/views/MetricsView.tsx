@@ -4,6 +4,8 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Tag from "@tricentis/aura/components/Tag.js";
 import { PROJECTS, GUARD_LOG } from "../data/mock";
+import { ROOT_CAUSE_LABEL } from "../data/dimensions";
+import type { RootCause } from "../types";
 
 export default function MetricsView() {
   const allSessions = PROJECTS.flatMap((p) => p.runs.flatMap((r) => r.sessions));
@@ -74,8 +76,8 @@ export default function MetricsView() {
         >
           {Object.entries(rootCauses).map(([cause, count]) => (
             <Box key={cause} sx={{ display: "flex", justifyContent: "space-between", mb: 0.5 }}>
-              <Typography variant="caption" sx={{ fontFamily: "monospace", color: "error.light" }}>
-                {cause}
+              <Typography variant="caption" sx={{ color: "error.light" }}>
+                {ROOT_CAUSE_LABEL[cause as RootCause] ?? cause}
               </Typography>
               <Typography variant="caption" sx={{ fontWeight: 700, color: "text.primary" }}>
                 {count}

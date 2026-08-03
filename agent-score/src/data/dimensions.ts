@@ -1,4 +1,21 @@
-import type { ShowcaseCategory, Session } from "../types";
+import type { ShowcaseCategory, Session, RootCause, SafetySignal } from "../types";
+
+// Plain-language labels for the internal root-cause slugs shown in
+// Attribution panels, reports, and metrics breakdowns.
+export const ROOT_CAUSE_LABEL: Record<RootCause, string> = {
+  credential_exposure: "Leaked a credential or secret",
+  hallucinated_state: "Acted on made-up information",
+  tool_selection_error: "Picked the wrong tool for the job",
+  pii_exposure: "Exposed personal data",
+};
+
+// Plain-language labels for safety override signals.
+export const SAFETY_SIGNAL_LABEL: Record<SafetySignal, string> = {
+  prompt_injection_detected: "Prompt injection detected",
+  credential_exposure: "Leaked a credential or secret",
+  pii_leak: "Exposed personal data",
+  path_violation: "Accessed files outside its allowed scope",
+};
 
 // Canonical dimension order, most heavily weighted first — mirrors
 // sessionCompositeScore's weighting and the order used across score views.

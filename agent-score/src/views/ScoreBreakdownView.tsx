@@ -5,7 +5,6 @@ import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import LinearProgress from "@mui/material/LinearProgress";
 import SvgIcon from "@mui/material/SvgIcon";
-import Tooltip from "@mui/material/Tooltip";
 import type { View, DimensionScore, Session } from "../types";
 import { getProject, getRun, getSession, sessionCompositeScore, sessionGrade } from "../data/mock";
 import { DIMENSION_QUESTION, SIG_LABEL } from "../components/ScoreBar";
@@ -47,12 +46,13 @@ function DimensionCard({ label, dimension }: { label: string; dimension: Dimensi
   if (!dimension) {
     return (
       <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1.5, opacity: 0.6 }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
-          <Tooltip title={explanation} arrow placement="top">
-            <Typography variant="subtitle1" sx={{ fontWeight: 700, cursor: "help", width: "fit-content" }}>{label}</Typography>
-          </Tooltip>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.5 }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 700, width: "fit-content" }}>{label}</Typography>
           <Typography variant="body2" sx={{ color: "text.disabled" }}>N/A</Typography>
         </Box>
+        {explanation && (
+          <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>{explanation}</Typography>
+        )}
         <LinearProgress variant="determinate" value={0} sx={{ height: 7, borderRadius: 4, opacity: 0.3 }} />
       </Paper>
     );
@@ -62,10 +62,8 @@ function DimensionCard({ label, dimension }: { label: string; dimension: Dimensi
 
   return (
     <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1.5 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
-        <Tooltip title={explanation} arrow placement="top">
-          <Typography variant="subtitle1" sx={{ fontWeight: 700, cursor: "help", width: "fit-content" }}>{label}</Typography>
-        </Tooltip>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.5 }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 700, width: "fit-content" }}>{label}</Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           {dimension.rawDeltaPct !== undefined && (
             <Typography variant="caption" sx={{ color: dimension.rawDeltaPct >= 0 ? "success.main" : "error.main", fontWeight: 500 }}>
@@ -77,6 +75,9 @@ function DimensionCard({ label, dimension }: { label: string; dimension: Dimensi
           </Typography>
         </Box>
       </Box>
+      {explanation && (
+        <Typography variant="body2" sx={{ color: "text.secondary", mb: 1 }}>{explanation}</Typography>
+      )}
       <LinearProgress variant="determinate" value={dimension.score} color={color} sx={{ height: 7, borderRadius: 4, mb: dimension.sigs.length > 0 ? 1.5 : 0 }} />
       {dimension.sigs.length > 0 && (
         <>
@@ -151,7 +152,7 @@ export default function ScoreBreakdownView({ projectId, runId, sessionId, naviga
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
         </SvgIcon>
         <Typography variant="caption" sx={{ color: "text.secondary" }}>
-          Hover a dimension name to see what it measures. Evals below show the raw signals feeding its score.
+          Each dimension below shows what it measures. Evals show the raw signals feeding its score.
         </Typography>
       </Box>
 

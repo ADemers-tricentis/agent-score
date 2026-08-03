@@ -19,6 +19,7 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Divider from "@mui/material/Divider";
+import Tooltip from "@mui/material/Tooltip";
 import type { View, Session } from "../types";
 import { getProject, getRun, runPassRate, sessionCompositeScore, sessionGrade } from "../data/mock";
 import VerdictBadge from "../components/VerdictBadge";
@@ -166,9 +167,15 @@ export default function RunView({ projectId, runId, navigate }: Props) {
                 {passRate}%
               </Typography>
               {ci95 > 0 && (
-                <Typography variant="caption" sx={{ color: "text.disabled", fontFamily: "monospace" }}>
-                  ± {ci95}pp
-                </Typography>
+                <Tooltip
+                  title={`Based on ${n} session${n === 1 ? "" : "s"}, we're 95% confident the true pass rate is between ${Math.max(0, passRate - ci95)}% and ${Math.min(100, passRate + ci95)}%. More sessions narrow this range.`}
+                  arrow
+                  placement="top"
+                >
+                  <Typography variant="caption" sx={{ color: "text.disabled", cursor: "help" }}>
+                    ± {ci95}%
+                  </Typography>
+                </Tooltip>
               )}
             </Box>
           </Box>
