@@ -11,6 +11,9 @@ This repository is a workspace of independent sub-projects, not a single deploya
 ### `agent-score/`
 The product prototype: a React + Vite + MUI frontend (using `@tricentis/aura`) that renders the AgentScore back office — agents, scoring runs, dimension breakdowns, scoring profiles, LLM judges, Runtime Guard logs, and more. This is the main UI referenced throughout the other folders. See `agent-score/README.md` for the product concept and scoring model in detail.
 
+### `agent-score-app/`
+A newer, simplified React + Vite + `@tricentis/aura` frontend aimed at the Domain Practitioner persona (a tester or other domain expert with no AI background), as opposed to `agent-score/`'s AI-engineer-facing back office. Currently covers the Home dashboard and Agent Overview tab on mock data. See `agent-score-app/README.md` to run it and `plans/2026-08-03-agent-score-app-home-overview.md` for scope.
+
 ### `agent-score-marketing/`
 A single-page static marketing site (`index.html`, no build step) introducing AgentScore to internal Tricentis teams: problem statement, how it works, capabilities, quality dimensions, use-case scenarios, FAQ, and a "Request access" form (Formspree-backed).
 
