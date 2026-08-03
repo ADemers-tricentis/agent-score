@@ -1,7 +1,5 @@
 # AgentScore — Live Demo Outline (Onboarding → First Scored Run)
 
-**Prepared by:** Lead PM, AgentScore
-
 **Format:** ~8-10 min live click-through of the real product UI 
 
 **Audience:** Domain practitioner / non-AI-expert persona — the target *end user*, not a technical buyer.
