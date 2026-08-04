@@ -16,7 +16,8 @@ import AuraTabPanel from "@tricentis/aura/components/TabPanel.js";
 import type { View, Session, Attribution, ShipDecision } from "../types";
 import { getProject, getRun, getSession, sessionCompositeScore, sessionGrade } from "../data/mock";
 import { ROOT_CAUSE_LABEL, SAFETY_SIGNAL_LABEL } from "../data/dimensions";
-import VerdictBadge from "../components/VerdictBadge";
+import { projectVerdictBands, sessionVerdict, VERDICT_BAND_META } from "../data/verdict";
+import VerdictChip from "../components/VerdictChip";
 import ScoreBar from "../components/ScoreBar";
 import ScoreMeter from "../components/ScoreMeter";
 import GradeChip from "../components/GradeChip";
@@ -34,12 +35,6 @@ function fmtDur(ms: number): string {
   return `${Math.floor(s / 60)}m ${s % 60}s`;
 }
 
-function shipLabel(verdict: string) {
-  if (verdict === "PASS") return { text: "Ship", color: "success.main" };
-  if (verdict === "PARTIAL") return { text: "Review", color: "warning.main" };
-  return { text: "Don't Ship", color: "error.main" };
-}
-
 export default function SessionView({ projectId, runId, sessionId, navigate }: Props) {
   const [reportTab, setReportTab] = useState(0);
   const [decisionOpen, setDecisionOpen] = useState(false);
@@ -55,7 +50,8 @@ export default function SessionView({ projectId, runId, sessionId, navigate }: P
     return <Box sx={{ p: 3 }}><Typography>Session not found.</Typography></Box>;
   }
 
-  const ship = shipLabel(session.verdict);
+  const bands = projectVerdictBands(project);
+  const verdict = sessionVerdict(session, bands);
   const composite = sessionCompositeScore(session);
   const grade = sessionGrade(composite);
   const existingDecision = recordedDecision ?? session.shipDecision;
@@ -153,9 +149,9 @@ export default function SessionView({ projectId, runId, sessionId, navigate }: P
 
               <Box sx={{ flex: 1 }}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
-                  <VerdictBadge verdict={session.verdict} size="medium" />
-                  <Typography variant="subtitle1" sx={{ fontWeight: 700, color: ship.color }}>
-                    {ship.text}
+                  <VerdictChip band={verdict.band} size="medium" />
+                  <Typography variant="subtitle1" sx={{ fontWeight: 700, color: VERDICT_BAND_META[verdict.band].token }}>
+                    {verdict.reason}
                   </Typography>
                   {session.baseline != null && (
                     <Typography variant="caption" sx={{ color: "text.disabled", ml: "auto" }}>
@@ -239,7 +235,7 @@ export default function SessionView({ projectId, runId, sessionId, navigate }: P
               <Box>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
                   <Tag
-                    label={existingDecision.decision}
+                    label={existingDecision.decision === "Ship" ? "Ship anyway" : existingDecision.decision === "Hold" ? "Hold" : "Block release"}
                     sx={{
                       bgcolor: existingDecision.decision === "Ship" ? "success.dark" : existingDecision.decision === "Hold" ? "warning.dark" : "error.dark",
                       fontWeight: 700,
@@ -278,13 +274,13 @@ export default function SessionView({ projectId, runId, sessionId, navigate }: P
                   sx={{ mb: 2 }}
                 >
                   <ToggleButton value="Ship" sx={{ fontSize: "0.75rem", px: 2, "&.Mui-selected": { bgcolor: "success.dark", color: "success.light" } }}>
-                    Ship
+                    Ship anyway
                   </ToggleButton>
                   <ToggleButton value="Hold" sx={{ fontSize: "0.75rem", px: 2, "&.Mui-selected": { bgcolor: "warning.dark", color: "warning.light" } }}>
                     Hold
                   </ToggleButton>
                   <ToggleButton value="Reject" sx={{ fontSize: "0.75rem", px: 2, "&.Mui-selected": { bgcolor: "error.dark", color: "error.light" } }}>
-                    Reject
+                    Block release
                   </ToggleButton>
                 </ToggleButtonGroup>
 

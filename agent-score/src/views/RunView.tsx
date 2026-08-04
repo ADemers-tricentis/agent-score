@@ -22,7 +22,8 @@ import Divider from "@mui/material/Divider";
 import Tooltip from "@mui/material/Tooltip";
 import type { View, Session } from "../types";
 import { getProject, getRun, runPassRate, sessionCompositeScore, sessionGrade } from "../data/mock";
-import VerdictBadge from "../components/VerdictBadge";
+import { projectVerdictBands, sessionVerdict, scoreToken } from "../data/verdict";
+import VerdictChip from "../components/VerdictChip";
 import GradeChip from "../components/GradeChip";
 
 interface Props {
@@ -69,6 +70,7 @@ export default function RunView({ projectId, runId, navigate }: Props) {
   const run = getRun(projectId, runId);
   if (!run || !project) return <Box sx={{ p: 3 }}><Typography>Run not found.</Typography></Box>;
 
+  const bands = projectVerdictBands(project);
   const passRate = runPassRate(run.sessions);
   const avgComposite = run.sessions.length
     ? Math.round(run.sessions.reduce((sum, s) => sum + sessionCompositeScore(s), 0) / run.sessions.length)
@@ -320,22 +322,22 @@ export default function RunView({ projectId, runId, navigate }: Props) {
                   </Box>
                 </TableCell>
                 <TableCell>
-                  <Typography variant="caption" sx={{ fontWeight: 600, color: scoreColor(session.scores.benchmarkPerformance.score) }}>
+                  <Typography variant="caption" sx={{ fontWeight: 600, color: scoreToken(session.scores.benchmarkPerformance.score) }}>
                     {session.scores.benchmarkPerformance.score}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography variant="caption" sx={{ fontWeight: 600, color: session.scores.valueEfficiency ? scoreColor(session.scores.valueEfficiency.score) : "text.disabled" }}>
+                  <Typography variant="caption" sx={{ fontWeight: 600, color: session.scores.valueEfficiency ? scoreToken(session.scores.valueEfficiency.score) : "text.disabled" }}>
                     {session.scores.valueEfficiency?.score ?? "—"}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography variant="caption" sx={{ fontWeight: 600, color: scoreColor(session.scores.uxSignal.score) }}>
+                  <Typography variant="caption" sx={{ fontWeight: 600, color: scoreToken(session.scores.uxSignal.score) }}>
                     {session.scores.uxSignal.score}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <VerdictBadge verdict={session.verdict} />
+                  <VerdictChip band={sessionVerdict(session, bands).band} />
                 </TableCell>
               </TableRow>
             ))}
@@ -366,7 +368,7 @@ export default function RunView({ projectId, runId, navigate }: Props) {
                 label={
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <Typography variant="body2">{s.scenario}</Typography>
-                    <VerdictBadge verdict={s.verdict} />
+                    <VerdictChip band={sessionVerdict(s, bands).band} />
                   </Box>
                 }
                 sx={{ m: 0 }}
@@ -396,10 +398,4 @@ export default function RunView({ projectId, runId, navigate }: Props) {
       </Dialog>
     </Box>
   );
-}
-
-function scoreColor(score: number): string {
-  if (score >= 75) return "#22c55e";
-  if (score >= 55) return "#f59e0b";
-  return "#ef4444";
 }

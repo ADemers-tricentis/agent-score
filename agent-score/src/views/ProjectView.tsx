@@ -23,8 +23,10 @@ import TextField from "@mui/material/TextField";
 import type { View, Run, Session, Project, ActivityEventKind } from "../types";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
-import { getProject, runPassRate, getEvalDesign, computePassK, projectCompositeScore, sessionGrade, getAdoptedProfile, isScorePreliminary, addRunToProject, addMockTracesToProject, LLM_JUDGES, PROFILES, updateProject } from "../data/mock";
-import VerdictBadge from "../components/VerdictBadge";
+import { getProject, runPassRate, getEvalDesign, computePassK, sessionGrade, sessionsCompositeScore, getAdoptedProfile, isScorePreliminary, addRunToProject, addMockTracesToProject, LLM_JUDGES, PROFILES, updateProject } from "../data/mock";
+import { agentVerdict, sessionVerdict, projectVerdictBands, scoreToken, RUN_STATE_META } from "../data/verdict";
+import { SAFETY_SIGNAL_LABEL } from "../data/dimensions";
+import VerdictChip from "../components/VerdictChip";
 import TypeTag from "../components/TypeTag";
 import GradeChip from "../components/GradeChip";
 import ScorecardPanel from "../components/ScorecardPanel";
@@ -245,6 +247,7 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
               id: `r-od-${Date.now()}`,
               label: `On-demand run · ${now.toLocaleDateString()}`,
               date: now.toISOString().slice(0, 10),
+              status: "scored",
               sessions: (lastRun?.sessions ?? []).map((s, idx) => ({
                 ...s,
                 id: `s-od-${idx}-${Date.now()}`,
@@ -302,8 +305,10 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
 
   const allSessions = runs.flatMap((r) => r.sessions);
   const passK = computePassK(project);
-  const composite = projectCompositeScore(project);
-  const grade = sessionGrade(composite);
+  const verdict = agentVerdict(project);
+  const bands = projectVerdictBands(project);
+  const composite = verdict.score ?? 0;
+  const grade = verdict.grade ?? "F";
   const canCompare = project.runs.length >= 2;
   const isPreliminary = isScorePreliminary(project);
   const confidenceDelta = Math.round(composite * 0.05);
@@ -315,6 +320,7 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
   // Derived stats for overview cards
   const latestRun = runs[0];
   const latestSessions = latestRun?.sessions ?? [];
+  const criticalSession = latestRun?.sessions.find((s) => s.safetyOverride?.severity === "Critical");
   const failCount = allSessions.filter((s) => s.verdict === "FAIL").length;
   const p95DurMs = (() => {
     const durations = allSessions.map((s) => s.dur).sort((a, b) => a - b);
@@ -340,6 +346,30 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
   function renderOverview() {
     return (
       <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+        {/* Safety override banner */}
+        {criticalSession?.safetyOverride && (
+          <Alert
+            severity="error"
+            sx={{ borderRadius: 1.5 }}
+            action={
+              <Button
+                size="small"
+                color="error"
+                variant="outlined"
+                onClick={() => navigate({ name: "session", projectId, runId: latestRun!.id, sessionId: criticalSession.id })}
+                sx={{ whiteSpace: "nowrap", fontSize: "0.72rem" }}
+              >
+                View failing session →
+              </Button>
+            }
+          >
+            <Typography variant="body2" sx={{ fontWeight: 700, mb: 0.25 }}>
+              Safety override · {SAFETY_SIGNAL_LABEL[criticalSession.safetyOverride.signal] ?? criticalSession.safetyOverride.signal}
+            </Typography>
+            <Typography variant="caption">{criticalSession.safetyOverride.detail}</Typography>
+          </Alert>
+        )}
+
         {/* Scoring animation */}
         {isScoringNow && (
           <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 1.5, borderColor: "primary.main" }}>
@@ -365,8 +395,9 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
             sx={{
               p: 2.5, borderRadius: 1.5, gridRow: "1 / 3", gridColumn: "1 / 2", display: "flex", flexDirection: "column",
               cursor: hasEnoughTraces && breakdownSession ? "pointer" : "default",
+              borderColor: verdict.safety?.severity === "Critical" ? "error.main" : "divider",
               transition: "border-color 0.15s",
-              "&:hover": hasEnoughTraces && breakdownSession ? { borderColor: "primary.main" } : {},
+              "&:hover": hasEnoughTraces && breakdownSession ? { borderColor: verdict.safety?.severity === "Critical" ? "error.dark" : "primary.main" } : {},
             }}
           >
             <Typography variant="overline" sx={{ color: "text.disabled", letterSpacing: 0.8, fontSize: "0.65rem" }}>Composite Score</Typography>
@@ -384,7 +415,7 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
                     <svg width="100" height="100" viewBox="0 0 100 100">
                       <circle cx="50" cy="50" r="40" fill="none" stroke="var(--mui-palette-divider)" strokeWidth="5" />
                       <circle cx="50" cy="50" r="40" fill="none"
-                        stroke={composite >= 80 ? "var(--mui-palette-success-main)" : composite >= 60 ? "var(--mui-palette-warning-main)" : "var(--mui-palette-error-main)"}
+                        stroke={`var(--mui-palette-${verdict.band ? { ship: "success", review: "warning", block: "error" }[verdict.band] : "warning"}-main)`}
                         strokeWidth="5" strokeLinecap="round"
                         strokeDasharray={`${(composite / 100) * circumference} ${circumference}`}
                         transform="rotate(-90 50 50)"
@@ -400,7 +431,10 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
                       <Chip label="Preliminary" size="small" color="warning" sx={{ height: 18, fontSize: "0.62rem", cursor: "help" }} />
                     </Tooltip>
                   )}
-                  <Typography variant="caption" sx={{ color: confidenceDelta > 0 ? "text.secondary" : "text.disabled", mt: 0.5 }}>
+                  <Typography variant="caption" sx={{ color: scoreToken(composite), fontWeight: 600, mt: 0.5, textAlign: "center" }}>
+                    {verdict.reason}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: confidenceDelta > 0 ? "text.secondary" : "text.disabled", mt: 0.25 }}>
                     ± {confidenceDelta} pts confidence
                   </Typography>
                 </>
@@ -573,7 +607,7 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
                         {new Date(s.ts).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
                       </Typography>
                     </TableCell>
-                    <TableCell><VerdictBadge verdict={s.verdict} /></TableCell>
+                    <TableCell><VerdictChip band={sessionVerdict(s, bands).band} /></TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -613,13 +647,13 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
               <TableBody>
                 {runs.slice(0, 3).map((run) => {
                   const pr = runPassRate(run.sessions);
-                  const lv = run.sessions[0]?.verdict ?? "FAIL";
+                  const scored = run.status === "scored";
                   return (
-                    <TableRow key={run.id} hover={!run.inProgress} onClick={() => !run.inProgress && navigate({ name: "run", projectId, runId: run.id })} sx={{ cursor: run.inProgress ? "default" : "pointer", "&:last-child td": { borderBottom: 0 } }}>
+                    <TableRow key={run.id} hover={scored} onClick={() => scored && navigate({ name: "run", projectId, runId: run.id })} sx={{ cursor: scored ? "pointer" : "default", "&:last-child td": { borderBottom: 0 } }}>
                       <TableCell>
                         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                           <Typography variant="body2" sx={{ fontWeight: 500 }}>{run.label}</Typography>
-                          {run.inProgress && <Chip label="In progress" size="small" color="primary" sx={{ height: 18, fontSize: "0.62rem" }} />}
+                          {!scored && <Chip label={RUN_STATE_META[run.status].label} size="small" color={RUN_STATE_META[run.status].muiColor} sx={{ height: 18, fontSize: "0.62rem" }} />}
                         </Box>
                       </TableCell>
                       <TableCell>
@@ -628,13 +662,13 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
                         </Typography>
                       </TableCell>
                       <TableCell>
-                        {run.inProgress ? (
+                        {!scored ? (
                           <Typography variant="body2" sx={{ color: "text.disabled" }}>-</Typography>
                         ) : (
-                          <Typography variant="body2" sx={{ fontWeight: 600, color: pr >= 75 ? "success.main" : pr >= 50 ? "warning.main" : "error.main" }}>{pr}%</Typography>
+                          <Typography variant="body2" sx={{ fontWeight: 600, color: scoreToken(pr) }}>{pr}%</Typography>
                         )}
                       </TableCell>
-                      <TableCell>{run.inProgress ? <Typography variant="body2" sx={{ color: "text.disabled" }}>-</Typography> : <VerdictBadge verdict={lv} />}</TableCell>
+                      <TableCell>{!scored || !run.sessions[0] ? <Typography variant="body2" sx={{ color: "text.disabled" }}>-</Typography> : <VerdictChip band={sessionVerdict(run.sessions[0], bands).band} />}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -952,7 +986,7 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
                       <TableCell>
                         <Typography variant="caption" sx={{ color: "text.secondary" }}>{spanCount}</Typography>
                       </TableCell>
-                      <TableCell><VerdictBadge verdict={s.verdict} /></TableCell>
+                      <TableCell><VerdictChip band={sessionVerdict(s, bands).band} /></TableCell>
                     </TableRow>
                   );
                 })}
@@ -1270,6 +1304,7 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
               profileVersion={adoptedProfileVersion}
               composite={composite}
               grade={grade}
+              verdict={verdict}
               isPreliminary={isPreliminary}
               confidenceDelta={confidenceDelta}
               isScoringNow={isScoringNow}
@@ -1359,18 +1394,10 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {runs.filter((r) => !r.inProgress).map((run) => {
+                  {runs.filter((r) => r.status === "scored").map((run) => {
                     const pr = runPassRate(run.sessions);
-                    const runScore = run.sessions.length > 0
-                      ? Math.round(run.sessions.reduce((acc, s) => {
-                          const bp = s.scores.benchmarkPerformance.score;
-                          const ve = s.scores.valueEfficiency?.score ?? bp;
-                          const ux = s.scores.uxSignal.score;
-                          return acc + (bp + ve + ux) / 3;
-                        }, 0) / run.sessions.length)
-                      : 0;
+                    const runScore = sessionsCompositeScore(run.sessions);
                     const runGrade = sessionGrade(runScore);
-                    const lv = run.sessions[0]?.verdict ?? "FAIL";
                     return (
                       <TableRow key={run.id} hover onClick={() => navigate({ name: "run", projectId, runId: run.id })} sx={{ cursor: "pointer", "&:last-child td": { borderBottom: 0 } }}>
                         <TableCell>
@@ -1386,10 +1413,10 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
                         </TableCell>
                         <TableCell><Typography variant="body2">{run.sessions.length}</Typography></TableCell>
                         <TableCell>
-                          <Typography variant="body2" sx={{ fontWeight: 600, color: pr >= 75 ? "success.main" : pr >= 50 ? "warning.main" : "error.main" }}>{pr}%</Typography>
+                          <Typography variant="body2" sx={{ fontWeight: 600, color: scoreToken(pr) }}>{pr}%</Typography>
                         </TableCell>
                         <TableCell><GradeChip grade={runGrade} size="small" /></TableCell>
-                        <TableCell><VerdictBadge verdict={lv} /></TableCell>
+                        <TableCell>{run.sessions[0] ? <VerdictChip band={sessionVerdict(run.sessions[0], bands).band} /> : <Typography variant="body2" sx={{ color: "text.disabled" }}>-</Typography>}</TableCell>
                       </TableRow>
                     );
                   })}
@@ -1465,7 +1492,7 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
                   { label: "FREQUENCY", value: "Daily" },
                   { label: "NEXT RUN", value: "02:00 UTC" },
                   { label: "LAST RUN", value: latestRun ? new Date(latestRun.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }) : "Never" },
-                  { label: "RUNS COMPLETED", value: runs.filter((r) => !r.inProgress).length.toString() },
+                  { label: "RUNS COMPLETED", value: runs.filter((r) => r.status === "scored").length.toString() },
                 ].map(({ label, value }) => (
                   <Box key={label}>
                     <Typography variant="overline" sx={{ color: "text.disabled", fontSize: "0.6rem", letterSpacing: 0.8 }}>{label}</Typography>
@@ -1541,10 +1568,18 @@ export default function ProjectView({ projectId, initialTab, initialTraceId, nav
           </Box>
           <Typography variant="h6" sx={{ fontWeight: 700 }}>{project.name}</Typography>
           <Chip label="external" size="small" variant="outlined" sx={{ height: 20, fontSize: "0.7rem" }} />
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-            <Box sx={{ width: 7, height: 7, borderRadius: "50%", bgcolor: "success.main" }} />
-            <Typography variant="caption" sx={{ color: "success.dark", fontWeight: 600 }}>active</Typography>
-          </Box>
+          {verdict.band ? (
+            <VerdictChip band={verdict.band} />
+          ) : (
+            <Chip
+              label={RUN_STATE_META[verdict.state].label}
+              size="small"
+              color={RUN_STATE_META[verdict.state].muiColor}
+              variant="outlined"
+              sx={{ height: 22, fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.02em" }}
+            />
+          )}
+          <Typography variant="caption" sx={{ color: "text.secondary" }}>{verdict.reason}</Typography>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 0 }}>
           <TypeTag type={project.type} />

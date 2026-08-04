@@ -26,6 +26,7 @@ import type {
   EvalKind,
 } from "../types";
 import { addProfile } from "../data/mock";
+import { VERDICT_BAND_META, DEFAULT_VERDICT_BANDS } from "../data/verdict";
 import TypeTag from "../components/TypeTag";
 
 interface Props {
@@ -54,15 +55,9 @@ const TYPE_DESC: Record<ProjectType, string> = {
   APT: "Performance and load testing",
 };
 
-const VERDICT_BAND_CONFIG: { key: VerdictBandKey; label: string; color: string }[] = [
-  { key: "ship", label: "Ship", color: "success.main" },
-  { key: "review", label: "Review", color: "warning.main" },
-  { key: "block", label: "Block", color: "error.main" },
-];
-
-const DEFAULT_VERDICT_BANDS: Record<VerdictBandKey, number> = {
-  ship: 85, review: 55, block: 40,
-};
+const VERDICT_BAND_CONFIG: { key: VerdictBandKey; label: string; color: string }[] = (
+  ["ship", "review", "block"] as VerdictBandKey[]
+).map((key) => ({ key, label: VERDICT_BAND_META[key].label, color: VERDICT_BAND_META[key].token }));
 
 // ── Icons ────────────────────────────────────────────────────────────────────
 

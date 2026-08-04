@@ -7,39 +7,16 @@ import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import LinearProgress from "@mui/material/LinearProgress";
 import SvgIcon from "@mui/material/SvgIcon";
-import type { View } from "../types";
-import { PROJECTS, projectCompositeScore, sessionGrade, projectPassRate } from "../data/mock";
+import type { View, VerdictBandKey } from "../types";
+import { PROJECTS, projectPassRate, projectDimensionAverages, sessionsCompositeScore } from "../data/mock";
+import { agentVerdict, criticalSafety, projectVerdictBands, bandForScore, scoreToken, VERDICT_BAND_META, RUN_STATE_META } from "../data/verdict";
 import GradeChip from "../components/GradeChip";
 import TypeTag from "../components/TypeTag";
 import ScoreBar from "../components/ScoreBar";
-import VerdictBadge from "../components/VerdictBadge";
+import VerdictChip from "../components/VerdictChip";
 
 interface Props {
   navigate: (v: View) => void;
-}
-
-function compositeVerdict(score: number): "Ship" | "Review" | "Block" {
-  if (score >= 85) return "Ship";
-  if (score >= 55) return "Review";
-  return "Block";
-}
-
-function verdictColor(verdict: "Ship" | "Review" | "Block"): "success" | "warning" | "error" {
-  if (verdict === "Ship") return "success";
-  if (verdict === "Review") return "warning";
-  return "error";
-}
-
-function scoreColor(score: number): string {
-  if (score >= 80) return "success.main";
-  if (score >= 60) return "warning.main";
-  return "error.main";
-}
-
-function reliabilityConfig(r: string) {
-  if (r === "RELIABLE") return { label: "Reliable", color: "success" as const };
-  if (r === "NEEDS_WORK") return { label: "Needs Work", color: "warning" as const };
-  return { label: "Unstable", color: "error" as const };
 }
 
 const SPARKLINE_POINTS = [18, 28, 22, 35, 30, 42, 48];
@@ -118,17 +95,19 @@ export default function HomeView({ navigate }: Props) {
   const allRuns = PROJECTS.flatMap((p) => p.runs.map((r) => ({ ...r, project: p })));
   const totalRuns = allRuns.length;
 
-  const projectScores = PROJECTS.map((p) => ({ project: p, score: projectCompositeScore(p) }));
+  const projectVerdicts = PROJECTS.map((p) => ({ project: p, verdict: agentVerdict(p) }));
   const verdictCounts = { Ship: 0, Review: 0, Block: 0 };
-  for (const { score } of projectScores) {
-    verdictCounts[compositeVerdict(score)]++;
+  for (const { verdict } of projectVerdicts) {
+    if (verdict.band === "ship") verdictCounts.Ship++;
+    else if (verdict.band === "review") verdictCounts.Review++;
+    else if (verdict.band === "block") verdictCounts.Block++;
   }
-  const needsReview = projectScores.filter(({ score }) => score < 80);
-  const blockCount = projectScores.filter(({ score }) => score < 60).length;
+  const needsReview = projectVerdicts.filter(({ verdict }) => verdict.band === "review" || verdict.band === "block" || verdict.state === "error");
+  const blockCount = projectVerdicts.filter(({ verdict }) => verdict.band === "block").length;
 
   const attentionAgents = needsReview
     .slice()
-    .sort((a, b) => a.score - b.score);
+    .sort((a, b) => (a.verdict.score ?? -1) - (b.verdict.score ?? -1));
 
   const recentRuns = allRuns
     .slice()
@@ -231,16 +210,13 @@ export default function HomeView({ navigate }: Props) {
                 ))}
               </Box>
               <Divider />
-              {attentionAgents.map(({ project, score }, idx) => {
-                const grade = sessionGrade(score);
-                const verdict = compositeVerdict(score);
+              {attentionAgents.map(({ project, verdict }, idx) => {
                 const latestRun = project.runs[0];
                 const latestSession = latestRun?.sessions[0];
                 const totalSessions = project.runs.flatMap((r) => r.sessions).length;
                 const passRate = projectPassRate(project);
-                const rel = reliabilityConfig(project.reliability);
                 const isExpanded = expandedId === project.id;
-                const criticalSafety = project.runs.flatMap((r) => r.sessions).find((s) => s.safetyOverride?.severity === "Critical");
+                const critical = criticalSafety(project);
                 return (
                   <Fragment key={project.id}>
                     <Box
@@ -264,7 +240,7 @@ export default function HomeView({ navigate }: Props) {
                           <Typography variant="body2" sx={{ fontWeight: 700, fontFamily: "monospace", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                             {project.service}
                           </Typography>
-                          {criticalSafety && (
+                          {critical && (
                             <SvgIcon sx={{ fontSize: "0.85rem", color: "error.main", flexShrink: 0 }}>
                               <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v4h-2v-4z" />
                             </SvgIcon>
@@ -274,15 +250,26 @@ export default function HomeView({ navigate }: Props) {
                       </Box>
                       <Box><TypeTag type={project.type} /></Box>
                       <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
-                        <GradeChip grade={grade} size="small" />
-                        <Typography variant="body2" sx={{ fontWeight: 700, color: scoreColor(score) }}>{score}</Typography>
+                        {verdict.grade ? (
+                          <>
+                            <GradeChip grade={verdict.grade} size="small" />
+                            <Typography variant="body2" sx={{ fontWeight: 700, color: scoreToken(verdict.score ?? 0) }}>{verdict.score}</Typography>
+                          </>
+                        ) : (
+                          <Typography variant="body2" sx={{ color: "text.disabled" }}>-</Typography>
+                        )}
                       </Box>
-                      <Chip
-                        label={verdict}
-                        size="small"
-                        color={verdictColor(verdict)}
-                        sx={{ height: 20, fontSize: "0.68rem", fontWeight: 600 }}
-                      />
+                      {verdict.band ? (
+                        <VerdictChip band={verdict.band} />
+                      ) : (
+                        <Chip
+                          label={RUN_STATE_META[verdict.state].label}
+                          size="small"
+                          color={RUN_STATE_META[verdict.state].muiColor}
+                          variant="outlined"
+                          sx={{ height: 20, fontSize: "0.62rem", fontWeight: 700 }}
+                        />
+                      )}
                       <Typography variant="caption" sx={{ color: "text.secondary" }}>
                         {latestRun?.date ?? "-"}
                       </Typography>
@@ -298,40 +285,56 @@ export default function HomeView({ navigate }: Props) {
                             <TypeTag type={project.type} />
                           </Box>
                           <Divider sx={{ mb: 1.5 }} />
-                          {criticalSafety && (
+                          {critical && (
                             <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.5, px: 1.25, py: 0.75, borderRadius: 1, border: "1px solid", borderColor: "error.light", bgcolor: "rgba(var(--mui-palette-error-mainChannel) / 0.06)" }}>
                               <SvgIcon sx={{ fontSize: "0.95rem", color: "error.main", flexShrink: 0 }}>
                                 <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v4h-2v-4z" />
                               </SvgIcon>
                               <Box sx={{ flex: 1, minWidth: 0 }}>
                                 <Typography variant="caption" sx={{ fontWeight: 700, color: "error.dark", display: "block" }}>
-                                  Safety issue · {criticalSafety.safetyOverride!.signal.replace(/_/g, " ")}
+                                  Safety issue · {critical.signal.replace(/_/g, " ")}
                                 </Typography>
                                 <Typography variant="caption" sx={{ color: "text.secondary", display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                                  {criticalSafety.safetyOverride!.detail}
+                                  {critical.detail}
                                 </Typography>
                               </Box>
                             </Box>
                           )}
-                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1.5, flexWrap: "wrap" }}>
-                            <GradeChip grade={grade} size="small" />
-                            <Typography variant="caption" sx={{ fontWeight: 700, fontFamily: "monospace" }}>{score}/100</Typography>
-                            {latestSession && <VerdictBadge verdict={latestSession.verdict} />}
-                            <Chip label={rel.label} size="small" color={rel.color} variant="outlined" sx={{ height: 20, fontSize: "0.65rem" }} />
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 0.5, flexWrap: "wrap" }}>
+                            {verdict.grade ? (
+                              <>
+                                <GradeChip grade={verdict.grade} size="small" />
+                                <Typography variant="caption" sx={{ fontWeight: 700, fontFamily: "monospace" }}>{verdict.score}/100</Typography>
+                              </>
+                            ) : (
+                              <Chip
+                                label={RUN_STATE_META[verdict.state].label}
+                                size="small"
+                                color={RUN_STATE_META[verdict.state].muiColor}
+                                variant="outlined"
+                                sx={{ height: 20, fontSize: "0.65rem", fontWeight: 700 }}
+                              />
+                            )}
                             <Typography variant="caption" sx={{ color: "text.secondary", ml: "auto" }}>
                               {passRate}% pass · {totalSessions} sessions
                             </Typography>
                           </Box>
-                          {latestSession && (
-                            <Box>
-                              <ScoreBar label="Correctness" dimension={latestSession.scores.benchmarkPerformance} compact />
-                              <ScoreBar label="Efficiency" dimension={latestSession.scores.valueEfficiency} compact />
-                              <ScoreBar label="Relevance" dimension={latestSession.scores.uxSignal} compact />
-                              <ScoreBar label="Safety" dimension={latestSession.scores.harmony ?? null} compact />
-                              <ScoreBar label="Consistency" dimension={latestSession.scores.stability ?? null} compact />
-                              <ScoreBar label="Tool Use" dimension={latestSession.scores.agency ?? null} compact />
-                            </Box>
-                          )}
+                          <Typography variant="caption" sx={{ color: verdict.band ? VERDICT_BAND_META[verdict.band].token : "text.secondary", fontWeight: 600, display: "block", mb: 1.5 }}>
+                            {verdict.reason}
+                          </Typography>
+                          {latestSession && (() => {
+                            const dims = projectDimensionAverages(project);
+                            return (
+                              <Box>
+                                <ScoreBar label="Correctness" dimension={dims.correctness} compact />
+                                <ScoreBar label="Efficiency" dimension={dims.efficiency} compact />
+                                <ScoreBar label="Relevance" dimension={dims.relevance} compact />
+                                <ScoreBar label="Safety" dimension={dims.safety} compact />
+                                <ScoreBar label="Consistency" dimension={dims.consistency} compact />
+                                <ScoreBar label="Tool Use" dimension={dims.toolUse} compact />
+                              </Box>
+                            );
+                          })()}
                           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 0.5 }}>
                             <Typography variant="caption" sx={{ color: "text.disabled" }}>
                               {project.runs.length} run{project.runs.length !== 1 ? "s" : ""} · latest {latestRun?.date}
@@ -362,21 +365,21 @@ export default function HomeView({ navigate }: Props) {
             Last 7 days · across all agents
           </Typography>
 
-          {(["Ship", "Review", "Block"] as const).map((v) => {
-            const count = verdictCounts[v];
+          {(["ship", "review", "block"] as const).map((band) => {
+            const meta = VERDICT_BAND_META[band];
+            const count = verdictCounts[meta.label as "Ship" | "Review" | "Block"];
             const pct = total > 0 ? Math.round((count / total) * 100) : 0;
-            const color = verdictColor(v);
             return (
-              <Box key={v} sx={{ mb: 1.5 }}>
+              <Box key={band} sx={{ mb: 1.5 }}>
                 <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.5 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 600, color: `${color}.main` }}>{v}</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: meta.token }}>{meta.label}</Typography>
                   <Typography variant="caption" sx={{ color: "text.secondary" }}>{count} ({pct}%)</Typography>
                 </Box>
                 <LinearProgress
                   variant="determinate"
                   value={pct}
-                  color={color}
-                  sx={{ height: 8, borderRadius: 4, bgcolor: `rgba(var(--mui-palette-${color}-mainChannel) / 0.12)` }}
+                  color={meta.muiColor}
+                  sx={{ height: 8, borderRadius: 4, bgcolor: `rgba(var(--mui-palette-${meta.muiColor}-mainChannel) / 0.12)` }}
                 />
               </Box>
             );
@@ -390,12 +393,12 @@ export default function HomeView({ navigate }: Props) {
           <TrendChart />
 
           <Box sx={{ display: "flex", gap: 2, mt: 1.5 }}>
-            {(["Ship", "Review", "Block"] as const).map((v) => {
-              const colors = { Ship: "#4ade80", Review: "#fbbf24", Block: "#f87171" };
+            {(["ship", "review", "block"] as const).map((band) => {
+              const meta = VERDICT_BAND_META[band];
               return (
-                <Box key={v} sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                  <Box sx={{ width: 8, height: 8, borderRadius: "50%", bgcolor: colors[v] }} />
-                  <Typography variant="caption" sx={{ color: "text.secondary" }}>{v}</Typography>
+                <Box key={band} sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                  <Box sx={{ width: 8, height: 8, borderRadius: "50%", bgcolor: meta.hex }} />
+                  <Typography variant="caption" sx={{ color: "text.secondary" }}>{meta.label}</Typography>
                 </Box>
               );
             })}
@@ -425,22 +428,17 @@ export default function HomeView({ navigate }: Props) {
         </Box>
         <Divider />
 
-        {recentRuns.map(({ project, id, label, date, sessions }, idx) => {
-          const totalScore = sessions.length > 0
-            ? Math.round(sessions.reduce((sum, s) => {
-                const dims = [
-                  s.scores.benchmarkPerformance.score * 35,
-                  (s.scores.valueEfficiency?.score ?? s.scores.benchmarkPerformance.score) * 20,
-                  s.scores.uxSignal.score * 15,
-                  ...(s.scores.harmony ? [s.scores.harmony.score * 15] : []),
-                  ...(s.scores.stability ? [s.scores.stability.score * 10] : []),
-                  ...(s.scores.agency ? [s.scores.agency.score * 5] : []),
-                ];
-                const weightSum = 35 + 20 + 15 + (s.scores.harmony ? 15 : 0) + (s.scores.stability ? 10 : 0) + (s.scores.agency ? 5 : 0);
-                return sum + dims.reduce((a, b) => a + b, 0) / weightSum;
-              }, 0) / sessions.length)
-            : 0;
-          const verdict = compositeVerdict(totalScore);
+        {recentRuns.map(({ project, id, label, date, sessions, status }, idx) => {
+          const scored = status === "scored";
+          const totalScore = scored ? sessionsCompositeScore(sessions) : null;
+          let band: VerdictBandKey | null = null;
+          if (scored && totalScore != null) {
+            const bands = projectVerdictBands(project);
+            const criticalSession = sessions.find((s) => s.safetyOverride?.severity === "Critical");
+            const highSession = sessions.find((s) => s.safetyOverride?.severity === "High");
+            band = criticalSession ? "block" : bandForScore(totalScore, bands);
+            if (!criticalSession && highSession && band === "ship") band = "review";
+          }
           const shortId = id.length > 10 ? id.slice(0, 10) + "..." : id;
           return (
             <Box
@@ -468,15 +466,24 @@ export default function HomeView({ navigate }: Props) {
                 </Typography>
                 <Typography variant="caption" sx={{ color: "text.secondary" }}>Phase {project.phase}</Typography>
               </Box>
-              <Typography variant="body2" sx={{ fontWeight: 700, color: scoreColor(totalScore) }}>
-                {totalScore}
-              </Typography>
-              <Chip
-                label={verdict}
-                size="small"
-                color={verdictColor(verdict)}
-                sx={{ height: 20, fontSize: "0.68rem", fontWeight: 600 }}
-              />
+              {totalScore != null ? (
+                <Typography variant="body2" sx={{ fontWeight: 700, color: scoreToken(totalScore) }}>
+                  {totalScore}
+                </Typography>
+              ) : (
+                <Typography variant="body2" sx={{ color: "text.disabled" }}>-</Typography>
+              )}
+              {band ? (
+                <VerdictChip band={band} />
+              ) : (
+                <Chip
+                  label={RUN_STATE_META[status].label}
+                  size="small"
+                  color={RUN_STATE_META[status].muiColor}
+                  variant="outlined"
+                  sx={{ height: 20, fontSize: "0.62rem", fontWeight: 700 }}
+                />
+              )}
               <Box sx={{ minWidth: 0 }}>
                 <Typography variant="caption" sx={{ color: "text.secondary", display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {label}
