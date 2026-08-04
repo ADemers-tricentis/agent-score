@@ -13,24 +13,13 @@ import Tag from "@tricentis/aura/components/Tag.js";
 import type { View, ScoringProfile, ProfileVersion, VerdictBandKey, ShowcaseCategory } from "../types";
 import { PROFILES, PROJECTS } from "../data/mock";
 import { DIMENSION_DOT_COLOR } from "../data/dimensions";
+import { VERDICT_BAND_META } from "../data/verdict";
 import TypeTag from "../components/TypeTag";
 import ExpandableCard from "../components/ExpandableCard";
 
 interface Props {
   navigate: (v: View) => void;
 }
-
-const VERDICT_LABELS: Record<VerdictBandKey, string> = {
-  ship: "Ship",
-  review: "Review",
-  block: "Block",
-};
-
-const VERDICT_COLORS: Record<VerdictBandKey, string> = {
-  ship: "success.main",
-  review: "warning.main",
-  block: "error.main",
-};
 
 function AddIcon() {
   return <SvgIcon fontSize="small"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" /></SvgIcon>;
@@ -223,8 +212,8 @@ function ProfileDetailContent({ profile, navigate }: { profile: ScoringProfile; 
       <Box sx={{ display: "flex", gap: 2.5, flexWrap: "wrap" }}>
         {(["ship", "review", "block"] as VerdictBandKey[]).map((key) => (
           <Box key={key} sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-            <Typography variant="caption" sx={{ color: VERDICT_COLORS[key], fontWeight: 700 }}>
-              {VERDICT_LABELS[key]}
+            <Typography variant="caption" sx={{ color: VERDICT_BAND_META[key].token, fontWeight: 700 }}>
+              {VERDICT_BAND_META[key].label}
             </Typography>
             <Typography variant="caption" sx={{ color: "text.secondary" }}>
               {key === "block" ? `< ${version?.verdictBands.block ?? 0}` : `≥ ${version?.verdictBands[key] ?? 0}`}

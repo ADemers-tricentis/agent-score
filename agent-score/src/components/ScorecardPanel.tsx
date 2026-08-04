@@ -10,14 +10,17 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import type { Run, ProfileVersion } from "../types";
-import { DIMENSION_ORDER, DIMENSION_DOT_COLOR, averageDimensionScore } from "../data/dimensions";
+import { DIMENSION_ORDER, DIMENSION_DOT_COLOR, averageDimensionScore, SAFETY_SIGNAL_LABEL } from "../data/dimensions";
+import type { AgentVerdict } from "../data/verdict";
 import GradeChip from "./GradeChip";
+import VerdictChip from "./VerdictChip";
 
 interface Props {
   run: Run | undefined;
   profileVersion: ProfileVersion | null;
   composite: number;
   grade: "A" | "B" | "C" | "D" | "F";
+  verdict: AgentVerdict;
   isPreliminary: boolean;
   confidenceDelta: number;
   isScoringNow: boolean;
@@ -46,7 +49,7 @@ function StatusIcon({ status }: { status: EvalStatus }) {
   return <Typography sx={{ color: "text.disabled" }}>—</Typography>;
 }
 
-export default function ScorecardPanel({ run, profileVersion, composite, grade, isPreliminary, confidenceDelta, isScoringNow, hasEnoughTraces, tracesNeeded, totalSessions }: Props) {
+export default function ScorecardPanel({ run, profileVersion, composite, grade, verdict, isPreliminary, confidenceDelta, isScoringNow, hasEnoughTraces, tracesNeeded, totalSessions }: Props) {
   const sessions = run?.sessions ?? [];
   const enabledEntries = (profileVersion?.entries ?? []).filter((e) => e.enabled);
 
@@ -87,7 +90,12 @@ export default function ScorecardPanel({ run, profileVersion, composite, grade, 
           </Box>
         )}
         <Box>
-          <Chip label={isPreliminary ? "Provisional" : "Final"} size="small" sx={{ height: 20, fontSize: "0.65rem", mb: 0.5 }} />
+          {hasEnoughTraces && verdict.band && <VerdictChip band={verdict.band} size="medium" />}
+          <Chip
+            label={isPreliminary ? `Provisional · ${Math.max(0, 30 - totalSessions)} more sessions for a final score` : "Final"}
+            size="small"
+            sx={{ height: 20, fontSize: "0.65rem", mb: 0.5, mt: hasEnoughTraces && verdict.band ? 0.5 : 0, display: "block", width: "fit-content" }}
+          />
           {hasEnoughTraces ? (
             <Tooltip title={`With more sessions, this score could reasonably land anywhere from ${Math.max(0, composite - confidenceDelta)} to ${Math.min(100, composite + confidenceDelta)}. More sessions narrow this range.`} arrow placement="top">
               <Typography variant="body2" sx={{ color: "text.secondary", width: "fit-content", cursor: "help" }}>
@@ -110,16 +118,28 @@ export default function ScorecardPanel({ run, profileVersion, composite, grade, 
         </Box>
       )}
 
-      {hasEnoughTraces && failedCount > 0 && (
+      {hasEnoughTraces && verdict.safety && (
+        <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1.25, p: 1.5, mb: 2, borderRadius: 1.5, border: "1px solid", borderColor: "error.light", bgcolor: "rgba(var(--mui-palette-error-mainChannel) / 0.08)" }}>
+          <SvgIcon sx={{ fontSize: "1.1rem", color: "error.main", mt: 0.15, flexShrink: 0 }}>
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v4h-2v-4z" />
+          </SvgIcon>
+          <Box>
+            <Typography variant="body2" sx={{ fontWeight: 700 }}>
+              Safety {verdict.safety.severity === "Critical" ? "override" : "warning"} · {SAFETY_SIGNAL_LABEL[verdict.safety.signal] ?? verdict.safety.signal}
+            </Typography>
+            <Typography variant="caption" sx={{ color: "text.secondary" }}>{verdict.safety.detail}</Typography>
+          </Box>
+        </Box>
+      )}
+
+      {hasEnoughTraces && !verdict.safety && failedCount > 0 && (
         <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1.25, p: 1.5, mb: 2, borderRadius: 1.5, border: "1px solid", borderColor: "warning.light", bgcolor: "rgba(var(--mui-palette-warning-mainChannel) / 0.08)" }}>
           <SvgIcon sx={{ fontSize: "1.1rem", color: "warning.main", mt: 0.15, flexShrink: 0 }}>
             <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
           </SvgIcon>
           <Box>
-            <Typography variant="body2" sx={{ fontWeight: 700 }}>Provisional — high failure rate</Typography>
-            <Typography variant="caption" sx={{ color: "text.secondary" }}>
-              {Math.round(failRate * 100)}% of evals are failing — the ship/block verdict is withheld until the failures below are addressed.
-            </Typography>
+            <Typography variant="body2" sx={{ fontWeight: 700 }}>{verdict.band ? `${verdict.band.toUpperCase()} · ` : ""}{Math.round(failRate * 100)}% of evals are failing</Typography>
+            <Typography variant="caption" sx={{ color: "text.secondary" }}>{verdict.reason}</Typography>
           </Box>
         </Box>
       )}

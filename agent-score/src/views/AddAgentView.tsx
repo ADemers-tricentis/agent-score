@@ -31,6 +31,7 @@ import type {
   EvalKind,
 } from "../types";
 import { addProject, addProfile, PROFILES, LLM_JUDGES } from "../data/mock";
+import { VERDICT_BAND_META, DEFAULT_VERDICT_BANDS } from "../data/verdict";
 import TypeTag from "../components/TypeTag";
 
 interface Props {
@@ -137,6 +138,7 @@ function generateMockRuns(dimensions: ShowcaseCategory[]): Run[] {
       id: runId,
       label,
       date: runDate.toISOString(),
+      status: "scored",
       sessions: Array.from({ length: count }, (_, i) => {
         const scores = makeScores(baseScore + (Math.random() - 0.3) * 14);
         const avg = Object.values(scores).filter(Boolean).reduce((s, d) => s + (d as { score: number }).score, 0) / Object.values(scores).filter(Boolean).length;
@@ -251,13 +253,9 @@ const CATEGORY_LABEL: Record<ShowcaseCategory, string> = {
   "Communication": "Clear communication",
 };
 
-const VERDICT_BAND_CONFIG: { key: VerdictBandKey; label: string; color: string }[] = [
-  { key: "ship", label: "Ship", color: "success.main" },
-  { key: "review", label: "Review", color: "warning.main" },
-  { key: "block", label: "Block", color: "error.main" },
-];
-
-const DEFAULT_VERDICT_BANDS: Record<VerdictBandKey, number> = { ship: 85, review: 55, block: 40 };
+const VERDICT_BAND_CONFIG: { key: VerdictBandKey; label: string; color: string }[] = (
+  ["ship", "review", "block"] as VerdictBandKey[]
+).map((key) => ({ key, label: VERDICT_BAND_META[key].label, color: VERDICT_BAND_META[key].token }));
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 
@@ -654,7 +652,7 @@ export default function AddAgentView({ navigate }: Props) {
         setLaunchStage(i);
         if (i === LAUNCH_STAGES.length - 1) {
           setTimeout(() => {
-            const runs: Run[] = [{ id: `r-${Date.now()}`, label: "Run #1 - collecting sessions", date: new Date().toISOString(), sessions: [], inProgress: true }];
+            const runs: Run[] = [{ id: `r-${Date.now()}`, label: "Run #1 - collecting sessions", date: new Date().toISOString(), sessions: [], status: "collecting" }];
             handleCreate(runs);
           }, 1000);
         }

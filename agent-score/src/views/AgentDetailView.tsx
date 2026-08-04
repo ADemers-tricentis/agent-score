@@ -17,8 +17,10 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Divider from "@mui/material/Divider";
 import type { View } from "../types";
-import { getProject, projectCompositeScore, sessionGrade, runPassRate, addMockTracesToProject } from "../data/mock";
-import VerdictBadge from "../components/VerdictBadge";
+import { getProject, runPassRate, addMockTracesToProject } from "../data/mock";
+import { agentVerdict, sessionVerdict, projectVerdictBands, scoreToken, RUN_STATE_META } from "../data/verdict";
+import { SAFETY_SIGNAL_LABEL } from "../data/dimensions";
+import VerdictChip from "../components/VerdictChip";
 import GradeChip from "../components/GradeChip";
 
 interface Props {
@@ -71,8 +73,11 @@ export default function AgentDetailView({ projectId, navigate }: Props) {
   const hasEnoughTraces = totalSessions >= tracesNeeded;
   const latestRun = runs[0];
   const latestSessions = latestRun?.sessions ?? [];
-  const composite = projectCompositeScore(project);
-  const grade = sessionGrade(composite);
+  const verdict = agentVerdict(project);
+  const bands = projectVerdictBands(project);
+  const composite = verdict.score ?? 0;
+  const grade = verdict.grade ?? "F";
+  const criticalSession = latestRun?.sessions.find((s) => s.safetyOverride?.severity === "Critical");
   const circumference = 2 * Math.PI * 40;
   const breakdownSession = latestSessions.find((s) => s.scores.benchmarkPerformance.sigs.length > 0) ?? latestSessions[0] ?? null;
 
@@ -101,6 +106,10 @@ export default function AgentDetailView({ projectId, navigate }: Props) {
 
   function handleTabChange(_: React.SyntheticEvent, tab: string) {
     if (tab === "overview") return;
+    if (tab === "settings") {
+      navigate({ name: "agent-settings", projectId });
+      return;
+    }
     navigate({ name: "project", projectId, initialTab: tab });
   }
 
@@ -116,13 +125,20 @@ export default function AgentDetailView({ projectId, navigate }: Props) {
           </Box>
           <Typography variant="h5" sx={{ fontWeight: 700 }}>{project.name}</Typography>
           <Chip label="external" size="small" variant="outlined" sx={{ height: 20, fontSize: "0.7rem" }} />
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-            <Box sx={{ width: 7, height: 7, borderRadius: "50%", bgcolor: "success.main" }} />
-            <Typography variant="caption" sx={{ color: "success.dark", fontWeight: 600 }}>active</Typography>
-          </Box>
+          {verdict.band ? (
+            <VerdictChip band={verdict.band} />
+          ) : (
+            <Chip
+              label={RUN_STATE_META[verdict.state].label}
+              size="small"
+              color={RUN_STATE_META[verdict.state].muiColor}
+              variant="outlined"
+              sx={{ height: 22, fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.02em" }}
+            />
+          )}
         </Box>
         <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 1.5, pl: 6 }}>
-          {project.type}{createdDate ? ` · Created ${createdDate}` : ""}
+          {project.type}{createdDate ? ` · Created ${createdDate}` : ""} · {verdict.reason}
         </Typography>
 
         {/* Tabs */}
@@ -146,6 +162,30 @@ export default function AgentDetailView({ projectId, navigate }: Props) {
 
       {/* Overview content */}
       <Box sx={{ flex: 1, overflow: "auto", p: 3, display: "flex", flexDirection: "column", gap: 3 }}>
+        {/* Safety override banner */}
+        {criticalSession?.safetyOverride && (
+          <Alert
+            severity="error"
+            sx={{ borderRadius: 1.5 }}
+            action={
+              <Button
+                size="small"
+                color="error"
+                variant="outlined"
+                onClick={() => navigate({ name: "session", projectId, runId: latestRun!.id, sessionId: criticalSession.id })}
+                sx={{ whiteSpace: "nowrap", fontSize: "0.72rem" }}
+              >
+                View failing session →
+              </Button>
+            }
+          >
+            <Typography variant="body2" sx={{ fontWeight: 700, mb: 0.25 }}>
+              Safety override · {SAFETY_SIGNAL_LABEL[criticalSession.safetyOverride.signal] ?? criticalSession.safetyOverride.signal}
+            </Typography>
+            <Typography variant="caption">{criticalSession.safetyOverride.detail}</Typography>
+          </Alert>
+        )}
+
         {/* Trace collection banner */}
         {!hasEnoughTraces && (
           <Alert
@@ -173,8 +213,9 @@ export default function AgentDetailView({ projectId, navigate }: Props) {
             sx={{
               p: 2.5, borderRadius: 1.5, gridRow: "1 / 3", gridColumn: "1 / 2", display: "flex", flexDirection: "column",
               cursor: hasEnoughTraces && breakdownSession ? "pointer" : "default",
+              borderColor: verdict.safety?.severity === "Critical" ? "error.main" : "divider",
               transition: "border-color 0.15s",
-              "&:hover": hasEnoughTraces && breakdownSession ? { borderColor: "primary.main" } : {},
+              "&:hover": hasEnoughTraces && breakdownSession ? { borderColor: verdict.safety?.severity === "Critical" ? "error.dark" : "primary.main" } : {},
             }}
           >
             <Typography variant="overline" sx={{ color: "text.disabled", letterSpacing: 0.8, fontSize: "0.65rem" }}>Composite Score</Typography>
@@ -193,7 +234,7 @@ export default function AgentDetailView({ projectId, navigate }: Props) {
                   <svg width="100" height="100" viewBox="0 0 100 100">
                     <circle cx="50" cy="50" r="40" fill="none" stroke="var(--mui-palette-divider)" strokeWidth="5" />
                     <circle cx="50" cy="50" r="40" fill="none"
-                      stroke={composite >= 80 ? "var(--mui-palette-success-main)" : composite >= 60 ? "var(--mui-palette-warning-main)" : "var(--mui-palette-error-main)"}
+                      stroke={`var(--mui-palette-${verdict.band ? { ship: "success", review: "warning", block: "error" }[verdict.band] : "warning"}-main)`}
                       strokeWidth="5" strokeLinecap="round"
                       strokeDasharray={`${(composite / 100) * circumference} ${circumference}`}
                       transform="rotate(-90 50 50)"
@@ -230,6 +271,11 @@ export default function AgentDetailView({ projectId, navigate }: Props) {
             <Typography variant="caption" sx={{ color: "text.secondary", display: "block", textAlign: "center", mt: 1 }}>
               {hasEnoughTraces ? `${totalSessions} traces collected` : `Scoring unlocks at ${tracesNeeded} traces`}
             </Typography>
+            {hasEnoughTraces && (
+              <Typography variant="caption" sx={{ color: scoreToken(composite), fontWeight: 600, display: "block", textAlign: "center", mt: 0.25 }}>
+                {verdict.reason}
+              </Typography>
+            )}
           </Paper>
 
           {/* Traces (24H) */}
@@ -362,7 +408,7 @@ export default function AgentDetailView({ projectId, navigate }: Props) {
                         {new Date(s.ts).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
                       </Typography>
                     </TableCell>
-                    <TableCell><VerdictBadge verdict={s.verdict} /></TableCell>
+                    <TableCell><VerdictChip band={sessionVerdict(s, bands).band} /></TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -407,13 +453,13 @@ export default function AgentDetailView({ projectId, navigate }: Props) {
               <TableBody>
                 {runs.slice(0, 3).map((run) => {
                   const pr = runPassRate(run.sessions);
-                  const lv = run.sessions[0]?.verdict ?? "FAIL";
+                  const scored = run.status === "scored";
                   return (
                     <TableRow
                       key={run.id}
-                      hover={!run.inProgress}
-                      onClick={() => !run.inProgress && navigate({ name: "run", projectId, runId: run.id })}
-                      sx={{ cursor: run.inProgress ? "default" : "pointer", "&:last-child td": { borderBottom: 0 } }}
+                      hover={scored}
+                      onClick={() => scored && navigate({ name: "run", projectId, runId: run.id })}
+                      sx={{ cursor: scored ? "pointer" : "default", "&:last-child td": { borderBottom: 0 } }}
                     >
                       <TableCell>
                         <Typography variant="body2" sx={{ fontWeight: 500 }}>{run.label}</Typography>
@@ -424,18 +470,18 @@ export default function AgentDetailView({ projectId, navigate }: Props) {
                         </Typography>
                       </TableCell>
                       <TableCell>
-                        {run.inProgress ? (
+                        {!scored ? (
                           <Typography variant="body2" sx={{ color: "text.disabled" }}>-</Typography>
                         ) : (
-                          <Typography variant="body2" sx={{ fontWeight: 600, color: pr >= 75 ? "success.main" : pr >= 50 ? "warning.main" : "error.main" }}>
+                          <Typography variant="body2" sx={{ fontWeight: 600, color: scoreToken(pr) }}>
                             {pr}%
                           </Typography>
                         )}
                       </TableCell>
                       <TableCell>
-                        {run.inProgress
-                          ? <Typography variant="body2" sx={{ color: "text.disabled" }}>-</Typography>
-                          : <VerdictBadge verdict={lv} />}
+                        {!scored || !run.sessions[0]
+                          ? <Typography variant="body2" sx={{ color: "text.disabled" }}>{RUN_STATE_META[run.status].label}</Typography>
+                          : <VerdictChip band={sessionVerdict(run.sessions[0], bands).band} />}
                       </TableCell>
                     </TableRow>
                   );

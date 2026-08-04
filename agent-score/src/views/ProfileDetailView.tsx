@@ -23,6 +23,7 @@ import Alert from "@mui/material/Alert";
 import ChipStatus from "@tricentis/aura/components/ChipStatus.js";
 import type { View, ScoringProfile, ProjectType, VerdictBandKey } from "../types";
 import { getProfile, updateProfile, PROJECTS } from "../data/mock";
+import { VERDICT_BAND_META } from "../data/verdict";
 import TypeTag from "../components/TypeTag";
 
 interface Props {
@@ -31,18 +32,6 @@ interface Props {
 }
 
 const PROJECT_TYPE_OPTIONS: ProjectType[] = ["ATA", "ATC", "CURA", "AI_WORKSPACE", "CODING", "APT"];
-
-const VERDICT_LABELS: Record<VerdictBandKey, string> = {
-  ship: "Ship",
-  review: "Review",
-  block: "Block",
-};
-
-const VERDICT_COLORS: Record<VerdictBandKey, string> = {
-  ship: "success.main",
-  review: "warning.main",
-  block: "error.main",
-};
 
 function LockIcon() {
   return <SvgIcon sx={{ fontSize: 14, color: "text.secondary" }}><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" /></SvgIcon>;
@@ -346,8 +335,8 @@ export default function ProfileDetailView({ profileId, navigate }: Props) {
             <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap", mb: 0.5 }}>
               {(["ship", "review"] as VerdictBandKey[]).map((key) => (
                 <Box key={key} sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                  <Typography variant="caption" sx={{ color: VERDICT_COLORS[key], fontWeight: 700 }}>
-                    {VERDICT_LABELS[key]}
+                  <Typography variant="caption" sx={{ color: VERDICT_BAND_META[key].token, fontWeight: 700 }}>
+                    {VERDICT_BAND_META[key].label}
                   </Typography>
                   <Typography variant="caption" sx={{ color: "text.secondary" }}>
                     ≥ {latestVersion.verdictBands[key]}

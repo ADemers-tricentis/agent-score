@@ -77,13 +77,15 @@ export interface Session {
   atcBeta?: boolean;
 }
 
+export type RunState = "collecting" | "scoring" | "scored" | "error";
+
 export interface Run {
   id: string;
   label: string;
   date: string;
   sessions: Session[];
   regradedWithProfileVersion?: number;
-  inProgress?: boolean;
+  status: RunState;
 }
 
 export type ActivityEventKind =

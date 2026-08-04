@@ -9,9 +9,10 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import type { View, Session } from "../types";
+import type { View, Session, VerdictBandKey } from "../types";
 import { getProject, getRun, sessionCompositeScore, sessionGrade } from "../data/mock";
-import VerdictBadge from "../components/VerdictBadge";
+import { projectVerdictBands, sessionVerdict, scoreHex } from "../data/verdict";
+import VerdictChip from "../components/VerdictChip";
 import GradeChip from "../components/GradeChip";
 
 interface Props {
@@ -31,12 +32,6 @@ function delta(a: number | undefined, b: number | undefined): { val: number; lab
   };
 }
 
-function scoreColor(score: number): string {
-  if (score >= 75) return "#22c55e";
-  if (score >= 55) return "#f59e0b";
-  return "#ef4444";
-}
-
 function DimCompare({
   label,
   scoreA,
@@ -54,8 +49,8 @@ function DimCompare({
         {label}
       </Typography>
       <Box sx={{ flex: 1, display: "flex", alignItems: "center", gap: 0.5 }}>
-        <Box sx={{ flex: scoreA ?? 0, height: 6, borderRadius: 1, bgcolor: scoreColor(scoreA ?? 0), minWidth: 2, maxWidth: (scoreA ?? 0) * 2 }} />
-        <Typography variant="caption" sx={{ fontWeight: 700, fontFamily: "monospace", width: 28, textAlign: "right", color: scoreColor(scoreA ?? 0) }}>
+        <Box sx={{ flex: scoreA ?? 0, height: 6, borderRadius: 1, bgcolor: scoreHex(scoreA ?? 0), minWidth: 2, maxWidth: (scoreA ?? 0) * 2 }} />
+        <Typography variant="caption" sx={{ fontWeight: 700, fontFamily: "monospace", width: 28, textAlign: "right", color: scoreHex(scoreA ?? 0) }}>
           {scoreA ?? "—"}
         </Typography>
       </Box>
@@ -67,8 +62,8 @@ function DimCompare({
         )}
       </Box>
       <Box sx={{ flex: 1, display: "flex", alignItems: "center", gap: 0.5, flexDirection: "row-reverse" }}>
-        <Box sx={{ flex: scoreB ?? 0, height: 6, borderRadius: 1, bgcolor: scoreColor(scoreB ?? 0), minWidth: 2, maxWidth: (scoreB ?? 0) * 2 }} />
-        <Typography variant="caption" sx={{ fontWeight: 700, fontFamily: "monospace", width: 28, textAlign: "left", color: scoreColor(scoreB ?? 0) }}>
+        <Box sx={{ flex: scoreB ?? 0, height: 6, borderRadius: 1, bgcolor: scoreHex(scoreB ?? 0), minWidth: 2, maxWidth: (scoreB ?? 0) * 2 }} />
+        <Typography variant="caption" sx={{ fontWeight: 700, fontFamily: "monospace", width: 28, textAlign: "left", color: scoreHex(scoreB ?? 0) }}>
           {scoreB ?? "—"}
         </Typography>
       </Box>
@@ -84,6 +79,7 @@ function ScenarioMatch({
   projectId,
   runIdA,
   runIdB,
+  bands,
 }: {
   scenario: string;
   sessionA?: Session;
@@ -92,6 +88,7 @@ function ScenarioMatch({
   projectId: string;
   runIdA: string;
   runIdB: string;
+  bands: Record<VerdictBandKey, number>;
 }) {
   const compA = sessionA ? sessionCompositeScore(sessionA) : undefined;
   const compB = sessionB ? sessionCompositeScore(sessionB) : undefined;
@@ -127,7 +124,7 @@ function ScenarioMatch({
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             {sessionA ? (
               <>
-                <VerdictBadge verdict={sessionA.verdict} />
+                <VerdictChip band={sessionVerdict(sessionA, bands).band} />
                 <GradeChip grade={sessionGrade(compA!)} size="small" />
                 <Typography variant="caption" sx={{ fontFamily: "monospace", fontWeight: 700 }}>
                   {compA}/100
@@ -158,7 +155,7 @@ function ScenarioMatch({
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexDirection: "row-reverse" }}>
             {sessionB ? (
               <>
-                <VerdictBadge verdict={sessionB.verdict} />
+                <VerdictChip band={sessionVerdict(sessionB, bands).band} />
                 <GradeChip grade={sessionGrade(compB!)} size="small" />
                 <Typography variant="caption" sx={{ fontFamily: "monospace", fontWeight: 700 }}>
                   {compB}/100
@@ -215,6 +212,8 @@ export default function CompareRunsView({ projectId, runIdA, runIdB, navigate }:
   if (!project || !runA || !runB) {
     return <Box sx={{ p: 3 }}><Typography>Run data not found.</Typography></Box>;
   }
+
+  const bands = projectVerdictBands(project);
 
   const passRateA = runA.sessions.filter((s) => s.verdict === "PASS").length / runA.sessions.length * 100;
   const passRateB = runB.sessions.filter((s) => s.verdict === "PASS").length / runB.sessions.length * 100;
@@ -355,6 +354,7 @@ export default function CompareRunsView({ projectId, runIdA, runIdB, navigate }:
             projectId={projectId}
             runIdA={runIdA}
             runIdB={runIdB}
+            bands={bands}
           />
         );
       })}

@@ -11,22 +11,16 @@ function AddIcon() {
 }
 import Chip from "@mui/material/Chip";
 import Tag from "@tricentis/aura/components/Tag.js";
-import ChipSubtle from "@tricentis/aura/components/ChipSubtle.js";
 import type { View } from "../types";
-import { PROJECTS, projectPassRate, projectLatestVerdict, projectCompositeScore, sessionGrade } from "../data/mock";
-import VerdictBadge from "../components/VerdictBadge";
+import { PROJECTS, projectDimensionAverages } from "../data/mock";
+import { agentVerdict, criticalSafety, RUN_STATE_META } from "../data/verdict";
+import VerdictChip from "../components/VerdictChip";
 import TypeTag from "../components/TypeTag";
 import ScoreBar from "../components/ScoreBar";
 import GradeChip from "../components/GradeChip";
 
 interface Props {
   navigate: (v: View) => void;
-}
-
-function reliabilityConfig(r: string) {
-  if (r === "RELIABLE") return { label: "Reliable", color: "success" as const };
-  if (r === "NEEDS_WORK") return { label: "Needs Work", color: "warning" as const };
-  return { label: "Unstable", color: "error" as const };
 }
 
 export default function AgentsView({ navigate }: Props) {
@@ -58,17 +52,13 @@ export default function AgentsView({ navigate }: Props) {
         }}
       >
         {PROJECTS.map((project) => {
-          const passRate = projectPassRate(project);
-          const verdict = projectLatestVerdict(project);
-          const rel = reliabilityConfig(project.reliability);
+          const verdict = agentVerdict(project);
+          const critical = criticalSafety(project);
+          const isScored = verdict.state === "scored";
+          const reasonColor = verdict.band === "block" ? "error.main" : verdict.band === "review" ? "warning.main" : verdict.band === "ship" ? "success.main" : "text.secondary";
           const allSessions = project.runs.flatMap((r) => r.sessions);
           const totalSessions = allSessions.length;
-          const latestSession = project.runs[0]?.sessions[0];
-          const composite = projectCompositeScore(project);
-          const grade = sessionGrade(composite);
           const isAtcBeta = project.type === "ATC";
-          const safetySessions = allSessions.filter((s) => s.safetyOverride);
-          const criticalSafety = safetySessions.find((s) => s.safetyOverride?.severity === "Critical");
 
           // Token spend: parse p95_tail_cost from valueEfficiency sigs
           const sessionCosts = allSessions
@@ -83,51 +73,9 @@ export default function AgentsView({ navigate }: Props) {
             ? sessionCosts.reduce((a, b) => a + b, 0) / sessionCosts.length
             : null;
 
-          // Averaged dimension scores across all sessions
-          const scoredSessions = allSessions.filter((s) => s.scores);
-          const avgDim = scoredSessions.length > 0 ? {
-            correctness: {
-              score: Math.round(scoredSessions.reduce((a, s) => a + s.scores.benchmarkPerformance.score, 0) / scoredSessions.length),
-              sigs: [] as string[],
-            },
-            efficiency: (() => {
-              const withEff = scoredSessions.filter((s) => s.scores.valueEfficiency != null);
-              if (withEff.length === 0) return null;
-              return {
-                score: Math.round(withEff.reduce((a, s) => a + s.scores.valueEfficiency!.score, 0) / withEff.length),
-                rawDeltaPct: latestSession?.scores.valueEfficiency?.rawDeltaPct,
-                sigs: [] as string[],
-              };
-            })(),
-            relevance: {
-              score: Math.round(scoredSessions.reduce((a, s) => a + s.scores.uxSignal.score, 0) / scoredSessions.length),
-              sigs: [] as string[],
-            },
-            safety: (() => {
-              const withDim = scoredSessions.filter((s) => s.scores.harmony != null);
-              if (withDim.length === 0) return null;
-              return {
-                score: Math.round(withDim.reduce((a, s) => a + s.scores.harmony!.score, 0) / withDim.length),
-                sigs: [] as string[],
-              };
-            })(),
-            consistency: (() => {
-              const withDim = scoredSessions.filter((s) => s.scores.stability != null);
-              if (withDim.length === 0) return null;
-              return {
-                score: Math.round(withDim.reduce((a, s) => a + s.scores.stability!.score, 0) / withDim.length),
-                sigs: [] as string[],
-              };
-            })(),
-            toolUse: (() => {
-              const withDim = scoredSessions.filter((s) => s.scores.agency != null);
-              if (withDim.length === 0) return null;
-              return {
-                score: Math.round(withDim.reduce((a, s) => a + s.scores.agency!.score, 0) / withDim.length),
-                sigs: [] as string[],
-              };
-            })(),
-          } : null;
+          // Dimension averages for the latest run - same source projectCompositeScore is derived from,
+          // so these bars always recombine to the composite shown above them.
+          const avgDim = project.runs[0]?.sessions.length ? projectDimensionAverages(project) : null;
 
           return (
             <ButtonBase
@@ -140,9 +88,9 @@ export default function AgentsView({ navigate }: Props) {
                   p: 2,
                   borderRadius: 2,
                   border: "1px solid",
-                  borderColor: criticalSafety ? "error.main" : "divider",
+                  borderColor: critical ? "error.main" : verdict.state === "error" ? "error.light" : "divider",
                   "&:hover": {
-                    borderColor: criticalSafety ? "error.dark" : "primary.main",
+                    borderColor: critical ? "error.dark" : "primary.main",
                     bgcolor: "action.hover",
                   },
                   transition: "all 0.15s",
@@ -150,7 +98,7 @@ export default function AgentsView({ navigate }: Props) {
                 }}
               >
                 {/* Safety banner */}
-                {criticalSafety && (
+                {critical && (
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.5, px: 1, py: 0.75, borderRadius: 1, bgcolor: "error.light", color: "error.contrastText" }}>
                     <SvgIcon sx={{ fontSize: "0.95rem", color: "error.main", flexShrink: 0 }}>
                       <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v4h-2v-4z" />
@@ -158,7 +106,7 @@ export default function AgentsView({ navigate }: Props) {
                     <Typography variant="caption" sx={{ fontWeight: 700, color: "error.dark", flex: 1, minWidth: 0 }}>
                       Safety issue detected
                     </Typography>
-                    <Chip label={criticalSafety.safetyOverride!.signal.replace(/_/g, " ")} size="small" color="error" sx={{ height: 18, fontSize: "0.6rem", fontWeight: 700 }} />
+                    <Chip label={critical.signal.replace(/_/g, " ")} size="small" color="error" sx={{ height: 18, fontSize: "0.6rem", fontWeight: 700 }} />
                   </Box>
                 )}
 
@@ -178,17 +126,24 @@ export default function AgentsView({ navigate }: Props) {
                 <Divider sx={{ mb: 1.5 }} />
 
                 {/* Stats row */}
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1.5, flexWrap: "wrap" }}>
-                  <GradeChip grade={grade} size="small" />
-                  <Typography variant="caption" sx={{ fontWeight: 700, fontFamily: "monospace" }}>
-                    {composite}/100
-                  </Typography>
-                  <VerdictBadge verdict={verdict} />
-                  <ChipSubtle
-                    label={rel.label}
-                    color={rel.color}
-                    sx={{ height: 20, fontSize: "0.65rem", fontWeight: 600 }}
-                  />
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 0.5, flexWrap: "wrap" }}>
+                  {isScored ? (
+                    <>
+                      <GradeChip grade={verdict.grade!} size="small" />
+                      <Typography variant="caption" sx={{ fontWeight: 700, fontFamily: "monospace" }}>
+                        {verdict.score}/100
+                      </Typography>
+                      <VerdictChip band={verdict.band!} />
+                    </>
+                  ) : (
+                    <Chip
+                      label={RUN_STATE_META[verdict.state].label}
+                      size="small"
+                      color={RUN_STATE_META[verdict.state].muiColor}
+                      variant="outlined"
+                      sx={{ height: 22, fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.02em" }}
+                    />
+                  )}
                   {isAtcBeta && (
                     <Tag
                       label="ATC beta"
@@ -196,14 +151,19 @@ export default function AgentsView({ navigate }: Props) {
                     />
                   )}
                   <Typography variant="caption" sx={{ color: "text.secondary", ml: "auto" }}>
-                    {passRate}% pass · {totalSessions} sessions
+                    {totalSessions} sessions
                     {avgCost != null && ` · $${avgCost.toFixed(2)}/session`}
                   </Typography>
                 </Box>
 
+                {/* Why-line */}
+                <Typography variant="caption" sx={{ color: reasonColor, fontWeight: 600, display: "block", mb: 1.5 }}>
+                  {verdict.reason}
+                </Typography>
+
                 {/* Dimension bars */}
                 {avgDim ? (
-                  <Box>
+                  <Box sx={{ opacity: isScored ? 1 : 0.45 }}>
                     <ScoreBar label="Correctness" dimension={avgDim.correctness} compact />
                     <ScoreBar label="Efficiency" dimension={avgDim.efficiency} compact />
                     <ScoreBar label="Relevance" dimension={avgDim.relevance} compact />

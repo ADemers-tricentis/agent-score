@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { scoreHex } from "../data/verdict";
 
 interface Props {
   score: number | null;
@@ -7,18 +8,12 @@ interface Props {
   label?: string;
 }
 
-function scoreColor(score: number): string {
-  if (score >= 75) return "#22c55e";
-  if (score >= 55) return "#f59e0b";
-  return "#ef4444";
-}
-
 export default function ScoreMeter({ score, size = 96, label }: Props) {
   const r = (size - 10) / 2;
   const circumference = 2 * Math.PI * r;
   const pct = score != null ? Math.max(0, Math.min(100, score)) : 0;
   const dashOffset = circumference * (1 - pct / 100);
-  const color = score != null ? scoreColor(score) : "#363d5c";
+  const color = score != null ? scoreHex(score) : "#363d5c";
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 0.5 }}>

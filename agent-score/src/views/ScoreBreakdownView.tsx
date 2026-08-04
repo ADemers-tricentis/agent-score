@@ -8,7 +8,8 @@ import SvgIcon from "@mui/material/SvgIcon";
 import type { View, DimensionScore, Session } from "../types";
 import { getProject, getRun, getSession, sessionCompositeScore, sessionGrade } from "../data/mock";
 import { DIMENSION_QUESTION, SIG_LABEL } from "../components/ScoreBar";
-import VerdictBadge from "../components/VerdictBadge";
+import { projectVerdictBands, sessionVerdict, scoreColor } from "../data/verdict";
+import VerdictChip from "../components/VerdictChip";
 import GradeChip from "../components/GradeChip";
 
 interface Props {
@@ -16,12 +17,6 @@ interface Props {
   runId: string;
   sessionId: string;
   navigate: (v: View) => void;
-}
-
-function scoreColor(score: number): "success" | "warning" | "error" {
-  if (score >= 75) return "success";
-  if (score >= 55) return "warning";
-  return "error";
 }
 
 // Order mirrors the weighting used by sessionCompositeScore — most heavily
@@ -115,6 +110,7 @@ export default function ScoreBreakdownView({ projectId, runId, sessionId, naviga
 
   const composite = sessionCompositeScore(session);
   const grade = sessionGrade(composite);
+  const bands = projectVerdictBands(project);
 
   return (
     <Box sx={{ p: 3, maxWidth: 760 }}>
@@ -138,7 +134,7 @@ export default function ScoreBreakdownView({ projectId, runId, sessionId, naviga
               {run.label} · {new Date(session.ts).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
             </Typography>
           </Box>
-          <VerdictBadge verdict={session.verdict} size="medium" />
+          <VerdictChip band={sessionVerdict(session, bands).band} size="medium" />
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 2 }}>
           <GradeChip grade={grade} size="small" />

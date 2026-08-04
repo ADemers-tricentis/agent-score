@@ -3,17 +3,12 @@ import Typography from "@mui/material/Typography";
 import LinearProgress from "@mui/material/LinearProgress";
 import Tooltip from "@mui/material/Tooltip";
 import type { DimensionScore } from "../types";
+import { scoreColor } from "../data/verdict";
 
 interface Props {
   label: string;
   dimension: DimensionScore | null;
   compact?: boolean;
-}
-
-function scoreColor(score: number): "success" | "warning" | "error" {
-  if (score >= 75) return "success";
-  if (score >= 55) return "warning";
-  return "error";
 }
 
 // Human-readable question shown below each bar

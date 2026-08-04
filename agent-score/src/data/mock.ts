@@ -27,6 +27,7 @@ export const PROJECTS: Project[] = [
         id: "r1",
         label: "v2.4.1 → v2.4.2",
         date: "2026-06-12",
+        status: "scored",
         sessions: [
           {
             id: "s1",
@@ -160,6 +161,7 @@ export const PROJECTS: Project[] = [
         id: "r2",
         label: "v2.4.0 → v2.4.1",
         date: "2026-06-10",
+        status: "scored",
         sessions: [
           {
             id: "s4",
@@ -192,6 +194,7 @@ export const PROJECTS: Project[] = [
         id: "r-p1-hist1",
         label: "v2.3.8 → v2.3.9",
         date: "2026-05-28",
+        status: "scored",
         sessions: [
           { id: "s-p1h1-1", ts: "2026-05-28T08:30:00Z", dur: 36800, scenario: "Full regression – payment workflow", verdict: "PASS", baseline: 67, scores: { benchmarkPerformance: { score: 84, passed: true, sigs: [] }, valueEfficiency: { score: 79, sigs: [] }, uxSignal: { score: 82, passed: true, sigs: [] } } },
           { id: "s-p1h1-2", ts: "2026-05-28T09:15:00Z", dur: 31200, scenario: "Smoke test – login flow", verdict: "PASS", baseline: 69, scores: { benchmarkPerformance: { score: 87, passed: true, sigs: [] }, valueEfficiency: { score: 81, sigs: [] }, uxSignal: { score: 85, passed: true, sigs: [] } } },
@@ -208,6 +211,7 @@ export const PROJECTS: Project[] = [
         id: "r-p1-hist2",
         label: "v2.3.7 → v2.3.8",
         date: "2026-05-14",
+        status: "scored",
         sessions: [
           { id: "s-p1h2-1", ts: "2026-05-14T08:00:00Z", dur: 38200, scenario: "Full regression – payment workflow", verdict: "PASS", baseline: 65, scores: { benchmarkPerformance: { score: 81, passed: true, sigs: [] }, valueEfficiency: { score: 76, sigs: [] }, uxSignal: { score: 79, passed: true, sigs: [] } } },
           { id: "s-p1h2-2", ts: "2026-05-14T08:45:00Z", dur: 32600, scenario: "Smoke test – login flow", verdict: "PASS", baseline: 68, scores: { benchmarkPerformance: { score: 84, passed: true, sigs: [] }, valueEfficiency: { score: 78, sigs: [] }, uxSignal: { score: 82, passed: true, sigs: [] } } },
@@ -235,6 +239,7 @@ export const PROJECTS: Project[] = [
         id: "r3",
         label: "Sprint 24 eval",
         date: "2026-06-11",
+        status: "scored",
         sessions: [
           {
             id: "s5",
@@ -333,6 +338,7 @@ export const PROJECTS: Project[] = [
         id: "r4",
         label: "Model upgrade: Sonnet 4.5 → 4.6",
         date: "2026-06-09",
+        status: "scored",
         sessions: [
           {
             id: "s7",
@@ -420,6 +426,7 @@ export const PROJECTS: Project[] = [
         id: "r-p3-hist1",
         label: "Sonnet 4.4 → 4.5 upgrade",
         date: "2026-05-25",
+        status: "scored",
         sessions: [
           { id: "s-p3h1-1", ts: "2026-05-25T09:00:00Z", dur: 29400, scenario: "Summarize engineering RFC", verdict: "PASS", baseline: 75, scores: { benchmarkPerformance: { score: 86, passed: true, sigs: [] }, valueEfficiency: { score: 91, sigs: [] }, uxSignal: { score: 89, passed: true, sigs: [] } } },
           { id: "s-p3h1-2", ts: "2026-05-25T09:45:00Z", dur: 32100, scenario: "Draft release notes – v2.4.1", verdict: "PASS", baseline: 74, scores: { benchmarkPerformance: { score: 85, passed: true, sigs: [] }, valueEfficiency: { score: 89, sigs: [] }, uxSignal: { score: 87, passed: true, sigs: [] } } },
@@ -434,6 +441,7 @@ export const PROJECTS: Project[] = [
         id: "r-p3-hist2",
         label: "Q2 baseline eval",
         date: "2026-05-10",
+        status: "scored",
         sessions: [
           { id: "s-p3h2-1", ts: "2026-05-10T09:00:00Z", dur: 30200, scenario: "Summarize engineering RFC", verdict: "PASS", baseline: 72, scores: { benchmarkPerformance: { score: 82, passed: true, sigs: [] }, valueEfficiency: { score: 86, sigs: [] }, uxSignal: { score: 84, passed: true, sigs: [] } } },
           { id: "s-p3h2-2", ts: "2026-05-10T09:50:00Z", dur: 34800, scenario: "Draft release notes – v2.4.1", verdict: "PASS", baseline: 71, scores: { benchmarkPerformance: { score: 81, passed: true, sigs: [] }, valueEfficiency: { score: 85, sigs: [] }, uxSignal: { score: 83, passed: true, sigs: [] } } },
@@ -448,6 +456,7 @@ export const PROJECTS: Project[] = [
         id: "r-p3-hist3",
         label: "Initial deployment eval",
         date: "2026-04-28",
+        status: "scored",
         sessions: [
           { id: "s-p3h3-1", ts: "2026-04-28T09:00:00Z", dur: 33200, scenario: "Summarize engineering RFC", verdict: "PASS", baseline: 70, scores: { benchmarkPerformance: { score: 79, passed: true, sigs: [] }, valueEfficiency: { score: 83, sigs: [] }, uxSignal: { score: 81, passed: true, sigs: [] } } },
           { id: "s-p3h3-2", ts: "2026-04-28T10:00:00Z", dur: 36900, scenario: "Draft release notes – v2.4.1", verdict: "PASS", baseline: 68, scores: { benchmarkPerformance: { score: 77, passed: true, sigs: [] }, valueEfficiency: { score: 81, sigs: [] }, uxSignal: { score: 79, passed: true, sigs: [] } } },
@@ -485,6 +494,7 @@ export const PROJECTS: Project[] = [
         id: "r5",
         label: "Stability test – v1.0.3",
         date: "2026-06-08",
+        status: "error",
         sessions: [
           {
             id: "s9",
@@ -625,6 +635,7 @@ export const PROJECTS: Project[] = [
         id: "r6",
         label: "Baseline eval – Q2",
         date: "2026-06-07",
+        status: "scoring",
         sessions: [
           {
             id: "s11",
@@ -667,6 +678,7 @@ export const PROJECTS: Project[] = [
         id: "r7",
         label: "v0.8 beta eval",
         date: "2026-06-06",
+        status: "collecting",
         regradedWithProfileVersion: 2,
         sessions: [
           {
@@ -1214,6 +1226,7 @@ export function addMockTracesToProject(projectId: string) {
     id: `mock-run-${projectId}-${Date.now()}`,
     label: `Live traces · ${now.toLocaleDateString()}`,
     date: now.toISOString().slice(0, 10),
+    status: "scored",
     sessions,
   });
 }
@@ -1713,11 +1726,87 @@ export function sessionGrade(score: number): "A" | "B" | "C" | "D" | "F" {
   return "F";
 }
 
-export function projectCompositeScore(project: import("../types").Project): number {
-  const sessions = project.runs[0]?.sessions ?? [];
+export interface DimensionAverage {
+  score: number;
+  passed?: boolean;
+  sigs: string[];
+  rawDeltaPct?: number;
+}
+
+export interface ProjectDimensionAverages {
+  correctness: DimensionAverage;
+  efficiency: DimensionAverage;
+  relevance: DimensionAverage;
+  safety: DimensionAverage | null;
+  consistency: DimensionAverage | null;
+  toolUse: DimensionAverage | null;
+}
+
+function avg(nums: number[]): number {
+  return nums.reduce((a, b) => a + b, 0) / nums.length;
+}
+
+/**
+ * Per-dimension averages across a set of sessions (typically one run), using
+ * the same fallback/weight-inclusion rules as sessionCompositeScore
+ * (valueEfficiency falls back to benchmarkPerformance rather than being
+ * excluded; optional dimensions are included only if at least one session
+ * has them). Kept as the single source of truth so displayed dimension bars
+ * always recombine to sessionsCompositeScore - see below.
+ */
+export function sessionsDimensionAverages(sessions: import("../types").Session[]): ProjectDimensionAverages {
+  const latest = sessions[0];
+
+  const withHarmony = sessions.filter((s) => s.scores.harmony);
+  const withStability = sessions.filter((s) => s.scores.stability);
+  const withAgency = sessions.filter((s) => s.scores.agency);
+
+  return {
+    correctness: { score: sessions.length ? Math.round(avg(sessions.map((s) => s.scores.benchmarkPerformance.score))) : 0, sigs: [] },
+    efficiency: {
+      score: sessions.length ? Math.round(avg(sessions.map((s) => s.scores.valueEfficiency?.score ?? s.scores.benchmarkPerformance.score))) : 0,
+      rawDeltaPct: latest?.scores.valueEfficiency?.rawDeltaPct,
+      sigs: [],
+    },
+    relevance: { score: sessions.length ? Math.round(avg(sessions.map((s) => s.scores.uxSignal.score))) : 0, sigs: [] },
+    safety: withHarmony.length ? { score: Math.round(avg(withHarmony.map((s) => s.scores.harmony!.score))), sigs: [] } : null,
+    consistency: withStability.length ? { score: Math.round(avg(withStability.map((s) => s.scores.stability!.score))), sigs: [] } : null,
+    toolUse: withAgency.length ? { score: Math.round(avg(withAgency.map((s) => s.scores.agency!.score))), sigs: [] } : null,
+  };
+}
+
+/**
+ * Weighted combination of sessionsDimensionAverages using the same weight
+ * table as sessionCompositeScore (35/20/15/15/10/5). Deriving the composite
+ * from the same averages shown in the dimension bars guarantees the two
+ * always reconcile - unlike averaging each session's own composite, which
+ * can drift from the displayed per-dimension averages when sessions have
+ * inconsistent dimension coverage.
+ */
+export function sessionsCompositeScore(sessions: import("../types").Session[]): number {
   if (!sessions.length) return 0;
-  const scores = sessions.map(sessionCompositeScore);
-  return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+  const { correctness, efficiency, relevance, safety, consistency, toolUse } = sessionsDimensionAverages(sessions);
+  const dims: { score: number; weight: number }[] = [
+    { score: correctness.score, weight: 35 },
+    { score: efficiency.score, weight: 20 },
+    { score: relevance.score, weight: 15 },
+  ];
+  if (safety) dims.push({ score: safety.score, weight: 15 });
+  if (consistency) dims.push({ score: consistency.score, weight: 10 });
+  if (toolUse) dims.push({ score: toolUse.score, weight: 5 });
+  const totalWeight = dims.reduce((sum, d) => sum + d.weight, 0);
+  const weightedSum = dims.reduce((sum, d) => sum + d.score * d.weight, 0);
+  return Math.round(weightedSum / totalWeight);
+}
+
+/** Dimension averages for the project's latest run. */
+export function projectDimensionAverages(project: import("../types").Project): ProjectDimensionAverages {
+  return sessionsDimensionAverages(project.runs[0]?.sessions ?? []);
+}
+
+/** Composite score for the project's latest run. */
+export function projectCompositeScore(project: import("../types").Project): number {
+  return sessionsCompositeScore(project.runs[0]?.sessions ?? []);
 }
 
 export function computePassK(project: import("../types").Project): number {

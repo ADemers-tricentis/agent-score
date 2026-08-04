@@ -45,7 +45,7 @@ export default function MetricsView() {
         <MetricCard
           name="evalclaw.eval.outcome"
           type="counter"
-          description="Session count by PASS / PARTIAL / FAIL"
+          description="Session count by raw eval outcome (PASS / PARTIAL / FAIL) — the per-session signal that feeds the Ship/Review/Block verdict shown elsewhere in the app"
         >
           <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
             <CountBadge label="PASS" value={passCount} color="success.main" />
@@ -162,7 +162,7 @@ export default function MetricsView() {
         <MetricCard
           name="evalclaw.guard.decisions"
           type="counter"
-          description="Runtime guard decision stream — allow / warn / block"
+          description="Runtime guard decision stream — allow / warn / block (a tool-call gate, unrelated to the agent-level Ship/Review/Block verdict)"
         >
           <Box sx={{ display: "flex", gap: 1.5 }}>
             <CountBadge label="allow" value={guardAllow} color="success.main" />

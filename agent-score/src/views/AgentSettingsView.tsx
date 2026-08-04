@@ -22,6 +22,7 @@ import {
   LLM_JUDGES,
   updateProject,
 } from "../data/mock";
+import { VERDICT_BAND_META, DEFAULT_VERDICT_BANDS } from "../data/verdict";
 import TypeTag from "../components/TypeTag";
 
 interface Props {
@@ -29,11 +30,9 @@ interface Props {
   navigate: (v: View) => void;
 }
 
-const VERDICT_BANDS: { key: VerdictBandKey; label: string; color: string }[] = [
-  { key: "ship", label: "Ship", color: "success.main" },
-  { key: "review", label: "Review", color: "warning.main" },
-  { key: "block", label: "Block", color: "error.main" },
-];
+const VERDICT_BANDS: { key: VerdictBandKey; label: string; color: string }[] = (
+  ["ship", "review", "block"] as VerdictBandKey[]
+).map((key) => ({ key, label: VERDICT_BAND_META[key].label, color: VERDICT_BAND_META[key].token }));
 
 const EVAL_KIND_COLOR: Record<string, "default" | "primary" | "info" | "secondary"> = {
   library_metric: "default",
@@ -68,7 +67,7 @@ export default function AgentSettingsView({ projectId, navigate }: Props) {
   const [sampleRate, setSampleRate] = useState(project?.traceSampleRate ?? 100);
 
   const [verdictBands, setVerdictBands] = useState(
-    adoptedVersion?.verdictBands ?? { ship: 85, review: 55, block: 40 }
+    adoptedVersion?.verdictBands ?? DEFAULT_VERDICT_BANDS
   );
 
   const [evalEnabled, setEvalEnabled] = useState<Record<string, boolean>>(() => {
@@ -475,12 +474,6 @@ export default function AgentSettingsView({ projectId, navigate }: Props) {
               <Typography variant="body2" sx={{ fontFamily: "monospace", mt: 0.25 }}>
                 {`AGT-${project.id.toUpperCase()}-${project.service.slice(0, 4).toUpperCase()}`}
               </Typography>
-            </Box>
-            <Box>
-              <Typography variant="overline" sx={{ color: "text.disabled", fontSize: "0.62rem", letterSpacing: 1, display: "block" }}>
-                WORKSPACE ID
-              </Typography>
-              <Typography variant="body2" sx={{ mt: 0.25 }}>WS-TRICENTIS-AGENTSCORE</Typography>
             </Box>
           </Box>
         </Paper>
