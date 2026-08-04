@@ -1125,7 +1125,7 @@
       <div class="nav-logo">
         <div class="logo-mark">A</div>
         AgentScore
-        <span class="nav-badge">Internal Alpha</span>
+        <span class="nav-badge">Phase 1 &middot; Internal Pilot</span>
       </div>
       <div class="nav-links">
         <a href="#capabilities">Features</a>
@@ -1207,24 +1207,23 @@
             <span class="dim-val">86</span>
           </div>
           <div class="dim-row">
-            <span class="dim-lbl">Harmony</span>
+            <span class="dim-lbl">Safety</span>
             <div class="dim-track"><div class="dim-fill" style="width:88%"></div></div>
             <span class="dim-val">88</span>
           </div>
           <div class="dim-row">
-            <span class="dim-lbl">Stability</span>
+            <span class="dim-lbl">Consistency</span>
             <div class="dim-track"><div class="dim-fill" style="width:85%"></div></div>
             <span class="dim-val">85</span>
           </div>
           <div class="dim-row">
-            <span class="dim-lbl">Agency</span>
+            <span class="dim-lbl">Tool Use</span>
             <div class="dim-track"><div class="dim-fill" style="width:87%"></div></div>
             <span class="dim-val">87</span>
           </div>
 
           <div class="card-foot">
             <span class="foot-stat"><strong>3 runs</strong> &middot; 9 sessions</span>
-            <span class="foot-passk">Pass^k 0.97</span>
             <span class="foot-stat"><strong>48</strong> traces</span>
           </div>
         </div>
@@ -1287,20 +1286,17 @@
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:3rem">
 
         <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius);padding:28px" class="reveal">
-          <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:#fca5a5;margin-bottom:12px">Nightmare</div>
-          <div style="font-size:1rem;font-weight:700;color:white;margin-bottom:10px">Edge cases &amp; adversarial inputs</div>
+          <div style="font-size:1.05rem;font-weight:700;color:white;margin-bottom:10px">Edge cases &amp; adversarial inputs</div>
           <p style="font-size:0.86rem;color:rgba(255,255,255,0.6);line-height:1.65">The inputs most likely to break your agent: malformed data, boundary conditions, error states, prompt injection attempts. AgentScore identifies these from patterns in your observed failures.</p>
         </div>
 
         <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius);padding:28px" class="reveal">
-          <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:#6ee7b7;margin-bottom:12px">Reality</div>
-          <div style="font-size:1rem;font-weight:700;color:white;margin-bottom:10px">Normal, expected inputs</div>
+          <div style="font-size:1.05rem;font-weight:700;color:white;margin-bottom:10px">Normal, expected inputs</div>
           <p style="font-size:0.86rem;color:rgba(255,255,255,0.6);line-height:1.65">The baseline your agent should handle reliably. AgentScore calibrates these from the happy-path sessions it has already observed - the inputs your agent actually sees in production.</p>
         </div>
 
         <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius);padding:28px" class="reveal">
-          <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:#fbbf24;margin-bottom:12px">Dream</div>
-          <div style="font-size:1rem;font-weight:700;color:white;margin-bottom:10px">Stretch goals</div>
+          <div style="font-size:1.05rem;font-weight:700;color:white;margin-bottom:10px">Stretch goals</div>
           <p style="font-size:0.86rem;color:rgba(255,255,255,0.6);line-height:1.65">The scenarios that define what excellent looks like for your agent type. Not required to ship, but tracked - so you know whether quality is improving over time.</p>
         </div>
 
@@ -1421,8 +1417,8 @@
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
             </svg>
           </div>
-          <h3>Runtime Guard</h3>
-          <p>Pre-tool-use safety evaluation catches prompt injection, credential exposure, PII leaks, and path violations before they reach your agent's environment. Guard decisions are logged and searchable.</p>
+          <h3>Runtime Guard <span style="font-weight:600;color:var(--text-muted);text-transform:none;letter-spacing:0;font-size:0.7rem">(on the roadmap)</span></h3>
+          <p>Pre-tool-use safety evaluation designed to catch prompt injection, credential exposure, PII leaks, and path violations before they reach your agent's environment - with logged, searchable guard decisions.</p>
         </div>
 
       </div>
@@ -1452,19 +1448,19 @@
           <div class="dim-desc">Is the output clear and useful to the practitioner who has to act on it - not just technically correct?</div>
         </div>
         <div class="dim-card reveal">
-          <div class="dim-cat extended">Extended</div>
-          <div class="dim-name">Harmony</div>
-          <div class="dim-desc">Does the agent ground its outputs in provided context without hallucinating facts or violating spec?</div>
+          <div class="dim-cat core">Core</div>
+          <div class="dim-name">Safety</div>
+          <div class="dim-desc">Does the agent avoid harmful, unsafe, or policy-violating actions - prompt injection, credential exposure, PII leaks, out-of-scope behavior?</div>
         </div>
         <div class="dim-card reveal">
-          <div class="dim-cat extended">Extended</div>
-          <div class="dim-name">Stability</div>
+          <div class="dim-cat core">Core</div>
+          <div class="dim-name">Consistency</div>
           <div class="dim-desc">Does it produce equivalent answers when the same task arrives in different formats or phrasings?</div>
         </div>
         <div class="dim-card reveal">
-          <div class="dim-cat extended">Extended</div>
-          <div class="dim-name">Agency</div>
-          <div class="dim-desc">Does it select the right tools, plan efficiently, and complete tasks using the minimum necessary steps?</div>
+          <div class="dim-cat core">Core</div>
+          <div class="dim-name">Tool Use</div>
+          <div class="dim-desc">Does it choose the right tools, use them efficiently, and recover cleanly when a tool call fails?</div>
         </div>
         <div class="dim-card reveal">
           <div class="dim-cat extended">Extended</div>
@@ -1550,7 +1546,7 @@
             </div>
           </div>
           <div class="scenario-q">"Something changed - is the agent still working?"</div>
-          <div class="scenario-body">Two runs came back PARTIAL this week. Attribution narrows it to a specific module: new test data format triggered the wrong tool selection, causing downstream assertion failures. The call chain shows exactly where it went wrong.</div>
+          <div class="scenario-body">Two sessions came back PARTIAL this week. Attribution narrows it to a specific module: new test data format triggered the wrong tool selection, causing downstream assertion failures. The call chain shows exactly where it went wrong.</div>
           <div class="scenario-outcome">Marco files a one-line ticket. The AI Ops engineer has a fix in the next run - no week-long debugging session required.</div>
         </div>
 
@@ -1742,10 +1738,12 @@
               <label for="f_agent_type">Agent type</label>
               <select id="f_agent_type" name="agent_type">
                 <option value="" disabled selected>Select&hellip;</option>
-                <option>ATA - Autonomous Test Agent</option>
+                <option>ATA - Automated Test Agent</option>
                 <option>ATC - Automated Test Creation</option>
+                <option>CURA - Root Cause Analysis</option>
                 <option>AI Workspace agent</option>
-                <option>APT - Performance Test Agent</option>
+                <option>CODING - Coding Assistant</option>
+                <option>APT - AI Performance Testing</option>
                 <option>Custom / homegrown agent</option>
                 <option>Not sure yet</option>
               </select>
