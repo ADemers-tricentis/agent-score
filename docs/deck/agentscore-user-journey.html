@@ -31,12 +31,12 @@
     top: 0;
     left: 0;
     width: 1920px;
-    height: 1150px;
+    height: 1320px;
     background: var(--navy-deep);
     overflow: hidden;
     transform-origin: top left;
   }
-  /* Fits the fixed 1920x1150 canvas entirely inside the viewport (both
+  /* Fits the fixed 1920x1320 canvas entirely inside the viewport (both
      width and height), centered, whatever the window's aspect ratio.
      Scale + explicit centering offset are computed in JS (below) rather
      than via flexbox, since flexbox centers based on the pre-transform
@@ -61,10 +61,10 @@
   .card {
     position: absolute;
     width: 320px;
-    height: 320px;
+    height: 400px;
     border-radius: 16px;
     background: rgba(255,255,255,0.045);
-    padding: 22px;
+    padding: 20px 22px;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -78,21 +78,30 @@
   .card .tagline { font-size: 14px; color: var(--teal-light); font-style: italic; }
   .card .rule { border-top: 1px solid var(--navy-mid); margin: 2px 0 4px; }
   .card .bullets { display: flex; flex-direction: column; gap: 7px; }
-  .card .bullet { display: flex; gap: 7px; font-size: 13.5px; color: var(--text-body); line-height: 1.4; }
+  .card .bullet { display: flex; gap: 7px; font-size: 13.5px; color: var(--text-body); line-height: 1.42; }
   .card .bullet .dot { flex-shrink: 0; }
+
+  /* Outcome callout — sits right under the title, first thing read, not a footnote */
+  .card .outcome-row { border-radius: 10px; padding: 10px 12px; margin: 2px 0 4px; }
+  .card .outcome-label { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.85; margin-bottom: 4px; }
+  .card .outcome-text { font-size: 14px; font-weight: 700; color: var(--white); line-height: 1.35; }
 
   .onboard-c { border: 2.5px solid var(--primary); }
   .onboard-n { background: var(--primary); }
   .onboard-dot { color: var(--primary); }
+  .onboard-c .outcome-row { background: rgba(0,76,151,0.16); }
   .collect-c { border: 2.5px solid var(--teal); }
   .collect-n { background: var(--teal); }
   .collect-dot { color: var(--teal); }
+  .collect-c .outcome-row { background: rgba(0,135,174,0.16); }
   .score-c { border: 2.5px solid var(--orange); }
   .score-n { background: var(--orange); }
   .score-dot { color: var(--orange); }
+  .score-c .outcome-row { background: rgba(255,108,14,0.16); }
   .review-c { border: 2.5px solid var(--review); }
   .review-n { background: var(--review); }
   .review-dot { color: var(--review); }
+  .review-c .outcome-row { background: rgba(47,191,120,0.16); }
 
   .connector { position: absolute; width: 30px; height: 4px; background: var(--orange); }
   .row-arrow { position: absolute; font-size: 24px; color: var(--navy-mid); }
@@ -133,142 +142,182 @@
     <!-- Row 1 cards -->
     <div class="abs card onboard-c" style="left:180px; top:210px;">
       <div class="head"><div class="num onboard-n">1</div><div class="title">Fleet</div></div>
+      <div class="outcome-row">
+        <div class="outcome-label onboard-dot">Outcome</div>
+        <div class="outcome-text">You spot the agent that's quietly failing before it turns into a shipped incident.</div>
+      </div>
       <div class="tagline">Every agent, one status board.</div>
       <div class="rule"></div>
       <div class="bullets">
-        <div class="bullet"><span class="dot onboard-dot">•</span><span>A–F grade + 0–100 composite</span></div>
-        <div class="bullet"><span class="dot onboard-dot">•</span><span>Verdict &amp; reliability (pass^k)</span></div>
-        <div class="bullet"><span class="dot onboard-dot">•</span><span>Not a config screen</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>A–F grade + 0–100 composite, recalculated after every scoring run</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Verdict (Ship/Hold/Reject) plus a reliability read across sessions (pass^k)</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Sorted by what needs attention first, not alphabetically</span></div>
       </div>
     </div>
 
     <div class="abs card onboard-c" style="left:530px; top:210px;">
       <div class="head"><div class="num onboard-n">2</div><div class="title">Setup</div></div>
+      <div class="outcome-row">
+        <div class="outcome-label onboard-dot">Outcome</div>
+        <div class="outcome-text">You find out whether your agent is any good without asking engineering to touch a line of its code.</div>
+      </div>
       <div class="tagline">Copy-paste, not a build.</div>
       <div class="rule"></div>
       <div class="bullets">
-        <div class="bullet"><span class="dot onboard-dot">•</span><span>One tenant API key, not per-agent</span></div>
-        <div class="bullet"><span class="dot onboard-dot">•</span><span>OTLP endpoint + auth header shown inline</span></div>
-        <div class="bullet"><span class="dot onboard-dot">•</span><span>Or: paste an install instruction for your coding agent</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>One tenant API key covers every agent you connect — not one key per agent</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>OTLP endpoint + auth header shown inline, ready to paste into your exporter</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Or hand the same instructions to your coding agent to wire it for you</span></div>
       </div>
     </div>
 
     <div class="abs card onboard-c" style="left:880px; top:210px;">
       <div class="head"><div class="num onboard-n">3</div><div class="title">Waiting for traces</div></div>
+      <div class="outcome-row">
+        <div class="outcome-label onboard-dot">Outcome</div>
+        <div class="outcome-text">You see everything actually running in your fleet — including agents nobody remembered to log.</div>
+      </div>
       <div class="tagline">Nobody names it yet.</div>
       <div class="rule"></div>
       <div class="bullets">
-        <div class="bullet"><span class="dot onboard-dot">•</span><span>Received → parked → recognized from behavior → ready</span></div>
-        <div class="bullet"><span class="dot onboard-dot">•</span><span>Known agents matched automatically</span></div>
-        <div class="bullet"><span class="dot onboard-dot">•</span><span>Brand-new ones created on the spot</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Received → parked → recognized from behavior → ready, shown live</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Known agents match an existing profile automatically, no manual linking</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Brand-new agents get created on the spot from what their traces reveal</span></div>
       </div>
     </div>
 
     <div class="abs card onboard-c" style="left:1230px; top:210px;">
       <div class="head"><div class="num onboard-n">4</div><div class="title">Name your agent</div></div>
+      <div class="outcome-row">
+        <div class="outcome-label onboard-dot">Outcome</div>
+        <div class="outcome-text">The agent gets scored against the right criteria from minute one, not a generic default.</div>
+      </div>
       <div class="tagline">Confirm, don't invent.</div>
       <div class="rule"></div>
       <div class="bullets">
-        <div class="bullet"><span class="dot onboard-dot">•</span><span>Name &amp; type pre-filled from detection</span></div>
-        <div class="bullet"><span class="dot onboard-dot">•</span><span>One field to edit, not create from scratch</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Name &amp; type pre-filled from detected behavior, not left for you to guess</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>One field to confirm or edit, not a form to build from scratch</span></div>
       </div>
     </div>
 
     <div class="abs card onboard-c" style="left:1580px; top:210px;">
       <div class="head"><div class="num onboard-n">5</div><div class="title">Launch</div></div>
+      <div class="outcome-row">
+        <div class="outcome-label onboard-dot">Outcome</div>
+        <div class="outcome-text">Monitoring starts the moment production traffic does — nothing sits unscored while you finish setup.</div>
+      </div>
       <div class="tagline">One click, five steps behind it.</div>
       <div class="rule"></div>
       <div class="bullets">
-        <div class="bullet"><span class="dot onboard-dot">•</span><span>Registers agent → connects OTel → provisions profile</span></div>
-        <div class="bullet"><span class="dot onboard-dot">•</span><span>Opens Run #1 — already collecting</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Registers the agent, connects OTel, and provisions a scoring profile at once</span></div>
+        <div class="bullet"><span class="dot onboard-dot">•</span><span>Opens Run #1 immediately — it's already collecting, no second click needed</span></div>
       </div>
     </div>
 
     <!-- Row 1 connectors -->
-    <div class="abs connector" style="left:500px; top:368px;"></div>
-    <div class="abs connector" style="left:850px; top:368px;"></div>
-    <div class="abs connector" style="left:1200px; top:368px;"></div>
-    <div class="abs connector" style="left:1550px; top:368px;"></div>
+    <div class="abs connector" style="left:500px; top:410px;"></div>
+    <div class="abs connector" style="left:850px; top:410px;"></div>
+    <div class="abs connector" style="left:1200px; top:410px;"></div>
+    <div class="abs connector" style="left:1550px; top:410px;"></div>
 
-    <div class="abs row-arrow" style="left:326px; top:538px;">↓</div>
+    <div class="abs row-arrow" style="left:326px; top:618px;">↓</div>
 
     <!-- Row 2 phase labels -->
-    <div class="abs phase-label" style="left:180px; top:576px; color:var(--teal);">COLLECT &amp; CONFIGURE</div>
-    <div class="abs phase-label" style="left:880px; top:576px; color:var(--orange);">SCORE</div>
-    <div class="abs phase-label" style="left:1230px; top:576px; color:var(--review);">REVIEW &amp; DECIDE</div>
+    <div class="abs phase-label" style="left:180px; top:656px; color:var(--teal);">COLLECT &amp; CONFIGURE</div>
+    <div class="abs phase-label" style="left:880px; top:656px; color:var(--orange);">SCORE</div>
+    <div class="abs phase-label" style="left:1230px; top:656px; color:var(--review);">REVIEW &amp; DECIDE</div>
 
     <!-- Row 2 cards -->
-    <div class="abs card collect-c" style="left:180px; top:610px;">
+    <div class="abs card collect-c" style="left:180px; top:690px;">
       <div class="head"><div class="num collect-n">6</div><div class="title">Project overview</div></div>
+      <div class="outcome-row">
+        <div class="outcome-label collect-dot">Outcome</div>
+        <div class="outcome-text">You can't ship a verdict that's actually built on three sessions.</div>
+      </div>
       <div class="tagline">Nothing scored on thin data.</div>
       <div class="rule"></div>
       <div class="bullets">
-        <div class="bullet"><span class="dot collect-dot">•</span><span>Run #1 sits open, in progress</span></div>
-        <div class="bullet"><span class="dot collect-dot">•</span><span>Needs enough traces before scoring unlocks</span></div>
-        <div class="bullet"><span class="dot collect-dot">•</span><span>"Simulate traces" — demo helper only</span></div>
+        <div class="bullet"><span class="dot collect-dot">•</span><span>Run #1 sits open and visibly in progress, not silently pending</span></div>
+        <div class="bullet"><span class="dot collect-dot">•</span><span>Scoring stays locked until there's enough trace volume for a score to mean something</span></div>
+        <div class="bullet"><span class="dot collect-dot">•</span><span>"Simulate traces" is a demo helper only — real runs wait on real traffic</span></div>
       </div>
     </div>
 
-    <div class="abs card collect-c" style="left:530px; top:610px;">
+    <div class="abs card collect-c" style="left:530px; top:690px;">
       <div class="head"><div class="num collect-n">7</div><div class="title">Scoring tab</div></div>
+      <div class="outcome-row">
+        <div class="outcome-label collect-dot">Outcome</div>
+        <div class="outcome-text">You set the standard once, in your own words — it keeps re-checking it.</div>
+      </div>
       <div class="tagline">Configure the bar, in plain language.</div>
       <div class="rule"></div>
       <div class="bullets">
-        <div class="bullet"><span class="dot collect-dot">•</span><span>Describe agent: Guided fields or Expert spec</span></div>
-        <div class="bullet"><span class="dot collect-dot">•</span><span>Compare runs once a 2nd run exists</span></div>
-        <div class="bullet"><span class="dot collect-dot">•</span><span>Auto-scores daily · next 02:00 UTC</span></div>
+        <div class="bullet"><span class="dot collect-dot">•</span><span>Describe the agent via Guided fields (a form) or an Expert spec (you write it)</span></div>
+        <div class="bullet"><span class="dot collect-dot">•</span><span>Compare runs side-by-side the moment a second run exists</span></div>
+        <div class="bullet"><span class="dot collect-dot">•</span><span>Auto-scores daily at 02:00 UTC, so the bar stays current with no manual trigger</span></div>
       </div>
     </div>
 
-    <div class="abs card score-c" style="left:880px; top:610px;">
+    <div class="abs card score-c" style="left:880px; top:690px;">
       <div class="head"><div class="num score-n">8</div><div class="title">Score now</div></div>
+      <div class="outcome-row">
+        <div class="outcome-label score-dot">Outcome</div>
+        <div class="outcome-text">You get a score you can defend, not a number nobody can explain.</div>
+      </div>
       <div class="tagline">On demand, or on schedule — not either/or.</div>
       <div class="rule"></div>
       <div class="bullets">
-        <div class="bullet"><span class="dot score-dot">•</span><span>Disabled until enough traces are in</span></div>
-        <div class="bullet"><span class="dot score-dot">•</span><span>Parallel LLM judges score each eval</span></div>
-        <div class="bullet"><span class="dot score-dot">•</span><span>A real scoring pass, not a placeholder</span></div>
+        <div class="bullet"><span class="dot score-dot">•</span><span>Disabled until there's enough trace volume — no button to click too early</span></div>
+        <div class="bullet"><span class="dot score-dot">•</span><span>Parallel LLM judges score every session against the configured evals at once</span></div>
+        <div class="bullet"><span class="dot score-dot">•</span><span>A real scoring pass with visible token cost and latency, not a placeholder</span></div>
       </div>
     </div>
 
-    <div class="abs card review-c" style="left:1230px; top:610px;">
+    <div class="abs card review-c" style="left:1230px; top:690px;">
       <div class="head"><div class="num review-n">9</div><div class="title">Run view</div></div>
+      <div class="outcome-row">
+        <div class="outcome-label review-dot">Outcome</div>
+        <div class="outcome-text">You can answer "better or worse" with one session, not a vibe.</div>
+      </div>
       <div class="tagline">The audit trail.</div>
       <div class="rule"></div>
       <div class="bullets">
-        <div class="bullet"><span class="dot review-dot">•</span><span>Every session's composite score, listed</span></div>
-        <div class="bullet"><span class="dot review-dot">•</span><span>Export as calibration case</span></div>
-        <div class="bullet"><span class="dot review-dot">•</span><span>Compare with the prior run</span></div>
+        <div class="bullet"><span class="dot review-dot">•</span><span>Every session in the run, its composite score, listed and sortable</span></div>
+        <div class="bullet"><span class="dot review-dot">•</span><span>Export any session as a calibration case to tune future scoring</span></div>
+        <div class="bullet"><span class="dot review-dot">•</span><span>Compared directly against the prior run — up, down, or flat</span></div>
       </div>
     </div>
 
-    <div class="abs card review-c" style="left:1580px; top:610px;">
+    <div class="abs card review-c" style="left:1580px; top:690px;">
       <div class="head"><div class="num review-n">10</div><div class="title">Session view</div></div>
+      <div class="outcome-row">
+        <div class="outcome-label review-dot">Outcome</div>
+        <div class="outcome-text">You leave with a decision to act on, and a paper trail for why.</div>
+      </div>
       <div class="tagline">The why, not just the what.</div>
       <div class="rule"></div>
       <div class="bullets">
-        <div class="bullet"><span class="dot review-dot">•</span><span>3–6 dimension bars (agent-type dependent)</span></div>
-        <div class="bullet"><span class="dot review-dot">•</span><span>Attribution: root cause + evidence + confidence</span></div>
-        <div class="bullet"><span class="dot review-dot">•</span><span>Ship / Hold / Reject + Markdown/JSON export</span></div>
+        <div class="bullet"><span class="dot review-dot">•</span><span>3–6 dimension bars, scaled to what actually matters for that agent type</span></div>
+        <div class="bullet"><span class="dot review-dot">•</span><span>Attribution: root cause, supporting evidence, and a confidence score</span></div>
+        <div class="bullet"><span class="dot review-dot">•</span><span>Ship / Hold / Reject, exportable as Markdown or JSON for what's next</span></div>
       </div>
     </div>
 
     <!-- Row 2 connectors -->
-    <div class="abs connector" style="left:500px; top:768px;"></div>
-    <div class="abs connector" style="left:850px; top:768px;"></div>
-    <div class="abs connector" style="left:1200px; top:768px;"></div>
-    <div class="abs connector" style="left:1550px; top:768px;"></div>
+    <div class="abs connector" style="left:500px; top:890px;"></div>
+    <div class="abs connector" style="left:850px; top:890px;"></div>
+    <div class="abs connector" style="left:1200px; top:890px;"></div>
+    <div class="abs connector" style="left:1550px; top:890px;"></div>
 
     <!-- Outcome chips -->
-    <div class="abs chip-label" style="left:1580px; top:948px;">the decision this feeds</div>
-    <div class="abs chips" style="left:1580px; top:978px;">
+    <div class="abs chip-label" style="left:1580px; top:1108px;">the decision this feeds</div>
+    <div class="abs chips" style="left:1580px; top:1138px;">
       <span class="chip ship">Ship</span>
       <span class="chip hold">Hold</span>
       <span class="chip reject">Reject</span>
     </div>
 
     <!-- Loop-back -->
-    <div class="abs loop-note" style="left:530px; top:988px; width:1050px;">
+    <div class="abs loop-note" style="left:530px; top:1148px; width:1050px;">
       ← next scoring cycle — daily, or triggered on demand
     </div>
 
@@ -283,14 +332,14 @@
   </div>
 </div>
 <script>
-  // Scale the fixed 1920x1150 canvas to fit inside the current window on
+  // Scale the fixed 1920x1320 canvas to fit inside the current window on
   // both axes (not just width), so the whole diagram is always visible
   // with no scrolling, however the window is sized or resized.
   function fitCanvas() {
     var canvas = document.querySelector(".canvas");
-    var scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1150);
+    var scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1320);
     var left = (window.innerWidth - 1920 * scale) / 2;
-    var top = (window.innerHeight - 1150 * scale) / 2;
+    var top = (window.innerHeight - 1320 * scale) / 2;
     canvas.style.transform = "translate(" + left + "px, " + top + "px) scale(" + scale + ")";
   }
   fitCanvas();
