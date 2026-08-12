@@ -4,3 +4,4 @@ node_modules/
 .vite/
 test-agent/.env
 test-agent/venv
+__pycache__/
