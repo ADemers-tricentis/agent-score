@@ -1,64 +1,104 @@
-# AgentScore — Live Demo Outline (Onboarding → First Scored Run)
+# AgentScore — Live Demo Outline (Alpha: Back Office + Front Office Walkthrough)
 
-**Format:** ~8-10 min live click-through of the real product UI 
+**Format:** Live click-through across both apps that make up the internal alpha - the back office (admin/config) and the front office (user-facing).
 
-**Audience:** Domain practitioner / non-AI-expert persona — the target *end user*, not a technical buyer.
+**Audience:** Prospective buyer / technical stakeholder evaluating the product end-to-end, not a first-time-user onboarding flow.
 
-**Goal:** Prove someone can go from zero to a graded, ship/hold-decided agent without ever touching AI vocabulary.
+**Goal:** Show the full loop - tenant and agent setup, trace ingestion, the evals → dimensions → profiles scoring model, custom eval creation in plain language, a real scoring run, and how the score sharpens as more traces come in.
 
 ---
 
-## 1. Fleet
-**What to show:** Land on Fleet — every agent/project with its A–F grade, composite 0–100 score, verdict, and reliability (pass^k), plus an ATC-beta label where relevant.
-**Say:** "This is the view for whoever owns outcomes across every agent the team runs — not a config screen, a status board."
-**Why it matters:** Frames the audience before a single AI concept comes up.
+## 1. Login
 
-## 2. Add Agent → Setup
-**What to show:** Click **Add Agent**. Step 1 of 4 ("Setup"): your tenant API key (one key, not per-agent), the OTLP ingest endpoint + auth header, env-var and Python snippets — and, above all of it, a dashed callout: *"Prefer to let your agent handle setup?"* with a **copy-pasteable instruction** ("Install the AgentScore skill from github.com/tricentis/agentscore/skills...") for Claude Code / Cursor / Copilot to wire up tracing automatically.
-**Say:** "There are two ways in: hand this instruction to your coding agent and it does the wiring, or copy the snippet yourself. Either way it's copy-paste, not a build."
-**Speaker note:** The "agentic" callout and the manual snippets sit on the same screen (not tabs) — if asked why, that's a deliberate choice to keep the manual path visible as a fallback, not hidden behind a click.
+**What to show:** Log in.
+**Say:** "Before we get into the product, one framing note."
 
-## 3. Add Agent → Waiting for traces
-**What to show:** Click **I've configured my exporter**. A live pipeline animates: *Trace received → Parked in private inbox → Agent recognized from behavior → Re-homed to agent profile → Ready to score.* Ends with a green "Agent ready!" banner.
-**Say:** "The moment one trace lands, AgentScore already knows what kind of agent this is from its tools, model, and handoffs — nobody names it yet."
-**Speaker note:** This is the trust-building beat — emphasize "known agents are matched automatically, brand-new ones are created on the spot," i.e. this isn't asking the user to self-classify.
+## 2. Frame the alpha
 
-## 4. Add Agent → Name your agent
-**What to show:** Confirm/edit the auto-detected name and agent type.
-**Say:** "One field to confirm, not to invent from scratch — it's pre-filled from what was already detected."
+**What to show:** Nothing yet - just narrate.
+**Say:** "This is an internal alpha. There are two separate apps today: a back office where we configure tenants, evals, and simulate data, and a front office - the user-facing product - where you'd actually monitor and score your agents."
+**Speaker note:** Set this expectation before touching either UI so screen-jumping between the two doesn't read as disjointed later.
 
-## 5. Add Agent → Overview → Start monitoring
-**What to show:** Review screen, then **Start monitoring**. A staged loading sequence plays: *Registering agent → Connecting to OTel endpoint → Provisioning Langfuse project → Applying agent configuration → Enabling Runtime Guard → Agent ready - waiting for first traces.*
-**Say:** "Behind that one click: the agent is registered, a scoring profile is generated from what was detected in its traces, and 'Run #1' is already open and collecting sessions before you've left the wizard."
-**What happens:** Lands on the new agent's Project (detail) page, Overview tab.
+## 3. Back office → create a tenant
 
-## 6. Project → Overview tab
-**What to show:** Run #1 shown "in progress" in the recent-scoring-runs table; traces trickling in.
-**Say:** "Nothing gets scored on thin data — the run sits open, collecting, until there's enough signal."
+**What to show:** Create a new tenant in the back office.
+**Say:** "A tenant is the container for an organization's agents."
+**Speaker note:** Explain the internal vs. external distinction here - internal agents are Tricentis's own (traces populate automatically); external agents are any customer's, ingested via OTel.
 
-## 7. Project → Scoring tab
-**What to show:** The **Score now** button (disabled until enough traces are in — a **Simulate 20 traces** helper exists for demo purposes only), a **Describe agent** panel (Guided vs. Expert mode — plain-language purpose/failure-modes/concerns fields, or a raw YAML/JSON/Markdown spec for power users), a **Compare runs** button once a second run exists, and a caption: *"Auto-scores daily · Next: 02:00 UTC."*
-**Say:** "Scoring isn't just automatic-only or manual-only — it runs on its own schedule, but anyone can force a run right now, and the eval profile itself can be refined in plain language."
-**Speaker note:** "Describe agent" is the moment to slow down if the audience is exactly the non-AI-expert persona — it's plain-language fields, not eval config.
+## 4. Front office → add agent
 
-## 8. Click "Score now"
-**What to show:** Scoring executes; the run updates from "in progress" to scored, with a pass rate and verdict.
-**Say:** "That's a real scoring pass — parallel LLM judges over the session traces, not the final output alone."
+**What to show:** Switch to the front office. Add an agent, choose the tenant just created.
+**Say:** "Adding an agent is where you'd wire up trace ingestion."
+**Speaker note:** Cover both paths - internal agents ingest automatically; external agents are configured via an OTel export. No SDK, no special library - two additional lines on an exporter you likely already have.
 
-## 9. Run view
-**What to show:** Click into the run — session table with composite scores per session, an **Export as calibration case** action, and **Compare with prior run**.
-**Say:** "This is the audit trail — every session in this run, individually scored, and reusable as a calibration case for tuning the profile later."
+## 5. Back to back office → simulate traces
 
-## 10. Session view
-**What to show:** Click into one session — full dimension score breakdown (3-6 bars depending on agent type: Benchmark Performance, Value Efficiency, UX Signal, Harmony, Stability, Agency), the **Attribution panel** (root cause, confidence, evidence chain, recommendation) on any non-PASS session, the **Shipping Decision** log, and Markdown/JSON report export.
-**Say:** "This is the 'why,' not just the 'what' — and Ship/Hold/Reject is a human decision the tool informs, backed by an exportable report, not a decision the tool makes for you."
+**What to show:** Back in the back office. Skip live-agent setup in the interest of time; go to **Simulation → Chatbot agent**, select the tenant, click **Start run**.
+**Say:** "These are real production traces, cherry-picked to give a good test dataset - not synthetic data."
+**Speaker note:** Naming that they're real but curated heads off the "is this staged?" question before it's asked.
+
+## 6. Watch traces land, explain the scoring engine
+
+**What to show:** Traces arriving against the tenant.
+**Say:** "The engine waits for 20 traces, then looks for the best-fit scoring profile for this agent - if nothing fits well, it tells you rather than guessing. We ship defaults out of the box. Evals make up dimensions, and dimensions make up a profile."
+**Speaker note:** This is the core mental model for the rest of the demo - evals → dimensions → profiles. Get it right here so nothing after this needs re-explaining.
+
+## 7. Catalog → build a custom eval
+
+**What to show:** Open the eval builder. Choose **Build with AI** (vs. selecting an existing eval). Prompt: *"I want to ensure 100% test coverage."*
+**Say:** "You're not limited to what ships out of the box - describe what you want in plain language and the engine proposes how to measure it."
+**What to show next:** The engine returns three options - **Hybrid** (map-then-reduce over actual code paths), **Library** (a deterministic, built-in metric), and **G-Eval** (LLM-as-judge).
+**Say:** "It's not one-size-fits-all - it picks the right measurement mechanism for the question you're asking."
+
+## 8. Open in Studio
+
+**What to show:** Open the new eval in Studio - a human-readable label, the engine configuration (including inputs and evidence), and a pass threshold.
+**Say:** "This is the same config whether we generated it or you wrote it by hand - fully inspectable and adjustable, not a black box."
+
+## 9. Front end → watch ingestion, build the scorecard
+
+**What to show:** Back in the front office. View the agent ingesting traces; refresh to check progress. At 20 traces, the scorecard starts building - and more traces keep arriving while the scoring run is in progress.
+**Say:** "Scoring doesn't wait for ingestion to stop - it starts as soon as there's enough signal, and keeps taking in data underneath it."
+
+## 10. Show dimensions, evals, and the Agent Card
+
+**What to show:** The dimensions and evals behind the score. Then the **Agent Card**.
+**Say:** "The Agent Card is inferred, not authored - an LLM reads the traces and states, in plain language, what this agent is for, its behavioral patterns, success criteria, and failure modes."
+**Speaker note:** This is a good beat to pause on - it's the clearest "the tool understood my agent without being told" moment in the demo.
+
+## 11. Show the Profile
+
+**What to show:** The profile view - dimensions and their weights.
+**Say:** "This is the composition of the score you're about to see, spelled out."
+
+## 12. Show the composite score and verdict
+
+**What to show:** The finished scoring run - composite score and a ship/hold recommendation, driven by verdict bands (shown back in the profile).
+**Say:** "The bands - ship, hold, whatever your thresholds are - are configurable per profile, not hardcoded."
+
+## 13. Rerun to show accuracy improving
+
+**What to show:** Rerun scoring after more traces have accumulated; compare the new score to the last one.
+**Say:** "As more traces come in, the score gets more accurate - let's rerun and see the difference."
+
+## 14. Show scheduling
+
+**What to show:** Set a scoring cadence and a lookback window.
+**Say:** "You don't have to trigger this by hand every time - set how often it scores and how far back it looks, and it runs on its own."
+
+## 15. Close on continuous accuracy
+
+**What to show:** Return to the improved score from step 13.
+**Say:** "The pattern to remember: more traces in, more accurate scoring out - this keeps sharpening on its own."
 
 ---
 
 ## Anticipated questions
 
-- **"Is any of this real data?"** Yes - this is currently grading internal Tricentis agents
-- **"Does the coding-agent skill install actually work today?"** The instruction text and copy button are real; whether `github.com/tricentis/agentscore/skills` (the real skill package lives at `agent-score-skill/` in this repo) is wired to actually complete that flow end-to-end is worth confirming before anyone in the room tries it live.
-- **"What triggers a scoring run — automatic or manual?"** Both: a run is opened automatically at agent launch and auto-scores on a daily schedule once ready, but **Score now** exists for on-demand runs at any time.
-- **"How is the eval profile decided?"** Auto-generated from evals detected in the agent's own traces at onboarding, refinable anytime via **Describe agent** (Guided plain-language fields, or Expert raw spec).
-
+- **"Is this real data?"** Yes - real, cherry-picked production traces used as a demo dataset, not synthetic.
+- **"What's the difference between internal and external agents?"** Internal (Tricentis's own) agents ingest automatically; external agents are any other org's, wired up via an OTel export.
+- **"Why wait for 20 traces before scoring?"** Scoring on too little data is unreliable - the engine holds off until there's enough signal, and keeps improving as more traces arrive.
+- **"What happens if no scoring profile fits my agent?"** The engine tells you rather than forcing a bad fit - defaults exist, but a mismatch is surfaced, not hidden.
+- **"Do I need to write eval code myself?"** No - describe what you want in plain language and the builder proposes hybrid, library, or LLM-judge (G-Eval) implementations; you can also select from existing evals.
+- **"Can I adjust the ship/hold thresholds?"** Yes - verdict bands are configurable per profile.
+- **"Is scoring one-and-done?"** No - it can be scheduled on a cadence with a configurable lookback window, and reruns get more accurate as trace volume grows.
