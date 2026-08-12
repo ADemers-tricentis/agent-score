@@ -8,7 +8,7 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExporter
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 
-DEFAULT_ENDPOINT = "https://agent-score-ingest.product.tricentis.com/internal/otel/v1/traces"
+DEFAULT_ENDPOINT = "https://agent-score-ingest.product.tricentis.com/external/otel/v1/traces"
 
 _configured = False
 
