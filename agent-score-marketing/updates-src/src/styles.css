@@ -1,0 +1,221 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy: #1b365d;
+  --navy-deep: #12264a;
+  --primary: #004c97;
+  --orange: #ff6c0e;
+  --teal: #0087ae;
+  --teal-light: #59c8e6;
+
+  --white: #ffffff;
+  --bg-light: #f4f7fb;
+  --text-dark: #1b365d;
+  --text-body: #343941;
+  --text-muted: #6b7a8d;
+  --border-light: #dce5f0;
+
+  --radius: 10px;
+  --radius-sm: 7px;
+  --max-w: 860px;
+  --font: "Open Sans", Calibri, Tahoma, sans-serif;
+}
+
+html { font-size: 16px; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg-light);
+  color: var(--text-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Nav */
+.topnav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border-light);
+  padding: 0 2rem;
+}
+
+.topnav-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--navy);
+}
+.brand:hover { text-decoration: none; }
+
+.logo-mark {
+  width: 28px; height: 28px;
+  background: var(--primary);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: white;
+}
+
+.nav-badge {
+  font-size: 0.66rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: #e8eef6;
+  color: var(--primary);
+  border: 1px solid #c5d4e8;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Hero */
+.hero {
+  background: var(--navy);
+  padding: 56px 2rem;
+}
+
+.hero-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--teal-light);
+  margin-bottom: 10px;
+}
+
+.hero h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.hero-sub {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 560px;
+  line-height: 1.7;
+}
+
+/* Timeline */
+.timeline {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 48px 2rem 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.empty {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 40px 0;
+}
+
+.entry {
+  background: var(--white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgba(27, 54, 93, 0.06);
+  padding: 32px 36px;
+}
+
+.entry-date {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--orange);
+  background: #fff1e6;
+  border: 1px solid #ffd8b8;
+  border-radius: 20px;
+  padding: 4px 12px;
+  margin-bottom: 18px;
+}
+
+.entry-body h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 22px 0 10px;
+}
+.entry-body h3:first-child { margin-top: 0; }
+
+.entry-body p {
+  font-size: 0.92rem;
+  color: var(--text-body);
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+.entry-body ul {
+  padding-left: 1.25rem;
+  margin-bottom: 10px;
+}
+
+.entry-body li {
+  font-size: 0.92rem;
+  color: var(--text-body);
+  line-height: 1.7;
+  margin-bottom: 6px;
+}
+
+.entry-body li::marker { color: var(--teal); }
+
+.entry-body ul ul {
+  margin-top: 6px;
+}
+
+.entry-body strong { color: var(--text-dark); }
+
+/* Footer */
+.site-footer {
+  background: var(--navy-deep);
+  padding: 24px 2rem;
+}
+
+.footer-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.footer-inner span:first-child {
+  font-weight: 700;
+  color: white;
+}
+
+.footer-copy a { color: var(--teal-light); }
+
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.8rem; }
+  .entry { padding: 24px 22px; }
+}
