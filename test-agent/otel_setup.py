@@ -24,6 +24,7 @@ def configure_agent_score(service_name: str = "rag-support-agent", force_console
         exporter = OTLPSpanExporter(
             endpoint=endpoint,
             headers={"Authorization": f"Bearer {api_key}"},
+            timeout=30,  # default 10s is too short once a batch gets large
         )
     else:
         if not _configured:
@@ -33,7 +34,11 @@ def configure_agent_score(service_name: str = "rag-support-agent", force_console
             )
         exporter = ConsoleSpanExporter()
 
-    provider.add_span_processor(BatchSpanProcessor(exporter))
+    # Smaller batches so a big synthetic run (hundreds of spans) doesn't
+    # queue into one slow request the ingest service times out on.
+    provider.add_span_processor(
+        BatchSpanProcessor(exporter, max_export_batch_size=64, schedule_delay_millis=2000)
+    )
     trace.set_tracer_provider(provider)
     _configured = True
     return provider

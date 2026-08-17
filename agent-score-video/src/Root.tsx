@@ -1,6 +1,7 @@
 import { Composition } from "remotion";
 import { Explainer } from "./Explainer";
 import { UserJourney } from "./scenes/UserJourney";
+import { TitleSlide } from "./scenes/TitleSlide";
 import { TOTAL_FRAMES } from "./scenes";
 import { FPS } from "./theme";
 
@@ -22,6 +23,15 @@ export const RemotionRoot: React.FC = () => {
         fps={FPS}
         width={1920}
         height={1150}
+      />
+      <Composition
+        id="TitleSlide"
+        component={TitleSlide}
+        durationInFrames={900}
+        fps={FPS}
+        width={1920}
+        height={1080}
+        defaultProps={{ durationInFrames: 900 }}
       />
     </>
   );

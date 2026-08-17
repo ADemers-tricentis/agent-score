@@ -39,3 +39,25 @@ python send_synthetic_traces.py --list-scenarios
 python send_synthetic_traces.py --dry-run --count 20   # preview, no network
 python send_synthetic_traces.py --count 32              # send to AgentScore
 ```
+
+## Attribute conventions (`langfuse_semconv.py`, `genai_semconv.py`)
+
+Every span sets two layers of attributes, grounded in a direct read of
+`Tricentis-AI/agent-score`'s scoring source (not guessed):
+
+- `langfuse.observation.*` (Langfuse's own OTel convention) - drives the
+  Agent Card and trace rendering in the AgentScore UI.
+- `gen_ai.*` / `openinference.*` - drives `has_tools`/`has_retrieval` in
+  agent-score's own profile-fit logic (`scoring/runner.py`). Confirmed:
+  a `type=="TOOL"` observation (or `gen_ai.operation.name="execute_tool"` +
+  `gen_ai.tool.name`) reliably sets `has_tools=True`.
+
+**Known gap:** `has_retrieval` (needed for the RAG Starter profile) requires
+Langfuse's own native `toolCalls` column to be populated on an observation -
+that parsing happens inside Langfuse's private OTel ingestion, outside the
+agent-score repo, and isn't confirmed to work from raw OTel spans like these.
+Real retrieved-passage text is attached to the tool span's output regardless
+(Faithfulness/Groundedness read it if the eval runs), but don't expect a
+guaranteed RAG Starter profile fit from this alone - Tool/Orchestrator
+Starter is the realistically achievable target given a confirmed `has_tools`
+signal.

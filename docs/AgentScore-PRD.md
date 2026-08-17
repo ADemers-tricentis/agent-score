@@ -583,6 +583,39 @@ Displays the following metric definitions in a catalog format with name, type (c
 
 ---
 
+### R14 - API Key Management (Tenant Self-Service)
+
+**As an AI Engineer, I want to view, create, rename, disable, rotate, and revoke my tenant's API keys from inside the AgentScore app, so I can onboard a new agent or recover from a leaked key without filing a support request.**
+
+Today the only surface for this is the superadmin-only backend route (`/admin/tenants/{tenant_id}/api_keys` - see Tenant API Keys reference) and the one-time key reveal during onboarding (R7, Path A Step 1). This story adds a tenant-facing UI for the same capability, most naturally as a new "API Keys" panel inside the Integrations View (R13).
+
+#### Acceptance Criteria
+
+**Key list:**
+- Table of the tenant's API keys: name, key hint (e.g. `as_live_...a1b2`), status (Active / Disabled), created date, last-used date.
+- Empty state explains the one-key-per-tenant model and prompts creating the first key.
+
+**Create key:**
+- "New API key" action opens a modal for a required name.
+- On create, the full secret is displayed once in a copyable monospace field with a persistent warning that it cannot be retrieved again.
+- New key is appended to the list showing only its hint.
+
+**Rename / enable-disable:**
+- Inline rename.
+- Disable toggle immediately blocks ingestion on that key without deleting it; can be re-enabled.
+
+**Rotate:**
+- "Rotate" action with a confirm step warning that the old secret stops working immediately.
+- New secret is shown once, using the same reveal-once pattern as create.
+
+**Revoke:**
+- "Revoke" (hard delete) requires typing the key name to confirm, since any agent still using it will fail ingestion immediately.
+
+**Permissions:**
+- Available to any tenant member, matching the app's existing permission model - not gated behind superadmin. This story is the tenant-scoped equivalent of the existing superadmin-only backend endpoints; whether it calls those routes directly (with tenant-scoped auth) or a new tenant-facing route is a backend design decision, not part of this story.
+
+---
+
 ## Data Model (Key Types)
 
 ### Session

@@ -38,6 +38,14 @@ function HomeIcon() {
   return <SvgIcon><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" /></SvgIcon>;
 }
 
+function PlayCircleIcon() {
+  return <SvgIcon><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" /></SvgIcon>;
+}
+
+function BookIcon() {
+  return <SvgIcon><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H6V4h5v8l2.5-1.5L16 12V4h2v16z" /></SvgIcon>;
+}
+
 function projectIcon(type: ProjectType): ReactElement {
   switch (type) {
     case "ATA": return <IconAgentCloudOutlined />;
@@ -57,7 +65,7 @@ export default function Layout({ view, navigate, children }: Props) {
 
   const breadcrumbs = buildBreadcrumbs(view);
 
-  const isAnyAgentView = ["agent-detail", "project", "run", "session", "compare-runs", "eval-design", "agent-settings"].includes(view.name);
+  const isAnyAgentView = ["agent-detail", "project", "run", "session", "compare-runs", "eval-design", "agent-settings", "chat-scoring"].includes(view.name);
   const activeProjectId = "projectId" in view ? view.projectId : null;
   const activeProject = PROJECTS.find((p) => p.id === activeProjectId);
 
@@ -85,6 +93,20 @@ export default function Layout({ view, navigate, children }: Props) {
       icon: <IconConnectionOutlined />,
       selected: view.name === "integrations",
       onClick: () => navigate({ name: "integrations" }),
+    },
+    {
+      id: "demo-gallery",
+      text: "Try a demo agent",
+      icon: <PlayCircleIcon />,
+      selected: view.name === "demo-gallery",
+      onClick: () => navigate({ name: "demo-gallery" }),
+    },
+    {
+      id: "getting-started",
+      text: "Getting Started",
+      icon: <BookIcon />,
+      selected: view.name === "getting-started",
+      onClick: () => navigate({ name: "getting-started" }),
     },
     {
       id: "advanced",
@@ -235,6 +257,17 @@ export default function Layout({ view, navigate, children }: Props) {
             </SvgIcon>
           </ListItemIcon>
           <ListItemText primary="Add agent" slotProps={{ primary: { variant: "body2" } }} />
+        </MenuItem>
+        <MenuItem
+          onClick={() => { navigate({ name: "demo-gallery" }); setAgentMenuOpen(false); }}
+          sx={{ borderRadius: 1, mx: 0.5, my: 0.25, minHeight: 0 }}
+        >
+          <ListItemIcon sx={{ minWidth: 32 }}>
+            <SvgIcon sx={{ fontSize: "1.1rem", color: "text.secondary" }}>
+              <path d="M8 5v14l11-7z" />
+            </SvgIcon>
+          </ListItemIcon>
+          <ListItemText primary="Try a demo agent" slotProps={{ primary: { variant: "body2" } }} />
         </MenuItem>
       </Menu>
 
@@ -390,5 +423,13 @@ function buildBreadcrumbs(view: View): { label: string; onClick?: () => void }[]
       return [{ label: "Profiles" }, { label: "New Profile" }];
     case "dimensions":
       return [{ label: "Dimensions" }];
+    case "demo-gallery":
+      return [{ label: "Try a demo agent" }];
+    case "getting-started":
+      return [{ label: "Getting Started" }];
+    case "chat-scoring": {
+      const agentName = PROJECTS.find((p) => p.id === view.projectId)?.name ?? "Agent";
+      return [{ label: "Agents" }, { label: agentName }, { label: "Chat Setup" }];
+    }
   }
 }

@@ -153,7 +153,10 @@ export type View =
   | { name: "profiles" }
   | { name: "profile"; profileId: string }
   | { name: "add-profile" }
-  | { name: "dimensions" };
+  | { name: "dimensions" }
+  | { name: "demo-gallery" }
+  | { name: "getting-started" }
+  | { name: "chat-scoring"; projectId: string };
 
 export type LLMProvider = "Anthropic" | "AWS Bedrock" | "OpenAI-compatible";
 
