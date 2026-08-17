@@ -109,7 +109,7 @@ export default function App() {
         </div>
         <div className="topbar-links">
           <a className="back-link" href="../">
-            Back to agentscore.ai
+            Back to Home
           </a>
         </div>
       </header>

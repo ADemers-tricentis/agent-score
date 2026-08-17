@@ -450,6 +450,7 @@ table.doc-table td strong { color: var(--text-primary); }
 .screenshot-img {
   display: block;
   width: 100%;
+  height: auto;
   border-radius: var(--radius-sm);
   border: 1px solid var(--divider-soft);
 }

@@ -78,12 +78,45 @@ baseline - you're checking whether production still matches these claims. Also r
 
 ### 3. Walk the production onboarding
 
-Open the site in the browser (prefer the in-app browser tools) and go through the
-onboarding exactly as a new customer would.
+Open the site in the browser and go through the onboarding exactly as a new
+customer would.
 
-- If you hit a sign-in wall, **pause and ask the user to sign in** in the browser
-  window, then continue once they confirm. The session persists, so this is
-  usually a one-time step. Do not enter credentials yourself.
+**Getting a browser that can reach the site.** The site is an internal Tricentis
+domain (`*.product.tricentis.com`). Two things block the obvious paths:
+
+- The **in-app Browser pane is blocked by policy** for this domain -
+  `preview_start`/`navigate` there will refuse it. Don't rely on it.
+- **Claude in Chrome** would work but is usually **not connected**
+  (`list_connected_browsers` returns empty), so it can't be counted on either.
+
+The reliable path is **Playwright driving a headed browser that the user logs into
+manually**. The host machine (on VPN) can reach the site even though the browser
+tool can't - confirm with
+`curl -sS -o /dev/null -w "%{http_code}" https://agent-score-customer.product.tricentis.com/`
+(expect `200`). Then:
+
+1. Playwright is installed as the Homebrew **Python** package. Find the browser
+   binary with a one-liner
+   (`from playwright.sync_api import sync_playwright; ... p.chromium.executable_path`).
+2. Launch that Chromium **headed**, in the background, with
+   `--remote-debugging-port=9222 --user-data-dir=<scratchpad>/pw-profile` and the
+   site URL. The persistent user-data-dir keeps the login session across runs.
+3. Wait for CDP (`curl http://localhost:9222/json/version`), then attach from short
+   Python scripts with `chromium.connect_over_cdp("http://localhost:9222")` and
+   drive `contexts[0].pages[0]` - screenshot with `full_page=True`, read text with
+   `inner_text("body")`, click by role/testid.
+4. The site opens on `/login`. **Ask the user to sign in in the headed window**
+   (send them the screenshot). Do not type credentials, and do not read them from
+   a `.env` and type them - that boundary holds even if the user asks for a login
+   script. Once they confirm, the session persists in the profile.
+
+Useful routes/notes learned from the product: `/agents` (fleet, cards are
+buttons with `data-testid="agent-card-<id>"`), agent detail is
+`/tenants/<tenantId>/agents/<agentId>` with tabs **Score / Agent Card / Profile /
+Activity**, `/settings` is the **Account** page. A freshly-opened detail sometimes
+renders "Something went wrong" - a `reload()` fixes it. To fully audit the profile
+catalog and dimension list, click into agents across **several tenants**, not just
+one.
 - Follow the real "Getting Started" / "Connect your agent" flow end to end:
   each screen, each button label, each field, each step count, each stated
   number or default.
