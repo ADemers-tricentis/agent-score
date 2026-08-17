@@ -79,14 +79,18 @@ export function Screenshot({
   src,
   alt,
   caption,
+  width,
+  height,
 }: {
   src: string;
   alt: string;
   caption?: string;
+  width?: number;
+  height?: number;
 }) {
   return (
     <div className="diagram-frame screenshot-frame">
-      <img src={src} alt={alt} className="screenshot-img" />
+      <img src={src} alt={alt} className="screenshot-img" width={width} height={height} />
       {caption && <div className="diagram-caption">{caption}</div>}
     </div>
   );
