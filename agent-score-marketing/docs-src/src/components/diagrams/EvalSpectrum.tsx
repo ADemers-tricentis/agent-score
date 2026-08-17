@@ -3,6 +3,10 @@ import { DiagramFrame } from "../PageChrome";
 export function EvalSpectrumDiagram() {
   return (
     <DiagramFrame caption="Every eval in the catalog sits somewhere on this line.">
+      <div className="spectrum-endpoints">
+        <span>← Fully deterministic</span>
+        <span>Fully LLM-based →</span>
+      </div>
       <div className="spectrum-track" />
       <div className="spectrum-points">
         <div className="spectrum-point">
