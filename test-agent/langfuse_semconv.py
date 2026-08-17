@@ -19,6 +19,7 @@ OBSERVATION_LEVEL = "langfuse.observation.level"
 OBSERVATION_STATUS_MESSAGE = "langfuse.observation.status_message"
 OBSERVATION_MODEL = "langfuse.observation.model.name"
 OBSERVATION_USAGE_DETAILS = "langfuse.observation.usage_details"
+OBSERVATION_COST_DETAILS = "langfuse.observation.cost_details"
 
 TRACE_INPUT = "langfuse.trace.input"
 TRACE_OUTPUT = "langfuse.trace.output"
@@ -41,5 +42,18 @@ def usage_details(input_tokens: int, output_tokens: int) -> str:
             "input": input_tokens,
             "output": output_tokens,
             "total": input_tokens + output_tokens,
+        }
+    )
+
+
+def cost_details(input_tokens: int, output_tokens: int, price_per_mtok_input: float, price_per_mtok_output: float) -> str:
+    """USD cost split, same shape as usage_details. Prices are list-rate $/million tokens."""
+    input_cost = input_tokens / 1_000_000 * price_per_mtok_input
+    output_cost = output_tokens / 1_000_000 * price_per_mtok_output
+    return to_json(
+        {
+            "input": input_cost,
+            "output": output_cost,
+            "total": input_cost + output_cost,
         }
     )

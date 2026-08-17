@@ -29,6 +29,10 @@ MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-5")
 SERVICE_NAME = os.environ.get("OTEL_SERVICE_NAME", "rag-support-agent")
 AGENT_NAME = "rag-support-agent"
 
+# List-rate $/million tokens for MODEL (claude-sonnet-5). Update if MODEL changes.
+PRICE_PER_MTOK_INPUT = 3.00
+PRICE_PER_MTOK_OUTPUT = 15.00
+
 SYSTEM_PROMPT = (
     "You are a support assistant for AgentScore, a product that scores AI agents "
     "on traces. Always call search_knowledge_base before answering a question about "
@@ -171,6 +175,10 @@ def answer_question(question: str, client: Anthropic | None = None) -> dict:
                 llm_span.set_attribute(
                     lf.OBSERVATION_USAGE_DETAILS,
                     lf.usage_details(response.usage.input_tokens, response.usage.output_tokens),
+                )
+                llm_span.set_attribute(
+                    lf.OBSERVATION_COST_DETAILS,
+                    lf.cost_details(response.usage.input_tokens, response.usage.output_tokens, PRICE_PER_MTOK_INPUT, PRICE_PER_MTOK_OUTPUT),
                 )
                 llm_span.set_attribute("gen_ai.response.duration_ms", int((time.monotonic() - start) * 1000))
                 llm_span.set_attribute(gs.GEN_AI_USAGE_INPUT_TOKENS, response.usage.input_tokens)

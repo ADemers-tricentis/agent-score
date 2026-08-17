@@ -60,6 +60,17 @@ So this isn't specific to our synthetic data or a shape we haven't guessed yet: 
 3. Should the RAG Starter profile's auto-fit conditions be revisited, given that even Tricentis's own reference "chatbot-gold" corpus (which is real prod data) can't satisfy `has_retrieval` as currently defined?
 4. Is there a way to configure a Tool Correctness golden (`expected_tools`) for a test tenant like `andrew-test-tenant` without going through full production onboarding?
 
+## Addendum (2026-08-17): customer feedback repeats the same ask, plus a new confirmed dead end
+
+Customer/support-facing feedback on the `rag-support-agent` traces (430+ captured) repeated two asks that this doc already covers, plus one new, more specific one worth recording:
+
+1. *"The search_knowledge_base step records no input and no output."* - **Already fixed** in `test-agent/rag_agent.py` (the query and full retrieved-passage text, not just IDs, are set on `langfuse.observation.input`/`output`) since an earlier pass. If this is still showing empty in the UI, the traces being viewed likely predate that fix rather than reflecting current instrumentation.
+2. *"The search step is typed as a generic 'tool' span, not a 'retrieval' span - emit it with the retriever/retrieval observation type your tracing SDK provides instead."* - **Verified this would actively regress scoring**, not just fail to help. Traced `_normalize_obs_type` and the `tool_executions` derivation in `canonical.py` (~line 639-670) directly: it matches only the literal string `"TOOL"`. A span emitted with `langfuse.observation.type = "retriever"` (or OTel/OpenInference `RETRIEVER`) satisfies neither the "structured" (`tool_calls` present) nor "typed" (`type=="TOOL"`) branch, so it is **dropped from `tool_executions` entirely** - `has_tools` regresses to `False` for that signal, on top of `has_retrieval` still never firing (per the root cause above, `has_retrieval` isn't gated on span `type` at all - it needs Langfuse's native `toolCalls` field, which is the whole subject of this doc). Worse: `_is_llm_observation`'s turn-guard only special-cases `type=="TOOL"` (F1); a `RETRIEVER`-typed span with a query in `input` but no `model`/`tool_calls` can fall through the broad `input is not None` fallback and get **miscounted as a conversational LLM turn**, corrupting turn/session-shape scoring.
+
+Given that, the current instrumentation choice (`langfuse.observation.type = "tool"`, with `openinference.span.kind = "RETRIEVER"` layered on as a second, currently-inert convention, plus an embedded OpenAI-shaped `tool_calls` object in the span's `output` as a bet that Langfuse's own ingestion might someday promote it to a native "structured" origin) is the best available mitigation from the sending side. **There is no span-type value a sender can emit today that gets `has_retrieval` to fire for an external tool-execution span** - closing that gap requires an agent-score-side change (see asks #1/#3 above), not a test-agent instrumentation change.
+
+Also added `langfuse.observation.cost_details` (real $/token cost, not $0) to the generation spans in `rag_agent.py` and `send_synthetic_traces.py` per the accompanying nice-to-have feedback - unrelated to the retrieval-scoring gap above, but noted here since it landed in the same pass.
+
 ## Appendix: file references
 
 **agent-score** (`Tricentis-AI/agent-score`):

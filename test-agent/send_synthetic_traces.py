@@ -50,6 +50,10 @@ load_dotenv()
 SERVICE_NAME = "rag-support-agent"
 AGENT_NAME = "rag-support-agent"
 MODEL = "claude-sonnet-5"
+
+# List-rate $/million tokens for MODEL. Update if MODEL changes.
+PRICE_PER_MTOK_INPUT = 3.00
+PRICE_PER_MTOK_OUTPUT = 15.00
 ALL_CHUNKS = kb.load_chunks()
 CHUNKS_BY_ID = {c.id: c for c in ALL_CHUNKS}
 QUESTION_POOL = [c.title for c in ALL_CHUNKS]
@@ -178,6 +182,7 @@ def gen_attrs(input_text: str, output_text: str, input_tokens: int, output_token
         lf.OBSERVATION_INPUT: input_text,
         lf.OBSERVATION_OUTPUT: output_text,
         lf.OBSERVATION_USAGE_DETAILS: lf.usage_details(input_tokens, output_tokens),
+        lf.OBSERVATION_COST_DETAILS: lf.cost_details(input_tokens, output_tokens, PRICE_PER_MTOK_INPUT, PRICE_PER_MTOK_OUTPUT),
         gs.GEN_AI_OPERATION_NAME: "chat",
         gs.OPENINFERENCE_SPAN_KIND: "LLM",
         gs.INPUT: input_text,
