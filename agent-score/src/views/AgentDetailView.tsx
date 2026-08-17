@@ -136,6 +136,14 @@ export default function AgentDetailView({ projectId, navigate }: Props) {
               sx={{ height: 22, fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.02em" }}
             />
           )}
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => navigate({ name: "chat-scoring", projectId })}
+            sx={{ ml: "auto", flexShrink: 0 }}
+          >
+            Chat about scoring
+          </Button>
         </Box>
         <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 1.5, pl: 6 }}>
           {project.type}{createdDate ? ` · Created ${createdDate}` : ""} · {verdict.reason}

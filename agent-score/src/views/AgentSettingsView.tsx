@@ -118,7 +118,17 @@ export default function AgentSettingsView({ projectId, navigate }: Props) {
 
       {/* Scoring Profile */}
       <Paper sx={{ p: 2.5, mb: 3, border: "1px solid", borderColor: "divider", borderRadius: 2 }}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>Scoring Profile</Typography>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Scoring Profile</Typography>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => navigate({ name: "chat-scoring", projectId })}
+            sx={{ ml: "auto", flexShrink: 0 }}
+          >
+            Chat about scoring
+          </Button>
+        </Box>
         <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
           The profile defines which dimensions are measured and how they are weighted into a composite score.
         </Typography>

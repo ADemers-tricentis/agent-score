@@ -21,6 +21,9 @@ import ProfilesView from "./views/ProfilesView";
 import ProfileDetailView from "./views/ProfileDetailView";
 import AddProfileView from "./views/AddProfileView";
 import DimensionsView from "./views/DimensionsView";
+import DemoGalleryView from "./views/DemoGalleryView";
+import GettingStartedView from "./views/GettingStartedView";
+import ChatScoringView from "./views/ChatScoringView";
 
 export default function App() {
   const [view, setView] = useState<View>({ name: "home" });
@@ -79,6 +82,12 @@ export default function App() {
         return <AddProfileView navigate={setView} />;
       case "dimensions":
         return <DimensionsView />;
+      case "demo-gallery":
+        return <DemoGalleryView navigate={setView} />;
+      case "getting-started":
+        return <GettingStartedView navigate={setView} />;
+      case "chat-scoring":
+        return <ChatScoringView projectId={view.projectId} navigate={setView} />;
       case "compare-runs":
         return (
           <CompareRunsView
