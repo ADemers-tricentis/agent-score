@@ -1,3 +1,16 @@
+## August 17, 2026 Update
+
+### Customer-facing docs are live
+The first version of the AgentScore docs site has shipped - a self-serve reference covering ingestion, dimensions and profiles, the eval catalog, agent cards, and scoring, so prospects and customers can find answers without waiting on us.
+- Every core concept has its own page, illustrated with real product screenshots and purpose-built diagrams
+- The eval catalog page shows the deterministic-to-LLM-judged spectrum so users can reason about tradeoffs themselves
+- Each page ships as a single self-contained build, so it's easy to host, share, or embed anywhere
+
+### A skill that keeps the docs honest
+We're shipping fast, and docs have a way of quietly falling behind. To close that gap, we built a skill that audits the live product against the docs site on demand - walking the real onboarding flow, flagging every place copy or behavior has drifted, and patching the docs in the same pass.
+- Drift gets caught and logged, not discovered by a customer
+- Docs stay within one audit of reality, no matter how fast the product underneath them moves
+
 ## August 14, 2026 Update
 
 ### Faster path from connect to first score
