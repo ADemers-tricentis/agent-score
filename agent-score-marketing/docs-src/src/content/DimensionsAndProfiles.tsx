@@ -18,17 +18,17 @@ export default function DimensionsAndProfiles() {
         on - things like Safety, Tool Use, or Response Quality. Agent Score ships with 11:
       </p>
       <ul>
-        <li>Correctness</li>
-        <li>Groundedness</li>
-        <li>Relevance</li>
-        <li>Retrieval (RAG)</li>
-        <li>Agentic / Tool-use</li>
-        <li>Conversational</li>
-        <li>Quality / Efficiency</li>
-        <li>Safety</li>
-        <li>Reliability</li>
-        <li>Attribution</li>
-        <li>Custom</li>
+        <li><strong>Correctness</strong> - getting the right answer</li>
+        <li><strong>Groundedness</strong> - grounded in context</li>
+        <li><strong>Relevance</strong> - staying on-topic</li>
+        <li><strong>Retrieval (RAG)</strong> - finding the right context</li>
+        <li><strong>Agentic / Tool-use</strong> - smart decisions</li>
+        <li><strong>Conversational</strong> - holding a natural conversation</li>
+        <li><strong>Quality / Efficiency</strong> - cost &amp; speed</li>
+        <li><strong>Safety</strong> - avoiding harmful output</li>
+        <li><strong>Reliability</strong> - consistent across runs</li>
+        <li><strong>Attribution</strong> - citing its sources</li>
+        <li><strong>Custom</strong> - whatever you define</li>
       </ul>
 
       <h2>A profile is the full recipe</h2>
