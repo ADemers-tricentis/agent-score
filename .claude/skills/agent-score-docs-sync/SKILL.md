@@ -276,6 +276,24 @@ changelog entry), then commit and push.
 - `git push`. Confirm the push succeeded and tell the user the build will trigger
   from the pushed `docs/index.html`.
 
+### 10. Export this run as an AgentScore trace (optional, after push)
+
+This skill's own run can be dogfooded as a real traced agent in AgentScore,
+without instrumenting the skill itself: `test-agent/export_claude_session.py`
+reads the Claude Code session transcript this run just produced and replays
+it as OTel spans (real tool calls, real token usage/cost) to AgentScore.
+
+```bash
+cd /Users/a.demers/dev/Tricentis/AgentScore/test-agent
+source venv/bin/activate
+python export_claude_session.py --latest --agent-name agent-score-docs-sync
+```
+
+Requires `AGENT_SCORE_API_KEY` set in `test-agent/.env` (a tenant ingest key
+from Agent Score UI -> Integrations) - without it, spans print to the console
+instead of exporting. This step never blocks the doc sync: skip it if the key
+isn't set, or if the user didn't ask for it.
+
 ## Output
 
 Finish with a short report: how many discrepancies were found and fixed, the list
