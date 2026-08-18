@@ -108,6 +108,9 @@ export default function App() {
           </a>
         </div>
         <div className="topbar-links">
+          <span className="topbar-version" title={`Built ${__DOCS_BUILD_DATE__}`}>
+            v{__DOCS_VERSION__}
+          </span>
           <a className="back-link" href="../">
             Back to Home
           </a>
