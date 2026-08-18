@@ -299,6 +299,38 @@ a:hover { color: var(--primary-light); }
   max-width: 640px;
 }
 
+.code-block {
+  position: relative;
+  max-width: 640px;
+}
+
+.code-block pre {
+  padding-right: 44px;
+}
+
+.code-block-copy {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  color: var(--text-secondary);
+  background: var(--bg-overlay);
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-sm);
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.code-block-copy:hover {
+  color: var(--text-primary);
+  border-color: var(--primary);
+}
+
 .content pre code {
   background: none;
   border: none;

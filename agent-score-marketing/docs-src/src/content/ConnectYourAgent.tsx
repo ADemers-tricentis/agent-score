@@ -1,4 +1,4 @@
-import { Callout, Dek, Eyebrow, Screenshot } from "../components/PageChrome";
+import { Callout, CodeBlock, Dek, Eyebrow, Screenshot } from "../components/PageChrome";
 import { IngestionFlowDiagram } from "../components/diagrams/IngestionFlow";
 import integrationsTab from "../assets/integrations-tab.png";
 
@@ -51,12 +51,10 @@ export default function ConnectYourAgent() {
         to install and no per-agent library to learn. In most cases it's two additional lines
         added to an exporter you already have:
       </p>
-      <pre>
-        <code>
-          {"OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=<your ingest endpoint>/external/otel/v1/traces\n"}
-          {"OTEL_EXPORTER_OTLP_TRACES_HEADERS=Authorization=Bearer <your tk_... ingest key>"}
-        </code>
-      </pre>
+      <CodeBlock>
+        {"OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=<your ingest endpoint>/external/otel/v1/traces\n" +
+          "OTEL_EXPORTER_OTLP_TRACES_HEADERS=Authorization=Bearer <your tk_... ingest key>"}
+      </CodeBlock>
       <p>
         Use the <code>_TRACES_</code>-suffixed variables specifically, not the generic{" "}
         <code>OTEL_EXPORTER_OTLP_ENDPOINT</code> - that's what keeps trace export separate from any
