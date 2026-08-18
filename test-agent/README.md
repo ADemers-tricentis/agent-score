@@ -40,6 +40,22 @@ python send_synthetic_traces.py --dry-run --count 20   # preview, no network
 python send_synthetic_traces.py --count 32              # send to AgentScore
 ```
 
+## Export a Claude Code session as a trace
+
+`export_claude_session.py` converts any Claude Code session transcript
+(`~/.claude/projects/<slug>/<session-id>.jsonl`) into an AgentScore trace -
+one span per LLM turn (real token usage/cost) and per tool call, with real
+historical timestamps. This is how a Claude Code skill run (e.g.
+`agent-score-docs-sync`) shows up in AgentScore as a scored agent, without
+instrumenting the skill itself - the conversion happens after the fact, from
+the transcript Claude Code already wrote.
+
+```bash
+python export_claude_session.py --latest --agent-name agent-score-docs-sync
+python export_claude_session.py --session /path/to/session.jsonl --dry-run
+python export_claude_session.py --latest --since 2026-08-18T14:03:00Z  # scope to part of a session
+```
+
 ## Attribute conventions (`langfuse_semconv.py`, `genai_semconv.py`)
 
 Every span sets two layers of attributes, grounded in a direct read of
