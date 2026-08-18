@@ -113,11 +113,19 @@ a:hover { color: var(--primary-light); }
 }
 .topbar-links a.back-link:hover { color: var(--text-primary); }
 
-.topbar-version {
+.sidebar-version {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: var(--sidebar-w);
+  padding: 10px 16px;
+  border-top: 1px solid var(--divider-soft);
+  background: var(--bg-base);
   font-size: 0.72rem;
   font-family: var(--mono);
   color: var(--text-muted);
   cursor: default;
+  z-index: 16;
 }
 
 .menu-toggle {
@@ -201,6 +209,7 @@ a:hover { color: var(--primary-light); }
     max-width: 320px;
   }
   .sidebar.open { transform: translateX(0); }
+  .sidebar-version { width: 84vw; max-width: 320px; }
   .content-wrap {
     margin-left: 0;
     width: 100%;
