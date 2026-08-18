@@ -4,7 +4,7 @@
 Create, rotate, or revoke an ingest key yourself from the Integrations page - no more filing a ticket and waiting on the team to rotate one for you.
 
 ### Customer-facing docs are live
-The first version of the AgentScore docs site has shipped - a self-serve reference covering ingestion, dimensions and profiles, the eval catalog, agent cards, and scoring, so prospects and customers can find answers without waiting on us.
+The first version of the [AgentScore docs site](https://demers-demos.product.tricentis.com/docs/) has shipped - a self-serve reference covering ingestion, dimensions and profiles, the eval catalog, agent cards, and scoring, so prospects and customers can find answers without waiting on us.
 - Every core concept has its own page, illustrated with real product screenshots and purpose-built diagrams
 - The eval catalog page shows the deterministic-to-LLM-judged spectrum so users can reason about tradeoffs themselves
 - Each page ships as a single self-contained build, so it's easy to host, share, or embed anywhere
