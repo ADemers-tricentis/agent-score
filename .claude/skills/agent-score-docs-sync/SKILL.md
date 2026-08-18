@@ -204,7 +204,7 @@ items in the drift log, untouched in the docs):
 - Keep edits scoped to what the discrepancy list justifies. Don't rewrite pages
   that are still accurate.
 
-### 7. Update the changelog
+### 7. Update the changelog and bump the version
 
 Add an entry to `agent-score-marketing/docs-src/CHANGELOG.md` (create the file with
 a standard Keep a Changelog header if it doesn't exist). Use today's date and
@@ -219,6 +219,25 @@ file names:
 ### Fixed
 - Welcome: corrected the eval count to match the catalog (now 72, was "60+").
 ```
+
+**Then bump the `version` field in `agent-score-marketing/docs-src/package.json`**
+so the version badge shown in the docs sidebar reflects the change (it reads that
+field at build time). The docs site is still in beta - stay in the `0.x` range and
+follow semver's intent within it:
+
+- **Patch** (`0.5.0` -> `0.5.1`): the changelog entry is `### Fixed` only - wording
+  or typo corrections, a swapped screenshot that doesn't change what's documented,
+  other cosmetic fixes.
+- **Minor** (`0.5.0` -> `0.6.0`): the changelog entry includes any `### Added` or
+  `### Removed` item - a new page, a newly documented capability, a new section,
+  a page or capability removed. A single `Added` item outweighs any number of
+  `Fixed` items in the same run - bump minor, not patch.
+- **Never bump major yourself.** `1.0.0` marks the official release out of beta.
+  That version change is the user's explicit call, not something a docs-sync run
+  triggers automatically - leave it at `0.x` even for a large sync.
+
+If you're unsure which bucket a change falls into, prefer the changelog's own
+Added/Changed/Removed/Fixed grouping you just wrote - don't re-litigate it.
 
 ### 8. Build
 
@@ -241,10 +260,12 @@ Show the user a summary of the diff (`git status` + a `git diff --stat`, and the
 changelog entry), then commit and push.
 
 - Stage only the files this task changed: the edited content/nav/asset files, the
-  changelog, the **drift log** (`DOCS-DRIFT-LOG.md` - always changed), and, when
-  there were doc edits, the rebuilt `agent-score-marketing/docs/index.html`. Do
-  **not** sweep in unrelated pre-existing changes you noted in step 1. A log-only
-  run still commits and pushes the drift log so the team's record stays current.
+  changelog, the bumped `package.json`, the **drift log** (`DOCS-DRIFT-LOG.md` -
+  always changed), and, when there were doc edits, the rebuilt
+  `agent-score-marketing/docs/index.html`. Do **not** sweep in unrelated
+  pre-existing changes you noted in step 1. A log-only run still commits and
+  pushes the drift log so the team's record stays current, but skips the version
+  bump - no doc edits means nothing changed for a reader to see.
 - Commit on the current branch if it isn't the protected default; if you're on the
   default branch, that matches this repo's normal docs workflow (source + built
   file committed together) - proceed unless the user asked otherwise.
@@ -258,6 +279,7 @@ changelog entry), then commit and push.
 ## Output
 
 Finish with a short report: how many discrepancies were found and fixed, the list
-of pages touched, the changelog entry, and confirmation that the build passed and
-the push landed. If you stopped early (no discrepancies, build failure, or the
-user declined at the review gate), say exactly where and why.
+of pages touched, the changelog entry, the version bump (old -> new, and why that
+bucket), and confirmation that the build passed and the push landed. If you
+stopped early (no discrepancies, build failure, or the user declined at the
+review gate), say exactly where and why.
