@@ -1,13 +1,7 @@
 ## August 18, 2026 Update
 
-### The docs-sync skill ran for real, and it worked
-Yesterday we shipped a skill that audits the docs against the live product on demand. Today it ran end-to-end for the first time - walked the real onboarding flow, found real drift, and fixed it in the same pass.
-- Caught and documented a brand-new capability that hadn't made it into the docs yet: ingest keys are now fully self-serve - create, rotate, or revoke from the Integrations page, no ticket to the team required
-- Corrected the agent status states, the OpenTelemetry setup snippet, and the scheduled-scoring constraints so they match exactly what's live today
-- Caught a stray screenshot that had quietly been sourced from an internal design prototype instead of the real product, and swapped it for the real thing
-- Every finding - including the handful we chose to leave for later - is now tracked in a standing drift log instead of living in someone's head
-
-## August 17, 2026 Update
+### Ingest keys are now self-serve
+Create, rotate, or revoke an ingest key yourself from the Integrations page - no more filing a ticket and waiting on the team to rotate one for you.
 
 ### Customer-facing docs are live
 The first version of the AgentScore docs site has shipped - a self-serve reference covering ingestion, dimensions and profiles, the eval catalog, agent cards, and scoring, so prospects and customers can find answers without waiting on us.
@@ -15,10 +9,12 @@ The first version of the AgentScore docs site has shipped - a self-serve referen
 - The eval catalog page shows the deterministic-to-LLM-judged spectrum so users can reason about tradeoffs themselves
 - Each page ships as a single self-contained build, so it's easy to host, share, or embed anywhere
 
-### A skill that keeps the docs honest
-We're shipping fast, and docs have a way of quietly falling behind. To close that gap, we built a skill that audits the live product against the docs site on demand - walking the real onboarding flow, flagging every place copy or behavior has drifted, and patching the docs in the same pass.
-- Drift gets caught and logged, not discovered by a customer
-- Docs stay within one audit of reality, no matter how fast the product underneath them moves
+### A skill that keeps the docs honest, because we're moving too fast for them to keep up by hand
+We're shipping fast enough that something drifts between the docs and the real product almost every week. Rather than wait to find out from a customer, we built a skill that walks the live product against the docs site on demand and fixes what's stale in the same pass. It ran end-to-end for the first time today:
+- Caught the self-serve ingest-key change above before it could sit undocumented behind stale instructions
+- Corrected the agent status states, the OpenTelemetry setup snippet, and the scheduled-scoring constraints so they match exactly what's live today
+- Caught a stray screenshot that had quietly been sourced from an internal design prototype instead of the real product, and swapped it for the real thing
+- Every finding - including the handful we chose to leave for later - is now tracked in a standing drift log instead of living in someone's head
 
 ## August 14, 2026 Update
 
