@@ -1,5 +1,6 @@
-import { Callout, Dek, Eyebrow } from "../components/PageChrome";
+import { Callout, Dek, Eyebrow, Screenshot } from "../components/PageChrome";
 import { IngestionFlowDiagram } from "../components/diagrams/IngestionFlow";
+import integrationsTab from "../assets/integrations-tab.png";
 
 export default function ConnectYourAgent() {
   return (
@@ -15,14 +16,29 @@ export default function ConnectYourAgent() {
       <p>
         Before any traces can flow in, your workspace - what Agent Score calls a <strong>tenant</strong> -
         has to exist. Today that's set up by the Agent Score team on your behalf, not a self-serve
-        signup form: someone on our side provisions your workspace and mints your first API key,
-        which we hand you directly. That key is shown once, so keep it somewhere safe.
+        signup form: someone on our side provisions your workspace. Once it exists, everything from
+        here on is yours to drive.
       </p>
+
+      <h2>Ingest keys are yours to manage</h2>
       <p>
-        If you ever need a new or rotated key, ask the Agent Score team - key management is
-        currently on our side, not something you self-serve from the app. Once you have a key,
-        everything from here on is yours to drive.
+        Traces authenticate with an <strong>ingest key</strong> (shown as <code>tk_...</code>), not
+        a generic API key. Each key belongs to exactly one tenant. From{" "}
+        <strong>Integrations</strong> in the sidebar, you can create a new key, rotate one, or
+        revoke it, independently of any other key on the tenant - no ticket to the Agent Score team
+        required.
       </p>
+      <Screenshot
+        src={integrationsTab}
+        alt="The Integrations page, showing a tenant selector and a table of API keys with status, created date, last used, and Rotate / Revoke actions, plus a New key button"
+        caption="Manage ingest keys yourself - create, rotate, or revoke, per tenant."
+      />
+      <Callout kind="warn" title="Reachable over the Tricentis VPN only">
+        <p>
+          The ingest endpoint is only reachable from the Tricentis VPN. Make sure whatever sends
+          traces - your agent, its exporter, or the host it runs on - can reach it from there.
+        </p>
+      </Callout>
 
       <h2>Two ways in</h2>
       <p>
@@ -33,7 +49,18 @@ export default function ConnectYourAgent() {
         <strong>External agents</strong> connect through an OpenTelemetry export - the same
         telemetry standard almost every modern agent framework already speaks. There's no new SDK
         to install and no per-agent library to learn. In most cases it's two additional lines
-        added to an exporter you already have.
+        added to an exporter you already have:
+      </p>
+      <pre>
+        <code>
+          {"OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=<your ingest endpoint>/external/otel/v1/traces\n"}
+          {"OTEL_EXPORTER_OTLP_TRACES_HEADERS=Authorization=Bearer <your tk_... ingest key>"}
+        </code>
+      </pre>
+      <p>
+        Use the <code>_TRACES_</code>-suffixed variables specifically, not the generic{" "}
+        <code>OTEL_EXPORTER_OTLP_ENDPOINT</code> - that's what keeps trace export separate from any
+        logs or metrics your exporter also happens to send.
       </p>
 
       <IngestionFlowDiagram />
@@ -63,13 +90,16 @@ export default function ConnectYourAgent() {
       <p>
         Traces arrive, get recognized, and are filed under the right agent - automatically and
         continuously, with no human in the loop. You'll see the agent appear in your dashboard
-        right away, in a <strong>Collecting data</strong> state.
+        right away in a <strong>Setting up</strong> state, then <strong>Learning your agent</strong>{" "}
+        with a live count ("n of 20 traces") once its first trace lands.
       </p>
       <p>
         It takes <strong>20 traces</strong> for scoring to begin. This is deliberate: asking you to
         configure evaluation criteria before Agent Score has seen how your agent actually behaves
         would mean guessing. Once enough real traces have arrived, a scoring run kicks off
-        automatically - see{" "}
+        automatically and the agent moves to <strong>Scored</strong> (or{" "}
+        <strong>Needs attention</strong> if that first run couldn't find anything to score) - see
+        {" "}
         <a href="#/agent-card">how Agent Score reads your agent</a> next.
       </p>
 

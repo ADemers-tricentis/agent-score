@@ -38,13 +38,13 @@ export default function AgentCard() {
       <h3>What it looks like in the product</h3>
       <p>
         The simplified view above strips out the operational detail. A real Agent Card carries
-        more - latency and cost envelopes alongside the observed tools, and a clear label on
-        anything the judge model inferred rather than measured directly:
+        more - the full observed-tools breakdown with call counts and success rates, and a clear
+        label on anything the judge model inferred rather than measured directly:
       </p>
       <Screenshot
         src={agentCardCustomer}
-        alt="A real Agent Card for a contract-clause-extractor agent, showing an inferred purpose, observed latency/token/cost envelope, and observed tools with call counts and success rates"
-        caption='An actual Agent Card from the Agent Score app. The "Inferred" badge marks an interpretation from the judge model, not a verified measurement.'
+        alt="A real Agent Card for chatbot-agent-service, showing a purpose labeled as synthesized by the judge model, behavioral patterns, success criteria, failure modes, and an observed tools table with call counts and success rates"
+        caption='An actual Agent Card from the Agent Score app. Purpose is labeled "Synthesized by the judge model - a draft, not a verified declaration," and tool descriptions are marked inferred.'
       />
 
       <Callout kind="note" title="Nothing here is hand-entered">
