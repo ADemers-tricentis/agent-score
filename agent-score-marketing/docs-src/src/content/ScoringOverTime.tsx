@@ -30,19 +30,22 @@ export default function ScoringOverTime() {
 
       <h2>Scheduling runs</h2>
       <p>
-        Beyond running scores manually, you can schedule them to run on their own:
+        Beyond running scores manually, each agent has an <strong>Autonomous scoring</strong> toggle
+        on its Profile tab. Leave its schedule blank and it inherits the tenant's default cadence;
+        override either setting per agent when you need to:
       </p>
       <StepList>
-        <Step title="Set an interval">
-          Choose how often a new scoring run should fire - in minutes.
+        <Step title="Set a cadence">
+          How often a new scoring run should fire, in minutes - 60 minutes minimum.
         </Step>
         <Step title="Set a lookback window">
-          Choose how far back to pull traces from for each scheduled run.
+          How far back to pull traces from for each scheduled run, from 1 to 90 days.
         </Step>
       </StepList>
       <p>
         From there, Agent Score keeps your scorecard current without anyone needing to remember to
-        click "run."
+        click "run." Turning the toggle off stops scheduled runs for that agent - "Score now" stays
+        available regardless.
       </p>
 
       <h3>What it looks like in the product</h3>

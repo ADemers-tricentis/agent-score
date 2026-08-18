@@ -12,6 +12,55 @@ Each audit appends a dated section. Newest first.
 
 ---
 
+## 2026-08-18 — follow-up audit + fixes (Playwright walkthrough, multiple tenants)
+
+Continuation of the 2026-08-17 audit below. Confirmed several of that audit's
+open items firsthand and fixed the ones the user approved.
+
+**Resolved this pass** (docs edited, see CHANGELOG):
+- #1 (API key naming + self-serve gap) - confirmed directly: `/integrations`
+  has full self-serve New key / Rotate / Revoke, tenant-scoped, `tk_` prefix.
+  This is a **brand-new feature**, not just a naming fix - docs previously told
+  customers to ask the team for key rotation, which is no longer true.
+- #2 (VPN-only ingest) - added.
+- #3 (agent states) - corrected to Setting up -> Learning your agent (n/20) ->
+  Scored / Needs attention.
+- #4 (OTel specifics) - added exact env var names and the bearer-token header
+  format.
+- #8 (schedule specifics from the older list's #8) - added cadence/lookback
+  constraints and the Autonomous scoring toggle.
+- #10 (scoring-engine page) - confirmed judge-model choice and a usage log do
+  **not** exist anywhere in the customer app (checked Profile, Agents,
+  Integrations, Settings). Pass thresholds are real, confirmed live on each
+  agent's Profile tab. Reframed the doc accordingly.
+- #9 (Agent Card latency/cost envelope) - **root cause found**: the doc's
+  screenshot (`agent-card-customer.png`) was captured from an internal
+  design-prototype tool (visible "CUSTOMER WEB APP · BASELINE" toolbar in the
+  original image), not the live product, and was mislabeled as "an actual
+  Agent Card from the Agent Score app." Confirmed on two different live agents
+  that no latency/token/cost figures render anywhere on the real Agent Card.
+  Replaced the screenshot with a genuine capture and removed the envelope
+  claim from the prose. The envelope itself is a real design intent that was
+  never built - logged below as a product gap, not restored to the docs.
+
+**New finding (not yet actioned):**
+- #11 - eval-catalog's family table lists "Tool Correctness" and "Argument
+  Correctness" under the "Agentic & Tool-use" family. On a live profile
+  (rag-support-agent, Tool/Orchestrator Starter v2), both evals are actually
+  assigned to the **correctness** dimension, not agentic_tool_use. Direction
+  unclear - the catalog's "family" may be a browsing taxonomy independent of
+  a profile's dimension assignment, which would make this not a bug. Held for
+  a broader check before editing either the docs or flagging it as a product
+  issue.
+
+**Still open from 2026-08-17** (not touched this pass):
+- #5, #6 (verdict-label / letter-grade inconsistencies) - product-should-catch-up,
+  intentionally left as-is per direction-of-truth rules.
+- #7 (profile naming / undocumented "Default v1" profile) - needs the broader
+  multi-tenant pass the original audit flagged.
+
+---
+
 ## 2026-08-17 — audit (Playwright walkthrough, tenant: andrew-test-tenant + fleet view)
 
 Scope note: audited the connect flow, the Agents dashboard, one scored agent's
