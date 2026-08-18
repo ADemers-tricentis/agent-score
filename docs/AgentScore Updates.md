@@ -1,3 +1,12 @@
+## August 18, 2026 Update
+
+### The docs-sync skill ran for real, and it worked
+Yesterday we shipped a skill that audits the docs against the live product on demand. Today it ran end-to-end for the first time - walked the real onboarding flow, found real drift, and fixed it in the same pass.
+- Caught and documented a brand-new capability that hadn't made it into the docs yet: ingest keys are now fully self-serve - create, rotate, or revoke from the Integrations page, no ticket to the team required
+- Corrected the agent status states, the OpenTelemetry setup snippet, and the scheduled-scoring constraints so they match exactly what's live today
+- Caught a stray screenshot that had quietly been sourced from an internal design prototype instead of the real product, and swapped it for the real thing
+- Every finding - including the handful we chose to leave for later - is now tracked in a standing drift log instead of living in someone's head
+
 ## August 17, 2026 Update
 
 ### Customer-facing docs are live
