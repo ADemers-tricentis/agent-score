@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 37 form submissions found (as of 2026-08-20), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Entries below are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini) — 33 distinct entries as a result. Combined entries list each submitter's Date/Name/Contact as its own three-line group.
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 43 form submissions found (as of 2026-08-21), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Two submissions (Brad Purcell, Michal Hrncirik) came from `@tricentis.com` addresses with the company field blank — internal test/QA submissions, not external prospects — and are excluded from the tracker below. Entries are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini, McKesson) — 36 distinct entries as a result. Combined entries list each submitter's Date/Name/Contact as its own three-line group.
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -10,12 +10,15 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos scheduled | Active betas |
 |---|---|---|---|
-| 33 | 0 | 0 | 0 |
+| 36 | 0 | 0 | 0 |
 
 Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
 
 | Company | Contact | Status |
 |---|---|---|
+| Regeneron Pharmaceuticals Inc. | Murali Sundaram | Interested |
+| Acadia Healthcare | Pratiksha Arora | Interested |
+| New Vision Software Inc. | Rohan Bansod | Interested |
 | Hilti Asia IT Services (MY) | Ashwin Mor | Email sent |
 | Panasonic Avionics (US) | Ronica Brisbon | Email sent |
 | The Boeing Company | Gurucharan Bijinepally | Email sent |
@@ -27,7 +30,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Capgemini | Mathankumar Kanagaraj, ARUN PRAKASH Shivakumar, Sathish kumar Backiam | Email sent |
 | Cummins Inc. | Lakshmi Sree Thirukonda | Email sent |
 | Home Depot Store Support, Inc. | Joe Pope | Email sent |
-| McKesson Corporation | Nitin Malik | Email sent |
+| McKesson Corporation | Nitin Malik, Cathy Soller | Email sent |
 | Merck Co. Inc. | Ramesh Magdum, Sateesh Rajegowda | Email sent |
 | Genpact (HQ) | Richard Hand | Email sent |
 | HP Inc. | Ejaz Siddiqui | Email sent |
@@ -51,6 +54,45 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Bayone Solutions | Mathi Natarajan | Email sent |
 
 *(Status values: Interested → Email sent → Replied → Demo scheduled → Active beta.)*
+
+---
+
+### Regeneron Pharmaceuticals Inc.
+Date: 2026-08-21 06:12  
+Name: Murali Sundaram  
+Contact: murali.sundaram@regeneron.com  
+
+what they do: Biotechnology/pharma company (Tarrytown, NY; Dupixent, Eylea, Kevzara); proprietary VelociSuite platform (VelocImmune) for antibody discovery; ~15,500 employees, ~$15.5B TTM revenue.
+
+likely use case: R&D/discovery-pipeline agents (target ID, literature/data mining) or regulatory-submission agents, given their antibody-discovery data platform and pharma's compliance sensitivity.
+
+known agent tooling: no public information found tying Regeneron specifically to a deployed agent product; broader biopharma industry (and their own regulator, FDA) is moving toward agentic AI in R&D and regulatory workflows ([PharmExec](https://www.pharmexec.com/view/daily-fda-agentic-ai-deployment)).
+
+---
+
+### Acadia Healthcare
+Date: 2026-08-20 19:03  
+Name: Pratiksha Arora  
+Contact: pratiksha.arora@acadiahealthcare.com  
+
+what they do: Largest stand-alone behavioral-health company in the US (Franklin, TN) — 279 facilities, ~12,600 beds across 40 states + Puerto Rico, ~23,500 employees, ~$3.3B revenue; operates the largest US chain of methadone clinics ([Wikipedia](https://en.wikipedia.org/wiki/Acadia_Healthcare)).
+
+likely use case: clinical-documentation or patient-intake/scheduling agents — behavioral health's regulatory and privacy sensitivity makes output verification matter a lot.
+
+known agent tooling: no public information found tying Acadia specifically to a deployed AI agent product.
+
+---
+
+### New Vision Software Inc.
+Date: 2026-08-20 16:12  
+Name: Rohan Bansod  
+Contact: rohan.bansod@newvision-software.com  
+
+what they do: India-based (Pune) IT services/QA consultancy (~687 employees) — application/data/infrastructure modernization plus a dedicated QA automation practice. Already a Tricentis partner — lists Tricentis/Tosca alongside Oracle, PEGA, Microsoft, and Google Cloud in its partner roster.
+
+likely use case: given the existing partner relationship and Tosca-based QA automation practice, most plausibly evaluating Agent Score to extend their QA offering into agentic-AI testing for their own client base, rather than for internal use — same profile as Merito Solutions above.
+
+known agent tooling: runs Tosca-based automation delivery for clients (e.g. a utility-services C2M/Tosca implementation reducing manual effort 29%); no public information found on New Vision operating AI agents themselves ([newvision-software.com/partners](https://newvision-software.com/partners/)).
 
 ---
 
@@ -216,6 +258,10 @@ known agent tooling: one of the most publicly documented deployments on this lis
 Date: 2026-08-20 14:48  
 Name: Nitin Malik  
 Contact: Nitin.Malik@McKesson.com  
+
+Date: 2026-08-21 12:53  
+Name: Cathy Soller  
+Contact: cathy.soller@mckesson.com  
 
 what they do: Largest US pharmaceutical distributor (~1/3 of North American distribution); FY2026 revenue ~$403B.
 
