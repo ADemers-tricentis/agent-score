@@ -3,6 +3,53 @@
 All notable changes to the AgentScore docs site are recorded here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased] - 2026-08-24
+
+Note: the sidebar version badge jumps from 0.5.0 to 0.34.0 in this release -
+by request, it now tracks the AgentScore product's own alpha version rather
+than the docs site's independent semver.
+
+### Added
+- Connect Your Agent: documented the real internal-agent onboarding process
+  (identify the service name in BetterStack, register it in the Back Office's
+  Ingestion > Stream > Configuration, confirm the pull, check the resolved
+  agent), replacing the inaccurate "ingested automatically, nothing to
+  configure" claim. Added two real screenshots: the `service.name` attribute
+  in a BetterStack trace, and the Back Office Configuration screen.
+- Building a Custom Eval: documented the real **Runner** tool (pick an eval,
+  tenant, and agent; run against already-captured traces) with a genuine
+  screenshot, as the actual way to test an eval before trusting it.
+- The Evaluation Catalog: added a missing real screenshot for the Library
+  eval type (previously had none).
+
+### Changed
+- Welcome, Connect Your Agent, Reading Your Scorecard, Scoring Over Time, The
+  Evaluation Catalog, Building a Custom Eval: replaced eight stale or
+  design-prototype screenshots (`agents-cards`, `integrations-tab`,
+  `scorecard-tab`, `activity-tab`, `catalog-door`, `entry-doors`,
+  `studio-geval`, `studio-hybrid`) with genuine current-build captures, and
+  corrected the alt/caption text to match what's actually shown (dropped a
+  fictitious Runs-table Change/Revision column, a "61/100, Needs work, 24
+  below" framing that doesn't reflect the real Score tab, and stale eval
+  counts).
+- The Evaluation Catalog, Building a Custom Eval: removed claims of a docked
+  "Live preview" panel (a real-time score gauge, PASS/FAIL, Agree/Disagree,
+  and a version-diff/"what the judge saw" transparency panel) that could not
+  be found anywhere in the current Builder after checking three separate
+  surfaces (the eval detail modal, the Builder editor, and the Runner tool).
+  "Nothing changes silently" is now "Versions are immutable" and only claims
+  the confirmed-real behavior (publishing creates a new immutable version;
+  past grades stay attributed to it).
+- The Evaluation Catalog, Building a Custom Eval: added explicit framing that
+  the catalog, builder, and runner live in Agent Score's Back Office and are
+  operated by the Agent Score team on a customer's behalf, not a customer
+  self-serve surface - the previous prose read as if the customer clicked
+  through these tools directly.
+
+### Removed
+- Building a Custom Eval: the inline trace-picker and version-diff/
+  transparency-panel screenshots and their accompanying claims (see Changed).
+
 ## [Unreleased] - 2026-08-18
 
 ### Added

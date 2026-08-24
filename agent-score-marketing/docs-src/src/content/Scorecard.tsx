@@ -59,8 +59,8 @@ export default function Scorecard() {
       </p>
       <Screenshot
         src={scorecardTab}
-        alt="A real Scorecard tab showing a composite score of 61 out of 100 with a Needs work verdict, how many points below the Ship threshold, and a dimension breakdown listing each evaluation's mean score, pass bar, and pass rate"
-        caption='A real scorecard - "you are 24 below" the Ship threshold, and exactly which evaluations are dragging the groundedness dimension down.'
+        alt="A real Score tab showing a composite score of 100 out of 100 with a Ship verdict, how many points above the Ship threshold, scored/skipped/failed/retired counts, and a dimension breakdown listing each dimension's weight and score with a link to the evaluations behind it"
+        caption='A real Score tab - the composite score, how far above or below the Ship threshold it is, and the dimension breakdown behind the number.'
       />
 
       <Callout kind="tip" title="This is preliminary, and that's fine">
