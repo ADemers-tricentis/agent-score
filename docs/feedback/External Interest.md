@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 43 form submissions found (as of 2026-08-21), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Two submissions (Brad Purcell, Michal Hrncirik) came from `@tricentis.com` addresses with the company field blank — internal test/QA submissions, not external prospects — and are excluded from the tracker below. Entries are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini, McKesson) — 36 distinct entries as a result. Combined entries list each submitter's Date/Name/Contact as its own three-line group.
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 48 form submissions found (as of 2026-08-24), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Two submissions (Brad Purcell, Michal Hrncirik) came from `@tricentis.com` addresses with the company field blank — internal test/QA submissions, not external prospects — and are excluded from the tracker below. Entries are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini, McKesson, Merito Solutions) — 39 distinct entries as a result. Combined entries list each submitter's Date/Name/Contact as its own three-line group.
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -10,12 +10,15 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos scheduled | Active betas |
 |---|---|---|---|
-| 36 | 0 | 0 | 0 |
+| 39 | 0 | 0 | 0 |
 
 Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
 
 | Company | Contact | Status |
 |---|---|---|
+| Artizent (form blank, domain-resolved) | Alan Mayfus | Interested |
+| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj | Interested |
+| SAP Labs India (IN) | SaiDeepak Ayyagari | Interested |
 | Regeneron Pharmaceuticals Inc. | Murali Sundaram | Interested |
 | Acadia Healthcare | Pratiksha Arora | Interested |
 | New Vision Software Inc. | Rohan Bansod | Interested |
@@ -45,7 +48,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Accenture LLP | Jigish Belani | Email sent |
 | Stanza | Anirban Toy Choudhury | Email sent |
 | Sunbelt Rentals | Arya Shrey | Email sent |
-| Merito Solutions | Chris Carpenter | Email sent |
+| Merito Solutions | Chris Carpenter, Gerard Trimberger | Email sent |
 | Amazon Kuiper Manufacturing Enterprises LLC | Saranya Vaithiyanathan | Email sent |
 | Accenture CIO HR Organization (unresolved, may be Stanza) | Greg Wanroy | Email sent |
 | Aspire Systems Digital Transformation Inc. | Naveen Srinivasan | Email sent |
@@ -54,6 +57,49 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Bayone Solutions | Mathi Natarajan | Email sent |
 
 *(Status values: Interested → Email sent → Replied → Demo scheduled → Active beta.)*
+
+---
+
+### — (form blank; email domain suggests Artizent)
+Date: 2026-08-24 13:13  
+Name: Alan Mayfus  
+Contact: sammayfusak@artizent.com  
+
+what they do: Enterprise technology engineering firm (Edison, NJ) — software/product engineering, data & analytics, cloud modernization, quality engineering, applied AI, with a focus on banking/financial services/insurance. Formerly Nous Infosystems, rebranded Artizent in July 2026 with TA Associates backing; founded 1996 ([artizent.com/company](https://www.artizent.com/company)).
+
+likely use case: as an AI/QA engineering vendor to regulated enterprises, plausibly evaluating Agent Score to validate agents it builds for clients or to offer as part of its own quality-engineering practice — same profile as New Vision Software and Merito Solutions above.
+
+known agent tooling: self-described focus on building/operating "production grade AI systems" for enterprises, with quality engineering and applied-AI as core service lines — a positioning claim, not a named product ([artizent.com/company](https://www.artizent.com/company)).
+
+---
+
+### Tritusa Consulting (AU)
+Date: 2026-08-24 02:46  
+Name: Pankaj Kumar Sinha  
+Contact: pankaj.sinha@tritusa.com.au  
+
+Date: 2026-08-24 00:49  
+Name: Deephan Mohanraj  
+Contact: deephan.mohanraj@tritusa.com.au  
+
+what they do: Sydney-headquartered SAP Technical Services & software-testing consultancy (~51 employees, ~$6M revenue, founded 2011) with presence in Melbourne, Canberra, Brisbane — 150+ projects delivered to 100+ Australian customers, specializing in SAP-focused quality engineering, automation, and performance testing ([tritusa.com.au/about-us](https://tritusa.com.au/about-us/)).
+
+likely use case: as an SAP testing/QA vendor, most plausibly evaluating Agent Score to extend its testing practice into agentic-AI QA for its own client base — same profile as New Vision Software and Merito Solutions above.
+
+known agent tooling: no public information found tying Tritusa specifically to a deployed agent product; core business is SAP test automation and performance testing.
+
+---
+
+### SAP Labs India (IN)
+Date: 2026-08-22 08:25  
+Name: SaiDeepak Ayyagari  
+Contact: s.ayyagari@sap.com  
+
+what they do: SAP's R&D subsidiary in India — engineering hub developing SAP's cloud and AI product lines.
+
+likely use case: internal evaluation/QA of AI agents built into SAP's own product lines (e.g., Joule, SAP Business AI) before they ship to SAP's enterprise customers.
+
+known agent tooling: SAP Business AI and the Joule generative-AI assistant embed agentic capabilities across SAP S/4HANA and BTP — well documented on SAP's public AI roadmap.
 
 ---
 
@@ -461,6 +507,10 @@ known agent tooling: partnered with Salesforce to implement Agentforce (autonomo
 Date: 2026-08-20 14:48  
 Name: Chris Carpenter  
 Contact: chris.carpenter@merito.com  
+
+Date: 2026-08-21 16:41  
+Name: Gerard Trimberger  
+Contact: gerard.trimberger@merito.com  
 
 what they do: Enterprise software VAR/consultancy (20+ years) — SDLC tooling, QA automation, app-security reseller. Already a Tricentis partner — lists Tricentis alongside Azure DevOps, TestRail, Planview on their own site.
 

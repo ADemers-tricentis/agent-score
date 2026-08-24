@@ -15,12 +15,15 @@ Under either path, agents are resolved from trace content: a **service name** (t
 ## Steps
 
 1. **Identify the service name.**
-   Find the exact service/container name the target agent's deployment reports in its traces. This is usually the deployment/container name, not the agent's own name.
+   Find the exact service/container name the target agent's deployment reports in its traces. This is usually the deployment/container name, not the agent's own name. The service name can be found in [Better Stack](https://telemetry.betterstack.com/team/t326687/services).
    - If you already know it (visible in BetterStack as a service), skip to step 2.
-   - If you don't know it, ask the engineers who built that service what name it sends as `service.name` — don't guess.
+   - If you don't know it, ask the engineers who built that service what name it sends as `service.name` — don't guess. 
+      - Alternatively, find the service name under Sources > Services > Env > Region > Service
 
-2. **Register the service name on the streaming page.**
-   Add the service name in Agent Score's streaming/ingestion admin page so the pull job knows to look for it in BetterStack.
+2. **Register the service name on the streaming page in the Back Office App.**
+   Add the service name in Agent Score's streaming/ingestion admin page so the pull job knows to look for it in BetterStack:
+   Ingestion > Stream > Configuration > Services - OTel service.name.
+   Once done, select Save configuration.
 
 3. **Confirm it's being pulled.**
    Agent Score will search BetterStack for traces matching that service name and pull them in. Give it a pull cycle to run, then check that traces are arriving.
