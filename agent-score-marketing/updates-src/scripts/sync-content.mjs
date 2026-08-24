@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const source = path.resolve(here, "../../../docs/AgentScore Updates.md");
+const source = path.resolve(here, "../../../docs/updates/AgentScore Updates.md");
 const destDir = path.resolve(here, "../src/content");
 const dest = path.join(destDir, "updates.md");
 
