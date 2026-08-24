@@ -27,8 +27,7 @@ export default function ConnectYourAgent() {
         Traces authenticate with an <strong>ingest key</strong> (shown as <code>tk_...</code>), not
         a generic API key. Each key belongs to exactly one tenant. From{" "}
         <strong>Integrations</strong> in the sidebar, you can create a new key, rotate one, or
-        revoke it, independently of any other key on the tenant - no ticket to the Agent Score team
-        required.
+        revoke it, independently of any other key on the tenant.
       </p>
       <Screenshot
         src={integrationsTab}
