@@ -12,6 +12,106 @@ Each audit appends a dated section. Newest first.
 
 ---
 
+## 2026-08-24 — internal-agent onboarding + screenshot refresh (Back Office + customer app, Playwright)
+
+Triggered by updating `connect-your-agent`'s internal-agent-ingestion steps against
+`docs/documentation/internal-agent-onboarding-runbook.md`, then auditing the rest of
+the site against production while in there.
+
+**Resolved this pass** (docs edited, see CHANGELOG):
+- Internal Tricentis agents were documented as "ingested automatically - nothing to
+  configure," which is stale. Replaced with the real manual, region-split,
+  BetterStack-pull process from the runbook (4 steps), confirmed directly against
+  the Back Office App's Ingestion > Stream > Configuration page (Services - OTel
+  service.name tag list, Save configuration) - matches the runbook exactly. Added
+  two new real screenshots: the `service.name` attribute in a BetterStack trace,
+  and the Back Office Configuration section.
+- `welcome` - `agents-cards.png` was the "CUSTOMER WEB APP · BASELINE"
+  design-prototype tool (same root cause as #9 below/2026-08-18), showing
+  fabricated dimension names (conversational/relevance/safety w/ decimal
+  weights) that don't match the product's real dimension set. Replaced with a
+  genuine capture of the live Agents cards view.
+- `connect-your-agent` - `integrations-tab.png` was stale (old tenant selector,
+  old key data) though the self-serve API-key prose was already confirmed
+  accurate. Refreshed with a genuine capture (no tenant selector in the current
+  single-tenant customer view).
+- `scorecard` - `scorecard-tab.png` was still a Baseline prototype ("61/100,
+  Needs work, 24 below," "pass bar and pass rate" language). Replaced with a
+  genuine Score tab capture (100/100, Ship, dimension-weight breakdown) and
+  corrected the alt/caption text to match what's actually shown.
+- `scoring-over-time` - `activity-tab.png` was a Baseline prototype implying a
+  Runs table with separate Change/Revision columns. Real Runs table columns are
+  When/Trigger/Score/Scored/State (verdict is an inline badge next to Score,
+  not its own column). Replaced screenshot and corrected the claim. Cadence
+  (60 min minimum), lookback (1-90 days), and the Autonomous scoring toggle
+  were all re-confirmed accurate live.
+- `eval-catalog` / `custom-evals` - `catalog-door.png` / `entry-doors.png` were
+  genuine captures but from a visibly older Back Office build (old nav, "Lior
+  Nabat" login, different eval counts). Refreshed both against the current
+  build (62 evals; "32 metrics · 3 templates" entry screen) - no prose changes
+  needed, the "Create an eval" copy is verbatim identical live.
+- Docs-site version bumped to `0.34.0` per user request, to track the
+  AgentScore product version rather than the docs site's own semver.
+
+**New finding, resolved as product-should-catch-up (no doc edit)**:
+- `dimensions-and-profiles` - `profile-tab.png` is the same Baseline prototype
+  tool as the items above (numeric "Fit score 0.82," an "Evidence diversity:
+  4.2 distinct behavioural signatures" field, and a percentage weight bar with
+  an "(excluded)" tag). Confirmed live on a real scored agent: the actual
+  Profile tab has none of this - just a plain-language "Why this profile"
+  paragraph and a simple table with integer `weight 1` values, no bar chart.
+  Unlike the other Baseline-prototype cases above, **the user confirmed this
+  richer version is the intended target design**, not a docs error - so the
+  doc is left as-is (screenshot included) and this is logged purely as a
+  product gap: the real Profile tab needs to grow a numeric fit score,
+  evidence-diversity metric, and a weighted-bar dimension view to match what
+  the docs already (correctly) describe.
+
+**Resolved this pass (second round)** - docs edited, see CHANGELOG:
+- `eval-catalog` (Library/G-Eval/Hybrid sections) and `custom-evals` ("Test
+  before you trust it," "Nothing changes silently") - the "Live preview" panel
+  question above is now resolved: **user direction is docs-should-update.**
+  Checked three more surfaces looking for it (the Catalog card's detail modal,
+  the "Run" button's destination, and a real agent's own Traces tab) and it
+  exists nowhere as the inline docked score-gauge/PASS-FAIL/Agree-Disagree/
+  version-diff experience the docs depicted. Trimmed both pages to match
+  reality:
+  - `eval-catalog` - dropped the Library section's screenshot entirely (no
+    real capture exists of a Library eval's detail view - still needed, see
+    below). Replaced the G-Eval and Hybrid screenshots with real detail-view
+    captures (`studio-geval.png` now shows the "Template: Helpful, On-Point
+    Answer" rubric + threshold; `studio-hybrid.png` now shows "Security
+    Findings"'s real MAP/REDUCE breakdown) and rewrote the alt/caption text to
+    describe what's actually shown - no more "live preview scoring 0.71" or
+    "citing three grounded claims as evidence" language.
+  - `custom-evals` - "Test before you trust it" now describes the real
+    **Runner** tool (pick an eval, tenant, and agent; run against that agent's
+    already-captured traces) with a genuine screenshot, replacing the
+    fictitious inline trace-picker. "Nothing changes silently" was trimmed to
+    just the confirmed-real fact (publishing creates a new immutable version;
+    past grades stay attributed to their version) and dropped the
+    diff-against-last-version / side-by-side score comparison / "what the
+    judge saw" transparency-panel claims and screenshot, none of which exist
+    today.
+  - Deleted the now-unused `studio-library.png`, `studio-tracepicker.png`,
+    and `studio-diff-transparency.png` asset files.
+
+- `eval-catalog` - Library section now has a genuine capture too
+  ("Template: Safe, Non-Toxic Output" derived from the `toxicity` library
+  metric) after the browser session was relaunched.
+- Added an explicit callout to both `eval-catalog` and `custom-evals` stating
+  the catalog/builder/runner live in Agent Score's Back Office and are
+  maintained by the Agent Score team, not a customer self-serve surface -
+  the prior prose read as if the customer clicks through these themselves.
+
+**Still open**:
+- `custom-evals` - `guided-author.png` (the "Guided author" AI-assisted
+  drafting flow, reachable via the "Start with AI" button on the "Create an
+  eval" screen) was not run end-to-end this pass (time/API-call cost) -
+  flagged for a follow-up verification, not yet trusted either way.
+
+---
+
 ## 2026-08-18 — follow-up audit + fixes (Playwright walkthrough, multiple tenants)
 
 Continuation of the 2026-08-17 audit below. Confirmed several of that audit's

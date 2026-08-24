@@ -2,8 +2,7 @@ import { Callout, Dek, Eyebrow, Screenshot } from "../components/PageChrome";
 import { EvalBuilderFlowDiagram } from "../components/diagrams/EvalBuilderFlow";
 import entryDoors from "../assets/entry-doors.png";
 import guidedAuthor from "../assets/guided-author.png";
-import studioTracepicker from "../assets/studio-tracepicker.png";
-import studioDiff from "../assets/studio-diff-transparency.png";
+import evalRunner from "../assets/eval-runner.png";
 
 export default function CustomEvals() {
   return (
@@ -12,15 +11,24 @@ export default function CustomEvals() {
       <h1>Building a custom eval</h1>
       <Dek>
         The catalog covers most measurement needs out of the box. When it doesn't, the eval
-        builder lets you describe what you want to measure in plain language - no eval-engineering
-        project required.
+        builder describes what to measure in plain language - no eval-engineering project
+        required.
       </Dek>
+
+      <Callout kind="note" title="Built by the Agent Score team, on your behalf">
+        <p>
+          The eval builder lives in Agent Score's Back Office, not in the customer app - it isn't
+          a self-serve surface today. Tell the Agent Score team what you want measured and they'll
+          build it using the flow below; this page shows you how it works, not a tool you'll click
+          into yourself.
+        </p>
+      </Callout>
 
       <h2>Two ways to start</h2>
       <p>
         Not sure what to measure? Describe it in plain language and let Agent Score recommend an
-        approach. Already know what you want? Browse the catalog and start from a template
-        instead. Both land in the same editor, and you can switch between them at any time.
+        approach. Already know what's needed? Start from a catalog template instead. Both land in
+        the same editor, and switching between them is possible at any time.
       </p>
       <Screenshot
         src={entryDoors}
@@ -32,7 +40,7 @@ export default function CustomEvals() {
       <p>
         Say you're scoring a qTest agent that turns requirements into test cases, and you want to
         make sure it always generates <strong>100% requirements coverage</strong> - a common ask
-        for this kind of agent. You type that request into the eval builder.
+        for this kind of agent. That request gets typed into the eval builder.
       </p>
 
       <EvalBuilderFlowDiagram />
@@ -51,28 +59,22 @@ export default function CustomEvals() {
 
       <h2>Test before you trust it</h2>
       <p>
-        Every new eval can be tested live against a real trace from your own agent - no pasting
-        IDs by hand, just pick one from what's already been captured.
+        Before you lean on a new or edited eval, run it against real captured traces from a real
+        tenant and agent with the <strong>Runner</strong> - no pasting trace IDs by hand, no
+        hand-built test fixtures.
       </p>
       <Screenshot
-        src={studioTracepicker}
-        alt="A picker showing five real captured interactions with scores and pass/fail outcomes, filterable by outcome, for testing an eval against"
-        caption="Picking a real interaction to test an eval against - no trace IDs to paste."
+        src={evalRunner}
+        alt="The Runner tool with an eval pre-selected, and Tenant and Agent pickers to load that agent's captured traces before running"
+        caption="The Runner - pick an eval, a tenant, and an agent, then run against whatever traces that agent has already captured."
       />
 
-      <h2>Nothing changes silently</h2>
+      <h2>Versions are immutable</h2>
       <p>
-        Publishing a new or edited eval creates a new immutable version, with a diff against the
-        last one and a side-by-side score comparison across the same sampled interactions - so you
-        can see exactly what a wording change actually moved before you publish it. A transparency
-        panel also shows exactly what the judge received and what it replied, so a score is never
-        just a number you have to take on faith.
+        Publishing a new or edited eval creates a new immutable version - the previous one, and
+        every grade it ever produced, stays exactly as it was. Editing draft v2 of a published eval
+        never rewrites what v1 already scored.
       </p>
-      <Screenshot
-        src={studioDiff}
-        alt="A version comparison showing exactly what changed in the criteria and evaluation steps between v2 and v3 of an eval, plus a score-impact table across four sampled interactions"
-        caption="Comparing two versions of an eval - what changed in the rubric, and how scores moved on the same interactions."
-      />
 
       <Callout kind="note" title="Where a custom eval fits">
         <p>

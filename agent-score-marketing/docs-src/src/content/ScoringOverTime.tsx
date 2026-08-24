@@ -55,8 +55,8 @@ export default function ScoringOverTime() {
       </p>
       <Screenshot
         src={activityTab}
-        alt="An Activity timeline for an agent showing a completed run, a profile automatically re-fit, past runs recomputed under the new profile, the first confident score being reached, a schedule change from every 24 hours to every 6 hours, and a failed run - followed by a table of individual runs with score, verdict, and change"
-        caption='A real Activity tab - including the moment this agent’s profile was automatically re-fit and its past runs recomputed under it.'
+        alt="An Activity tab's What happened event log - the first confident score being reached and a run completing - followed by a Runs table listing when each run fired, its trigger, score, verdict, how many interactions were scored, and its state"
+        caption="A real Activity tab - every run and what triggered it, in one timeline."
       />
 
       <Callout kind="note" title="More data, not different data">

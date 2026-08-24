@@ -1,6 +1,8 @@
-import { Callout, CodeBlock, Dek, Eyebrow, Screenshot } from "../components/PageChrome";
+import { Callout, CodeBlock, Dek, Eyebrow, Screenshot, Step, StepList } from "../components/PageChrome";
 import { IngestionFlowDiagram } from "../components/diagrams/IngestionFlow";
 import integrationsTab from "../assets/integrations-tab.png";
+import ingestionStreamConfig from "../assets/ingestion-stream-config.png";
+import betterstackServiceName from "../assets/betterstack-service-name.png";
 
 export default function ConnectYourAgent() {
   return (
@@ -42,9 +44,50 @@ export default function ConnectYourAgent() {
 
       <h2>Two ways in</h2>
       <p>
-        <strong>Internal Tricentis agents</strong> are ingested automatically - there is nothing to
-        configure. They are named and categorized the moment their first traces arrive.
+        <strong>Internal Tricentis agents</strong> are ingested through BetterStack rather than an
+        ingest key, and setup is currently a manual, per-service process rather than a one-time
+        connection. Ingestion also splits by region: in US-East, a collector forwards traces to
+        Agent Score directly as they happen; everywhere else, Agent Score pulls from BetterStack's
+        API on a schedule instead of receiving a live stream.
       </p>
+      <StepList>
+        <Step title="Identify the service name">
+          Find the exact service/container name the agent's deployment reports in its traces
+          (e.g. <code>relic-service</code>, <code>autonomous-service</code>) - this is usually the
+          deployment name, not the agent's own name. Look it up in BetterStack, or ask the
+          engineers who built the service what they send as <code>service.name</code> rather than
+          guessing.
+        </Step>
+        <Step title="Register the service name">
+          Add it in the Back Office App under Ingestion &gt; Stream &gt; Configuration &gt;
+          Services - OTel service.name, then select Save configuration, so the pull job knows to
+          look for it in BetterStack.
+        </Step>
+        <Step title="Confirm it's being pulled">
+          Give it a pull cycle to run, then check that traces from that service are arriving.
+        </Step>
+        <Step title="Check the resolved agent(s)">
+          Individual agents are derived from the agent-run signal nested inside the service's
+          traces. Confirm the names that show up match what you expect - a service with multiple
+          distinct agent runs should resolve to one agent each.
+        </Step>
+      </StepList>
+      <Screenshot
+        src={betterstackServiceName}
+        alt="A BetterStack trace's Attributes tab, showing the raw span JSON with the service.name field highlighted"
+        caption="Step 1 - the service.name attribute in a BetterStack trace, the exact string to register in step 2."
+      />
+      <Screenshot
+        src={ingestionStreamConfig}
+        alt="The Back Office App's Ingestion Control & Monitoring page, Stream tab, showing the Configuration section with a Sources - Better Stack env:region tag list, a Services - OTel service.name tag list, poll interval, read lag, and a Save configuration button"
+        caption="Step 2 - Ingestion > Stream > Configuration, where that service name gets registered so the pull job knows to look for it."
+      />
+      <Callout kind="note" title="If nothing resolves, or the wrong thing resolves">
+        <p>
+          The service isn't sending an identifiable agent-name signal Agent Score recognizes. Go
+          back to that service's engineers, confirm exactly what name/field they emit, and adjust.
+        </p>
+      </Callout>
       <p>
         <strong>External agents</strong> connect through an OpenTelemetry export - the same
         telemetry standard almost every modern agent framework already speaks. There's no new SDK

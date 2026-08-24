@@ -35,8 +35,8 @@ export default function EvalCatalog() {
       </p>
       <Screenshot
         src={studioLibrary}
-        alt="A Library eval called Answer Relevancy, showing a pre-built metric with a pass threshold and a live preview scoring 0.71 as a pass"
-        caption="A Library eval - a pre-built metric, a threshold, nothing to write."
+        alt="A Library eval called Template: Safe, Non-Toxic Output, derived from the toxicity library metric, showing its rubric and a pass threshold at 0.50"
+        caption="A Library eval's detail view - a pre-built metric and a threshold, nothing to write."
       />
 
       <h3>G-Eval</h3>
@@ -47,8 +47,8 @@ export default function EvalCatalog() {
       </p>
       <Screenshot
         src={studioGeval}
-        alt="A G-Eval called Faithfulness (strict), showing a plain-English rubric, evaluation steps, and a live preview citing three grounded claims as evidence"
-        caption='A G-Eval - a plain-English rubric graded by the judge, with the evidence it based its score on.'
+        alt="A G-Eval called Template: Helpful, On-Point Answer, showing its plain-English rubric, a Strict mode toggle, and the pass threshold at 0.70"
+        caption="A G-Eval's detail view - the plain-English rubric the judge grades against, and where its pass threshold is set."
       />
 
       <h3>Hybrid</h3>
@@ -58,18 +58,20 @@ export default function EvalCatalog() {
       </p>
       <Screenshot
         src={studioHybrid}
-        alt="A Hybrid eval called Security findings, showing an LLM extraction phase feeding a code-computed severity gate that failed on a high-severity finding"
-        caption="A Hybrid eval - the judge extracts findings, then code computes the final verdict."
+        alt="A Hybrid eval called Security Findings, showing a MAP (LLM) phase emitting severity-tagged claims that feed a REDUCE (code) phase computing a severity-weighted score, with a pass threshold at 0.50"
+        caption="A Hybrid eval's detail view - an LLM MAP phase extracts claims, then a code REDUCE phase computes the final score."
       />
 
       <h2>Browsing the catalog</h2>
       <p>
         Every eval - library metric, custom G-Eval, or hybrid - lives in one searchable catalog,
-        organized by family so you can find the right one in seconds.
+        organized by family. This catalog lives in Agent Score's Back Office, maintained by the
+        Agent Score team rather than browsed self-serve in the customer app - the families table
+        below is the customer-facing summary of what's in it.
       </p>
       <Screenshot
         src={catalogDoor}
-        alt="The eval catalog, showing a grid of templates like Faithfulness check, Answer relevancy, Tool-call accuracy, and Safety gate, filterable by category"
+        alt="The eval catalog, showing 62 evals as a grid of templates and metrics like Template: Tool Success Rate, Template: Safe Non-Toxic Output, Failure Attribution, and Faithfulness (EvalClaw), filterable by kind, status, and dimension"
         caption="The catalog view - browse by category, or search templates and metrics directly."
       />
 
