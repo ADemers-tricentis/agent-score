@@ -1,34 +1,70 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* Aura dark tokens - mirrored from agent-score-video/src/auraTheme.ts */
-  --bg-base: hsl(240, 10%, 4%);
-  --bg-raised: hsl(240, 6%, 10%);
-  --bg-overlay: hsl(240, 3.7%, 15.9%);
-  --divider: hsla(240, 10%, 24%, 1);
-  --divider-soft: hsla(240, 10%, 24%, 0.5);
-  --text-primary: hsl(0, 0%, 100%);
-  --text-secondary: hsla(240, 5%, 74%, 1);
-  --text-muted: hsla(240, 5%, 52%, 1);
-  --primary: hsla(210, 71%, 68%, 1);
-  --primary-light: hsla(210, 90%, 80%, 1);
-  --primary-dim: hsla(210, 60%, 68%, 0.12);
-  --warning: hsla(26, 100%, 61%, 1);
-  --warning-dim: hsla(26, 100%, 61%, 0.12);
-  --success: hsla(150, 55%, 55%, 1);
-  --success-dim: hsla(150, 55%, 55%, 0.12);
-  --danger: hsla(0, 72%, 63%, 1);
-  --danger-dim: hsla(0, 72%, 63%, 0.12);
-
+  /* Theme-independent tokens */
+  --radius-none: 0px;
   --radius-xs: 4px;
   --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-circular: 9999px;
 
   --sidebar-w: 272px;
   --content-max-w: 720px;
   --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --mono: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+}
+
+/* Aura light tokens (default) - sourced from Tricentis-UX/aura-ui
+   src/constants/themeOptions.tsx (colorSchemes.light) */
+:root,
+:root[data-theme="light"] {
+  --bg-base: hsla(240, 5%, 96%, 1);
+  --bg-raised: hsla(0, 0%, 100%, 1);
+  --bg-overlay: hsla(0, 0%, 100%, 1);
+  --divider: hsla(240, 5%, 84%, 1);
+  --divider-soft: hsla(240, 5%, 84%, 0.5);
+  --text-primary: hsla(0, 0%, 0%, 1);
+  --text-secondary: hsla(240, 4%, 46%, 1);
+  --text-muted: hsla(240, 5%, 65%, 1);
+  --primary: hsla(210, 60%, 47%, 1);
+  --primary-light: hsla(210, 70%, 39%, 1);
+  --primary-dim: hsla(210, 60%, 47%, 0.12);
+  --warning: hsla(23, 80%, 45%, 1);
+  --warning-dim: hsla(23, 80%, 45%, 0.12);
+  --success: hsla(122, 50%, 35%, 1);
+  --success-dim: hsla(122, 50%, 35%, 0.12);
+  --danger: hsla(0, 65%, 51%, 1);
+  --danger-dim: hsla(0, 65%, 51%, 0.12);
+  /* Light mode has no distinct surface tiers - shadows provide depth instead */
+  --shadow-raised: 0 1px 2px hsla(240, 10%, 4%, 0.06), 0 1px 8px hsla(240, 10%, 4%, 0.06);
+  --bg-topbar: hsla(240, 5%, 96%, 0.85);
+  --logo-mark-color: hsla(0, 0%, 100%, 1);
+}
+
+/* Aura dark tokens - sourced from Tricentis-UX/aura-ui
+   src/constants/themeOptions.tsx (colorSchemes.dark) */
+:root[data-theme="dark"] {
+  --bg-base: hsl(240, 10%, 4%);
+  --bg-raised: hsl(240, 6%, 10%);
+  --bg-overlay: hsl(240, 3.7%, 15.9%);
+  --divider: hsla(240, 5%, 34%, 1);
+  --divider-soft: hsla(240, 5%, 34%, 0.5);
+  --text-primary: hsl(0, 0%, 100%);
+  --text-secondary: hsla(240, 5%, 84%, 1);
+  --text-muted: hsla(240, 4%, 46%, 1);
+  --primary: hsla(210, 71%, 68%, 1);
+  --primary-light: hsla(210, 90%, 80%, 1);
+  --primary-dim: hsla(210, 71%, 68%, 0.12);
+  --warning: hsla(26, 100%, 61%, 1);
+  --warning-dim: hsla(26, 100%, 61%, 0.12);
+  --success: hsla(122, 38%, 58%, 1);
+  --success-dim: hsla(122, 38%, 58%, 0.12);
+  --danger: hsla(0, 80%, 60%, 1);
+  --danger-dim: hsla(0, 80%, 60%, 0.12);
+  --shadow-raised: none;
+  --bg-topbar: hsla(240, 10%, 4%, 0.85);
+  --logo-mark-color: hsl(240, 10%, 4%);
 }
 
 html { font-size: 16px; }
@@ -39,6 +75,7 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 a { color: var(--primary); text-decoration: none; }
@@ -61,7 +98,7 @@ a:hover { color: var(--primary-light); }
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  background: hsla(240, 10%, 4%, 0.85);
+  background: var(--bg-topbar);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--divider-soft);
   z-index: 20;
@@ -86,7 +123,7 @@ a:hover { color: var(--primary-light); }
   justify-content: center;
   font-size: 12px;
   font-weight: 800;
-  color: hsl(240, 10%, 4%);
+  color: var(--logo-mark-color);
 }
 
 .topbar-docs-tag {
@@ -139,6 +176,25 @@ a:hover { color: var(--primary-light); }
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+.theme-toggle {
+  display: flex;
+  background: none;
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.theme-toggle:hover {
+  color: var(--text-primary);
+  border-color: var(--primary);
 }
 
 .sidebar {
@@ -233,52 +289,74 @@ a:hover { color: var(--primary-light); }
 
 /* ---------- Typography ---------- */
 
+/* Heading sizes below are Aura's literal MUI typography variants (h1-h6),
+   sourced from Tricentis-UX/aura-ui src/constants/themeOptions.tsx */
+
 .eyebrow {
-  font-size: 0.72rem;
-  font-weight: 700;
+  /* Aura overline */
+  font-size: 0.6875rem;
+  font-weight: 400;
+  line-height: 1rem;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.09375rem;
   color: var(--primary-light);
   margin-bottom: 12px;
 }
 
 .content h1 {
-  font-size: 2.1rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  /* Aura h1 */
+  font-size: 1.75rem;
+  font-weight: 300;
+  line-height: 2.25rem;
+  letter-spacing: 0.03125rem;
   margin-bottom: 14px;
 }
 
 .content .dek {
-  font-size: 1.08rem;
+  /* Aura h5, used as the lead paragraph under h1 */
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+  letter-spacing: 0.025rem;
   color: var(--text-secondary);
-  line-height: 1.65;
   margin-bottom: 40px;
   max-width: 620px;
 }
 
 .content h2 {
-  font-size: 1.4rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  /* Aura h2 */
+  font-size: 1.5625rem;
+  font-weight: 300;
+  line-height: 2rem;
+  letter-spacing: 0.025rem;
   margin: 44px 0 14px;
 }
 
 .content h2:first-of-type { margin-top: 0; }
 
 .content h3 {
-  font-size: 1.1rem;
-  font-weight: 700;
+  /* Aura h3 */
+  font-size: 1.375rem;
+  font-weight: 400;
+  line-height: 1.75rem;
+  letter-spacing: 0.07125rem;
   margin: 28px 0 10px;
 }
 
 .content p {
+  /* Aura body1 */
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  letter-spacing: 0.03125rem;
   color: var(--text-secondary);
   margin-bottom: 14px;
   max-width: 640px;
 }
 
 .content ul, .content ol {
+  /* Aura body1, matched to .content p */
+  font-size: 0.875rem;
+  letter-spacing: 0.03125rem;
   color: var(--text-secondary);
   padding-left: 1.3rem;
   margin-bottom: 16px;
@@ -364,6 +442,7 @@ a:hover { color: var(--primary-light); }
   border: 1px solid var(--divider);
   border-radius: var(--radius-md);
   padding: 18px 20px;
+  box-shadow: var(--shadow-raised);
   transition: border-color 0.15s ease, transform 0.15s ease;
 }
 
@@ -391,6 +470,7 @@ a:hover { color: var(--primary-light); }
   margin: 20px 0;
   border: 1px solid var(--divider);
   background: var(--bg-raised);
+  box-shadow: var(--shadow-raised);
   max-width: 640px;
 }
 
@@ -463,7 +543,7 @@ a:hover { color: var(--primary-light); }
   text-transform: uppercase;
   letter-spacing: 0.04em;
   padding: 3px 9px;
-  border-radius: 20px;
+  border-radius: var(--radius-circular);
 }
 
 .badge.ship { background: var(--success-dim); color: var(--success); }
@@ -620,6 +700,7 @@ table.doc-table td strong { color: var(--text-primary); }
   border: 1px solid var(--divider);
   border-radius: var(--radius-md);
   padding: 20px;
+  box-shadow: var(--shadow-raised);
 }
 
 .mock-panel + .mock-panel { margin-top: 14px; }
@@ -711,7 +792,6 @@ table.doc-table td strong { color: var(--text-primary); }
 
 @media (max-width: 600px) {
   .content { padding: 40px 20px 80px; }
-  .content h1 { font-size: 1.7rem; }
   .spectrum-points { flex-direction: column; gap: 20px; }
   .spectrum-point-dot { display: none; }
 }
