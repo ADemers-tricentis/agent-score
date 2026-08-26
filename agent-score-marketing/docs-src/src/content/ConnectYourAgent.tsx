@@ -21,6 +21,13 @@ export default function ConnectYourAgent() {
         signup form: someone on our side provisions your workspace. Once it exists, everything from
         here on is yours to drive.
       </p>
+      <Callout kind="note" title="Onboarding through AI Workspace">
+        <p>
+          If your agent runs in AI Workspace, there's nothing to request - your tenant is
+          created in Agent Score automatically, the moment that agent's traces are first
+          ingested.
+        </p>
+      </Callout>
 
       <h2>Ingest keys are yours to manage</h2>
       <p>
@@ -41,7 +48,14 @@ export default function ConnectYourAgent() {
         </p>
       </Callout>
 
-      <h2>Two ways in</h2>
+      <h2>Three ways in</h2>
+      <p>
+        <strong>Agents built in AI Workspace</strong> need no setup at all - no ingest key, no
+        registration step. Traces start flowing the moment the agent runs, your tenant is created
+        automatically on first ingestion (see above), and session identity is captured
+        automatically too, since the OTel stack underlying AI Workspace agents generates a session
+        ID per trace on its own.
+      </p>
       <p>
         <strong>Internal Tricentis agents</strong> are ingested through BetterStack rather than an
         ingest key, and setup is currently a manual, per-service process rather than a one-time
