@@ -43,7 +43,7 @@ export default function AgentCard() {
       </p>
       <Screenshot
         src={agentCardCustomer}
-        alt="A real Agent Card for chatbot-agent-service, showing a purpose labeled as synthesized by the judge model, behavioral patterns, success criteria, failure modes, and an observed tools table with call counts and success rates"
+        alt="A real Agent Card for testcase.generate, showing a purpose labeled as synthesized by the judge model, behavioral patterns, success criteria, failure modes, and an observed tools table with call counts and success rates"
         caption='An actual Agent Card from the Agent Score app. Purpose is labeled "Synthesized by the judge model - a draft, not a verified declaration," and tool descriptions are marked inferred.'
       />
 

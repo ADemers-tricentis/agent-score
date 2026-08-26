@@ -52,6 +52,13 @@ export default function DimensionsAndProfiles() {
         for you. See how that decision gets made on{" "}
         <a href="#/agent-card">the Agent Card page</a>.
       </p>
+      <p>
+        Brand-new agents start on <strong>General Starter</strong> - a simple, four-dimension
+        profile (Correctness, Relevance, Safety, Quality / Efficiency) Agent Score falls back to
+        until your agent has produced enough varied behavior to justify a more specific profile.
+        You'll see this any time an agent's evidence diversity hasn't yet crossed the threshold for
+        a confident match - it's a real, functioning profile, not a placeholder.
+      </p>
 
       <Screenshot
         src={profileTab}

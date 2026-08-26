@@ -19,7 +19,7 @@ const terms: { term: string; def: string }[] = [
   },
   {
     term: "Judge model",
-    def: "The LLM that reads an interaction and produces an eval's score and reason. You choose which provider and model to use.",
+    def: "The LLM that reads an interaction and produces an eval's score and reason. Agent Score picks the provider on your behalf today - not yet a self-serve choice.",
   },
   {
     term: "Dimension",
