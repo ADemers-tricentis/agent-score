@@ -9,14 +9,16 @@ description: >-
   (via a Slack draft). Gathers update items from what the user pastes into
   chat plus a scan of merged PRs on the Tricentis-AI/agent-score GitHub repo,
   prepends a new dated entry to docs/updates/AgentScore Updates.md, rebuilds
-  the updates page, and drafts an internal Slack summary.
+  the updates page, mirrors the same entry onto the "Testing AI Updates"
+  Confluence page, and drafts an internal Slack summary.
 ---
 
 # AgentScore Updates
 
 Keep customers/prospects and the internal team both aware of what shipped.
 One markdown file is the source of truth; this skill turns it into a public
-updates page and an internal Slack draft in the same pass.
+updates page, a mirrored Confluence page, and an internal Slack draft in the
+same pass.
 
 ## What you are working with
 
@@ -39,6 +41,14 @@ updates page and an internal Slack draft in the same pass.
 - **Product GitHub source** (a different repo from this one):
   `https://github.com/Tricentis-AI/agent-score`. Only merged PRs count, and
   only the customer-facing ones.
+- **Slack draft output:** `agent-score-updates-slack-draft.md` at the repo
+  root - gitignored, overwritten every run (never appended, never dated).
+- **Confluence mirror:** the page "Testing AI Updates" at
+  `https://tricentis.atlassian.net/wiki/x/BAAR2Q` (tiny-link id `BAAR2Q`,
+  page id `3641769988`, in Andrew Demers' personal Confluence space) is a
+  full HTML mirror of the *entire* `AgentScore Updates.md` file - not just
+  the newest entry. It has no auto-sync; each run pushes it by hand with the
+  Atlassian MCP tools (`cloudId: "tricentis.atlassian.net"`).
 
 ## Workflow
 
@@ -131,10 +141,38 @@ Once confirmed:
 - `git push`. Confirm the push succeeded and tell the user the redeploy will
   follow via the demers-demos sync.
 
-### 7. Draft the internal Slack message
+### 7. Sync the Confluence mirror
 
-Output as **plain text in chat only** - there is no Slack integration in this
-repo to post it automatically.
+Keep the Confluence copy word-for-word in step with the markdown, since it
+has no auto-sync:
+
+1. `getConfluencePage` (`cloudId: "tricentis.atlassian.net"`,
+   `pageId: "BAAR2Q"`, `contentFormat: "html"`) to pull the current body.
+2. Convert only the **new** markdown entry from step 4 into HTML that matches
+   the page's existing conventions exactly: `<h2>` for the date heading,
+   `<h3>` for each headline, a bare `<p>` for any intro sentence, and bullets
+   as `<ul><li><p>...</p></li></ul>` (every `<li>` wraps its text in `<p>`,
+   matching the fetched body - don't drop the inner `<p>`).
+3. Prepend that HTML in front of the body `getConfluencePage` returned - the
+   page keeps every past entry, so don't trim or rewrite older ones.
+4. `updateConfluencePage` with the same `cloudId`/`pageId`, `contentFormat:
+   "html"`, the assembled body, and a `versionMessage` naming the entry
+   (e.g. `Add <Month Day, Year> update`).
+
+This is a live shared Confluence page, so treat it like the git push it sits
+next to: it shares the single review-gate approval from step 6 (don't ask
+again), but if the user declined to push there, skip this step too rather
+than publishing to Confluence alone.
+
+### 8. Draft the internal Slack message
+
+There is no Slack integration in this repo to post it automatically, so write
+the draft to `agent-score-updates-slack-draft.md` at the repo root
+(`/Users/a.demers/dev/Tricentis/AgentScore/agent-score-updates-slack-draft.md`).
+**Overwrite the file each run - same filename every time, no appending, no
+dated variants.** It's gitignored, so this is a local scratch artifact, not a
+committed one. Also show the same content in chat so the user doesn't have to
+open the file.
 
 - Audience: internal team channel, informal tone - unlike the public copy,
   it's fine to reference internal work directly (which system, which team).
@@ -145,5 +183,6 @@ repo to post it automatically.
 
 Finish with a short report: the new entry's headline(s), any items promoted
 out of Coming next, whether the build passed, and (if pushed) confirmation of
-the push plus the Slack draft. If you stopped early (no update items, build
-failure, or the user declined to push), say exactly where and why.
+the push, the Confluence page version bump, plus the Slack draft. If you
+stopped early (no update items, build failure, or the user declined to
+push), say exactly where and why.
