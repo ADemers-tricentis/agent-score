@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 48 form submissions found (as of 2026-08-24), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Two submissions (Brad Purcell, Michal Hrncirik) came from `@tricentis.com` addresses with the company field blank — internal test/QA submissions, not external prospects — and are excluded from the tracker below. Entries are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini, McKesson, Merito Solutions) — 39 distinct entries as a result. Combined entries list each submitter's Date/Name/Contact as its own three-line group.
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 49 form submissions found (as of 2026-08-25), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Four submissions (Brad Purcell, Michal Hrncirik, Maria Argulla, Caitlin Bowers) came from `@tricentis.com` addresses — internal test/QA submissions, not external prospects — and are excluded from the tracker below. Entries are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini, McKesson, Merito Solutions) — 40 distinct entries as a result. Combined entries list each submitter's Date/Name/Contact as its own three-line group.
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -10,12 +10,13 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos scheduled | Active betas |
 |---|---|---|---|
-| 39 | 0 | 0 | 0 |
+| 40 | 0 | 0 | 0 |
 
 Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
 
 | Company | Contact | Status |
 |---|---|---|
+| Charter Communications Operating, LLC | Sarvesh Peddi | Interested |
 | Artizent (form blank, domain-resolved) | Alan Mayfus | Interested |
 | Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj | Interested |
 | SAP Labs India (IN) | SaiDeepak Ayyagari | Interested |
@@ -57,6 +58,19 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Bayone Solutions | Mathi Natarajan | Email sent |
 
 *(Status values: Interested → Email sent → Replied → Demo scheduled → Active beta.)*
+
+---
+
+### Charter Communications Operating, LLC
+Date: 2026-08-24 16:26  
+Name: Sarvesh Peddi  
+Contact: C-Sarvesh.Peddi@spectrum.com  
+
+what they do: Operates as Spectrum — one of the largest US cable/broadband/telecom providers (~32M+ customers, ~$55B revenue, HQ Stamford, CT).
+
+likely use case: given Charter's active investment in production customer-service AI, most plausibly evaluating Agent Score to validate agent output quality/consistency before or during wider rollout — same profile as Cox Automotive and Home Depot above.
+
+known agent tooling: AI-powered call-summarization and knowledge-search tools already live for frontline call-center agents ([Charter Newsroom](https://corporate.charter.com/newsroom/spectrum-agents-use-ai-tools-to-strengthen-customer-connection)); Spectrum Business + RingCentral partnership deploying RingCX, an AI-first omnichannel contact center with "AI Conversation Expert," nationwide for Spectrum Business by late March 2026 ([Charter Newsroom](https://corporate.charter.com/newsroom/spectrum-business-and-ring-central-expand-partnership)); broader strategic collaboration with AWS on generative/agentic AI across software development and operations, including GitLab Duo with Amazon Q Developer ([PR Newswire](https://www.prnewswire.com/news-releases/charter-communications-announces-strategic-collaboration-with-aws-on-generative-ai-to-transform-software-development-and-operations-302618763.html)).
 
 ---
 

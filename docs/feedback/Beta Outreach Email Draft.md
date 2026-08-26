@@ -1,8 +1,3 @@
-# AgentScore Beta Outreach - Email Draft
-
-Template for responding to the 37 "AI Agent Testing and Evaluation" submissions in [External Interest.md](External%20Interest.md). Modeled on Christopher Colosimo's Aida beta-welcome email, adapted for AgentScore's cloud-hosted access model. Merge fields in `{{ }}` - swap in per recipient.
-
----
 
 **Subject:** Welcome to the AgentScore Beta - let's get you started
 
