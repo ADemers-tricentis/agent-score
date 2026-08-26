@@ -1,3 +1,19 @@
+## August 26, 2026 Update
+
+### More of your traces make it to a score
+We closed two gaps between "you sent a trace" and "you got a score for it."
+- Fixed an ingestion gap that was silently dropping roughly a third of routed runs before they ever reached the trace store - missing traces should now show up
+- If our scoring provider has a brief outage, we no longer record a wrong guess as your permanent score - affected runs are retried instead of silently written wrong
+
+### Faster access to your traces, and answers built into the app
+- You can now download an agent's raw traces directly from the Traces tab
+- Product docs are no longer a separate site - there's now a Docs tab built into the app, so you don't have to leave the product to find an answer
+- Fixed a bug that could block a brand-new account from connecting its very first agent
+
+### Coming next: scoring by session, and profiles built for your agent
+- Session-based scoring - so a score reflects a whole interaction, not a fragment of one
+- Dynamic scoring profiles - a profile built for what your specific agent needs to get right, instead of the closest fit among nine fixed ones
+
 ## August 24, 2026 Update
 
 ### Faster, cheaper scoring on a new foundation
@@ -5,11 +21,6 @@ We've moved off Langfuse and onto our own trace storage (Postgres + S3), purpose
 - Scoring runs faster and uses meaningfully fewer tokens per run
 - One less third-party system in the path between your traces and your score
 - Historical traces and scores from before the cutover didn't carry over - we're rebuilding history from here forward on the new foundation. If there's a specific past run you need, reach out and we'll see what's recoverable.
-
-### Coming next: scoring by session, and profiles built for your agent
-With the new foundation in place, the next two priorities are the ones testers have told us matter most:
-- Session-based scoring - so a score reflects a whole interaction, not a fragment of one
-- Dynamic scoring profiles - a profile built for what your specific agent needs to get right, instead of the closest fit among nine fixed ones
 
 ## August 18, 2026 Update
 
