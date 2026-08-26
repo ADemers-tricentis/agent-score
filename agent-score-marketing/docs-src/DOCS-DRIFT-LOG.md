@@ -12,6 +12,91 @@ Each audit appends a dated section. Newest first.
 
 ---
 
+## 2026-08-26 — GitHub merge scan + production walk (Playwright, multi-agent)
+
+First run using the new step-3 GitHub merge scan (added to the `agent-score-docs-sync`
+skill this session). Scanned 92 PRs merged on `Tricentis-AI/agent-score` since
+2026-08-12 (no `.last-github-sync` marker existed yet, so used the 14-day default).
+Kept 3 as customer-facing/onboarding-relevant, dropped the other 89 as internal
+infra/back-office/scoring-pipeline work (the Langfuse → Postgres + object-store
+migration, skills tooling, ops/alerting, etc.).
+
+**⚠️ Structural finding, not a per-page discrepancy - flagged prominently per user
+direction:**
+- **PR #407** (`feat(customer): add a Docs section to the customer app`, merged
+  2026-08-26) ports all 10 guide pages and 7 diagrams from **this project**
+  (`agent-score-marketing/docs-src`) directly into the `agent-score` repo's customer
+  app frontend as hand-edited source, rendered at a new `/docs` nav-rail item. The
+  PR description calls `docs-src` **"the retired ... project"** and the port
+  **"a one-time port, not an ongoing sync."** Confirmed live in production today:
+  logging in and opening the book icon (the new 4th nav-rail item) shows `/docs`
+  with the identical nav structure and Welcome-page copy this project currently
+  has. **This means the docs this skill audits and rebuilds are no longer
+  guaranteed to be what real customers see in-product** - the source of truth for
+  onboarding docs may now be inside the `agent-score` repo, which this skill has
+  no access to edit. User direction this run: keep auditing/editing `docs-src` as
+  before, but surface this for a separate decision (retire `docs-src`, redirect its
+  published site, or repoint this skill at `agent-score`).
+
+**New findings this pass, pending review-gate approval:**
+- `connect-your-agent` - undocumented **"Connect an agent" dialog**: the Agents
+  page's "+ Add agent" button opens a guided 4-step modal (pick the tenant → see
+  its ingest key → exporter config with a copy-button env-var block → "what
+  happens next") that covers most of what the doc currently only describes via a
+  separate trip to the Integrations page plus manual OTel instructions. Also
+  confirms PR #393's fix is live: the tenant picker now includes zero-agent
+  tenants (`andrew-new-tenant` was selectable and showed its key), where before
+  that PR the picker excluded exactly the tenant a first-time user needs.
+  Direction: **docs-should-update**. Severity: high (a real, prominent, live entry
+  point is completely undocumented).
+- `dimensions-and-profiles` - **advances open item #7** (2026-08-17, still open as
+  of 2026-08-24): the "ships seven profiles" claim is stale. Two different live
+  agents (`jira epic poller`, `overlap-cap3-test_delay_agent (2)`) are scored
+  against a profile named **"General Starter v1 (Auto)"** - not one of the seven
+  named profiles, and not the "Default v1" name seen on 2026-08-17 (renamed since,
+  or a second undocumented fallback). Assigned when "evidence diversity 1.000
+  still below the 3.0 threshold." Carries exactly 4 dimensions (Correctness,
+  Relevance, Safety, Quality Efficiency), weight 1 each, 1 eval each - much
+  simpler than the doc's description of a full weighted profile. This is likely
+  the *first* profile most newly-connected agents actually get. Direction:
+  **docs-should-update**. Severity: high (affects most fresh agents, per both
+  examples seen).
+- Screenshots showing the customer-app sidebar are stale by one icon across every
+  page that has one (`welcome`, `connect-your-agent`, `dimensions-and-profiles`,
+  `scorecard`, `scoring-over-time`, `agent-card`) - production's nav rail now has
+  4 icons (Agents / Integrations / Settings / the new Docs book icon from PR
+  #407), confirmed directly against `integrations-tab.png`. Direction:
+  **docs-should-update**. Severity: low (cosmetic, but touches 6 images).
+- `scoring-engine` vs `glossary` - **docs-internal inconsistency**, found reading
+  step 2, not a prod comparison: Glossary's "Judge model" entry says "You choose
+  which provider and model to use," directly contradicting `scoring-engine`'s own
+  (already-confirmed-accurate per 2026-08-18 item #10) statement that provider
+  choice "isn't yet a self-serve setting in the app." Direction:
+  **docs-should-update** (reword Glossary to match `scoring-engine`). Severity:
+  medium.
+
+**Noted, not actioned (pending-verification):**
+- PR #411 (`feat(llm-catalog): LLM Inference catalog — rename, cache pricing,
+  per-task routing`) renames the back-office judge-model concept and adds
+  per-task routing, but the rename is back-office-only (`/admin/judges` →
+  `/admin/llm-inferences`) - nothing customer-facing changed yet. Worth
+  re-checking on a future pass in case it's a precursor to customer-facing
+  judge-model choice, which would finally resolve the glossary/scoring-engine
+  contradiction above in the other direction.
+- PR #347 (self-service API key management) was flagged by the merge scan but
+  already matches what `connect-your-agent` documents today - good corroboration,
+  no action needed.
+
+**Confirmed accurate this pass (no change needed):** the Integrations page
+(tenant selector, API keys table, New key / Rotate / Revoke), the Score tab
+(composite score, verdict, confidence band, scored/skipped/failed/retired
+counts), the Agent Card tab ("Synthesized by the judge model" wording, behavioral
+patterns/success criteria/failure modes), the Profile tab's Autonomous scoring /
+cadence (60 min minimum) / lookback (1-90 days) controls, the Activity tab's
+run timeline, and `/settings` as the Account page.
+
+---
+
 ## 2026-08-24 — internal-agent onboarding + screenshot refresh (Back Office + customer app, Playwright)
 
 Triggered by updating `connect-your-agent`'s internal-agent-ingestion steps against

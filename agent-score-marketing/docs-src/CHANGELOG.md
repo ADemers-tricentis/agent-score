@@ -3,7 +3,24 @@
 All notable changes to the AgentScore docs site are recorded here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
-## [Unreleased] - 2026-08-24
+## [0.35.0] - 2026-08-26
+
+### Added
+- Dimensions & Profiles: documented **General Starter**, the fallback profile
+  brand-new agents are scored against before enough behavioral evidence
+  exists for a specific profile match - previously undocumented despite being
+  the first profile most freshly-connected agents actually get.
+
+### Fixed
+- Glossary: corrected the "Judge model" definition, which claimed provider
+  choice is self-serve - it contradicted Scoring Engine Settings' own
+  (already-accurate) statement that it isn't yet.
+- Welcome, Connect Your Agent, Reading Your Scorecard, Scoring Over Time, Meet
+  Your Agent Card: refreshed five screenshots that were stale by one sidebar
+  icon - the customer app added a fourth nav-rail item (Docs) since these were
+  last captured.
+
+## [0.34.0] - 2026-08-24
 
 Note: the sidebar version badge jumps from 0.5.0 to 0.34.0 in this release -
 by request, it now tracks the AgentScore product's own alpha version rather
@@ -50,7 +67,7 @@ than the docs site's independent semver.
 - Building a Custom Eval: the inline trace-picker and version-diff/
   transparency-panel screenshots and their accompanying claims (see Changed).
 
-## [Unreleased] - 2026-08-18
+## [0.5.0] - 2026-08-18
 
 ### Added
 - Connect Your Agent: documented self-serve ingest key management (create,
