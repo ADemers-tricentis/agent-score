@@ -12,6 +12,74 @@ Each audit appends a dated section. Newest first.
 
 ---
 
+## 2026-08-27 — GitHub merge scan + production walk, using AgentScore Updates.md
+
+Cross-checked `docs/updates/AgentScore Updates.md`'s Aug 26/27 entries against a
+GitHub merge scan (24 PRs merged on `Tricentis-AI/agent-score` since the
+`.last-github-sync` marker of 2026-08-26T15:00:06Z) and a fresh Playwright walk of
+production, logged in as a superadmin.
+
+**Merge scan:** of 24 PRs, the customer-facing/billing-visible ones (LLM catalog
+pricing + the OpenAI cached-token double-billing fix, the new internal usage/spend
+report, the trace-assembly rebuild, the bad-span-type fix) were all already written
+up in `AgentScore Updates.md`'s Aug 27 entry - none require a `docs-src` change,
+since none of that work touches anything the onboarding docs describe (it's
+internal admin/billing tooling). The rest (DB migration fix, ingest concurrency,
+infra vCPU bump, `agent-tools` bounded-tool-surface groundwork with no transport
+yet, ECS diagnostics) are internal-only. No `docs-src`-relevant PRs found beyond
+PR #407 (already logged below, still open).
+
+**Resolved this pass** (docs edited, see CHANGELOG 0.36.0):
+- `scorecard`, `glossary` - verdict names were stale: docs said Ship / Ship (with
+  note) / Review required / Block recommended / Block. Live Score tab badges and
+  the Activity/Runs table now show Ship / **Ship with note** / **Needs work** /
+  **Don't ship (recommended)** / Block. Confirmed live across three different
+  agents and cross-checked against the Activity tab's Runs table for the same
+  scores. Direction: **docs-should-update**. Severity: high.
+  - Note: **"Needs work" is not a new term** - the 2026-08-24 entry below records
+    it being *removed* from a screenshot as stale prototype wording ("61/100,
+    Needs work, 24 below") believed not to reflect the real product. It turns out
+    that wording shipped for real between then and now. Worth remembering next
+    time a screenshot looks like it's using "placeholder" copy - it may be a
+    preview of what's coming.
+- `connect-your-agent` - closes the **"Connect an agent" wizard** gap first
+  flagged 2026-08-26 (see below) and left unapplied at that review gate. Added a
+  screenshot and callout for the Agents page's + Add agent → guided tenant-key +
+  exporter-config modal. Also corrected the doc's stated reason for using the
+  `_TRACES_`-suffixed OTel variables (was: separates traces from logs/metrics;
+  actually: prevents `/v1/traces` from being appended to the ingest path twice) -
+  the real reason is now shown directly in-app in that same wizard. Direction:
+  **docs-should-update**. Severity: medium (wizard gap), medium (wrong rationale).
+- `agent-card` - screenshot caption quoted "Synthesized by the judge model";
+  live copy reads "Synthesized by the model" (no "judge"). Direction:
+  **docs-should-update**. Severity: low.
+- `scorecard` - added a short section on the predictive score range and
+  "close to the line" callout the Score tab shows near a verdict boundary
+  (e.g. "Score another sample and you'd likely get 66-80"), previously
+  undocumented. Direction: **docs-should-update**. Severity: low.
+
+**Still outstanding (not touched this pass):**
+- **PR #407 structural finding** (below, 2026-08-26) remains unresolved - user
+  direction this run was again to keep auditing/editing `docs-src` as-is and treat
+  ownership of the customer docs (`docs-src` vs. the in-app ported copy) as a
+  separate decision. Reconfirmed live: both `https://agent-score-customer.product.tricentis.com/docs`
+  (the ported in-app copy) and the old standalone docs site both return 200 today.
+- Could not confirm the live label for the 0-39 ("Block") band - found no agent
+  scored below 40 during this walk. Left as "Block" (unchanged) on the assumption
+  the rename pattern (Ship with note / Needs work / Don't ship (recommended))
+  didn't touch the bottom tier, but this is unverified.
+- **Product-internal inconsistency, logged only, no doc action:** the same
+  agent's **Profile tab** "The bar" verdict-bands table still shows the *old*
+  labels ("Review required", "Block recommended") while its Score tab and
+  Activity log use the new ones for the identical score. The docs' own
+  `profile-tab.png` screenshot (still showing "Review required") is therefore
+  still an accurate capture of that specific tab - only the Score-tab-facing
+  Scorecard/Glossary pages needed the update. Direction:
+  **product-should-catch-up** (the Profile tab's own table is stale, not the
+  docs).
+
+---
+
 ## 2026-08-26 — GitHub merge scan + production walk (Playwright, multi-agent)
 
 First run using the new step-3 GitHub merge scan (added to the `agent-score-docs-sync`

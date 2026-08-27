@@ -33,15 +33,15 @@ export default function Scorecard() {
           </tr>
           <tr>
             <td>70-84</td>
-            <td><Badge kind="ship">Ship (with note)</Badge></td>
+            <td><Badge kind="ship">Ship with note</Badge></td>
           </tr>
           <tr>
             <td>55-69</td>
-            <td><Badge kind="review">Review required</Badge></td>
+            <td><Badge kind="review">Needs work</Badge></td>
           </tr>
           <tr>
             <td>40-54</td>
-            <td><Badge kind="block">Block recommended</Badge></td>
+            <td><Badge kind="block">Don't ship (recommended)</Badge></td>
           </tr>
           <tr>
             <td>0-39</td>
@@ -49,6 +49,15 @@ export default function Scorecard() {
           </tr>
         </tbody>
       </table>
+
+      <h2>How close you are to the next zone</h2>
+      <p>
+        When a score lands near a verdict boundary, the scorecard says so directly - a note like
+        "Close to the Ship with note line. Another sample could land on either side" - along with
+        a likely range for what the next scoring run would show (e.g. "Score another sample and
+        you'd likely get 66-80"). That range narrows as more traces come in, the same way the
+        composite score itself does.
+      </p>
 
       <h2>Every number is evidence-backed</h2>
       <p>

@@ -39,7 +39,7 @@ const terms: { term: string; def: string }[] = [
   },
   {
     term: "Verdict",
-    def: "The plain-language recommendation the composite score maps to: Ship, Ship (with note), Review required, Block recommended, or Block.",
+    def: "The plain-language recommendation the composite score maps to: Ship, Ship with note, Needs work, Don't ship (recommended), or Block.",
   },
   {
     term: "Threshold",

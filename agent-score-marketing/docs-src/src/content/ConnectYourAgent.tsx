@@ -3,6 +3,7 @@ import { IngestionFlowDiagram } from "../components/diagrams/IngestionFlow";
 import integrationsTab from "../assets/integrations-tab.png";
 import ingestionStreamConfig from "../assets/ingestion-stream-config.png";
 import betterstackServiceName from "../assets/betterstack-service-name.png";
+import connectAgentWizard from "../assets/connect-agent-wizard.png";
 
 export default function ConnectYourAgent() {
   return (
@@ -113,9 +114,25 @@ export default function ConnectYourAgent() {
       </CodeBlock>
       <p>
         Use the <code>_TRACES_</code>-suffixed variables specifically, not the generic{" "}
-        <code>OTEL_EXPORTER_OTLP_ENDPOINT</code> - that's what keeps trace export separate from any
-        logs or metrics your exporter also happens to send.
+        <code>OTEL_EXPORTER_OTLP_ENDPOINT</code>. The unsuffixed form is a base that most
+        exporters append <code>/v1/traces</code> to on their own - since the endpoint above
+        already ends in <code>/v1/traces</code>, using the unsuffixed variable would silently
+        append that path a second time.
       </p>
+
+      <Callout kind="tip" title="Or let the wizard fill this in for you">
+        <p>
+          From the Agents page, <strong>+ Add agent</strong> opens a guided{" "}
+          <strong>Connect an agent</strong> flow: pick the tenant, it shows that tenant's key, and
+          it hands you the exact exporter configuration to paste in - the same variables shown
+          above, with your real key already filled in.
+        </p>
+      </Callout>
+      <Screenshot
+        src={connectAgentWizard}
+        alt="The Connect an agent dialog, showing a tenant picker, that tenant's ingest key, the exact OTel exporter environment variables to paste in with a Copy button, and a note that scoring begins automatically after 20 traces"
+        caption="The Connect an agent wizard - the fastest way to the exact config for one specific tenant."
+      />
 
       <IngestionFlowDiagram />
 

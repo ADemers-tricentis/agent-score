@@ -3,6 +3,30 @@
 All notable changes to the AgentScore docs site are recorded here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.36.0] - 2026-08-27
+
+### Added
+- Connect Your Agent: documented the in-app **Connect an agent** wizard
+  (Agents page → + Add agent) - pick a tenant, see its ingest key, and get
+  the exact exporter configuration to paste in - with a genuine screenshot.
+  This closes an onboarding-entry-point gap first flagged, but not yet
+  fixed, on 2026-08-26.
+- Reading Your Scorecard: documented the predictive score range and
+  "close to the line" callout that appears when a score is near a verdict
+  boundary.
+
+### Fixed
+- Reading Your Scorecard, Glossary: corrected the verdict names to match
+  the live product - "Ship with note" (was "Ship (with note)"), "Needs
+  work" (was "Review required"), and "Don't ship (recommended)" (was
+  "Block recommended"). Ship and Block are unchanged.
+- Connect Your Agent: corrected the reason for using the `_TRACES_`-suffixed
+  OTel variables - it prevents the ingest path from being appended twice,
+  not (as previously stated) separating traces from logs/metrics.
+- Meet Your Agent Card: corrected a screenshot caption quote from
+  "Synthesized by the judge model" to "Synthesized by the model," matching
+  the real product copy.
+
 ## [0.35.0] - 2026-08-26
 
 ### Added
