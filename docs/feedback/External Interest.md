@@ -18,7 +18,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 |---|---|---|
 | Charter Communications Operating, LLC | Sarvesh Peddi | Interested |
 | Artizent (form blank, domain-resolved) | Alan Mayfus | Interested |
-| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj | Interested |
+| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj | Replied |
 | SAP Labs India (IN) | SaiDeepak Ayyagari | Interested |
 | Regeneron Pharmaceuticals Inc. | Murali Sundaram | Interested |
 | Acadia Healthcare | Pratiksha Arora | Interested |
@@ -101,6 +101,8 @@ what they do: Sydney-headquartered SAP Technical Services & software-testing con
 likely use case: as an SAP testing/QA vendor, most plausibly evaluating Agent Score to extend its testing practice into agentic-AI QA for its own client base — same profile as New Vision Software and Merito Solutions above.
 
 known agent tooling: no public information found tying Tritusa specifically to a deployed agent product; core business is SAP test automation and performance testing.
+
+Responded: Curious about evaluation using AIW *and* third party agents
 
 ---
 
