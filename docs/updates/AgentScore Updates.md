@@ -1,3 +1,15 @@
+## August 27, 2026 Update
+
+### Better visibility into what powers your scores
+We built out an internal LLM catalog so we always know exactly which model handled which task, and what it costs - this keeps routing smart and pricing honest as new models come out.
+- Every model we might call, current or retired, now carries real, effective-dated pricing on file, including cache read/write rates
+- Fixed a bug that double-billed OpenAI cached tokens - they're already counted inside the total input tokens, but we were also charging them again as a separate cache cost, so the accounting behind our routing and pricing decisions is now accurate
+- A new usage and spend report lets our team see what each tenant costs to run, so we can keep AgentScore priced fairly as usage grows
+
+### Faster, sturdier trace pipeline
+- Rebuilt how incoming traces get assembled, trimming the delay between when your agent runs and when its trace is ready to score
+- Fixed a bug where a single unusual span type could throw out an entire trace instead of just that one piece - so more of what your agent actually did makes it into your score
+
 ## August 26, 2026 Update
 
 ### More of your traces make it to a score
