@@ -43,6 +43,11 @@ same pass.
   only the customer-facing ones.
 - **Slack draft output:** `agent-score-updates-slack-draft.md` at the repo
   root - gitignored, overwritten every run (never appended, never dated).
+- **Stakeholder slide output:** `agent-score-updates-slide.md` at the repo
+  root - gitignored, overwritten every run (never appended, never dated).
+  This is an internal progress-toward-value slide, a *different* framing from
+  the customer updates and the Slack draft: it answers "where are we on the
+  journey to getting users to value?" rather than "what shipped".
 - **Confluence mirror:** the page "Testing AI Updates" at
   `https://tricentis.atlassian.net/wiki/x/BAAR2Q` (tiny-link id `BAAR2Q`,
   page id `3641769988`, in Andrew Demers' personal Confluence space) is a
@@ -179,10 +184,51 @@ open the file.
 - Summarize this run's new headline bullets.
 - Include a link to the live page: `https://demers-demos.product.tricentis.com/updates/`.
 
+### 9. Draft the stakeholder progress slide
+
+Write a slide-ready markdown draft to `agent-score-updates-slide.md` at the
+repo root (`/Users/a.demers/dev/Tricentis/AgentScore/agent-score-updates-slide.md`).
+**Overwrite the file each run - same filename every time, no appending, no
+dated variants.** It's gitignored, a local scratch artifact. Also show the
+same content in chat.
+
+This slide is not a "what shipped" recap - it's a status read on the current
+target. Frame everything around one question: **how far along are we in
+getting internal users to value?** External onboarding is a later funnel
+stage - only report it as active if there's real signal; while the product is
+in internal closed beta it belongs under the forward path, not as a live stage.
+
+Match the deck's existing "AgentScore Status" slide layout (see the live slide
+for the canonical look). Produce these blocks, in order:
+
+- **Title + subtitle:** `# AgentScore Status`, then an italic line -
+  `AgentScore — Internal Beta Testing — Last Updated <MM/DD/YYYY>` (run date).
+- **KPI tile row** (a 5-column markdown table, big number over a one-line
+  label): phase, product surfaces built, scoring dimensions live, time to
+  first score (target), and the current beta stage. Update numbers only to
+  match real state this run.
+- **MARKET:** one or two sentences on the positioning / why-now. Carry the
+  prior wording forward unless something material changed.
+- **SHIPPED — Phase <version> (internal):** 3-4 bullets, each a product
+  surface with a short "what it does" clause. Mark anything mid-flight as
+  "in progress". Follow with a **SIGNAL:** line - the single strongest proof
+  of internal traction this run (e.g. "all N surfaces functional end-to-end").
+- **FORWARD PATH:** 3-4 bullets of what's next - blockers being closed,
+  integrations landing, and the external design-partner / beta milestone.
+  Follow with a **WATCH:** line naming the current-target risk, i.e. internal
+  adoption - teams trusting the verdict and wiring the gate into daily
+  workflows.
+
+Keep it terse and presentation-grade: short noun phrases, no paragraphs, no
+customer-marketing voice. Internal jargon is fine here (same audience as the
+Slack draft). Draw the content from this run's gathered items (chat + filtered
+PRs + any usage data the user gave you) - if a block has no real signal this
+run, carry the prior slide's wording forward rather than inventing one.
+
 ## Output
 
 Finish with a short report: the new entry's headline(s), any items promoted
 out of Coming next, whether the build passed, and (if pushed) confirmation of
-the push, the Confluence page version bump, plus the Slack draft. If you
-stopped early (no update items, build failure, or the user declined to
-push), say exactly where and why.
+the push, the Confluence page version bump, the Slack draft, plus the stakeholder
+slide draft. If you stopped early (no update items, build failure, or the user
+declined to push), say exactly where and why.

@@ -1,3 +1,29 @@
+## September 4, 2026 Update
+
+### Behind the scenes: scores now hold up no matter how big the trace gets
+More progress on the new judge from last update - this closes the two biggest risks to trusting it on real-world traces.
+- Scoring no longer has to read an entire trace end to end - it now pulls only the specific evidence it needs to judge each step, so trace size stops being a limiting factor. In one test, a 36 MB trace needed only about 0.2% of its data to reach the correct score.
+- Scores are also more consistent run to run. Newer models reason better but can vary slightly between repeated evaluations, so we moved everything that doesn't require judgment out of the model and into dedicated, deterministic checks - leaving the model to focus only on the reasoning that actually needs it.
+- Still nothing customer-facing changes yet - the new judge is running side by side with today's scoring engine until validation finishes.
+
+### Faster scores when a trace's root step goes missing
+- If a trace's root span never made it in (a truncated or split capture), it used to sit unscored for up to 24 hours before we gave up and forced a result. It now completes within minutes of us detecting the gap, so you see a score much sooner.
+
+### Coming next
+- A conversational assistant for asking questions about your agent's scores directly - built and through internal safety review, launch timing still to be decided
+- Score-improvement recommendations that trace back to exactly which score drove them - in development
+
+## September 2, 2026 Update
+
+### Behind the scenes: a new judge is coming online
+Nothing here changes what you see today - this is the engineering underneath the next wave of scoring improvements.
+- Scoring is moving to a new judge that grades directly against the evidence it read, checking specific facts (like the arguments a tool call used, or what a step actually returned) with dedicated verification tools instead of relying on memory
+- The new judge is running in parallel with today's scoring engine while we validate it side by side - nothing customer-facing changes until that validation finishes and the old engine is retired
+- Fixed a scoring failure mode where certain models rejected a request outright instead of completing it
+
+### Back office: faster manual scoring for our team
+- Our team can now score a single trace on demand and see every eval's verdict on one page, instead of waiting on a batch pass - speeds up how quickly we can chase down a customer-reported scoring question
+
 ## August 27, 2026 Update
 
 ### Better visibility into what powers your scores
