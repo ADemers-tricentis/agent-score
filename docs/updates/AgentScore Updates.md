@@ -1,3 +1,17 @@
+## September 8, 2026 Update
+
+### More precise agent profiles
+- Agent Score now matches your agent against seven specific profiles - Grounded Answerer, Summarizer, Tool Caller, Task Agent, Conversational Assistant, Policy Guardrail, and General Answerer - instead of a smaller, harder-to-fit set. A tighter match means the dimensions and evaluations scoring you are the ones that actually apply to what your agent does.
+
+### Faster, more reliable scoring runs
+- Scoring, advisor, and fit runs can now execute in parallel instead of queuing one at a time, so scores come back faster.
+- A single trace that can't produce a verdict no longer holds up the rest of the batch - the other traces in the same run keep scoring instead of getting marked incomplete alongside it.
+- Turning off automatic scoring for an agent now actually stops it - previously a scheduled re-score could still run (and get billed) even after you'd switched autonomous scoring off.
+
+### Coming next
+- A conversational assistant for asking questions about your agent's scores directly - built and through internal safety review, launch timing still to be decided
+- Score-improvement recommendations that trace back to exactly which score drove them - in development
+
 ## September 4, 2026 Update
 
 ### Behind the scenes: scores now hold up no matter how big the trace gets
