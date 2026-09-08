@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 49 form submissions found (as of 2026-08-25), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Four submissions (Brad Purcell, Michal Hrncirik, Maria Argulla, Caitlin Bowers) came from `@tricentis.com` addresses — internal test/QA submissions, not external prospects — and are excluded from the tracker below. Entries are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini, McKesson, Merito Solutions) — 40 distinct entries as a result. Combined entries list each submitter's Date/Name/Contact as its own three-line group.
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 54 form submissions found (as of 2026-08-31), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Four submissions (Brad Purcell, Michal Hrncirik, Maria Argulla, Caitlin Bowers) came from `@tricentis.com` addresses — internal test/QA submissions, not external prospects — and are excluded from the tracker below. A fifth submission (VIJESH Vijayan, 2026-08-27, "Neotys (FR) - HQ") came from a `@neotys.com` address; Neotys/NeoLoad has been a Tricentis-owned brand since the 2021 acquisition, so it's excluded on the same basis pending confirmation of whether this is a legacy-domain Tricentis employee or a genuine external NeoLoad customer. Entries are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini, McKesson, Merito Solutions, PVH Corp) — 42 distinct entries as a result. Combined entries list each submitter's Date/Name/Contact as its own three-line group. One additional entry (Freddie Mac / Kaleb Jackson, 2026-08-28) came in through Sales rather than the Labs form — no form timestamp, and it's counted separately from the 54 form submissions above.
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -10,19 +10,22 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos scheduled | Active betas |
 |---|---|---|---|
-| 40 | 0 | 0 | 0 |
+| 43 | 2 | 1 | 0 |
 
 Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
 
 | Company | Contact | Status |
 |---|---|---|
-| Charter Communications Operating, LLC | Sarvesh Peddi | Interested |
-| Artizent (form blank, domain-resolved) | Alan Mayfus | Interested |
+| Freddie Mac | Kaleb Jackson | Replied |
+| Workday, Inc. | Vijay Mummaneni | Email sent |
+| PVH Corp | Beena P K, Aimee Martin | Email sent |
+| Charter Communications Operating, LLC | Sarvesh Peddi | Email sent |
+| Artizent (form blank, domain-resolved) | Alan Mayfus | Email sent |
 | Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj | Replied |
-| SAP Labs India (IN) | SaiDeepak Ayyagari | Interested |
-| Regeneron Pharmaceuticals Inc. | Murali Sundaram | Interested |
-| Acadia Healthcare | Pratiksha Arora | Interested |
-| New Vision Software Inc. | Rohan Bansod | Interested |
+| SAP Labs India (IN) | SaiDeepak Ayyagari | Email sent |
+| Regeneron Pharmaceuticals Inc. | Murali Sundaram | Email sent |
+| Acadia Healthcare | Pratiksha Arora | Email sent |
+| New Vision Software Inc. | Rohan Bansod | Email sent |
 | Hilti Asia IT Services (MY) | Ashwin Mor | Email sent |
 | Panasonic Avionics (US) | Ronica Brisbon | Email sent |
 | The Boeing Company | Gurucharan Bijinepally | Email sent |
@@ -43,7 +46,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Tachyon Technologies | Subba Rao Gonugunta | Email sent |
 | Xebia - Partner | Anmol Jain | Email sent |
 | Cargill Incorporated | Alfonso Garbanzo | Email sent |
-| Wolters Kluwer United States Inc. | Chris Allanson | Email sent |
+| Wolters Kluwer United States Inc. | Chris Allanson | Demo Scheduled |
 | J. R. Simplot Company | Neeraja Kusuma | Email sent |
 | Crown Equipment Corporation | Vinay Patlolla | Email sent |
 | Accenture LLP | Jigish Belani | Email sent |
@@ -58,6 +61,53 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Bayone Solutions | Mathi Natarajan | Email sent |
 
 *(Status values: Interested → Email sent → Replied → Demo scheduled → Active beta.)*
+
+---
+
+### Freddie Mac
+Date: 2026-08-28 (Sales conversation — no Labs form submission)  
+Name: Kaleb Jackson  
+Contact: (via Sales, not the Labs form)  
+
+what they do: Government-sponsored enterprise providing liquidity/stability to the US residential mortgage market by purchasing and securitizing mortgages.
+
+likely use case: auditing/scoring the quality of Freddie Mac's own internally-built agentic workflows. Kaleb's stated pain points were fragmented AI ownership across teams (the product team and the AI accelerator team are building overlapping agents) and no shared way to validate agent behavior/tool-use org-wide. Agent Score's ship/warn/block scoring model was the part he reacted to most directly.
+
+known agent tooling: not stated in the transcript — Kaleb didn't name specific internal frameworks, LLM providers, or orchestration tools they're using today.
+
+---
+
+### Workday, Inc.
+Date: 2026-08-28 18:28  
+Name: Vijay Mummaneni  
+Contact: vijay.mummaneni@workday.com  
+
+what they do: Enterprise HR/Finance/IT SaaS platform (Pleasanton, CA); ~19,000+ employees, ~$8.4B revenue; core HCM and Financial Management products used across thousands of enterprises.
+
+likely use case: given Workday's own aggressive build-out of agentic AI tooling (see below), most plausibly evaluating Agent Score either as a complementary evaluation layer for agents built on Workday Build, or as landscape research into third-party agent-testing tools — notable given the direct overlap with Agent Score's own positioning.
+
+known agent tooling: extensive and directly adjacent to Agent Score's space — "Workday Build" now ships a Developer Agent (plugs into Claude Code, Cursor, Codex, etc.), Agent-Ready Tools exposing HR/finance data over MCP, and "Agent Passport," a system explicitly built to test, verify, and continuously monitor every AI agent in the enterprise (early access H2 2026, GA by end of 2026); also shipped new domain-specific agents for IT service management and travel on its Sana platform (May 2026) ([Workday Newsroom](https://newsroom.workday.com/2026-06-02-Workday-Launches-New-Tools-for-Developers-to-Build,-Connect,-and-Verify-AI-Agents-For-HR,-Finance,-and-IT), [Workday Investor Relations](https://investor.workday.com/news-and-events/press-releases/news-details/2026/Workday-Launches-Agent-Passport-to-Test-Verify-and-Continuously-Monitor-Every-AI-Agent-in-the-Enterprise/default.aspx), [SiliconANGLE](https://siliconangle.com/2026/05/21/workday-brings-ai-agents-service-management-travel/)).
+
+---
+
+### PVH Corp
+Date: 2026-08-28 15:39  
+Name: Beena P K  
+Contact: beenapk@pvh.com  
+
+Date: 2026-08-28 12:53  
+Name: Beena P K  
+Contact: beenapk@pvh.com  
+
+Date: 2026-08-28 12:52  
+Name: Aimee Martin  
+Contact: aimeemartin@pvh.com  
+
+what they do: Global apparel/fashion conglomerate (New York, NY) — owns Calvin Klein and Tommy Hilfiger; ~$8.6B revenue, operations in 40+ countries.
+
+likely use case: evaluating output quality/consistency of the generative-AI tools it's co-developing with OpenAI across design, demand planning, inventory, and consumer-facing engagement, given the scale of that rollout.
+
+known agent tooling: announced a company-wide collaboration with OpenAI (January 2026) under its "PVH+ Plan" — adopting ChatGPT Enterprise and OpenAI APIs, with custom applications for product/design, demand planning, inventory optimization, and consumer engagement across Calvin Klein and Tommy Hilfiger ([PVH.com press release](https://www.pvh.com/news/press-releases/pvh-corp-collaborates-with-openai-to-accelerate-brandbuilding-journey), [OpenAI](https://openai.com/index/pvh-future-of-fashion/)).
 
 ---
 
