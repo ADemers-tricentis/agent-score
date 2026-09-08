@@ -1,6 +1,6 @@
 import { Callout, Dek, Eyebrow, Screenshot } from "../components/PageChrome";
 import { DimensionHierarchyDiagram } from "../components/diagrams/DimensionHierarchy";
-import profileTab from "../assets/profile-tab.png";
+import profileTab from "../assets/profile-tab-general-answerer.png";
 
 export default function DimensionsAndProfiles() {
   return (
@@ -34,9 +34,10 @@ export default function DimensionsAndProfiles() {
       <h2>A profile is the full recipe</h2>
       <p>
         A <strong>profile</strong> is a curated bundle - the right evals, dimensions, weights, and
-        pass thresholds - tuned for a kind of agent. Agent Score ships seven: RAG, Computer-Use,
-        Conversational, Tool-Orchestrator, Code, Structured-Generation, and EvalClaw (Tricentis's
-        own automatic evaluation suite).
+        pass thresholds - tuned for a kind of agent. Agent Score ships seven: Grounded Answerer,
+        Summarizer, Tool Caller, Task Agent, Conversational Assistant, Policy Guardrail, and
+        General Answerer (the fallback for general-purpose agents that don't fit a more specific
+        shape).
       </p>
       <p>
         Every profile shows a complete, transparent breakdown of how its score is calculated - no
@@ -53,7 +54,7 @@ export default function DimensionsAndProfiles() {
         <a href="#/agent-card">the Agent Card page</a>.
       </p>
       <p>
-        Brand-new agents start on <strong>General Starter</strong> - a simple, four-dimension
+        Brand-new agents start on <strong>General Answerer</strong> - a simple, four-dimension
         profile (Correctness, Relevance, Safety, Quality / Efficiency) Agent Score falls back to
         until your agent has produced enough varied behavior to justify a more specific profile.
         You'll see this any time an agent's evidence diversity hasn't yet crossed the threshold for
@@ -62,7 +63,7 @@ export default function DimensionsAndProfiles() {
 
       <Screenshot
         src={profileTab}
-        alt="The Profile tab for an agent, showing why the RAG Starter profile was chosen (fit score 0.82), the full verdict band table from Ship down to Block, and the dimensions and their weights"
+        alt="The Profile tab for an agent, showing why the General Answerer profile was chosen, the full verdict band table from Ship down to Block, and the dimensions and their weights"
         caption="An agent's Profile tab - why this profile was chosen, the verdict bands for it, and the weighted dimensions behind the score."
       />
 

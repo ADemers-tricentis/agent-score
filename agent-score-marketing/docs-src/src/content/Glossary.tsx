@@ -27,7 +27,7 @@ const terms: { term: string; def: string }[] = [
   },
   {
     term: "Profile",
-    def: "A named bundle of dimensions, weights, and pass thresholds tuned for a kind of agent (RAG, Tool-Orchestrator, Conversational, and more). Chosen automatically based on observed behavior.",
+    def: "A named bundle of dimensions, weights, and pass thresholds tuned for a kind of agent (Grounded Answerer, Tool Caller, Conversational Assistant, and more). Chosen automatically based on observed behavior.",
   },
   {
     term: "Agent Card",
