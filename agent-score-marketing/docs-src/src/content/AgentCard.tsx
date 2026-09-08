@@ -16,8 +16,8 @@ export default function AgentCard() {
       <p>
         Once enough traces have arrived, the scoring agent looks at your agent's inputs, outputs,
         and tool use, and automatically selects the{" "}
-        <a href="#/dimensions-and-profiles">profile</a> that fits best - RAG, Tool-Orchestrator,
-        Conversational, and so on. You don't pick a profile off a menu before you know anything
+        <a href="#/dimensions-and-profiles">profile</a> that fits best - Grounded Answerer, Tool
+        Caller, Conversational Assistant, and so on. You don't pick a profile off a menu before you know anything
         about your agent; Agent Score picks the one your agent's actual behavior earns.
       </p>
       <p>

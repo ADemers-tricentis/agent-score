@@ -3,6 +3,24 @@
 All notable changes to the AgentScore docs site are recorded here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.37.0] - 2026-09-08
+
+### Added
+- Dimensions & Profiles, Meet Your Agent Card, Glossary: documented the
+  rebuilt profile catalog - Grounded Answerer, Summarizer, Tool Caller, Task
+  Agent, Conversational Assistant, Policy Guardrail, and General Answerer
+  (the renamed fallback, was "General Starter").
+
+### Removed
+- The old profile catalog (RAG, Computer-Use, Conversational,
+  Tool-Orchestrator, Code, Structured-Generation, EvalClaw), replaced
+  wholesale in the product, not extended.
+
+### Changed
+- Dimensions & Profiles: swapped the Profile-tab screenshot to a live capture
+  of the General Answerer profile (the old one showed the now-retired RAG
+  Starter profile).
+
 ## [0.36.0] - 2026-08-27
 
 ### Added

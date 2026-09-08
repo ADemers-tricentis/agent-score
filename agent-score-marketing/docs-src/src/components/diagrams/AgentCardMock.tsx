@@ -36,7 +36,7 @@ export function AgentCardMock() {
         </div>
         <div className="mock-kv">
           <span className="mock-kv-key">Recommended profile</span>
-          <span className="mock-kv-val">Tool-Orchestrator</span>
+          <span className="mock-kv-val">Tool Caller</span>
         </div>
       </div>
     </DiagramFrame>

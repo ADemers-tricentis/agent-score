@@ -12,6 +12,63 @@ Each audit appends a dated section. Newest first.
 
 ---
 
+## 2026-09-08 — GitHub merge scan + production walk (Playwright, superadmin + customer logins)
+
+Cross-checked 190 PRs merged on `Tricentis-AI/agent-score` since the
+`.last-github-sync` marker (2026-08-27), and walked both the customer app and the
+back office live, logged in as a superadmin.
+
+**Merge scan:** of 190 PRs, only PR #598 ("seed seven fit-ready profile
+families...") was customer-visible enough to require a `docs-src` change. PR #588
+("make the improvement advisor usable end to end...") is relevant but its own
+body confirms it only added a trigger and an API endpoint - no rendered surface -
+and the live walk (below) found no advisor/recommendation UI anywhere, so it's
+logged as pending-verification, not fixed. Everything else (back-office
+chat-assistant polish, judge-calibration campaigns, e2e suites, migrations,
+CI/infra) is internal.
+
+**Resolved this pass** (docs edited, see CHANGELOG):
+- `dimensions-and-profiles`, `agent-card`, `glossary` - the profile catalog was
+  entirely stale. Docs listed 7 old names (RAG, Computer-Use, Conversational,
+  Tool-Orchestrator, Code, Structured-Generation, EvalClaw) plus a separate
+  "General Starter" fallback. PR #598 replaced the whole catalog; confirmed live
+  across 9+ agents in both the customer app and the back office's Agent Registry:
+  **Grounded Answerer, Summarizer, Tool Caller, Task Agent, Conversational
+  Assistant, Policy Guardrail, General Answerer** (the last is the renamed
+  fallback - same 4 dimensions as the old "General Starter," internal id
+  `general-starter` unchanged). Direction: **docs-should-update**. Severity: high.
+  - Swapped `dimensions-and-profiles`'s screenshot for a live capture of the
+    General Answerer profile tab (`profile-tab-general-answerer.png`, replacing
+    `profile-tab.png` which showed the retired RAG Starter profile).
+  - `AgentCardMock.tsx`'s mock "Recommended profile" value updated from
+    `Tool-Orchestrator` to `Tool Caller`.
+
+**Still outstanding (not touched this pass):**
+- **Product-internal verdict-label inconsistency, re-confirmed still open.**
+  Same finding as 2026-08-27 below, checked again today and still true: every
+  agent's **Profile tab** "The bar" table shows "Review required" / "Block
+  recommended," while the **Score tab** and (newly checked this pass) the
+  **back-office Home** worklist both show "Needs work" / "Don't ship
+  (recommended)" for the identical band. This is the same rename from
+  2026-08-27's `scorecard`/`glossary` fix - the Profile tab's own table still
+  never got it, two weeks later. Direction: **product-should-catch-up** (still
+  the Profile tab's table that's stale, not the docs). Also folded into
+  `docs/documentation/agent-score-0-to-1-runbook.md` §3.7 for the internal
+  audience.
+- **`dimension-hierarchy.png` diagram still shows retired profile names**
+  ("e.g. RAG, Tool-Orchestrator, Conversational," baked into the exported image
+  from `src/assets/excalidraw-src/dimension-hierarchy.excalidraw`). Not fixed
+  this pass - correcting it means editing the Excalidraw source and re-exporting
+  the PNG, out of scope for a text-focused pass. Direction:
+  **docs-should-update**. Severity: low (illustrative example list, not primary
+  content) - deferred to next run.
+- **`eval-catalog`'s "Faithfulness (EvalClaw)" screenshot alt text** - not
+  independently verified this pass. The eval catalog lives in the back office,
+  which wasn't part of this walk's focus; PR #598's body doesn't mention EvalClaw
+  either way. Left as-is, unconfirmed.
+
+---
+
 ## 2026-08-27 — GitHub merge scan + production walk, using AgentScore Updates.md
 
 Cross-checked `docs/updates/AgentScore Updates.md`'s Aug 26/27 entries against a
