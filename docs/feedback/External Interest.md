@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 54 form submissions found (as of 2026-08-31), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Four submissions (Brad Purcell, Michal Hrncirik, Maria Argulla, Caitlin Bowers) came from `@tricentis.com` addresses — internal test/QA submissions, not external prospects — and are excluded from the tracker below. A fifth submission (VIJESH Vijayan, 2026-08-27, "Neotys (FR) - HQ") came from a `@neotys.com` address; Neotys/NeoLoad has been a Tricentis-owned brand since the 2021 acquisition, so it's excluded on the same basis pending confirmation of whether this is a legacy-domain Tricentis employee or a genuine external NeoLoad customer. Entries are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini, McKesson, Merito Solutions, PVH Corp) — 42 distinct entries as a result. Combined entries list each submitter's Date/Name/Contact as its own three-line group. One additional entry (Freddie Mac / Kaleb Jackson, 2026-08-28) came in through Sales rather than the Labs form — no form timestamp, and it's counted separately from the 54 form submissions above.
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 64 form submissions found (as of 2026-09-09), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Six submissions came from `@tricentis.com` addresses — internal test/QA submissions, not external prospects — and are excluded from the tracker below: Brad Purcell (submitted twice, 2026-08-21 and 2026-09-07), Michal Hrncirik, Maria Argulla, Caitlin Bowers, and Neil Williams (submitted twice, both 2026-09-08, under "Tricentis (UK)"). A seventh submission (VIJESH Vijayan, 2026-08-27, "Neotys (FR) - HQ") came from a `@neotys.com` address; Neotys/NeoLoad has been a Tricentis-owned brand since the 2021 acquisition, so it's excluded on the same basis pending confirmation of whether this is a legacy-domain Tricentis employee or a genuine external NeoLoad customer. One more (Jigish Belani / Accenture LLP, 2026-09-09) is a repeat submission from a contact already tracked below (original: 2026-08-20) — noted, but not added as a second entry. Entries are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini, McKesson, Merito Solutions, PVH Corp, Tritusa Consulting) — 48 distinct entries as a result. Combined entries list each submitter's Date/Name/Contact as its own three-line group. One additional entry (Freddie Mac / Kaleb Jackson, 2026-08-28) came in through Sales rather than the Labs form — no form timestamp, and it's counted separately from the 64 form submissions above.
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -10,7 +10,7 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos scheduled | Active betas |
 |---|---|---|---|
-| 43 | 2 | 1 | 0 |
+| 49 | 2 | 1 | 0 |
 
 Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
 
@@ -21,7 +21,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | PVH Corp | Beena P K, Aimee Martin | Email sent |
 | Charter Communications Operating, LLC | Sarvesh Peddi | Email sent |
 | Artizent (form blank, domain-resolved) | Alan Mayfus | Email sent |
-| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj | Replied |
+| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj | Replied |
 | SAP Labs India (IN) | SaiDeepak Ayyagari | Email sent |
 | Regeneron Pharmaceuticals Inc. | Murali Sundaram | Email sent |
 | Acadia Healthcare | Pratiksha Arora | Email sent |
@@ -59,8 +59,92 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Mouser Electronics | Mohammad Mahboob | Email sent |
 | Cox Automotive | Balaji Gandsi Krishna Prakash | Email sent |
 | Bayone Solutions | Mathi Natarajan | Email sent |
+| Saudi Telecom Company STC (SA) - HQ | Farhan Shaikh | Interested |
+| Diriyah Gate Company Limited - DGCL (SA) | Ali Alshehri | Interested |
+| TestCrew | Ramesh Panthangi | Interested |
+| Dolpheen IT Solutions | Jia Jun Zhan | Interested |
+| Cengage Learning, Inc. | Ajan Nattamai | Interested |
+| Pegasystems Inc. | Kiran kadarla | Interested |
 
 *(Status values: Interested → Email sent → Replied → Demo scheduled → Active beta.)*
+
+---
+
+### Saudi Telecom Company STC (SA) - HQ
+Date: 2026-09-09 09:51  
+Name: Farhan Shaikh  
+Contact: falishaikh.c@stc.com.sa  
+
+what they do: Saudi Arabia's largest telecom operator and self-described "digital enabler" — a strategic LEAP partner building AI-ready data-center capacity (via its center3 subsidiary) and Kingdom-wide AI infrastructure alongside HUMAIN.
+
+likely use case: validating/testing the agentic AI it's already rolling out across customer service, network operations, and enterprise sales — a near-direct fit given the scale of that deployment, similar profile to Cox Automotive and Home Depot above.
+
+known agent tooling: agentic AI reported live across customer-service automation, network-operations coordination, and enterprise sales management, per industry coverage of stc group's LEAP 2026 presence ([Telecom Review Middle East](https://www.telecomreview.com/articles/telecom-operators/30130-stc-group-puts-saudi-arabias-ai-ambitions-into-action-at-leap-2026/)).
+
+---
+
+### Diriyah Gate Company Limited - DGCL (SA)
+Date: 2026-09-09 09:52  
+Name: Ali Alshehri  
+Contact: Alialshehri@diriyah.sa  
+
+what they do: Operating company for Diriyah, the Saudi giga-project redeveloping the historic birthplace of the first Saudi state (northwest of Riyadh) into a heritage/culture/tourism destination — 38+ hotels, 20 cultural landmarks, 100+ restaurants planned — under the Diriyah Gate Development Authority ([dgda.gov.sa](https://www.dgda.gov.sa/en)).
+
+likely use case (weak inference): no AI-agent initiative confirmed publicly; plausibly guest-facing hospitality/booking agents or internal construction-program-management agents, given the project's scale and Saudi Arabia's broader public-sector AI push.
+
+known agent tooling: no public information found tying Diriyah/DGCL to a deployed AI agent product.
+
+---
+
+### TestCrew
+Date: 2026-09-09 09:53  
+Name: Ramesh Panthangi  
+Contact: rpanthangi@testcrew.com  
+
+what they do: Riyadh-headquartered global software-testing/QA firm (founded 2018; 700+ experts across KSA, UAE, Jordan, Egypt, India, and Europe) serving banking, government, telecom, aviation, retail, and sports-tech clients; first MENA testing company to reach TMMi Level 5, named a top-10 QA company on the 2024 Software Testing Leaders list ([clutch.co/profile/testcrew](https://clutch.co/profile/testcrew)).
+
+likely use case: as a QA/testing-services vendor, most plausibly evaluating Agent Score to extend its testing practice into agentic-AI QA for its own enterprise client base — same profile as Bayone Solutions and Aspire Systems above.
+
+known agent tooling: no public information found tying TestCrew to a deployed agent product; core business is quality engineering and test automation services.
+
+---
+
+### Dolpheen IT Solutions
+Date: 2026-09-09 14:41  
+Name: Jia Jun Zhan  
+Contact: jiajun.zhan@dolpheen-it.com  
+
+what they do: Vienna, Austria-based test-automation/RPA consultancy focused on SAP S/4HANA migration testing (founded by Yunus Saylan and Simon Kreitmayer). Already a Tricentis partner ([tricentis.com/partners/dolpheen-it-solutions-gmbh](https://www.tricentis.com/partners/dolpheen-it-solutions-gmbh)).
+
+likely use case: given the existing partner relationship, most plausibly evaluating Agent Score to extend their SAP-testing/automation practice into agentic-AI QA for their own client base — same profile as New Vision Software and Merito Solutions above.
+
+known agent tooling: no public information found tying Dolpheen to a deployed AI agent product; core business is SAP test automation and RPA.
+
+---
+
+### Cengage Learning, Inc.
+Date: 2026-09-03 15:20  
+Name: Ajan Nattamai  
+Contact: ajan.nattamai@cengage.com  
+
+what they do: Education-content/EdTech publisher spanning higher ed, workforce training, and K-12; part of Cengage Group.
+
+likely use case: evaluating/testing the output quality and personalization accuracy of its GenAI-powered Student Assistant and AI Leveler tools before or during wider rollout.
+
+known agent tooling: shipped a GenAI-powered Student Assistant (beta) and an AI Leveler tool (K-12 reading-level personalization, built with AWS) as part of an August 2025 AI-portfolio expansion across all customer segments ([Cengage Group press release](https://www.cengagegroup.com/news/press-releases/2025/cengage-group-scales-ai-products-across-portfolio-to-enhance-learning-outcomes-and-personalize-experiences-for-millions-of-learners/), [PR Newswire](https://www.prnewswire.com/news-releases/cengage-launches-genai-powered-student-assistant-in-beta-to-empower-students-and-personalize-learning-302226960.html)).
+
+---
+
+### Pegasystems Inc.
+Date: 2026-09-02 14:51  
+Name: Kiran kadarla  
+Contact: kiran.kadarla@pega.com  
+
+what they do: Enterprise low-code/BPM software vendor; recently launched "Pega Agentic Process Fabric" with MCP-powered agent orchestration for mission-critical business processes.
+
+likely use case: as a vendor building agent-orchestration tooling for enterprise clients, plausibly evaluating Agent Score to validate its own pre-built agents or as landscape research into third-party agent-testing tools — notable overlap with Agent Score's own positioning, similar profile to the Workday entry above.
+
+known agent tooling: launched Pega Agentic Process Fabric with MCP support (letting Claude, Gemini, and OpenAI agents execute Pega workflows), a "Predictable AI" architecture, and new pre-built agents (an assignment agent and a document-processing agent), shipping in Pega Infinity 26 ([SiliconANGLE](https://siliconangle.com/2026/06/08/pega-expands-ai-platform-agent-orchestration-development-tools-new-pricing-model/), [Constellation Research](https://www.constellationr.com/insights/news/pegasystems-launches-pega-agentic-process-fabric-rides-ai-momentum)).
 
 ---
 
@@ -145,6 +229,10 @@ Contact: pankaj.sinha@tritusa.com.au
 Date: 2026-08-24 00:49  
 Name: Deephan Mohanraj  
 Contact: deephan.mohanraj@tritusa.com.au  
+
+Date: 2026-09-01 10:25  
+Name: Jawahar Govindaraj  
+Contact: jawahar.govindaraj@tritusa.com.au  
 
 what they do: Sydney-headquartered SAP Technical Services & software-testing consultancy (~51 employees, ~$6M revenue, founded 2011) with presence in Melbourne, Canberra, Brisbane — 150+ projects delivered to 100+ Australian customers, specializing in SAP-focused quality engineering, automation, and performance testing ([tritusa.com.au/about-us](https://tritusa.com.au/about-us/)).
 

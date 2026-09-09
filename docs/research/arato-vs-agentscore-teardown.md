@@ -1,6 +1,6 @@
 # Arato.ai vs AgentScore: Competitive Deep Dive
 
-_Last updated: 2026-09-02_
+_Last updated: 2026-09-08_
 
 ## TL;DR
 
@@ -128,8 +128,31 @@ The pricing philosophies actually diverge in an interesting way: Arato's unit of
 
 ---
 
+## Field notes: live Arato demo (2026-09-08)
+
+First-party observations from a vendor demo Arato gave (their GTM lead, Tel Aviv, to Andrew Demers). Confirms much of the desk research above and adds a few specifics worth recording.
+
+**Confirmed live**
+- **Outside-in, user-level access only.** Rep repeated "no deep integration, all we need is user-level access" to a test or production environment. Matches the "connect as-is" pitch - this is genuinely their headline and their time-to-first-value edge.
+- **Four-pillar model shown end to end** on a public Kayak chatbot: (1) auto-generated **brief** from context (website + downloaded page content, PRDs), ~2-3 min; (2) **personas** (naive / malicious / edge-case / good), configurable language, age, gender, tech proficiency; (3) **scenarios** = persona + goal + business flow, risk-rated, editable/deletable; (4) **report** dashboard.
+- **Report specifics:** test score, 64 conversations / 64 personas, **4 dimensions**, **15 critical findings**; findings tagged critical / warning / good; per-finding **screenshot + video evidence**; findings can be marked relevant/not; **Jira integration opens tickets**; re-run same simulation after fixes. Positioned explicitly as a "day-to-day testing tool," not one-shot.
+- **Speed:** brief in minutes; simulation "a couple of hours to a couple of days" depending on conversation volume (does 20 or thousands).
+- **GTM motion:** free sample simulation (~30 conversations) offered on a prospect's own agent; POC or technical follow-up with engineering as the standard next step.
+
+**New / clarifying (beyond the desk research)**
+- **Hard scope boundary, stated by the rep:** Arato only fits **conversational / user-facing** surfaces. **Agent-to-agent flows are explicitly not a fit.** This is a concrete, self-admitted gap - and it covers a large share of the MCP-agent, agent-calls-agent topology AgentScore targets.
+- **Two questions the rep did not answer:**
+  - **Token / efficiency tracking** (context-window growth, usage blow-up as an eval dimension) - deflected to the demo, never confirmed as supported.
+  - **PII redaction/storage** in captured screenshots and conversations - dodged; answered about marking findings relevant instead.
+- Brief prompt is optional - the system auto-generates a usable brief with no input; a custom prompt just steers it.
+
+**Read for AgentScore.** The demo reinforces the complementary framing (they manufacture the test, we grade the exam) and hands us three clean counter-positions to use in copy and calls: (1) **agent-to-agent / non-conversational coverage** - their stated blind spot, our core lane; (2) **token/efficiency as a first-class scored dimension** - they had no answer; (3) **PII/safety handling with an explicit hard-fail** - they had no answer. The evidence chain (screenshot + video + one-click Jira ticket) is slick and sets a bar for how we present root-cause attribution.
+
+---
+
 ## Sources
 
+- Live Arato product demo, 2026-09-08 (notes: `whisply/transcriptions/2026_09_08_09_31_32/`)
 - [arato.ai](https://arato.ai/)
 - [Arato Simulate](https://arato.ai/simulate/)
 - [Arato Observe](https://arato.ai/observe/)

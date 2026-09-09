@@ -1,3 +1,16 @@
+## September 9, 2026 Update
+
+### More accurate run status when scoring can't complete
+- If every judge call fails before producing a single verdict (for example, during a provider outage), the run now shows as failed instead of a misleading partial - so you know to retry instead of trusting a result that never actually scored anything.
+
+### Cleaner run results and advice pages
+- Scoring-run pages no longer repeat the same evaluation data across tabs - your run's overview and interaction results now show it once, in one place.
+- Advice status is now accurate end to end - it no longer looks "ready" before it's actually finished, and it recovers cleanly if a request gets interrupted instead of losing track of what you asked for.
+
+### Coming next
+- A conversational assistant for asking questions about your agent's scores directly - built and through internal safety review, launch timing still to be decided
+- Score-improvement recommendations that trace back to exactly which score drove them - in development
+
 ## September 8, 2026 Update
 
 ### More precise agent profiles
