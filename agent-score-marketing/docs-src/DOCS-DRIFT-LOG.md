@@ -12,6 +12,63 @@ Each audit appends a dated section. Newest first.
 
 ---
 
+## 2026-09-09 — GitHub merge scan + production walk (Playwright, customer login)
+
+Cross-checked PRs merged on `Tricentis-AI/agent-score` since the `.last-github-sync`
+marker (2026-09-08T13:20:52Z), and walked the customer app live logged in as a
+customer.
+
+**Merge scan:** 22 PRs merged in the window; only #626 (chat-assistant model/caps),
+#619/#618/#617 (advice/Improve-tab work), and #598 (already resolved 2026-09-08) were
+candidates. #626 is an internal chat-assistant config change with no customer-facing
+surface. CI/platform/DB/infra PRs (#620-625) are internal. Everything else was
+already covered by the 2026-09-08 pass.
+
+**No doc edits this pass** - log-only run:
+
+- **Verdict-label product inconsistency, re-confirmed still open (4th audit in a
+  row).** Walked a fully-scored agent (`file reader agent`, composite 35.2,
+  `Conversational Assistant` profile) live today: its **Profile tab** "The bar"
+  table still shows "Review required" / "Block recommended," unchanged from the
+  2026-08-27 and 2026-09-08 findings. Docs (`scorecard`, `glossary`) correctly use
+  "Needs work" / "Don't ship (recommended)" per the established direction of
+  truth - do not re-flip this again without first checking this log. Direction:
+  **product-should-catch-up** (Profile tab is the stale surface).
+
+- **New "Improve" tab / advice feature - pending-verification.** PRs #617
+  ("feat(advice): make progress and recovery reflect durable requests"), #618
+  ("feat(backoffice): clarify agent review pages and preserve advice history"),
+  and #619 ("feat(scoring): consolidate run results and simplify advice
+  navigation") describe a new **Improve tab** with an advice panel/history for
+  agent-improvement recommendations. Walked `file reader agent`'s detail page
+  live (fully scored, 159 evaluations) and saw only **Score / Agent Card /
+  Profile / Activity** - no Improve tab present. #618 is tagged
+  `feat(backoffice)` and may be back-office-only; #617/#619 aren't tagged
+  backoffice-only but the feature isn't visible in the customer app yet
+  (deploy lag or gating). Not added to docs on the PRs' word alone - re-check
+  next run. PRs:
+  https://github.com/Tricentis-AI/agent-score/pull/617,
+  https://github.com/Tricentis-AI/agent-score/pull/618,
+  https://github.com/Tricentis-AI/agent-score/pull/619
+
+- **Observation only (not a docs claim, not edited): agent status stuck on
+  "Setting up" despite a completed score.** `ConnectYourAgent.tsx` says an agent
+  moves to "Scored" (or "Needs attention") once its first run completes. Live,
+  `file reader agent` has a completed run (composite 35.2, "complete", 159
+  evaluations scored) but its status badge - on both the fleet cards and the
+  detail-page header - reads "Setting up" everywhere checked. Only one scored
+  agent existed in this tenant to check, so this is a single data point, not
+  confirmed as systemic. Logged for the team to investigate; not treated as a
+  docs claim to fix either direction.
+
+Rest of the docs (Connect Agent wizard, Integrations page, Agent Card tab,
+Activity tab, dimension/profile catalog) matched production with no drift found.
+
+`.last-github-sync` advanced to `2026-09-09T11:30:41Z` (mergedAt of PR #626, the
+newest PR this scan looked at).
+
+---
+
 ## 2026-09-08 — GitHub merge scan + production walk (Playwright, superadmin + customer logins)
 
 Cross-checked 190 PRs merged on `Tricentis-AI/agent-score` since the
