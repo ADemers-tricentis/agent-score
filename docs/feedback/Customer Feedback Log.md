@@ -15,13 +15,27 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
 | Clear answer to "is this a testing tool or an observability tool?" | Workday | Open - category framing needs to be fixed in the deck |
 | Crisp, rehearsed answer to "why trust the LLM judge / how do you know it's accurate?" | Workday | Open - tiered answer drafted in Workday debrief, not yet shipped |
 | Deterministic/exploratory "red-team the agent" testing (not just passive grading) | Meta | Open - not built yet, matches buyer's own mental model |
-| Root-cause attribution (span + fix, not just a score) | Workday, Meta | Landing well - keep leading with this |
-| Evaluate a *group*/hierarchy of agents, not just one in isolation | Meta | Landing well - candidate for a named slide/feature |
+| Root-cause attribution (span + fix, not just a score) | Workday, Meta, Wolters Kluwer | Landing well - keep leading with this |
+| Evaluate a *group*/hierarchy of agents, not just one in isolation | Meta, Wolters Kluwer | Lands as a concept, not shipped - Wolters Kluwer needs literal bulk/fleet-level scoring (point at a repo of agents, score together) and called per-agent-only "not useful" at their scale; targeted "hopefully end of month" |
 | Agentforce / Salesforce-native integration | Workday | Open - known gap |
+| Fine-grained access control / RBAC / self-service onboarding | Wolters Kluwer | Open - admin + mostly-view-only today; roles, per-tenant/agent scoping, and self-service all "on the roadmap" - a stated rollout blocker for a governance-driven buyer |
+| Score agents outside the Tricentis ecosystem (e.g. GitHub Copilot, internal platforms) to benchmark against sanctioned tooling | Wolters Kluwer | Open - vision, not a named shipped feature; was Wolters Kluwer's origin reason for the call |
 
 ---
 
 ## Sessions
+
+### 2026-09 (exact date undated) - Wolters Kluwer
+
+- **Who:** Paul DiGrazia (quality/AI leader, deeply embedded design partner), Chris Allanson (Labs signup contact, QA/governance lens), Hope Isley (joined at the end). Tricentis: Andrew Demers.
+- **What we learned:** A warm, high-context relationship that already co-designs the product, not a cold evaluation - tone was positive throughout. "Score agents outside the Tricentis ecosystem" (GitHub Copilot, WK's internal FAB platform) was their reason for the call and landed squarely with the "any agent, anywhere" positioning. LLM before/after benchmarking (immutable runs, rerun and compare) got the strongest single hit of the call. Auto-generated agent card, the dual access model (embedded in AI workspace + standalone platform), and the per-scoring-run packaging model all landed cleanly. Internal dogfooding (scoring Tricentis's own quality agent, Q-tests, MCP agents) was the most credibility-building unscripted moment, same as it was with Meta.
+- **Major asks:**
+  - Bulk/fleet-level scoring - point at a repo full of agents, score them together. Called out twice as their core requirement; per-agent-only today is "a proof of concept, not the product they need." Biggest gap in the call.
+  - RBAC / self-service administration - roles, per-tenant/agent scoping, and self-service onboarding without a central bottleneck, named a "big concern"; currently just admin + mostly-view-only.
+  - A lower-touch onboarding path for WK's internal FAB LLM platform (today requires going through the FAB team for endpoint/config changes).
+  - Confirmation of WK's telemetry protocol and trace storage before pilot scoping - unverified whether they use OTel.
+  - Pair any bulk-scoring date with a sampling/cost story so "we can do your whole fleet" doesn't collide with the cost of scoring every trace on every agent.
+- **Full debrief:** [feedback-sessions/Wolters Kluwer Feedback Session.md](feedback-sessions/Wolters%20Kluwer%20Feedback%20Session.md)
 
 ### 2026-08-11 - Meta
 
@@ -32,7 +46,7 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
   - A firm timeline - self-testing is being switched off next week with nothing to replace it; Tricentis dates moved live on the call.
   - Deterministic/exploratory "make the agent fail" red-teaming - not built yet, but matches Sri's own framing exactly.
   - A resolved answer on the HCL/Accenture coopetition risk (both are Tricentis partners and are separately tasked by Meta to build a competing framework).
-- **Full debrief:** [Meta Feedback Session.md](Meta%20Feedback%20Session.md)
+- **Full debrief:** [feedback-sessions/Meta Feedback Session.md](feedback-sessions/Meta%20Feedback%20Session.md)
 
 ### 2026-07-24 - Workday
 
@@ -43,7 +57,7 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
   - A crisp, rehearsed accuracy answer - "there's a response, no error, how do you know it's accurate?" got a wandering answer instead of a tiered one (deterministic checks -> LLM judge + CI -> golden dataset).
   - Stop leading with "supplementary, not a replacement" - audience couldn't state what AgentScore definitively owns.
   - Agentforce/Salesforce-native integration (known gap, this account maps everything to it).
-- **Full debrief:** [Workday Feedback Session.md](Workday%20Feedback%20Session.md)
+- **Full debrief:** [feedback-sessions/Workday Feedback Session.md](feedback-sessions/Workday%20Feedback%20Session.md)
 
 ---
 

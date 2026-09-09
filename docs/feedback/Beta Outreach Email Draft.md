@@ -1,5 +1,4 @@
-
-**Subject:** Welcome to the AgentScore Beta - let's get you started
+Subject: Welcome to the AgentScore Beta - let's get you started
 
 Hi {{Name}},
 
@@ -17,9 +16,3 @@ Looking forward to it.
 
 Andrew Demers
 AgentScore Lead PM | Tricentis
-
----
-
-## Notes
-
-- Data source for the merge is [Beta Outreach Mail Merge.csv](Beta%20Outreach%20Mail%20Merge.csv) - columns `Name`, `Company`, `Email`. 28 single-recipient rows, ready to merge as-is.
