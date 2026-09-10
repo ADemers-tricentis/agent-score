@@ -1,3 +1,17 @@
+## September 10, 2026 Update
+
+### Talk to Agent Score directly
+- The chat assistant is now full-featured - ask about your agents' scores and evidence, and act on what you find, all from one conversation instead of clicking through screens.
+
+### Ask how to make your agent better
+- Every scored agent can now generate improvement advice on demand - ask what's holding your score back and get recommendations that trace straight back to the evaluation that drove them.
+
+### Freshly calibrated profiles
+- All seven agent profiles got a calibration pass this week for more accurate pass thresholds - if a score moved slightly without your agent's behavior changing, this is likely why.
+
+### More agents to try Agent Score against
+- The simulated-agent library grew to 34 ready-to-run agents, so you can see Agent Score in action before connecting your own - and you can now send and score a whole batch of them at once instead of one at a time.
+
 ## September 9, 2026 Update
 
 ### More accurate run status when scoring can't complete
