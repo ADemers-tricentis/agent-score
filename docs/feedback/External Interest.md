@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 64 form submissions found (as of 2026-09-09), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Six submissions came from `@tricentis.com` addresses — internal test/QA submissions, not external prospects — and are excluded from the tracker below: Brad Purcell (submitted twice, 2026-08-21 and 2026-09-07), Michal Hrncirik, Maria Argulla, Caitlin Bowers, and Neil Williams (submitted twice, both 2026-09-08, under "Tricentis (UK)"). A seventh submission (VIJESH Vijayan, 2026-08-27, "Neotys (FR) - HQ") came from a `@neotys.com` address; Neotys/NeoLoad has been a Tricentis-owned brand since the 2021 acquisition, so it's excluded on the same basis pending confirmation of whether this is a legacy-domain Tricentis employee or a genuine external NeoLoad customer. One more (Jigish Belani / Accenture LLP, 2026-09-09) is a repeat submission from a contact already tracked below (original: 2026-08-20) — noted, but not added as a second entry. Entries are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini, McKesson, Merito Solutions, PVH Corp, Tritusa Consulting) — 48 distinct entries as a result. Combined entries list each submitter's Date/Name/Contact as its own three-line group. One additional entry (Freddie Mac / Kaleb Jackson, 2026-08-28) came in through Sales rather than the Labs form — no form timestamp, and it's counted separately from the 64 form submissions above.
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 64 form submissions found (as of 2026-09-09), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Six submissions came from `@tricentis.com` addresses — internal test/QA submissions, not external prospects — and are excluded from the tracker below: Brad Purcell (submitted twice, 2026-08-21 and 2026-09-07), Michal Hrncirik, Maria Argulla, Caitlin Bowers, and Neil Williams (submitted twice, both 2026-09-08, under "Tricentis (UK)"). A seventh submission (VIJESH Vijayan, 2026-08-27, "Neotys (FR) - HQ") came from a `@neotys.com` address; Neotys/NeoLoad has been a Tricentis-owned brand since the 2021 acquisition, so it's excluded on the same basis pending confirmation of whether this is a legacy-domain Tricentis employee or a genuine external NeoLoad customer. One more (Jigish Belani / Accenture LLP, 2026-09-09) is a repeat submission from a contact already tracked below (original: 2026-08-20) — noted, but not added as a second entry. Entries are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini, McKesson, Merito Solutions, PVH Corp, Tritusa Consulting) — 48 distinct entries as a result. Combined entries list each submitter's Date/Name/Contact as its own three-line group. Two additional entries came in through Sales rather than the Labs form — no form timestamp, and they're counted separately from the 64 form submissions above: Freddie Mac (Kaleb Jackson, 2026-08-28) and Meta Platforms, Inc. (Sri Pulleti, 2026-09-10).
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -10,14 +10,17 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos scheduled | Active betas |
 |---|---|---|---|
-| 49 | 2 | 1 | 0 |
+| 50 | 2 | 4 | 0 |
+
+Source breakdown: 48 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.) = 50 total.
 
 Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
 
 | Company | Contact | Status |
 |---|---|---|
+| Meta Platforms, Inc. | Sri Pulleti | Demo Scheduled |
 | Freddie Mac | Kaleb Jackson | Replied |
-| Workday, Inc. | Vijay Mummaneni | Email sent |
+| Workday, Inc. | Vijay Mummaneni | Demo Scheduled |
 | PVH Corp | Beena P K, Aimee Martin | Email sent |
 | Charter Communications Operating, LLC | Sarvesh Peddi | Email sent |
 | Artizent (form blank, domain-resolved) | Alan Mayfus | Email sent |
@@ -49,7 +52,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Wolters Kluwer United States Inc. | Chris Allanson | Demo Scheduled |
 | J. R. Simplot Company | Neeraja Kusuma | Email sent |
 | Crown Equipment Corporation | Vinay Patlolla | Email sent |
-| Accenture LLP | Jigish Belani | Email sent |
+| Accenture LLP | Jigish Belani | Demo Scheduled |
 | Stanza | Anirban Toy Choudhury | Email sent |
 | Sunbelt Rentals | Arya Shrey | Email sent |
 | Merito Solutions | Chris Carpenter, Gerard Trimberger | Email sent |
@@ -67,6 +70,19 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Pegasystems Inc. | Kiran kadarla | Interested |
 
 *(Status values: Interested → Email sent → Replied → Demo scheduled → Active beta.)*
+
+---
+
+### Meta Platforms, Inc.
+Date: 2026-09-10 (Sales conversation — no Labs form submission)  
+Name: Sri Pulleti  
+Contact: sripulleti@meta.com  
+
+what they do: Global social-media/technology conglomerate (Facebook, Instagram, WhatsApp, Messenger, Reality Labs) with a large open-model AI research arm (the Llama model family).
+
+likely use case: given Meta's own push into customer-facing agents at massive scale via its new Business Agent Platform, plausibly evaluating Agent Score either to validate agents built on that platform or as landscape research into third-party agent-testing tools — notable overlap with Agent Score's own positioning, similar profile to the Workday and Pegasystems entries below.
+
+known agent tooling: launched Meta Business Agent (a customer-facing agent live across WhatsApp, Messenger, and Instagram handling Q&A, appointment booking, lead qualification, and multilingual responses) and the enterprise Business Agent Platform (integrating with 100+ systems including Shopify and Zendesk) at Conversations 2026 in London (June 3, 2026), building on over 1 million businesses already using earlier chatbot pilots in India, Mexico, and Brazil; separately ships Llama Stack, a toolchain interface for customizing Llama models and building agentic applications ([Digital Applied](https://www.digitalapplied.com/blog/meta-ai-business-agents-enterprise-llama-launch-2026), [Meta AI blog](https://ai.meta.com/blog/future-of-ai-built-with-llama/)).
 
 ---
 
