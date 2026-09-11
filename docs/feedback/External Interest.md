@@ -10,7 +10,7 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos scheduled | Active betas |
 |---|---|---|---|
-| 50 | 2 | 4 | 0 |
+| 50 | 5 | 4 | 0 |
 
 Source breakdown: 48 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.) = 50 total.
 

@@ -19,11 +19,29 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
 | Evaluate a *group*/hierarchy of agents, not just one in isolation | Meta, Wolters Kluwer | Lands as a concept, not shipped - Wolters Kluwer needs literal bulk/fleet-level scoring (point at a repo of agents, score together) and called per-agent-only "not useful" at their scale; targeted "hopefully end of month" |
 | Agentforce / Salesforce-native integration | Workday | Open - known gap |
 | Fine-grained access control / RBAC / self-service onboarding | Wolters Kluwer | Open - admin + mostly-view-only today; roles, per-tenant/agent scoping, and self-service all "on the roadmap" - a stated rollout blocker for a governance-driven buyer |
-| Score agents outside the Tricentis ecosystem (e.g. GitHub Copilot, internal platforms) to benchmark against sanctioned tooling | Wolters Kluwer | Open - vision, not a named shipped feature; was Wolters Kluwer's origin reason for the call |
+| Score agents outside the Tricentis ecosystem (e.g. GitHub Copilot, internal platforms) to benchmark against sanctioned tooling | Wolters Kluwer, Tritusa | Open - vision, not a named shipped feature; was Wolters Kluwer's origin reason for the call; Tritusa needs it for non-Tricentis client agents |
+| Compliance validation (GxP/SOX-style regimes, PII flagging on traces) | Tritusa | Open - "not currently, easy to add"; roadmap only. Blocker for regulated (bank/pharma) clients |
+| Alerting when an agent degrades (Slack/email to managers/admins) | Tritusa | Open - not built, stated "top of the list" |
+| Bulk / programmatic export of traces + scores (get the data out, not just view it) | Wolters Kluwer, Tritusa | Open - API in progress, possibly alpha, not shipped. Larger/partner accounts keep asking |
+| Synthetic dataset generation (targeted/edge-case coverage without waiting for real traces) | Tritusa | Open - golden sets are curated from real interactions only; roadmap |
+| Partner co-sell / co-working motion (SIs who implement + evaluate for their own clients) | Tritusa | Open - asked twice, no answer available; gold-sponsor partner presenting our story at Transatlantic 26 |
 
 ---
 
 ## Sessions
+
+### 2026-09-11 - Tritusa (partner / SI)
+
+- **Who:** Tritusa's AAA evals-and-assurance practice lead (drove the call and demoed live), Pankaj (Tosca lead, ~8 yrs), Vedanth (principal architect, ~decade in Tosca), Deepan + an account contact. Tricentis: Andrew Demers. *(Names approximate - messy auto-diarized transcript.)*
+- **What we learned:** Not an end buyer - a **Tricentis gold-sponsor partner/SI** who both builds agents for their clients (two live demos: a Copilot Studio agent and an AI Workspace MCP+A2A agent, each turning a requirements doc into qTest requirements/test cases and Tosca execution) and runs an advisory practice on LLM choice, safety, and compliance. The whole call was driven by a hard deadline: they present an autonomous QA agent at **Transatlantic 26 Singapore the week of 2026-09-15** and expect customers to hammer them on trust/models/benchmarks/safety/compliance. Auto-derived agent card, two-line OTel + "any model, anywhere" (incl. local Llama/Mistral), and root-cause attribution ("agent claimed done but no tool call fired") all landed - the last drew an explicit "brilliant." The benchmark reframe ("we grade the agent, the providers already benchmarked the model") is the right answer but needs to be rehearsed for the event.
+- **Major asks:**
+  - Compliance validation (GxP/SOX-style, PII flagging) - biggest unmet ask; their clients are banks and pharma. "Not currently, easy to add" won't survive a regulated engagement.
+  - Alerting to managers/admins (Slack/email) - not built, "top of the list."
+  - Bulk/programmatic export of traces + scores to their own DB for their own reports - API in progress, not shipped.
+  - Synthetic dataset generation - not available; golden sets curated from real traces only.
+  - Partner enablement before the event: access grant (~a week out), getting-started docs with sample use cases, and a rehearsed "answer guide" for the Singapore Q&A (Andrew is not attending).
+  - A partner co-sell/co-working motion - asked twice, no answer available today.
+- **Full debrief:** [feedback-sessions/Tritusa Feedback Session.md](feedback-sessions/Tritusa%20Feedback%20Session.md)
 
 ### 2026-09 (exact date undated) - Wolters Kluwer
 
