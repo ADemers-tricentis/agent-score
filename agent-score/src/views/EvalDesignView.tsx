@@ -23,6 +23,7 @@ import type {
   SuggestedDimension,
   EvalQuestion,
   ShowcaseCategory,
+  EvalKind,
 } from "../types";
 import {
   getProject,
@@ -179,6 +180,46 @@ const RISK_AREAS = [
   "Path / permission violation",
   "Latency / cost overrun",
 ];
+
+// ── Plain-language suggestion (mocked, deterministic keyword matching) ────────
+// No network call and no real LLM — a small local heuristic, same spirit as the
+// rest of this file's mocked guided/expert flows and SPEC_GENERATED_QUESTIONS.
+
+function suggestFromDescription(text: string): {
+  dimension: ShowcaseCategory;
+  evalKind: EvalKind;
+  rationale: string;
+} {
+  const t = text.toLowerCase();
+  const hasAny = (words: string[]) => words.some((w) => t.includes(w));
+
+  if (hasAny(["leak", "pii", "credential", "injection", "unsafe", "secret", "exploit", "malicious"])) {
+    return {
+      dimension: "Safety",
+      evalKind: "llm_judge",
+      rationale: "Mentions leaking data, credentials, injection, or unsafe behavior — this needs a judge reading the full session, not a simple metric.",
+    };
+  }
+  if (hasAny(["slow", "latency", "cost", "token", "expensive", "budget", "throughput"])) {
+    return {
+      dimension: "Efficiency",
+      evalKind: "library_metric",
+      rationale: "Mentions speed, cost, or token usage — measurable directly from trace metrics, no judge call required.",
+    };
+  }
+  if (hasAny(["wrong answer", "accurate", "correct", "accuracy", "right answer", "inaccurate"])) {
+    return {
+      dimension: "Correctness",
+      evalKind: "llm_judge",
+      rationale: "Mentions getting the right answer — best assessed by a judge comparing the output against expected behavior.",
+    };
+  }
+  return {
+    dimension: "Relevance",
+    evalKind: "hybrid",
+    rationale: "No strong signal toward a specific failure mode — defaulting to a general reliability check combining metrics and judge review.",
+  };
+}
 
 // ── Main view ─────────────────────────────────────────────────────────────────
 
@@ -747,6 +788,33 @@ function SpecTab({ status, mode }: { projectId: string; status: string; mode: Mo
       : []
   );
   const [confirmed, setConfirmed] = useState(false);
+  const [plainDescription, setPlainDescription] = useState("");
+
+  function handleSuggestFromDescription() {
+    const description = plainDescription.trim();
+    if (!description) return;
+    const { dimension, evalKind, rationale } = suggestFromDescription(description);
+    const isSafety = dimension === "Safety";
+    const newQuestion: EvalQuestion = {
+      id: `plain-${Date.now()}`,
+      rank: questions.length + 1,
+      showcaseCategory: dimension,
+      behaviorClass: isSafety ? "impermissible" : "permissible",
+      question: description,
+      taskDefinition: `Evaluate agent behavior against the plain-language description: "${description}"`,
+      testDimensions: ["source: plain_language_description", `suggested_eval_kind: ${evalKind}`],
+      requiredData: "Session traces relevant to the described concern.",
+      candidateMeasure: `${dimension.toLowerCase().replace(/\s+/g, "_")}_check: ${rationale} (eval_kind: ${evalKind})`,
+      judgeCriteria: rationale,
+      specCitation: "Derived from a free-text description, not a written spec clause.",
+      directionality: dimension === "Efficiency" ? "lower_is_better" : "higher_is_better",
+      riskLevel: isSafety ? "high" : "medium",
+      selected: true,
+    };
+    setQuestions((prev) => [...prev, newQuestion]);
+    setGenerated(true);
+    setPlainDescription("");
+  }
 
   function toggleCategory(key: string) {
     setSelectedCategories((prev) => {
@@ -791,6 +859,33 @@ function SpecTab({ status, mode }: { projectId: string; status: string; mode: Mo
           ? "Tell us about your agent in plain language — what it does, who uses it, and what you're worried about. A few sentences is enough."
           : "Write what this agent is supposed to do — purpose, tools, success criteria, failure modes, and constraints. The spec is first-class input, not background context. AgentScore systematizes it into a permissible/impermissible behavior taxonomy, then generates stratified eval cases with judge criteria grounded in specific spec clauses."}
       </Typography>
+
+      <Paper sx={{ p: 2, mb: 2.5, border: "1px solid", borderColor: "divider", borderRadius: 1.5, bgcolor: "action.hover" }}>
+        <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
+          Describe in plain language
+        </Typography>
+        <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 1.5 }}>
+          Not sure where to start? Describe one thing you're worried about, and we'll suggest an evaluation approach for it.
+        </Typography>
+        <TextField
+          multiline
+          minRows={3}
+          fullWidth
+          variant="outlined"
+          placeholder="e.g. Make sure it never leaks customer PII, or that responses stay accurate on ambiguous questions."
+          value={plainDescription}
+          onChange={(e) => setPlainDescription(e.target.value)}
+          sx={{ mb: 1.5, bgcolor: "background.paper" }}
+        />
+        <Button
+          variant="outlined"
+          size="small"
+          disabled={!plainDescription.trim()}
+          onClick={handleSuggestFromDescription}
+        >
+          Suggest approach
+        </Button>
+      </Paper>
 
       {!generated ? (
         <>

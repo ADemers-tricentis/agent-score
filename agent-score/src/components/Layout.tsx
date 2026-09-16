@@ -562,5 +562,15 @@ function buildBreadcrumbs(view: View): { label: string; onClick?: () => void }[]
       const agentName = PROJECTS.find((p) => p.id === view.projectId)?.name ?? "Agent";
       return [{ label: "Agents" }, { label: agentName }, { label: "Chat Setup" }];
     }
+    case "tenants":
+      return [{ label: "Tenants" }];
+    case "users":
+      return [{ label: "Users" }];
+    case "agent-registry":
+      return [{ label: "Agent Registry" }];
+    case "reports":
+      return [{ label: "Reports" }];
+    case "llm-catalog":
+      return [{ label: "LLM Catalog" }];
   }
 }

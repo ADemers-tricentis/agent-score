@@ -121,18 +121,8 @@ export default function MetricsView() {
           type="histogram"
           description="Token consumption per task; P95 tail cost input for Efficiency"
         >
-          <Box sx={{ display: "flex", gap: 2 }}>
-            <Box>
-              <Typography variant="caption" sx={{ color: "text.disabled", display: "block" }}>median cost</Typography>
-              <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>~$0.62</Typography>
-            </Box>
-            <Box>
-              <Typography variant="caption" sx={{ color: "text.disabled", display: "block" }}>P95 tail</Typography>
-              <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>~$1.12</Typography>
-            </Box>
-          </Box>
-          <Typography variant="caption" sx={{ color: "text.disabled", mt: 0.5, display: "block" }}>
-            Target: &lt;$1.00/session (Sonnet 4.5)
+          <Typography variant="caption" sx={{ color: "text.disabled", display: "block" }}>
+            Dollar-cost figures for this metric now live in Reports.
           </Typography>
         </MetricCard>
 

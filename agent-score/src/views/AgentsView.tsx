@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -20,9 +20,9 @@ import ScoreMeter from "../components/ScoreMeter";
 
 interface Props {
   navigate: (v: View) => void;
+  tenantId: string;
 }
 
-const TENANT = "tais";
 const PAGE_SIZE = 10;
 
 function AddIcon() {
@@ -178,6 +178,7 @@ function rowAccentColor(verdict: AgentVerdict, critical: boolean): string {
 }
 
 function AgentRow({ project, navigate }: { project: Project; navigate: (v: View) => void }) {
+  const tenantLabel = project.tenantId ?? "-";
   const verdict = agentVerdict(project);
   const critical = !!criticalSafety(project);
   const isScored = verdict.state === "scored";
@@ -217,7 +218,7 @@ function AgentRow({ project, navigate }: { project: Project; navigate: (v: View)
 
         <Box sx={{ width: 90, flexShrink: 0 }}>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            {TENANT}
+            {tenantLabel}
           </Typography>
         </Box>
 
@@ -258,7 +259,7 @@ function AgentRow({ project, navigate }: { project: Project; navigate: (v: View)
   );
 }
 
-export default function AgentsView({ navigate }: Props) {
+export default function AgentsView({ navigate, tenantId }: Props) {
   const [search, setSearch] = useState("");
   const [filterOpen, setFilterOpen] = useState(false);
   const nextRowId = useRef(1);
@@ -266,15 +267,24 @@ export default function AgentsView({ navigate }: Props) {
   const [appliedFilters, setAppliedFilters] = useState<FilterRow[]>([]);
   const [page, setPage] = useState(1);
 
+  const tenantProjects = useMemo(
+    () => PROJECTS.filter((project) => project.tenantId === tenantId),
+    [tenantId]
+  );
+
+  useEffect(() => {
+    setPage(1);
+  }, [tenantId]);
+
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase();
-    return PROJECTS.filter((project) => {
+    return tenantProjects.filter((project) => {
       const matchesSearch = !term || project.name.toLowerCase().includes(term) || project.service.toLowerCase().includes(term);
       if (!matchesSearch) return false;
       const verdict = agentVerdict(project);
       return appliedFilters.every((row) => matchesFilter(project, verdict, row));
     });
-  }, [search, appliedFilters]);
+  }, [tenantProjects, search, appliedFilters]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
@@ -305,7 +315,7 @@ export default function AgentsView({ navigate }: Props) {
             Agents
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            {PROJECTS.length} agents · {PROJECTS.filter((p) => p.phase === 1).length} Phase 1 · {PROJECTS.filter((p) => p.phase === 2).length} Phase 2
+            {tenantProjects.length} agents · {tenantProjects.filter((p) => p.phase === 1).length} Phase 1 · {tenantProjects.filter((p) => p.phase === 2).length} Phase 2
           </Typography>
         </Box>
         <Box sx={{ display: "flex", gap: 1 }}>
