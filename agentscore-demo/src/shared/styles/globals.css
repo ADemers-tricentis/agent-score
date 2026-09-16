@@ -1,0 +1,48 @@
+/* Inter is the app font. Aura's theme asks for `font-family: "Inter"`, but the
+   bundled @fontsource-variable/inter package registers the variable face as
+   "Inter Variable" — a name nothing references, so the app silently fell back to
+   a system font. Register the same variable woff2 under the name the theme
+   actually uses ("Inter"). Latin + latin-ext subsets cover the back-office UI;
+   add more subsets here if non-Latin text needs Inter. MUI's ScopedCssBaseline
+   applies the reset within the app subtree; this file only loads the font and
+   zeroes the document margin. Color/spacing tokens live in the Aura theme. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("@fontsource-variable/inter/files/inter-latin-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("@fontsource-variable/inter/files/inter-latin-ext-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Document root = 16px (the browser default) so Aura's rem-based type scale
+   renders at its native token sizes (body 14px, page title 22px, meta 12px),
+   matching the Tricentis Tosca portal's density. (An comfort bump to
+   18px was reverted to 16px for cross-product parity — see docs/10.) */
+html {
+  font-size: 16px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}

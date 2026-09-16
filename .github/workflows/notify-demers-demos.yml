@@ -10,7 +10,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'agent-score/**'
+      - 'agentscore-demo/**'
       - 'agent-score-marketing/**'
 
 permissions:

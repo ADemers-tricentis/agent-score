@@ -1,17 +1,24 @@
 {
   "compilerOptions": {
     "target": "ES2022",
+    "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
+    "skipLibCheck": true,
     "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
     "jsx": "react-jsx",
     "strict": true,
-    "noEmit": true,
-    "skipLibCheck": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "@tricentis/aura/*": ["../Tricentis/aura-ui/*"],
-      "@tricentis/mui-icons/*": ["../Tricentis/aura-ui/node_modules/@tricentis/mui-icons/*"]
+      "@/*": ["src/*"]
     }
   },
   "include": ["src"]
