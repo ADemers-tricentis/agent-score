@@ -48,7 +48,7 @@ export default function App() {
       case "home":
         return <HomeView navigate={setView} />;
       case "agents":
-        return <AgentsView navigate={setView} />;
+        return <AgentsView navigate={setView} tenantId={tenantId} />;
       case "agent-detail":
         return <AgentDetailView projectId={view.projectId} navigate={setView} />;
       case "project":
