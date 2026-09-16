@@ -1,7 +1,8 @@
-/** UserCreatePage — create a back-office user.
- *
- * Mirrors the "Add user" dialog in the design ref, rendered as a full page
- * for richer validation (initial tenants picker, password generator).
+/** UserCreatePage — create a back-office user from an approved access
+ * request. Reachable only from `AccessRequestsPage`'s Approve action now —
+ * there's no standalone "Add user" entry point on `UsersPage` any more, so
+ * every account created here is staff by construction and `kind` is fixed
+ * rather than asked for.
  */
 
 import { useState } from "react";
@@ -28,7 +29,6 @@ import { PasswordInput } from "@/shared/components/password-input";
 import { RadioCards } from "@/shared/components/radio-cards";
 
 type Role = "member" | "superadmin";
-type Kind = "staff" | "customer";
 
 export function UserCreatePage() {
   const { accessConfig } = useAuth();
@@ -41,25 +41,20 @@ export function UserCreatePage() {
   };
   const [email, setEmail] = useState(prefillEmail ?? "");
   const [password, setPassword] = useState("");
-  const [kind, setKind] = useState<Kind>("staff");
   const [role, setRole] = useState<Role>("member");
   const [tenantIds, setTenantIds] = useState<string[]>([]);
 
   const navigate = useNavigate();
 
-  // Password on create: required for a customer, required for staff under
-  // `password` mode, refused for staff under `entra`/`gateway` — there is
-  // nothing to set, the person signs in through Microsoft or the gateway.
-  // Guarded by `accessConfig != null` so the still-booting case (where the
-  // mode is unknown) defaults to password mode rather than to passwordless.
-  const staffPasswordless =
-    accessConfig != null && !passwordSignInAvailable(accessConfig);
-  // An access-request approval is always a Microsoft-authenticated staff
-  // account, whatever the mode — the person already signed in with Microsoft
-  // to land in the queue, so a request id widens the passwordless case
-  // alongside the mode test.
+  // Password on create: required under `password` mode, refused under
+  // `entra`/`gateway` — there is nothing to set, the person signs in through
+  // Microsoft or the gateway. Guarded by `accessConfig != null` so the still-
+  // booting case (where the mode is unknown) defaults to password mode
+  // rather than to passwordless. An access-request approval is always a
+  // Microsoft-authenticated account, whatever the mode — the person already
+  // signed in with Microsoft to land in the queue.
   const passwordlessStaff =
-    (staffPasswordless || Boolean(request)) && kind === "staff";
+    (accessConfig != null && !passwordSignInAvailable(accessConfig)) || Boolean(request);
 
   const [creating, setCreating] = useState(false);
 
@@ -69,7 +64,7 @@ export function UserCreatePage() {
       setCreating(true);
       createUserFake({
         email: email.trim(),
-        kind,
+        kind: "staff",
         is_superadmin: role === "superadmin",
         tenant_ids: role === "superadmin" ? [] : tenantIds,
       });
@@ -141,7 +136,7 @@ export function UserCreatePage() {
 
         <FormSection
           title="General"
-          description="Email is the login identity. Kind picks which application the account belongs to; Role gates back-office access scope."
+          description="Email is the login identity. Role gates back-office access scope."
         >
           <Stack sx={{ gap: 0.75 }}>
             <TextField
@@ -201,47 +196,6 @@ export function UserCreatePage() {
             </Stack>
           )}
           <Stack sx={{ gap: 0.75 }}>
-            <FormLabel>Kind</FormLabel>
-            <RadioCards
-              value={kind}
-              testIdPrefix="user-kind"
-              onValueChange={(v) => {
-                const next = v as Kind;
-                setKind(next);
-                // A customer can never be a superadmin (refused at the
-                // route and again by ck_users_customer_not_superadmin). Drop a
-                // stale superadmin pick instead of submitting a combination the
-                // backend will reject.
-                if (next === "customer") setRole("member");
-              }}
-              items={[
-                {
-                  value: "staff",
-                  label: "Staff",
-                  description: staffPasswordless
-                    ? "Signs in through Microsoft or the Tricentis gateway — no password to set."
-                    : "Tricentis operator — signs in to the back-office.",
-                },
-                {
-                  value: "customer",
-                  label: "Customer",
-                  description: "Signs in to the customer portal only.",
-                  disabled: Boolean(request),
-                },
-              ]}
-            />
-            {request ? (
-              <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                Access requests are for back-office staff.
-              </Typography>
-            ) : (
-              <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                Immutable after creation. A mis-created account is fixed by
-                soft-delete and recreate.
-              </Typography>
-            )}
-          </Stack>
-          <Stack sx={{ gap: 0.75 }}>
             <FormLabel>Role</FormLabel>
             <RadioCards
               value={role}
@@ -255,24 +209,18 @@ export function UserCreatePage() {
                 },
                 {
                   value: "superadmin",
-                  label: "Superadmin",
+                  label: "Admin",
                   description: "Cross-tenant access.",
-                  disabled: kind === "customer",
                 },
               ]}
             />
-            {kind === "customer" ? (
-              <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                Customers cannot be superadmins.
-              </Typography>
-            ) : null}
           </Stack>
         </FormSection>
 
         {role === "member" ? (
           <FormSection
             title="Initial tenants"
-            description="Tenants this user will access. Skip for superadmins — they implicitly access all tenants."
+            description="Tenants this user will access. Skip for admins — they implicitly access all tenants."
           >
             <Stack sx={{ gap: 0.75 }}>
               <FormLabel>Tenants</FormLabel>

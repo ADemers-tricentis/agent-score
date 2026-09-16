@@ -3,7 +3,7 @@
  * Layout mirrors the design ref:
  *  - Pinned header banner (breadcrumb + name + role chip + status dot + meta)
  *  - General FormSection (email + role radio cards)
- *  - Tenant memberships (members only — superadmins implicitly access all)
+ *  - Tenant memberships (members only — admins implicitly access all)
  *  - Sessions (revoke + reset password)
  *  - Danger zone (soft-delete / restore)
  *
@@ -33,7 +33,6 @@ import IconMaterialSymbolsApartment from "@tricentis/mui-icons/material-symbols/
 import IconMaterialSymbolsDelete from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsDelete.mjs";
 import IconMaterialSymbolsInfo from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsInfo.mjs";
 import IconMaterialSymbolsKey from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsKey.mjs";
-import IconMaterialSymbolsLock from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsLock.mjs";
 import IconMaterialSymbolsLogout from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsLogout.mjs";
 import IconMaterialSymbolsReplay from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsReplay.mjs";
 import IconMaterialSymbolsSave from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSave.mjs";
@@ -227,14 +226,8 @@ export function UserEditPage() {
       title={user.email}
       badges={
         <>
-          <Chip
-            tint={user.kind === "customer" ? "warning" : "muted"}
-            data-testid="user-kind-badge"
-          >
-            {user.kind}
-          </Chip>
           <Chip tint={user.is_superadmin ? "info" : "muted"}>
-            {user.is_superadmin ? "superadmin" : "member"}
+            {user.is_superadmin ? "admin" : "member"}
           </Chip>
           {isDeleted ? (
             <StatusDot status="destructive">deleted</StatusDot>
@@ -260,7 +253,7 @@ export function UserEditPage() {
         <Stack sx={{ maxWidth: 1024, gap: 3 }}>
           <FormSection
             title="General"
-            description="Email is the login identity. Kind is fixed at creation; Role gates back-office access scope."
+            description="Email is the login identity. Role gates back-office access scope — admins can change any other user's role here."
           >
             <TextField
               id="edit-user-email"
@@ -274,34 +267,6 @@ export function UserEditPage() {
                 htmlInput: { "data-testid": "user-email-input" },
               }}
             />
-            <Stack sx={{ gap: 0.75 }}>
-              <FormLabel
-                htmlFor="edit-user-kind"
-                sx={{ display: "flex", alignItems: "center", gap: 0.75 }}
-              >
-                Kind{" "}
-                <IconMaterialSymbolsLock
-                  sx={{ fontSize: 12, color: "text.secondary" }}
-                />
-              </FormLabel>
-              <TextField
-                value={user.kind}
-                disabled
-                fullWidth
-                size="small"
-                slotProps={{
-                  htmlInput: {
-                    id: "edit-user-kind",
-                    "data-testid": "user-kind-input",
-                    sx: { fontFamily: "monospace", color: "text.secondary" },
-                  },
-                }}
-              />
-              <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                Cannot be changed — a mis-created account is fixed by
-                soft-delete and recreate.
-              </Typography>
-            </Stack>
             <Stack sx={{ gap: 0.75 }}>
               <FormLabel>Role</FormLabel>
               <RadioCards
@@ -317,20 +282,11 @@ export function UserEditPage() {
                   },
                   {
                     value: "superadmin",
-                    label: "Superadmin",
+                    label: "Admin",
                     description: "Cross-tenant access.",
-                    // A customer row can never be promoted: the update route
-                    // refuses it, and ck_users_customer_not_superadmin backs
-                    // that up.
-                    disabled: user.kind === "customer",
                   },
                 ]}
               />
-              {user.kind === "customer" ? (
-                <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                  Customers cannot be superadmins.
-                </Typography>
-              ) : null}
             </Stack>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               <Button
@@ -348,7 +304,7 @@ export function UserEditPage() {
           {role === "member" ? (
             <FormSection
               title="Tenant memberships"
-              description="Tenants this user can access. Superadmins implicitly access all tenants."
+              description="Tenants this user can access. Admins implicitly access all tenants."
               bare
             >
               <Box
@@ -693,7 +649,7 @@ export function UserEditPage() {
         <DialogTitle>Restore {user.email}?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Reinstates their tenant memberships{user.is_superadmin ? " and the superadmin flag" : ""}
+            Reinstates their tenant memberships{user.is_superadmin ? " and the admin flag" : ""}
             {request
               ? ", and permanently stamps the access request approved."
               : "."}
