@@ -10,6 +10,8 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
+import Select from "@mui/material/Select";
+import Tooltip from "@mui/material/Tooltip";
 import { useColorScheme } from "@mui/material/styles";
 import NavRail from "@tricentis/aura/components/NavRail.js";
 import IconAgentsOutlined from "@tricentis/aura/components/IconAgentsOutlined.js";
@@ -25,13 +27,17 @@ import IconDistributionConstantOutlined from "@tricentis/aura/components/IconDis
 import IconConnectionOutlined from "@tricentis/aura/components/IconConnectionOutlined.js";
 import IconFileTableAdvancedOutlined from "@tricentis/aura/components/IconFileTableAdvancedOutlined.js";
 import IconComponentsOutlined from "@tricentis/aura/components/IconComponentsOutlined.js";
-import type { View, ProjectType } from "../types";
-import { PROJECTS } from "../data/mock";
+import type { View, ProjectType, PreviewRole } from "../types";
+import { PROJECTS, TENANTS } from "../data/mock";
 
 interface Props {
   view: View;
   navigate: (v: View) => void;
   children: ReactNode;
+  previewRole: PreviewRole;
+  setPreviewRole: (r: PreviewRole) => void;
+  tenantId: string;
+  setTenantId: (id: string) => void;
 }
 
 function HomeIcon() {
@@ -46,6 +52,18 @@ function BookIcon() {
   return <SvgIcon><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H6V4h5v8l2.5-1.5L16 12V4h2v16z" /></SvgIcon>;
 }
 
+function BadgeIcon() {
+  return <SvgIcon><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-1.99.9-1.99 2v11c0 1.1.89 2 1.99 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 0h-4V4h4v2z" /></SvgIcon>;
+}
+
+function PeopleIcon() {
+  return <SvgIcon><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" /></SvgIcon>;
+}
+
+function ReportsIcon() {
+  return <SvgIcon><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z" /></SvgIcon>;
+}
+
 function projectIcon(type: ProjectType): ReactElement {
   switch (type) {
     case "ATA": return <IconAgentCloudOutlined />;
@@ -57,7 +75,7 @@ function projectIcon(type: ProjectType): ReactElement {
   }
 }
 
-export default function Layout({ view, navigate, children }: Props) {
+export default function Layout({ view, navigate, children, previewRole, setPreviewRole, tenantId, setTenantId }: Props) {
   const { mode, setMode } = useColorScheme();
   const isDark = (mode ?? "dark") === "dark";
   const [agentMenuOpen, setAgentMenuOpen] = useState(false);
@@ -71,6 +89,10 @@ export default function Layout({ view, navigate, children }: Props) {
 
   const advancedViewNames = ["guard-log", "metrics", "llm-judges", "add-judge", "dimensions", "profiles", "profile", "add-profile"];
   const isAdvancedView = advancedViewNames.includes(view.name);
+
+  const adminViewNames = ["tenants", "users", "llm-catalog"];
+  const isAdminView = adminViewNames.includes(view.name);
+  const isAdminPreview = previewRole === "admin";
 
   const navItems = [
     {
@@ -88,11 +110,25 @@ export default function Layout({ view, navigate, children }: Props) {
       onClick: () => navigate({ name: "agents" }),
     },
     {
+      id: "agent-registry",
+      text: "Agent Registry",
+      icon: <IconAgentCloudOutlined />,
+      selected: view.name === "agent-registry",
+      onClick: () => navigate({ name: "agent-registry" }),
+    },
+    {
       id: "integrations",
       text: "Integrations",
       icon: <IconConnectionOutlined />,
       selected: view.name === "integrations",
       onClick: () => navigate({ name: "integrations" }),
+    },
+    {
+      id: "reports",
+      text: "Reports",
+      icon: <ReportsIcon />,
+      selected: view.name === "reports",
+      onClick: () => navigate({ name: "reports" }),
     },
     {
       id: "demo-gallery",
@@ -152,6 +188,40 @@ export default function Layout({ view, navigate, children }: Props) {
         },
       ],
     },
+    ...(isAdminPreview
+      ? [
+          {
+            id: "admin",
+            text: "Admin",
+            icon: <BadgeIcon />,
+            tooltipText: "Superadmin-only surfaces - tenants, staff users, and the LLM catalog",
+            selected: isAdminView,
+            items: [
+              {
+                id: "tenants",
+                text: "Tenants",
+                icon: <IconAgentTeamOutlined />,
+                selected: view.name === "tenants",
+                onClick: () => navigate({ name: "tenants" }),
+              },
+              {
+                id: "users",
+                text: "Users",
+                icon: <PeopleIcon />,
+                selected: view.name === "users",
+                onClick: () => navigate({ name: "users" }),
+              },
+              {
+                id: "llm-catalog",
+                text: "LLM Catalog",
+                icon: <IconArtificialIntelligenceOutlined />,
+                selected: view.name === "llm-catalog",
+                onClick: () => navigate({ name: "llm-catalog" }),
+              },
+            ],
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -320,6 +390,26 @@ export default function Layout({ view, navigate, children }: Props) {
             </Typography>
           </ButtonBase>
 
+          {/* Tenant switcher */}
+          <Select
+            size="small"
+            value={tenantId}
+            onChange={(e) => setTenantId(e.target.value)}
+            title="Switch tenant"
+            sx={{
+              flexShrink: 0,
+              fontSize: "0.78rem",
+              height: 30,
+              "& .MuiSelect-select": { py: 0.4, px: 1 },
+            }}
+          >
+            {TENANTS.map((t) => (
+              <MenuItem key={t.id} value={t.id} sx={{ fontSize: "0.8rem" }}>
+                {t.name}
+              </MenuItem>
+            ))}
+          </Select>
+
           {/* Breadcrumbs */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flex: 1 }}>
             {breadcrumbs.map((crumb, i) => (
@@ -350,6 +440,47 @@ export default function Layout({ view, navigate, children }: Props) {
               </Box>
             ))}
           </Box>
+
+          {/* Preview-as demo control - a presenter aid, not a real account setting. Kept visually
+              distinct (dashed border, "DEMO" tag) from the real dark/light toggle below. */}
+          <Tooltip title="Demo control - preview the sidebar as an admin or a regular user. Not a real account setting.">
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 0.5,
+                flexShrink: 0,
+                border: "1px dashed",
+                borderColor: "warning.main",
+                borderRadius: 1.5,
+                px: 0.5,
+                py: 0.25,
+              }}
+            >
+              <Typography
+                variant="caption"
+                sx={{ fontSize: "0.58rem", fontWeight: 700, color: "warning.main", letterSpacing: "0.06em", px: 0.25 }}
+              >
+                DEMO
+              </Typography>
+              <Box sx={{ display: "flex", border: "1px solid", borderColor: "divider", borderRadius: 1, overflow: "hidden" }}>
+                {(["admin", "member"] as const).map((r) => (
+                  <ButtonBase
+                    key={r}
+                    onClick={() => setPreviewRole(r)}
+                    sx={{
+                      py: 0.3, px: 1, fontSize: "0.68rem", textTransform: "capitalize", minWidth: 0,
+                      fontWeight: previewRole === r ? 700 : 400,
+                      bgcolor: previewRole === r ? "warning.main" : "transparent",
+                      color: previewRole === r ? "warning.contrastText" : "text.secondary",
+                    }}
+                  >
+                    Preview as {r}
+                  </ButtonBase>
+                ))}
+              </Box>
+            </Box>
+          </Tooltip>
 
           {/* Mode toggle */}
           <IconButton

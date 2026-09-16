@@ -1,5 +1,5 @@
-import { useState } from "react";
-import type { View } from "./types";
+import { useEffect, useState } from "react";
+import type { PreviewRole, View } from "./types";
 import Layout from "./components/Layout";
 import HomeView from "./views/HomeView";
 import AgentsView from "./views/AgentsView";
@@ -24,9 +24,24 @@ import DimensionsView from "./views/DimensionsView";
 import DemoGalleryView from "./views/DemoGalleryView";
 import GettingStartedView from "./views/GettingStartedView";
 import ChatScoringView from "./views/ChatScoringView";
+import TenantsView from "./views/TenantsView";
+import UsersView from "./views/UsersView";
+import AgentRegistryView from "./views/AgentRegistryView";
+import ReportsView from "./views/ReportsView";
+import LLMCatalogView from "./views/LLMCatalogView";
+
+const ADMIN_ONLY_VIEWS: View["name"][] = ["tenants", "users", "llm-catalog"];
 
 export default function App() {
   const [view, setView] = useState<View>({ name: "home" });
+  const [previewRole, setPreviewRole] = useState<PreviewRole>("admin");
+  const [tenantId, setTenantId] = useState("tais");
+
+  useEffect(() => {
+    if (previewRole === "member" && ADMIN_ONLY_VIEWS.includes(view.name)) {
+      setView({ name: "home" });
+    }
+  }, [previewRole, view.name]);
 
   function renderView() {
     switch (view.name) {
@@ -97,11 +112,28 @@ export default function App() {
             navigate={setView}
           />
         );
+      case "tenants":
+        return <TenantsView navigate={setView} />;
+      case "users":
+        return <UsersView navigate={setView} />;
+      case "agent-registry":
+        return <AgentRegistryView />;
+      case "reports":
+        return <ReportsView tenantId={tenantId} previewRole={previewRole} />;
+      case "llm-catalog":
+        return <LLMCatalogView />;
     }
   }
 
   return (
-    <Layout view={view} navigate={setView}>
+    <Layout
+      view={view}
+      navigate={setView}
+      previewRole={previewRole}
+      setPreviewRole={setPreviewRole}
+      tenantId={tenantId}
+      setTenantId={setTenantId}
+    >
       {renderView()}
     </Layout>
   );

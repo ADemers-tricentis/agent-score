@@ -113,6 +113,7 @@ export interface Project {
   phase: 1 | 2;
   reliability: Reliability;
   runs: Run[];
+  tenantId?: string;
   adoptedProfileId?: string;
   llmJudgeId?: string;
   traceSampleRate?: number;
@@ -120,6 +121,48 @@ export interface Project {
   fingerprintConfidence?: number;
   fingerprintSessionCount?: number;
   events?: ActivityEvent[];
+}
+
+// ── Preview role (demo-only presenter control, not a real account attribute) ──
+
+export type PreviewRole = "admin" | "member";
+
+// ── Tenants & staff users ────────────────────────────────────────────────────
+
+export interface Tenant {
+  id: string;
+  slug: string;
+  name: string;
+  plan: "Pilot" | "Standard" | "Enterprise";
+  status: "active" | "trial";
+  createdAt: string;
+}
+
+export interface StaffUser {
+  id: string;
+  name: string;
+  email: string;
+  role: "admin" | "member";
+  tenantIds: string[];
+  lastActive: string;
+}
+
+// ── Agent Registry (user-facing, simplified) ─────────────────────────────────
+
+export type AgentRegistrySlotKind =
+  | "agent_card"
+  | "chat_assistant"
+  | "improvement_advisor"
+  | "profile_fit"
+  | "scoring_judge";
+
+export interface AgentRegistrySlot {
+  id: string;
+  kind: AgentRegistrySlotKind;
+  name: string;
+  description: string;
+  model: string;
+  status: "live" | "error";
 }
 
 export interface GuardLogEntry {
@@ -156,7 +199,12 @@ export type View =
   | { name: "dimensions" }
   | { name: "demo-gallery" }
   | { name: "getting-started" }
-  | { name: "chat-scoring"; projectId: string };
+  | { name: "chat-scoring"; projectId: string }
+  | { name: "tenants" }
+  | { name: "users" }
+  | { name: "agent-registry" }
+  | { name: "reports" }
+  | { name: "llm-catalog" };
 
 export type LLMProvider = "Anthropic" | "AWS Bedrock" | "OpenAI-compatible";
 
@@ -168,6 +216,34 @@ export interface LLMJudge {
   model: string;
   createdAt: string;
   status: "live" | "error";
+}
+
+// ── LLM Catalog (usage, pricing, routing) ────────────────────────────────────
+
+export interface LLMPricingRow {
+  id: string;
+  judgeId: string;
+  model: string;
+  inputPer1M: number;
+  outputPer1M: number;
+  cacheReadPer1M: number;
+  cacheWritePer1M: number;
+  effectiveDate: string;
+}
+
+export interface LLMUsageLogEntry {
+  id: string;
+  ts: string;
+  judgeId: string;
+  task: string;
+  tokens: number;
+  costUsd: number;
+}
+
+export interface LLMRoutingAssignment {
+  id: string;
+  taskSlot: string;
+  judgeId: string;
 }
 
 // ── Evaluation Design types ──────────────────────────────────────────────────

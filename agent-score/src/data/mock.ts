@@ -1,8 +1,9 @@
-import type { Project, Run, Session, Verdict, ProjectType, GuardLogEntry, EvalDesign, LLMJudge, ScoringProfile, ProfileVersion } from "../types";
+import type { Project, Run, Session, Verdict, ProjectType, GuardLogEntry, EvalDesign, LLMJudge, ScoringProfile, ProfileVersion, Tenant, StaffUser, AgentRegistrySlot, LLMPricingRow, LLMUsageLogEntry, LLMRoutingAssignment } from "../types";
 
 export const PROJECTS: Project[] = [
   {
     id: "p1",
+    tenantId: "tais",
     name: "ATA Regression Suite",
     service: "autonomous-service",
     type: "ATA",
@@ -228,6 +229,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "p2",
+    tenantId: "tais",
     name: "ATC Test Case Author",
     service: "atc-quality-agent",
     type: "ATC",
@@ -327,6 +329,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "p3",
+    tenantId: "tais",
     name: "AI Workspace Agent",
     service: "ai-workspace-core",
     type: "AI_WORKSPACE",
@@ -471,6 +474,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "p4",
+    tenantId: "meta",
     name: "CURA Diagnostic Agent",
     service: "cura-diagnostic",
     type: "CURA",
@@ -624,6 +628,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "p5",
+    tenantId: "meta",
     name: "APT Performance Agent",
     service: "apt-perf",
     type: "APT",
@@ -668,6 +673,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: "p6",
+    tenantId: "wolters-kluwer",
     name: "Coding Assistant",
     service: "coding-agent",
     type: "CODING",
@@ -725,6 +731,23 @@ export const PROJECTS: Project[] = [
       },
     ],
   },
+];
+
+export const TENANTS: Tenant[] = [
+  { id: "tais", slug: "tais", name: "TAIS (Testing AI team)", plan: "Enterprise", status: "active", createdAt: "2026-04-14T10:00:00Z" },
+  { id: "meta", slug: "meta", name: "Meta Platforms", plan: "Standard", status: "active", createdAt: "2026-06-02T15:30:00Z" },
+  { id: "wolters-kluwer", slug: "wolters-kluwer", name: "Wolters Kluwer", plan: "Standard", status: "active", createdAt: "2026-07-18T09:15:00Z" },
+  { id: "tritusa", slug: "tritusa", name: "Tritusa", plan: "Pilot", status: "trial", createdAt: "2026-09-08T13:45:00Z" },
+];
+
+export const STAFF_USERS: StaffUser[] = [
+  { id: "u1", name: "Andrew Demers", email: "a.demers@tricentis.com", role: "admin", tenantIds: ["tais", "meta", "wolters-kluwer", "tritusa"], lastActive: "2026-09-16T09:10:00Z" },
+  { id: "u2", name: "Sohil Patel", email: "s.patel@tricentis.com", role: "admin", tenantIds: ["tais", "meta"], lastActive: "2026-09-15T18:22:00Z" },
+  { id: "u3", name: "Lior Cohen", email: "l.cohen@tricentis.com", role: "member", tenantIds: ["tais"], lastActive: "2026-09-15T14:05:00Z" },
+  { id: "u4", name: "Andrew Whitfield", email: "a.whitfield@tricentis.com", role: "member", tenantIds: ["tais"], lastActive: "2026-09-14T11:47:00Z" },
+  { id: "u5", name: "Priya Natarajan", email: "p.natarajan@meta.com", role: "member", tenantIds: ["meta"], lastActive: "2026-09-13T16:30:00Z" },
+  { id: "u6", name: "Daniel Voss", email: "d.voss@wolterskluwer.com", role: "member", tenantIds: ["wolters-kluwer"], lastActive: "2026-09-10T08:52:00Z" },
+  { id: "u7", name: "Elena Marchetti", email: "e.marchetti@tricentis.com", role: "admin", tenantIds: ["tais", "tritusa"], lastActive: "2026-09-16T07:40:00Z" },
 ];
 
 export const GUARD_LOG: GuardLogEntry[] = [
@@ -1857,3 +1880,121 @@ export const LLM_JUDGES: LLMJudge[] = [
     status: "live",
   },
 ];
+
+// ── Agent Registry (user-facing, simplified) ─────────────────────────────────
+
+export const AGENT_REGISTRY_SLOTS: AgentRegistrySlot[] = [
+  {
+    id: "slot-agent-card",
+    kind: "agent_card",
+    name: "Agent Card Writer",
+    description: "Turns a scoring run into a short, plain-language summary of what your agent is good at and where it struggles.",
+    model: "claude-sonnet-4-6",
+    status: "live",
+  },
+  {
+    id: "slot-scoring-judge",
+    kind: "scoring_judge",
+    name: "Score Judge",
+    description: "Reads each session and scores it against your active profile's dimensions and thresholds.",
+    model: "claude-sonnet-4-6",
+    status: "live",
+  },
+  {
+    id: "slot-improvement-advisor",
+    kind: "improvement_advisor",
+    name: "Improvement Advisor",
+    description: "Turns a run's verdict into concrete, prioritized recommendations for what to fix first.",
+    model: "claude-opus-4-8",
+    status: "live",
+  },
+  {
+    id: "slot-profile-fit",
+    kind: "profile_fit",
+    name: "Profile Fit Matcher",
+    description: "Watches how your agent actually behaves — tools, retrieval, turns — and matches it to the best-fit scoring profile automatically.",
+    model: "claude-haiku-4-5-20251001",
+    status: "live",
+  },
+  {
+    id: "slot-chat-assistant",
+    kind: "chat_assistant",
+    name: "Chat Assistant",
+    description: "Answers questions about your scores and runs in plain language, right inside the product.",
+    model: "claude-sonnet-4-6",
+    status: "live",
+  },
+];
+
+// ── LLM Catalog (usage, pricing, routing) ────────────────────────────────────
+
+export const LLM_USAGE_LOG: LLMUsageLogEntry[] = [
+  { id: "u-log-1", ts: "2026-09-15T09:12:00Z", judgeId: "j1", task: "Score Judge", tokens: 18400, costUsd: 0.61 },
+  { id: "u-log-2", ts: "2026-09-15T09:14:00Z", judgeId: "j2", task: "Profile Fit Matcher", tokens: 4200, costUsd: 0.04 },
+  { id: "u-log-3", ts: "2026-09-15T10:02:00Z", judgeId: "j3", task: "Improvement Advisor", tokens: 26100, costUsd: 1.12 },
+  { id: "u-log-4", ts: "2026-09-15T11:47:00Z", judgeId: "j1", task: "Agent Card Writer", tokens: 12800, costUsd: 0.44 },
+  { id: "u-log-5", ts: "2026-09-16T08:03:00Z", judgeId: "j1", task: "Score Judge", tokens: 19600, costUsd: 0.65 },
+  { id: "u-log-6", ts: "2026-09-16T08:30:00Z", judgeId: "j2", task: "Profile Fit Matcher", tokens: 3900, costUsd: 0.04 },
+];
+
+export const LLM_PRICING: LLMPricingRow[] = [
+  { id: "price-j1", judgeId: "j1", model: "claude-sonnet-4-6", inputPer1M: 3.0, outputPer1M: 15.0, cacheReadPer1M: 0.3, cacheWritePer1M: 3.75, effectiveDate: "2026-05-28" },
+  { id: "price-j2", judgeId: "j2", model: "us.anthropic.claude-haiku-4-5-20251001", inputPer1M: 0.8, outputPer1M: 4.0, cacheReadPer1M: 0.08, cacheWritePer1M: 1.0, effectiveDate: "2026-06-01" },
+  { id: "price-j3", judgeId: "j3", model: "claude-opus-4-8", inputPer1M: 15.0, outputPer1M: 75.0, cacheReadPer1M: 1.5, cacheWritePer1M: 18.75, effectiveDate: "2026-06-05" },
+];
+
+export const LLM_ROUTING: LLMRoutingAssignment[] = [
+  { id: "route-1", taskSlot: "Score Judge", judgeId: "j1" },
+  { id: "route-2", taskSlot: "Agent Card Writer", judgeId: "j1" },
+  { id: "route-3", taskSlot: "Improvement Advisor", judgeId: "j3" },
+  { id: "route-4", taskSlot: "Profile Fit Matcher", judgeId: "j2" },
+  { id: "route-5", taskSlot: "Chat Assistant", judgeId: "j1" },
+];
+
+export interface ReportsSummary {
+  activeAgents: number;
+  traces: number;
+  evalResults: number;
+  agentCards: number;
+  costByCategory: {
+    category: "Scoring" | "Profile fit" | "Agent card" | "Other";
+    costUsd: number;
+    unitCount: number;
+  }[];
+  totalCostUsd: number;
+}
+
+export function reportsSummary(tenantId: string): ReportsSummary {
+  const tenantProjects = PROJECTS.filter((p) => p.tenantId === tenantId);
+  const sessions = tenantProjects.flatMap((p) => p.runs.flatMap((r) => r.sessions));
+
+  const categoryForTask = (task: string): "Scoring" | "Profile fit" | "Agent card" | "Other" => {
+    if (task === "Score Judge") return "Scoring";
+    if (task === "Profile Fit Matcher") return "Profile fit";
+    if (task === "Agent Card Writer") return "Agent card";
+    return "Other";
+  };
+
+  const costByCategoryMap = new Map<string, { costUsd: number; unitCount: number }>();
+  for (const entry of LLM_USAGE_LOG) {
+    const category = categoryForTask(entry.task);
+    const existing = costByCategoryMap.get(category) ?? { costUsd: 0, unitCount: 0 };
+    existing.costUsd += entry.costUsd;
+    existing.unitCount += 1;
+    costByCategoryMap.set(category, existing);
+  }
+
+  const costByCategory = (["Scoring", "Profile fit", "Agent card", "Other"] as const).map((category) => {
+    const bucket = costByCategoryMap.get(category) ?? { costUsd: 0, unitCount: 0 };
+    return { category, costUsd: Math.round(bucket.costUsd * 100) / 100, unitCount: bucket.unitCount };
+  });
+
+  return {
+    activeAgents: tenantProjects.length,
+    traces: sessions.length,
+    evalResults: sessions.reduce((acc, s) => acc + Object.values(s.scores).filter(Boolean).length, 0),
+    agentCards: tenantProjects.filter((p) => p.events?.some((e) => e.kind === "profile_adopted")).length,
+    costByCategory,
+    totalCostUsd: Math.round(LLM_USAGE_LOG.reduce((acc, e) => acc + e.costUsd, 0) * 100) / 100,
+  };
+}
