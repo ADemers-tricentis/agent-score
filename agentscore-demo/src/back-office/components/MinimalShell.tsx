@@ -25,6 +25,9 @@ export function MinimalShell({ children }: { children: ReactNode }) {
         <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
           AgentScore
         </Typography>
+        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+          <Typography variant="body2">Home</Typography>
+        </Link>
         <Link to="/agents" search={{ view: "list", by: "tenant" }} style={{ textDecoration: "none", color: "inherit" }}>
           <Typography variant="body2">Agents</Typography>
         </Link>
