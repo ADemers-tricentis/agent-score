@@ -1,26 +1,42 @@
 {
-  "name": "agent-score",
+  "name": "agentscore-demo",
   "private": true,
+  "version": "0.0.0",
   "type": "module",
+  "packageManager": "pnpm@10.23.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/material": "^7.3.11",
-    "@tricentis/aura": "^4.3.3",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "@fontsource-variable/inter": "^5.2.8",
+    "@mui/material": "^7.3.9",
+    "@mui/x-data-grid-pro": "^8.27.5",
+    "@mui/x-date-pickers-pro": "^8.27.5",
+    "@mui/x-license": "^8.26.0",
+    "@tanstack/react-router": "^1.91.0",
+    "@tanstack/react-table": "^8.20.0",
+    "@tricentis/aura": "file:vendor/tricentis-aura-4.2.3.tgz",
+    "@tricentis/mui-icons": "file:vendor/tricentis-mui-icons-2.1.0.tgz",
+    "@xyflow/react": "^12.11.0",
+    "dayjs": "^1.11.13",
+    "notistack": "^3.0.2",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-markdown": "^10.1.0",
+    "recharts": "3.8.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
-    "@types/react": "^19.2.17",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.20.2",
+    "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.3.4",
-    "typescript": "^5.7.3",
-    "vite": "^6.3.5",
-    "vite-plugin-singlefile": "^2.3.3"
+    "typescript": "^5.7.2",
+    "vite": "^6.4.3"
   }
 }
