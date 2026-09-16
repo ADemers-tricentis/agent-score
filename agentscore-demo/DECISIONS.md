@@ -48,6 +48,22 @@ Every entry is checked against the live source in `agentscore-demo/src` before b
 
 ---
 
+## 2026-09-16 - Restyled the agent Score tab away from an "engineering report" look
+
+**Change:** On the agent detail Score tab (`/tenants/$tenantId/agents/$agentId?sub=run`) and the run-detail page it drills into:
+- `per-point-grid.tsx`: replaced four stacked MUI `Table`s (one per dimension, each repeating "Evaluation | Result | Average | Target" headers) with a single rounded card per dimension, a tinted header showing "N of N passing," and pill-shaped status badges ("Meets threshold" / "Needs attention") in place of bare icon+text table cells.
+- `ScorecardTab.tsx`: the four bare run-count numbers (interactions scored, checks contributed, etc.) now sit in soft tinted stat tiles instead of floating unstyled in a row; card corners softened from 4px to 8px radius to match.
+- `score-uncertainty.tsx`: the confidence bar is now pill-shaped, and dropped the redundant middle "Score 90.0" label (the composite is already shown big above it) - just the lower/upper bounds remain, in muted gray.
+- `RunsTab.tsx`: run-history table copy de-jargoned - "population" → "Standard run" (or hidden when it's the default), "N traces" → "N interactions" to match the plain-language wording used above; run-ID hash de-emphasized to secondary gray.
+- Made row-level clickability legible: every clickable eval row and per-interaction trace row gets a trailing chevron (rotates 90° when expanded); trace IDs in the drill-through panel render in link-blue with an underline-on-hover, since a gray-text-plus-hover-tint treatment alone wasn't obviously clickable.
+- Fixed the drill-through panel (`ScoringRunResultPage.tsx`'s `PerPointScorecard`/`DrillThroughPanel`) to expand inline directly under the clicked eval row (via new `PerPointGrid` props `expandedSlug`/`renderExpanded`), instead of always rendering at the bottom of the whole Evaluation breakdown regardless of which category was clicked.
+
+**Who it's for:** Anyone viewing a scorecard who isn't the engineer who built the scoring pipeline - the prior layout (repeated table headers, "checks could not be evidenced," "population"/"traces" jargon, a drill-through panel that popped up disconnected from what was clicked) read as a QA/CI report rather than a product screen.
+
+**Why:** Requested directly by the user (2026-09-16): "make this page look less engineery." Iterated in three rounds based on live feedback: (1) initial restyle of tables/stats/confidence bar/runs table, (2) added visible affordance (chevron) once the user noted row-clickability wasn't obvious, (3) moved the drill-through panel inline and strengthened the trace-row hover treatment to full link styling after the chevron alone still wasn't clear enough. Left the "checks contributed" / "could not be evidenced" / "interactions retired" stat-tile wording as-is - inline code comments flag that phrasing as intentionally precise about interaction-vs-evaluation count grains, so it wasn't changed without being asked.
+
+---
+
 ## Template for new entries
 
 ```

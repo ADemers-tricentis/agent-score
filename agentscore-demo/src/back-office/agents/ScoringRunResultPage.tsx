@@ -55,6 +55,7 @@ import Typography from "@mui/material/Typography";
 import { alpha } from "@mui/material/styles";
 import IconMaterialSymbolsArrowBack from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsArrowBack.mjs";
 import IconMaterialSymbolsCheckCircle from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsCheckCircle.mjs";
+import IconMaterialSymbolsChevronForward from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsChevronForward.mjs";
 import IconMaterialSymbolsContentCopy from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsContentCopy.mjs";
 import IconMaterialSymbolsKeyboardArrowDown from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsKeyboardArrowDown.mjs";
 import IconMaterialSymbolsRefresh from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsRefresh.mjs";
@@ -1316,22 +1317,20 @@ function PerPointScorecard({
   });
 
   return (
-    <>
-      <PerPointGrid
-        metrics={metrics}
-        trendBySlug={trendBySlug}
-        onDrillMetric={(slug) =>
-          setDrillSlug((cur) => (cur === slug ? null : slug))
-        }
-      />
-
-      {drillSlug ? (
+    <PerPointGrid
+      metrics={metrics}
+      trendBySlug={trendBySlug}
+      onDrillMetric={(slug) =>
+        setDrillSlug((cur) => (cur === slug ? null : slug))
+      }
+      expandedSlug={drillSlug}
+      renderExpanded={(slug) => (
         <DrillThroughPanel
           tenantId={tenantId}
           agentId={agentId}
           runId={runId}
-          evalSlug={drillSlug}
-          aggregateRefs={refsByEval.get(drillSlug) ?? []}
+          evalSlug={slug}
+          aggregateRefs={refsByEval.get(slug) ?? []}
           onNavigateToTrace={(traceId) =>
             void navigate({
               to: "/tenants/$tenantId/agents/$agentId/traces/$traceId",
@@ -1340,8 +1339,8 @@ function PerPointScorecard({
             })
           }
         />
-      ) : null}
-    </>
+      )}
+    />
   );
 }
 
@@ -1420,7 +1419,14 @@ function DrillThroughPanel({
                 borderRadius: 0.5,
                 px: 1,
                 py: 0.75,
-                "&:hover": { bgcolor: alpha(theme.palette.action.hover, 0.4) },
+                border: 1,
+                borderColor: "transparent",
+                "&:hover": {
+                  bgcolor: alpha(theme.palette.action.hover, 0.4),
+                  borderColor: "divider",
+                  "& .row-chevron": { color: theme.palette.primary.main },
+                  "& .trace-link": { textDecoration: "underline" },
+                },
               })}
             >
               <Box
@@ -1438,10 +1444,11 @@ function DrillThroughPanel({
               </Box>
               <Box sx={{ minWidth: 0, flex: 1 }}>
                 <Box
+                  className="trace-link"
                   sx={{
                     fontFamily: "monospace",
                     typography: "caption",
-                    color: "text.secondary",
+                    color: "primary.main",
                   }}
                 >
                   {item.traceId}
@@ -1462,6 +1469,12 @@ function DrillThroughPanel({
                   <EvidenceRefList refs={item.evidenceRefs} label="Evidence" />
                 ) : null}
               </Box>
+              <IconMaterialSymbolsChevronForward
+                aria-hidden
+                fontSize="small"
+                className="row-chevron"
+                sx={{ color: "text.disabled", flexShrink: 0, alignSelf: "center" }}
+              />
             </Box>
           ))}
         </Box>
