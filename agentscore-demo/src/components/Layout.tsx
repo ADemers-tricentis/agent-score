@@ -15,7 +15,6 @@ import Tooltip from "@mui/material/Tooltip";
 import { useColorScheme } from "@mui/material/styles";
 import NavRail from "@tricentis/aura/components/NavRail.js";
 import IconAgentsOutlined from "@tricentis/aura/components/IconAgentsOutlined.js";
-import IconRunPrivatelyOutlined from "@tricentis/aura/components/IconRunPrivatelyOutlined.js";
 import IconCellularDataOutlined from "@tricentis/aura/components/IconCellularDataOutlined.js";
 import IconArtificialIntelligenceOutlined from "@tricentis/aura/components/IconArtificialIntelligenceOutlined.js";
 import IconAgentCloudOutlined from "@tricentis/aura/components/IconAgentCloudOutlined.js";
@@ -87,7 +86,7 @@ export default function Layout({ view, navigate, children, previewRole, setPrevi
   const activeProjectId = "projectId" in view ? view.projectId : null;
   const activeProject = PROJECTS.find((p) => p.id === activeProjectId);
 
-  const advancedViewNames = ["guard-log", "metrics", "llm-judges", "add-judge", "dimensions", "profiles", "profile", "add-profile"];
+  const advancedViewNames = ["metrics", "llm-judges", "add-judge", "dimensions", "profiles", "profile", "add-profile"];
   const isAdvancedView = advancedViewNames.includes(view.name);
 
   const adminViewNames = ["tenants", "users", "add-user", "llm-catalog", "reports", "tenant-usage"];
@@ -151,13 +150,6 @@ export default function Layout({ view, navigate, children, previewRole, setPrevi
       tooltipText: "Developer settings - judges, guard rules, and raw metrics",
       selected: isAdvancedView,
       items: [
-        {
-          id: "guard-log",
-          text: "Guard Log",
-          icon: <IconRunPrivatelyOutlined />,
-          selected: view.name === "guard-log",
-          onClick: () => navigate({ name: "guard-log" }),
-        },
         {
           id: "metrics",
           text: "Metrics",
@@ -530,8 +522,6 @@ function buildBreadcrumbs(view: View): { label: string; onClick?: () => void }[]
       return [{ label: "My Agents" }, { label: "Agent" }, { label: "Score Breakdown" }];
     case "eval-design":
       return [{ label: "My Agents" }, { label: "Agent" }, { label: "Evaluation Design" }];
-    case "guard-log":
-      return [{ label: "Guard Log" }];
     case "metrics":
       return [{ label: "Metrics" }];
     case "llm-judges":

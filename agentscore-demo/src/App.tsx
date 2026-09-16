@@ -7,7 +7,6 @@ import AgentsView from "./views/AgentsView";
 import AgentShellView from "./views/AgentShellView";
 import SessionView from "./views/SessionView";
 import ScoreBreakdownView from "./views/ScoreBreakdownView";
-import GuardLogView from "./views/GuardLogView";
 import MetricsView from "./views/MetricsView";
 import EvalDesignView from "./views/EvalDesignView";
 import LLMJudgesView from "./views/LLMJudgesView";
@@ -77,8 +76,6 @@ export default function App() {
         );
       case "eval-design":
         return <EvalDesignView projectId={view.projectId} navigate={setView} />;
-      case "guard-log":
-        return <GuardLogView navigate={setView} />;
       case "metrics":
         return <MetricsView />;
       case "llm-judges":

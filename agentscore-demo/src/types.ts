@@ -337,7 +337,6 @@ export type View =
   | { name: "score-breakdown"; projectId: string; runId: string; sessionId: string }
   | { name: "compare-runs"; projectId: string; runIdA: string; runIdB: string }
   | { name: "eval-design"; projectId: string }
-  | { name: "guard-log" }
   | { name: "metrics" }
   | { name: "llm-judges" }
   | { name: "add-judge" }
