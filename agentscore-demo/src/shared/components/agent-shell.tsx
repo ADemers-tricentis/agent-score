@@ -106,7 +106,7 @@ export function AgentShell({
             data-slot="breadcrumb-link"
             component={Link}
             to="/agents"
-            label="Agents"
+            label="My Agents"
           />
           <Typography
             data-slot="breadcrumb-page"

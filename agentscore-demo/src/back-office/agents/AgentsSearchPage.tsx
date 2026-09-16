@@ -191,7 +191,7 @@ function AgentsSearchShell() {
     <Box sx={{ display: "flex", minHeight: 0, flex: 1, flexDirection: "column" }}>
       <PageBand sx={{ pt: 4, pb: 2.5 }}>
         <PageHeader
-          title="Agents"
+          title="My Agents"
           description="Cross-tenant view. Each agent is one ingest identity bound to its tenant."
           actions={
             <Button

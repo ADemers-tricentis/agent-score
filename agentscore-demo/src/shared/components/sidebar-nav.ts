@@ -66,7 +66,7 @@ export const sidebarNavSections: SidebarNavSection[] = [
       },
       {
         id: "agents",
-        title: "Agents",
+        title: "My Agents",
         to: "/agents",
         icon: IconMaterialSymbolsSmartToy,
         matches: (p) =>
