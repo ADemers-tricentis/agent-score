@@ -17,6 +17,7 @@ import IconMaterialSymbolsApartment from "@tricentis/mui-icons/material-symbols/
 import IconMaterialSymbolsBalance from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsBalance.mjs";
 import IconMaterialSymbolsBarChart from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsBarChart.mjs";
 import IconMaterialSymbolsGroup from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsGroup.mjs";
+import IconMaterialSymbolsMenuBook from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsMenuBook.mjs";
 import IconMaterialSymbolsScience from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsScience.mjs";
 import IconMaterialSymbolsSmartToy from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSmartToy.mjs";
 import IconMaterialSymbolsSpaceDashboard from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSpaceDashboard.mjs";
@@ -145,6 +146,17 @@ export function MinimalShell({ children }: { children: ReactNode }) {
         {visibleItems.map((item) => (
           <NavLink key={item.id} item={item} />
         ))}
+        {/* Not a `NavItem`/`NavId` — there's no production back-office
+         * equivalent to gate against, so this is demo-only and always
+         * visible regardless of role. */}
+        <Link
+          to="/docs/$slug"
+          params={{ slug: "welcome" }}
+          style={{ textDecoration: "none", color: "inherit", display: "flex", alignItems: "center", gap: 8 }}
+        >
+          <IconMaterialSymbolsMenuBook sx={{ fontSize: NAV_ICON_SIZE, flexShrink: 0, color: "text.secondary" }} />
+          <Typography variant="body2">Docs</Typography>
+        </Link>
         <DemoControls />
       </Box>
       <Box sx={{ flex: 1, overflow: "auto" }}>{children}</Box>

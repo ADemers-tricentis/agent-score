@@ -38,6 +38,16 @@ Every entry is checked against the live source in `agentscore-demo/src` before b
 
 ---
 
+## 2026-09-16 - Added a native "Docs" section
+
+**Change:** Added a "Docs" nav item (always visible, any role - no production back-office equivalent to gate it against) linking to a new `/docs/$slug` route (`src/back-office/docs/DocsPage.tsx`). Section/page structure (4 sections, 10 pages, titles + one-line blurbs) mirrors the real customer-facing docs site 1:1 (`agent-score-marketing/docs-src/src/nav.ts`, copied into `src/back-office/docs/nav.ts`) so the demo's docs nav reads as the real product. Every page body is a placeholder ("This page is a placeholder — content coming soon.") - not wired to the real docs content.
+
+**Who it's for:** Whoever is running the demo - lets them show that customer docs exist and are reachable from the product, without yet needing the real doc content to be accurate or finished.
+
+**Why:** Requested directly by the user (2026-09-16): "add the customer facing docs to the demo... don't worry about content, we can fix it later." Confirmed via a follow-up question that a native section built in the demo's own shell (not an iframe embed or an external link) was the wanted approach.
+
+---
+
 ## Template for new entries
 
 ```
