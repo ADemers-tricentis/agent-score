@@ -22,6 +22,8 @@ import { parseAgentScoreSearch, parseRunResultSearch } from "@/back-office/agent
 import { parseAgentsViewSearch } from "@/back-office/agents/view-params";
 import { MinimalShell } from "@/back-office/components/MinimalShell";
 import { AccessRequestsPage } from "@/back-office/access-requests/AccessRequestsPage";
+import { DocsPage } from "@/back-office/docs/DocsPage";
+import { DEFAULT_DOCS_SLUG } from "@/back-office/docs/nav";
 import { TenantsPage } from "@/back-office/tenants/TenantsPage";
 import { TenantCreatePage } from "@/back-office/tenants/TenantCreatePage";
 import { TenantDetailLayout } from "@/back-office/tenants/TenantDetailLayout";
@@ -204,6 +206,22 @@ const accessRequestsRedirectRoute = createRoute({
   beforeLoad: () => {
     throw redirect({ to: "/users/requests" });
   },
+});
+
+// ── Docs (demo-only — no production back-office equivalent) ────────────────
+
+const docsIndexRoute = createRoute({
+  getParentRoute: () => protectedLayoutRoute,
+  path: "/docs",
+  beforeLoad: () => {
+    throw redirect({ to: "/docs/$slug", params: { slug: DEFAULT_DOCS_SLUG } });
+  },
+});
+
+const docsPageRoute = createRoute({
+  getParentRoute: () => protectedLayoutRoute,
+  path: "/docs/$slug",
+  component: DocsPage,
 });
 
 // ── Tenants ───────────────────────────────────────────────────────────────
@@ -427,6 +445,8 @@ const protectedChildren = [
   userCreateRoute,
   userEditRoute,
   accessRequestsRedirectRoute,
+  docsIndexRoute,
+  docsPageRoute,
   tenantsRoute,
   tenantCreateRoute,
   tenantDetailLayoutRoute.addChildren([
