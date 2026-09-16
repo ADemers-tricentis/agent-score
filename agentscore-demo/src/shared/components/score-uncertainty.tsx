@@ -54,15 +54,14 @@ export function ScoreUncertainty({
         </Typography>
       ) : null}
       {showInterval && lower != null && upper != null && composite != null && Number.isFinite(lower) && Number.isFinite(upper) && lower <= upper ? (
-        <Box data-testid="score-uncertainty-interval" sx={{ my: 2 }}>
-          <Box aria-hidden sx={{ position: "relative", height: 8, borderRadius: 1, bgcolor: "action.hover" }}>
-            <Box sx={{ position: "absolute", left: `${Math.max(0, Math.min(100, lower))}%`, width: `${Math.max(0, Math.min(100, upper) - Math.max(0, lower))}%`, height: "100%", bgcolor: "primary.light", borderRadius: 1 }} />
-            <Box sx={{ position: "absolute", left: `${Math.max(0, Math.min(100, composite))}%`, top: -2, width: 12, height: 12, transform: "translateX(-50%)", borderRadius: "50%", bgcolor: "primary.main" }} />
+        <Box data-testid="score-uncertainty-interval" sx={{ my: 1.5 }}>
+          <Box aria-hidden sx={{ position: "relative", height: 10, borderRadius: 9999, bgcolor: "action.hover" }}>
+            <Box sx={{ position: "absolute", left: `${Math.max(0, Math.min(100, lower))}%`, width: `${Math.max(0, Math.min(100, upper) - Math.max(0, lower))}%`, height: "100%", bgcolor: "primary.light", borderRadius: 9999 }} />
+            <Box sx={{ position: "absolute", left: `${Math.max(0, Math.min(100, composite))}%`, top: -2, width: 14, height: 14, transform: "translateX(-50%)", borderRadius: "50%", bgcolor: "primary.main", border: "2px solid", borderColor: "background.paper", boxShadow: 1 }} />
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1, gap: 1 }}>
-            <Typography variant="caption">Lower {lower.toFixed(0)}</Typography>
-            <Typography variant="caption">Score {composite.toFixed(1)}</Typography>
-            <Typography variant="caption">Upper {upper.toFixed(0)}</Typography>
+            <Typography variant="caption" color="text.secondary">{lower.toFixed(0)}</Typography>
+            <Typography variant="caption" color="text.secondary">{upper.toFixed(0)}</Typography>
           </Box>
         </Box>
       ) : null}

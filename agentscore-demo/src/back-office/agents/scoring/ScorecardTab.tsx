@@ -163,7 +163,7 @@ export function ScoreCard({
       sx={{ display: "flex", flexDirection: "column", gap: 2 }}
       data-testid="scorecard"
     >
-      <Box sx={{ border: 1, borderColor: "divider", borderRadius: 1, p: { xs: 2, md: 3 } }}>
+      <Box sx={{ border: 1, borderColor: "divider", borderRadius: 2, p: { xs: 2, md: 3 } }}>
       <Box sx={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 2, mb: 3 }}>
         <Typography variant="h6">Latest scored run</Typography>
         <Typography variant="body2" color="text.secondary">{run.startedAt ? new Date(run.startedAt).toLocaleString() : "Start time not recorded"}</Typography>
@@ -227,11 +227,27 @@ export function ScoreCard({
           infrastructure fault now fails the whole run before any per-check
           row is written, so this field keeps its persisted default of 0. */}
       <Box data-testid="scorecard-counts">
-      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "repeat(2, minmax(0, 1fr))", md: "repeat(4, minmax(0, 1fr))" }, gap: 2, mt: 3, pt: 2, borderTop: 1, borderColor: "divider" }}>
-        <Box><Typography variant="h5">{run.scoredCount}</Typography>{" "}<Typography variant="body2">interactions scored</Typography></Box>
-        {run.evalsAssigned != null && run.evalsAssigned > 0 ? <Box><Typography variant="h5">{run.evalsScored == null ? "Not recorded" : `${run.evalsScored}/${run.evalsAssigned}`}</Typography>{" "}<Typography variant="body2">checks contributed</Typography></Box> : null}
-        <Box><Typography variant="h5">{run.skippedCount}</Typography>{" "}<Typography variant="body2">checks could not be evidenced</Typography></Box>
-        {run.retiredCount != null ? <Box><Typography variant="h5">{run.retiredCount}</Typography>{" "}<Typography variant="body2">interactions retired</Typography></Box> : null}
+      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "repeat(2, minmax(0, 1fr))", md: "repeat(4, minmax(0, 1fr))" }, gap: 1.5, mt: 3, pt: 3, borderTop: 1, borderColor: "divider" }}>
+        <Box sx={{ borderRadius: 2, bgcolor: "action.hover", p: 1.5 }}>
+          <Typography variant="h5" sx={{ fontVariantNumeric: "tabular-nums" }}>{run.scoredCount}</Typography>
+          <Typography variant="body2" color="text.secondary">interactions scored</Typography>
+        </Box>
+        {run.evalsAssigned != null && run.evalsAssigned > 0 ? (
+          <Box sx={{ borderRadius: 2, bgcolor: "action.hover", p: 1.5 }}>
+            <Typography variant="h5" sx={{ fontVariantNumeric: "tabular-nums" }}>{run.evalsScored == null ? "Not recorded" : `${run.evalsScored}/${run.evalsAssigned}`}</Typography>
+            <Typography variant="body2" color="text.secondary">checks contributed</Typography>
+          </Box>
+        ) : null}
+        <Box sx={{ borderRadius: 2, bgcolor: "action.hover", p: 1.5 }}>
+          <Typography variant="h5" sx={{ fontVariantNumeric: "tabular-nums" }}>{run.skippedCount}</Typography>
+          <Typography variant="body2" color="text.secondary">checks could not be evidenced</Typography>
+        </Box>
+        {run.retiredCount != null ? (
+          <Box sx={{ borderRadius: 2, bgcolor: "action.hover", p: 1.5 }}>
+            <Typography variant="h5" sx={{ fontVariantNumeric: "tabular-nums" }}>{run.retiredCount}</Typography>
+            <Typography variant="body2" color="text.secondary">interactions retired</Typography>
+          </Box>
+        ) : null}
       </Box>
       {reuseCountsCopy(run).length ? <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: 2 }}>{reuseCountsCopy(run).map((item) => <Chip key={item.key} tint="muted">{item.text}</Chip>)}</Box> : null}
       </Box>
@@ -278,7 +294,7 @@ export function ScoreCard({
       ) : null}
 
       {run.metrics.length > 0 ? (
-        <Box sx={{ border: 1, borderColor: "divider", borderRadius: 1, p: { xs: 2, md: 3 } }}>
+        <Box sx={{ border: 1, borderColor: "divider", borderRadius: 2, p: { xs: 2, md: 3 } }}>
           <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", alignItems: "center", mb: 2 }}>
             <Typography variant="h6">Evaluation breakdown</Typography>
             {run.metrics.some((metric: any) => metric.status === "fail" || metric.status === "partial") ? <Chip tint="warning">{run.metrics.filter((metric: any) => metric.status === "fail" || metric.status === "partial").length} need attention</Chip> : null}

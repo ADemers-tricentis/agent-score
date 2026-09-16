@@ -150,7 +150,7 @@ export function RunsTab({
   }
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", border: 1, borderColor: "divider", borderRadius: 1, p: { xs: 2, md: 3 }, minWidth: 0 }} data-testid="scoring-history">
+    <Box sx={{ display: "flex", flexDirection: "column", border: 1, borderColor: "divider", borderRadius: 2, p: { xs: 2, md: 3 }, minWidth: 0 }} data-testid="scoring-history">
       <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", alignItems: "baseline" }}><Typography variant="h6">Scoring history</Typography>{toggle}</Box>
       {sub === "version" ? (
         <VersionsView tenantId={tenantId} agentId={agentId} />
@@ -317,6 +317,7 @@ export function RunsTable({
               gap: 0.5,
               fontFamily: "monospace",
               typography: "caption",
+              color: "text.secondary",
             }}
           >
             {row.original.runId.slice(0, 8)}…
@@ -328,10 +329,13 @@ export function RunsTable({
         id: "mode",
         header: "Mode",
         accessorFn: (r) => r.mode,
+        // "population" is the standard run mode and carries no information for
+        // most runs, so it stays silent — only the single-trace exception (an
+        // engineer re-scoring one trace) gets a visible flag.
         cell: ({ row }) => (
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
             <Box component="span" sx={{ typography: "caption", color: "text.secondary" }}>
-              {row.original.mode}
+              {row.original.mode === "population" ? "Standard run" : row.original.mode}
             </Box>
             {row.original.singleTraceRef != null ? (
               <Chip tint="info">single trace</Chip>
@@ -356,7 +360,7 @@ export function RunsTable({
                   {r.singleTraceRef.slice(0, 8)}…
                 </Box>
               ) : (
-                `${r.sampleSize} trace${r.sampleSize === 1 ? "" : "s"}`
+                `${r.sampleSize} interaction${r.sampleSize === 1 ? "" : "s"}`
               )}
             </Box>
           );
