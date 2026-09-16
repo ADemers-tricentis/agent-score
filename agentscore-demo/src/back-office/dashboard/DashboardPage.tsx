@@ -4,7 +4,8 @@
  * IngestionPanel ~5/12) → full-width RecentRunsTable. No backend, no
  * superadmin gate — every other section in this clone dropped that gate too
  * (no AuthProvider mounted); `AutoRefreshControl` is cosmetic here, same as
- * `AgentsSearchPage`.
+ * `AgentsSearchPage`. The demo-mode "blank" toggle (`useDemoMode`) swaps in
+ * the zeroed `*_BLANK` fixtures to preview a brand-new tenant.
  */
 
 import { useState } from "react";
@@ -12,7 +13,12 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
 import { toast } from "@/shared/lib/toast";
-import { DASHBOARD_OVERVIEW, INGESTION_OVERVIEW } from "@/back-office/dashboard/fake-data";
+import {
+  DASHBOARD_OVERVIEW,
+  DASHBOARD_OVERVIEW_BLANK,
+  INGESTION_OVERVIEW,
+  INGESTION_OVERVIEW_BLANK,
+} from "@/back-office/dashboard/fake-data";
 import { IngestionPanel } from "@/back-office/dashboard/IngestionPanel";
 import { KpiRow } from "@/back-office/dashboard/KpiRow";
 import { RecentRunsTable } from "@/back-office/dashboard/RecentRunsTable";
@@ -20,9 +26,13 @@ import { ScoringPanel } from "@/back-office/dashboard/ScoringPanel";
 import { AutoRefreshControl } from "@/shared/components/auto-refresh-control";
 import { PageBand } from "@/shared/components/page-band";
 import { PageHeader } from "@/shared/components/page-header";
+import { useDemoMode } from "@/shared/demo-mode/demo-mode-context";
 
 export function DashboardPage() {
   const [intervalId, setIntervalId] = useState("30s");
+  const { blank } = useDemoMode();
+  const overview = blank ? DASHBOARD_OVERVIEW_BLANK : DASHBOARD_OVERVIEW;
+  const ingestion = blank ? INGESTION_OVERVIEW_BLANK : INGESTION_OVERVIEW;
   const handleRefresh = () => toast.info("Nothing new — this demo's dashboard data is fixed.");
 
   return (
@@ -30,7 +40,9 @@ export function DashboardPage() {
       <PageBand sx={{ pt: 4, pb: 2.5 }}>
         <PageHeader
           title="Home"
-          description="Product-wide overview · activity across every tenant"
+          description={
+            blank ? "No activity yet · get started by connecting your first agent" : "Product-wide overview · activity across every tenant"
+          }
           actions={
             <AutoRefreshControl
               intervalId={intervalId}
@@ -44,18 +56,18 @@ export function DashboardPage() {
 
       <Box sx={{ minHeight: 0, flex: 1, overflowY: "auto" }}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5, px: 4, py: 3 }}>
-          <KpiRow overview={DASHBOARD_OVERVIEW} ingestion={INGESTION_OVERVIEW} />
+          <KpiRow overview={overview} ingestion={ingestion} />
 
           <Grid container spacing={2.5}>
             <Grid size={{ xs: 12, lg: 7 }}>
-              <ScoringPanel scoring={DASHBOARD_OVERVIEW.scoring} />
+              <ScoringPanel scoring={overview.scoring} />
             </Grid>
             <Grid size={{ xs: 12, lg: 5 }}>
-              <IngestionPanel ingestion={INGESTION_OVERVIEW} />
+              <IngestionPanel ingestion={ingestion} />
             </Grid>
           </Grid>
 
-          <RecentRunsTable recentRuns={DASHBOARD_OVERVIEW.scoring.recentRuns} />
+          <RecentRunsTable recentRuns={overview.scoring.recentRuns} />
         </Box>
       </Box>
     </Box>

@@ -156,3 +156,39 @@ export const INGESTION_OVERVIEW: IngestionOverview = {
     { point: "langfuse-bridge", enabled: true, tracesInFlight: 1 },
   ],
 };
+
+/** "Blank / new login" demo state — what a brand-new tenant with nothing
+ * configured yet looks like: no agents, no runs, no traces. Driven by the
+ * `blank` toggle in `shared/demo-mode/demo-mode-context.tsx`. */
+export const DASHBOARD_OVERVIEW_BLANK: DashboardOverview = {
+  counts: {
+    tenantsTotal: 0,
+    agentsActive: 0,
+    agentsTotal: 0,
+  },
+  scoring: {
+    runsTotal: 0,
+    buckets: { ship: 0, review: 0, block: 0 },
+    noVerdict: 0,
+    collapsed: 0,
+    collapsedByClass: { backpressure: 0, infrastructure: 0, profile_attributable: 0 },
+    attention: [],
+    recentRuns: [],
+    needsAttentionAgents: 0,
+    needsReviewAgents: 0,
+    profileAttentionAgents: 0,
+    trend7D: [],
+  },
+};
+
+export const INGESTION_OVERVIEW_BLANK: IngestionOverview = {
+  currentTps: 0,
+  tracesToday: 0,
+  errorRate: 0,
+  writeSuccessRate: 0,
+  activeAlertCount: 0,
+  points: [
+    { point: "otel-collector", enabled: true, tracesInFlight: 0 },
+    { point: "langfuse-bridge", enabled: true, tracesInFlight: 0 },
+  ],
+};
