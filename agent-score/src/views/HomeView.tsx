@@ -7,8 +7,8 @@ import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import LinearProgress from "@mui/material/LinearProgress";
 import SvgIcon from "@mui/material/SvgIcon";
-import type { View, VerdictBandKey } from "../types";
-import { PROJECTS, projectPassRate, projectDimensionAverages, sessionsCompositeScore } from "../data/mock";
+import type { View, VerdictBandKey, PreviewRole } from "../types";
+import { PROJECTS, TENANTS, projectPassRate, projectDimensionAverages, sessionsCompositeScore } from "../data/mock";
 import { agentVerdict, criticalSafety, projectVerdictBands, bandForScore, scoreToken, VERDICT_BAND_META, RUN_STATE_META } from "../data/verdict";
 import GradeChip from "../components/GradeChip";
 import TypeTag from "../components/TypeTag";
@@ -17,6 +17,8 @@ import VerdictChip from "../components/VerdictChip";
 
 interface Props {
   navigate: (v: View) => void;
+  tenantId: string;
+  previewRole: PreviewRole;
 }
 
 const SPARKLINE_POINTS = [18, 28, 22, 35, 30, 42, 48];
@@ -82,20 +84,27 @@ function TrendChart() {
   );
 }
 
-export default function HomeView({ navigate }: Props) {
+export default function HomeView({ navigate, tenantId, previewRole }: Props) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const phase1 = PROJECTS.filter((p) => p.phase === 1).length;
-  const phase2 = PROJECTS.filter((p) => p.phase === 2).length;
 
-  const totalTraces = PROJECTS.reduce(
+  // Admin preview sees product-wide stats across every tenant (matching the
+  // production back-office Home, which is explicitly cross-tenant). The member
+  // preview only ever sees their own tenant's agents, like a real customer would.
+  const isAdminPreview = previewRole === "admin";
+  const scopedProjects = isAdminPreview ? PROJECTS : PROJECTS.filter((p) => p.tenantId === tenantId);
+
+  const phase1 = scopedProjects.filter((p) => p.phase === 1).length;
+  const phase2 = scopedProjects.filter((p) => p.phase === 2).length;
+
+  const totalTraces = scopedProjects.reduce(
     (sum, p) => sum + p.runs.reduce((rs, r) => rs + r.sessions.length, 0),
     0
   );
 
-  const allRuns = PROJECTS.flatMap((p) => p.runs.map((r) => ({ ...r, project: p })));
+  const allRuns = scopedProjects.flatMap((p) => p.runs.map((r) => ({ ...r, project: p })));
   const totalRuns = allRuns.length;
 
-  const projectVerdicts = PROJECTS.map((p) => ({ project: p, verdict: agentVerdict(p) }));
+  const projectVerdicts = scopedProjects.map((p) => ({ project: p, verdict: agentVerdict(p) }));
   const verdictCounts = { Ship: 0, Review: 0, Block: 0 };
   for (const { verdict } of projectVerdicts) {
     if (verdict.band === "ship") verdictCounts.Ship++;
@@ -114,12 +123,25 @@ export default function HomeView({ navigate }: Props) {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 6);
 
-  const total = PROJECTS.length;
+  const total = scopedProjects.length;
 
   const kpiCards = [
+    ...(isAdminPreview
+      ? [
+          {
+            label: "TENANTS",
+            main: <Typography variant="h4" sx={{ fontWeight: 800, lineHeight: 1 }}>{TENANTS.length}</Typography>,
+            sub: (
+              <Typography variant="caption" sx={{ color: "text.secondary" }}>
+                {TENANTS.filter((t) => t.status === "active").length} active · {TENANTS.filter((t) => t.status === "trial").length} trial
+              </Typography>
+            ),
+          },
+        ]
+      : []),
     {
       label: "ACTIVE AGENTS",
-      main: <Typography variant="h4" sx={{ fontWeight: 800, lineHeight: 1 }}>{PROJECTS.length}</Typography>,
+      main: <Typography variant="h4" sx={{ fontWeight: 800, lineHeight: 1 }}>{scopedProjects.length}</Typography>,
       sub: (
         <Typography variant="caption" sx={{ color: "text.secondary" }}>
           {phase1} Phase 1 · {phase2} Phase 2
@@ -165,11 +187,13 @@ export default function HomeView({ navigate }: Props) {
         <Typography variant="h5" fontWeight={700}>Home</Typography>
       </Box>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        Activity across all agents · last 7 days
+        {isAdminPreview
+          ? `Activity across all agents · ${TENANTS.length} tenants · last 7 days`
+          : "Activity across your agents · last 7 days"}
       </Typography>
 
       {/* KPI cards */}
-      <Box sx={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 2, mb: 3 }}>
+      <Box sx={{ display: "grid", gridTemplateColumns: `repeat(${kpiCards.length}, 1fr)`, gap: 2, mb: 3 }}>
         {kpiCards.map((card) => (
           <Paper key={card.label} sx={{ p: 2, border: "1px solid", borderColor: "divider", borderRadius: 2 }}>
             <Typography variant="overline" sx={{ color: "text.disabled", fontSize: "0.62rem", letterSpacing: 1, display: "block", mb: 0.75 }}>
@@ -362,7 +386,7 @@ export default function HomeView({ navigate }: Props) {
         <Paper sx={{ p: 2, border: "1px solid", borderColor: "divider", borderRadius: 2 }}>
           <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.25 }}>Verdict distribution</Typography>
           <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 2 }}>
-            Last 7 days · across all agents
+            Last 7 days · {isAdminPreview ? "across all agents" : "across your agents"}
           </Typography>
 
           {(["ship", "review", "block"] as const).map((band) => {
@@ -411,7 +435,9 @@ export default function HomeView({ navigate }: Props) {
         <Box sx={{ px: 2, pt: 2, pb: 1.5, display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 1 }}>
           <Box>
             <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Recent scoring runs</Typography>
-            <Typography variant="caption" sx={{ color: "text.secondary" }}>Across all agents</Typography>
+            <Typography variant="caption" sx={{ color: "text.secondary" }}>
+              {isAdminPreview ? "Across all agents" : "Across your agents"}
+            </Typography>
           </Box>
           <Button size="small" onClick={() => navigate({ name: "agents" })} sx={{ color: "text.secondary", flexShrink: 0 }}>
             View all →

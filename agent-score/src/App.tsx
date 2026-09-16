@@ -46,7 +46,7 @@ export default function App() {
   function renderView() {
     switch (view.name) {
       case "home":
-        return <HomeView navigate={setView} />;
+        return <HomeView navigate={setView} tenantId={tenantId} previewRole={previewRole} />;
       case "agents":
         return <AgentsView navigate={setView} tenantId={tenantId} />;
       case "agent-detail":
