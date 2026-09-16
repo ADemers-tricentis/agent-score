@@ -87,6 +87,20 @@ export function InactiveBadge({ agent }: { agent: AgentProfile }) {
   );
 }
 
+/** Flags the pre-loaded walkthrough agent shown to a brand-new tenant
+ *  ("blank / new login" demo state) so it never reads as one of the
+ *  operator's own connected agents. */
+export function SampleBadge({ agent }: { agent: AgentProfile }) {
+  if (!agent.is_sample) return null;
+  return (
+    <Box component="span" sx={{ flexShrink: 0 }}>
+      <StatusDot status="info" data-testid="agent-sample-badge">
+        Sample
+      </StatusDot>
+    </Box>
+  );
+}
+
 /** `AgentFitStatus` → attention-marker tooltip text (spec §3.3 "Cell
  *  rendering by state"). `binding_invalid` is checked directly (rather than
  *  via `attention_reason`, which the backend may or may not set for a

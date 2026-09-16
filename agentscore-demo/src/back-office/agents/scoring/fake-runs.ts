@@ -193,6 +193,10 @@ function makeRun(agentId: string, idx: number, opts: Partial<FakeRun> & { seed: 
 }
 
 const RUNS_BY_AGENT: Record<string, FakeRun[]> = {
+  "agent-sample": [
+    makeRun("agent-sample", 0, { seed: 5, compositeScore: 87, verdict: "ship", shipDecision: "ship" }),
+    makeRun("agent-sample", 1, { seed: 9, compositeScore: 83, verdict: "ship", shipDecision: "ship" }),
+  ],
   "agent-1": [
     makeRun("agent-1", 0, { seed: 7, compositeScore: 84, verdict: "review", shipDecision: "needs_work" }),
     makeRun("agent-1", 1, { seed: 3 }),

@@ -42,6 +42,7 @@ export interface GroupedFilters {
   includeDeleted?: boolean;
   tenantId?: string;
   kind?: "internal" | "external";
+  onlySample?: boolean;
 }
 
 /** The group's key mapped onto the matching `listAgentsFlat` axis param
@@ -75,8 +76,9 @@ export function AgentGroupsView({
         includeDeleted: filters.includeDeleted,
         tenantId: filters.tenantId,
         kind: filters.kind,
+        onlySample: filters.onlySample,
       }).groups,
-    [by, filters.q, filters.includeDeleted, filters.tenantId, filters.kind],
+    [by, filters.q, filters.includeDeleted, filters.tenantId, filters.kind, filters.onlySample],
   );
 
   if (groups.length === 0) {
@@ -139,7 +141,7 @@ export function AgentGroupSection({
   // offset can't land past the new end (empty body + nonsensical "51–50 of 5").
   useEffect(() => {
     setPage(0);
-  }, [filters.q, filters.includeDeleted, filters.tenantId, filters.kind]);
+  }, [filters.q, filters.includeDeleted, filters.tenantId, filters.kind, filters.onlySample]);
 
   const params: ListAgentsFlatFakeParams = useMemo(
     () => ({
@@ -151,9 +153,10 @@ export function AgentGroupSection({
       dir,
       tenantId: filters.tenantId,
       kind: filters.kind,
+      onlySample: filters.onlySample,
       ...axisOverride(by, group.key),
     }),
-    [page, filters.includeDeleted, filters.q, filters.tenantId, filters.kind, sort, dir, by, group.key],
+    [page, filters.includeDeleted, filters.q, filters.tenantId, filters.kind, filters.onlySample, sort, dir, by, group.key],
   );
 
   const { items, total } = useMemo(() => (open ? listAgentsFlat(params) : { items: [], total: group.count }), [open, params, group.count]);

@@ -18,6 +18,7 @@ import {
   DeletedBadge,
   FitStatusCell,
   InactiveBadge,
+  SampleBadge,
   SourceCell,
 } from "@/back-office/agents/activity-cells";
 import {
@@ -61,6 +62,7 @@ export function flatAgentColumns(): ColumnDef<FakeFlatAgentItem, unknown>[] {
             </Box>
             <DeletedBadge agent={row.original.agent} />
             <InactiveBadge agent={row.original.agent} />
+            <SampleBadge agent={row.original.agent} />
           </Box>
           <Box
             sx={{
