@@ -56,6 +56,7 @@ import { PageHeader } from "@/shared/components/page-header";
 import { ScrollRegion } from "@/shared/components/scroll-region";
 import { Toolbar } from "@/shared/components/toolbar";
 import { useDebouncedValue } from "@/shared/hooks/use-debounced-value";
+import { useDemoMode } from "@/shared/demo-mode/demo-mode-context";
 
 const PAGE_SIZE = 25;
 
@@ -101,6 +102,7 @@ function AgentsSearchShell() {
   ]);
   const [createOpen, setCreateOpen] = useState(false);
   const navigate = useNavigate();
+  const { blank } = useDemoMode();
 
   // Auto-refresh (spec §3.1 Feature 2 / §4.6): local useState only, no
   // URL-sync. Default 30s. No cache to invalidate against fixed fake data -
@@ -157,8 +159,9 @@ function AgentsSearchShell() {
       tenantId: tenantFilter,
       kind: kindFilter,
       source: sourceFilter,
+      onlySample: blank,
     }),
-    [includeDeleted, debouncedSearch, tenantFilter, kindFilter, sourceFilter],
+    [includeDeleted, debouncedSearch, tenantFilter, kindFilter, sourceFilter, blank],
   );
 
   const { items, total } = useMemo(
@@ -179,10 +182,10 @@ function AgentsSearchShell() {
   // still has to show up as a filter option.
   const sourceOptions = useMemo(
     () =>
-      (view === "list" ? listAgentGroups({ by: "source", includeDeleted }).groups : [])
+      (view === "list" ? listAgentGroups({ by: "source", includeDeleted, onlySample: blank }).groups : [])
         .map((g) => ({ value: g.key, label: g.label }))
         .sort((a, b) => a.label.localeCompare(b.label)),
-    [view, includeDeleted],
+    [view, includeDeleted, blank],
   );
 
   const columns = useMemo(() => flatAgentColumns(), []);
@@ -403,6 +406,7 @@ function AgentsSearchShell() {
                 includeDeleted,
                 tenantId: by !== "tenant" ? groupedTenantId : undefined,
                 kind: by !== "kind" ? groupedKind : undefined,
+                onlySample: blank,
               }}
               refetchInterval={null}
             />

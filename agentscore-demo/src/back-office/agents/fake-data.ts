@@ -46,6 +46,12 @@ export interface FakeAgent {
   forwarded_trace_count: number;
   latest_score: FakeLatestScore | null;
   drop_pressure: { dropped_count: number; last_dropped_at: string | null } | null;
+  /** Pre-loaded walkthrough agent shown to brand-new tenants (demo-mode
+   * "blank" toggle) so there's something real to click into before they've
+   * connected anything of their own. Excluded from the normal, populated
+   * agent list/groups via `listAgentsFlat`/`listAgentGroups`'s `onlySample`
+   * filter. */
+  is_sample?: boolean;
 }
 
 export interface FakeFitStatus {
@@ -78,7 +84,11 @@ const now = Date.now();
 const hoursAgo = (h: number) => new Date(now - h * 3600_000).toISOString();
 const daysAgo = (d: number) => new Date(now - d * 86_400_000).toISOString();
 
+export const SAMPLE_TENANT_ID = "tenant-sample";
+export const SAMPLE_AGENT_ID = "agent-sample";
+
 export const FAKE_TENANTS: FakeTenant[] = [
+  { tenant_id: SAMPLE_TENANT_ID, name: "Sample Workspace", kind: "internal", env: "sample" },
   { tenant_id: "tenant-tais", name: "TAIS (Testing AI team)", kind: "external", env: "prod" },
   { tenant_id: "tenant-tar", name: "tricentisairesearch", kind: "internal", env: "prod" },
   { tenant_id: "tenant-acme", name: "Acme Financial", kind: "internal", env: "prod" },
@@ -87,6 +97,24 @@ export const FAKE_TENANTS: FakeTenant[] = [
 ];
 
 export const FAKE_AGENTS: FakeAgent[] = [
+  {
+    agent_id: SAMPLE_AGENT_ID,
+    tenant_id: SAMPLE_TENANT_ID,
+    name: "Sample Support Agent",
+    kind: "internal",
+    source_service: "sample-agent-service",
+    lifecycle: { stage: "up_to_date", threshold: 20, captured: 42 },
+    provisioning_status: "active",
+    failure_reason: null,
+    deactivated_at: null,
+    deleted_at: null,
+    created_at: daysAgo(7),
+    last_seen_at: hoursAgo(2),
+    forwarded_trace_count: 42,
+    latest_score: { composite_score: 87, ship_decision: "ship", scored_at: hoursAgo(3) },
+    drop_pressure: null,
+    is_sample: true,
+  },
   {
     agent_id: "agent-1",
     tenant_id: "tenant-tais",
@@ -225,7 +253,14 @@ export const FAKE_AGENTS: FakeAgent[] = [
   },
 ];
 
+/** Ids present at module load, before any runtime `FAKE_AGENTS.push(...)`
+ * from `NewAgentDialog` — lets `onlySample` distinguish the pre-populated
+ * roster (hidden for a "blank / new login" tenant) from an agent the demo
+ * presenter actually creates while in that state (still shown). */
+const SEED_AGENT_IDS = new Set(FAKE_AGENTS.map((a) => a.agent_id));
+
 export const FAKE_FIT_STATUS: Record<string, FakeFitStatus> = {
+  [SAMPLE_AGENT_ID]: { state: "fitted_auto", profile_name: "Sample Support Profile", has_enabled_checks: true, binding_source: "auto" },
   "agent-1": { state: "fitted_auto", profile_name: "ATA Regression Profile", has_enabled_checks: true, needs_profile_attention: true, attention_reason: "low_confidence", binding_source: "auto" },
   "agent-2": { state: "fitted_pinned", profile_name: "Internal Automation Profile", has_enabled_checks: true, binding_source: "pinned" },
   "agent-3": { state: "fitted_auto", profile_name: "Finance Ops Profile", has_enabled_checks: true, binding_source: "auto" },
@@ -270,6 +305,10 @@ export interface ListAgentsFlatFakeParams {
   source?: string | string[];
   sort?: "last_active" | "name" | "score";
   dir?: "asc" | "desc";
+  /** "Blank / new login" demo state: show only the pre-loaded sample agent
+   * (plus anything the presenter creates from there) instead of the
+   * populated multi-tenant roster. */
+  onlySample?: boolean;
 }
 
 function matchesArrayFilter(value: string | null | undefined, filter: string | string[] | undefined): boolean {
@@ -281,8 +320,9 @@ function matchesArrayFilter(value: string | null | undefined, filter: string | s
 /** Client-side stand-in for `GET /admin/agents` — filters/sorts/paginates the
  *  fixed fake roster the same way the real endpoint would. */
 export function listAgentsFlat(params: ListAgentsFlatFakeParams = {}): { items: FakeFlatAgentItem[]; total: number } {
-  const { limit = 25, offset = 0, includeDeleted, q, tenantId, kind, source, sort = "last_active", dir = "desc" } = params;
+  const { limit = 25, offset = 0, includeDeleted, q, tenantId, kind, source, sort = "last_active", dir = "desc", onlySample } = params;
   let rows = FAKE_AGENTS.filter((a) => includeDeleted || !a.deleted_at);
+  if (onlySample) rows = rows.filter((a) => a.is_sample || !SEED_AGENT_IDS.has(a.agent_id));
   if (q) {
     const needle = q.toLowerCase();
     rows = rows.filter((a) => a.name.toLowerCase().includes(needle));
@@ -310,11 +350,13 @@ export interface ListAgentGroupsFakeParams {
   includeDeleted?: boolean;
   tenantId?: string;
   kind?: "internal" | "external";
+  onlySample?: boolean;
 }
 
 export function listAgentGroups(params: ListAgentGroupsFakeParams): { groups: { key: string; label: string; count: number; rollup: { total_traces: number; last_active: string | null; scored_count: number } }[] } {
-  const { by, q, includeDeleted, tenantId, kind } = params;
+  const { by, q, includeDeleted, tenantId, kind, onlySample } = params;
   let rows = FAKE_AGENTS.filter((a) => includeDeleted || !a.deleted_at);
+  if (onlySample) rows = rows.filter((a) => a.is_sample || !SEED_AGENT_IDS.has(a.agent_id));
   if (q) {
     const needle = q.toLowerCase();
     rows = rows.filter((a) => a.name.toLowerCase().includes(needle));

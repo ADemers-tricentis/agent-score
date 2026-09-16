@@ -19,6 +19,7 @@ import {
   INGESTION_OVERVIEW,
   INGESTION_OVERVIEW_BLANK,
 } from "@/back-office/dashboard/fake-data";
+import { GettingStartedChecklist } from "@/back-office/dashboard/GettingStartedChecklist";
 import { IngestionPanel } from "@/back-office/dashboard/IngestionPanel";
 import { KpiRow } from "@/back-office/dashboard/KpiRow";
 import { RecentRunsTable } from "@/back-office/dashboard/RecentRunsTable";
@@ -30,7 +31,7 @@ import { useDemoMode } from "@/shared/demo-mode/demo-mode-context";
 
 export function DashboardPage() {
   const [intervalId, setIntervalId] = useState("30s");
-  const { blank } = useDemoMode();
+  const { blank, role } = useDemoMode();
   const overview = blank ? DASHBOARD_OVERVIEW_BLANK : DASHBOARD_OVERVIEW;
   const ingestion = blank ? INGESTION_OVERVIEW_BLANK : INGESTION_OVERVIEW;
   const handleRefresh = () => toast.info("Nothing new — this demo's dashboard data is fixed.");
@@ -56,6 +57,7 @@ export function DashboardPage() {
 
       <Box sx={{ minHeight: 0, flex: 1, overflowY: "auto" }}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5, px: 4, py: 3 }}>
+          {blank ? <GettingStartedChecklist role={role} /> : null}
           <KpiRow overview={overview} ingestion={ingestion} />
 
           <Grid container spacing={2.5}>

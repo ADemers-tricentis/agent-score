@@ -261,6 +261,19 @@ function baseBenchmark(profileVersionId: string, profileName: string, profileVer
 }
 
 const FIXTURES: Record<string, AgentProfileFixture> = {
+  // Pre-loaded walkthrough agent for a brand-new tenant ("blank / new login"
+  // demo state) — a clean, healthy example with no attention-needed edge
+  // cases, so it reads as "this is what a good result looks like."
+  "agent-sample": {
+    benchmark: baseBenchmark("pv-sample-1", "Sample Support Profile", 1, "profile-sample"),
+    fitHistory: [
+      fitDecision({ id: "fit-sample-a", daysAgoN: 3, method: "llm", outcome: "adopted", chosenProfileVersionId: "pv-sample-1", trigger: "new_agent", confidence: 0.88, rationale: "Sample Support Profile v1 was the only applicable profile for this agent type at creation." }),
+    ],
+    activity: [
+      { id: "ev-sample-a", eventType: "profile_auto_refit", createdAt: daysAgo(3), actorEmail: null, referenceData: { outcome: "adopted" } },
+      { id: "ev-sample-b", eventType: "run_completed", createdAt: daysAgo(1), actorEmail: null, referenceData: null },
+    ],
+  },
   // Flagship — full richness: pinned + drift nudge + discrimination + rich fit history.
   "agent-1": {
     benchmark: {
