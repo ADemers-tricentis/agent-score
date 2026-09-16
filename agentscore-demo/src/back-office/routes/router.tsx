@@ -6,6 +6,7 @@
 // (see agent-score/frontend/src/back-office/routes/router.tsx) 1:1 for paths.
 import { createRootRoute, createRoute, createRouter, Outlet, redirect } from "@tanstack/react-router";
 
+import { DashboardPage } from "@/back-office/dashboard/DashboardPage";
 import { AgentCardPage } from "@/back-office/agents/AgentCardPage";
 import { AgentDetailLayout } from "@/back-office/agents/AgentDetailLayout";
 import { AgentImprovePage } from "@/back-office/agents/AgentImprovePage";
@@ -75,9 +76,7 @@ const protectedLayoutRoute = createRoute({
 const indexRoute = createRoute({
   getParentRoute: () => protectedLayoutRoute,
   path: "/",
-  beforeLoad: () => {
-    throw redirect({ to: "/agents", search: { view: "list", by: "tenant" } });
-  },
+  component: DashboardPage,
 });
 
 const agentsRoute = createRoute({
