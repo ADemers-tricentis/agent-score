@@ -24,7 +24,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
-import IconMaterialSymbolsAdd from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsAdd.mjs";
 import IconMaterialSymbolsApartment from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsApartment.mjs";
 import IconMaterialSymbolsDelete from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsDelete.mjs";
 import IconMaterialSymbolsEdit from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsEdit.mjs";
@@ -201,10 +200,10 @@ export function UsersPage() {
     [page, filterParams, refreshTick],
   );
 
-  // The superadmin count beside the total was counted over the PAGE, so the
-  // label read "200 users · 3 superadmins" where the 3 described only the 25
+  // The admin count beside the total was counted over the PAGE, so the
+  // label read "200 users · 3 admins" where the 3 described only the 25
   // rows on screen. One number over the whole set, under the same filters.
-  const superadmins = useMemo(
+  const admins = useMemo(
     () => listUsersFake({ ...filterParams, role: ["superadmin"], limit: 1000, offset: 0 }).total,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [filterParams, refreshTick],
@@ -278,27 +277,13 @@ export function UsersPage() {
         ),
       },
       {
-        id: "kind",
-        header: "Kind",
-        accessorFn: (u) => u.kind,
-        meta: { headerSx: { width: "12%" } },
-        cell: ({ row }) => (
-          <Chip
-            tint={row.original.kind === "customer" ? "warning" : "muted"}
-            data-testid={`user-kind-${row.original.user_id}`}
-          >
-            {row.original.kind}
-          </Chip>
-        ),
-      },
-      {
         id: "role",
         header: "Role",
-        accessorFn: (u) => (u.is_superadmin ? "superadmin" : "member"),
-        meta: { headerSx: { width: "14%" } },
+        accessorFn: (u) => (u.is_superadmin ? "admin" : "member"),
+        meta: { headerSx: { width: "16%" } },
         cell: ({ row }) => (
           <Chip tint={row.original.is_superadmin ? "info" : "muted"}>
-            {row.original.is_superadmin ? "superadmin" : "member"}
+            {row.original.is_superadmin ? "admin" : "member"}
           </Chip>
         ),
       },
@@ -306,7 +291,7 @@ export function UsersPage() {
         id: "tenants",
         header: "Tenants",
         accessorFn: (u) => u.tenants.length,
-        meta: { headerSx: { width: "10%" } },
+        meta: { headerSx: { width: "12%" } },
         cell: ({ row }) => (
           <Box component="span" sx={{ color: "text.secondary" }}>
             {row.original.is_superadmin ? "all" : row.original.tenants.length}
@@ -317,7 +302,7 @@ export function UsersPage() {
         id: "created",
         header: "Created",
         accessorFn: (u) => u.created_at,
-        meta: { headerSx: { width: "16%" } },
+        meta: { headerSx: { width: "20%" } },
         cell: ({ row }) =>
           new Date(row.original.created_at).toLocaleDateString(),
       },
@@ -325,7 +310,7 @@ export function UsersPage() {
         id: "status",
         header: "Status",
         accessorFn: (u) => (u.deleted_at ? "deleted" : "active"),
-        meta: { headerSx: { width: "12%" } },
+        meta: { headerSx: { width: "14%" } },
         cell: ({ row }) =>
           row.original.deleted_at ? (
             <StatusDot status="destructive">deleted</StatusDot>
@@ -413,7 +398,7 @@ export function UsersPage() {
                 onChange={facetSetter(setRoleFilter)}
                 options={[
                   { value: "member", label: "member" },
-                  { value: "superadmin", label: "superadmin" },
+                  { value: "superadmin", label: "admin" },
                 ]}
               />
               <FacetedFilter
@@ -462,21 +447,11 @@ export function UsersPage() {
               </Button>
             </>
           }
-          actions={
-            <Button
-              variant="contained"
-              onClick={() => void navigate({ to: "/users/new" })}
-              data-testid="new-user-button"
-              startIcon={<IconMaterialSymbolsAdd sx={{ fontSize: 16 }} />}
-            >
-              Add user
-            </Button>
-          }
           right={
             total > 0 ? (
               <Box component="span">
                 {total} users
-                {superadmins > 0 ? ` · ${superadmins} superadmin${superadmins === 1 ? "" : "s"}` : ""}
+                {admins > 0 ? ` · ${admins} admin${admins === 1 ? "" : "s"}` : ""}
               </Box>
             ) : undefined
           }
@@ -509,7 +484,7 @@ export function UsersPage() {
               statusFilter.length > 0 ||
               includeDeleted
                 ? "Try a different search term, or clear the filters."
-                : "Add a user to grant back-office or customer-portal access.",
+                : "Approve an access request to add a user.",
           }}
           pagination={{
             pageIndex: page,
@@ -567,7 +542,7 @@ export function UsersPage() {
         <DialogContent>
           <DialogContentText>
             Reinstates their tenant memberships
-            {restoreTarget?.is_superadmin ? " and the superadmin flag" : ""}.
+            {restoreTarget?.is_superadmin ? " and the admin flag" : ""}.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -28,6 +28,16 @@ Every entry is checked against the live source in `agentscore-demo/src` before b
 
 ---
 
+## 2026-09-16 - Simplified the Users page: dropped "Add user", "Kind", and "superadmin"
+
+**Change:** Removed the standalone "Add user" button/action from `UsersPage.tsx` (the `/users/new` route and `UserCreatePage.tsx` stay - they're still reachable from the Access Requests queue's Approve action, which is the only way a user now gets created). Removed the "Kind" (staff/customer) column from the users table and the "Kind" field/badge from `UserEditPage.tsx`'s detail header and General section; `UserCreatePage.tsx` no longer asks for it either, and just creates every account as `kind: "staff"` (matching what Access Requests approval always produced anyway). Dropped the kind-based restriction that disabled the Admin role option for customer-kind users, since kind is no longer a visible concept for the viewer to reason about. Renamed the "superadmin" role label to "Admin" everywhere it's displayed (chips, radio cards, filters, counts) - the underlying field/type names (`is_superadmin`, `UserRole = "superadmin" | "member"`) are unchanged, since those also drive real nav-gating logic in `destination-tiers.ts` that's out of scope here.
+
+**Who it's for:** Admins managing users in the demo - fewer concepts to explain (no "Kind" distinction, one role vocabulary) and one less no-op entry point ("Add user" duplicated what Access Requests already does).
+
+**Why:** Requested directly by the user (2026-09-16). Role-changing (member ↔ admin, via the existing role radio cards on `UserEditPage`) already worked for any admin viewing another user's row before this change - the Users nav item itself is admin-only, so anyone who can reach the page already has the ability.
+
+---
+
 ## Template for new entries
 
 ```
