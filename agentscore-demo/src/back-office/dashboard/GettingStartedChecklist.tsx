@@ -1,17 +1,19 @@
 /** "Get started" card — shown on Home only in the demo-mode "blank / new
  * login" state (`useDemoMode`), where the rest of the dashboard is zeroed
  * out and otherwise gives a brand-new viewer nothing to do. Each step links
- * straight to where the action happens; there's no backend to track real
- * completion, so this is guidance, not a progress tracker — no checkboxes
- * claiming a step is "done".
+ * straight to where the action happens. The checkbox is self-reported, not
+ * derived from real state (there's no backend to track it against) — it's
+ * there so a presenter can visibly mark steps off while walking through the
+ * demo, not as a claim that the step was actually completed.
  */
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import Checkbox from "@mui/material/Checkbox";
 import IconMaterialSymbolsGroup from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsGroup.mjs";
 import IconMaterialSymbolsScience from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsScience.mjs";
 import IconMaterialSymbolsSmartToy from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSmartToy.mjs";
@@ -22,6 +24,7 @@ import { SAMPLE_AGENT_ID, SAMPLE_TENANT_ID } from "@/back-office/agents/fake-dat
 import type { DemoRole } from "@/shared/demo-mode/demo-mode-context";
 
 interface Step {
+  id: string;
   icon: typeof SvgIcon;
   title: string;
   description: string;
@@ -34,6 +37,7 @@ interface Step {
 function stepsFor(role: DemoRole): Step[] {
   const steps: Step[] = [
     {
+      id: "explore-sample",
       icon: IconMaterialSymbolsVisibility,
       title: "Explore the sample agent",
       description: "See a fully scored agent — profile fit, runs, and evals — before connecting your own.",
@@ -42,6 +46,7 @@ function stepsFor(role: DemoRole): Step[] {
       params: { tenantId: SAMPLE_TENANT_ID, agentId: SAMPLE_AGENT_ID },
     },
     {
+      id: "connect-agent",
       icon: IconMaterialSymbolsSmartToy,
       title: "Connect your first agent",
       description: "Point your agent's traces at AgentScore to start collecting evidence for a real score.",
@@ -50,6 +55,7 @@ function stepsFor(role: DemoRole): Step[] {
       search: { view: "list", by: "tenant" },
     },
     {
+      id: "browse-evals",
       icon: IconMaterialSymbolsScience,
       title: "Browse the Evals Catalog",
       description: "See what AgentScore checks for out of the box, by dimension.",
@@ -59,6 +65,7 @@ function stepsFor(role: DemoRole): Step[] {
   ];
   if (role === "admin") {
     steps.push({
+      id: "invite-team",
       icon: IconMaterialSymbolsGroup,
       title: "Invite your team",
       description: "Add teammates so more than one person can review scores and manage agents.",
@@ -69,7 +76,15 @@ function stepsFor(role: DemoRole): Step[] {
   return steps;
 }
 
-function StepRow({ step }: { step: Step }) {
+function StepRow({
+  step,
+  checked,
+  onToggle,
+}: {
+  step: Step;
+  checked: boolean;
+  onToggle: () => void;
+}) {
   const navigate = useNavigate();
   const Icon = step.icon;
   return (
@@ -77,13 +92,20 @@ function StepRow({ step }: { step: Step }) {
       sx={{
         display: "flex",
         alignItems: "center",
-        gap: 2,
+        gap: 1,
         py: 1.5,
         borderBottom: 1,
         borderColor: "divider",
         "&:last-of-type": { borderBottom: "none" },
       }}
     >
+      <Checkbox
+        checked={checked}
+        onChange={onToggle}
+        size="small"
+        sx={{ flexShrink: 0 }}
+        inputProps={{ "aria-label": `Mark "${step.title}" as done` }}
+      />
       <Box
         sx={{
           display: "flex",
@@ -94,12 +116,21 @@ function StepRow({ step }: { step: Step }) {
           borderRadius: "50%",
           bgcolor: "action.hover",
           flexShrink: 0,
+          opacity: checked ? 0.5 : 1,
         }}
       >
         <Icon sx={{ fontSize: 18, color: "text.secondary" }} />
       </Box>
-      <Box sx={{ minWidth: 0, flex: 1 }}>
-        <Box sx={{ typography: "body2", fontWeight: 600 }}>{step.title}</Box>
+      <Box sx={{ minWidth: 0, flex: 1, opacity: checked ? 0.5 : 1 }}>
+        <Box
+          sx={{
+            typography: "body2",
+            fontWeight: 600,
+            textDecoration: checked ? "line-through" : "none",
+          }}
+        >
+          {step.title}
+        </Box>
         <Box sx={{ typography: "caption", color: "text.secondary" }}>{step.description}</Box>
       </Box>
       <Button
@@ -118,6 +149,8 @@ function StepRow({ step }: { step: Step }) {
 
 export function GettingStartedChecklist({ role }: { role: DemoRole }): ReactNode {
   const steps = stepsFor(role);
+  const [checked, setChecked] = useState<Record<string, boolean>>({});
+
   return (
     <Card>
       <CardContent sx={{ p: 0, "&:last-child": { pb: 0 } }}>
@@ -129,7 +162,12 @@ export function GettingStartedChecklist({ role }: { role: DemoRole }): ReactNode
         </Box>
         <Box sx={{ px: 2.5, pb: 1 }}>
           {steps.map((step) => (
-            <StepRow key={step.title} step={step} />
+            <StepRow
+              key={step.id}
+              step={step}
+              checked={checked[step.id] ?? false}
+              onToggle={() => setChecked((prev) => ({ ...prev, [step.id]: !prev[step.id] }))}
+            />
           ))}
         </Box>
       </CardContent>
