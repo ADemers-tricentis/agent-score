@@ -1,7 +1,7 @@
 import { SLIDES } from "../data/slideRegistry";
 import { SLIDE_W, SLIDE_H } from "../theme/theme";
 
-// Renders all 24 slides stacked in document order, each exactly
+// Renders all 26 slides stacked in document order, each exactly
 // 1920x1080, for the Playwright PDF export script to screenshot/print.
 // Not meant to be viewed interactively - navigate here directly at /print.
 export const PrintView: React.FC = () => (

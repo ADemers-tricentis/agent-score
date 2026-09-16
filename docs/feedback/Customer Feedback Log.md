@@ -10,25 +10,40 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
 
 | Ask | Sessions raised in | Status |
 |---|---|---|
-| On-prem / no-cloud deployment | Meta | Open - no architecture answer yet |
+| On-prem / no-cloud deployment | Meta (x2) | Progressing - self-hosting in customer's own AWS/EC2 floated in the 09-11 POC-scoping call, not yet confirmed with engineering |
 | Firm, consistent timeline (POC/beta dates that don't move mid-call) | Workday, Meta | Open - need one rehearsed slide every speaker uses |
-| Clear answer to "is this a testing tool or an observability tool?" | Workday | Open - category framing needs to be fixed in the deck |
-| Crisp, rehearsed answer to "why trust the LLM judge / how do you know it's accurate?" | Workday | Open - tiered answer drafted in Workday debrief, not yet shipped |
-| Deterministic/exploratory "red-team the agent" testing (not just passive grading) | Meta | Open - not built yet, matches buyer's own mental model |
-| Root-cause attribution (span + fix, not just a score) | Workday, Meta, Wolters Kluwer | Landing well - keep leading with this |
+| Clear answer to "is this a testing tool or an observability tool?" | Workday | Answered - name the category, don't fight the word: something else drives the agent, AgentScore grades. Boundary picture: Driver -> Agent -> Traces -> AgentScore grades. Ready to ship to the deck |
+| Crisp, rehearsed answer to "why trust the LLM judge / how do you know it's accurate?" | Workday | Answered - tiered: (1) deterministic/hybrid checks wherever ground truth exists, (2) LLM-judge dimensions with pass@k + confidence intervals + minimum-sample gating where it doesn't, (3) golden-dataset back-testing. Close on a live correctness-dimension walkthrough, not narration. Ready to ship to the deck |
+| Deterministic/exploratory "red-team the agent" testing / scenario bank (define + run scenarios, not just passive grading) | Meta (x2) | Open - roadmap, not built. Now the pivotal gap for the Meta POC: separates "evaluate prod agents" (shippable) from "test dev-to-prod" |
+| Point the evaluator/judge at customer's own internal/custom LLMs (self-hosted, not a cloud judge) | Meta | Open - technical precondition for Meta on-prem; to be confirmed with engineering |
+| Root-cause attribution (span + fix, not just a score) | Workday, Meta, Wolters Kluwer, Tritusa | Landing well - keep leading with this |
 | Evaluate a *group*/hierarchy of agents, not just one in isolation | Meta, Wolters Kluwer | Lands as a concept, not shipped - Wolters Kluwer needs literal bulk/fleet-level scoring (point at a repo of agents, score together) and called per-agent-only "not useful" at their scale; targeted "hopefully end of month" |
 | Agentforce / Salesforce-native integration | Workday | Open - known gap |
 | Fine-grained access control / RBAC / self-service onboarding | Wolters Kluwer | Open - admin + mostly-view-only today; roles, per-tenant/agent scoping, and self-service all "on the roadmap" - a stated rollout blocker for a governance-driven buyer |
-| Score agents outside the Tricentis ecosystem (e.g. GitHub Copilot, internal platforms) to benchmark against sanctioned tooling | Wolters Kluwer, Tritusa | Open - vision, not a named shipped feature; was Wolters Kluwer's origin reason for the call; Tritusa needs it for non-Tricentis client agents |
+| Score agents outside the Tricentis ecosystem (e.g. GitHub Copilot, internal platforms) to benchmark against sanctioned tooling | Wolters Kluwer, Tritusa | Solved - any agent that supports OTel can be ingested, regardless of vendor |
 | Compliance validation (GxP/SOX-style regimes, PII flagging on traces) | Tritusa | Open - "not currently, easy to add"; roadmap only. Blocker for regulated (bank/pharma) clients |
 | Alerting when an agent degrades (Slack/email to managers/admins) | Tritusa | Open - not built, stated "top of the list" |
 | Bulk / programmatic export of traces + scores (get the data out, not just view it) | Wolters Kluwer, Tritusa | Open - API in progress, possibly alpha, not shipped. Larger/partner accounts keep asking |
 | Synthetic dataset generation (targeted/edge-case coverage without waiting for real traces) | Tritusa | Open - golden sets are curated from real interactions only; roadmap |
 | Partner co-sell / co-working motion (SIs who implement + evaluate for their own clients) | Tritusa | Open - asked twice, no answer available; gold-sponsor partner presenting our story at Transatlantic 26 |
 
+*Audit note (2026-09-11): reviewed every row for a question that can now be answered vs. a genuine product/roadmap/business gap. Category framing and judge-trust (rows above) now have rehearsed answers and are ready to ship. Cross-ecosystem OTel ingestion is confirmed solved. Everything else - on-prem self-hosting, internal-LLM judge, scenario bank/red-teaming, fleet-level scoring, Agentforce integration, RBAC, compliance validation, alerting, bulk export, synthetic datasets, partner co-sell - is still a real engineering, roadmap, or business decision pending confirmation, not something answerable today.*
+
 ---
 
 ## Sessions
+
+### 2026-09-11 - Meta (POC scoping, via delivery partner)
+
+- **Who:** A delivery/SI partner positioning to build the POC for Sri's team ("your tool, our people") - a business/account lead, Satish (supply chain domain), Alex (technical/integration), Ranjit (Sri liaison), Jagesh (shared the arch slide). End client Sri (Meta autonomous supply chain) not on the call. Tricentis: Andrew Demers (Greg referenced). *(Non-diarized transcript - attributions inferred.)*
+- **What we learned:** A follow-on to the 2026-08-11 Meta call, but a POC-scoping session run through a partner who already has an underused Tosca footprint at Meta. Two-line OTel held up under scoping. On-prem finally has a plausible answer: it already runs on AWS, so the path is self-hosting in Meta's own private EC2 (they are a big AWS shop) - uncommitted pending engineer confirmation. Evaluator model (library / gEval / hybrid, 40+ evals, auto-profiles with confidence, weighted dimensions, composite + needs-attention), golden-dataset back-testing, and trace-level root-cause all landed. The crux of the call was exposure/perception risk: the partner asked point-blank whether AgentScore is mature enough to put in front of Meta, and Andrew's honest split - production-agent evaluation yes, full pre-prod simulation not yet - is what the POC scope has to be built around.
+- **Major asks:**
+  - Self-hosted / on-prem deployment in Meta's own AWS (data can't leave, custom internal models). Now has a floated path (private EC2 + handoff), not yet confirmed.
+  - Point the evaluator/judge at Meta's internal/custom LLMs (Spark 1.3, "meta intern"-style models) rather than a cloud judge - the technical precondition for on-prem to work for them.
+  - Scenario bank / adversarial simulation ("define scenarios, run them, see how the agent responds") - the pivotal gap; separates "evaluate prod agents" (shippable) from "test dev-to-prod" (not yet). Same red-team ask Sri raised directly.
+  - A carefully-scoped, transparent POC framing so an early-stage product doesn't create bad perception with a savvy client ("harder to walk back once it's out there").
+  - Fast answers - Sri's need is urgent and there is another partner circling the account.
+- **Full debrief:** [feedback-sessions/Meta POC Scoping Feedback Session.md](feedback-sessions/Meta%20POC%20Scoping%20Feedback%20Session.md)
 
 ### 2026-09-11 - Tritusa (partner / SI)
 

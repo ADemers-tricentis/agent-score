@@ -18,16 +18,18 @@ import {
   Slide15NoGuardrails,
   Slide16Maturity,
 } from "../slides/Slide11to16Gaps";
-import { Slide17Positioning } from "../slides/Slide17Positioning";
+import { Slide17EffortSequencing } from "../slides/Slide17EffortSequencing";
+import { Slide18Positioning } from "../slides/Slide18Positioning";
 import {
-  Slide18LeadWithFeatures,
-  Slide19WhatToMeasure,
-  Slide20SimulationGuardrails,
-  Slide21McpCapabilities,
-  Slide22EnterpriseReadiness,
-} from "../slides/Slide18to22Recommendations";
-import { Slide23WatchItem } from "../slides/Slide23WatchItem";
-import { Slide24Closing } from "../slides/Slide24Closing";
+  Slide19LeadWithFeatures,
+  Slide20WhatToMeasure,
+  Slide21SimulationGuardrails,
+  Slide22McpCapabilities,
+  Slide23EnterpriseReadiness,
+  Slide24FailureAttribution,
+} from "../slides/Slide19to24Recommendations";
+import { Slide25WatchItem } from "../slides/Slide25WatchItem";
+import { Slide26Closing } from "../slides/Slide26Closing";
 
 // Ordered 1-indexed registry of every slide in the deck. Both the
 // interactive /deck/:n viewer and the /print export route render off of
@@ -49,14 +51,16 @@ export const SLIDES: React.FC[] = [
   Slide14NoSimulation,
   Slide15NoGuardrails,
   Slide16Maturity,
-  Slide17Positioning,
-  Slide18LeadWithFeatures,
-  Slide19WhatToMeasure,
-  Slide20SimulationGuardrails,
-  Slide21McpCapabilities,
-  Slide22EnterpriseReadiness,
-  Slide23WatchItem,
-  Slide24Closing,
+  Slide17EffortSequencing,
+  Slide18Positioning,
+  Slide19LeadWithFeatures,
+  Slide20WhatToMeasure,
+  Slide21SimulationGuardrails,
+  Slide22McpCapabilities,
+  Slide23EnterpriseReadiness,
+  Slide24FailureAttribution,
+  Slide25WatchItem,
+  Slide26Closing,
 ];
 
 export const SLIDE_COUNT = SLIDES.length;

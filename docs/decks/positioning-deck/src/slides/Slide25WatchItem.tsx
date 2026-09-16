@@ -14,8 +14,8 @@ const IMPLICATIONS = [
   },
 ];
 
-export const Slide23WatchItem: React.FC = () => (
-  <Slide index={23} kicker="Watch List · SAP / Enterprise-App Angle" accentColor={ACCENT}>
+export const Slide25WatchItem: React.FC = () => (
+  <Slide index={25} kicker="Watch List · SAP / Enterprise-App Angle" accentColor={ACCENT}>
     <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
       <Title size={44} style={{ maxWidth: 1300 }}>
         Watch item: int4 TrustGate
