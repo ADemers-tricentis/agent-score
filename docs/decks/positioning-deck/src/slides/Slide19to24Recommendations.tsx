@@ -4,10 +4,10 @@ import { brand } from "../theme/theme";
 
 const ACCENT = brand.primary;
 
-export const Slide18LeadWithFeatures: React.FC = () => (
+export const Slide19LeadWithFeatures: React.FC = () => (
   <ListSlide
-    index={18}
-    kicker="Recommendation 1 of 5"
+    index={19}
+    kicker="Recommendation 1 of 6"
     title="Lead with the features competitors can't easily copy"
     accent={ACCENT}
     bigNumber={1}
@@ -31,10 +31,10 @@ export const Slide18LeadWithFeatures: React.FC = () => (
   />
 );
 
-export const Slide19WhatToMeasure: React.FC = () => (
+export const Slide20WhatToMeasure: React.FC = () => (
   <ListSlide
-    index={19}
-    kicker="Recommendation 2 of 5"
+    index={20}
+    kicker="Recommendation 2 of 6"
     title="Knowing what to measure is the hardest part of evals"
     accent={ACCENT}
     bigNumber={2}
@@ -48,10 +48,10 @@ export const Slide19WhatToMeasure: React.FC = () => (
   />
 );
 
-export const Slide20SimulationGuardrails: React.FC = () => (
+export const Slide21SimulationGuardrails: React.FC = () => (
   <ListSlide
-    index={20}
-    kicker="Recommendation 3 of 5"
+    index={21}
+    kicker="Recommendation 3 of 6"
     title="Make a call on simulation and guardrails capabilities"
     accent={ACCENT}
     bigNumber={3}
@@ -71,10 +71,10 @@ export const Slide20SimulationGuardrails: React.FC = () => (
   />
 );
 
-export const Slide21McpCapabilities: React.FC = () => (
+export const Slide22McpCapabilities: React.FC = () => (
   <ListSlide
-    index={21}
-    kicker="Recommendation 4 of 5"
+    index={22}
+    kicker="Recommendation 4 of 6"
     title="MCP capabilities"
     accent={ACCENT}
     bigNumber={4}
@@ -98,10 +98,10 @@ export const Slide21McpCapabilities: React.FC = () => (
   />
 );
 
-export const Slide22EnterpriseReadiness: React.FC = () => (
+export const Slide23EnterpriseReadiness: React.FC = () => (
   <ListSlide
-    index={22}
-    kicker="Recommendation 5 of 5"
+    index={23}
+    kicker="Recommendation 5 of 6"
     title="Fix enterprise readiness"
     accent={ACCENT}
     bigNumber={5}
@@ -117,6 +117,33 @@ export const Slide22EnterpriseReadiness: React.FC = () => (
           { label: "RBAC", sub: "true role-based access" },
           { label: "SSO / SAML", sub: "enterprise identity" },
           { label: "Non-VPN access", sub: "reachable by design partners" },
+        ]}
+      />
+    }
+  />
+);
+
+export const Slide24FailureAttribution: React.FC = () => (
+  <ListSlide
+    index={24}
+    kicker="Recommendation 6 of 6"
+    title="Make the ingest-to-fix pipeline the story, not attribution alone"
+    accent={ACCENT}
+    bigNumber={6}
+    bullets={[
+      "Failure attribution alone isn't unique - Arize's Alyx and Patronus's Percival already do it",
+      "What's harder to copy is the pipeline it sits inside, running end-to-end on zero-setup OTel traces",
+      "Competitors hand you an explanation only after setup work; we hand you the explanation as a byproduct of the same zero-touch ingestion that produced the score",
+      "Neither Alyx nor Percival is documented to close the loop from \"why it failed\" to \"what to do about it\"",
+      "\"We don't just tell you it's broken, we tell you how to fix it\" - a claim none of the profiled competitors can make",
+    ]}
+    visual={
+      <FlowDiagram
+        accent={ACCENT}
+        nodes={[
+          { label: "Ingest", sub: "zero-setup OTel trace" },
+          { label: "Auto-evaluate → auto-score", sub: "no instrumentation, no dataset curation" },
+          { label: "Failure attribution → fix recommendation", sub: "no other profiled competitor closes this loop" },
         ]}
       />
     }

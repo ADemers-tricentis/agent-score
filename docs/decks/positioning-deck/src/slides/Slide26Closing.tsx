@@ -2,8 +2,8 @@ import { Slide } from "../components/Slide";
 import { Wordmark } from "../components/Wordmark";
 import { brand, surface, SLIDE_W, SLIDE_H } from "../theme/theme";
 
-export const Slide24Closing: React.FC = () => (
-  <Slide index={24} bare>
+export const Slide26Closing: React.FC = () => (
+  <Slide index={26} bare>
     <div
       style={{
         width: SLIDE_W,
@@ -74,7 +74,7 @@ export const Slide24Closing: React.FC = () => (
         }}
       >
         <span>© Tricentis. All rights reserved.</span>
-        <span style={{ fontWeight: 600 }}>24 / 24</span>
+        <span style={{ fontWeight: 600 }}>26 / 26</span>
       </div>
     </div>
   </Slide>

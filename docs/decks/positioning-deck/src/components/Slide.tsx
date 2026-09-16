@@ -133,7 +133,7 @@ export const Slide: React.FC<SlideProps> = ({
               fontWeight: 600,
             }}
           >
-            {String(index).padStart(2, "0")} / 24
+            {String(index).padStart(2, "0")} / 26
           </span>
         </div>
       )}

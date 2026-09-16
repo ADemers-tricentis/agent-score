@@ -24,6 +24,7 @@ export const SCORING_ROWS: CompareRow[] = [
   { label: "LLM-as-judge", values: ["✅ (G-Eval, Hybrid)", "✅", "✅", "✅", "✅ + SLM judges", "✅", "✅", "🟡 n/p", "✅ (Lynx/GLIDER)", "❌ deterministic"] },
   { label: "Multi-model judge catalog", values: ["✅ 7 models (Bedrock)", "✅", "✅", "✅", "✅", "✅", "✅", "n/p", "✅", "❌ (n/a)"] },
   { label: "Customer-selectable judge", values: ["✅", "✅", "✅", "✅", "✅", "✅", "✅", "n/p", "✅", "❌ (n/a)"] },
+  { label: "Failure attribution / root-cause diagnosis", values: ["✅ score decomposes to dimension → eval → evidence", "n/p", "🟡 \"Loop\" assistant", "✅ \"Alyx\" debugging assistant", "n/p", "n/p", "n/p", "n/p", "✅ \"Percival\" debugger (20+ failure modes)", "❌ (n/a)"] },
   { label: "Zero-config / auto-profile", values: ["✅ differentiated", "❌", "❌", "❌", "❌", "❌", "❌", "🟡", "❌", "❌"] },
   { label: "Simulation / synthetic users", values: ["❌", "❌", "❌", "❌", "❌", "❌", "❌", "✅", "✅", "🟡 prod replay (Prove)"] },
   { label: "Guardrails / runtime protect", values: ["❌", "❌", "🟡", "🟡", "✅", "❌", "❌", "❌", "🟡", "✅ core"] },

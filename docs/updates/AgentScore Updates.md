@@ -1,3 +1,17 @@
+## September 15, 2026 Update
+
+### Switching windows no longer resets your work
+- Alt-tabbing away from Agent Score and back used to blank the screen and rebuild the page while it re-checked your session - losing your scroll position, open dialogs, and anything you were mid-typing. It now re-checks quietly in the background and only reloads if your session actually needs it.
+
+### More reliable ingestion when traffic gets uneven
+- A single integration sending unusually slow or high-volume requests could previously eat into the shared capacity other tenants rely on to send traces. Each credential now gets its own fair share, so one noisy or slow sender can no longer crowd out everyone else's traces.
+
+### Internal note: unified Tricentis login (Entra ID)
+- Tricentis staff now sign into the Agent Score back office with the same Microsoft Entra ID login used elsewhere at Tricentis, instead of a separate one-off account. Anyone not yet on the access list gets a self-serve "request access" button, and any admin can approve the request and set an access level, no IT ticket needed.
+
+### Coming next
+- Signing in with your existing Tosca Cloud account, so you won't need a separate one-off login just for Agent Score
+
 ## September 10, 2026 Update
 
 ### Talk to Agent Score directly

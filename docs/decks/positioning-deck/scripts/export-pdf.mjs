@@ -1,7 +1,7 @@
 // Builds the deck, serves the built app on a fixed local port, drives it
-// with Playwright Chromium to the /print route (all 24 slides stacked,
+// with Playwright Chromium to the /print route (all 26 slides stacked,
 // 1920x1080 each, page-break-after per slide), and exports a PDF to the
-// AgentScore research docs folder.
+// deck's output folder.
 //
 // Usage: node scripts/export-pdf.mjs   (wired to `npm run export:pdf`)
 
@@ -16,7 +16,7 @@ const ROOT = path.resolve(__dirname, "..");
 const PORT = 4173;
 const OUT_PATH = path.resolve(
   ROOT,
-  "../AgentScore-Competitive-Positioning.pdf",
+  "output/AgentScore-Competitive-Positioning.pdf",
 );
 
 function run(cmd, args, opts = {}) {

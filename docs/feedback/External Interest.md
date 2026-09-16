@@ -10,7 +10,7 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos scheduled | Active betas |
 |---|---|---|---|
-| 50 | 5 | 4 | 0 |
+| 50 | 5 | 5 | 0 |
 
 Source breakdown: 48 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.) = 50 total.
 
@@ -18,13 +18,13 @@ Update the per-company Status column below as accounts move, and keep the summar
 
 | Company | Contact | Status |
 |---|---|---|
-| Meta Platforms, Inc. | Sri Pulleti | Demo Scheduled |
+| Meta Platforms, Inc. | Sri Pulleti | Demo Scheduled — POC scoping |
 | Freddie Mac | Kaleb Jackson | Replied |
 | Workday, Inc. | Vijay Mummaneni | Demo Scheduled |
 | PVH Corp | Beena P K, Aimee Martin | Email sent |
 | Charter Communications Operating, LLC | Sarvesh Peddi | Email sent |
 | Artizent (form blank, domain-resolved) | Alan Mayfus | Email sent |
-| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj | Replied |
+| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj | Demo Scheduled |
 | SAP Labs India (IN) | SaiDeepak Ayyagari | Email sent |
 | Regeneron Pharmaceuticals Inc. | Murali Sundaram | Email sent |
 | Acadia Healthcare | Pratiksha Arora | Email sent |
@@ -80,7 +80,9 @@ Contact: sripulleti@meta.com
 
 what they do: Global social-media/technology conglomerate (Facebook, Instagram, WhatsApp, Messenger, Reality Labs) with a large open-model AI research arm (the Llama model family).
 
-likely use case: given Meta's own push into customer-facing agents at massive scale via its new Business Agent Platform, plausibly evaluating Agent Score either to validate agents built on that platform or as landscape research into third-party agent-testing tools — notable overlap with Agent Score's own positioning, similar profile to the Workday and Pegasystems entries below.
+confirmed use case (from feedback sessions): Sri owns Meta's autonomous supply chain program and has an urgent need to test 4-5 production agents (order management is the flagship) as more agents ship to prod. Two sessions held: an initial demo with Sri (2026-08-11) and a POC-scoping call on 2026-09-11 run through a delivery/SI partner who wants to build the POC ("your tool, our people") on Meta's existing, underused Tosca footprint. Gating requirements: self-hosted deployment in Meta's own AWS (data can't leave; custom internal models) and pointing the evaluator/judge at Meta's internal LLMs; scenario-bank/adversarial simulation is the deciding roadmap gap. Debriefs: [Meta Feedback Session](feedback-sessions/Meta%20Feedback%20Session.md), [Meta POC Scoping Feedback Session](feedback-sessions/Meta%20POC%20Scoping%20Feedback%20Session.md).
+
+likely use case (original inference, now superseded by the above): given Meta's own push into customer-facing agents at massive scale via its new Business Agent Platform, plausibly evaluating Agent Score either to validate agents built on that platform or as landscape research into third-party agent-testing tools — notable overlap with Agent Score's own positioning, similar profile to the Workday and Pegasystems entries below.
 
 known agent tooling: launched Meta Business Agent (a customer-facing agent live across WhatsApp, Messenger, and Instagram handling Q&A, appointment booking, lead qualification, and multilingual responses) and the enterprise Business Agent Platform (integrating with 100+ systems including Shopify and Zendesk) at Conversations 2026 in London (June 3, 2026), building on over 1 million businesses already using earlier chatbot pilots in India, Mexico, and Brazil; separately ships Llama Stack, a toolchain interface for customizing Llama models and building agentic applications ([Digital Applied](https://www.digitalapplied.com/blog/meta-ai-business-agents-enterprise-llama-launch-2026), [Meta AI blog](https://ai.meta.com/blog/future-of-ai-built-with-llama/)).
 
@@ -251,6 +253,8 @@ Name: Jawahar Govindaraj
 Contact: jawahar.govindaraj@tritusa.com.au  
 
 what they do: Sydney-headquartered SAP Technical Services & software-testing consultancy (~51 employees, ~$6M revenue, founded 2011) with presence in Melbourne, Canberra, Brisbane — 150+ projects delivered to 100+ Australian customers, specializing in SAP-focused quality engineering, automation, and performance testing ([tritusa.com.au/about-us](https://tritusa.com.au/about-us/)).
+
+confirmed use case (from 2026-09-11 demo): confirmed the inference below. As a Tricentis gold-sponsor partner/SI they want AgentScore both to evaluate the agents they build for clients (they demoed two - a Copilot Studio agent and an AI Workspace MCP+A2A agent, each turning a requirements doc into qTest requirements/test cases and Tosca execution) and to arm their own evals-and-assurance advisory practice. Immediate driver: they present an autonomous QA agent at Transatlantic 26 Singapore the week of 2026-09-15 and expect customer questions on trust/models/benchmarks/safety/compliance. Attendees included Jawahar Govindaraj (heads their agent practice), Pankaj Kumar Sinha (Tosca lead), Deephan Mohanraj, and Vedanth (principal architect, ~decade in Tosca; not in the form-submission list). Top asks: compliance validation (bank/pharma clients), alerting, bulk export, and a partner co-sell motion. Debrief: [Tritusa Feedback Session](feedback-sessions/Tritusa%20Feedback%20Session.md).
 
 likely use case: as an SAP testing/QA vendor, most plausibly evaluating Agent Score to extend its testing practice into agentic-AI QA for its own client base — same profile as New Vision Software and Merito Solutions above.
 

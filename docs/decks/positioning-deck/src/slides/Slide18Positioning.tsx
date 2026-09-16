@@ -9,8 +9,8 @@ import { brand, surface } from "../theme/theme";
 const NEUTRAL = brand.navy;
 const CHROME_ACCENT = brand.orange;
 
-export const Slide17Positioning: React.FC = () => (
-  <Slide index={17} kicker="Positioning Assessment" dark accentColor={CHROME_ACCENT}>
+export const Slide18Positioning: React.FC = () => (
+  <Slide index={18} kicker="Positioning Assessment" dark accentColor={CHROME_ACCENT}>
     <Title size={46} color={surface.textOnDark} style={{ maxWidth: 1600 }}>
       Where AgentScore sits
     </Title>

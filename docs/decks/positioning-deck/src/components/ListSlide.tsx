@@ -4,7 +4,7 @@ import { BigIndexMark } from "./visuals";
 import { surface } from "../theme/theme";
 
 // Shared layout for the Differentiator (7-10), Gap (11-16), and Strategic
-// Recommendation (18-22) slides: title + bullets on the left, a concrete
+// Recommendation (19-24) slides: title + bullets on the left, a concrete
 // visual (never just more bullets) on the right, with a faint numeral
 // watermark for wayfinding within the sub-sequence.
 export const ListSlide: React.FC<{
