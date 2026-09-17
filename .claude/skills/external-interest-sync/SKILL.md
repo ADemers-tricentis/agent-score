@@ -35,9 +35,9 @@ fresh mail-merge file, without re-processing submissions already recorded.
   submission count and exclusion notes, a **Pipeline Tracker** table (summary
   counts row + per-company Company/Contact/Status rows), then per-company
   `### <Company>` sections newest-first (what they do / likely use case /
-  known agent tooling, each with a `Date:` / `Name:` / `Contact:` block —
-  multiple submitters from one company get repeated Date/Name/Contact groups
-  stacked before the prose).
+  known agent tooling, each with a `Date:` / `Name:` / `Contact:` / `Title:` /
+  `Relationship:` block — multiple submitters from one company get repeated
+  Date/Name/Contact/Title/Relationship groups stacked before the prose).
 - **Mail-merge output:**
   `docs/feedback/external-interest-mail-merge.csv` — header
   `Company,Name,Email,Status`, quoted fields. **This run's new companies
@@ -92,8 +92,12 @@ history back to day one).
 
 Search `labs@tricentis.com` for messages with the subject *"New Tricentis
 Labs Submission for AI Agent Testing and Evaluation"* received after the
-cutoff. For each, extract: submission timestamp, submitter name, submitter
-email, and the form's own Company field (may be blank).
+cutoff. For each, read the full email body (the search result summary alone
+won't have every field) and extract: submission timestamp, submitter name,
+submitter email, the form's own Company field (may be blank), **Title**, and
+**Relationship** (e.g. Customer / Partner / Evaluating Tricentis / Other).
+Title and Relationship are part of every submission's Date/Name/Contact block
+and must be captured alongside them, not dropped.
 
 If there are no new submissions, say so and stop — don't touch the tracker
 or the CSV.
@@ -131,7 +135,10 @@ voice and rigor:
 - **what they do** — one or two sentences, factual, sourced.
 - **likely use case** — an inference from public info, explicitly framed as
   an inference (match phrases like "given their..., most plausibly..."),
-  not a confirmed customer statement.
+  not a confirmed customer statement. The submitter's Title and Relationship
+  are useful signal here (e.g. a Partner-relationship SAP consultant plausibly
+  means the company is evaluating Agent Score for its own client base, not as
+  an end customer) — fold them into the inference where they change the read.
 - **known agent tooling** — what's publicly documented about their AI/agent
   deployments, with inline markdown source links; if nothing turns up, say
   "no public information found tying X to a deployed agent product" exactly
@@ -156,6 +163,8 @@ emails into an outbound mail merge. Wait for their go-ahead before continuing.
 
 - Prepend each new `### <Company>` section, newest-first, directly after the
   Pipeline Tracker table (before the current first per-company section).
+  Each submitter group is five lines: `Date:` / `Name:` / `Contact:` /
+  `Title:` / `Relationship:`.
 - Add one row per new company to the Pipeline Tracker's per-company table,
   Status = `Interested`.
 - Bump only the **Interested companies** count in the summary row — leave

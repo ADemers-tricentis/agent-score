@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 64 form submissions found (as of 2026-09-09), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Six submissions came from `@tricentis.com` addresses — internal test/QA submissions, not external prospects — and are excluded from the tracker below: Brad Purcell (submitted twice, 2026-08-21 and 2026-09-07), Michal Hrncirik, Maria Argulla, Caitlin Bowers, and Neil Williams (submitted twice, both 2026-09-08, under "Tricentis (UK)"). A seventh submission (VIJESH Vijayan, 2026-08-27, "Neotys (FR) - HQ") came from a `@neotys.com` address; Neotys/NeoLoad has been a Tricentis-owned brand since the 2021 acquisition, so it's excluded on the same basis pending confirmation of whether this is a legacy-domain Tricentis employee or a genuine external NeoLoad customer. One more (Jigish Belani / Accenture LLP, 2026-09-09) is a repeat submission from a contact already tracked below (original: 2026-08-20) — noted, but not added as a second entry. Entries are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini, McKesson, Merito Solutions, PVH Corp, Tritusa Consulting) — 48 distinct entries as a result. Combined entries list each submitter's Date/Name/Contact as its own three-line group. Two additional entries came in through Sales rather than the Labs form — no form timestamp, and they're counted separately from the 64 form submissions above: Freddie Mac (Kaleb Jackson, 2026-08-28) and Meta Platforms, Inc. (Sri Pulleti, 2026-09-10).
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 85 form submissions found (as of 2026-09-17), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Nine submissions came from `@tricentis.com` addresses — internal test/QA submissions, not external prospects — and are excluded from the tracker below: Brad Purcell (submitted twice, 2026-08-21 and 2026-09-07), Michal Hrncirik (submitted twice, 2026-09-08 and 2026-09-10, the second time under "Tecra Systems, Inc."), Maria Argulla, Caitlin Bowers, Neil Williams (submitted twice, both 2026-09-08, under "Tricentis (UK)"), Karthick S (2026-09-11, under "Tricentis"), and Kevin Demancsik (2026-09-10, under "TRICENTIS USA"). A seventh submission (VIJESH Vijayan, 2026-08-27, "Neotys (FR) - HQ") came from a `@neotys.com` address; Neotys/NeoLoad has been a Tricentis-owned brand since the 2021 acquisition, so it's excluded on the same basis pending confirmation of whether this is a legacy-domain Tricentis employee or a genuine external NeoLoad customer. One more (Jigish Belani / Accenture LLP, 2026-09-09) is a repeat submission from a contact already tracked below (original: 2026-08-20) — noted, but not added as a second entry. One submission (Rohan Patil / BearingPoint GmbH (DE) - HQ, 2026-09-14) was submitted five times within about 90 seconds and is recorded once. Entries are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini, McKesson, Merito Solutions, PVH Corp, Tritusa Consulting, Ariba, Inc.) — 67 distinct entries as a result. One more combined entry, cbs Corporate Business Solutions (DE/MY), merges two submissions the CRM matched to differently-named accounts ("CBS Corporation" and "CBS Corporate Business Solutions MY") that share the same cbs-consulting.com email domain. Combined entries list each submitter's Date/Name/Contact as its own three-line group. Two additional entries came in through Sales rather than the Labs form — no form timestamp, and they're counted separately from the 85 form submissions above: Freddie Mac (Kaleb Jackson, 2026-08-28) and Meta Platforms, Inc. (Sri Pulleti, 2026-09-10).
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -10,9 +10,9 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos scheduled | Active betas |
 |---|---|---|---|
-| 50 | 5 | 5 | 0 |
+| 69 | 5 | 5 | 0 |
 
-Source breakdown: 48 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.) = 50 total.
+Source breakdown: 67 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.) = 69 total.
 
 Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
 
@@ -68,8 +68,324 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Dolpheen IT Solutions | Jia Jun Zhan | Interested |
 | Cengage Learning, Inc. | Ajan Nattamai | Interested |
 | Pegasystems Inc. | Kiran kadarla | Interested |
+| cbs Corporate Business Solutions (DE/MY) | Ashish Chavan, Arumugam Lekshmanan | Interested |
+| Ariba, Inc. | Akihiko Yamano, Sina Döbbelin | Interested |
+| Seatrium (SG) | Florance Yong | Interested |
+| Singapore Power Digital Private Limited | Ritu Agrawal | Interested |
+| ABeam Consulting (Malaysia) Sdn. Bhd. | Sharifah Nadiah Alhabshi | Interested |
+| Singapore Institute of Technology (SG) | Dennis Fung | Interested |
+| Olam Agri (form blank, domain-resolved) | Vanitha Velusamy | Interested |
+| Tata Consultancy Services Asia Pacific Pte. Ltd. (SG) | Balaji Sampathkumar | Interested |
+| SAP North America | Thomas Zimmermann | Interested |
+| Defence Science and Technology Agency (SG) | cydnie na | Interested |
+| Housing Development Board (SG) | Swee Chyuan Koh | Interested |
+| L'OREAL | Khadim KASHANI | Interested |
+| City Dev (SG) | Davin Ng | Interested |
+| Testing IT Consulting S.A. de C.V. | Hector Santa Maria | Interested |
+| Brillar Pte Ltd (SG) | Zuzan Win | Interested |
+| Harrods Ltd (UK) | Shanita Helyar | Interested |
+| Ally Financial Inc. | Jana Kethamreddy | Interested |
+| BearingPoint GmbH (DE) - HQ | Rohan Patil | Interested |
+| xAmplify (AU) | Prakash Panchal | Interested |
 
 *(Status values: Interested → Email sent → Replied → Demo scheduled → Active beta.)*
+
+---
+
+### cbs Corporate Business Solutions (DE/MY)
+Date: 2026-09-17 05:36  
+Name: Ashish Chavan  
+Contact: ashish.chavan@cbs-consulting.com  
+Title: SAP Consultant  
+Relationship: Evaluating Tricentis  
+
+Date: 2026-09-17 01:45  
+Name: Arumugam Lekshmanan  
+Contact: arumugam.lekshmanan@cbs-consulting.com  
+Title: Test Manager  
+Relationship: Partner  
+
+what they do: German SAP consultancy founded by former SAP consultants in 1995, now part of the Materna Group — 1,700+ employees across 40+ locations including a Malaysia office and the US ([cbs-consulting.com](https://www.cbs-consulting.com/en/about-cbs/company/)).
+
+likely use case: as an SAP implementation partner, most plausibly evaluating Agent Score to extend its SAP-testing practice into agentic-AI QA for its own client base — same profile as Dolpheen IT Solutions and Merito Solutions above.
+
+known agent tooling: no public information found tying cbs to a deployed agent product; core business is SAP consulting and migration services.
+
+---
+
+### Ariba, Inc.
+Date: 2026-09-17 01:59  
+Name: Akihiko Yamano  
+Contact: akihiko.yamano@sap.com  
+Title: Lead Architect  
+Relationship: Partner  
+
+Date: 2026-09-17 01:44  
+Name: Sina Döbbelin  
+Contact: sina.doebbelin@sap.com  
+Title: BTM Partner Management  
+Relationship: Partner  
+
+what they do: SAP Ariba, SAP's cloud-based procurement and supply-chain collaboration platform.
+
+likely use case: both submitters are `@sap.com` addresses, so this most plausibly reflects an internal SAP evaluation of Agent Score against SAP's own emerging Ariba agentic-procurement features, rather than an external customer need.
+
+known agent tooling: next-gen SAP Ariba embeds a Joule Bid Analysis Agent and AI-assisted contract support directly into procurement workflows ([SAP News](https://news.sap.com/2026/03/next-gen-sap-ariba-foundation-for-intelligent-procurement/)).
+
+---
+
+### Seatrium (SG)
+Date: 2026-09-17 01:51  
+Name: Florance Yong  
+Contact: florance.yong@seatrium.com  
+Title: IT QA Manager  
+Relationship: Customer  
+
+what they do: Singapore-headquartered offshore/marine and shipbuilding group formed from the 2023 Sembcorp Marine–Keppel O&M merger.
+
+likely use case: given its active AI/digital-twin push in shipyard operations, most plausibly evaluating Agent Score to test agentic tools supporting that transformation.
+
+known agent tooling: partnered with A*STAR on AI and new-energy R&D for offshore/marine applications, and opened a joint Offshore & Marine Digital Learning Lab with Singapore Institute of Technology covering AI and digital twins ([Splash247](https://splash247.com/seatrium-looks-into-new-energies-and-ai-for-offshore-and-marine-sector/); [A*STAR](https://www.a-star.edu.sg/News/astarNews/news/press-releases/seatrium-astar-explore-new-energies-ai-in-offshore-marine-applications)).
+
+---
+
+### Singapore Power Digital Private Limited
+Date: 2026-09-17 01:47  
+Name: Ritu Agrawal  
+Contact: rituka@spgroup.com.sg  
+Title: Test manager  
+Relationship: Customer  
+
+what they do: SP Digital, the digital-solutions subsidiary of Singapore Power (SP) Group, Singapore's national electricity and gas transmission utility.
+
+likely use case: given SP Digital's existing AI/IoT energy-management products, most plausibly evaluating Agent Score to test agentic features within those products before rollout.
+
+known agent tooling: builds AI- and IoT-driven products for energy efficiency and grid fault diagnosis, including AI-based fault detection and solar-optimization tools used by customers like Sembcorp Marine ([SP Group](https://www.spgroup.com.sg/about-us/media-resources/energy-hub/innovation/data-science-and-ai-deliver-efficient-energy-solutions-to-customers)).
+
+---
+
+### ABeam Consulting (Malaysia) Sdn. Bhd.
+Date: 2026-09-17 01:47  
+Name: Sharifah Nadiah Alhabshi  
+Contact: salhabshi@abeam.com  
+Title: Manager  
+Relationship: Partner  
+
+what they do: Japanese-origin SAP consultancy with 180+ consultants in Malaysia (Petaling Jaya and Penang), one of the largest SAP partners in the country.
+
+likely use case: given ABeam's own AI-agent support service and SAP Joule rollout, most plausibly evaluating Agent Score to extend its agentic-AI QA practice for client implementations — same profile as TestCrew and Aspire Systems above.
+
+known agent tooling: offers a generative-AI agent utilization/construction support service, and deployed SAP Joule for Consultants across 19+ use cases in its Southeast Asia offices including Malaysia ([ABeam](https://www.abeam.com/my/en/news/2025/0715/); [SAP News](https://news.sap.com/sea/2026/08/abeam-consulting-accelerates-project-delivery-with-sap-joule-for-consultants/)).
+
+---
+
+### Singapore Institute of Technology (SG)
+Date: 2026-09-17 01:46  
+Name: Dennis Fung  
+Contact: dennis.fung@singaporetech.edu.sg  
+Title: Senior IT Consultant  
+Relationship: Evaluating Tricentis  
+
+what they do: Singapore's university of applied learning, focused on industry-integrated degree programs.
+
+likely use case (weak inference): no confirmed Agent Score initiative; plausibly evaluating for its own IT/QA teaching labs, given its existing AI-focused industry labs.
+
+known agent tooling: co-runs an Offshore & Marine Digital Learning Lab with Seatrium covering AI and digital twins for workforce training ([Marine Link](https://www.marinelink.com/news/sit-seatrium-launch-offshore-marine-535601)); no public information found tying SIT itself to a deployed AI agent product.
+
+---
+
+### Olam Agri (form blank; email domain suggests Olam Agri)
+Date: 2026-09-17 01:46  
+Name: Vanitha Velusamy  
+Contact: vanitha.velusamy@olamagri.com  
+Title: IT Project Manager  
+Relationship: Customer  
+
+what they do: Singapore-headquartered agri-business (food, feed, and fiber) spun off from Olam International in 2020.
+
+likely use case: given its active SAP S/4HANA + Joule rollout on AWS, most plausibly evaluating Agent Score to test agentic features (predictive maintenance, quality control, business-integrity screening) as they go live.
+
+known agent tooling: deploying RISE with SAP on AWS with Joule generative-AI capabilities for predictive maintenance, commodity quality control, and AI-powered business-integrity screening, implemented with Olam's IT arm Mindsprint ([SAP News](https://news.sap.com/sea/2024/09/olam-agri-accelerates-ai-journey-with-rise-with-sap-on-aws/)).
+
+---
+
+### Tata Consultancy Services Asia Pacific Pte. Ltd. (SG)
+Date: 2026-09-17 01:46  
+Name: Balaji Sampathkumar  
+Contact: sampathkumar.balaji@tcs.com  
+Title: Associate Consultant  
+Relationship: Partner  
+
+what they do: Indian IT-services and consulting major, one of the world's largest technology services firms.
+
+likely use case: as a systems-integration partner, most plausibly evaluating Agent Score to extend its own agentic-AI QA offering into client engagements — same profile as ABeam and TestCrew above.
+
+known agent tooling: has launched multiple agentic-AI platforms including TCS ADD AgentHub for drug development and GenAI/agentic-AI-powered TCS MasterCraft for legacy modernization ([TCS](https://www.tcs.com/who-we-are/newsroom/press-release/tcs-launches-agentic-ai-platform-transform-drug-development)).
+
+---
+
+### SAP North America
+Date: 2026-09-17 01:45  
+Name: Thomas Zimmermann  
+Contact: thomas.zimmermann03@sap.com  
+Title: VP  
+Relationship: Partner  
+
+what they do: SAP's North American business unit.
+
+likely use case: given the submitter's VP title and SAP's own push into agentic ERP/procurement tooling (Joule), most plausibly an internal SAP evaluation of Agent Score rather than an external customer need.
+
+known agent tooling: SAP is actively building agentic AI (Joule) across Ariba, S/4HANA, and consultant tooling ([SAP News](https://news.sap.com/2026/03/next-gen-sap-ariba-foundation-for-intelligent-procurement/)).
+
+---
+
+### Defence Science and Technology Agency (SG)
+Date: 2026-09-17 01:45  
+Name: cydnie na  
+Contact: cnaxinye@dsta.gov.sg  
+Title: Developer  
+Relationship: Partner  
+
+what they do: statutory board under Singapore's Ministry of Defence responsible for defense technology acquisition and systems development for MINDEF and the SAF.
+
+likely use case: given DSTA's active build-out of in-house AI agents, most plausibly evaluating Agent Score to test/validate those agents before deployment.
+
+known agent tooling: launched Gaia, a generative-AI assistant for MOD/SAF staff, and is expanding a Mistral partnership on AI agents for reasoning/complex tasks and autonomous drone navigation ([GovInsider](https://govinsider.asia/intl-en/article/how-singapores-defence-tech-uses-ai-and-digital-twins-mervyn-tan-dsta)).
+
+---
+
+### Housing Development Board (SG)
+Date: 2026-09-17 01:44  
+Name: Swee Chyuan Koh  
+Contact: Koh_swee_chyuan@hdb.gov.sg  
+Title: Principal Software Quality Engineer  
+Relationship: Customer  
+
+what they do: Singapore's public-housing statutory board under the Ministry of National Development.
+
+likely use case: given the submitter's "Principal Software Quality Engineer" title and HDB's AI rollouts on its new digital portal, most plausibly evaluating Agent Score to test those agentic/AI features.
+
+known agent tooling: reported use of LiDAR + AI for automated estate mapping (Geo Week 2024 award), and its new resale/purchase portal is reported to integrate third-party AI assistants; sourcing on a specific in-house agent product is thin.
+
+---
+
+### L'OREAL
+Date: 2026-09-17 01:44  
+Name: Khadim KASHANI  
+Contact: khadim.kashani@loreal.com  
+Title: SME Test Automation  
+Relationship: Customer  
+
+what they do: French multinational cosmetics and beauty group.
+
+likely use case: given the submitter's "SME Test Automation" title and L'Oréal's rapid rollout of consumer-facing AI agents, most plausibly evaluating Agent Score to test those agents' quality/behavior before release.
+
+known agent tooling: deployed the "Beauty Genius" AI agent (built on Azure OpenAI/GPT-4o) for consumer beauty advice, with active AI partnerships spanning NVIDIA, IBM, and OpenAI ([Microsoft](https://www.microsoft.com/en/customers/story/25570-loreal-azure-openai); [L'Oréal](https://www.loreal.com/en/press-release/research-and-innovation/l-oreal-and-openai-join-forces-for-transformation-in-beauty-with-ai/)).
+
+---
+
+### City Dev (SG)
+Date: 2026-09-17 01:44  
+Name: Davin Ng  
+Contact: davin.ng@cdl.com.sg  
+Title: QA Lead  
+Relationship: Customer  
+
+what they do: City Developments Limited (CDL), a major Singapore-listed real-estate group operating in 29 countries.
+
+likely use case: given the submitter's "QA Lead" title and CDL's adoption of AI-driven platforms on SAP/Microsoft, most plausibly evaluating Agent Score to test those systems' agentic features.
+
+known agent tooling: has adopted machine-learning, computer-vision, and generative-AI tools across its SAP S/4HANA and Microsoft 365 stack ([AppsRunTheWorld](https://www.appsruntheworld.com/customers-database/customers/view/city-developments-limited-cdl-singapore-singapore)); no public information found tying CDL to a specific named deployed agent product.
+
+---
+
+### Testing IT Consulting S.A. de C.V.
+Date: 2026-09-16 15:34  
+Name: Hector Santa Maria  
+Contact: hector.santamaria@testingit.com.mx  
+Title: CEO  
+Relationship: Partner  
+
+what they do: Mexico City-based software-testing/QA consultancy (founded 2008, 51–200 employees) offering testing consulting, ISTQB certification training, and agile/DevOps testing frameworks ([testingit.com.mx](https://www.testingit.com.mx/en/home)).
+
+likely use case: as a QA/testing-services vendor, most plausibly evaluating Agent Score to extend its testing practice into agentic-AI QA for its own client base — same profile as TestCrew and Bayone Solutions above.
+
+known agent tooling: no public information found tying Testing IT Consulting to a deployed agent product; core business is quality-engineering training and testing services.
+
+---
+
+### Brillar Pte Ltd (SG)
+Date: 2026-09-16 06:17  
+Name: Zuzan Win  
+Contact: zuzan.win@brillar.io  
+Title: Test Automation Engineer  
+Relationship: Partner  
+
+what they do: Singapore-based digital-transformation solution provider and Tricentis partner (named SEA Tricentis Partner of the Year), focused on test automation, cloud, cybersecurity, and analytics/ML for financial-services, banking, and telco clients ([Tricentis](https://www.tricentis.com/partners/brillar)).
+
+likely use case: as an existing Tricentis partner, most plausibly evaluating Agent Score to extend its test-automation practice into agentic-AI QA for its own client base — same profile as Dolpheen IT Solutions above.
+
+known agent tooling: no public information found tying Brillar to a deployed agent product; core business is test-automation and digital-transformation consulting.
+
+---
+
+### Harrods Ltd (UK)
+Date: 2026-09-15 11:37  
+Name: Shanita Helyar  
+Contact: shanita.helyar@harrods.com  
+Title: Senior Test Manager  
+Relationship: Customer  
+
+what they do: iconic London luxury department store.
+
+likely use case: given the submitter's "Senior Test Manager" title and Harrods' recent AI-driven marketing/inventory rollouts, most plausibly evaluating Agent Score to test those systems as it scales further AI-powered retail features.
+
+known agent tooling: uses AI-based inventory replenishment and an AI-driven digital-marketing analytics platform ("Seamless Search") to optimize ad spend in real time ([Retail Systems](https://retail-systems.com/rs/Harrods_rolls_out_ai_powered_platform_to_boost_digital_marketing_strategy.php)).
+
+---
+
+### Ally Financial Inc.
+Date: 2026-09-14 16:17  
+Name: Jana Kethamreddy  
+Contact: jana.kethamreddy@ally.com  
+Title: Principal Cloud Engg  
+Relationship: Other  
+
+what they do: US digital-only bank and financial-services company (auto finance, banking, mortgage).
+
+likely use case: given the submitter's "Principal Cloud Engg" title and Ally's plans to experiment with autonomous agents via Amazon Bedrock, most plausibly evaluating Agent Score to test those emerging agents.
+
+known agent tooling: runs the proprietary enterprise AI platform Ally.ai (10,000+ employees), built AI-persona tools modeling customer behavior, and is exploring autonomous AI agents via Amazon Bedrock ([Ally](https://media.ally.com/2025-07-23-Ally-Financial-rolls-out-proprietary-AI-platform-enterprise-wide); [TechTarget](https://www.techtarget.com/searchcio/feature/Allys-generative-AI-strategy-eyes-multiple-LLMs-AI-agents)).
+
+---
+
+### BearingPoint GmbH (DE) - HQ
+Date: 2026-09-14 12:27  
+Name: Rohan Patil  
+Contact: rohan.patil@bearingpoint.com  
+Title: Senior Technology Consultant  
+Relationship: Partner  
+
+what they do: European management and technology consultancy (13,000+ people, 70+ countries).
+
+likely use case: given its own agentic-AI platform launch, most plausibly evaluating Agent Score to extend its consulting practice into agentic-AI QA for client engagements — same profile as TCS and ABeam above.
+
+known agent tooling: launched GenAIQ, a proprietary agentic-AI platform for enterprise-scale automation of knowledge-intensive tasks ([BearingPoint](https://www.bearingpoint.com/en/about-us/news-and-media/press-releases/bearingpoint-launches-genaiq/)).
+
+---
+
+### xAmplify (AU)
+Date: 2026-09-14 11:04  
+Name: Prakash Panchal  
+Contact: prakash.panchal@xamplify.com.au  
+Title: Test Automation Architect  
+Relationship: Partner  
+
+what they do: Canberra-based, 100%-Australian-owned test automation, DevOps, and AI integrator (156 employees), already a Tricentis partner ([Tricentis](https://www.tricentis.com/partners/xamplify)).
+
+likely use case: as an existing Tricentis partner, most plausibly evaluating Agent Score to extend its test-automation practice into agentic-AI QA for its own client base — same profile as Dolpheen IT Solutions and Brillar above.
+
+known agent tooling: no public information found tying xAmplify to a deployed agent product beyond its own AI-integration services; recently received equity investment from Macquarie Capital to expand ([Business News Australia](https://www.businessnewsaustralia.com/articles/macquarie-capital-invests-in-automated-systems-and-ai-integrator-xamplify.html)).
 
 ---
 

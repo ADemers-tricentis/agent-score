@@ -1,8 +1,8 @@
 # Demo Usability Decision Log
 
-Tracks changes made to `agentscore-demo` specifically to improve usability for non-technical users: what changed, who it's for, and why. Does not track feature/build-out work (cloning screens, wiring fixture data, matching production feature parity) unless the change itself was made for a usability reason.
+Tracks changes made to `agentscore-frontend` specifically to improve usability for non-technical users: what changed, who it's for, and why. Does not track feature/build-out work (cloning screens, wiring fixture data, matching production feature parity) unless the change itself was made for a usability reason.
 
-Every entry is checked against the live source in `agentscore-demo/src` before being logged - not just commit messages, which can describe a change that was intended but never actually landed.
+Every entry is checked against the live source in `agentscore-frontend/src` before being logged - not just commit messages, which can describe a change that was intended but never actually landed.
 
 ---
 
