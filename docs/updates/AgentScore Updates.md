@@ -1,3 +1,13 @@
+## September 17, 2026 Update
+
+### Internal note: platform migration to Tricentis' shared Kubernetes infrastructure
+- Agent Score's backend is moving from its current AWS setup onto Tricentis' shared Kubernetes platform (TAIS), including a cutover from Postgres-on-EC2 to Amazon RDS. This is infrastructure work with no visible change for customers yet.
+- Staff and Tosca Cloud sign-in are being wired up in parallel on the new infrastructure so Tosca Cloud login (see Coming next) can launch there - the Tosca Cloud path itself is not yet turned on in any environment.
+- Along the way: back-office sign-in now leads with Microsoft and flags pending access requests to admins, and a Tricentis staff member who is also an Agent Score customer can now hold one login for each without the two accounts conflicting.
+
+### Coming next
+- Signing in with your existing Tosca Cloud account, so you won't need a separate one-off login just for Agent Score
+
 ## September 15, 2026 Update
 
 ### Switching windows no longer resets your work
