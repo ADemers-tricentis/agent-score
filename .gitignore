@@ -3,6 +3,7 @@ agent-score-updates-slack-draft.md
 agent-score-updates-slide.md
 .claude/skills/agentscore-kanban-sync/.last-github-sync
 .claude/skills/agent-score-docs-sync/.last-github-sync
+.claude/skills/external-interest-sync/.last-processed
 logs/
 node_modules/
 .vite/
