@@ -64,6 +64,16 @@ Every entry is checked against the live source in `agentscore-demo/src` before b
 
 ---
 
+## 2026-09-17 - Plain-language tooltips on the scoring run result page
+
+**Change:** Rewrote the tooltip copy on `ScoringRunResultPage.tsx` (the per-run result detail page) to drop technical/pipeline vocabulary: "Verdict zone" (dropped "score band"/"configured thresholds"), "Score stability" ("fresh sample of interactions" → "tested this agent again"), the "evaluation results scored" / "evaluations" / "results lacked evidence" stat tiles (dropped "interaction-and-evaluation pairs," "distinct evaluation checks," "the evaluator needed"), the "reused"/"newly scored" chips (dropped "underlying trace," "judge," "traces"), and "Baseline comparison" (dropped "run" in favor of "score"). No layout, data, or component structure changed - only the `tooltip`/`title` strings passed to `TermLabel` and the reuse-chip `Tooltip`.
+
+**Who it's for:** A non-technical viewer of a scoring run result - someone who needs to understand what a stat or badge means without knowing pipeline terms like "trace," "judge," or "evidence ref."
+
+**Why:** Requested directly by the user (2026-09-17): "can we make the tooltips on this page more plain language? A non-technical user should be able to easily understand this."
+
+---
+
 ## Template for new entries
 
 ```
