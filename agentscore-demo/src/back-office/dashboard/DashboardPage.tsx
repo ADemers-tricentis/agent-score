@@ -10,7 +10,9 @@
 
 import { useState } from "react";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
+import IconMaterialSymbolsTour from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsTour.mjs";
 
 import { toast } from "@/shared/lib/toast";
 import {
@@ -28,10 +30,12 @@ import { AutoRefreshControl } from "@/shared/components/auto-refresh-control";
 import { PageBand } from "@/shared/components/page-band";
 import { PageHeader } from "@/shared/components/page-header";
 import { useDemoMode } from "@/shared/demo-mode/demo-mode-context";
+import { useTour } from "@/shared/tour/tour-context";
 
 export function DashboardPage() {
   const [intervalId, setIntervalId] = useState("30s");
   const { blank, role } = useDemoMode();
+  const { start: startTour } = useTour();
   const overview = blank ? DASHBOARD_OVERVIEW_BLANK : DASHBOARD_OVERVIEW;
   const ingestion = blank ? INGESTION_OVERVIEW_BLANK : INGESTION_OVERVIEW;
   const handleRefresh = () => toast.info("Nothing new — this demo's dashboard data is fixed.");
@@ -45,12 +49,23 @@ export function DashboardPage() {
             blank ? "No activity yet · get started by connecting your first agent" : "Overview of activity across all of your tenants"
           }
           actions={
-            <AutoRefreshControl
-              intervalId={intervalId}
-              onIntervalChange={setIntervalId}
-              onRefresh={handleRefresh}
-              isRefreshing={false}
-            />
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Button
+                variant="outlined"
+                size="small"
+                startIcon={<IconMaterialSymbolsTour sx={{ fontSize: 16 }} />}
+                onClick={startTour}
+                data-testid="start-tour-button"
+              >
+                Take a tour
+              </Button>
+              <AutoRefreshControl
+                intervalId={intervalId}
+                onIntervalChange={setIntervalId}
+                onRefresh={handleRefresh}
+                isRefreshing={false}
+              />
+            </Box>
           }
         />
       </PageBand>

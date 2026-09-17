@@ -152,7 +152,7 @@ export function GettingStartedChecklist({ role }: { role: DemoRole }): ReactNode
   const [checked, setChecked] = useState<Record<string, boolean>>({});
 
   return (
-    <Card>
+    <Card data-tour="getting-started">
       <CardContent sx={{ p: 0, "&:last-child": { pb: 0 } }}>
         <Box sx={{ px: 2.5, py: 1.5 }}>
           <Box sx={{ typography: "body2", fontWeight: 600 }}>Get started</Box>
