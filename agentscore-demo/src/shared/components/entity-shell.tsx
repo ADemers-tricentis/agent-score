@@ -29,6 +29,14 @@ export interface EntityShellProps {
   /** Title (rendered as `<h1>`). */
   title: ReactNode;
   /**
+   * Optional plain-language subtitle below the title, same visual weight as
+   * `PageHeader`'s `description` — for section-level shells (Users, Evals
+   * Catalog, Agent Registry) that use `EntityShell` instead of `PageHeader`.
+   * Entity-detail callers (tenant/agent shells) have no reason to set this;
+   * they already use `meta` for id/timestamp-style facts.
+   */
+  description?: ReactNode;
+  /**
    * Optional inline badges / status next to the title (e.g. tenant kind,
    * provisioning state). Children should render as small chips/pills.
    */
@@ -89,6 +97,7 @@ export interface EntityShellProps {
 export function EntityShell({
   breadcrumb,
   title,
+  description,
   badges,
   meta,
   actions,
@@ -174,6 +183,15 @@ export function EntityShell({
                 </Box>
               ) : null}
             </Box>
+            {description ? (
+              <Box
+                component="p"
+                data-slot="entity-shell-description"
+                sx={{ mt: 0.5, mb: 0, typography: "body1", color: "text.secondary" }}
+              >
+                {description}
+              </Box>
+            ) : null}
             {meta ? (
               <Box
                 data-slot="entity-shell-meta"

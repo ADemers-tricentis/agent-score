@@ -75,6 +75,14 @@ export function useFakeQuery<T>(opts: FakeQueryOptions<T>): FakeQueryResult<T> {
     }
   }, []);
 
+  // Callers sometimes pass a queryKey containing a fresh object/array
+  // literal every render (e.g. `["x", { includeDeleted }]`). Spreading that
+  // straight into a dependency array never stabilizes - the effect reruns,
+  // calls `run()`, which calls `setState`, which triggers the render that
+  // creates the next unequal literal, forever ("Maximum update depth
+  // exceeded"). Stringifying first gives the effect a primitive to compare.
+  const queryKeySignature = JSON.stringify(opts.queryKey);
+
   useEffect(() => {
     mountedRef.current = true;
     if (enabled) run();
@@ -82,7 +90,7 @@ export function useFakeQuery<T>(opts: FakeQueryOptions<T>): FakeQueryResult<T> {
       mountedRef.current = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled, ...opts.queryKey]);
+  }, [enabled, queryKeySignature]);
 
   useEffect(() => {
     const listener = () => run();

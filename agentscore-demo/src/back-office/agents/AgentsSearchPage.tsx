@@ -195,7 +195,7 @@ function AgentsSearchShell() {
       <PageBand sx={{ pt: 4, pb: 2.5 }}>
         <PageHeader
           title="My Agents"
-          description="Every agent across every customer. Each agent belongs to exactly one customer."
+          description="All of your agents, across every tenant. Each agent belongs to one of your tenants."
           actions={
             <Button
               variant="contained"

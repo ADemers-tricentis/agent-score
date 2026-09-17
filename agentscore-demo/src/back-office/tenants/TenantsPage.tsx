@@ -292,7 +292,7 @@ function TenantsShell() {
       <PageBand sx={{ pt: 4, pb: 2.5 }}>
         <PageHeader
           title="Tenants"
-          description="One tenant per customer, per environment (like production or staging). Groups their agents for billing and scoring."
+          description="Your environments — like production and staging. Each groups its own agents for billing and scoring."
           actions={
             <Button
               variant="contained"

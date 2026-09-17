@@ -27,7 +27,11 @@ const TABS: EntityShellTabItem[] = [
 // fire anyway - dropped rather than left as dead code.
 export function UsersLayout() {
   return (
-    <EntityShell title="Users" tabs={<EntityShell.Tabs items={TABS} />}>
+    <EntityShell
+      title="Users"
+      description="People in your organization who can sign in here, and what they're allowed to do."
+      tabs={<EntityShell.Tabs items={TABS} />}
+    >
       <Outlet />
     </EntityShell>
   );

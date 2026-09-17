@@ -30,6 +30,7 @@ export function EvalCatalogLayout() {
   return (
     <EntityShell
       title="Evals Catalog"
+      description="The checks and scoring recipes used to grade your agents' answers."
       actions={<CatalogCreateMenu />}
       tabs={<EntityShell.Tabs items={TABS} />}
     >

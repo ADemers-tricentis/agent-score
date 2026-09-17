@@ -50,10 +50,10 @@ export function AgentRegistryLayout() {
     <EntityShell
       title="Agent Registry"
       testId="agent-registry-shell"
-      meta={
+      description={
         user?.is_superadmin
-          ? "Task slots, the agent versions serving them, and every run the fleet executed."
-          : "Task slots and the agent versions serving them."
+          ? "Internal catalog of agent software builds and versions, plus every run they've executed — separate from your company's live agents (see Agents for those). Staff-only."
+          : "Internal catalog of agent software builds and versions — separate from your company's live agents (see Agents for those). Staff-only."
       }
       tabs={<EntityShell.Tabs items={tabs} />}
     >
