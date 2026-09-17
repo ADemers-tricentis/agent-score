@@ -58,6 +58,7 @@ import { useAutoFit } from "@/back-office/agents/use-auto-fit";
 import { Chip } from "@/shared/components/chip";
 import { EmptyState } from "@/shared/components/empty-state";
 import { ProvenanceDl, type ProvenanceItem } from "@/shared/components/provenance-dl";
+import { TermLabel } from "@/shared/components/term-label";
 
 // ---------------------------------------------------------------------------
 // Shell-facing wrapper — "Scoring profile" section header + adopted-version
@@ -100,6 +101,20 @@ function readableName(value: string): string {
 
 function fitOutcome(value: string): string {
   return ({ no_change: "Unchanged", adopted: "Selected", fallback: "Fallback", superseded: "Superseded" } as Record<string, string>)[value] ?? readableName(value);
+}
+
+/** Plain-language label + tooltip for the fitter's `method` field. Only
+ *  "llm"/"heuristic" appear anywhere in this demo (no backend enum). */
+const FIT_METHOD_LABELS: Record<string, string> = {
+  llm: "AI-assisted match",
+  heuristic: "Rule-based match",
+};
+const FIT_METHOD_TOOLTIPS: Record<string, string> = {
+  llm: "An AI model compared this agent against candidate profiles and picked the best one.",
+  heuristic: "Picked by fixed rules — e.g. matching the agent's type to a profile built for that type.",
+};
+function fitMethodLabel(value: string): string {
+  return FIT_METHOD_LABELS[value] ?? readableName(value);
 }
 
 const PROFILE_SECTION_SX = { border: 1, borderColor: "divider", borderRadius: 1, p: { xs: 2, md: 3 }, minWidth: 0 };
@@ -529,7 +544,10 @@ function EvidenceDiversitySection({ benchmark }: { benchmark: BenchmarkConfigOut
       data-testid="evidence-diversity"
     >
       <Box sx={{ typography: "caption", color: "text.secondary" }}>
-        Evidence diversity
+        <TermLabel
+          label="Evidence diversity"
+          tooltip="How varied the interactions used to test this match were. Higher means it was checked against a wider range of behavior, not just a narrow slice."
+        />
       </Box>
       <Chip tint={evidenceDiversityTint(benchmark)}>
         {evidenceDiversityText(benchmark)}
@@ -657,6 +675,26 @@ function evalShortfallText(row: EvalDiscriminationOut): string {
   return clauses.join("; ");
 }
 
+/** One-line plain summary shown above the technical `profileDiscriminationDetail`
+ *  sentence, so a non-technical viewer gets the gist before the statistics. */
+function profileDiscriminationSummary(verdict: string): string {
+  switch (verdict) {
+    case "discriminating":
+      return "This profile's checks can reliably tell a good agent run from a bad one.";
+    case "inverted":
+      return "This profile's checks are backwards — they score worse outcomes higher.";
+    case "not_discriminating":
+      return "This profile's checks can't yet tell a good agent run from a bad one.";
+    case "degenerate":
+      return "Not enough score variation yet to tell good runs from bad ones.";
+    case "inconclusive":
+    case "insufficient_evidence":
+      return "Not enough data yet to judge this profile's checks.";
+    default:
+      return "";
+  }
+}
+
 function profileDiscriminationDetail(verdict: string): string {
   switch (verdict) {
     case "discriminating":
@@ -764,6 +802,9 @@ function DiscriminationSection({
             sx={{ transform: open ? "rotate(180deg)" : "none", transition: "transform 150ms" }}
           />
         </IconButton>
+      </Box>
+      <Box sx={{ typography: "body2" }} data-testid="discrimination-summary">
+        {profileDiscriminationSummary(discrimination.verdict)}
       </Box>
       <Box sx={{ typography: "caption", color: "text.secondary" }} data-testid="discrimination-detail">
         {profileDiscriminationDetail(discrimination.verdict)}
@@ -1057,11 +1098,30 @@ function FitProvenancePanel({ latest }: { latest: FitDecisionOut | null }) {
   }
 
   const items: ProvenanceItem[] = [
-    { label: "Method", value: <Chip tint={latest.fitMethod === "llm" ? "info" : "muted"}>{latest.fitMethod}</Chip> },
+    {
+      label: (
+        <TermLabel
+          label="Method"
+          tooltip={
+            FIT_METHOD_TOOLTIPS[latest.fitMethod] ??
+            "How the profile was matched to this agent."
+          }
+        />
+      ),
+      value: <Chip tint={latest.fitMethod === "llm" ? "info" : "muted"}>{fitMethodLabel(latest.fitMethod)}</Chip>,
+    },
     { label: "Outcome", value: <Chip tint={outcomeTint(latest.outcome)}>{fitOutcome(latest.outcome)}</Chip> },
     { label: "Confidence", value: latest.confidence != null ? formatConfidencePercent(latest.confidence) : "—" },
     { label: "Chosen profile", value: <ProfileLabel id={latest.chosenProfileVersionId} /> },
-    { label: "Trigger", value: latest.trigger },
+    {
+      label: (
+        <TermLabel
+          label="Trigger"
+          tooltip="What caused this profile match to be checked or changed."
+        />
+      ),
+      value: readableName(latest.trigger),
+    },
     { label: "Timestamp", value: new Date(latest.createdAt).toLocaleString() },
   ];
 
@@ -1074,7 +1134,7 @@ function FitProvenancePanel({ latest }: { latest: FitDecisionOut | null }) {
       <Typography variant="h6">Why this profile</Typography>
       {latest.rationale ? <Typography variant="body1" sx={{ maxWidth: "85ch", lineHeight: 1.7, overflowWrap: "anywhere" }} data-testid="profile-reason-preview">{latest.rationale.length > 240 ? `${latest.rationale.slice(0, 240)}…` : latest.rationale}</Typography> : <Typography variant="body2" color="text.secondary">No selection explanation recorded.</Typography>}
       <Box sx={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-        <Box><Typography variant="subtitle2">Selection confidence</Typography><Typography variant="h5">{latest.confidence != null ? formatConfidencePercent(latest.confidence) : "Not recorded"}</Typography><Typography variant="caption" color="text.secondary">Confidence reported by the profile fitter</Typography></Box>
+        <Box><Typography variant="subtitle2"><TermLabel label="Selection confidence" tooltip="How sure the system is that this is the best-matching profile, based on this agent's type and which checks have enough data." /></Typography><Typography variant="h5">{latest.confidence != null ? formatConfidencePercent(latest.confidence) : "Not recorded"}</Typography><Typography variant="caption" color="text.secondary">Confidence score from the automatic profile-matching system</Typography></Box>
       </Box>
       <Accordion disableGutters elevation={0}>
         <AccordionSummary expandIcon={<IconMaterialSymbolsKeyboardArrowDown fontSize="small" />} data-testid="profile-selection-reasoning"><Typography variant="subtitle2">View selection reasoning and candidate comparison</Typography></AccordionSummary>
