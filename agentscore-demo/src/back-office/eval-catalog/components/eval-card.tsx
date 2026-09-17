@@ -56,6 +56,7 @@ import type {
 import type { components } from "@/shared/api/generated";
 import { Chip, ChipStrip } from "@/shared/components/chip";
 import { ErrorState } from "@/shared/components/error-state";
+import { TermLabel } from "@/shared/components/term-label";
 import { dimensionAccent } from "@/shared/components/dimension-palette";
 import {
   kindRamp,
@@ -75,6 +76,13 @@ export const KIND_LABELS: Record<string, string> = {
   library: "Library",
   g_eval: "G-Eval",
   hybrid: "Hybrid",
+};
+
+/** Kind → plain-language explanation, shown as a tooltip on the kind badge.
+ *  `library` is self-explanatory and has no entry. */
+export const KIND_TOOLTIPS: Partial<Record<string, string>> = {
+  g_eval: "An AI judge model scores this using a rubric you define.",
+  hybrid: "Combines several automated checks into one score using a formula.",
 };
 
 /** Kind → badge icon. `library` books, `g_eval` reasoning, `hybrid` a hub.
@@ -277,7 +285,13 @@ export function renderEvalCard(
             <Typography variant="caption" sx={{ color: "text.disabled" }}>
               ·
             </Typography>
-            <Chip tint="outline">{kindLabel}</Chip>
+            <Chip tint="outline">
+              {KIND_TOOLTIPS[ev.kind] ? (
+                <TermLabel label={kindLabel} tooltip={KIND_TOOLTIPS[ev.kind]!} />
+              ) : (
+                kindLabel
+              )}
+            </Chip>
           </Box>
         </Box>
       </Box>
@@ -754,7 +768,13 @@ function EvalDetailBody({ ev, opts }: { ev: EvalDefinitionRead; opts: DetailOpts
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mt: 0.25 }}>
             <Typography variant="caption" sx={{ fontFamily: "monospace", color: "text.secondary" }}>{ev.slug}</Typography>
             <Typography variant="caption" sx={{ color: "text.disabled" }}>·</Typography>
-            <Chip tint="outline" sx={{ color: ramp.text, borderColor: ramp.text }}>{kindLabel}</Chip>
+            <Chip tint="outline" sx={{ color: ramp.text, borderColor: ramp.text }}>
+              {KIND_TOOLTIPS[ev.kind] ? (
+                <TermLabel label={kindLabel} tooltip={KIND_TOOLTIPS[ev.kind]!} />
+              ) : (
+                kindLabel
+              )}
+            </Chip>
           </Box>
         </Box>
         <Stack direction="row" spacing={1} sx={{ flexShrink: 0 }}>

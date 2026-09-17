@@ -74,6 +74,36 @@ Every entry is checked against the live source in `agentscore-demo/src` before b
 
 ---
 
+## 2026-09-17 - Plain-language tooltips on the Score tab
+
+**Change:** Added `TermLabel` tooltips to the agent detail Score tab (`ScorecardTab.tsx`): "How stable is this score?", the four stat tiles ("interactions scored," "checks contributed," "checks could not be evidenced," "interactions retired"), the "reused"/"newly scored" chips, the "Evaluation breakdown" header, and the "N need attention" chip - all using the same plain-language phrasing already used on the run-result page. Extracted the `TermLabel` helper (previously local to `ScoringRunResultPage.tsx`) into `shared/components/term-label.tsx` so both pages share one implementation.
+
+**Who it's for:** A non-technical viewer of the Score tab - the same audience as the 2026-09-17 run-result-page tooltip pass, extended to the tab they land on first.
+
+**Why:** Requested directly by the user (2026-09-17): "can we add tooltips here as well? non-technical focus," referencing the Score tab screenshot.
+
+---
+
+## 2026-09-17 - Plain-language jargon pass on the Evals Catalog / Profile Builder
+
+**Change:** Reused the `TermLabel` tooltip helper (`shared/components/term-label.tsx`) across the Evals Catalog. In `ProfileBuilderPage.tsx`: added tooltips to the "Verdict bands" section title, the "Block (rec)" band label, and the "Threshold"/"Weight"/"Dimension" table column headers; reworded the disabled dropdown's placeholder from "No weighted match" to "No matching dimension" and added a proactive tooltip on the "Dimension" header explaining the constraint (only dimensions with a weight set below are selectable) instead of only surfacing it after the fact; added a plain-language framing sentence above the existing mechanics-focused subtitle ("A profile defines how this agent gets scored..."). In `eval-card.tsx`: added a `KIND_TOOLTIPS` map and wrapped the "G-Eval"/"Hybrid" kind badges (on the collapsed eval card and the detail panel header) in `TermLabel`; left "Library" unwrapped since it's self-explanatory.
+
+**Who it's for:** A non-technical admin trying to set up scoring via Evals Catalog > Profiles > New profile - flagged in the initial usability audit as "the single most technical screen in the app... with no plain-language path at all."
+
+**Why:** Requested directly by the user (2026-09-17), following up on the initial usability audit's Evals Catalog findings. Scoped to the specific jargon terms and disabled-state confusion the audit called out (G-Eval, Hybrid, verdict bands, block_rec, the disabled dropdown) rather than restructuring the builder into a wizard - that was flagged as a bigger, separate follow-up.
+
+---
+
+## 2026-09-17 - Added a generic "Documentation Assistant Baseline" example profile
+
+**Change:** Added a new profile to `profile-catalog-fixtures.ts` (`docs-assistant-baseline`) modeling a RAG-based Q&A agent that answers from a knowledge base - weighted toward Factual Accuracy (threshold 0.85, weight 3) and Answer Relevancy (0.75, weight 2), with Harmlessness (0.85, weight 2), Prompt Alignment (0.70, weight 1), and Conciseness (0.60, weight 1) rounding it out. Uses only evals/dimensions already present in the fixtures; default verdict bands.
+
+**Who it's for:** Anyone watching the demo, not just Tricentis's own test-suite audience - the existing example profiles ("ATA Regression Baseline," "Code Review Assistant") assume internal/engineering context, while a documentation/support Q&A bot is a pattern any company evaluating AgentScore would recognize.
+
+**Why:** Requested directly by the user (2026-09-17): "give me a good example that would be applicable to anyone (not just Tricentis users)."
+
+---
+
 ## Template for new entries
 
 ```
