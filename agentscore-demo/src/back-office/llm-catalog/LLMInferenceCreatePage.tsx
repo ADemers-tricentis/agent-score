@@ -73,7 +73,7 @@ export function LLMInferenceCreatePage() {
       setCreating(true);
       try {
         const inference = createInference(buildCreateBody(draft));
-        toast.success(`Inference ${inference.name} created`);
+        toast.success(`Provider ${inference.name} created`);
         void navigate({ to: "/llm-catalog", search: { tab: "catalog" } });
       } catch (err) {
         toast.error((err as Error).message);
@@ -92,8 +92,8 @@ export function LLMInferenceCreatePage() {
         setTestResult({
           ok: result.ok,
           message: result.ok
-            ? "Connection OK — auth and model verified."
-            : `Connection test failed: ${result.message ?? result.code ?? "unknown error"}.`,
+            ? "Connection succeeded — credentials and model verified."
+            : `Couldn't connect: ${result.message ?? result.code ?? "unknown error"}.`,
         });
         setTesting(false);
       }, 500);
@@ -131,7 +131,7 @@ export function LLMInferenceCreatePage() {
             color="text.primary"
             aria-current="page"
           >
-            New inference
+            New Provider
           </Typography>
         </Breadcrumbs>
         <Typography
@@ -139,18 +139,18 @@ export function LLMInferenceCreatePage() {
           variant="h3"
           sx={{ mt: 1.5, fontWeight: 600, letterSpacing: "-0.025em" }}
         >
-          Add inference
+          New Provider
         </Typography>
         <Typography variant="subtitle1" sx={{ mt: 0.5, color: "text.secondary" }}>
-          Registers a named LLM inference in the global catalogue. Credentials
-          are stored encrypted and never returned.
+          Adds a named AI model provider to your organization's catalog.
+          Credentials are stored encrypted and never shown again.
         </Typography>
       </Box>
 
       <Stack sx={{ width: "100%", maxWidth: 1024, gap: 3 }}>
         <FormSection
           title="General"
-          description="Name is the human identifier — unique across live inferences."
+          description="A name to identify this provider — must be unique among your active providers."
         >
           <InferenceGeneralFields
             draft={draft}
@@ -163,7 +163,7 @@ export function LLMInferenceCreatePage() {
 
         <FormSection
           title="Provider & credentials"
-          description="The provider, the model it serves, its connection coordinates, and how it authenticates."
+          description="Which provider this is, the model it uses, its address, and how it authenticates."
         >
           <InferenceProviderFields
             draft={draft}
@@ -176,7 +176,7 @@ export function LLMInferenceCreatePage() {
 
         <FormSection
           title="Connectivity"
-          description="An optional live check. It runs one minimal real call and does not block saving."
+          description="Optional: send one test request to confirm this works. Saving doesn't require it."
         >
           <Stack sx={{ gap: 1 }}>
             <Box>
@@ -224,7 +224,7 @@ export function LLMInferenceCreatePage() {
               </Box>
             ) : (
               <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                Verifies auth and that the entered model answers.
+                Confirms your credentials work and the model responds.
               </Typography>
             )}
           </Stack>
@@ -253,7 +253,7 @@ export function LLMInferenceCreatePage() {
             data-testid="create-inference-submit"
             startIcon={<IconMaterialSymbolsSave sx={{ fontSize: 16 }} />}
           >
-            Add inference
+            Add Provider
           </Button>
         </Box>
       </Stack>

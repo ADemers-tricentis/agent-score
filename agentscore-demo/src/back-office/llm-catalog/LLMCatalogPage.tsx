@@ -265,7 +265,7 @@ function InferencesList() {
   const setDefault = {
     mutate: (inferenceId: string) => {
       const inference = setDefaultInference(inferenceId);
-      toast.success(`"${inference.name}" is now the default inference`);
+      toast.success(`"${inference.name}" is now the default provider`);
       bump();
     },
   };
@@ -274,7 +274,7 @@ function InferencesList() {
     mutate: (inferenceId: string) => {
       try {
         deleteInference(inferenceId);
-        toast.success("Inference deleted");
+        toast.success("Provider deleted");
         bump();
       } catch (err) {
         toast.error((err as Error).message);
@@ -285,7 +285,7 @@ function InferencesList() {
   const restore = {
     mutate: (inferenceId: string) => {
       restoreInference(inferenceId);
-      toast.success("Inference restored");
+      toast.success("Provider restored");
       bump();
     },
   };
@@ -426,12 +426,12 @@ function InferencesList() {
             <TextField
               size="small"
               fullWidth
-              placeholder="Filter inferences by name…"
+              placeholder="Filter providers by name…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               slotProps={{
                 htmlInput: {
-                  "aria-label": "Search inferences",
+                  "aria-label": "Search providers",
                   "data-testid": "search-inferences",
                 },
                 input: {
@@ -472,7 +472,7 @@ function InferencesList() {
           right={
             inferences.length > 0 ? (
               <Box component="span">
-                {inferences.length} inference{inferences.length === 1 ? "" : "s"}
+                {inferences.length} provider{inferences.length === 1 ? "" : "s"}
               </Box>
             ) : undefined
           }
@@ -490,11 +490,11 @@ function InferencesList() {
         tableSx={{ tableLayout: "fixed" }}
         emptyState={{
           icon: IconMaterialSymbolsBalance,
-          title: "No inferences found",
+          title: "No providers found",
           description:
             debouncedSearch || includeDeleted
               ? "Try a different search term, or clear the filters."
-              : "Create an inference to start scoring benchmarks.",
+              : "Add a provider to start scoring your agents.",
         }}
         enableSorting={false}
       />
@@ -509,9 +509,10 @@ function InferencesList() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Soft-deletes the inference and frees its name for reuse. The default
-            inference or one referenced by a benchmark/metric can't be deleted —
-            reassign or set another default first. Restorable while soft-deleted.
+            Deletes this provider and frees its name for reuse. A provider
+            that's the default, or one currently used by scoring, can't be
+            deleted — reassign or set another default first. You can restore
+            it later from the deleted list.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

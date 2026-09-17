@@ -164,6 +164,16 @@ Every entry is checked against the live source in `agentscore-demo/src` before b
 
 ---
 
+## 2026-09-17 - Finished the "inference" -> "Provider" rename; extended the plain-language pass to Users and LLM Catalog
+
+**Change:** Finished propagating the "New inference" -> "New Provider" rename (flagged as a follow-up in the entry above) into `LLMInferenceCreatePage.tsx`: breadcrumb, `<h1>`, subtitle, section descriptions, the connection-test copy, and the submit button now all say "Provider" instead of "inference," matching the button that links to this page. Then extended the same cleanup into `LLMCatalogPage.tsx` (toasts, search placeholder/aria-label, the count in the toolbar, the empty state, and the delete-confirmation dialog body, which also dropped "Soft-deletes"/"soft-deleted" and "benchmark/metric" for plain wording) and into `UsersPage.tsx`, mirroring the Tenants/Agents pass logged above: **Soft-delete -> Delete** (row action, dialog title, submit button) and **Revoke sessions -> Sign out everywhere** (row action, success toast), plus a plain-language rewrite of the delete/restore dialog bodies. Internal type, variable, and function names (`LLMInferenceOut`, `deleteInference`, `softDeleteTarget`, etc.) are unchanged - only user-visible copy moved.
+
+**Who it's for:** A non-technical admin managing providers or users - the same audience as the Tenants/Agents pass, closing the "same jargon pattern exists there but wasn't part of the agreed scope" gap it left open.
+
+**Why:** Requested directly by the user (2026-09-17): fix the flagged inference/Provider naming mismatch, and extend the Soft-delete/Hard-purge-style plain-language cleanup to Users and LLM Catalog.
+
+---
+
 ## Template for new entries
 
 ```
