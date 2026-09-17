@@ -38,7 +38,7 @@ function ReportsShell() {
       <PageBand sx={{ pt: 4, pb: 2.5 }}>
         <PageHeader
           title="Reports"
-          description="Cross-tenant usage and spend, over a chosen window."
+          description="Usage and spend across your tenants, over a chosen window."
         />
       </PageBand>
 

@@ -42,7 +42,7 @@ export function DashboardPage() {
         <PageHeader
           title="Home"
           description={
-            blank ? "No activity yet · get started by connecting your first agent" : "Product-wide overview · activity across every tenant"
+            blank ? "No activity yet · get started by connecting your first agent" : "Overview of activity across all of your tenants"
           }
           actions={
             <AutoRefreshControl

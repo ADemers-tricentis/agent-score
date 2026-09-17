@@ -124,6 +124,26 @@ Every entry is checked against the live source in `agentscore-demo/src` before b
 
 ---
 
+## 2026-09-17 - Plain-language descriptions on every top-level page, framed as one customer's own view
+
+**Change:** Added a `description` prop to the shared `EntityShell` component (`entity-shell.tsx`) - same visual style as `PageHeader`'s existing `description`, rendered below the title/badges row - since Users, Evals Catalog, and Agent Registry are built on `EntityShell` rather than `PageHeader` and had no equivalent slot. Then gave every top-level page a one-line, plain-language description: added new ones to **Users** ("People in your organization who can sign in here...") and **Evals Catalog** ("The checks and scoring recipes used to grade your agents' answers."), which previously had none; fixed jargon in the existing **LLM Catalog** description ("inferences" -> "AI models," "superadmins" -> "your organization's admins") and **Agent Registry**'s existing blurb (moved out of the tiny-caption `meta` slot into the new `description` slot, dropped "task slots"/"fleet" for "Internal catalog of agent software builds and versions... Staff-only"); and reworded **Home**, **My Agents**, **Tenants** (list + create), and **Reports** away from staff/multi-customer phrasing ("every tenant," "across every customer," "cross-tenant") to first-person-customer phrasing ("your tenants," "your agents"), per the user's correction that this demo represents one customer's own view, who may have multiple tenants and agents but is not viewing across other customers. Left **Docs** unchanged - it has no landing page (redirects straight to a default article) and each article already carries its own plain-language title + blurb.
+
+**Who it's for:** A non-technical customer admin exploring any section of the app for the first time - continuing the initial usability audit's "plain-language layer on first use of jargon" recommendation, extended from individual tooltips to the page-level description every section already has room for.
+
+**Why:** Requested directly by the user (2026-09-17): "lets add plain language descriptions for each page," followed by a correction mid-review that the copy needed to read as one customer's own view (their tenants, their agents) rather than a staff/cross-customer view.
+
+---
+
+## 2026-09-17 - Renamed the LLM Catalog's primary action from "New inference" to "New Provider"
+
+**Change:** The user changed the LLM Catalog page's primary action button label from "New inference" to "New Provider" directly in `LLMCatalogPage.tsx` (`data-testid="new-inference-button"` kept as-is). Not yet propagated: `LLMInferenceCreatePage.tsx` (the page that button navigates to) still says "New inference" in its breadcrumb, "Add inference" in its `<h1>`, and "Registers a named LLM inference in the global catalogue" in its subtitle - flagging this as a follow-up rather than changing it unprompted.
+
+**Who it's for:** Continues the same LLM Catalog jargon cleanup as the page-description fix above - "inference" as a product noun for a model connection was one of the audit's specific call-outs.
+
+**Why:** User-made edit; logged per the project's decision-log convention.
+
+---
+
 ## Template for new entries
 
 ```

@@ -186,7 +186,7 @@ function LLMCatalogShell() {
       <PageBand sx={{ pt: 4, pb: 2.5 }}>
         <PageHeader
           title="LLM Catalog"
-          description="Named, reusable LLM inferences used to score benchmarks. Global catalog managed by superadmins."
+          description="The AI models available to score your agents' interactions. Managed by your organization's admins."
           actions={
             <Button
               variant="contained"
@@ -194,7 +194,7 @@ function LLMCatalogShell() {
               data-testid="new-inference-button"
               startIcon={<IconMaterialSymbolsAdd sx={{ fontSize: 16 }} />}
             >
-              New inference
+              New Provider
             </Button>
           }
         />
