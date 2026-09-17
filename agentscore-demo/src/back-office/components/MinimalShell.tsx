@@ -145,20 +145,25 @@ export function MinimalShell({ children }: { children: ReactNode }) {
         <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
           AgentScore
         </Typography>
-        {visibleItems.map((item) => (
-          <NavLink key={item.id} item={item} />
-        ))}
-        {/* Not a `NavItem`/`NavId` — there's no production back-office
-         * equivalent to gate against, so this is demo-only and always
-         * visible regardless of role. */}
-        <Link
-          to="/docs/$slug"
-          params={{ slug: "welcome" }}
-          style={{ textDecoration: "none", color: "inherit", display: "flex", alignItems: "center", gap: 8 }}
-        >
-          <IconMaterialSymbolsMenuBook sx={{ fontSize: NAV_ICON_SIZE, flexShrink: 0, color: "text.secondary" }} />
-          <Typography variant="body2">Docs</Typography>
-        </Link>
+        {/* `data-tour="sidebar-nav"` scopes the tour's "everything starts
+         * here" spotlight to just the nav links — excludes the title above
+         * and the demo-only controls below. */}
+        <Box component="nav" data-tour="sidebar-nav" sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+          {visibleItems.map((item) => (
+            <NavLink key={item.id} item={item} />
+          ))}
+          {/* Not a `NavItem`/`NavId` — there's no production back-office
+           * equivalent to gate against, so this is demo-only and always
+           * visible regardless of role. */}
+          <Link
+            to="/docs/$slug"
+            params={{ slug: "welcome" }}
+            style={{ textDecoration: "none", color: "inherit", display: "flex", alignItems: "center", gap: 8 }}
+          >
+            <IconMaterialSymbolsMenuBook sx={{ fontSize: NAV_ICON_SIZE, flexShrink: 0, color: "text.secondary" }} />
+            <Typography variant="body2">Docs</Typography>
+          </Link>
+        </Box>
         <DemoControls />
       </Box>
       <Box sx={{ flex: 1, overflow: "auto" }}>{children}</Box>

@@ -42,6 +42,7 @@ import { TENANT_PURGE_CASCADE } from "@/shared/components/purge-cascade";
 import { Chip } from "@/shared/components/chip";
 import { DataTable } from "@/shared/components/data-table";
 import { FacetedFilter } from "@/shared/components/faceted-filter";
+import { OnboardingCallout } from "@/shared/components/onboarding-callout";
 import { PageBand } from "@/shared/components/page-band";
 import { pageContentPaddingSx } from "@/shared/components/page-content";
 import { PageHeader } from "@/shared/components/page-header";
@@ -50,6 +51,7 @@ import { StatusDot } from "@/shared/components/status-dot";
 import { Toolbar } from "@/shared/components/toolbar";
 import { TypedConfirmInput } from "@/shared/components/typed-confirm-input";
 import { useDebouncedValue } from "@/shared/hooks/use-debounced-value";
+import { useDemoMode } from "@/shared/demo-mode/demo-mode-context";
 
 const PAGE_SIZE = 25;
 
@@ -62,6 +64,7 @@ export function TenantsPage() {
 }
 
 function TenantsShell() {
+  const { blank } = useDemoMode();
   const [search, setSearch] = useState("");
   // Typed to the wire enum, not `string[]`: `kind` is a server param now, so a
   // value the API cannot express fails here rather than at runtime.
@@ -306,6 +309,27 @@ function TenantsShell() {
         />
       </PageBand>
 
+      {blank ? (
+        <PageBand>
+          <OnboardingCallout
+            title="Tenants are your customers"
+            testId="onboarding-callout-tenants"
+            action={
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => void navigate({ to: "/tenants/new" })}
+                data-testid="onboarding-new-tenant"
+              >
+                New tenant
+              </Button>
+            }
+          >
+            Each agent belongs to exactly one tenant.
+          </OnboardingCallout>
+        </PageBand>
+      ) : null}
+
       <PageBand>
         <Toolbar
           search={
@@ -415,8 +439,9 @@ function TenantsShell() {
           emptyState={{
             icon: IconMaterialSymbolsApartment,
             title: "No tenants yet",
-            description:
-              "Onboard your first customer to start scoring agents.",
+            description: blank
+              ? "This is where the customers you onboard will show up."
+              : "Onboard your first customer to start scoring agents.",
           }}
           pagination={{
             pageIndex: page,

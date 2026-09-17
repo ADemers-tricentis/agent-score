@@ -42,9 +42,11 @@ import {
 import { dimensionAccent } from "@/shared/components/dimension-palette";
 import { CardGrid } from "@/shared/components/card-grid";
 import { FacetedFilter } from "@/shared/components/faceted-filter";
+import { OnboardingCallout } from "@/shared/components/onboarding-callout";
 import { pageBandSx } from "@/shared/components/page-band";
 import { pageContentSx } from "@/shared/components/page-content";
 import { Toolbar } from "@/shared/components/toolbar";
+import { useDemoMode } from "@/shared/demo-mode/demo-mode-context";
 import { useSingleStatusFilter } from "@/shared/hooks/use-single-status-filter";
 
 const KIND_LABELS: Record<string, string> = {
@@ -109,6 +111,7 @@ export function EvalCatalogPage() {
 }
 
 function EvalCatalogList() {
+  const { blank } = useDemoMode();
   const [search, setSearch] = useState("");
   const [kindFilter, setKindFilter] = useState<string[]>([]);
   const { statusFilter, setStatusSingle, status } = useSingleStatusFilter();
@@ -364,7 +367,15 @@ function EvalCatalogList() {
         />
       </Box>
 
-      <Box sx={pageContentSx}>
+      <Box sx={pageContentSx} data-tour="eval-catalog">
+        {blank ? (
+          <Box sx={{ mb: 3 }}>
+            <OnboardingCallout title="What gets checked" testId="onboarding-callout-evals">
+              These are the evals AgentScore runs out of the box, grouped by dimension. You don't
+              have to configure any of them to get a first score.
+            </OnboardingCallout>
+          </Box>
+        ) : null}
         {viewMode === "flat" ? (
           <CardGrid<EvalDefinitionRead>
             {...cardGridProps}

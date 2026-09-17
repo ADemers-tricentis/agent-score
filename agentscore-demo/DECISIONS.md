@@ -174,6 +174,16 @@ Every entry is checked against the live source in `agentscore-demo/src` before b
 
 ---
 
+## 2026-09-17 - Extended blank-state onboarding to more pages; added a cross-page "Take a tour" walkthrough
+
+**Change:** Two additions, both requested directly. (1) A new shared `OnboardingCallout` component (`shared/components/onboarding-callout.tsx`, modeled on `MilestoneBanner` but with non-persisted dismissal) now shows on My Agents, Evals Catalog, and Tenants while `useDemoMode().blank` is on - the same blank-mode pattern that previously only existed on Home's "Get started" checklist. Also branched the existing DataTable empty-state copy on `blank` for Agents and Tenants so it doesn't misdescribe a new-tenant view. (2) A new manual, presenter-triggered product tour (`shared/tour/`: `tour-steps.ts`, `tour-context.tsx`, `TourOverlay.tsx`, `use-tour-rect.ts`) that spotlights an element via `data-tour="..."` attributes and navigates across routes (Home sidebar -> Get started checklist [blank mode only] -> My Agents -> Evals Catalog -> done), built from MUI primitives only (Popper + a boxShadow spotlight), no new dependency. `TourProvider` mounts inside the router (`router.tsx`'s `protectedLayoutRoute`, wrapping `MinimalShell`), not alongside `DemoModeProvider` in `main.tsx`, since it needs `useNavigate`. Triggered by a "Take a tour" button in Home's `PageHeader` actions. State isn't persisted - a reload ends it. One notable engine detail: when a spotlighted target covers most of the viewport (e.g. the Evals Catalog's full scrollable content pane), no `flip` placement has room on any side, so the overlay falls back to a centered card instead of an off-screen Popper.
+
+**Who it's for:** A presenter walking a prospect through the product for the first time - the tour narrates itself across pages instead of requiring the presenter to explain every click, and the onboarding callouts keep the "you're in a sample/blank state" framing consistent everywhere the checklist sends a viewer, not just on Home.
+
+**Why:** Requested directly by the user (2026-09-17): extend the existing blank-state pattern past Home, and add a lightweight guided tour.
+
+---
+
 ## Template for new entries
 
 ```

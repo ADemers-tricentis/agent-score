@@ -51,6 +51,7 @@ import { Chip } from "@/shared/components/chip";
 import { Combobox, type ComboboxOption } from "@/shared/components/combobox";
 import { DataTable } from "@/shared/components/data-table";
 import { FacetedFilter } from "@/shared/components/faceted-filter";
+import { OnboardingCallout } from "@/shared/components/onboarding-callout";
 import { PageBand } from "@/shared/components/page-band";
 import { pageContentPaddingSx } from "@/shared/components/page-content";
 import { PageHeader } from "@/shared/components/page-header";
@@ -215,6 +216,27 @@ function AgentsSearchShell() {
         />
       </PageBand>
 
+      {blank ? (
+        <PageBand>
+          <OnboardingCallout
+            title="You're looking at a sample agent"
+            testId="onboarding-callout-agents"
+            action={
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => setCreateOpen(true)}
+                data-testid="onboarding-new-agent"
+              >
+                New agent
+              </Button>
+            }
+          >
+            It's fully scored so you can explore before connecting your own.
+          </OnboardingCallout>
+        </PageBand>
+      ) : null}
+
       <PageBand>
         <Toolbar
           search={
@@ -371,7 +393,7 @@ function AgentsSearchShell() {
       </PageBand>
 
       <ScrollRegion>
-        <Box sx={pageContentPaddingSx}>
+        <Box sx={pageContentPaddingSx} data-tour="agents-table">
           {view === "list" ? (
             <DataTable
               columns={columns}
@@ -392,7 +414,9 @@ function AgentsSearchShell() {
                 title: "No agents found",
                 description: search
                   ? "Try a different search term, or toggle Show deleted."
-                  : "Create an agent inside a tenant to see it here.",
+                  : blank
+                    ? "This is where your connected agents will show up."
+                    : "Create an agent inside a tenant to see it here.",
               }}
               pagination={{
                 pageIndex: page,

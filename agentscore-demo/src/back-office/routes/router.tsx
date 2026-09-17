@@ -21,6 +21,7 @@ import { ScoringRunResultPage } from "@/back-office/agents/ScoringRunResultPage"
 import { parseAgentScoreSearch, parseRunResultSearch } from "@/back-office/agents/scoring/tab-params";
 import { parseAgentsViewSearch } from "@/back-office/agents/view-params";
 import { MinimalShell } from "@/back-office/components/MinimalShell";
+import { TourProvider } from "@/shared/tour/tour-context";
 import { AccessRequestsPage } from "@/back-office/access-requests/AccessRequestsPage";
 import { DocsPage } from "@/back-office/docs/DocsPage";
 import { DEFAULT_DOCS_SLUG } from "@/back-office/docs/nav";
@@ -70,9 +71,11 @@ const protectedLayoutRoute = createRoute({
   getParentRoute: () => rootRoute,
   id: "protected",
   component: () => (
-    <MinimalShell>
-      <Outlet />
-    </MinimalShell>
+    <TourProvider>
+      <MinimalShell>
+        <Outlet />
+      </MinimalShell>
+    </TourProvider>
   ),
 });
 
