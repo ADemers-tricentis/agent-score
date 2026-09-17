@@ -86,7 +86,7 @@ Every entry is checked against the live source in `agentscore-frontend/src` befo
 
 ## 2026-09-17 - Plain-language jargon pass on the Evals Catalog / Profile Builder
 
-**Change:** Reused the `TermLabel` tooltip helper (`shared/components/term-label.tsx`) across the Evals Catalog. In `ProfileBuilderPage.tsx`: added tooltips to the "Verdict bands" section title, the "Block (rec)" band label, and the "Threshold"/"Weight"/"Dimension" table column headers; reworded the disabled dropdown's placeholder from "No weighted match" to "No matching dimension" and added a proactive tooltip on the "Dimension" header explaining the constraint (only dimensions with a weight set below are selectable) instead of only surfacing it after the fact; added a plain-language framing sentence above the existing mechanics-focused subtitle ("A profile defines how this agent gets scored..."). In `eval-card.tsx`: added a `KIND_TOOLTIPS` map and wrapped the "G-Eval"/"Hybrid" kind badges (on the collapsed eval card and the detail panel header) in `TermLabel`; left "Library" unwrapped since it's self-explanatory.
+**Change:** Reused the `TermLabel` tooltip helper (`shared/components/term-label.tsx`) across the Evals Catalog. In `ProfileBuilderPage.tsx`: added tooltips to the "Verdict bands" section title, the "Block (rec)" band label, and the "Threshold"/"Weight"/"Dimension" table column headers; reworded the disabled dropdown's placeholder from "No weighted match" to "No matching dimension" and added a proactive tooltip on the "Dimension" header explaining the constraint (only dimensions with a weight set below are selectable) instead of only surfacing it after the fact; added a plain-language framing sentence above the existing mechanics-focused subtitle ("A profile defines how this agent gets scored..."). In `eval-card.tsx`: added a `KIND_TOOLTIPS` map and wrapped the "G-Eval"/"Hybrid" kind badges (on the collapsed eval card and the detail panel header) in `TermLabel`; left "Library" unwrapped since it's self-explanatory (revisited below - it got its own tooltip too).
 
 **Who it's for:** A non-technical admin trying to set up scoring via Evals Catalog > Profiles > New profile - flagged in the initial usability audit as "the single most technical screen in the app... with no plain-language path at all."
 
@@ -231,6 +231,16 @@ Every entry is checked against the live source in `agentscore-frontend/src` befo
 **Who it's for:** An admin managing a tenant - one fewer tab to check, and Integrations sits next to the other tenant-configuration sections (General, Provisioning, Danger zone) instead of being the only kind-gated tab in the strip.
 
 **Why:** Requested directly by the user (2026-09-17), after asking "do you think that makes sense?" - I'd initially pushed back (production parity, key-management discoverability), user decided to move it anyway: "yeah move it. update any references."
+
+---
+
+## 2026-09-17 - Removed the top-level Integrations page and sidebar item
+
+**Change:** Deleted `back-office/integrations/IntegrationsPage.tsx` and its route (`/integrations`) from `router.tsx`, and removed the "Integrations" entry (and its now-unused `IconMaterialSymbolsKey` import) from `MinimalShell.tsx`'s sidebar `NAV_ITEMS`. Left the `integrations` entry in `destination-tiers.ts`'s `DESTINATION_GATES` alone - `MinimalShell`'s nav list was already a deliberate subset of that table (it excludes several unbuilt sections by the same pattern), so no other file needed a change. Updated `ApiKeysPanel.tsx`'s doc comment, which previously described the panel as shared by two mount points - now just the one (tenant Settings).
+
+**Who it's for:** An admin who now manages API keys per-tenant (from that tenant's Settings tab) - this removes the redundant cross-tenant picker page and sidebar entry now that the same panel lives on every external tenant's own Settings tab.
+
+**Why:** Requested directly by the user (2026-09-17), immediately after the tab-to-Settings move above: "no i want integrations in the tenant detail page. remove it from the sidebar" - correcting an initial assumption that the top-level admin page should stay alongside the per-tenant section.
 
 ---
 
