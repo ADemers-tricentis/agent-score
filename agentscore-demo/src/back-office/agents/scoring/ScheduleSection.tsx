@@ -9,6 +9,7 @@ import Switch from "@mui/material/Switch";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import IconMaterialSymbolsKeyboardArrowDown from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsKeyboardArrowDown.mjs";
+import { TermLabel } from "@/shared/components/term-label";
 import { toast } from "@/shared/lib/toast";
 
 type BenchmarkConfigOut = any;
@@ -73,6 +74,14 @@ export function ScheduleSection({
 
   const [saving, setSaving] = useState(false);
 
+  const cadenceNum = cadence.trim() === "" ? null : Number(cadence);
+  const cadenceInvalid =
+    cadenceNum != null && (!Number.isFinite(cadenceNum) || cadenceNum < 60);
+  const lookbackNum = lookback.trim() === "" ? null : Number(lookback);
+  const lookbackInvalid =
+    lookbackNum != null &&
+    (!Number.isFinite(lookbackNum) || lookbackNum < 1 || lookbackNum > 90);
+
   function submit() {
     const body: ScheduleUpdateIn = {
       refreshCadenceMinutes: cadence === "" ? null : Number(cadence),
@@ -115,11 +124,11 @@ export function ScheduleSection({
           >
             <Box sx={{ display: "flex", flexDirection: "column", gap: 0.25 }}>
               <FormLabel htmlFor="schedule-autonomous-scoring">
-                Autonomous scoring
+                Automatic scoring
               </FormLabel>
               <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                Disabling stops first-run discovery and cadence scoring for
-                this agent. Score now stays available.
+                When on, this agent is scored on its own on a schedule. Turn
+                off to only score it when you click Score now.
               </Typography>
             </Box>
             <Switch
@@ -136,35 +145,58 @@ export function ScheduleSection({
               }}
             />
           </Box>
+          {!autonomousScoringEnabled ? (
+            <Typography variant="caption" color="text.secondary">
+              The settings below are inactive while automatic scoring is off.
+            </Typography>
+          ) : null}
           <TextField
             type="number"
-            label="Cadence (minutes)"
+            label={
+              <TermLabel
+                label="Check frequency (minutes)"
+                tooltip="How often, in minutes, this agent gets scored automatically."
+              />
+            }
             value={cadence}
             onChange={(e) => setCadence(e.target.value)}
             size="small"
             fullWidth
+            disabled={!autonomousScoringEnabled}
+            error={cadenceInvalid}
             slotProps={{
               htmlInput: { min: 60, "data-testid": "schedule-cadence" },
             }}
-            helperText="Minimum 60 minutes"
+            helperText={
+              cadenceInvalid ? "Enter at least 60 minutes" : "Minimum 60 minutes"
+            }
           />
           <TextField
             type="number"
-            label="Lookback (days)"
+            label={
+              <TermLabel
+                label="History window (days)"
+                tooltip="How many days of past activity are included each time this agent is scored."
+              />
+            }
             value={lookback}
             onChange={(e) => setLookback(e.target.value)}
             size="small"
             fullWidth
+            disabled={!autonomousScoringEnabled}
+            error={lookbackInvalid}
             slotProps={{
               htmlInput: { min: 1, max: 90, "data-testid": "schedule-lookback" },
             }}
-            helperText="1–90 days"
+            helperText={
+              lookbackInvalid ? "Enter a number between 1 and 90" : "1–90 days"
+            }
           />
           <Button
             variant="contained"
             disableElevation
             onClick={submit}
-            disabled={saving}
+            disabled={saving || cadenceInvalid || lookbackInvalid}
             data-testid="schedule-submit"
             sx={{ alignSelf: "flex-start" }}
           >

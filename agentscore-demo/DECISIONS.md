@@ -184,6 +184,16 @@ Every entry is checked against the live source in `agentscore-demo/src` before b
 
 ---
 
+## 2026-09-17 - Plain-language + validation pass on the agent Scoring schedule panel
+
+**Change:** In `ScheduleSection.tsx` (agent Settings page, "Refresh schedule" panel): (1) "Autonomous scoring" -> "Automatic scoring," with its description rewritten in plain language ("When on, this agent is scored on its own on a schedule. Turn off to only score it when you click Score now.") in place of the jargon "first-run discovery"/"cadence scoring" wording; (2) "Cadence (minutes)" -> "Check frequency (minutes)" and "Lookback (days)" -> "History window (days)," both now carrying a `TermLabel` info-icon tooltip (the same shared component used for jargon call-outs elsewhere in the app); (3) the two schedule fields now disable, with an explanatory caption, whenever automatic scoring is off, since they don't do anything in that state; (4) added real client-side validation - out-of-range values (cadence < 60, lookback outside 1-90) now show a red error state and message and disable Save, instead of only having non-enforcing helper text. Also updated the matching `FormSection` description on `AgentSettingsPage.tsx` to the same plain-language wording.
+
+**Who it's for:** A non-technical admin configuring an agent's scoring schedule - fewer unexplained technical terms, and the UI now visibly reflects which controls are actually live instead of leaving disabled-in-effect fields looking editable.
+
+**Why:** Requested directly by the user (2026-09-17), from a screenshot of the panel ("we can probably make this better, right?"), with the explicit goal of getting non-technical people onboarding as quickly as possible.
+
+---
+
 ## Template for new entries
 
 ```
