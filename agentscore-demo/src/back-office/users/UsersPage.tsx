@@ -121,7 +121,7 @@ function RowActionsMenu({
           <ListItemIcon>
             <IconMaterialSymbolsLogout sx={{ fontSize: 18 }} />
           </ListItemIcon>
-          Revoke sessions
+          Sign out everywhere
         </MenuItem>
         <Divider />
         {user.deleted_at ? (
@@ -153,7 +153,7 @@ function RowActionsMenu({
             <ListItemIcon>
               <IconMaterialSymbolsDelete sx={{ fontSize: 18, color: "error.main" }} />
             </ListItemIcon>
-            Soft-delete
+            Delete
           </MenuItem>
         )}
       </Menu>
@@ -242,8 +242,8 @@ export function UsersPage() {
 
   const revoke = {
     mutate: (userId: string) => {
-      const result = revokeSessionsFake(userId);
-      toast.success(`Revoked ${result.revoked} session(s)`);
+      revokeSessionsFake(userId);
+      toast.success("Signed out everywhere");
       invalidate();
     },
   };
@@ -501,12 +501,12 @@ export function UsersPage() {
         open={softDeleteTarget !== null}
         onClose={() => setSoftDeleteTarget(null)}
       >
-        <DialogTitle>Soft-delete {softDeleteTarget?.email}?</DialogTitle>
+        <DialogTitle>Delete {softDeleteTarget?.email}?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Revokes all sessions and hides the user from active lists.
-            Tenant memberships and role are preserved and come back with a
-            restore.
+            Signs them out everywhere and hides them from the active list.
+            Their tenants and role are kept, and come back if you restore
+            them.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -529,7 +529,7 @@ export function UsersPage() {
             }}
             startIcon={<IconMaterialSymbolsDelete sx={{ fontSize: 16 }} />}
           >
-            Soft-delete
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
@@ -541,8 +541,8 @@ export function UsersPage() {
         <DialogTitle>Restore {restoreTarget?.email}?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Reinstates their tenant memberships
-            {restoreTarget?.is_superadmin ? " and the admin flag" : ""}.
+            Restores their tenants
+            {restoreTarget?.is_superadmin ? " and admin access" : ""}.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
