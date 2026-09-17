@@ -17,7 +17,6 @@ import IconMaterialSymbolsApartment from "@tricentis/mui-icons/material-symbols/
 import IconMaterialSymbolsBalance from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsBalance.mjs";
 import IconMaterialSymbolsBarChart from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsBarChart.mjs";
 import IconMaterialSymbolsGroup from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsGroup.mjs";
-import IconMaterialSymbolsKey from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsKey.mjs";
 import IconMaterialSymbolsMenuBook from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsMenuBook.mjs";
 import IconMaterialSymbolsScience from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsScience.mjs";
 import IconMaterialSymbolsSmartToy from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSmartToy.mjs";
@@ -31,13 +30,15 @@ type NavItem = {
   label: string;
 };
 
-/** The 8 destinations this trimmed shell actually routes to. `id` matches
+/** The 7 destinations this trimmed shell actually routes to. `id` matches
  * `destination-tiers.ts` so the demo-mode role toggle can gate visibility
  * off the same tiers production uses for staff vs. superadmin (see
  * `STAFF_VISIBLE_EXTRA_IDS` below for this demo's deliberate override) —
  * deliberately NOT the full `sidebarNavItems` list, which also includes
  * sections this clone hasn't built (ingestion, scoring-pipeline, simulation,
- * debug-logs) and would otherwise turn into dead links for an admin. */
+ * debug-logs) and would otherwise turn into dead links for an admin.
+ * `integrations` is also intentionally absent - API-key management moved
+ * into the tenant detail Settings tab, so there's no top-level page for it. */
 const NAV_ITEMS: NavItem[] = [
   { id: "dashboard", to: "/", icon: IconMaterialSymbolsSpaceDashboard, label: "Home" },
   {
@@ -49,7 +50,6 @@ const NAV_ITEMS: NavItem[] = [
   },
   { id: "tenants", to: "/tenants", icon: IconMaterialSymbolsApartment, label: "Tenants" },
   { id: "users", to: "/users", icon: IconMaterialSymbolsGroup, label: "Users" },
-  { id: "integrations", to: "/integrations", icon: IconMaterialSymbolsKey, label: "Integrations" },
   { id: "evals-catalog", to: "/evals/catalog/evals", icon: IconMaterialSymbolsScience, label: "Evals Catalog" },
   {
     id: "llm-catalog",

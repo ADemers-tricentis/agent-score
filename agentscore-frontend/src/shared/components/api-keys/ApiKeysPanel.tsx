@@ -1,7 +1,7 @@
-/** ApiKeysPanel — the entire ingest API-key management UI, shared by the
- *  customer Integrations page and the back-office tenant Settings tab's
- *  Integrations section (spec `customer-api-key-self-service`, "Is the panel
- *  built twice?" — no, once here, mounted by both apps over their own adapter).
+/** ApiKeysPanel — the entire ingest API-key management UI, mounted by the
+ *  back-office tenant Settings tab's Integrations section (spec
+ *  `customer-api-key-self-service`). Split out as its own component, over its
+ *  own adapter, so a future second consumer doesn't mean building this twice.
  *
  *  Built to `integrations-page-mock.html`: table with inline rename, a status
  *  switch, per-row rotate/revoke, one-time secret reveal, create/rotate/
