@@ -323,7 +323,7 @@ export function AgentSettingsPage() {
 
         <FormSection
           title="Scoring schedule"
-          description="Override the global cadence & lookback; disable autonomous scoring for this agent."
+          description="Override how often and how far back this agent is scored automatically, or turn off automatic scoring for this agent."
         >
           <ScheduleSection
             tenantId={tenantId}
