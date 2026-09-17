@@ -137,7 +137,7 @@ function TenantsShell() {
   const softDelete = useMutation({
     mutationFn: (tenantId: string) => api.softDeleteTenant(tenantId),
     onSuccess: () => {
-      toast.success("Tenant soft-deleted");
+      toast.success("Tenant deleted");
       invalidate();
     },
     onError: (err: Error) => toast.error(err.message),
@@ -292,7 +292,7 @@ function TenantsShell() {
       <PageBand sx={{ pt: 4, pb: 2.5 }}>
         <PageHeader
           title="Tenants"
-          description="One tenant per customer × environment. Groups agents for billing, identity and scoring."
+          description="One tenant per customer, per environment (like production or staging). Groups their agents for billing and scoring."
           actions={
             <Button
               variant="contained"
@@ -518,7 +518,7 @@ function RowActions({
                 }}
               >
                 <IconMaterialSymbolsWhatshot fontSize="small" sx={{ mr: 1 }} />
-                Hard-purge…
+                Permanently delete…
               </MenuItem>,
             ]
           : [
@@ -533,7 +533,7 @@ function RowActions({
                 }}
               >
                 <IconMaterialSymbolsDelete fontSize="small" sx={{ mr: 1 }} />
-                Soft-delete
+                Delete
               </MenuItem>,
             ]}
       </Menu>
@@ -552,12 +552,12 @@ function SoftDeleteDialog({
 }) {
   return (
     <Dialog open={target !== null} onClose={onClose}>
-      <DialogTitle>Soft-delete {target?.name}?</DialogTitle>
+      <DialogTitle>Delete {target?.name}?</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Reversible. Trace ingest stops immediately. Stored traces stay —
-          use Hard-purge from the Show-deleted view to
-          remove it permanently.
+          Reversible. Its agents stop working immediately. Stored traces
+          stay — use Permanently delete from the Show-deleted view to
+          remove it for good.
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -571,7 +571,7 @@ function SoftDeleteDialog({
           startIcon={<IconMaterialSymbolsDelete fontSize="small" />}
           onClick={() => target && onConfirm(target)}
         >
-          Soft-delete
+          Delete
         </Button>
       </DialogActions>
     </Dialog>
@@ -593,7 +593,7 @@ function HardPurgeDialog({
       onClose={onClose}
       slotProps={{ paper: { sx: { maxWidth: 512 } } }}
     >
-      <DialogTitle>Hard-purge {target?.name}?</DialogTitle>
+      <DialogTitle>Permanently delete {target?.name}?</DialogTitle>
       <DialogContent>
         <DialogContentText sx={{ color: "error.main" }}>
           This cannot be undone.
@@ -612,7 +612,7 @@ function HardPurgeDialog({
                 sx={{ display: "inline-flex", alignItems: "center", gap: 0.75 }}
               >
                 <IconMaterialSymbolsWhatshot fontSize="small" />
-                Hard-purge {target.name}
+                Permanently delete {target.name}
               </Box>
             }
             onConfirm={() => onConfirm(target)}

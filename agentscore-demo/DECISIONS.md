@@ -114,6 +114,16 @@ Every entry is checked against the live source in `agentscore-demo/src` before b
 
 ---
 
+## 2026-09-17 - Plain-language copy pass on Tenants and Agents
+
+**Change:** In `AgentsSearchPage.tsx` and `AgentSettingsPage.tsx`: reworded "Each agent is one ingest identity bound to its tenant" and the raw `provisioning → active` state-machine notation (Provisioning section description, new-agent dialog) into plain sentences ("New agents briefly show as Connecting, then switch to Active..."). In `TenantsPage.tsx` and `TenantCreatePage.tsx`: reworded "One tenant per customer × environment" into "One tenant per customer, per environment (like production or staging)." Across `AgentSettingsPage.tsx`, `TenantsPage.tsx`, and `TenantSettingsPage.tsx`: renamed the danger-zone actions **Soft-delete → Delete** and **Hard-purge → Permanently delete** in row labels, buttons, dialog titles/copy, disabled-reason tooltips, and success toasts. Kept "Deactivate" as-is and did not reuse it for Soft-delete, since Agents already has a separate non-destructive Deactivate action distinct from delete - the audit's suggested "Soft-delete → Deactivate" mapping would have collided with it here. Left Users and LLM Catalog untouched (same jargon pattern exists there but wasn't part of the agreed scope for this pass).
+
+**Who it's for:** A non-technical admin browsing Tenants or Agents - flagged in the initial usability audit ("ingest identity bound to its tenant" and "provisioning → active" leak backend vocabulary; "Soft-delete/Hard-purge" are engineering terms where plain customer language would work fine).
+
+**Why:** Requested directly by the user (2026-09-17), following up on the initial usability audit's high-leverage fix list (jargon renames, items 1-3) as the agreed next step after the Evals Catalog/Profile jargon pass.
+
+---
+
 ## Template for new entries
 
 ```
