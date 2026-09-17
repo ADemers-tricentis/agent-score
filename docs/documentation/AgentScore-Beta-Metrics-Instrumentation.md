@@ -1,10 +1,12 @@
 # AgentScore Beta: Metrics & Instrumentation
 
-Draft answer to the open action item in [Path to Beta Release](https://tricentis.atlassian.net/wiki/x/swBN0w), Section 3 ("Andrew to define the exact data points/shape first, then Lior exposes them"). Grounded in the committed value metric and metering principles from the [Beta / Early-Access Commercial Model](https://tricentis.atlassian.net/wiki/pages/resumedraft.action?draftId=3561422894) doc.
+Answers two open items from [Path to Beta Release](https://tricentis.atlassian.net/wiki/x/swBN0w): the Section 3 commercial-model action item ("Andrew to define the exact data points/shape first, then Lior exposes them") and the broader question Section 2 leaves open - once customers are in the product, how do we know if they're getting value out of it? Part 1 is grounded in the committed value metric and metering principles from the [Beta / Early-Access Commercial Model](https://tricentis.atlassian.net/wiki/pages/resumedraft.action?draftId=3561422894) doc. Part 2 has no equivalent source doc - the beta tracker names "onboarding flow" and "feedback channel" as Section 2 deliverables but never defines what to measure, so it's specified here.
 
 Status: draft for review, not yet posted back to the wiki.
 
-## Why these metrics
+## Part 1: Commercial / Cost Metrics
+
+### Why these metrics
 
 The commercial model doc locks two decisions this list has to serve:
 
@@ -13,11 +15,11 @@ The commercial model doc locks two decisions this list has to serve:
 
 Token/LLM-call attribution at the **eval/dimension level** (per your earlier answer) is still worth collecting, but its purpose shifts: it's no longer an input to the customer-facing credit formula, since that formula only counts runs. It remains valuable for internal cost/margin visibility - i.e., knowing what a run actually costs Tricentis to serve (which judges ran, per-judge model tier) even though the customer is charged the same per-run regardless.
 
-## Metrics to collect
+### Metrics to collect
 
 | # | Metric | Grain | Why it matters | Collection method | Status |
 |---|---|---|---|---|---|
-| 1 | Scoring run count | per tenant, per period | The committed value metric, and now the literal billing unit - every credit charged maps back to a run, not to calls/tokens within it | Emit an event at scoring-run completion (`POST .../scoring/runs` completion, or the existing append-only `scoring-events` log) tagged `tenant_id`, `agent_id`, `run_id`, `mode`, `revision_label` | Partially exists - `scoring-events` audit log already logs run lifecycle events per the API reference; needs a tenant-period rollup |
+| 1 | Scoring run count | per tenant, per period | The committed value metric, and now the literal billing unit - every credit charged maps back to a run, not to calls/tokens within it | Emit an event at scoring-run completion (`POST .../scoring/runs` completion, or the existing append-only `scoring-events` log) tagged `tenant_id`, `agent_id`, `run_id`, `mode`, `revision_label`, and (new, see Part 2 #12) `trigger` (`manual` / `scheduled`) | Partially exists - `scoring-events` audit log already logs run lifecycle events per the API reference; needs a tenant-period rollup and the `trigger` label |
 | 2 | LLM calls per scoring run, by judge | per run, broken out by judge (Correctness / Quality / Security / Attribution) | No longer a credit-formula input (billing is per-run only) - kept for internal cost/margin visibility, since judge dispatch is conditional (Attribution only on non-PASS) so Tricentis's actual cost per run still varies even though the customer's charge doesn't | Extend `evalclaw.evaluator.llm_calls` (currently a session-level counter: 3 calls/PASS, 4/non-PASS) to carry a `judge` label and roll up per `run_id` | Needs new instrumentation - counter exists but not run-scoped or judge-labeled today |
 | 3 | Token usage per eval/dimension | per run, per judge/dimension | Same as #2 - internal cost visibility at eval granularity per your answer, not a billing input | Extend `gen_ai.client.token.usage` histogram with `judge`/`dimension` and `run_id` labels at the point each judge call completes | Needs new instrumentation - currently session-level only |
 | 4 | Model tier per judge call | per run, per judge | Same as #2/#3 - internal margin analysis (a Bedrock small model vs. a large Anthropic judge costs Tricentis differently even at a flat per-run price to the customer) | Tag the same LLM-call/token events with `provider` + `model` (already surfaced in R12's judge config: name, provider, model) | Needs new instrumentation - judge config exists, but isn't joined to usage events yet |
@@ -27,14 +29,47 @@ Token/LLM-call attribution at the **eval/dimension level** (per your earlier ans
 | 8 | Session duration | per run/session | Secondary signal on run cost/complexity; useful for sanity-checking credit outliers | Existing `evalclaw.session.duration` histogram | Exists |
 | 9 | Profile-fit confidence at scoring time | per run | Not billing-related, but flagged in the same standup as a potential future auto-notify trigger; worth capturing alongside run metadata now so it's not lost if the auto-notify question (Section "Open questions" on the beta page) gets picked up later | Tag onto the same run-completion event as metric 1 | Exists (confidence score is already computed per the beta doc) - just needs to be included in the run event payload |
 
-## Rollup and join key
+## Part 2: Customer Behavior Metrics
 
-Every metric above should carry `tenant_id` as the primary join key, consistent with the existing API contract (`/admin/tenants/{tenant_id}/...`). Roll up to **per tenant per period** (period = week, to match the "weekly usage dashboard" ask) for the dashboard, but keep the underlying events at `run_id` grain so a specific run can be drilled into when a number looks wrong.
+### Why these metrics
+
+Part 1 answers "what does a customer cost us." This part answers the question the beta actually exists to answer: **are users getting value out of this, fast enough that they'd be upset if we took it away?** Cost metrics can't tell us that - a tenant can generate scoring runs on schedule without a single human ever looking at the results. These metrics are about human behavior in the product: did they get set up, did they come back, what did they actually use, and where did they give up.
+
+Recommended approach: **instrument both layers, not one.**
+
+- **Backend events** for anything that's already a committed, server-side state change (an agent created, a scoring run completed, an API key issued, a profile adopted). Extend the same append-only `scoring-events` audit-log pattern Part 1 already uses, tagged with `tenant_id` **and** `user_id`. This is the ground truth for "how much of the product got used" - it can't be lost to an ad-blocker or a client that failed to load a script, and it requires no new vendor.
+- **A lightweight client-side analytics tool** (PostHog is the natural fit - generous free/self-hosted tier, EU or US data residency, and funnel/retention reporting built in rather than hand-rolled) for everything that is *not* a backend state change: page views, dialog opens vs. abandons, which nav section someone actually clicks into, checklist/tour progress, docs article reads. There is currently no client-side analytics SDK anywhere in the frontend (`agent-score/frontend`) - confirmed via a full dependency and source search - so this is a from-scratch addition, not a gap in existing tooling.
+
+Backend-only instrumentation would miss every abandoned dialog and every page nobody clicked into - exactly the "friction/drop-off" signal that matters most for "are they getting value." Client-side-only instrumentation would miss anything blocked by the browser and wouldn't be authoritative for billing-adjacent counts. Both together, joined on `tenant_id` + `user_id`, cover it.
+
+**Before wiring in a third-party SDK:** the beta tracker's Legal & Compliance section already gates on a PII/DPA review for trace data and a beta clickthrough/consent framework (Christopher LaPoint / Christopher Colosimo). Behavioral tracking of named users should go through the same review, and the beta consent flow should probably disclose it - flagged in Open Questions below.
+
+### Metrics to collect
+
+| # | Metric | Grain | Why it matters | Collection method | Status |
+|---|---|---|---|---|---|
+| 10 | Agent creation events | per tenant, per user | Core usage-depth signal ("number of agents scored") and adoption path detail - tags whether the agent was created via the main Create Agent dialog or the inline "+ Create new tenant" sub-flow | Emit an event at agent creation (`POST .../agents`) tagged `tenant_id`, `user_id`, `agent_id`, `kind`, `via_inline_tenant_create` (bool) | Needs new instrumentation - the action already exists server-side, needs an event on it |
+| 11 | Scoring run trigger breakdown (manual "Score now" vs. autonomous schedule) | per tenant, per period | Distinguishes active engagement (someone clicked Score now) from passive scheduled runs nobody looked at - a tenant with only scheduled runs and no manual ones is a weaker value signal even if run count 1 looks healthy | Add a `trigger` label to metric 1's existing run-completion event | Needs new instrumentation - extends Part 1 metric 1 |
+| 12 | Time-to-first-value milestones | per tenant, once each | The single most direct answer to "how fast do users get value" - the whole point of this redesign's onboarding work. Milestones: first agent created, first trace ingested, first scoring run completed, first "Get started" checklist item completed | Idempotent "first occurrence" event per tenant per milestone, timestamped once | Needs new instrumentation |
+| 13 | Onboarding checklist / product tour engagement | per tenant, per user | Did the checklist and tour built for onboarding actually get used, and how far did people get before dropping off - directly measures whether that UX investment is working | Client-side events on checklist item completion and each tour step reached/skipped | Needs new instrumentation, client-side |
+| 14 | Page / section visits | per tenant, per user, per section | Feature adoption breadth - which sections actually get opened (My Agents, Evals Catalog, Tenants, Users, LLM Catalog, Agent Registry, Reports, Docs) vs. which sit unused | Client-side page-view events tagged with route/section id | Needs new instrumentation, client-side |
+| 15 | Dialog funnel completion (Create Agent, Create Tenant, New Profile, New API key) | per tenant, per dialog | The clearest friction/drop-off signal - opened vs. submitted vs. canceled for every major creation flow | Client-side events on dialog open, submit, and cancel/dismiss | Needs new instrumentation, client-side |
+| 16 | Profile-fit override rate | per tenant | How often a user manually pins a profile version instead of accepting the auto-fit, and whether that follows a low-confidence flag - signals whether the zero-touch profile-fit story is actually trusted | Extend the existing fit-decision event (`outcome`/`trigger` fields already in the schema, per `FitDecisionOut`) with a rollup of manual vs. auto outcomes | Partially exists - fields are already captured per-decision; needs a tenant-period rollup |
+| 17 | Docs engagement | per tenant, per user, per article | Signals self-serve success (or its absence) - low docs engagement alongside high support-channel contact means the docs aren't answering the right questions | Client-side events on doc article view, with dwell time | Needs new instrumentation, client-side |
+| 18 | Retention / return usage | per tenant | The headline "are they coming back" metric - distinct days active per week, days since last session | Rollup from existing login/session events; needs a period rollup job, no new capture | Mostly exists - needs the rollup |
+| 19 | API key / integration setup | per tenant (external only) | Time from tenant creation to first API key created, and whether it happens at all - the concrete "did self-serve setup actually work" signal, directly tied to today's ingest-URL reminder and Integrations-in-Settings changes | Extend the existing API-key creation event with a first-key-per-tenant timestamp | Needs new instrumentation - extends an existing event |
+| 20 | Support/feedback contact rate vs. usage | per tenant | Cross-referencing who contacts support/feedback (Section 2's planned Slack channel or shared inbox) against their usage metrics above surfaces friction the product itself won't show | Manual join against the support channel log - not something the app can instrument directly | Process/ops task, not code - flag for whoever owns the feedback channel |
+
+## Rollup and join keys
+
+Every metric above should carry `tenant_id` as the primary join key, consistent with the existing API contract (`/admin/tenants/{tenant_id}/...`). Part 2 metrics also carry `user_id` as a secondary join key - unlike Part 1's cost metrics, which are meaningful at the tenant level alone, behavior metrics need per-user granularity to tell "one admin doing everything" apart from "the whole team is engaged." Roll up to **per tenant per period** (period = week, to match the "weekly usage dashboard" ask) for the dashboard, but keep the underlying events at `run_id` / `user_id` / action grain so a specific tenant or user can be drilled into when a number looks wrong or a customer conversation needs backup.
 
 ## Open questions
 
 These are decisions or confirmations I can't make from the codebase or docs alone:
 
-
 1. **Credit formula version.** `credits = f(#LLM calls, model tier)` is the directional formula from the billing research doc, but the exact weighting (e.g., credit cost per model tier, small-vs-large-run split a la Patronus) is explicitly "deferred to end of beta by design" per the commercial model doc. Do we instrument with a placeholder formula now (and accept it'll be recalculated retroactively from raw events), or wait for a first-draft formula before building metric 5?
 2. **Retention/replay.** Since the credit formula will change post-beta, should raw per-eval token/call events be retained long enough to recompute credits-equivalent retroactively under a new formula, or is the beta-window rollup sufficient?
+3. **Client-side tool choice.** PostHog is the recommendation above (funnels/retention/session data out of the box, no other SDK currently in the codebase to weigh against) - does that clear procurement/security review in time for the beta, or should Part 2 start as backend-only events until a tool is approved?
+4. **Consent/disclosure.** Given the beta cohort authenticates with named username/password accounts (per the beta tracker), does per-user behavioral tracking need explicit disclosure in the beta clickthrough/consent framework Christopher LaPoint and Christopher Colosimo are building, or does the existing PII/DPA review already cover it?
+5. **Data residency.** If a third-party client-side tool is approved, does it need EU-region hosting given the cross-region trace-fetcher work already accounts for EU customer data?

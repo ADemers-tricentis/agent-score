@@ -190,6 +190,40 @@ step 7/8 actually completed — if the user declined at the review gate in
 step 6, leave the marker untouched so the same submissions surface again next
 run.
 
+### 10. Export this run as an AgentScore trace (after the tracker and CSV are updated)
+
+This skill's own run can be dogfooded as a real traced agent in AgentScore,
+without instrumenting the skill itself: `test-agent/export_claude_session.py`
+reads the Claude Code session transcript this run just produced and replays
+it as OTel spans (real tool calls, real token usage/cost) to AgentScore.
+
+The script refuses a bare `--latest` (it once turned an entire multi-hour
+session into one giant trace) - scope it with `--since`, read from the shared
+marker `.claude/skills/agent-score-docs-sync/.last-exported.json` (a
+session-id -> ISO-timestamp map, also written by the Stop hook that
+auto-exports other sessions). Look up the current session id's entry:
+
+```bash
+cd /Users/a.demers/dev/Tricentis/AgentScore/test-agent
+source venv/bin/activate
+# If the current session id has an entry in .last-exported.json, use it:
+python export_claude_session.py --latest --agent-name external-interest-sync --since <that timestamp>
+# If it has no entry yet (nothing exported this session so far), export the whole thing instead:
+python export_claude_session.py --latest --agent-name external-interest-sync --full-session
+```
+
+Requires `AGENT_SCORE_API_KEY` set in `test-agent/.env` (a tenant ingest key
+from Agent Score UI -> Integrations) - without it, spans print to the console
+instead of exporting. Run this step automatically, once the rest of the
+workflow is done - don't wait for the user to ask. This step never blocks the
+sync: skip it only if the key isn't set. Note: this manual export doesn't
+update `.last-exported.json` itself (only the Stop hook does), so a small
+overlap with the next Stop-hook export is expected and fine.
+
+Skip this step entirely if the run stopped early (no new submissions, blocked
+on M365 auth, or the user declined at the review gate) - there's nothing
+meaningful to trace.
+
 ## Output
 
 Finish with a short report: how many new submissions were found, how many
