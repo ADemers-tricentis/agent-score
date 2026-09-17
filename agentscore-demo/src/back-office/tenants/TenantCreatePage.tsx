@@ -272,8 +272,8 @@ export function TenantCreatePage() {
             variant="subtitle1"
             sx={{ mt: 0.5, color: "text.secondary" }}
           >
-            One tenant per customer × environment. Groups agents for billing,
-            identity and scoring.
+            One tenant per customer, per environment (like production or
+            staging). Groups their agents for billing and scoring.
           </Typography>
         </Box>
 

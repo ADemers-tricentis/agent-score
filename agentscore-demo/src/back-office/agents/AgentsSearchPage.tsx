@@ -195,7 +195,7 @@ function AgentsSearchShell() {
       <PageBand sx={{ pt: 4, pb: 2.5 }}>
         <PageHeader
           title="My Agents"
-          description="Cross-tenant view. Each agent is one ingest identity bound to its tenant."
+          description="Every agent across every customer. Each agent belongs to exactly one customer."
           actions={
             <Button
               variant="contained"
@@ -533,11 +533,8 @@ function NewAgentDialog({
       <DialogTitle>Create agent</DialogTitle>
       <DialogContent>
         <DialogContentText sx={{ mb: 2 }}>
-          Creates the agent and binds its default profile (state machine:{" "}
-          <Box component="span" sx={{ fontFamily: "monospace" }}>
-            provisioning → active
-          </Box>
-          ).
+          Creates the agent and assigns its default scoring profile. It will
+          briefly show as Connecting before it's ready.
         </DialogContentText>
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>

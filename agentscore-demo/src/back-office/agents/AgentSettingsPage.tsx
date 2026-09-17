@@ -108,7 +108,7 @@ export function AgentSettingsPage() {
   const softDelete = {
     mutate: () => {
       setAgent((a) => ({ ...a, deleted_at: new Date().toISOString() }));
-      toast.success("Agent soft-deleted");
+      toast.success("Agent deleted");
     },
     isPending: false,
   };
@@ -166,8 +166,8 @@ export function AgentSettingsPage() {
       : isActive
         ? "deactivate first"
         : null;
-  const restoreReason = agentLoaded && !isDeleted ? "soft-delete first" : null;
-  const purgeReason = agentLoaded && !isDeleted ? "soft-delete first" : null;
+  const restoreReason = agentLoaded && !isDeleted ? "delete first" : null;
+  const purgeReason = agentLoaded && !isDeleted ? "delete first" : null;
 
   return (
     <Box sx={{ px: 4, py: 3 }}>
@@ -215,19 +215,7 @@ export function AgentSettingsPage() {
 
         <FormSection
           title="Provisioning"
-          description={
-            <>
-              State machine:{" "}
-              <Box component="span" sx={{ fontFamily: "monospace" }}>
-                provisioning → active
-              </Box>
-              , or{" "}
-              <Box component="span" sx={{ fontFamily: "monospace" }}>
-                failed
-              </Box>{" "}
-              with a retry action.
-            </>
-          }
+          description="New agents briefly show as Connecting, then switch to Active once set up. If setup fails, you can retry."
         >
           {agent ? (
             <>
@@ -346,7 +334,7 @@ export function AgentSettingsPage() {
 
         <FormSection
           title="Danger zone"
-          description="Deactivate stops work non-destructively. Soft-delete preserves traces and can be undone. Hard-purge cascades to all keys and is irreversible."
+          description="Deactivate stops work non-destructively. Delete preserves traces and can be undone. Permanently deleting cascades to all keys and cannot be undone."
           tone="destructive"
           bare
         >
@@ -381,12 +369,12 @@ export function AgentSettingsPage() {
               }
             />
             <DangerZone.Row
-              title="Soft-delete agent"
-              description="Traces remain in the trace store. Requires deactivate first — ingest already stopped by then."
+              title="Delete agent"
+              description="Traces are kept. Requires deactivating first, since work already stopped by then."
               action={
                 <LadderActionButton
                   testId="agent-delete"
-                  label="Soft-delete"
+                  label="Delete"
                   icon={<IconMaterialSymbolsDelete />}
                   color="error"
                   disabledReason={softDeleteReason}
@@ -397,7 +385,7 @@ export function AgentSettingsPage() {
             />
             <DangerZone.Row
               title="Restore agent"
-              description="Brings the agent back from soft-delete. It lands inactive — ingest stays off until you also activate it."
+              description="Brings the agent back from deletion. It lands inactive — you'll need to activate it again."
               action={
                 <LadderActionButton
                   testId="agent-restore"
@@ -410,12 +398,12 @@ export function AgentSettingsPage() {
               }
             />
             <DangerZone.Row
-              title="Hard-purge agent"
-              description="Removes the agent row and its stored trace payloads. Cannot be undone."
+              title="Permanently delete agent"
+              description="Removes the agent and all its stored traces. Cannot be undone."
               action={
                 <LadderActionButton
                   testId="agent-purge"
-                  label="Hard-purge…"
+                  label="Permanently delete…"
                   icon={<IconMaterialSymbolsLocalFireDepartment />}
                   variant="contained"
                   color="error"
@@ -465,12 +453,12 @@ export function AgentSettingsPage() {
       </Dialog>
 
       <Dialog open={confirmDelete} onClose={() => setConfirmDelete(false)}>
-        <DialogTitle>Soft-delete {agent?.name}?</DialogTitle>
+        <DialogTitle>Delete {agent?.name}?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Reversible via Restore. Trace ingest already stopped when this
-            agent was deactivated — soft-delete does not change that. Traces
-            remain in the trace store.
+            Reversible via Restore. This agent already stopped working when
+            it was deactivated, and deleting it doesn't change that. Its
+            traces are kept.
           </DialogContentText>
           {agent?.drop_pressure?.dropped_recently ? (
             <Box
@@ -509,7 +497,7 @@ export function AgentSettingsPage() {
             data-testid="delete-confirm"
             startIcon={<IconMaterialSymbolsDelete />}
           >
-            Soft-delete
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
@@ -520,7 +508,7 @@ export function AgentSettingsPage() {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>Hard-purge {agent?.name}?</DialogTitle>
+        <DialogTitle>Permanently delete {agent?.name}?</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ color: "error.main" }}>
             This cannot be undone.
@@ -540,7 +528,7 @@ export function AgentSettingsPage() {
                   sx={{ display: "inline-flex", alignItems: "center", gap: 0.5 }}
                 >
                   <IconMaterialSymbolsLocalFireDepartment />
-                  Hard-purge {agent.name}
+                  Permanently delete {agent.name}
                 </Box>
               }
               onConfirm={() => {

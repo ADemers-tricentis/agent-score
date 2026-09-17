@@ -68,7 +68,7 @@ export function TenantSettingsPage() {
   const softDelete = useMutation({
     mutationFn: () => api.softDeleteTenant(tenantId),
     onSuccess: () => {
-      toast.success("Tenant soft-deleted");
+      toast.success("Tenant deleted");
       invalidate();
     },
     onError: (err: Error) => toast.error(err.message),
@@ -281,7 +281,7 @@ export function TenantSettingsPage() {
 
         <FormSection
           title="Danger zone"
-          description="Soft-delete preserves data and can be reversed. Hard-purge cascades to agents and keys — it cannot be undone."
+          description="Delete preserves data and can be reversed. Permanently deleting cascades to agents and keys and cannot be undone."
           tone="destructive"
           bare
         >
@@ -304,8 +304,8 @@ export function TenantSettingsPage() {
                   }
                 />
                 <DangerZone.Row
-                  title="Hard-purge tenant"
-                  description="Removes the tenant row and cascades to all memberships. Cannot be undone."
+                  title="Permanently delete tenant"
+                  description="Removes the tenant and cascades to all memberships. Cannot be undone."
                   action={
                     <Button
                       variant="contained"
@@ -315,15 +315,15 @@ export function TenantSettingsPage() {
                       onClick={() => setConfirmPurge(true)}
                       startIcon={<IconMaterialSymbolsLocalFireDepartment />}
                     >
-                      Hard-purge…
+                      Permanently delete…
                     </Button>
                   }
                 />
               </>
             ) : (
               <DangerZone.Row
-                title="Soft-delete tenant"
-                description="Stops trace ingest on every agent. Purge from the deleted view to remove the tenant permanently."
+                title="Delete tenant"
+                description="Stops every agent from working. Permanently delete from the deleted view to remove the tenant for good."
                 action={
                   <Button
                     variant="outlined"
@@ -332,7 +332,7 @@ export function TenantSettingsPage() {
                     onClick={() => setConfirmDelete(true)}
                     startIcon={<IconMaterialSymbolsDelete />}
                   >
-                    Soft-delete
+                    Delete
                   </Button>
                 }
               />
@@ -342,11 +342,11 @@ export function TenantSettingsPage() {
       </Box>
 
       <Dialog open={confirmDelete} onClose={() => setConfirmDelete(false)}>
-        <DialogTitle>Soft-delete {tenant?.name}?</DialogTitle>
+        <DialogTitle>Delete {tenant?.name}?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Reversible. Trace ingest stops immediately on all agents. Restore
-            from "Show deleted" or hard-purge to remove permanently.
+            Reversible. All of its agents stop working immediately. Restore
+            from "Show deleted" or permanently delete to remove for good.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -367,7 +367,7 @@ export function TenantSettingsPage() {
             }}
             startIcon={<IconMaterialSymbolsDelete />}
           >
-            Soft-delete
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
@@ -378,7 +378,7 @@ export function TenantSettingsPage() {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>Hard-purge {tenant?.name}?</DialogTitle>
+        <DialogTitle>Permanently delete {tenant?.name}?</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ color: "error.main" }}>
             This cannot be undone.
@@ -398,7 +398,7 @@ export function TenantSettingsPage() {
                   sx={{ display: "inline-flex", alignItems: "center", gap: 0.5 }}
                 >
                   <IconMaterialSymbolsLocalFireDepartment />
-                  Hard-purge {tenant.name}
+                  Permanently delete {tenant.name}
                 </Box>
               }
               onConfirm={() => {
