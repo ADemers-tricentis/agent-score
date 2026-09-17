@@ -40,6 +40,11 @@ export const DESTINATION_GATES = {
   },
   tenants: { tier: "superadmin", method: "GET", path: "/admin/tenants" },
   users: { tier: "superadmin", method: "GET", path: "/admin/users" },
+  integrations: {
+    tier: "superadmin",
+    method: "GET",
+    path: "/admin/integrations",
+  },
   "llm-catalog": {
     tier: "superadmin",
     method: "GET",
@@ -73,7 +78,7 @@ export const DESTINATION_GATES = {
 } satisfies Record<string, DestinationGate>;
 
 /**
- * The 13 gated destination ids (12 sidebar nav ids plus `assistant`).
+ * The 14 gated destination ids (13 sidebar nav ids plus `assistant`).
  * Derived from the object's own literal keys (not `Record<string, …>`) so a
  * typo'd id is a compile error, not a silent fail-closed `false` at runtime.
  */

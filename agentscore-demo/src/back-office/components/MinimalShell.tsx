@@ -17,6 +17,7 @@ import IconMaterialSymbolsApartment from "@tricentis/mui-icons/material-symbols/
 import IconMaterialSymbolsBalance from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsBalance.mjs";
 import IconMaterialSymbolsBarChart from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsBarChart.mjs";
 import IconMaterialSymbolsGroup from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsGroup.mjs";
+import IconMaterialSymbolsKey from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsKey.mjs";
 import IconMaterialSymbolsMenuBook from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsMenuBook.mjs";
 import IconMaterialSymbolsScience from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsScience.mjs";
 import IconMaterialSymbolsSmartToy from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSmartToy.mjs";
@@ -48,6 +49,7 @@ const NAV_ITEMS: NavItem[] = [
   },
   { id: "tenants", to: "/tenants", icon: IconMaterialSymbolsApartment, label: "Tenants" },
   { id: "users", to: "/users", icon: IconMaterialSymbolsGroup, label: "Users" },
+  { id: "integrations", to: "/integrations", icon: IconMaterialSymbolsKey, label: "Integrations" },
   { id: "evals-catalog", to: "/evals/catalog/evals", icon: IconMaterialSymbolsScience, label: "Evals Catalog" },
   {
     id: "llm-catalog",
