@@ -11,7 +11,7 @@ import type { UserProfile } from "@/shared/auth/api";
 
 export type DemoRole = "admin" | "staff";
 
-const STORAGE_KEY = "agentscore-demo:mode";
+const STORAGE_KEY = "agentscore-frontend:mode";
 
 interface StoredDemoMode {
   role: DemoRole;
