@@ -4,7 +4,14 @@
 // BackOfficeAppGate/SetupGate; those get reintroduced (faked, not real) when
 // auth/nav gets its own pass. Mirrors the real router.tsx's Agents subtree
 // (see agent-score/frontend/src/back-office/routes/router.tsx) 1:1 for paths.
-import { createRootRoute, createRoute, createRouter, Outlet, redirect } from "@tanstack/react-router";
+import {
+  createHashHistory,
+  createRootRoute,
+  createRoute,
+  createRouter,
+  Outlet,
+  redirect,
+} from "@tanstack/react-router";
 
 import { DashboardPage } from "@/back-office/dashboard/DashboardPage";
 import { AgentCardPage } from "@/back-office/agents/AgentCardPage";
@@ -494,7 +501,7 @@ const protectedChildren = [
 
 const routeTree = rootRoute.addChildren([protectedLayoutRoute.addChildren(protectedChildren)]);
 
-export const router = createRouter({ routeTree });
+export const router = createRouter({ routeTree, history: createHashHistory() });
 
 declare module "@tanstack/react-router" {
   interface Register {
