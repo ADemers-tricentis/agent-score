@@ -312,7 +312,21 @@ const FIXTURES: Record<string, AgentProfileFixture> = {
   "agent-3": {
     benchmark: baseBenchmark("pv-general-4", "General Automation Baseline", 4, "profile-general"),
     fitHistory: [
-      fitDecision({ id: "fit-3a", daysAgoN: 5, method: "heuristic", outcome: "no_change", chosenProfileVersionId: "pv-general-4", trigger: "scheduled", rationale: "General Automation Baseline v4 remains the best available match." }),
+      fitDecision({
+        id: "fit-3a",
+        daysAgoN: 5,
+        method: "llm",
+        outcome: "no_change",
+        chosenProfileVersionId: "pv-general-4",
+        trigger: "scheduled",
+        confidence: 0.83,
+        rationale: "General Automation Baseline v4 remains the best available match — it covers this agent's mixed task types more broadly than any specialized profile.",
+        candidates: [
+          { profileVersionId: "pv-general-4", score: 0.83, reason: "Broadest eval coverage for this agent's mixed workload; no specialized profile fits better." },
+          { profileVersionId: "pv-support-2", score: 0.54, reason: "Partial match — covers correctness and safety but misses this agent's tool-use patterns." },
+          { profileVersionId: "pv-code-1", score: 0.31, reason: "Poor match — built for code-review workflows, not this agent's task type." },
+        ],
+      }),
     ],
     activity: [
       { id: "ev-3a", eventType: "run_completed", createdAt: daysAgo(1), actorEmail: null, referenceData: null },

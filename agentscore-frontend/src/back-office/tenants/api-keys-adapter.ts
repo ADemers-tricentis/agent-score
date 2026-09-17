@@ -1,7 +1,7 @@
 /** Maps `back-office/tenants/api.ts` onto the tenant-free `ApiKeysAdapter` —
  *  the 409 name-collision create/rename can throw (as `ApiKeyNameConflictError`)
  *  becomes `NameConflictError`, the shape the panel understands without
- *  knowing which app it's running in. Split out of `TenantIntegrationsPage.tsx`
+ *  knowing which app it's running in. Split out of `TenantSettingsPage.tsx`
  *  so that module only exports the page component
  *  (`react-refresh/only-export-components`) — plain logic, independently
  *  tested, has earned its own file, mirroring

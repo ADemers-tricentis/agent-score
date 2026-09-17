@@ -48,6 +48,7 @@ import * as tenantsApi from "@/back-office/tenants/tenant-fixtures";
 import type { AgentsViewSearch, AgentView } from "@/back-office/agents/view-params";
 import { AutoRefreshControl } from "@/shared/components/auto-refresh-control";
 import { Chip } from "@/shared/components/chip";
+import { CodeBlock } from "@/shared/components/code-block";
 import { Combobox, type ComboboxOption } from "@/shared/components/combobox";
 import { DataTable } from "@/shared/components/data-table";
 import { FacetedFilter } from "@/shared/components/faceted-filter";
@@ -64,6 +65,11 @@ import { useDemoMode } from "@/shared/demo-mode/demo-mode-context";
 // Sentinel combobox value that opens the inline "create tenant" form instead
 // of selecting a tenant.
 const CREATE_TENANT_VALUE = "__create_tenant__";
+
+// OTLP/HTTP traces endpoint external tenants export to (see
+// agent-score-skill/skills/agent-score/references/env-vars.md for the
+// matching OTEL_EXPORTER_OTLP_TRACES_ENDPOINT setup).
+const TRACE_INGEST_URL = "https://agent-score-ingest.product.tricentis.com/internal/otel/v1/traces";
 
 const PAGE_SIZE = 25;
 
@@ -702,6 +708,33 @@ function NewAgentDialog({
               </Box>
             )}
           </Box>
+          {kind === "external" ? (
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
+              <CodeBlock
+                label="Send this agent's traces to"
+                inline
+                testId="new-agent-ingest-url"
+              >
+                {TRACE_INGEST_URL}
+              </CodeBlock>
+              <Box
+                component="p"
+                sx={{ m: 0, typography: "caption", color: "text.secondary" }}
+              >
+                Authenticate with the tenant's API key, from its Settings
+                tab.
+              </Box>
+            </Box>
+          ) : null}
+          {kind === "internal" ? (
+            <Box
+              component="p"
+              sx={{ m: 0, typography: "caption", color: "text.secondary" }}
+            >
+              Internal agents don't need an exporter — traces are ingested
+              automatically.
+            </Box>
+          ) : null}
         </Box>
       </DialogContent>
 

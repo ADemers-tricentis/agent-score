@@ -194,6 +194,46 @@ Every entry is checked against the live source in `agentscore-frontend/src` befo
 
 ---
 
+## 2026-09-17 - Added the missing tooltip for the "Library" eval kind badge
+
+**Change:** Added a `library` entry to `KIND_TOOLTIPS` in `eval-card.tsx` ("A ready-made metric from AgentScore's built-in library, scored against a preset rubric."), so the "Library" kind badge on both the collapsed eval card and the detail panel header now carries a `TermLabel` tooltip like the existing "G-Eval" and "Hybrid" badges do. Previously `library` had no entry and was left unwrapped on the assumption it was self-explanatory.
+
+**Who it's for:** A non-technical viewer of the Evals Catalog - "Library," "G-Eval," and "Hybrid" all now explain themselves consistently instead of two out of three badges having a tooltip and one not.
+
+**Why:** Requested directly by the user (2026-09-17): "we also need to add a tooltip description for library evals."
+
+---
+
+## 2026-09-17 - Better example data for the agent Profile tab's "Why this profile" panel
+
+**Change:** In `profile-fixtures.ts`, changed `agent-3`'s ("invoice-reconciler") fit decision (`fit-3a`) from a heuristic match with no confidence score and a single candidate to an AI-assisted match with a real confidence score (83%) and three ranked candidates (General Automation Baseline · v4 chosen at 0.83, Customer Support Triage · v2 at 0.54, Code Review Assistant · v1 at 0.31), each with a plain-language reason. No component code changed - the "Why this profile" panel already supported multiple ranked candidates and an AI-assisted confidence score; this fixture just wasn't using either.
+
+**Who it's for:** Anyone viewing this panel as a demo - the previous example showed "Not recorded" confidence and only one candidate, which undersold what the feature actually does (rank multiple candidate profiles with a real confidence score).
+
+**Why:** Requested directly by the user (2026-09-17): "can we have a better example for why this profile," pointing at a screenshot of the weak `agent-3` example.
+
+---
+
+## 2026-09-17 - Ingest reminder on the Create Agent dialog, branched on tenant kind
+
+**Change:** In `NewAgentDialog` (`AgentsSearchPage.tsx`), added a block below the existing "Kind" indicator that reads the same tenant-derived `kind` already used to fix the agent's kind: for an **external** tenant, shows the OTLP traces endpoint (`https://agent-score-ingest.product.tricentis.com/internal/otel/v1/traces`) in a `CodeBlock` with a one-click Copy button, plus a line pointing to the tenant's API key under Integrations; for an **internal** tenant, shows a plain caption that traces are ingested automatically, no exporter needed. Added the `TRACE_INGEST_URL` constant (matches the real endpoint documented in `agent-score-skill/skills/agent-score/references/env-vars.md`). No message shown until a tenant is picked, consistent with the existing "Determined by the tenant" placeholder.
+
+**Who it's for:** Whoever is creating an agent for an external tenant - they need the ingest URL to configure their OTEL exporter, and previously had to go find it elsewhere (or already know it). Internal-tenant creators get reassurance instead of a URL they don't need.
+
+**Why:** Requested directly by the user (2026-09-17): "when we are adding a new agent, if the user is using an external tenant, lets remind them the url to send traces to and make it so they can copy it. if it is internal, lets show a message that there agents will be automatically ingested."
+
+---
+
+## 2026-09-17 - Moved tenant Integrations from its own tab into Settings
+
+**Change:** Removed the standalone "Integrations" tab from the tenant detail shell (`tenant-shell.tsx`) - it only ever rendered for external tenants - and folded its content (the `ApiKeysPanel`, unchanged) into a new "Integrations" `FormSection` on `TenantSettingsPage.tsx`, shown only when `tenant.kind === "external"`. Deleted `TenantIntegrationsPage.tsx` and its route (`/tenants/$tenantId/integrations`) from `router.tsx`; the now-unused `tenantKind` prop was removed from `TenantShellProps` and its one call site (`TenantDetailLayout.tsx`). Updated stale doc comments in `ApiKeysPanel.tsx`, `api-keys-adapter.ts`, and the top-level `IntegrationsPage.tsx` that referenced the deleted file/tab, and the "Authenticate with the tenant's API key" hint in the Create Agent dialog (logged above) now points to the tenant's Settings tab instead of Integrations. This is a deliberate divergence from production - `agent-score/frontend` still has Integrations as its own tab; this is a demo-only usability choice, not a claim about what the real app does.
+
+**Who it's for:** An admin managing a tenant - one fewer tab to check, and Integrations sits next to the other tenant-configuration sections (General, Provisioning, Danger zone) instead of being the only kind-gated tab in the strip.
+
+**Why:** Requested directly by the user (2026-09-17), after asking "do you think that makes sense?" - I'd initially pushed back (production parity, key-management discoverability), user decided to move it anyway: "yeah move it. update any references."
+
+---
+
 ## Template for new entries
 
 ```

@@ -24,6 +24,8 @@ import IconMaterialSymbolsDelete from "@tricentis/mui-icons/material-symbols/Ico
 
 import { toast } from "@/shared/lib/toast";
 import * as api from "@/back-office/tenants/tenant-fixtures";
+import { makeAdapter } from "@/back-office/tenants/api-keys-adapter";
+import { ApiKeysPanel } from "@/shared/components/api-keys/ApiKeysPanel";
 import { CascadePreviewList } from "@/shared/components/cascade-preview-list";
 import { TENANT_PURGE_CASCADE } from "@/shared/components/purge-cascade";
 import { Chip } from "@/shared/components/chip";
@@ -278,6 +280,19 @@ export function TenantSettingsPage() {
             </Box>
           )}
         </FormSection>
+
+        {tenant?.kind === "external" ? (
+          <FormSection
+            title="Integrations"
+            description="API keys authenticate the traces this tenant's agents send to AgentScore."
+          >
+            <ApiKeysPanel
+              adapter={makeAdapter(tenantId)}
+              queryKey={["tenant-api-keys", tenantId]}
+              showSimulationBadge
+            />
+          </FormSection>
+        ) : null}
 
         <FormSection
           title="Danger zone"
