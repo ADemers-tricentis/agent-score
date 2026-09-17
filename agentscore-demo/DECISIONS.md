@@ -104,6 +104,16 @@ Every entry is checked against the live source in `agentscore-demo/src` before b
 
 ---
 
+## 2026-09-17 - Plain-language reasoning on the agent Profile tab's "Why this profile" panel
+
+**Change:** In `ProfileFitTab.tsx` (agent Profile tab, `FitProvenancePanel`/`DiscriminationSection`): the "Method" chip now shows "AI-assisted match"/"Rule-based match" instead of raw `llm`/`heuristic`, with a `TermLabel` tooltip explaining each; "Trigger" is now run through the existing `readableName()` humanizer (previously shown raw/unhumanized, unlike the fit-history row below it) and has a tooltip explaining what a trigger is; "Selection confidence" gets a tooltip, and its caption dropped the internal term "profile fitter" for "Confidence score from the automatic profile-matching system"; "Evidence diversity" gets a tooltip explaining what the bare number means; "Profile quality across agents" now shows a one-line plain-language summary (e.g. "This profile's checks can reliably tell a good agent run from a bad one") above the existing AUC/statistics sentence, for all six discrimination verdicts.
+
+**Who it's for:** A non-technical viewer of an agent's Profile tab trying to understand why a given profile was auto-selected - flagged in the initial usability audit as raw-ML-jargon territory ("binding source," "discrimination verdict," "AUC," "drift nudge").
+
+**Why:** Requested directly by the user (2026-09-17): "lets give plain language reasoning as to why a profile was chosen," pointing at a screenshot of this exact panel.
+
+---
+
 ## Template for new entries
 
 ```
