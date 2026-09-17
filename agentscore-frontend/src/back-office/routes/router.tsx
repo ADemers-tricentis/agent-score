@@ -38,7 +38,6 @@ import { TenantDetailLayout } from "@/back-office/tenants/TenantDetailLayout";
 import { TenantOverviewPage } from "@/back-office/tenants/TenantOverviewPage";
 import { TenantAgentsPage } from "@/back-office/tenants/TenantAgentsPage";
 import { TenantMembersPage } from "@/back-office/tenants/TenantMembersPage";
-import { TenantIntegrationsPage } from "@/back-office/tenants/TenantIntegrationsPage";
 import { IntegrationsPage } from "@/back-office/integrations/IntegrationsPage";
 import { TenantSettingsPage } from "@/back-office/tenants/TenantSettingsPage";
 import { TenantAuditLogPage } from "@/back-office/tenants/TenantAuditLogPage";
@@ -273,12 +272,6 @@ const tenantMembersRoute = createRoute({
   component: TenantMembersPage,
 });
 
-const tenantIntegrationsRoute = createRoute({
-  getParentRoute: () => tenantDetailLayoutRoute,
-  path: "/integrations",
-  component: TenantIntegrationsPage,
-});
-
 const tenantSettingsRoute = createRoute({
   getParentRoute: () => tenantDetailLayoutRoute,
   path: "/settings",
@@ -472,7 +465,6 @@ const protectedChildren = [
     tenantOverviewRoute,
     tenantAgentsListRoute,
     tenantMembersRoute,
-    tenantIntegrationsRoute,
     tenantSettingsRoute,
     tenantAuditLogRoute,
   ]),

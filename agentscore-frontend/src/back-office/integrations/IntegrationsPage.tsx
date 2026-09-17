@@ -4,8 +4,8 @@
  * to an external tenant (an internal/sample tenant never gets one), so this
  * page has nothing to manage until at least one external tenant exists.
  *
- * Mounts the same shared `ApiKeysPanel` as the back-office tenant
- * Integrations tab (`TenantIntegrationsPage.tsx`), over the same
+ * Mounts the same shared `ApiKeysPanel` as the Integrations section of the
+ * back-office tenant Settings tab (`TenantSettingsPage.tsx`), over the same
  * tenant-fixtures-backed adapter, scoped to whichever external tenant is
  * selected.
  */
@@ -30,7 +30,7 @@ import { Link } from "@tanstack/react-router";
 import Button from "@mui/material/Button";
 
 // Customer-side keys are capped, unlike the uncapped admin/back-office mount
-// of the same panel (`TenantIntegrationsPage.tsx`).
+// of the same panel (`TenantSettingsPage.tsx`).
 const MAX_KEYS = 20;
 
 export function IntegrationsPage() {

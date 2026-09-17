@@ -78,9 +78,9 @@ export const KIND_LABELS: Record<string, string> = {
   hybrid: "Hybrid",
 };
 
-/** Kind → plain-language explanation, shown as a tooltip on the kind badge.
- *  `library` is self-explanatory and has no entry. */
+/** Kind → plain-language explanation, shown as a tooltip on the kind badge. */
 export const KIND_TOOLTIPS: Partial<Record<string, string>> = {
+  library: "A ready-made metric from AgentScore's built-in library, scored against a preset rubric.",
   g_eval: "An AI judge model scores this using a rubric you define.",
   hybrid: "Combines several automated checks into one score using a formula.",
 };

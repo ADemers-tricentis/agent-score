@@ -1,8 +1,8 @@
 /** TenantDetailLayout — shell for the tenant detail sub-app.
  *
  * Loads the tenant and renders a TenantShell with the URL-segment
- * subtabs (Overview / Agents / Members / Integrations / Settings / Audit
- * Log). Each subroute renders into `<Outlet />` below the shell chrome.
+ * subtabs (Overview / Agents / Members / Settings / Audit Log). Each
+ * subroute renders into `<Outlet />` below the shell chrome.
  */
 
 import { useFakeQuery as useQuery } from "@/back-office/agents/fake-query";
@@ -62,7 +62,6 @@ export function TenantDetailLayout() {
     <TenantShell
       tenantId={tenantId}
       tenantName={tenant.name}
-      tenantKind={tenant.kind}
       badges={<TenantBadges tenant={tenant} />}
       meta={
         <>

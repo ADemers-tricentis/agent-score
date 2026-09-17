@@ -6,7 +6,6 @@ import BreadcrumbsItem from "@tricentis/aura/components/BreadcrumbsItem.js";
 import IconMaterialSymbolsSmartToy from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSmartToy.mjs";
 import IconMaterialSymbolsGroup from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsGroup.mjs";
 import IconMaterialSymbolsHistory from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsHistory.mjs";
-import IconMaterialSymbolsHub from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsHub.mjs";
 import IconMaterialSymbolsSettings from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSettings.mjs";
 import IconMaterialSymbolsSpaceDashboard from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSpaceDashboard.mjs";
 
@@ -30,12 +29,6 @@ export interface TenantShellProps {
   agentsCount?: ReactNode;
   /** Optional count to surface on the Members tab. */
   membersCount?: ReactNode;
-  /**
-   * The tenant's kind. The Integrations tab renders only for `"external"`
-   * (mirrors the admin API's `tenant_not_external` refusal); omitted or
-   * `"internal"` hides it, matching the Settings section it replaced.
-   */
-  tenantKind?: "external" | "internal";
   /** Page body (typically `<Outlet />` from the route component). */
   children?: ReactNode;
   className?: string;
@@ -45,7 +38,7 @@ export interface TenantShellProps {
  * Tenant entity shell — breadcrumb + tenant header + tab strip.
  *
  * Wraps `EntityShell` with the tenant-specific tab config (Overview, Agents,
- * Members, Integrations, Settings, Audit Log). Mirrors the chrome from the
+ * Members, Settings, Audit Log). Mirrors the chrome from the
  * tenant screens in `docs/03-backoffice-ui-design.html`.
  */
 export function TenantShell({
@@ -56,7 +49,6 @@ export function TenantShell({
   actions,
   agentsCount,
   membersCount,
-  tenantKind,
   children,
   className,
 }: TenantShellProps) {
@@ -82,16 +74,6 @@ export function TenantShell({
       icon: IconMaterialSymbolsGroup,
       count: membersCount,
     },
-    ...(tenantKind === "external"
-      ? [
-          {
-            id: "integrations",
-            label: "Integrations",
-            to: `${base}/integrations`,
-            icon: IconMaterialSymbolsHub,
-          } satisfies EntityShellTabItem,
-        ]
-      : []),
     {
       id: "settings",
       label: "Settings",
