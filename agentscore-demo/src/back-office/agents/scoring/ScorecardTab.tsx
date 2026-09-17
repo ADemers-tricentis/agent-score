@@ -3,6 +3,7 @@ import AlertTitle from "@mui/material/AlertTitle";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Skeleton from "@mui/material/Skeleton";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "@tanstack/react-router";
 import IconMaterialSymbolsSpeed from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSpeed.mjs";
@@ -36,6 +37,7 @@ import { ErrorState } from "@/shared/components/error-state";
 import { PerPointGrid } from "@/shared/components/per-point-grid";
 import { formatScore } from "@/shared/components/score-confidence";
 import { ScoreUncertainty } from "@/shared/components/score-uncertainty";
+import { TermLabel } from "@/shared/components/term-label";
 import { verdictBandLabel } from "@/shared/components/verdict-band";
 import { VerdictBadge } from "@/shared/components/verdict-badge";
 
@@ -176,7 +178,12 @@ export function ScoreCard({
           <VerdictBadge shipDecision={shipDecisionOf(run)} label={verdictBandLabel(run.verdict) ?? undefined} />
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-          <Typography variant="subtitle2">How stable is this score?</Typography>
+          <Typography variant="subtitle2">
+            <TermLabel
+              label="How stable is this score?"
+              tooltip="How much the score might change if we tested this agent again. A small range means you can trust this score; a large range means one test isn't enough to be sure."
+            />
+          </Typography>
           {run.confidence?.lower == null || run.confidence?.upper == null ? <Typography variant="body2" color="text.secondary">An uncertainty range is not available for this run.</Typography> : null}
           <ScoreUncertainty
             showInterval
@@ -230,26 +237,46 @@ export function ScoreCard({
       <Box sx={{ display: "grid", gridTemplateColumns: { xs: "repeat(2, minmax(0, 1fr))", md: "repeat(4, minmax(0, 1fr))" }, gap: 1.5, mt: 3, pt: 3, borderTop: 1, borderColor: "divider" }}>
         <Box sx={{ borderRadius: 2, bgcolor: "action.hover", p: 1.5 }}>
           <Typography variant="h5" sx={{ fontVariantNumeric: "tabular-nums" }}>{run.scoredCount}</Typography>
-          <Typography variant="body2" color="text.secondary">interactions scored</Typography>
+          <Typography variant="body2" color="text.secondary">
+            <TermLabel
+              label="interactions scored"
+              tooltip="The number of conversations with this agent that got at least one score."
+            />
+          </Typography>
         </Box>
         {run.evalsAssigned != null && run.evalsAssigned > 0 ? (
           <Box sx={{ borderRadius: 2, bgcolor: "action.hover", p: 1.5 }}>
             <Typography variant="h5" sx={{ fontVariantNumeric: "tabular-nums" }}>{run.evalsScored == null ? "Not recorded" : `${run.evalsScored}/${run.evalsAssigned}`}</Typography>
-            <Typography variant="body2" color="text.secondary">checks contributed</Typography>
+            <Typography variant="body2" color="text.secondary">
+              <TermLabel
+                label="checks contributed"
+                tooltip="Of all the individual checks set up for this agent, how many actually produced a score in this run."
+              />
+            </Typography>
           </Box>
         ) : null}
         <Box sx={{ borderRadius: 2, bgcolor: "action.hover", p: 1.5 }}>
           <Typography variant="h5" sx={{ fontVariantNumeric: "tabular-nums" }}>{run.skippedCount}</Typography>
-          <Typography variant="body2" color="text.secondary">checks could not be evidenced</Typography>
+          <Typography variant="body2" color="text.secondary">
+            <TermLabel
+              label="checks could not be evidenced"
+              tooltip="Checks that couldn't be scored because there wasn't enough information in the conversation to judge them."
+            />
+          </Typography>
         </Box>
         {run.retiredCount != null ? (
           <Box sx={{ borderRadius: 2, bgcolor: "action.hover", p: 1.5 }}>
             <Typography variant="h5" sx={{ fontVariantNumeric: "tabular-nums" }}>{run.retiredCount}</Typography>
-            <Typography variant="body2" color="text.secondary">interactions retired</Typography>
+            <Typography variant="body2" color="text.secondary">
+              <TermLabel
+                label="interactions retired"
+                tooltip="Conversations that were removed from scoring, for example because the agent or its configuration changed."
+              />
+            </Typography>
           </Box>
         ) : null}
       </Box>
-      {reuseCountsCopy(run).length ? <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: 2 }}>{reuseCountsCopy(run).map((item) => <Chip key={item.key} tint="muted">{item.text}</Chip>)}</Box> : null}
+      {reuseCountsCopy(run).length ? <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: 2 }}>{reuseCountsCopy(run).map((item) => <Tooltip key={item.key} title={item.key === "reused" ? "Results carried over from an earlier run because nothing had changed since then." : "Results scored fresh in this run."}><Box component="span"><Chip tint="muted">{item.text}</Chip></Box></Tooltip>)}</Box> : null}
       </Box>
 
       </Box>
@@ -296,8 +323,19 @@ export function ScoreCard({
       {run.metrics.length > 0 ? (
         <Box sx={{ border: 1, borderColor: "divider", borderRadius: 2, p: { xs: 2, md: 3 } }}>
           <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", alignItems: "center", mb: 2 }}>
-            <Typography variant="h6">Evaluation breakdown</Typography>
-            {run.metrics.some((metric: any) => metric.status === "fail" || metric.status === "partial") ? <Chip tint="warning">{run.metrics.filter((metric: any) => metric.status === "fail" || metric.status === "partial").length} need attention</Chip> : null}
+            <Typography variant="h6">
+              <TermLabel
+                label="Evaluation breakdown"
+                tooltip="Each row is one check that was set up for this agent, and whether its results met the target."
+              />
+            </Typography>
+            {run.metrics.some((metric: any) => metric.status === "fail" || metric.status === "partial") ? (
+              <Tooltip title="Checks that fell short of their target and should be looked at.">
+                <Box component="span">
+                  <Chip tint="warning">{run.metrics.filter((metric: any) => metric.status === "fail" || metric.status === "partial").length} need attention</Chip>
+                </Box>
+              </Tooltip>
+            ) : null}
             <Typography variant="caption" color="text.secondary">Results follow each evaluation’s scoring rule.</Typography>
           </Box>
         <PerPointGrid

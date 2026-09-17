@@ -69,6 +69,7 @@ import type {
 import { FormSection } from "@/shared/components/form-section";
 import { MultiSelect } from "@/shared/components/combobox";
 import { NotFoundState } from "@/shared/components/not-found-state";
+import { TermLabel } from "@/shared/components/term-label";
 
 // ---------------------------------------------------------------------------
 // Reducer state
@@ -621,7 +622,12 @@ export function ProfileBuilderPage() {
               ? `New version${profile ? ` — ${profile.name}` : ""}`
               : "New profile"}
           </Typography>
-          <Typography variant="subtitle1" sx={{ mt: 0.5, color: "text.secondary" }}>
+          <Typography variant="subtitle1" sx={{ mt: 1, color: "text.primary" }}>
+            A profile defines how this agent gets scored: which checks run,
+            how much each counts, and what result means ship, review, or
+            block.
+          </Typography>
+          <Typography variant="body2" sx={{ mt: 0.5, color: "text.secondary" }}>
             {isVersionMode
               ? "Identity is fixed across versions. Adjust the pinned evals, thresholds, weights and dimension weights, then publish a new immutable version."
               : "Bundle evals, pin exact versions, and set thresholds and weights. Publishing creates the profile and its first version."}
@@ -758,10 +764,30 @@ export function ProfileBuilderPage() {
                     <TableCell>Eval</TableCell>
                     <TableCell sx={{ width: 128 }}>Version</TableCell>
                     <TableCell sx={{ width: 176 }}>
-                      Dimension <Box component="span" sx={{ color: "error.main" }}>*</Box>
+                      <TermLabel
+                        label={
+                          <>
+                            Dimension{" "}
+                            <Box component="span" sx={{ color: "error.main" }}>
+                              *
+                            </Box>
+                          </>
+                        }
+                        tooltip="Only dimensions that also have a weight set below are selectable here. If the one you want is missing, add it as a weight first."
+                      />
                     </TableCell>
-                    <TableCell sx={{ width: 96 }}>Threshold</TableCell>
-                    <TableCell sx={{ width: 80 }}>Weight</TableCell>
+                    <TableCell sx={{ width: 96 }}>
+                      <TermLabel
+                        label="Threshold"
+                        tooltip="The minimum per-check score (0–1) an interaction needs to pass this eval."
+                      />
+                    </TableCell>
+                    <TableCell sx={{ width: 80 }}>
+                      <TermLabel
+                        label="Weight"
+                        tooltip="How much this eval counts toward the profile's overall score, relative to the other evals."
+                      />
+                    </TableCell>
                     <TableCell sx={{ width: 64 }}>Enabled</TableCell>
                     <TableCell sx={{ width: 40 }} />
                   </TableRow>
@@ -861,7 +887,7 @@ export function ProfileBuilderPage() {
                                     return (
                                       <Box component="span" sx={{ color: "text.secondary" }}>
                                         {noDimChoices
-                                          ? "No weighted match"
+                                          ? "No matching dimension"
                                           : "Select…"}
                                       </Box>
                                     );
@@ -995,7 +1021,12 @@ export function ProfileBuilderPage() {
         </FormSection>
 
         <FormSection
-          title="Verdict bands"
+          title={
+            <TermLabel
+              label="Verdict bands"
+              tooltip="The score ranges that decide a run's outcome label — Ship, Ship w/ note, Review, or Block."
+            />
+          }
           description="Composite-score (0–100) floor for each verdict, highest first. The run's verdict is the first band the composite clears."
         >
           <Box
@@ -1007,7 +1038,16 @@ export function ProfileBuilderPage() {
           >
             {VERDICT_BAND_KEYS.map(({ key, label }) => (
               <Stack key={key} sx={{ gap: 0.75 }}>
-                <FormLabel htmlFor={`verdict-band-${key}`}>{label}</FormLabel>
+                <FormLabel htmlFor={`verdict-band-${key}`}>
+                  {key === "block_rec" ? (
+                    <TermLabel
+                      label={label}
+                      tooltip="The recommended floor for blocking or escalating a run. Scores below this are labeled “Block”."
+                    />
+                  ) : (
+                    label
+                  )}
+                </FormLabel>
                 <TextField
                   id={`verdict-band-${key}`}
                   type="number"

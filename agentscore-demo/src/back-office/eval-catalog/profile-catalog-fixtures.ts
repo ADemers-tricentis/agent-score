@@ -222,6 +222,32 @@ export const PROFILES: ProfileRead[] = [
     ],
   },
   {
+    id: "profile-docs-assistant",
+    slug: "docs-assistant-baseline",
+    name: "Documentation Assistant Baseline",
+    description: "Baseline scoring profile for a RAG-based Q&A agent that answers from a knowledge base — weighted toward factual accuracy and relevance, since users trust it not to make things up.",
+    status: "active",
+    discriminationVerdict: "insufficient_evidence",
+    createdAt: daysAgo(3),
+    updatedAt: daysAgo(3),
+    versions: [
+      {
+        id: "pv-docs-1",
+        version: 1,
+        dimensionWeights: { correctness: 3, relevance: 2, safety: 2, quality_efficiency: 1 },
+        verdictBands: DEFAULT_VERDICT_BANDS,
+        entries: [
+          entry("eval-factual-accuracy", "dim-correctness", { threshold: 0.85, weight: 3 }),
+          entry("eval-prompt-alignment", "dim-correctness", { threshold: 0.7, weight: 1, versionIndex: 1 }),
+          entry("eval-answer-relevancy", "dim-relevance", { threshold: 0.75, weight: 2 }),
+          entry("eval-harmlessness", "dim-safety", { threshold: 0.85, weight: 2 }),
+          entry("eval-conciseness", "dim-quality-efficiency", { threshold: 0.6, weight: 1 }),
+        ],
+        createdAt: daysAgo(3),
+      },
+    ],
+  },
+  {
     id: "profile-archived-legacy",
     slug: "legacy-triage-v0",
     name: "Legacy Triage (v0)",

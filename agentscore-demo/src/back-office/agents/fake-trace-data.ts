@@ -415,10 +415,25 @@ export interface RunInteractionValueOut {
   value: string | null;
 }
 
+export interface RunInteractionEvaluationSampleOut {
+  id: string;
+  sampleIndex: number;
+  score: number | null;
+  reason: string | null;
+  evidenceRefs: unknown[];
+}
+
 export interface RunInteractionEvaluationOut {
   id: string;
   evalSlug: string;
   score: number | null;
+  reason: string | null;
+  evidenceRefs: unknown[];
+  evalVersionId: string | null;
+  sampleCount: number;
+  nullCount: number;
+  aggregation: string;
+  samples: RunInteractionEvaluationSampleOut[];
 }
 
 export interface RunInteractionDetailOut {
@@ -488,11 +503,37 @@ export async function listRunInteractions(runId: string, params: ListRunInteract
 
 export async function getRunInteraction(runId: string, interactionRef: string): Promise<RunInteractionDetailOut> {
   const idx = Number(interactionRef.split("-").pop());
-  const evaluations: RunInteractionEvaluationOut[] = EVAL_SLUGS.map((slug, i) => ({
-    id: `${interactionRef}-eval-${i}`,
-    evalSlug: slug,
-    score: di(`${interactionRef}-${slug}`, 10, 50) < 8 ? 0.5 + di(`${interactionRef}-${slug}`, 45, 51) / 100 : null,
-  }));
+  const evaluations: RunInteractionEvaluationOut[] = EVAL_SLUGS.map((slug, i) => {
+    const scored = di(`${interactionRef}-${slug}`, 10, 50) < 8;
+    const sampleCount = 3;
+    const nullCount = scored ? 0 : sampleCount;
+    const samples: RunInteractionEvaluationSampleOut[] = Array.from({ length: sampleCount }, (_, s) => {
+      const sampleScored = scored && di(`${interactionRef}-${slug}-sample-${s}`, 10, 52) < 9;
+      return {
+        id: `${interactionRef}-eval-${i}-sample-${s}`,
+        sampleIndex: s,
+        score: sampleScored ? 0.5 + di(`${interactionRef}-${slug}-sample-${s}`, 45, 53) / 100 : null,
+        reason: sampleScored
+          ? `Judge found the response met the "${slug.split(".")[1].replace(/_/g, " ")}" bar on this sample.`
+          : null,
+        evidenceRefs: sampleScored ? [`${interactionRef}-eval-${i}-sample-${s}-span`] : [],
+      };
+    });
+    return {
+      id: `${interactionRef}-eval-${i}`,
+      evalSlug: slug,
+      score: scored ? 0.5 + di(`${interactionRef}-${slug}`, 45, 51) / 100 : null,
+      reason: scored
+        ? `Judge found the response met the "${slug.split(".")[1].replace(/_/g, " ")}" bar for this interaction.`
+        : "The judge could not evidence this check against the recorded trace.",
+      evidenceRefs: scored ? [`${interactionRef}-eval-${i}-span`] : [],
+      evalVersionId: `${slug}@v1`,
+      sampleCount,
+      nullCount,
+      aggregation: "mean",
+      samples,
+    };
+  });
   return {
     interactionRef,
     input: { availability: "available", value: `Sample request #${idx} for ${runId}` },

@@ -58,7 +58,6 @@ import IconMaterialSymbolsArrowBack from "@tricentis/mui-icons/material-symbols/
 import IconMaterialSymbolsCheckCircle from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsCheckCircle.mjs";
 import IconMaterialSymbolsChevronForward from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsChevronForward.mjs";
 import IconMaterialSymbolsContentCopy from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsContentCopy.mjs";
-import IconMaterialSymbolsInfo from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsInfo.mjs";
 import IconMaterialSymbolsKeyboardArrowDown from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsKeyboardArrowDown.mjs";
 import IconMaterialSymbolsRefresh from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsRefresh.mjs";
 import { toast } from "@/shared/lib/toast";
@@ -106,6 +105,7 @@ import type { TrendDirection } from "@/shared/components/per-point-grid";
 import { ProvenanceDl } from "@/shared/components/provenance-dl";
 import { formatScore } from "@/shared/components/score-confidence";
 import { ScoreUncertainty } from "@/shared/components/score-uncertainty";
+import { TermLabel } from "@/shared/components/term-label";
 import type { ShipDecision } from "@/shared/components/verdict-badge";
 import { VerdictBadge } from "@/shared/components/verdict-badge";
 
@@ -206,29 +206,6 @@ function stateTint(
   if (state === "partial") return "warning";
   if (state === "failed") return "destructive";
   return "info";
-}
-
-/** Inline label + info glyph, for a term on the Overview tab that isn't
- *  self-explanatory to someone who didn't build the scoring pipeline. */
-function TermLabel({ label, tooltip }: { label: ReactNode; tooltip: string }) {
-  return (
-    <Tooltip title={tooltip}>
-      <Box
-        component="span"
-        sx={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 0.4,
-          cursor: "help",
-        }}
-      >
-        {label}
-        <IconMaterialSymbolsInfo
-          sx={{ fontSize: 14, color: "text.disabled", flexShrink: 0 }}
-        />
-      </Box>
-    </Tooltip>
-  );
 }
 
 function RunDisclosure({
