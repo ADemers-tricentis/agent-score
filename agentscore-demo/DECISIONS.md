@@ -144,6 +144,26 @@ Every entry is checked against the live source in `agentscore-demo/src` before b
 
 ---
 
+## 2026-09-17 - Inline "create tenant" from the Create Agent dialog
+
+**Change:** The New Agent dialog's Tenant combobox (`AgentsSearchPage.tsx`) now has a "+ Create new tenant…" option pinned above the tenant list. Picking it opens a small nested dialog (Name + Kind, via the existing `RadioCards`) instead of the full `TenantCreatePage`; on submit it calls the same `tenantsApi.createTenant` the Tenants section uses, mirrors the result into the `FAKE_TENANTS` array the combobox itself reads from (so it appears immediately, without a refetch), and auto-selects the new tenant back in the Create Agent dialog. This is feature/build-out work, not a usability rename - logged here per direct request rather than because it fits this doc's usual scope.
+
+**Who it's for:** Anyone creating an agent for a tenant that doesn't exist yet - previously required abandoning the Create Agent dialog, going to Tenants > New tenant, then starting over.
+
+**Why:** Requested directly by the user (2026-09-17), from a screenshot of the tenant picker dropdown.
+
+---
+
+## 2026-09-17 - Added an admin-only Integrations page for API keys
+
+**Change:** New top-level `/integrations` page (`IntegrationsPage.tsx`), nav-gated to the Admin role only (added `integrations` to `destination-tiers.ts` as a superadmin tier, alongside Tenants/Users). Shows an empty state ("No tenant to hold a key" + a "Create a tenant" link) when no external tenant exists yet; otherwise a tenant picker (skipped when there's only one external tenant) plus the existing shared `ApiKeysPanel` - the same add/rotate/revoke UI already used on the back-office tenant Integrations tab, reused here over the same `tenant-fixtures.ts` adapter, capped at 20 keys like the real customer-side surface. This is feature/build-out work (the shared `ApiKeysPanel` component's own doc comment already names this as an intended consumer that just hadn't been built in this demo clone), logged here per direct request rather than because it fits this doc's usual scope.
+
+**Who it's for:** An admin managing which API keys can send trace data into AgentScore, without needing to go through a specific tenant's detail page to find the Integrations tab.
+
+**Why:** Requested directly by the user (2026-09-17), from a screenshot of the intended blank state.
+
+---
+
 ## Template for new entries
 
 ```

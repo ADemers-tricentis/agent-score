@@ -31,6 +31,7 @@ import { TenantOverviewPage } from "@/back-office/tenants/TenantOverviewPage";
 import { TenantAgentsPage } from "@/back-office/tenants/TenantAgentsPage";
 import { TenantMembersPage } from "@/back-office/tenants/TenantMembersPage";
 import { TenantIntegrationsPage } from "@/back-office/tenants/TenantIntegrationsPage";
+import { IntegrationsPage } from "@/back-office/integrations/IntegrationsPage";
 import { TenantSettingsPage } from "@/back-office/tenants/TenantSettingsPage";
 import { TenantAuditLogPage } from "@/back-office/tenants/TenantAuditLogPage";
 import { UsersLayout } from "@/back-office/users/UsersLayout";
@@ -420,6 +421,14 @@ const reportsRoute = createRoute({
   validateSearch: parseReportsSearch,
 });
 
+// ── Integrations (superadmin only) ──────────────────────────────────────────
+
+const integrationsRoute = createRoute({
+  getParentRoute: () => protectedLayoutRoute,
+  path: "/integrations",
+  component: IntegrationsPage,
+});
+
 const tenantUsageDetailRoute = createRoute({
   getParentRoute: () => protectedLayoutRoute,
   path: "/reports/usage/$tenantId",
@@ -477,6 +486,7 @@ const protectedChildren = [
   agentRegistryVersionDetailRoute,
   reportsRoute,
   tenantUsageDetailRoute,
+  integrationsRoute,
 ];
 
 const routeTree = rootRoute.addChildren([protectedLayoutRoute.addChildren(protectedChildren)]);

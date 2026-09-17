@@ -44,6 +44,7 @@ import {
   listAgentsFlat,
   type AgentKind,
 } from "@/back-office/agents/fake-data";
+import * as tenantsApi from "@/back-office/tenants/tenant-fixtures";
 import type { AgentsViewSearch, AgentView } from "@/back-office/agents/view-params";
 import { AutoRefreshControl } from "@/shared/components/auto-refresh-control";
 import { Chip } from "@/shared/components/chip";
@@ -53,10 +54,15 @@ import { FacetedFilter } from "@/shared/components/faceted-filter";
 import { PageBand } from "@/shared/components/page-band";
 import { pageContentPaddingSx } from "@/shared/components/page-content";
 import { PageHeader } from "@/shared/components/page-header";
+import { RadioCards } from "@/shared/components/radio-cards";
 import { ScrollRegion } from "@/shared/components/scroll-region";
 import { Toolbar } from "@/shared/components/toolbar";
 import { useDebouncedValue } from "@/shared/hooks/use-debounced-value";
 import { useDemoMode } from "@/shared/demo-mode/demo-mode-context";
+
+// Sentinel combobox value that opens the inline "create tenant" form instead
+// of selecting a tenant.
+const CREATE_TENANT_VALUE = "__create_tenant__";
 
 const PAGE_SIZE = 25;
 
@@ -477,6 +483,11 @@ function NewAgentDialog({
   const [name, setName] = useState("");
   const [creating, setCreating] = useState(false);
 
+  const [createTenantOpen, setCreateTenantOpen] = useState(false);
+  const [newTenantName, setNewTenantName] = useState("");
+  const [newTenantKind, setNewTenantKind] = useState<AgentKind>("external");
+  const [creatingTenant, setCreatingTenant] = useState(false);
+
   const selectedTenant = FAKE_TENANTS.find((t) => t.tenant_id === tenantId);
 
   // Agent kind is fixed by the parent tenant — the backend enforces
@@ -492,6 +503,41 @@ function NewAgentDialog({
   const handleClose = () => {
     onClose();
     resetForm();
+  };
+
+  const resetNewTenantForm = () => {
+    setNewTenantName("");
+    setNewTenantKind("external");
+  };
+
+  const handleCreateTenant = async () => {
+    const trimmed = newTenantName.trim();
+    if (!trimmed) return;
+    setCreatingTenant(true);
+    try {
+      const tenant = await tenantsApi.createTenant({
+        name: trimmed,
+        kind: newTenantKind,
+        env: null,
+        region: null,
+        metadata: null,
+      });
+      // Mirror into FAKE_TENANTS so this dialog's own tenant picker (and any
+      // other agents-section UI reading it) sees the new tenant immediately —
+      // tenant-fixtures.ts only writes its own TENANTS array.
+      FAKE_TENANTS.push({
+        tenant_id: tenant.tenant_id,
+        name: tenant.name,
+        kind: tenant.kind,
+        env: tenant.env ?? undefined,
+      });
+      toast.success(`Tenant ${tenant.name} created`);
+      setTenantId(tenant.tenant_id);
+      setCreateTenantOpen(false);
+      resetNewTenantForm();
+    } finally {
+      setCreatingTenant(false);
+    }
   };
 
   const handleCreate = () => {
@@ -524,6 +570,7 @@ function NewAgentDialog({
   const disabled = !tenantId || name.trim().length === 0 || creating;
 
   return (
+    <>
     <Dialog
       open={open}
       onClose={handleClose}
@@ -547,14 +594,27 @@ function NewAgentDialog({
             </FormLabel>
             <Combobox
               testId="new-agent-tenant"
-              options={FAKE_TENANTS.map((t) => ({
-                value: t.tenant_id,
-                label: t.name,
-                description: `${t.kind}${t.env ? ` · ${t.env}` : ""}`,
-                searchText: t.name,
-              }))}
+              options={[
+                {
+                  value: CREATE_TENANT_VALUE,
+                  label: "+ Create new tenant…",
+                  searchText: "create new tenant",
+                },
+                ...FAKE_TENANTS.map((t) => ({
+                  value: t.tenant_id,
+                  label: t.name,
+                  description: `${t.kind}${t.env ? ` · ${t.env}` : ""}`,
+                  searchText: t.name,
+                })),
+              ]}
               value={tenantId}
-              onChange={setTenantId}
+              onChange={(next) => {
+                if (next === CREATE_TENANT_VALUE) {
+                  setCreateTenantOpen(true);
+                  return;
+                }
+                setTenantId(next);
+              }}
               placeholder="Pick a tenant…"
             />
           </Box>
@@ -639,5 +699,75 @@ function NewAgentDialog({
         </Button>
       </DialogActions>
     </Dialog>
+
+    <Dialog
+      open={createTenantOpen}
+      onClose={() => {
+        setCreateTenantOpen(false);
+        resetNewTenantForm();
+      }}
+      fullWidth
+      slotProps={{ paper: { sx: { maxWidth: 400 } } }}
+    >
+      <DialogTitle>Create tenant</DialogTitle>
+      <DialogContent>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
+            <TextField
+              label={
+                <>
+                  Name{" "}
+                  <Box component="span" sx={{ color: "error.main" }}>
+                    *
+                  </Box>
+                </>
+              }
+              id="new-tenant-name"
+              placeholder="e.g. Acme Financial"
+              value={newTenantName}
+              onChange={(e) => setNewTenantName(e.target.value)}
+              autoComplete="off"
+              fullWidth
+              size="small"
+              slotProps={{
+                htmlInput: { "data-testid": "new-tenant-name" },
+              }}
+            />
+          </Box>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
+            <FormLabel>Kind</FormLabel>
+            <RadioCards
+              items={[
+                { value: "external", label: "External", description: "A customer or partner org." },
+                { value: "internal", label: "Internal", description: "A Tricentis-owned workspace." },
+              ]}
+              value={newTenantKind}
+              onValueChange={setNewTenantKind}
+              testIdPrefix="new-tenant-kind"
+            />
+          </Box>
+        </Box>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setCreateTenantOpen(false);
+            resetNewTenantForm();
+          }}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          disabled={newTenantName.trim().length === 0 || creatingTenant}
+          onClick={handleCreateTenant}
+          data-testid="create-tenant-submit"
+        >
+          Create tenant
+        </Button>
+      </DialogActions>
+    </Dialog>
+    </>
   );
 }
