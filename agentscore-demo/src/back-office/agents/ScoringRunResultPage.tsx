@@ -51,12 +51,14 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Tabs from "@mui/material/Tabs";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { alpha } from "@mui/material/styles";
 import IconMaterialSymbolsArrowBack from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsArrowBack.mjs";
 import IconMaterialSymbolsCheckCircle from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsCheckCircle.mjs";
 import IconMaterialSymbolsChevronForward from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsChevronForward.mjs";
 import IconMaterialSymbolsContentCopy from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsContentCopy.mjs";
+import IconMaterialSymbolsInfo from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsInfo.mjs";
 import IconMaterialSymbolsKeyboardArrowDown from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsKeyboardArrowDown.mjs";
 import IconMaterialSymbolsRefresh from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsRefresh.mjs";
 import { toast } from "@/shared/lib/toast";
@@ -204,6 +206,29 @@ function stateTint(
   if (state === "partial") return "warning";
   if (state === "failed") return "destructive";
   return "info";
+}
+
+/** Inline label + info glyph, for a term on the Overview tab that isn't
+ *  self-explanatory to someone who didn't build the scoring pipeline. */
+function TermLabel({ label, tooltip }: { label: ReactNode; tooltip: string }) {
+  return (
+    <Tooltip title={tooltip}>
+      <Box
+        component="span"
+        sx={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 0.4,
+          cursor: "help",
+        }}
+      >
+        {label}
+        <IconMaterialSymbolsInfo
+          sx={{ fontSize: 14, color: "text.disabled", flexShrink: 0 }}
+        />
+      </Box>
+    </Tooltip>
+  );
 }
 
 function RunDisclosure({
@@ -683,7 +708,10 @@ export function RunResultBody({
                           color: "text.secondary",
                         }}
                       >
-                        Verdict zone:
+                        <TermLabel
+                          label="Verdict zone:"
+                          tooltip="Which score range this result falls into. The decision above can be different because it also takes into account how reliable the score is and how much evidence backs it up."
+                        />
                         <VerdictBadge verdict={verdict} />
                       </Box>
                     ) : null}
@@ -757,7 +785,10 @@ export function RunResultBody({
                 }}
               >
                 <Box sx={{ typography: "subtitle2", mb: 0.5 }}>
-                  Score stability
+                  <TermLabel
+                    label="Score stability"
+                    tooltip="How much the score might change if we tested this agent again. A small range means you can trust this score; a large range means one test isn't enough to be sure."
+                  />
                 </Box>
                 {run.compositeScore != null &&
                 run.confidence?.lower != null &&
@@ -786,16 +817,22 @@ export function RunResultBody({
                   testId: "run-results-scored",
                   value: run.scoredCount,
                   label: "evaluation results scored",
+                  tooltip:
+                    "The number of individual checks that were run and given a score.",
                 },
                 {
                   testId: "run-evaluation-count",
                   value: evaluationCount,
                   label: evaluationCount === 1 ? "evaluation" : "evaluations",
+                  tooltip:
+                    "The number of different tests set up to check this agent.",
                 },
                 {
                   testId: "run-results-without-evidence",
                   value: run.skippedCount,
                   label: "results lacked evidence",
+                  tooltip:
+                    "Checks that couldn't be scored because there wasn't enough information in the conversation to judge them.",
                 },
               ].map((item, index) => (
                 <Grid key={item.testId} size={{ xs: 12, sm: 4 }}>
@@ -817,7 +854,7 @@ export function RunResultBody({
                       {item.value}
                     </Box>
                     <Box sx={{ typography: "caption", color: "text.secondary" }}>
-                      {item.label}
+                      <TermLabel label={item.label} tooltip={item.tooltip} />
                     </Box>
                   </Box>
                 </Grid>
@@ -826,9 +863,18 @@ export function RunResultBody({
             {reuseCountsCopy(run).length > 0 ? (
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75, mt: 1.5 }}>
                 {reuseCountsCopy(run).map((chip) => (
-                  <Chip key={chip.key} tint="muted">
-                    {chip.text}
-                  </Chip>
+                  <Tooltip
+                    key={chip.key}
+                    title={
+                      chip.key === "reused"
+                        ? "Results carried over from an earlier run because nothing had changed since then."
+                        : "Results scored fresh in this run."
+                    }
+                  >
+                    <Box component="span">
+                      <Chip tint="muted">{chip.text}</Chip>
+                    </Box>
+                  </Tooltip>
                 ))}
               </Box>
             ) : null}
@@ -847,7 +893,12 @@ export function RunResultBody({
           }}
         >
           <Box>
-            <Box sx={{ typography: "h6" }}>Baseline comparison</Box>
+            <Box sx={{ typography: "h6" }}>
+              <TermLabel
+                label="Baseline comparison"
+                tooltip="How this result compares to the agent's approved baseline, the reference score everything else is measured against."
+              />
+            </Box>
             {run.deltaVsBaseline != null ? (
               <Box
                 data-testid="baseline-delta"
