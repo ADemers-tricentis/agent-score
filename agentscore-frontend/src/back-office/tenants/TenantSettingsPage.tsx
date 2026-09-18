@@ -17,7 +17,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import FormLabel from "@mui/material/FormLabel";
 import TextField from "@mui/material/TextField";
 import IconMaterialSymbolsLocalFireDepartment from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsLocalFireDepartment.mjs";
-import IconMaterialSymbolsLock from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsLock.mjs";
 import IconMaterialSymbolsRestartAlt from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsRestartAlt.mjs";
 import IconMaterialSymbolsSave from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSave.mjs";
 import IconMaterialSymbolsDelete from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsDelete.mjs";
@@ -110,7 +109,7 @@ export function TenantSettingsPage() {
       >
         <FormSection
           title="General"
-          description="Customer-facing identity. Name is unique among live tenants. Kind is immutable."
+          description="The name for your workspace. Must be unique."
         >
           <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
             <TextField
@@ -132,38 +131,7 @@ export function TenantSettingsPage() {
               component="p"
               sx={{ m: 0, typography: "caption", color: "text.secondary" }}
             >
-              Convention:{" "}
-              <Box component="span" sx={{ fontFamily: "monospace" }}>
-                {"<customer>-<env>"}
-              </Box>
-              . Case-insensitive uniqueness across live tenants.
-            </Box>
-          </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-            <FormLabel
-              sx={{ display: "flex", alignItems: "center", gap: 0.75 }}
-            >
-              Kind{" "}
-              <IconMaterialSymbolsLock
-                sx={{ fontSize: 12, color: "text.secondary" }}
-              />
-            </FormLabel>
-            <TextField
-              value={tenant?.kind ?? ""}
-              disabled
-              fullWidth
-              size="small"
-              slotProps={{
-                htmlInput: {
-                  sx: { fontFamily: "monospace", color: "text.secondary" },
-                },
-              }}
-            />
-            <Box
-              component="p"
-              sx={{ m: 0, typography: "caption", color: "text.secondary" }}
-            >
-              Cannot be changed — kind gates the tenant API key (external only).
+              Used in URLs.
             </Box>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -181,73 +149,8 @@ export function TenantSettingsPage() {
         </FormSection>
 
         <FormSection
-          title="Grouping attributes"
-          description="Free-form metadata used in filters and dashboards. Not auth-relevant."
-        >
-          <Box
-            sx={{
-              display: "grid",
-              gap: 1.5,
-              gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
-            }}
-          >
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-              <FormLabel
-                htmlFor="edit-tenant-env"
-                sx={{ display: "flex", alignItems: "center", gap: 0.75 }}
-              >
-                Environment{" "}
-                <IconMaterialSymbolsLock
-                  sx={{ fontSize: 12, color: "text.secondary" }}
-                />
-              </FormLabel>
-              <TextField
-                id="edit-tenant-env"
-                value={tenant?.env ?? ""}
-                disabled
-                placeholder="—"
-                fullWidth
-                size="small"
-                slotProps={{
-                  htmlInput: { "data-testid": "tenant-env-input" },
-                }}
-              />
-            </Box>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-              <FormLabel
-                htmlFor="edit-tenant-region"
-                sx={{ display: "flex", alignItems: "center", gap: 0.75 }}
-              >
-                Region{" "}
-                <IconMaterialSymbolsLock
-                  sx={{ fontSize: 12, color: "text.secondary" }}
-                />
-              </FormLabel>
-              <TextField
-                id="edit-tenant-region"
-                value={tenant?.region ?? ""}
-                disabled
-                placeholder="—"
-                fullWidth
-                size="small"
-                slotProps={{
-                  htmlInput: { "data-testid": "tenant-region-input" },
-                }}
-              />
-            </Box>
-          </Box>
-          <Box
-            component="p"
-            sx={{ m: 0, typography: "caption", color: "text.secondary" }}
-          >
-            Read-only here — mutate env / region / metadata via the BE admin API
-            for now (PATCH wiring lands in a follow-up).
-          </Box>
-        </FormSection>
-
-        <FormSection
           title="Provisioning"
-          description="Kind is set at create and is read-only."
+          description="Set at create and read-only."
         >
           {tenant ? (
             <ProvenanceDl
@@ -260,6 +163,10 @@ export function TenantSettingsPage() {
                       {tenant.kind}
                     </Chip>
                   ),
+                },
+                {
+                  label: "Environment",
+                  value: tenant.env ?? "—",
                 },
                 {
                   label: "Created",
@@ -294,66 +201,68 @@ export function TenantSettingsPage() {
           </FormSection>
         ) : null}
 
-        <FormSection
-          title="Danger zone"
-          description="Delete preserves data and can be reversed. Permanently deleting cascades to agents and keys and cannot be undone."
-          tone="destructive"
-          bare
-        >
-          <DangerZone>
-            {isDeleted ? (
-              <>
+        {tenant?.kind === "external" ? (
+          <FormSection
+            title="Danger zone"
+            description="Delete preserves data and can be reversed. Permanently deleting cascades to agents and keys and cannot be undone."
+            tone="destructive"
+            bare
+          >
+            <DangerZone>
+              {isDeleted ? (
+                <>
+                  <DangerZone.Row
+                    title="Restore tenant"
+                    description="Bring this tenant back to active. Agents must be re-activated manually."
+                    action={
+                      <Button
+                        variant="outlined"
+                        data-testid="tenant-restore"
+                        onClick={() => restore.mutate()}
+                        disabled={restore.isPending}
+                        startIcon={<IconMaterialSymbolsRestartAlt />}
+                      >
+                        Restore
+                      </Button>
+                    }
+                  />
+                  <DangerZone.Row
+                    title="Permanently delete tenant"
+                    description="Removes the tenant and cascades to all memberships. Cannot be undone."
+                    action={
+                      <Button
+                        variant="contained"
+                        color="error"
+                        disableElevation
+                        data-testid="tenant-purge"
+                        onClick={() => setConfirmPurge(true)}
+                        startIcon={<IconMaterialSymbolsLocalFireDepartment />}
+                      >
+                        Permanently delete…
+                      </Button>
+                    }
+                  />
+                </>
+              ) : (
                 <DangerZone.Row
-                  title="Restore tenant"
-                  description="Bring this tenant back to active. Agents must be re-activated manually."
+                  title="Delete tenant"
+                  description="Stops every agent from working. Permanently delete from the deleted view to remove the tenant for good."
                   action={
                     <Button
                       variant="outlined"
-                      data-testid="tenant-restore"
-                      onClick={() => restore.mutate()}
-                      disabled={restore.isPending}
-                      startIcon={<IconMaterialSymbolsRestartAlt />}
-                    >
-                      Restore
-                    </Button>
-                  }
-                />
-                <DangerZone.Row
-                  title="Permanently delete tenant"
-                  description="Removes the tenant and cascades to all memberships. Cannot be undone."
-                  action={
-                    <Button
-                      variant="contained"
                       color="error"
-                      disableElevation
-                      data-testid="tenant-purge"
-                      onClick={() => setConfirmPurge(true)}
-                      startIcon={<IconMaterialSymbolsLocalFireDepartment />}
+                      data-testid="tenant-delete"
+                      onClick={() => setConfirmDelete(true)}
+                      startIcon={<IconMaterialSymbolsDelete />}
                     >
-                      Permanently delete…
+                      Delete
                     </Button>
                   }
                 />
-              </>
-            ) : (
-              <DangerZone.Row
-                title="Delete tenant"
-                description="Stops every agent from working. Permanently delete from the deleted view to remove the tenant for good."
-                action={
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    data-testid="tenant-delete"
-                    onClick={() => setConfirmDelete(true)}
-                    startIcon={<IconMaterialSymbolsDelete />}
-                  >
-                    Delete
-                  </Button>
-                }
-              />
-            )}
-          </DangerZone>
-        </FormSection>
+              )}
+            </DangerZone>
+          </FormSection>
+        ) : null}
       </Box>
 
       <Dialog open={confirmDelete} onClose={() => setConfirmDelete(false)}>

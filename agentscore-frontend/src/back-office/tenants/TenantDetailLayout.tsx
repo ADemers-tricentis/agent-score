@@ -68,12 +68,6 @@ export function TenantDetailLayout() {
           <Box component="span" sx={{ fontFamily: "monospace" }}>
             {tenant.tenant_id}
           </Box>
-          {tenant.region ? (
-            <>
-              <span>·</span>
-              <span>region: {tenant.region}</span>
-            </>
-          ) : null}
           <span>·</span>
           <span>
             Created {new Date(tenant.created_at).toLocaleDateString()}

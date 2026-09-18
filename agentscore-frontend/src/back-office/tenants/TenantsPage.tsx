@@ -25,7 +25,6 @@ import TextField from "@mui/material/TextField";
 import IconMaterialSymbolsApartment from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsApartment.mjs";
 import IconMaterialSymbolsEdit from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsEdit.mjs";
 import IconMaterialSymbolsHistory from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsHistory.mjs";
-import IconMaterialSymbolsLocationOn from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsLocationOn.mjs";
 import IconMaterialSymbolsMoreVert from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsMoreVert.mjs";
 import IconMaterialSymbolsPublic from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsPublic.mjs";
 import IconMaterialSymbolsAdd from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsAdd.mjs";
@@ -70,7 +69,6 @@ function TenantsShell() {
   // value the API cannot express fails here rather than at runtime.
   const [kindFilter, setKindFilter] = useState<api.TenantKind[]>([]);
   const [envFilter, setEnvFilter] = useState<string[]>([]);
-  const [regionFilter, setRegionFilter] = useState<string[]>([]);
   const [includeDeleted, setIncludeDeleted] = useState(false);
   const [page, setPage] = useState(0);
   const [softDeleteTarget, setSoftDeleteTarget] = useState<TenantProfile | null>(
@@ -95,9 +93,8 @@ function TenantsShell() {
       q: debouncedSearch || undefined,
       kind: kindFilter,
       env: envFilter,
-      region: regionFilter,
     }),
-    [includeDeleted, debouncedSearch, kindFilter, envFilter, regionFilter],
+    [includeDeleted, debouncedSearch, kindFilter, envFilter],
   );
 
   const queryKey = useMemo(
@@ -221,17 +218,6 @@ function TenantsShell() {
         ),
       },
       {
-        id: "region",
-        header: "Region",
-        meta: { headerSx: { width: "14%" } },
-        accessorFn: (t) => t.region ?? "—",
-        cell: ({ row }) => (
-          <Box component="span" sx={{ color: "text.secondary" }}>
-            {row.original.region ?? "—"}
-          </Box>
-        ),
-      },
-      {
         id: "created",
         header: "Created",
         meta: { headerSx: { width: "13%" } },
@@ -281,11 +267,6 @@ function TenantsShell() {
   const envOptions = useMemo(
     () =>
       (facetsQuery.data?.envs ?? []).map((v) => ({ value: v, label: v })),
-    [facetsQuery.data],
-  );
-  const regionOptions = useMemo(
-    () =>
-      (facetsQuery.data?.regions ?? []).map((v) => ({ value: v, label: v })),
     [facetsQuery.data],
   );
   const total = tenantsQuery.data?.total ?? 0;
@@ -379,14 +360,6 @@ function TenantsShell() {
                 values={envFilter}
                 onChange={facetSetter(setEnvFilter)}
                 options={envOptions}
-              />
-              <FacetedFilter
-                title="Region"
-                testId="filter-region"
-                icon={IconMaterialSymbolsLocationOn}
-                values={regionFilter}
-                onChange={facetSetter(setRegionFilter)}
-                options={regionOptions}
               />
               <Button
                 type="button"
@@ -519,48 +492,50 @@ function RowActions({
           <IconMaterialSymbolsEdit fontSize="small" sx={{ mr: 1 }} />
           Open
         </MenuItem>
-        {tenant.deleted_at
-          ? [
-              <MenuItem
-                key="restore"
-                data-testid="row-action-restore"
-                onClick={() => {
-                  setOpen(false);
-                  onRestore(tenant);
-                }}
-              >
-                <IconMaterialSymbolsHistory fontSize="small" sx={{ mr: 1 }} />
-                Restore
-              </MenuItem>,
-              <Divider key="divider" />,
-              <MenuItem
-                key="purge"
-                data-testid="row-action-purge"
-                sx={{ color: "error.main" }}
-                onClick={() => {
-                  setOpen(false);
-                  onPurge(tenant);
-                }}
-              >
-                <IconMaterialSymbolsWhatshot fontSize="small" sx={{ mr: 1 }} />
-                Permanently delete…
-              </MenuItem>,
-            ]
-          : [
-              <Divider key="divider" />,
-              <MenuItem
-                key="delete"
-                data-testid="row-action-delete"
-                sx={{ color: "error.main" }}
-                onClick={() => {
-                  setOpen(false);
-                  onSoftDelete(tenant);
-                }}
-              >
-                <IconMaterialSymbolsDelete fontSize="small" sx={{ mr: 1 }} />
-                Delete
-              </MenuItem>,
-            ]}
+        {tenant.kind === "external"
+          ? tenant.deleted_at
+            ? [
+                <MenuItem
+                  key="restore"
+                  data-testid="row-action-restore"
+                  onClick={() => {
+                    setOpen(false);
+                    onRestore(tenant);
+                  }}
+                >
+                  <IconMaterialSymbolsHistory fontSize="small" sx={{ mr: 1 }} />
+                  Restore
+                </MenuItem>,
+                <Divider key="divider" />,
+                <MenuItem
+                  key="purge"
+                  data-testid="row-action-purge"
+                  sx={{ color: "error.main" }}
+                  onClick={() => {
+                    setOpen(false);
+                    onPurge(tenant);
+                  }}
+                >
+                  <IconMaterialSymbolsWhatshot fontSize="small" sx={{ mr: 1 }} />
+                  Permanently delete…
+                </MenuItem>,
+              ]
+            : [
+                <Divider key="divider" />,
+                <MenuItem
+                  key="delete"
+                  data-testid="row-action-delete"
+                  sx={{ color: "error.main" }}
+                  onClick={() => {
+                    setOpen(false);
+                    onSoftDelete(tenant);
+                  }}
+                >
+                  <IconMaterialSymbolsDelete fontSize="small" sx={{ mr: 1 }} />
+                  Delete
+                </MenuItem>,
+              ]
+          : null}
       </Menu>
     </Box>
   );

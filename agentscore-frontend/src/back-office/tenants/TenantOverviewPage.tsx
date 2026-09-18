@@ -273,7 +273,6 @@ export function TenantOverviewPage() {
                       ),
                     },
                     { label: "Environment", value: tenant.env ?? "—" },
-                    { label: "Region", value: tenant.region ?? "—" },
                     {
                       label: "Tenant id",
                       value: (
