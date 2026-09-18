@@ -24,26 +24,19 @@ import IconMaterialSymbolsSave from "@tricentis/mui-icons/material-symbols/IconM
 import * as api from "@/back-office/tenants/tenant-fixtures";
 import { FormSection } from "@/shared/components/form-section";
 import { OneTimeSecretBanner } from "@/shared/components/OneTimeSecretBanner";
-import { RadioCards } from "@/shared/components/radio-cards";
 
 // Auto-minted first key for a new external tenant (revealed once on create).
 const INITIAL_KEY_NAME = "default";
 
-type Kind = "external" | "internal";
-
 interface FormState {
   name: string;
-  kind: Kind;
   env: string;
-  region: string;
   metadata: string;
 }
 
 const INITIAL: FormState = {
   name: "",
-  kind: "external",
   env: "",
-  region: "",
   metadata: "",
 };
 
@@ -88,16 +81,10 @@ export function TenantCreatePage() {
       }
       const tenant = await api.createTenant({
         name: form.name.trim(),
-        kind: form.kind,
+        kind: "external",
         env: form.env.trim() || null,
-        region: form.region.trim() || null,
         metadata: parsed.value,
       });
-      // External tenants ship with one initial API key, revealed once here.
-      // Internal tenants get no key.
-      if (tenant.kind !== "external") {
-        return { tenant, secret: null as string | null, keyFailed: false };
-      }
       try {
         const res = await api.createTenantApiKey(
           tenant.tenant_id,
@@ -272,14 +259,14 @@ export function TenantCreatePage() {
             variant="subtitle1"
             sx={{ mt: 0.5, color: "text.secondary" }}
           >
-            Your environments — like production and staging. Each groups
-            its own agents for billing and scoring.
+            Your workspace on AgentScore. Groups your agents for billing and
+            scoring.
           </Typography>
         </Box>
 
         <FormSection
           title="General"
-          description="Customer-facing identity. Name is unique among live tenants. Kind is immutable."
+          description="The name for your workspace. Must be unique."
         >
           <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
             <FormLabel htmlFor="new-tenant-name" sx={{ typography: "subtitle1" }}>
@@ -288,7 +275,7 @@ export function TenantCreatePage() {
             <TextField
               id="new-tenant-name"
               autoComplete="off"
-              placeholder="e.g. acme-prod"
+              placeholder="e.g. my-team"
               value={form.name}
               onChange={(e) => update({ name: e.target.value })}
               size="small"
@@ -300,32 +287,8 @@ export function TenantCreatePage() {
               }}
             />
             <Typography variant="caption" sx={{ color: "text.secondary" }}>
-              Convention:{" "}
-              <Box component="span" sx={{ fontFamily: "monospace" }}>
-                {"<customer>-<env>"}
-              </Box>
-              . Used in URLs.
+              Used in URLs.
             </Typography>
-          </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-            <FormLabel sx={{ typography: "subtitle1" }}>Kind</FormLabel>
-            <RadioCards
-              value={form.kind}
-              onValueChange={(v) => update({ kind: v as Kind })}
-              testIdPrefix="tenant-kind"
-              items={[
-                {
-                  value: "external",
-                  label: "External",
-                  description: "Customer-owned. Gets a tenant API key on create.",
-                },
-                {
-                  value: "internal",
-                  label: "Internal",
-                  description: "Tricentis-internal. No tenant API key.",
-                },
-              ]}
-            />
           </Box>
         </FormSection>
 
@@ -351,23 +314,6 @@ export function TenantCreatePage() {
                 />
               </Box>
             </Grid>
-            <Grid size={{ xs: 2, sm: 1 }}>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-                <FormLabel htmlFor="new-tenant-region" sx={{ typography: "subtitle1" }}>
-                  Region
-                </FormLabel>
-                <TextField
-                  id="new-tenant-region"
-                  placeholder="eu-west-1"
-                  value={form.region}
-                  onChange={(e) => update({ region: e.target.value })}
-                  size="small"
-                  slotProps={{
-                    htmlInput: { "data-testid": "tenant-region-input" },
-                  }}
-                />
-              </Box>
-            </Grid>
           </Grid>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
             <FormLabel htmlFor="new-tenant-metadata" sx={{ typography: "subtitle1" }}>
@@ -379,7 +325,7 @@ export function TenantCreatePage() {
             <TextField
               multiline
               rows={4}
-              placeholder={'{"contract_tier": "enterprise", "csm": "lior@tricentis.com"}'}
+              placeholder={'{"team": "platform", "owner": "you@yourcompany.com"}'}
               value={form.metadata}
               onChange={(e) => onMetadataChange(e.target.value)}
               error={metadataError !== null}
@@ -397,7 +343,7 @@ export function TenantCreatePage() {
               </Typography>
             ) : (
               <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                JSONB. Free-form. Searchable + filterable in the back-office.
+                Free-form JSON. You can search and filter on it later.
               </Typography>
             )}
           </Box>

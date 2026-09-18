@@ -2,8 +2,9 @@
 // real `sidebar-shell.tsx`, which pulls in auth + tenants/users/assistant
 // APIs we haven't built yet. Swap for the real cloned shell once the nav/
 // shell gets its own pass.
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import Box from "@mui/material/Box";
+import Collapse from "@mui/material/Collapse";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
@@ -12,8 +13,9 @@ import { Link } from "@tanstack/react-router";
 import { canAccess, type NavId } from "@/shared/auth/destination-tiers";
 import { useDemoMode } from "@/shared/demo-mode/demo-mode-context";
 import { NAV_ICON_SIZE } from "@/shared/components/sidebar-nav";
-import IconMaterialSymbolsAccountTree from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsAccountTree.mjs";
 import IconMaterialSymbolsApartment from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsApartment.mjs";
+import IconMaterialSymbolsArrowDropDown from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsArrowDropDown.mjs";
+import IconMaterialSymbolsArrowDropUp from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsArrowDropUp.mjs";
 import IconMaterialSymbolsBalance from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsBalance.mjs";
 import IconMaterialSymbolsBarChart from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsBarChart.mjs";
 import IconMaterialSymbolsGroup from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsGroup.mjs";
@@ -30,7 +32,7 @@ type NavItem = {
   label: string;
 };
 
-/** The 7 destinations this trimmed shell actually routes to. `id` matches
+/** The destinations this trimmed shell actually routes to. `id` matches
  * `destination-tiers.ts` so the demo-mode role toggle can gate visibility
  * off the same tiers production uses for staff vs. superadmin (see
  * `STAFF_VISIBLE_EXTRA_IDS` below for this demo's deliberate override) —
@@ -38,7 +40,8 @@ type NavItem = {
  * sections this clone hasn't built (ingestion, scoring-pipeline, simulation,
  * debug-logs) and would otherwise turn into dead links for an admin.
  * `integrations` is also intentionally absent - API-key management moved
- * into the tenant detail Settings tab, so there's no top-level page for it. */
+ * into the tenant detail Settings tab, so there's no top-level page for it.
+ * `agent-registry` is intentionally absent too - not yet ready for users. */
 const NAV_ITEMS: NavItem[] = [
   { id: "dashboard", to: "/", icon: IconMaterialSymbolsSpaceDashboard, label: "Home" },
   {
@@ -50,6 +53,11 @@ const NAV_ITEMS: NavItem[] = [
   },
   { id: "tenants", to: "/tenants", icon: IconMaterialSymbolsApartment, label: "Tenants" },
   { id: "users", to: "/users", icon: IconMaterialSymbolsGroup, label: "Users" },
+];
+
+/** Secondary destinations, tucked behind a collapsible "Advanced" group so
+ * they don't compete with the core nav items above by default. */
+const ADVANCED_NAV_ITEMS: NavItem[] = [
   { id: "evals-catalog", to: "/evals/catalog/evals", icon: IconMaterialSymbolsScience, label: "Evals Catalog" },
   {
     id: "llm-catalog",
@@ -57,13 +65,6 @@ const NAV_ITEMS: NavItem[] = [
     search: { tab: "catalog" },
     icon: IconMaterialSymbolsBalance,
     label: "LLM Catalog",
-  },
-  {
-    id: "agent-registry",
-    to: "/agent-registry",
-    search: {},
-    icon: IconMaterialSymbolsAccountTree,
-    label: "Agent Registry",
   },
   { id: "reports", to: "/reports", search: { tab: "usage" }, icon: IconMaterialSymbolsBarChart, label: "Reports" },
 ];
@@ -124,9 +125,11 @@ function DemoControls() {
 
 export function MinimalShell({ children }: { children: ReactNode }) {
   const { user, role } = useDemoMode();
-  const visibleItems = NAV_ITEMS.filter(
-    (item) => canAccess(user, item.id) || (role === "staff" && STAFF_VISIBLE_EXTRA_IDS.includes(item.id)),
-  );
+  const [advancedOpen, setAdvancedOpen] = useState(false);
+  const isVisible = (item: NavItem) =>
+    canAccess(user, item.id) || (role === "staff" && STAFF_VISIBLE_EXTRA_IDS.includes(item.id));
+  const visibleItems = NAV_ITEMS.filter(isVisible);
+  const visibleAdvancedItems = ADVANCED_NAV_ITEMS.filter(isVisible);
 
   return (
     <Box sx={{ display: "flex", height: "100vh" }}>
@@ -163,6 +166,35 @@ export function MinimalShell({ children }: { children: ReactNode }) {
             <IconMaterialSymbolsMenuBook sx={{ fontSize: NAV_ICON_SIZE, flexShrink: 0, color: "text.secondary" }} />
             <Typography variant="body2">Docs</Typography>
           </Link>
+          {visibleAdvancedItems.length > 0 && (
+            <Box>
+              <Box
+                onClick={() => setAdvancedOpen((open) => !open)}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  cursor: "pointer",
+                  color: "text.secondary",
+                  userSelect: "none",
+                }}
+              >
+                {advancedOpen ? (
+                  <IconMaterialSymbolsArrowDropUp sx={{ fontSize: NAV_ICON_SIZE, flexShrink: 0 }} />
+                ) : (
+                  <IconMaterialSymbolsArrowDropDown sx={{ fontSize: NAV_ICON_SIZE, flexShrink: 0 }} />
+                )}
+                <Typography variant="body2">Advanced</Typography>
+              </Box>
+              <Collapse in={advancedOpen}>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 1, pl: 3, pt: 1 }}>
+                  {visibleAdvancedItems.map((item) => (
+                    <NavLink key={item.id} item={item} />
+                  ))}
+                </Box>
+              </Collapse>
+            </Box>
+          )}
         </Box>
         <DemoControls />
       </Box>

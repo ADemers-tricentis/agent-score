@@ -244,6 +244,36 @@ Every entry is checked against the live source in `agentscore-frontend/src` befo
 
 ---
 
+## 2026-09-18 - Removed Agent Registry from the sidebar; added a collapsible "Advanced" nav group
+
+**Change:** Removed the "Agent Registry" entry from `MinimalShell.tsx`'s `NAV_ITEMS` (the route/page itself is untouched - just no longer linked from the sidebar). Moved Evals Catalog, LLM Catalog, and Reports out of the main nav list into a new collapsible "Advanced" group (collapsed by default, toggled via a MUI `Collapse` + arrow icon, gated by the same `canAccess`/staff-visibility rules the items already had), positioned after the "Docs" link so it's the last item in the sidebar.
+
+**Who it's for:** A user setting up their own environment for the first time - fewer top-level nav items competing for attention, and Agent Registry (a staff-only build catalog) isn't yet meant to be user-facing.
+
+**Why:** Requested directly by the user (2026-09-18): "remove the agent registry from the sidebar - users don't need access to that yet," followed by a decision to group the three secondary items under a collapsible "Advanced" section rather than a separate mode toggle, then to move that group to the end of the nav.
+
+---
+
+## 2026-09-18 - Simplified tenant creation and settings for a single-tenant self-serve customer
+
+**Change:** On `TenantCreatePage.tsx`: removed the "Kind" (External/Internal) choice - every tenant a customer creates is now hardcoded `kind: "external"` - and removed the Region field entirely. Reworded the remaining copy to drop internal-only framing: the `<customer>-<env>` naming convention, the "back-office" reference, and the metadata placeholder example that leaked a Tricentis CSM email (`csm: "lior@tricentis.com"`), replaced with a generic customer-relevant example. Removed the "region" concept end-to-end rather than leaving it half-visible: the `TenantProfile` type, seed data, and list filters/facets in `tenant-fixtures.ts`; the table column and filter chip on `TenantsPage.tsx`; the header meta line on `TenantDetailLayout.tsx`; and the Overview-tab display on `TenantOverviewPage.tsx`. On `TenantSettingsPage.tsx`: removed the "Kind" field from General (kept in the separate read-only "Provisioning" block); removed the "Grouping attributes" section altogether once Region was gone and Environment was its only remaining (already-locked, uneditable) field - Environment now displays as a plain read-only value in Provisioning instead, alongside Kind/Created/Updated; and gated the "Danger zone" (Delete/Restore/Permanently delete) to render only for external tenants, since internal tenants shouldn't be deletable from here.
+
+**Who it's for:** A customer setting up their own AgentScore environment - someone who will only ever have one tenant and has no reason to reason about Tricentis-internal tenant kinds, infrastructure regions, or CSM/contract metadata.
+
+**Why:** Requested directly by the user (2026-09-18), starting from a screenshot of the New tenant form: "this is for a user setting up their own environment. I imagine they won't have a need for multiple tricentis tenants... how can we make this better?" Extended over several follow-ups to Region (list column and form field), to Kind on the Settings page, to gating tenant deletion to external tenants only, and finally to dropping the now-single-field Grouping attributes section once its only remaining field was already read-only: "since users can't change it, maybe we remove this as a settings option and instead just display the value in the provisioning section."
+
+---
+
+## 2026-09-18 - Extended tenant-deletion gating to the Tenants list row actions
+
+**Change:** The list-page kebab menu on `TenantsPage.tsx` (`RowActions`) now only renders Delete / Restore / Permanently delete when `tenant.kind === "external"` - previously only the tenant Settings-page Danger zone had this restriction (logged above), leaving internal tenants deletable from the list view even though their own Settings page hid the option. Internal tenants' menu now shows only "Open."
+
+**Who it's for:** Same audience as the Settings-page restriction above - keeps internal tenants non-deletable everywhere in the UI, not just from their own Settings page.
+
+**Why:** Flagged as a leftover inconsistency immediately after the Settings-page change above; user confirmed (2026-09-18): "yes fix that."
+
+---
+
 ## Template for new entries
 
 ```

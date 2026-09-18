@@ -12,7 +12,6 @@ export interface TenantProfile {
   name: string;
   kind: TenantKind;
   env: string | null;
-  region: string | null;
   created_at: string;
   updated_at: string;
   deleted_at: string | null;
@@ -26,7 +25,6 @@ export interface TenantListResponse {
 
 export interface TenantFacetsResponse {
   envs: string[];
-  regions: string[];
 }
 
 export interface TenantApiKeyProfile {
@@ -79,14 +77,6 @@ export interface AuditThroughputSummary {
   purged: number;
 }
 
-const REGIONS: Record<string, string> = {
-  "tenant-tais": "us-east-1",
-  "tenant-tar": "us-east-1",
-  "tenant-acme": "us-west-2",
-  "tenant-northwind": "eu-west-1",
-  "tenant-globex": "eu-central-1",
-};
-
 const CREATED: Record<string, string> = {
   "tenant-tais": "2026-01-12T09:00:00Z",
   "tenant-tar": "2026-01-20T09:00:00Z",
@@ -103,7 +93,6 @@ export const TENANTS: TenantProfile[] = FAKE_TENANTS.map((t) => ({
   name: t.name,
   kind: t.kind,
   env: t.env ?? null,
-  region: REGIONS[t.tenant_id] ?? null,
   created_at: CREATED[t.tenant_id] ?? new Date().toISOString(),
   updated_at: CREATED[t.tenant_id] ?? new Date().toISOString(),
   deleted_at: null,
@@ -146,17 +135,15 @@ export interface ListTenantsParams {
   q?: string;
   kind?: TenantKind[];
   env?: string[];
-  region?: string[];
   includeDeleted?: boolean;
 }
 
 export async function listTenants(params: ListTenantsParams = {}): Promise<TenantListResponse> {
-  const { limit = 25, offset = 0, q, kind = [], env = [], region = [], includeDeleted = false } = params;
+  const { limit = 25, offset = 0, q, kind = [], env = [], includeDeleted = false } = params;
   let items = TENANTS.filter((t) => includeDeleted || !t.deleted_at);
   if (q) items = items.filter((t) => matches(t, q));
   if (kind.length) items = items.filter((t) => kind.includes(t.kind));
   if (env.length) items = items.filter((t) => t.env && env.includes(t.env));
-  if (region.length) items = items.filter((t) => t.region && region.includes(t.region));
   const total = items.length;
   return { items: items.slice(offset, offset + limit), total };
 }
@@ -165,7 +152,6 @@ export async function listTenantFacets(includeDeleted = false): Promise<TenantFa
   const pool = TENANTS.filter((t) => includeDeleted || !t.deleted_at);
   return {
     envs: [...new Set(pool.map((t) => t.env).filter((v): v is string => !!v))],
-    regions: [...new Set(pool.map((t) => t.region).filter((v): v is string => !!v))],
   };
 }
 
@@ -179,7 +165,6 @@ export interface CreateTenantParams {
   name: string;
   kind: TenantKind;
   env: string | null;
-  region: string | null;
   metadata: Record<string, unknown> | null;
 }
 
@@ -190,7 +175,6 @@ export async function createTenant(params: CreateTenantParams): Promise<TenantPr
     name: params.name,
     kind: params.kind,
     env: params.env,
-    region: params.region,
     created_at: now,
     updated_at: now,
     deleted_at: null,

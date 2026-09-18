@@ -549,7 +549,6 @@ function NewAgentDialog({
         name: trimmed,
         kind: newTenantKind,
         env: null,
-        region: null,
         metadata: null,
       });
       // Mirror into FAKE_TENANTS so this dialog's own tenant picker (and any
