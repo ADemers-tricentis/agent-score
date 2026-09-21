@@ -60,14 +60,18 @@ Neither failure mode announces itself. A hallucinated answer looks identical to 
 
 ## Ideal Customer Profile (ICP)
 
-The clearest-fit customer isn't defined by industry or headcount - it's defined by four things being true at once:
+The clearest-fit customer isn't defined by industry or headcount - it's defined by four things being true at once, plus one bonus signal that makes the fit even stronger:
 
 1. **Already running agents in AI Workspace.** They get zero-setup auto-profiling for free and are a warm lead, not a cold integration decision (see [Why Tricentis Should Solve This](#why-tricentis-should-solve-this)).
-2. **Worried about governance, not just shipping faster.** They're asking "how do we know this is safe" before "how do we ship more" - the gap Gartner quantifies at 1 in 5 companies having a mature agent governance model (see [Why Now](#why-now)).
-3. **Watching AI spend, not just AI output.** They've noticed the token bill doesn't track cleanly to work done and have no way to separate a performant agent from a wasteful one (see [Cost of Getting It Wrong](#the-cost-of-getting-it-wrong)).
-4. **Running a bunch of external agents alongside AI Workspace.** GitHub Copilot, Copilot Studio, homegrown frameworks, other vendors' agents - shadow IT they didn't build and can't currently score side-by-side with their sanctioned tooling.
+2. **Running multiple agents or workflows, not just one.** Scale is what turns "we'll eyeball this one agent" into a real problem - more agents means more surface area for something to go wrong and more manual effort spent grading each one.
+3. **Motivated by risk, by eval efficiency, or both.** We've seen deals engage for either reason, and they're not mutually exclusive:
+   - **Risk-driven:** worried about governance and spend, not just shipping faster - asking "how do we know this is safe" before "how do we ship more," the gap Gartner quantifies at 1 in 5 companies having a mature agent governance model (see [Why Now](#why-now)); or watching the token bill stop tracking cleanly to work done, with no way to separate a performant agent from a wasteful one (see [Cost of Getting It Wrong](#the-cost-of-getting-it-wrong)).
+   - **Efficiency-driven:** already grading agents themselves - ad hoc scripts, spreadsheet rubrics, a homegrown eval harness - and want to cut the manual time/cost of doing that per agent, or want more rigor than what they've built in-house. AgentScore's zero-setup auto-profiling and 60+ evals across 11 dimensions replaces that manual effort rather than adding a new one.
+4. **Running external agents, tools, or MCPs alongside AI Workspace.** GitHub Copilot, Copilot Studio, homegrown frameworks, other vendors' agents, MCP servers they've wired in - shadow IT and third-party tooling they didn't build and can't currently score side-by-side with their sanctioned AIW agents.
 
-Wolters Kluwer is the cleanest real match today: they run agents through AI Workspace, named RBAC/self-service as a governance blocker, and their stated reason for engaging was to "score agents outside the Tricentis ecosystem" (GitHub Copilot, their internal FAB platform) alongside it. Tritusa fits three of four - AI Workspace agent plus a Copilot Studio agent, with a compliance/governance advisory practice layered on top. This profile is a hypothesis sharpened by two data points, not a validated segment - a useful filter for qualifying the next batch of inbound, not yet a proven ICP.
+**Bonus: no dedicated AI engineers or existing eval tooling of their own.** If they don't have the in-house expertise or a homegrown framework to build evals themselves, AgentScore isn't competing against a build option - it's the only realistic path to a rigorous eval, not just the faster one. This is what turns the efficiency-driven motivation in #3 from "nice to have" into "no other option."
+
+Wolters Kluwer is the cleanest real match today: risk-driven (named RBAC/self-service a governance blocker), running agents through AI Workspace, with a stated reason for engaging of scoring agents outside the Tricentis ecosystem (GitHub Copilot, their internal FAB platform) alongside it. Tritusa fits three of four - AI Workspace agent plus a Copilot Studio agent, also risk-driven via a compliance/governance advisory practice layered on top. Both data points confirm the risk-driven motivation; neither yet confirms efficiency-driven independently - that half of criterion 3 is a hypothesis to validate against the next batch of inbound, not yet proven. This profile overall is a hypothesis sharpened by two data points, not a validated segment.
 
 ---
 
