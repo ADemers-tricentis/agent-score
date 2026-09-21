@@ -8,8 +8,20 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
 import type { UserProfile } from "@/shared/auth/api";
+import { SAMPLE_TENANT_ID } from "@/back-office/agents/fake-data";
 
 export type DemoRole = "admin" | "staff";
+
+/** The tenant id a Tosca login would have resolved to, for each `blank`
+ * state — there's no tenant picker anywhere in the product anymore, so
+ * every screen that needs "the current tenant" reads it from here instead
+ * of asking the person. `blank` stands in for "first-ever Tosca login for
+ * this org" (the tenant was just auto-created, so it's still empty besides
+ * the seeded sample agent); un-blank stands in for a returning, known org. */
+const TENANT_ID_BY_BLANK: Record<"blank" | "populated", string> = {
+  blank: SAMPLE_TENANT_ID,
+  populated: "tenant-tais",
+};
 
 const STORAGE_KEY = "agentscore-frontend:mode";
 
@@ -49,6 +61,9 @@ interface DemoModeContextValue {
   blank: boolean;
   setBlank: (blank: boolean) => void;
   user: UserProfile;
+  /** The tenant a Tosca login resolved to for this session. Read this
+   * instead of prompting for a tenant — there is nothing to pick. */
+  tenantId: string;
 }
 
 const DemoModeContext = createContext<DemoModeContextValue | null>(null);
@@ -66,6 +81,7 @@ export function DemoModeProvider({ children }: { children: ReactNode }) {
     blank: mode.blank,
     setBlank: (blank) => setMode((m) => ({ ...m, blank })),
     user: DEMO_USERS[mode.role],
+    tenantId: TENANT_ID_BY_BLANK[mode.blank ? "blank" : "populated"],
   };
 
   return <DemoModeContext.Provider value={value}>{children}</DemoModeContext.Provider>;

@@ -1,10 +1,9 @@
 // TEMPORARY shell for this pass (Agents section only) — NOT a copy of the
-// real `sidebar-shell.tsx`, which pulls in auth + tenants/users/assistant
-// APIs we haven't built yet. Swap for the real cloned shell once the nav/
-// shell gets its own pass.
-import { useState, type ReactNode } from "react";
+// real `sidebar-shell.tsx`, which pulls in auth + assistant APIs we haven't
+// built yet. Swap for the real cloned shell once the nav/shell gets its own
+// pass.
+import type { ReactNode } from "react";
 import Box from "@mui/material/Box";
-import Collapse from "@mui/material/Collapse";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
@@ -13,12 +12,7 @@ import { Link } from "@tanstack/react-router";
 import { canAccess, type NavId } from "@/shared/auth/destination-tiers";
 import { useDemoMode } from "@/shared/demo-mode/demo-mode-context";
 import { NAV_ICON_SIZE } from "@/shared/components/sidebar-nav";
-import IconMaterialSymbolsApartment from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsApartment.mjs";
-import IconMaterialSymbolsArrowDropDown from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsArrowDropDown.mjs";
-import IconMaterialSymbolsArrowDropUp from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsArrowDropUp.mjs";
-import IconMaterialSymbolsBalance from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsBalance.mjs";
 import IconMaterialSymbolsBarChart from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsBarChart.mjs";
-import IconMaterialSymbolsGroup from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsGroup.mjs";
 import IconMaterialSymbolsMenuBook from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsMenuBook.mjs";
 import IconMaterialSymbolsScience from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsScience.mjs";
 import IconMaterialSymbolsSmartToy from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSmartToy.mjs";
@@ -39,9 +33,20 @@ type NavItem = {
  * deliberately NOT the full `sidebarNavItems` list, which also includes
  * sections this clone hasn't built (ingestion, scoring-pipeline, simulation,
  * debug-logs) and would otherwise turn into dead links for an admin.
+ * `tenants` and `users` are intentionally absent, not just unbuilt - per
+ * user request, this beta drops both as visible concepts: a person's tenant
+ * is resolved automatically from their Tosca login (never picked/created by
+ * hand - see `useDemoMode().tenantId`), and anyone who logs in and resolves
+ * to that tenant is already a member, with no invite/approval step and no
+ * RBAC yet. `llm-catalog` is intentionally absent too - LLM provider is now
+ * a per-agent setting (`AgentSettingsPage`), not a shared catalog. All three
+ * may come back later, for staff debugging - out of scope for this pass.
  * `integrations` is also intentionally absent - API-key management moved
  * into the tenant detail Settings tab, so there's no top-level page for it.
- * `agent-registry` is intentionally absent too - not yet ready for users. */
+ * `agent-registry` is intentionally absent too - not yet ready for users.
+ * With so few destinations left, there's no longer a collapsible "Advanced"
+ * group splitting them off - every destination is a flat, always-visible
+ * menu item (per user request). */
 const NAV_ITEMS: NavItem[] = [
   { id: "dashboard", to: "/", icon: IconMaterialSymbolsSpaceDashboard, label: "Home" },
   {
@@ -51,30 +56,15 @@ const NAV_ITEMS: NavItem[] = [
     icon: IconMaterialSymbolsSmartToy,
     label: "My Agents",
   },
-  { id: "tenants", to: "/tenants", icon: IconMaterialSymbolsApartment, label: "Tenants" },
-  { id: "users", to: "/users", icon: IconMaterialSymbolsGroup, label: "Users" },
-];
-
-/** Secondary destinations, tucked behind a collapsible "Advanced" group so
- * they don't compete with the core nav items above by default. */
-const ADVANCED_NAV_ITEMS: NavItem[] = [
   { id: "evals-catalog", to: "/evals/catalog/evals", icon: IconMaterialSymbolsScience, label: "Evals Catalog" },
-  {
-    id: "llm-catalog",
-    to: "/llm-catalog",
-    search: { tab: "catalog" },
-    icon: IconMaterialSymbolsBalance,
-    label: "LLM Catalog",
-  },
   { id: "reports", to: "/reports", search: { tab: "usage" }, icon: IconMaterialSymbolsBarChart, label: "Reports" },
 ];
 
 /** Demo-specific override, on top of `canAccess`: in the real product these
  * are superadmin-only, but for this demo a Staff viewer should still be able
  * to land on Home and see their own agents and the eval catalog they run
- * against - only Tenants/Users/LLM Catalog/Reports (genuinely admin-only
- * concerns) stay hidden. Deliberate deviation from production tiering, per
- * user request. */
+ * against - only Reports (a genuinely admin-only concern) stays hidden.
+ * Deliberate deviation from production tiering, per user request. */
 const STAFF_VISIBLE_EXTRA_IDS: NavId[] = ["dashboard", "agents", "evals-catalog"];
 
 function NavLink({ item }: { item: NavItem }) {
@@ -125,11 +115,9 @@ function DemoControls() {
 
 export function MinimalShell({ children }: { children: ReactNode }) {
   const { user, role } = useDemoMode();
-  const [advancedOpen, setAdvancedOpen] = useState(false);
   const isVisible = (item: NavItem) =>
     canAccess(user, item.id) || (role === "staff" && STAFF_VISIBLE_EXTRA_IDS.includes(item.id));
   const visibleItems = NAV_ITEMS.filter(isVisible);
-  const visibleAdvancedItems = ADVANCED_NAV_ITEMS.filter(isVisible);
 
   return (
     <Box sx={{ display: "flex", height: "100vh" }}>
@@ -166,35 +154,6 @@ export function MinimalShell({ children }: { children: ReactNode }) {
             <IconMaterialSymbolsMenuBook sx={{ fontSize: NAV_ICON_SIZE, flexShrink: 0, color: "text.secondary" }} />
             <Typography variant="body2">Docs</Typography>
           </Link>
-          {visibleAdvancedItems.length > 0 && (
-            <Box>
-              <Box
-                onClick={() => setAdvancedOpen((open) => !open)}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                  cursor: "pointer",
-                  color: "text.secondary",
-                  userSelect: "none",
-                }}
-              >
-                {advancedOpen ? (
-                  <IconMaterialSymbolsArrowDropUp sx={{ fontSize: NAV_ICON_SIZE, flexShrink: 0 }} />
-                ) : (
-                  <IconMaterialSymbolsArrowDropDown sx={{ fontSize: NAV_ICON_SIZE, flexShrink: 0 }} />
-                )}
-                <Typography variant="body2">Advanced</Typography>
-              </Box>
-              <Collapse in={advancedOpen}>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 1, pl: 3, pt: 1 }}>
-                  {visibleAdvancedItems.map((item) => (
-                    <NavLink key={item.id} item={item} />
-                  ))}
-                </Box>
-              </Collapse>
-            </Box>
-          )}
         </Box>
         <DemoControls />
       </Box>

@@ -1,8 +1,11 @@
 /** Cross-tenant agents search.
  *
  * PageHeader + Toolbar + DataTable with q-search, faceted filters
- * (client-side over the current page), and an inline "New agent" dialog
- * that lets the operator pick a tenant before creating.
+ * (client-side over the current page), and an inline "Connect an agent"
+ * dialog. Nothing to fill in and submit — an agent is expected to appear on
+ * its own the first time its traces are forwarded, so the dialog is purely
+ * instructions (the ingest key, the exporter env vars to paste, what happens
+ * once traces start arriving) rather than a form.
  *
  * List | Grouped view toggle (agents-grouped-view spec §3.1 Feature 3): the
  * view mode + group-by axis are URL search state (`view-params.ts`); List
@@ -18,11 +21,10 @@ import { toast } from "@/shared/lib/toast";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import FormLabel from "@mui/material/FormLabel";
+import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -30,6 +32,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import IconMaterialSymbolsSmartToy from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSmartToy.mjs";
 import IconMaterialSymbolsApartment from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsApartment.mjs";
 import IconMaterialSymbolsAdd from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsAdd.mjs";
+import IconMaterialSymbolsClose from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsClose.mjs";
 import IconMaterialSymbolsSearch from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSearch.mjs";
 import IconMaterialSymbolsSell from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSell.mjs";
 import IconMaterialSymbolsHub from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsHub.mjs";
@@ -38,13 +41,11 @@ import type { OnChangeFn, SortingState } from "@tanstack/react-table";
 import { flatAgentColumns } from "@/back-office/agents/agent-columns";
 import { AgentGroupsView } from "@/back-office/agents/AgentGroupSection";
 import {
-  FAKE_AGENTS,
   FAKE_TENANTS,
   listAgentGroups,
   listAgentsFlat,
   type AgentKind,
 } from "@/back-office/agents/fake-data";
-import * as tenantsApi from "@/back-office/tenants/tenant-fixtures";
 import type { AgentsViewSearch, AgentView } from "@/back-office/agents/view-params";
 import { AutoRefreshControl } from "@/shared/components/auto-refresh-control";
 import { Chip } from "@/shared/components/chip";
@@ -56,20 +57,24 @@ import { OnboardingCallout } from "@/shared/components/onboarding-callout";
 import { PageBand } from "@/shared/components/page-band";
 import { pageContentPaddingSx } from "@/shared/components/page-content";
 import { PageHeader } from "@/shared/components/page-header";
-import { RadioCards } from "@/shared/components/radio-cards";
 import { ScrollRegion } from "@/shared/components/scroll-region";
 import { Toolbar } from "@/shared/components/toolbar";
 import { useDebouncedValue } from "@/shared/hooks/use-debounced-value";
 import { useDemoMode } from "@/shared/demo-mode/demo-mode-context";
 
-// Sentinel combobox value that opens the inline "create tenant" form instead
-// of selecting a tenant.
-const CREATE_TENANT_VALUE = "__create_tenant__";
-
 // OTLP/HTTP traces endpoint external tenants export to (see
 // agent-score-skill/skills/agent-score/references/env-vars.md for the
 // matching OTEL_EXPORTER_OTLP_TRACES_ENDPOINT setup).
 const TRACE_INGEST_URL = "https://agent-score-ingest.product.tricentis.com/internal/otel/v1/traces";
+
+// The _TRACES_-suffixed vars take the full ingest path already - the
+// unsuffixed OTEL_EXPORTER_OTLP_ENDPOINT/HEADERS form is a base an exporter
+// appends /v1/traces onto itself, which would double it up here.
+const EXPORTER_ENV_VARS = `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=${TRACE_INGEST_URL}
+OTEL_EXPORTER_OTLP_TRACES_HEADERS=Authorization=Bearer <tk_your_key>`;
+
+// Masked display only - no real key material lives in this demo.
+const FAKE_TENANT_KEY_DISPLAY = "default: tk_...lcPo";
 
 const PAGE_SIZE = 25;
 
@@ -208,7 +213,7 @@ function AgentsSearchShell() {
       <PageBand sx={{ pt: 4, pb: 2.5 }}>
         <PageHeader
           title="My Agents"
-          description="All of your agents, across every tenant. Each agent belongs to one of your tenants."
+          description="All of your agents, in one place."
           actions={
             <Button
               variant="contained"
@@ -216,7 +221,7 @@ function AgentsSearchShell() {
               onClick={() => setCreateOpen(true)}
               data-testid="new-agent-button"
             >
-              New agent
+              Connect agent
             </Button>
           }
         />
@@ -234,7 +239,7 @@ function AgentsSearchShell() {
                 onClick={() => setCreateOpen(true)}
                 data-testid="onboarding-new-agent"
               >
-                New agent
+                Connect agent
               </Button>
             }
           >
@@ -450,17 +455,7 @@ function AgentsSearchShell() {
         </Box>
       </ScrollRegion>
 
-      <NewAgentDialog
-        open={createOpen}
-        onClose={() => setCreateOpen(false)}
-        onCreated={(tenantId, agentId) => {
-          setCreateOpen(false);
-          void navigate({
-            to: "/tenants/$tenantId/agents/$agentId",
-            params: { tenantId, agentId },
-          } as never);
-        }}
-      />
+      <ConnectAgentDialog open={createOpen} onClose={() => setCreateOpen(false)} />
     </Box>
   );
 }
@@ -500,330 +495,80 @@ function ShowDeletedButton({
   );
 }
 
-function NewAgentDialog({
+/** Purely instructional - there's nothing to fill in and submit. An agent is
+ * expected to show up on its own the first time its traces are forwarded, so
+ * this just walks through the ingest key, the exporter env vars to paste,
+ * and what happens once traces start arriving. Closing (the header X) is the
+ * only action. */
+function ConnectAgentDialog({
   open,
   onClose,
-  onCreated,
 }: {
   open: boolean;
   onClose: () => void;
-  onCreated: (tenantId: string, agentId: string) => void;
 }) {
-  const [tenantId, setTenantId] = useState<string | undefined>(undefined);
-  const [name, setName] = useState("");
-  const [creating, setCreating] = useState(false);
-
-  const [createTenantOpen, setCreateTenantOpen] = useState(false);
-  const [newTenantName, setNewTenantName] = useState("");
-  const [newTenantKind, setNewTenantKind] = useState<AgentKind>("external");
-  const [creatingTenant, setCreatingTenant] = useState(false);
-
-  const selectedTenant = FAKE_TENANTS.find((t) => t.tenant_id === tenantId);
-
-  // Agent kind is fixed by the parent tenant — the backend enforces
-  // body.kind == tenant.kind. Derive it from the selected tenant so the
-  // operator can't pick a value that drifts and 422s on submit.
-  const kind = selectedTenant?.kind;
-
-  const resetForm = () => {
-    setTenantId(undefined);
-    setName("");
-  };
-
-  const handleClose = () => {
-    onClose();
-    resetForm();
-  };
-
-  const resetNewTenantForm = () => {
-    setNewTenantName("");
-    setNewTenantKind("external");
-  };
-
-  const handleCreateTenant = async () => {
-    const trimmed = newTenantName.trim();
-    if (!trimmed) return;
-    setCreatingTenant(true);
-    try {
-      const tenant = await tenantsApi.createTenant({
-        name: trimmed,
-        kind: newTenantKind,
-        env: null,
-        metadata: null,
-      });
-      // Mirror into FAKE_TENANTS so this dialog's own tenant picker (and any
-      // other agents-section UI reading it) sees the new tenant immediately —
-      // tenant-fixtures.ts only writes its own TENANTS array.
-      FAKE_TENANTS.push({
-        tenant_id: tenant.tenant_id,
-        name: tenant.name,
-        kind: tenant.kind,
-        env: tenant.env ?? undefined,
-      });
-      toast.success(`Tenant ${tenant.name} created`);
-      setTenantId(tenant.tenant_id);
-      setCreateTenantOpen(false);
-      resetNewTenantForm();
-    } finally {
-      setCreatingTenant(false);
-    }
-  };
-
-  const handleCreate = () => {
-    if (!tenantId || !kind) return;
-    setCreating(true);
-    const agentId = `agent-${Date.now()}`;
-    FAKE_AGENTS.push({
-      agent_id: agentId,
-      tenant_id: tenantId,
-      name: name.trim(),
-      kind,
-      source_service: null,
-      lifecycle: { stage: "connecting", threshold: 20, captured: 0 },
-      provisioning_status: "provisioning",
-      failure_reason: null,
-      deactivated_at: null,
-      deleted_at: null,
-      created_at: new Date().toISOString(),
-      last_seen_at: null,
-      forwarded_trace_count: 0,
-      latest_score: null,
-      drop_pressure: null,
-    });
-    toast.success(`Agent ${name.trim()} created`);
-    onCreated(tenantId, agentId);
-    resetForm();
-    setCreating(false);
-  };
-
-  const disabled = !tenantId || name.trim().length === 0 || creating;
-
   return (
-    <>
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={onClose}
       fullWidth
-      slotProps={{ paper: { sx: { maxWidth: 448 } } }}
+      slotProps={{ paper: { sx: { maxWidth: 480 } } }}
     >
-      <DialogTitle>Create agent</DialogTitle>
+      <DialogTitle sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1 }}>
+        Connect an agent
+        <IconButton
+          size="small"
+          onClick={onClose}
+          aria-label="Close"
+          data-testid="connect-agent-close"
+        >
+          <IconMaterialSymbolsClose sx={{ fontSize: 18 }} />
+        </IconButton>
+      </DialogTitle>
       <DialogContent>
         <DialogContentText sx={{ mb: 2 }}>
-          Creates the agent and assigns its default scoring profile. It will
-          briefly show as Connecting before it's ready.
+          An agent appears here automatically the first time your ingest key
+          forwards a trace - there is nothing to create by hand.
         </DialogContentText>
 
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-            <FormLabel htmlFor="new-agent-tenant">
-              Tenant{" "}
-              <Box component="span" sx={{ color: "error.main" }}>
-                *
-              </Box>
-            </FormLabel>
-            <Combobox
-              testId="new-agent-tenant"
-              options={[
-                {
-                  value: CREATE_TENANT_VALUE,
-                  label: "+ Create new tenant…",
-                  searchText: "create new tenant",
-                },
-                ...FAKE_TENANTS.map((t) => ({
-                  value: t.tenant_id,
-                  label: t.name,
-                  description: `${t.kind}${t.env ? ` · ${t.env}` : ""}`,
-                  searchText: t.name,
-                })),
-              ]}
-              value={tenantId}
-              onChange={(next) => {
-                if (next === CREATE_TENANT_VALUE) {
-                  setCreateTenantOpen(true);
-                  return;
-                }
-                setTenantId(next);
-              }}
-              placeholder="Pick a tenant…"
-            />
-          </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-            <TextField
-              label={
-                <>
-                  Name{" "}
-                  <Box component="span" sx={{ color: "error.main" }}>
-                    *
-                  </Box>
-                </>
-              }
-              id="new-agent-name"
-              placeholder="e.g. billing-agent"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              autoComplete="off"
-              fullWidth
-              size="small"
-              slotProps={{
-                htmlInput: {
-                  "data-testid": "new-agent-name",
-                  sx: { fontFamily: "monospace" },
-                },
-              }}
-            />
-            <Box
-              component="p"
-              sx={{ m: 0, typography: "caption", color: "text.secondary" }}
-            >
-              Immutable. Lowercase, alphanumeric +{" "}
-              <Box component="span" sx={{ fontFamily: "monospace" }}>
-                _
-              </Box>{" "}
-              and{" "}
-              <Box component="span" sx={{ fontFamily: "monospace" }}>
-                -
-              </Box>
-              . Up to 63 chars.
+            <Box component="p" sx={{ m: 0, typography: "subtitle2", fontWeight: 600 }}>
+              1. Your API key
+            </Box>
+            <Box>
+              <Chip tint="muted">{FAKE_TENANT_KEY_DISPLAY}</Chip>
             </Box>
           </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-            <FormLabel>Kind</FormLabel>
-            {kind ? (
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <Chip tint="muted">{kind}</Chip>
-                <Box
-                  component="span"
-                  sx={{ typography: "caption", color: "text.secondary" }}
-                >
-                  Fixed by the tenant.
-                </Box>
-              </Box>
-            ) : (
-              <Box
-                component="p"
-                sx={{ m: 0, typography: "caption", color: "text.secondary" }}
-              >
-                Determined by the tenant — pick a tenant first.
-              </Box>
-            )}
-          </Box>
-          {kind === "external" ? (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-              <CodeBlock
-                label="Send this agent's traces to"
-                inline
-                testId="new-agent-ingest-url"
-              >
-                {TRACE_INGEST_URL}
-              </CodeBlock>
-              <Box
-                component="p"
-                sx={{ m: 0, typography: "caption", color: "text.secondary" }}
-              >
-                Authenticate with the tenant's API key, from its Settings
-                tab.
-              </Box>
-            </Box>
-          ) : null}
-          {kind === "internal" ? (
-            <Box
-              component="p"
-              sx={{ m: 0, typography: "caption", color: "text.secondary" }}
-            >
-              Internal agents don't need an exporter — traces are ingested
-              automatically.
-            </Box>
-          ) : null}
-        </Box>
-      </DialogContent>
 
-      <DialogActions>
-        <Button
-          variant="outlined"
-          onClick={handleClose}
-          data-testid="cancel-agent"
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="contained"
-          disabled={disabled}
-          onClick={handleCreate}
-          data-testid="create-agent-submit"
-        >
-          Create agent
-        </Button>
-      </DialogActions>
-    </Dialog>
-
-    <Dialog
-      open={createTenantOpen}
-      onClose={() => {
-        setCreateTenantOpen(false);
-        resetNewTenantForm();
-      }}
-      fullWidth
-      slotProps={{ paper: { sx: { maxWidth: 400 } } }}
-    >
-      <DialogTitle>Create tenant</DialogTitle>
-      <DialogContent>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-            <TextField
-              label={
-                <>
-                  Name{" "}
-                  <Box component="span" sx={{ color: "error.main" }}>
-                    *
-                  </Box>
-                </>
-              }
-              id="new-tenant-name"
-              placeholder="e.g. Acme Financial"
-              value={newTenantName}
-              onChange={(e) => setNewTenantName(e.target.value)}
-              autoComplete="off"
-              fullWidth
-              size="small"
-              slotProps={{
-                htmlInput: { "data-testid": "new-tenant-name" },
-              }}
-            />
+            <Box component="p" sx={{ m: 0, typography: "subtitle2", fontWeight: 600 }}>
+              2. Exporter configuration
+            </Box>
+            <Box component="p" sx={{ m: 0, typography: "caption", color: "text.secondary" }}>
+              Paste into the agent&rsquo;s environment.
+            </Box>
+            <CodeBlock testId="new-agent-exporter-config">{EXPORTER_ENV_VARS}</CodeBlock>
+            <Box component="p" sx={{ m: 0, typography: "caption", color: "text.secondary" }}>
+              Use the <Box component="span" sx={{ fontFamily: "monospace" }}>_TRACES_</Box>-suffixed
+              variables, which take the full ingest path. The unsuffixed form is a base your
+              exporter would silently append{" "}
+              <Box component="span" sx={{ fontFamily: "monospace" }}>/v1/traces</Box> to a second
+              time.
+            </Box>
           </Box>
+
           <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-            <FormLabel>Kind</FormLabel>
-            <RadioCards
-              items={[
-                { value: "external", label: "External", description: "A customer or partner org." },
-                { value: "internal", label: "Internal", description: "A Tricentis-owned workspace." },
-              ]}
-              value={newTenantKind}
-              onValueChange={setNewTenantKind}
-              testIdPrefix="new-tenant-kind"
-            />
+            <Box component="p" sx={{ m: 0, typography: "subtitle2", fontWeight: 600 }}>
+              3. What happens next
+            </Box>
+            <Box component="p" sx={{ m: 0, typography: "caption", color: "text.secondary" }}>
+              Once this agent has forwarded at least 20 traces, Tricentis binds a scoring
+              profile and scoring begins automatically.
+            </Box>
           </Box>
         </Box>
       </DialogContent>
-      <DialogActions>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setCreateTenantOpen(false);
-            resetNewTenantForm();
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="contained"
-          disabled={newTenantName.trim().length === 0 || creatingTenant}
-          onClick={handleCreateTenant}
-          data-testid="create-tenant-submit"
-        >
-          Create tenant
-        </Button>
-      </DialogActions>
     </Dialog>
-    </>
   );
 }

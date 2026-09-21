@@ -5,6 +5,11 @@
  * derived from real state (there's no backend to track it against) — it's
  * there so a presenter can visibly mark steps off while walking through the
  * demo, not as a claim that the step was actually completed.
+ *
+ * No role-specific steps anymore: the one admin-only step ("Invite your
+ * team") pointed at `/users`, which no longer exists — teammates now get
+ * access automatically the moment their own Tosca login resolves to this
+ * same tenant, so there's nothing left to invite.
  */
 
 import { useState, type ReactNode } from "react";
@@ -14,14 +19,12 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Checkbox from "@mui/material/Checkbox";
-import IconMaterialSymbolsGroup from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsGroup.mjs";
 import IconMaterialSymbolsScience from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsScience.mjs";
 import IconMaterialSymbolsSmartToy from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSmartToy.mjs";
 import IconMaterialSymbolsVisibility from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsVisibility.mjs";
 import type SvgIcon from "@mui/material/SvgIcon";
 
 import { SAMPLE_AGENT_ID, SAMPLE_TENANT_ID } from "@/back-office/agents/fake-data";
-import type { DemoRole } from "@/shared/demo-mode/demo-mode-context";
 
 interface Step {
   id: string;
@@ -34,47 +37,34 @@ interface Step {
   search?: Record<string, unknown>;
 }
 
-function stepsFor(role: DemoRole): Step[] {
-  const steps: Step[] = [
-    {
-      id: "explore-sample",
-      icon: IconMaterialSymbolsVisibility,
-      title: "Explore the sample agent",
-      description: "See a fully scored agent — profile fit, runs, and evals — before connecting your own.",
-      cta: "View sample agent",
-      to: "/tenants/$tenantId/agents/$agentId",
-      params: { tenantId: SAMPLE_TENANT_ID, agentId: SAMPLE_AGENT_ID },
-    },
-    {
-      id: "connect-agent",
-      icon: IconMaterialSymbolsSmartToy,
-      title: "Connect your first agent",
-      description: "Point your agent's traces at AgentScore to start collecting evidence for a real score.",
-      cta: "Go to My Agents",
-      to: "/agents",
-      search: { view: "list", by: "tenant" },
-    },
-    {
-      id: "browse-evals",
-      icon: IconMaterialSymbolsScience,
-      title: "Browse the Evals Catalog",
-      description: "See what AgentScore checks for out of the box, by dimension.",
-      cta: "Open Evals Catalog",
-      to: "/evals/catalog/evals",
-    },
-  ];
-  if (role === "admin") {
-    steps.push({
-      id: "invite-team",
-      icon: IconMaterialSymbolsGroup,
-      title: "Invite your team",
-      description: "Add teammates so more than one person can review scores and manage agents.",
-      cta: "Go to Users",
-      to: "/users",
-    });
-  }
-  return steps;
-}
+const STEPS: Step[] = [
+  {
+    id: "explore-sample",
+    icon: IconMaterialSymbolsVisibility,
+    title: "Explore the sample agent",
+    description: "See a fully scored agent — profile fit, runs, and evals — before connecting your own.",
+    cta: "View sample agent",
+    to: "/tenants/$tenantId/agents/$agentId",
+    params: { tenantId: SAMPLE_TENANT_ID, agentId: SAMPLE_AGENT_ID },
+  },
+  {
+    id: "connect-agent",
+    icon: IconMaterialSymbolsSmartToy,
+    title: "Connect your first agent",
+    description: "Point your agent's traces at AgentScore to start collecting evidence for a real score.",
+    cta: "Go to My Agents",
+    to: "/agents",
+    search: { view: "list", by: "tenant" },
+  },
+  {
+    id: "browse-evals",
+    icon: IconMaterialSymbolsScience,
+    title: "Browse the Evals Catalog",
+    description: "See what AgentScore checks for out of the box, by dimension.",
+    cta: "Open Evals Catalog",
+    to: "/evals/catalog/evals",
+  },
+];
 
 function StepRow({
   step,
@@ -147,8 +137,7 @@ function StepRow({
   );
 }
 
-export function GettingStartedChecklist({ role }: { role: DemoRole }): ReactNode {
-  const steps = stepsFor(role);
+export function GettingStartedChecklist(): ReactNode {
   const [checked, setChecked] = useState<Record<string, boolean>>({});
 
   return (
@@ -161,7 +150,7 @@ export function GettingStartedChecklist({ role }: { role: DemoRole }): ReactNode
           </Box>
         </Box>
         <Box sx={{ px: 2.5, pb: 1 }}>
-          {steps.map((step) => (
+          {STEPS.map((step) => (
             <StepRow
               key={step.id}
               step={step}

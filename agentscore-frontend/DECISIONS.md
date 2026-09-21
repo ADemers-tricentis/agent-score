@@ -274,6 +274,30 @@ Every entry is checked against the live source in `agentscore-frontend/src` befo
 
 ---
 
+## 2026-09-18 - Removed Tenants, Users, and LLM Catalog; tenant and provider are now implicit
+
+**Change:** Deleted three whole sections rather than continuing to trim them:
+- `src/back-office/tenants/` (list, create, detail layout, Overview/Agents/Members/Settings/Audit Log tabs, fixtures) and `shared/components/tenant-shell.tsx`. This supersedes the 2026-09-18 "Simplified tenant creation and settings" entry above - there's no tenant-management UI left to simplify.
+- `src/back-office/users/` and `src/back-office/access-requests/` (people list, create/edit, the Microsoft-sign-in-without-an-account approval queue).
+- `src/back-office/llm-catalog/` in full - inference catalog, Pricing, Task Routing, and the Usage Log/call-detail audit log.
+
+In their place:
+- **Tenant is now resolved, not picked or created.** `useDemoMode()` gained a `tenantId`, standing in for "the tenant a Tosca login just resolved to" - `tenant-sample` while the "Blank / new login" toggle is on (a brand-new org, auto-provisioned, still just the seeded sample agent), `tenant-tais` once it's off (a returning, known org). The "New agent" dialog (`AgentsSearchPage.tsx`) no longer has a tenant picker or a "+ Create new tenant…" sub-flow; it just reads `tenantId` off the session and creates the agent there. Agent `kind` is hardcoded `"external"` in that dialog too (dropped the picker) - a self-serve customer's own agents are always the exported/traced kind; "internal" was a Tricentis-dogfooding distinction with no place in this flow.
+- **Membership is automatic, with no RBAC yet.** Per user direction, there is no approval queue standing in for it this beta - a login that resolves to a known tenant is a member of it, full stop. RBAC is an explicitly deferred follow-up, not an oversight.
+- **LLM provider moved from a shared catalog to a per-agent setting.** `AgentSettingsPage.tsx` gained an "LLM provider" `FormSection` (Provider/Model/API key, plus an Endpoint URL field when Provider is "Custom / self-hosted") - fake/local state, matching every other field on that page.
+
+Also: `MinimalShell.tsx` nav trimmed to Home + My Agents + Evals Catalog + Reports, all flat, top-level menu items - with the Tenants/Users/LLM Catalog items gone, too few destinations were left to justify the collapsible "Advanced" group they used to sit behind (added just one user-request cycle earlier, in the "Moved secondary nav items into a collapsible Advanced group" entry above), so that grouping came out too, per user request; `KpiRow.tsx` dropped the "Tenants" tile (5 tiles → 4, grid resized `2.4` → `3`) and `DashboardCounts.tenantsTotal` was removed with it; `GettingStartedChecklist` dropped its one admin-only step ("Invite your team" → `/users`) since there's nothing left to invite into - it's one unconditional list now, so the component no longer takes a `role` prop; fixed the two dangling `/tenants/$tenantId` references left behind (`AgentSettingsPage`'s permanently-delete redirect now goes to `/agents`; `ScopeSwitcher.tsx`, an Agent Registry component, now reads tenant names from `agents/fake-data.ts`'s `FAKE_TENANTS` instead of the deleted `tenant-fixtures.ts`).
+
+**Audited and deliberately left alone:** `Reports` (`UsageReportTab`/`TenantUsageDetailPage`) is untouched - it's a per-tenant cost/usage rollup with its own fixtures, never coupled to the LLM Catalog. The LLM Catalog's Usage Log was **not** moved there: it was a per-call ledger keyed to the shared inference catalog's Model/Provider registry and pricing schema (facets, cost columns, everything), so once that catalog is gone there's no shared "Model" to filter or price against - moving it would mean rebuilding it as a different feature, not relocating it. `sidebar-nav.ts`/`destination-tiers.ts` (the real-production nav/tier mirror, already documented as deliberately kept in sync with production rather than this demo's trimmed nav) were left untouched - production hasn't made this change, only this beta mock has.
+
+**Known gap, not fixed here:** `TenantSettingsPage.tsx` was the only place a customer could see/manage their tenant's API key (`shared/components/api-keys/ApiKeysPanel.tsx`) - deleting it leaves that panel unused anywhere, and the new-agent dialog's "Authenticate with your tenant's API key" line now points nowhere. Surfacing API keys somewhere reachable is follow-up work, out of scope for this pass.
+
+**Who it's for:** A self-serve beta customer whose org logs in via Tosca - matches the "single implicit tenant, no multi-tenant concepts to reason about" direction already underway in the tenant-creation simplification above, taken to removing the concept from view entirely rather than continuing to simplify its UI.
+
+**Why:** Requested directly by the user (2026-09-18): remove tenant as a user-visible concept (auto-created in the backoffice from the Tosca login, invisible to the customer, who can still add agents to it); remove Users entirely, with no replacement approval gate ("there is zero concept of RBAC for this version. we will add it later"); remove LLM Catalog since provider is now an agent-level setting. Backoffice-only tenant browsing and the LLM Catalog may return later, tucked into Advanced for staff debugging - deliberately deferred, not built now, "to keep things minimal for this initial beta."
+
+---
+
 ## Template for new entries
 
 ```

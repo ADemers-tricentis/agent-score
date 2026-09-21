@@ -12,7 +12,6 @@ import type { ReactNode } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import IconMaterialSymbolsApartment from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsApartment.mjs";
 import IconMaterialSymbolsBolt from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsBolt.mjs";
 import IconMaterialSymbolsMonitoring from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsMonitoring.mjs";
 import IconMaterialSymbolsSmartToy from "@tricentis/mui-icons/material-symbols/IconMaterialSymbolsSmartToy.mjs";
@@ -33,13 +32,13 @@ function KpiTile({ to, children }: { to?: string; children: ReactNode }) {
   const navigate = useNavigate();
   if (!to) {
     return (
-      <Grid size={{ xs: 12, sm: 6, lg: 2.4 }}>
+      <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
         <Box sx={{ height: "100%" }}>{children}</Box>
       </Grid>
     );
   }
   return (
-    <Grid size={{ xs: 12, sm: 6, lg: 2.4 }}>
+    <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
       <Box
         component="button"
         type="button"
@@ -68,16 +67,6 @@ export function KpiRow({ overview, ingestion }: KpiRowProps) {
 
   return (
     <Grid container spacing={2}>
-      <KpiTile to="/tenants">
-        <StatCard
-          label="Tenants"
-          icon={IconMaterialSymbolsApartment}
-          value={fmtCount(counts.tenantsTotal)}
-          hint="across all orgs"
-          sx={{ height: "100%" }}
-        />
-      </KpiTile>
-
       <KpiTile to="/agents">
         <StatCard
           label="Active agents"

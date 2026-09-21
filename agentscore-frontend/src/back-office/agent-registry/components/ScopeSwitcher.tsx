@@ -3,7 +3,7 @@
  *  `onChange(tenantId | null)`; the caller reflects that into `?tenant=`.
  */
 
-import { TENANTS } from "@/back-office/tenants/tenant-fixtures";
+import { FAKE_TENANTS } from "@/back-office/agents/fake-data";
 import { Combobox, type ComboboxOption } from "@/shared/components/combobox";
 
 /** Sentinel for "no tenant" (Global scope). Tenant ids are ULIDs — 26
@@ -19,7 +19,7 @@ interface ScopeSwitcherProps {
 export function ScopeSwitcher({ tenantId, onChange }: ScopeSwitcherProps) {
   const options: ComboboxOption[] = [
     { value: GLOBAL_SCOPE, label: "Global" },
-    ...TENANTS.filter((t) => !t.deleted_at).map((tenant) => ({
+    ...FAKE_TENANTS.map((tenant) => ({
       value: tenant.tenant_id,
       label: tenant.name,
     })),

@@ -28,7 +28,6 @@ export interface DashboardTrendPoint {
 }
 
 export interface DashboardCounts {
-  tenantsTotal: number;
   agentsActive: number;
   agentsTotal: number;
 }
@@ -126,7 +125,6 @@ const TREND_7D: DashboardTrendPoint[] = Array.from({ length: 7 }, (_, i) => {
 
 export const DASHBOARD_OVERVIEW: DashboardOverview = {
   counts: {
-    tenantsTotal: 5,
     agentsActive: 6,
     agentsTotal: 7,
   },
@@ -162,7 +160,6 @@ export const INGESTION_OVERVIEW: IngestionOverview = {
  * `blank` toggle in `shared/demo-mode/demo-mode-context.tsx`. */
 export const DASHBOARD_OVERVIEW_BLANK: DashboardOverview = {
   counts: {
-    tenantsTotal: 0,
     agentsActive: 0,
     agentsTotal: 0,
   },

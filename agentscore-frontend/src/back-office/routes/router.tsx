@@ -29,21 +29,8 @@ import { parseAgentScoreSearch, parseRunResultSearch } from "@/back-office/agent
 import { parseAgentsViewSearch } from "@/back-office/agents/view-params";
 import { MinimalShell } from "@/back-office/components/MinimalShell";
 import { TourProvider } from "@/shared/tour/tour-context";
-import { AccessRequestsPage } from "@/back-office/access-requests/AccessRequestsPage";
 import { DocsPage } from "@/back-office/docs/DocsPage";
 import { DEFAULT_DOCS_SLUG } from "@/back-office/docs/nav";
-import { TenantsPage } from "@/back-office/tenants/TenantsPage";
-import { TenantCreatePage } from "@/back-office/tenants/TenantCreatePage";
-import { TenantDetailLayout } from "@/back-office/tenants/TenantDetailLayout";
-import { TenantOverviewPage } from "@/back-office/tenants/TenantOverviewPage";
-import { TenantAgentsPage } from "@/back-office/tenants/TenantAgentsPage";
-import { TenantMembersPage } from "@/back-office/tenants/TenantMembersPage";
-import { TenantSettingsPage } from "@/back-office/tenants/TenantSettingsPage";
-import { TenantAuditLogPage } from "@/back-office/tenants/TenantAuditLogPage";
-import { UsersLayout } from "@/back-office/users/UsersLayout";
-import { UsersPage } from "@/back-office/users/UsersPage";
-import { UserCreatePage } from "@/back-office/users/UserCreatePage";
-import { UserEditPage } from "@/back-office/users/UserEditPage";
 import { DimensionCreatePage } from "@/back-office/eval-catalog/DimensionCreatePage";
 import { DimensionDetailPage } from "@/back-office/eval-catalog/DimensionDetailPage";
 import { DimensionsPage } from "@/back-office/eval-catalog/DimensionsPage";
@@ -52,12 +39,6 @@ import { EvalCatalogPage } from "@/back-office/eval-catalog/EvalCatalogPage";
 import { ProfileBuilderPage } from "@/back-office/eval-catalog/ProfileBuilderPage";
 import { ProfileDetailPage } from "@/back-office/eval-catalog/ProfileDetailPage";
 import { ProfilesPage } from "@/back-office/eval-catalog/ProfilesPage";
-import { LLMCatalogPage } from "@/back-office/llm-catalog/LLMCatalogPage";
-import { LLMInferenceCreatePage } from "@/back-office/llm-catalog/LLMInferenceCreatePage";
-import { LLMInferenceEditPage } from "@/back-office/llm-catalog/LLMInferenceEditPage";
-import { UsageCallDetailPage } from "@/back-office/llm-catalog/UsageCallDetailPage";
-import { parseLLMCatalogSearch } from "@/back-office/llm-catalog/tab-params";
-import { parseUsageViewSearch } from "@/back-office/llm-catalog/usage-view-params";
 import { AgentRegistryLayout } from "@/back-office/agent-registry/AgentRegistryLayout";
 import { AgentRegistryPage } from "@/back-office/agent-registry/AgentRegistryPage";
 import { SlotDetailPage } from "@/back-office/agent-registry/SlotDetailPage";
@@ -167,56 +148,6 @@ const agentTraceDetailRoute = createRoute({
   }),
 });
 
-// ── Users (+ Access Requests) ────────────────────────────────────────────────
-// Mirrors the real router: UsersLayout wraps the people-list/requests tabs;
-// create/edit are full-page forms registered directly under the protected
-// layout (not nested in UsersLayout), same as the real tree.
-
-const usersLayoutRoute = createRoute({
-  getParentRoute: () => protectedLayoutRoute,
-  path: "/users",
-  component: UsersLayout,
-});
-
-const usersListRoute = createRoute({
-  getParentRoute: () => usersLayoutRoute,
-  path: "/",
-  component: UsersPage,
-});
-
-const usersRequestsRoute = createRoute({
-  getParentRoute: () => usersLayoutRoute,
-  path: "/requests",
-  component: AccessRequestsPage,
-});
-
-const userCreateRoute = createRoute({
-  getParentRoute: () => protectedLayoutRoute,
-  path: "/users/new",
-  component: UserCreatePage,
-  validateSearch: (search: Record<string, unknown>): { email?: string; request?: string } => ({
-    email: typeof search.email === "string" ? search.email : undefined,
-    request: typeof search.request === "string" ? search.request : undefined,
-  }),
-});
-
-const userEditRoute = createRoute({
-  getParentRoute: () => protectedLayoutRoute,
-  path: "/users/$userId",
-  component: UserEditPage,
-  validateSearch: (search: Record<string, unknown>): { request?: string } => ({
-    request: typeof search.request === "string" ? search.request : undefined,
-  }),
-});
-
-const accessRequestsRedirectRoute = createRoute({
-  getParentRoute: () => protectedLayoutRoute,
-  path: "/access-requests",
-  beforeLoad: () => {
-    throw redirect({ to: "/users/requests" });
-  },
-});
-
 // ── Docs (demo-only — no production back-office equivalent) ────────────────
 
 const docsIndexRoute = createRoute({
@@ -231,56 +162,6 @@ const docsPageRoute = createRoute({
   getParentRoute: () => protectedLayoutRoute,
   path: "/docs/$slug",
   component: DocsPage,
-});
-
-// ── Tenants ───────────────────────────────────────────────────────────────
-
-const tenantsRoute = createRoute({
-  getParentRoute: () => protectedLayoutRoute,
-  path: "/tenants",
-  component: TenantsPage,
-});
-
-const tenantCreateRoute = createRoute({
-  getParentRoute: () => protectedLayoutRoute,
-  path: "/tenants/new",
-  component: TenantCreatePage,
-});
-
-const tenantDetailLayoutRoute = createRoute({
-  getParentRoute: () => protectedLayoutRoute,
-  path: "/tenants/$tenantId",
-  component: TenantDetailLayout,
-});
-
-const tenantOverviewRoute = createRoute({
-  getParentRoute: () => tenantDetailLayoutRoute,
-  path: "/",
-  component: TenantOverviewPage,
-});
-
-const tenantAgentsListRoute = createRoute({
-  getParentRoute: () => tenantDetailLayoutRoute,
-  path: "/agents",
-  component: TenantAgentsPage,
-});
-
-const tenantMembersRoute = createRoute({
-  getParentRoute: () => tenantDetailLayoutRoute,
-  path: "/members",
-  component: TenantMembersPage,
-});
-
-const tenantSettingsRoute = createRoute({
-  getParentRoute: () => tenantDetailLayoutRoute,
-  path: "/settings",
-  component: TenantSettingsPage,
-});
-
-const tenantAuditLogRoute = createRoute({
-  getParentRoute: () => tenantDetailLayoutRoute,
-  path: "/audit-log",
-  component: TenantAuditLogPage,
 });
 
 // ── Evals Catalog (dimensions / evals / profiles) ───────────────────────────
@@ -340,38 +221,6 @@ const profileVersionRoute = createRoute({
   getParentRoute: () => protectedLayoutRoute,
   path: "/evals/catalog/profiles/$profileId/version",
   component: ProfileBuilderPage,
-});
-
-// ── LLM Catalog (models / usage log / pricing / routing) ────────────────────
-// A single page with 4 in-page tabs driven by `?tab=` (no child routes) —
-// mirrors the real router. /new must precede /$inferenceId so the literal
-// path wins; the usage call-detail leaf is standalone (3 segments, no
-// <Outlet/>), same precedent as the agent-level run/trace detail routes.
-
-const llmCatalogRoute = createRoute({
-  getParentRoute: () => protectedLayoutRoute,
-  path: "/llm-catalog",
-  component: LLMCatalogPage,
-  validateSearch: (search: Record<string, unknown>) => parseLLMCatalogSearch(search),
-});
-
-const llmInferenceCreateRoute = createRoute({
-  getParentRoute: () => protectedLayoutRoute,
-  path: "/llm-catalog/new",
-  component: LLMInferenceCreatePage,
-});
-
-const llmCatalogUsageCallDetailRoute = createRoute({
-  getParentRoute: () => protectedLayoutRoute,
-  path: "/llm-catalog/usage/$callId",
-  component: UsageCallDetailPage,
-  validateSearch: (search: Record<string, unknown>) => parseUsageViewSearch(search),
-});
-
-const llmInferenceEditRoute = createRoute({
-  getParentRoute: () => protectedLayoutRoute,
-  path: "/llm-catalog/$inferenceId",
-  component: LLMInferenceEditPage,
 });
 
 // ── Agent Registry (slots / versions / bindings) ────────────────────────────
@@ -444,21 +293,8 @@ const protectedChildren = [
     agentSettingsRoute,
     agentTraceDetailRoute,
   ]),
-  usersLayoutRoute.addChildren([usersListRoute, usersRequestsRoute]),
-  userCreateRoute,
-  userEditRoute,
-  accessRequestsRedirectRoute,
   docsIndexRoute,
   docsPageRoute,
-  tenantsRoute,
-  tenantCreateRoute,
-  tenantDetailLayoutRoute.addChildren([
-    tenantOverviewRoute,
-    tenantAgentsListRoute,
-    tenantMembersRoute,
-    tenantSettingsRoute,
-    tenantAuditLogRoute,
-  ]),
   evalsCatalogLayoutRoute.addChildren([
     evalsCatalogEvalsRoute,
     evalsCatalogDimensionsRoute,
@@ -469,10 +305,6 @@ const protectedChildren = [
   profileBuilderRoute,
   profileDetailRoute,
   profileVersionRoute,
-  llmCatalogRoute,
-  llmInferenceCreateRoute,
-  llmCatalogUsageCallDetailRoute,
-  llmInferenceEditRoute,
   agentRegistryLayoutRoute.addChildren([agentRegistryRoute]),
   agentRegistrySlotDetailRoute,
   agentRegistryVersionCreateRoute,

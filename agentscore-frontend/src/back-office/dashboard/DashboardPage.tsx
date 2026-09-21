@@ -34,7 +34,7 @@ import { useTour } from "@/shared/tour/tour-context";
 
 export function DashboardPage() {
   const [intervalId, setIntervalId] = useState("30s");
-  const { blank, role } = useDemoMode();
+  const { blank } = useDemoMode();
   const { start: startTour } = useTour();
   const overview = blank ? DASHBOARD_OVERVIEW_BLANK : DASHBOARD_OVERVIEW;
   const ingestion = blank ? INGESTION_OVERVIEW_BLANK : INGESTION_OVERVIEW;
@@ -72,7 +72,7 @@ export function DashboardPage() {
 
       <Box sx={{ minHeight: 0, flex: 1, overflowY: "auto" }}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5, px: 4, py: 3 }}>
-          {blank ? <GettingStartedChecklist role={role} /> : null}
+          {blank ? <GettingStartedChecklist /> : null}
           <KpiRow overview={overview} ingestion={ingestion} />
 
           <Grid container spacing={2.5}>

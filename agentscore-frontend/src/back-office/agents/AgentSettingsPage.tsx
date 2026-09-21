@@ -31,11 +31,33 @@ import { ScheduleSection } from "@/back-office/agents/scoring/ScheduleSection";
 import { CascadePreviewList } from "@/shared/components/cascade-preview-list";
 import { AGENT_PURGE_CASCADE } from "@/shared/components/purge-cascade";
 import { Chip } from "@/shared/components/chip";
+import { Combobox } from "@/shared/components/combobox";
 import { DangerZone } from "@/shared/components/danger-zone";
 import { FormSection } from "@/shared/components/form-section";
 import { ProvenanceDl } from "@/shared/components/provenance-dl";
 import { StatusDot } from "@/shared/components/status-dot";
 import { TypedConfirmInput } from "@/shared/components/typed-confirm-input";
+
+const LLM_PROVIDER_OPTIONS = [
+  { value: "openai", label: "OpenAI" },
+  { value: "anthropic", label: "Anthropic" },
+  { value: "azure-openai", label: "Azure OpenAI" },
+  { value: "vertex-ai", label: "Google Vertex AI" },
+  { value: "custom", label: "Custom / self-hosted" },
+] as const;
+
+type LLMProviderId = (typeof LLM_PROVIDER_OPTIONS)[number]["value"];
+
+interface LLMProviderSettings {
+  provider: LLMProviderId;
+  model: string;
+  apiKey: string;
+  baseUrl: string;
+}
+
+function fakeLLMProviderSettings(): LLMProviderSettings {
+  return { provider: "openai", model: "gpt-4o", apiKey: "", baseUrl: "" };
+}
 
 // Fake agent-profile roster (no backend) - canonical ids shared with the
 // other agent-tab clones so the same agent looks consistent across tabs.
@@ -83,6 +105,7 @@ export function AgentSettingsPage() {
     () => FAKE_AGENT_PROFILES[agentId] ?? { ...FAKE_AGENT_PROFILES["agent-1"], agent_id: agentId, tenant_id: tenantId },
   );
   const [benchmark] = useState(() => fakeBenchmark());
+  const [llmSettings, setLlmSettings] = useState<LLMProviderSettings>(fakeLLMProviderSettings);
   const [purgePending, setPurgePending] = useState(false);
 
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -127,7 +150,7 @@ export function AgentSettingsPage() {
       toast.success("Agent purged");
       setTimeout(() => {
         setPurgePending(false);
-        void navigate({ to: "/tenants/$tenantId", params: { tenantId } });
+        void navigate({ to: "/agents", search: { view: "list", by: "tenant" } });
       }, 300);
     },
     isPending: purgePending,
@@ -209,6 +232,86 @@ export function AgentSettingsPage() {
               sx={{ m: 0, typography: "caption", color: "text.secondary" }}
             >
               Cannot be changed. Create a new agent to use a different name.
+            </Box>
+          </Box>
+        </FormSection>
+
+        <FormSection
+          title="LLM provider"
+          description="Bring your own key. This agent's judge/scoring calls run against the provider and model configured here — there's no shared platform catalog to pick from anymore."
+        >
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
+              <FormLabel htmlFor="agent-llm-provider">Provider</FormLabel>
+              <Combobox
+                testId="agent-llm-provider"
+                options={LLM_PROVIDER_OPTIONS.map((o) => ({ value: o.value, label: o.label }))}
+                value={llmSettings.provider}
+                onChange={(next) =>
+                  next &&
+                  setLlmSettings((s) => ({ ...s, provider: next as LLMProviderId }))
+                }
+                clearable={false}
+                ariaLabel="LLM provider"
+              />
+            </Box>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
+              <FormLabel htmlFor="agent-llm-model">Model</FormLabel>
+              <TextField
+                id="agent-llm-model"
+                placeholder="e.g. gpt-4o"
+                value={llmSettings.model}
+                onChange={(e) => setLlmSettings((s) => ({ ...s, model: e.target.value }))}
+                autoComplete="off"
+                fullWidth
+                size="small"
+                slotProps={{ htmlInput: { "data-testid": "agent-llm-model" } }}
+              />
+            </Box>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
+              <FormLabel htmlFor="agent-llm-api-key">API key</FormLabel>
+              <TextField
+                id="agent-llm-api-key"
+                type="password"
+                placeholder="sk-…"
+                value={llmSettings.apiKey}
+                onChange={(e) => setLlmSettings((s) => ({ ...s, apiKey: e.target.value }))}
+                autoComplete="off"
+                fullWidth
+                size="small"
+                slotProps={{ htmlInput: { "data-testid": "agent-llm-api-key" } }}
+              />
+              <Box
+                component="p"
+                sx={{ m: 0, typography: "caption", color: "text.secondary" }}
+              >
+                Stored encrypted. Never shown again after saving.
+              </Box>
+            </Box>
+            {llmSettings.provider === "custom" ? (
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
+                <FormLabel htmlFor="agent-llm-base-url">Endpoint URL</FormLabel>
+                <TextField
+                  id="agent-llm-base-url"
+                  placeholder="https://your-inference-endpoint"
+                  value={llmSettings.baseUrl}
+                  onChange={(e) => setLlmSettings((s) => ({ ...s, baseUrl: e.target.value }))}
+                  autoComplete="off"
+                  fullWidth
+                  size="small"
+                  slotProps={{ htmlInput: { "data-testid": "agent-llm-base-url" } }}
+                />
+              </Box>
+            ) : null}
+            <Box>
+              <Button
+                variant="outlined"
+                size="small"
+                data-testid="agent-llm-save"
+                onClick={() => toast.success("LLM provider settings saved")}
+              >
+                Save
+              </Button>
             </Box>
           </Box>
         </FormSection>
@@ -341,7 +444,7 @@ export function AgentSettingsPage() {
           <DangerZone>
             <DangerZone.Row
               title="Deactivate agent"
-              description="Stops new scoring/fit/card/discovery work and hides the agent from customers. Reversible via Activate."
+              description="Stops new scoring/fit/card/discovery work and hides the agent from view. Reversible via Activate."
               action={
                 <LadderActionButton
                   testId="agent-deactivate"
@@ -356,7 +459,7 @@ export function AgentSettingsPage() {
             />
             <DangerZone.Row
               title="Activate agent"
-              description="Resumes scoring/fit/card/discovery work and unhides the agent from customers."
+              description="Resumes scoring/fit/card/discovery work and makes the agent visible again."
               action={
                 <LadderActionButton
                   testId="agent-activate"
