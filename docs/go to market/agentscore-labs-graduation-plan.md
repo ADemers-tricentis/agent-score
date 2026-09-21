@@ -20,10 +20,10 @@
 
 Tricentis Labs formalized graduation criteria after leadership challenged why a sibling lab project ("AIDA") wasn't being sold yet, exposing that Labs had no process to judge when a project is ready to leave the lab. A steering/advisory group set four requirements to move from **Ignite** to **Activate** (next stop after that: **Beta**):
 
-1. **Active users** - a real usage signal, not just signups.
+1. **Active users** - a real usage signal, not just signups. Threshold and definition now concrete: [5 tenants with real usage](one-pager-agentscore-business-case.md#how-well-know-were-ready-for-go-to-market) (manual scoring runs + return usage across 2+ weeks, not signups or schedule-only tenants) - currently at zero.
 2. **A commercial model** - started and validated (packaging/pricing direction, not final).
 3. **Steering committee approval.**
-4. **ROI materials** - added explicitly because a prior project never clearly stated the problem it solved, only that it existed.
+4. **ROI materials** - added explicitly because a prior project never clearly stated the problem it solved, only that it existed. Definition now concrete: the [three ROI hypotheses](one-pager-agentscore-business-case.md#the-roi-we-can-measure-and-what-were-still-hypothesizing) moved from directional to measured via this plan's [§4](#4-turn-the-study-into-roisizing-materials) - currently all three still open.
 
 AIDA cleared this bar and was approved to move to Beta. The playbook below is how - translated to AgentScore. This plan works alongside [`one-pager-agentscore-business-case.md`](one-pager-agentscore-business-case.md) - the ICP and use-case-cluster sections there are exactly the artifacts item 2 below produces; this plan is the "how to get there," the business case is the "what we found."
 
@@ -164,3 +164,4 @@ Set B is somewhat harder on paper (two subtle failures vs. one) - that's a reaso
 * `docs/feedback/External Interest.md` - pipeline to tier by engagement (step 1)
 * `docs/feedback/Customer Feedback Log.md` - existing session-by-session evidence to cross-check against green-account outreach; also the source of the "wrong tool -> bad data -> bad answer" root-cause pattern Workday/Meta/Wolters Kluwer/Tritusa all praised, which the study's corpus is designed to reproduce with a number attached
 * `test-agent/send_synthetic_traces.py` - the synthetic trace scaffold the study corpus (3.3) is built from; run `--list-scenarios` to see all 8 available scenarios
+* [`docs/documentation/AgentScore-Beta-Metrics-Instrumentation.md`](../documentation/AgentScore-Beta-Metrics-Instrumentation.md) - the usage-dashboard metrics (manual-trigger tagging, retention rollup) the active-user threshold in criterion #1 depends on; most are marked "needs new instrumentation," not yet built

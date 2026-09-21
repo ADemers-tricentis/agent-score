@@ -152,10 +152,18 @@ These three belong alongside [Open Questions / Honest Risks](#open-questions--ho
 - We are *ready for GTM* on a given use case once it has a validated cluster **and** a working answer to that cluster's named blocker (e.g. fleet-level scoring for the governance cluster).
 - We are **not** ready if the pipeline keeps spreading across new use cases rather than reinforcing the four above - that pattern means we're being pulled by inbound rather than converging on a wedge.
 
+**Two more thresholds, borrowed directly from the Labs graduation bar (criteria #1 and #4 in [the graduation plan](agentscore-labs-graduation-plan.md#the-bar-we-have-to-clear)), have to clear alongside the use-case thresholds above:**
+
+- **Active users, defined as real signal, not signups.** Proposed threshold: **5 tenants** showing real usage in the same rolling period - not 5 signups, not 5 tenants running only unattended schedules. "Real usage" means both (a) at least one manually-triggered scoring run ("Score now," not just an autonomous schedule - metric #11 in the Beta Metrics doc exists specifically because a schedule nobody looks at is a weak signal even when it runs cleanly) and (b) return usage across 2+ distinct weeks (metric #18, retention/days-active). Validate against the weekly usage dashboard once it's built - Part 2 of [`AgentScore-Beta-Metrics-Instrumentation.md`](../documentation/AgentScore-Beta-Metrics-Instrumentation.md) marks the metrics this threshold depends on (#11, #12, #18) as "needs new instrumentation" today, so this is a build dependency before it's a reportable number.
+- **ROI materials, defined as measured, not hypothesized.** The three hypotheses above - savings, governance, token-waste - have to move from "directional" to "measured" using the timed study's output ([graduation plan §4](agentscore-labs-graduation-plan.md#4-turn-the-study-into-roisizing-materials)): the FTE-cost conversion, the accuracy delta, and at least one draft credit/pricing package. We are not ready on ROI messaging while all three are still discussion points rather than numbers we'd put in front of a buyer.
+
+**Where we actually stand on both, today:** zero. Zero active betas per the External Interest pipeline tracker, and zero measured ROI numbers - all three hypotheses above are still open. Naming that plainly, rather than rounding either number up, is the point (see [Section 5 of the graduation plan](agentscore-labs-graduation-plan.md#5-package-it-as-an-honest-ask-not-a-pitch)).
+
 **Next steps to get a real read on this (not yet started):**
 
 - Work with marketing to build a targeted beta list *per use-case cluster*, rather than one generic "sign up for beta" funnel, so new inbound has a chance to concentrate instead of scatter further.
 - Prioritize automatic tenant provisioning beyond AI Workspace (which already has it) so we can gather a larger volume of usage feedback per cluster faster, without waiting on manual onboarding for each new account.
+- Build the Part 2 behavior-metrics instrumentation the active-user threshold depends on - manual-vs-scheduled trigger tagging (#11) and the retention/return-usage rollup (#18) don't exist yet per the Beta Metrics doc, so the threshold above isn't checkable until they do.
 
 ---
 
