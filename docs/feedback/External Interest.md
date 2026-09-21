@@ -8,9 +8,9 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 ## Pipeline Tracker
 
-| Interested companies | Companies replied | Demos scheduled | Active betas |
-|---|---|---|---|
-| 69 | 5 | 5 | 0 |
+| Interested companies | Companies replied | Demos | Pending betas | Active betas |
+|---|---|---|---|---|
+| 69 | 6 | 5 | 1 | 0 |
 
 Source breakdown: 67 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.) = 69 total.
 
@@ -52,7 +52,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Wolters Kluwer United States Inc. | Chris Allanson | Demo Scheduled |
 | J. R. Simplot Company | Neeraja Kusuma | Email sent |
 | Crown Equipment Corporation | Vinay Patlolla | Email sent |
-| Accenture LLP | Jigish Belani | Demo Scheduled |
+| Accenture LLP | Jigish Belani | Pending Beta — on-prem/private AWS setup (on behalf of Meta) |
 | Stanza | Anirban Toy Choudhury | Email sent |
 | Sunbelt Rentals | Arya Shrey | Email sent |
 | Merito Solutions | Chris Carpenter, Gerard Trimberger | Email sent |
@@ -85,10 +85,10 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Brillar Pte Ltd (SG) | Zuzan Win | Interested |
 | Harrods Ltd (UK) | Shanita Helyar | Interested |
 | Ally Financial Inc. | Jana Kethamreddy | Interested |
-| BearingPoint GmbH (DE) - HQ | Rohan Patil | Interested |
+| BearingPoint GmbH (DE) - HQ | Rohan Patil | Replied |
 | xAmplify (AU) | Prakash Panchal | Interested |
 
-*(Status values: Interested → Email sent → Replied → Demo scheduled → Active beta.)*
+*(Status values: Interested → Email sent → Replied → Demo scheduled → Pending beta → Active beta.)*
 
 ---
 
@@ -964,6 +964,8 @@ what they do: World's largest IT/management consultancy (~750,000+ employees).
 likely use case: evaluating agent quality either for internal delivery QA or as part of client engagements.
 
 known agent tooling: "AI Refinery" distiller framework/SDK (agent memory, multi-agent collaboration, governance/observability, built-in model evaluation), agentic procurement systems for HPE, partnerships with ServiceNow/Google Cloud/OpenAI, training 700,000 staff in agentic AI ([Accenture Newsroom](https://newsroom.accenture.com/news/2025/accenture-expands-ai-refinery-and-launches-new-industry-agent-solutions-to-accelerate-agentic-ai-adoption)).
+
+beta evaluation status (as of 2026-09-18): in the process of scoping a beta evaluation for Accenture, who will evaluate on Meta's behalf — the same delivery/SI-partner engagement referenced in the Meta Platforms, Inc. entry above. Still working out Accenture's setup, since they require an on-prem (private AWS) instance.
 
 ---
 
