@@ -41,10 +41,9 @@
 
 **"Being right about the market isn't the same as being the right company to act on it - but here we are."**
 
-- We start the trust conversation somewhere else has to earn from zero - the buyer who owns "is this agent safe to ship" already trusts Tricentis for Tosca and qTest
+- Quality engineering, from code to agents - users already trust Tricentis for Tosca and qTest; AgentScore isn't a new tool to evaluate, it's the same platform extended from code to the agents that code powers
 - Distribution and cost advantage no outside vendor can match - AI Workspace agents auto-provision a tenant and get graded with zero setup; every AIW customer is a warm lead, not a cold integration decision
-- Existing regulated-industry footprint (Merck, Regeneron, McKesson, Tritusa's bank/pharma clients) already answers "how do you know it's accurate" in an adjacent product
-  - *Visual note: current deck pairs this bullet with a gift/present icon, which doesn't fit "regulated industry" - swap for a compliance/shield-style icon.*
+- The market is deciding right now - Braintrust, Galileo, and Langfuse all moved (raised, acquired, or folded in) within months of each other; every quarter we wait, someone else becomes the default answer to "is this agent safe to ship?"
 
 *Notes: This doesn't guarantee we win the category - on-prem, RBAC/SSO, and compliance/PII gaps are real and someone else could close them faster. But the odds are better than a startup's, and worse odds still beat sitting out a market this size.*
 
@@ -107,13 +106,23 @@
 
 ---
 
-## 8. The ROI Metric We Can Measure
+## 8. The ROI Metrics We Can Measure
 
-**"Incident-investigation time saved."**
+**"Three candidate metrics - none validated by a paying customer yet."**
 
-- Baseline: employees report spending ~4.3 hours/week verifying whether AI outputs are true - an estimated $14K/employee/year in pure overhead
-- Hypothesis: if root-cause attribution cuts incident-investigation time by even 25%, that's ~$3.5K/employee/year reclaimed
-- How we'll measure it: a timed pilot comparing root-cause investigation time with vs. without AgentScore, per incident
-- Status today: hypothesis, not yet validated by a paying customer - needs before/after pilot data before it goes in front of a buyer as a claim
+1. **Incident-investigation time saved**
+   - Baseline: ??? (employees self-report ~4.3 hours/week verifying whether AI outputs are true externally, but we haven't measured this against our own usage yet - an estimated $14K/employee/year in overhead if the self-reported figure holds)
+   - Hypothesis: if root-cause attribution cuts incident-investigation time by even 25%, that's ~$3.5K/employee/year reclaimed
+   - How we'll measure it: a timed pilot comparing root-cause investigation time with vs. without AgentScore, per incident
+2. **Audit-evidence turnaround time**
+   - Baseline: ??? - "time to produce audit-ready evidence that an agent is safe to ship" is currently unmeasured and ad hoc at every account we've talked to (Wolters Kluwer, Freddie Mac)
+   - Hypothesis: AgentScore's tiered evidence model turns this from ad hoc into a reportable SLA metric
+   - How we'll measure it: benchmark time-to-evidence at a pilot account before vs. after AgentScore
+3. **% of token spend recovered as waste**
+   - Baseline: ??? % - we don't have a real customer token bill to benchmark against yet
+   - Hypothesis: Gartner finds 40-60% of agentic token spend contributes nothing to the answer; AgentScore's scoring could surface and quantify that waste as a direct, meterable cost-avoidance story
+   - How we'll measure it: compare token spend AgentScore flags as low-value against a pilot customer's actual bill
 
-*Notes: Two other candidate ROI metrics exist (audit-evidence turnaround time; % of token spend recovered as waste) but aren't measured yet either - see "The ROI We Can Measure" in the one-pager for all three.*
+- Status today (all three): hypothesis, not yet validated by a paying customer - needs before/after pilot data before any goes in front of a buyer as a claim
+
+*Notes: previously only "incident-investigation time saved" appeared on-slide, with the other two relegated to a footnote; all three are now presented as ROI metrics we plan to measure, not yet as validated numbers - see "The ROI We Can Measure" in the one-pager for full detail.*
