@@ -26,12 +26,24 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
 | Bulk / programmatic export of traces + scores (get the data out, not just view it) | Wolters Kluwer, Tritusa | Open - API in progress, possibly alpha, not shipped. Larger/partner accounts keep asking |
 | Synthetic dataset generation (targeted/edge-case coverage without waiting for real traces) | Tritusa | Open - golden sets are curated from real interactions only; roadmap |
 | Partner co-sell / co-working motion (SIs who implement + evaluate for their own clients) | Tritusa | Open - asked twice, no answer available; gold-sponsor partner presenting our story at Transatlantic 26 |
+| Expose the eval run-count / non-deterministic repetition setting to users (backend-config only today) | BearingPoint | Open - flagged internally as low effort, not yet exposed |
+| Point AgentScore at Tricentis's own agents (e.g. QTest ATC) so a partner can prove to their client that agent works | BearingPoint | Open - deliberately not exposed today for proprietary/IP reasons; blocks BearingPoint's most concrete use case |
 
 *Audit note (2026-09-11): reviewed every row for a question that can now be answered vs. a genuine product/roadmap/business gap. Category framing and judge-trust (rows above) now have rehearsed answers and are ready to ship. Cross-ecosystem OTel ingestion is confirmed solved. Everything else - on-prem self-hosting, internal-LLM judge, scenario bank/red-teaming, fleet-level scoring, Agentforce integration, RBAC, compliance validation, alerting, bulk export, synthetic datasets, partner co-sell - is still a real engineering, roadmap, or business decision pending confirmation, not something answerable today.*
 
 ---
 
 ## Sessions
+
+### 2026-09-23 - BearingPoint (partner / SI, Labs beta onboarding)
+
+- **Who:** Rohan Patil (Senior Technology Consultant, testing/QA architecture lead, ~10 yrs, runs BearingPoint's internal SAP-focused testing factory). Tricentis: Andrew Demers.
+- **What we learned:** A Labs signup converted into a first hands-on intro call, not a deep technical evaluation yet. BearingPoint's testing factory is picking up more agents/tools and has **no evaluation tooling at all** today ("we don't have anything of that sort") - that gap is exactly what drew Rohan to sign up. Two use cases surfaced: run AgentScore against BearingPoint's own QTest ATC test-case-generation agent, and build an answer he can show his own clients when they ask "how do you know the agent works" (BearingPoint just launched its own agentic-AI platform, GenAIQ, and expects that question soon) - same partner/SI lens as Tritusa and Wolters Kluwer. Auto-derived agent profiles, two-line OTel setup, configurable weighting/verdict bands with immutable versioned baselines, root-cause attribution, and region-based EU/US data residency all landed cleanly and were followed with detailed, technical questions.
+- **Major asks:**
+  - Expose the non-deterministic run-count / trace-threshold setting to users (currently backend-config only, not shown in-product).
+  - Visibility into Tricentis's own agents (e.g. QTest ATC) inside AgentScore, so a partner can point at it and prove "your agent works" to a client - currently withheld for proprietary/IP reasons, and the one wall his most concrete use case hit.
+  - Setup + evaluation-criteria slides to bring to his manager (and eventually his own clients) - nothing existed to hand over on the call itself.
+- **Full debrief:** [feedback-sessions/BearingPoint Feedback Session.md](feedback-sessions/BearingPoint%20Feedback%20Session.md)
 
 ### 2026-09-11 - Meta (POC scoping, via delivery partner)
 

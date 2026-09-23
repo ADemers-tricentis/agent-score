@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "powerpoint": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "ppt-mcp"
+      ],
+      "env": {}
+    }
+  }
+}

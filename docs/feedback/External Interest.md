@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 85 form submissions found (as of 2026-09-17), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Nine submissions came from `@tricentis.com` addresses — internal test/QA submissions, not external prospects — and are excluded from the tracker below: Brad Purcell (submitted twice, 2026-08-21 and 2026-09-07), Michal Hrncirik (submitted twice, 2026-09-08 and 2026-09-10, the second time under "Tecra Systems, Inc."), Maria Argulla, Caitlin Bowers, Neil Williams (submitted twice, both 2026-09-08, under "Tricentis (UK)"), Karthick S (2026-09-11, under "Tricentis"), and Kevin Demancsik (2026-09-10, under "TRICENTIS USA"). A seventh submission (VIJESH Vijayan, 2026-08-27, "Neotys (FR) - HQ") came from a `@neotys.com` address; Neotys/NeoLoad has been a Tricentis-owned brand since the 2021 acquisition, so it's excluded on the same basis pending confirmation of whether this is a legacy-domain Tricentis employee or a genuine external NeoLoad customer. One more (Jigish Belani / Accenture LLP, 2026-09-09) is a repeat submission from a contact already tracked below (original: 2026-08-20) — noted, but not added as a second entry. One submission (Rohan Patil / BearingPoint GmbH (DE) - HQ, 2026-09-14) was submitted five times within about 90 seconds and is recorded once. Entries are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini, McKesson, Merito Solutions, PVH Corp, Tritusa Consulting, Ariba, Inc.) — 67 distinct entries as a result. One more combined entry, cbs Corporate Business Solutions (DE/MY), merges two submissions the CRM matched to differently-named accounts ("CBS Corporation" and "CBS Corporate Business Solutions MY") that share the same cbs-consulting.com email domain. Combined entries list each submitter's Date/Name/Contact as its own three-line group. Two additional entries came in through Sales rather than the Labs form — no form timestamp, and they're counted separately from the 85 form submissions above: Freddie Mac (Kaleb Jackson, 2026-08-28) and Meta Platforms, Inc. (Sri Pulleti, 2026-09-10).
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 90 form submissions found (as of 2026-09-22), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Nine submissions came from `@tricentis.com` addresses — internal test/QA submissions, not external prospects — and are excluded from the tracker below: Brad Purcell (submitted twice, 2026-08-21 and 2026-09-07), Michal Hrncirik (submitted twice, 2026-09-08 and 2026-09-10, the second time under "Tecra Systems, Inc."), Maria Argulla, Caitlin Bowers, Neil Williams (submitted twice, both 2026-09-08, under "Tricentis (UK)"), Karthick S (2026-09-11, under "Tricentis"), and Kevin Demancsik (2026-09-10, under "TRICENTIS USA"). A seventh submission (VIJESH Vijayan, 2026-08-27, "Neotys (FR) - HQ") came from a `@neotys.com` address; Neotys/NeoLoad has been a Tricentis-owned brand since the 2021 acquisition, so it's excluded on the same basis pending confirmation of whether this is a legacy-domain Tricentis employee or a genuine external NeoLoad customer. One more (Jigish Belani / Accenture LLP, 2026-09-09) is a repeat submission from a contact already tracked below (original: 2026-08-20) — noted, but not added as a second entry. One submission (Rohan Patil / BearingPoint GmbH (DE) - HQ, 2026-09-14) was submitted five times within about 90 seconds and is recorded once. Entries are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini, McKesson, Merito Solutions, PVH Corp, Tritusa Consulting, Ariba, Inc.) — 72 distinct entries as a result. One more combined entry, cbs Corporate Business Solutions (DE/MY), merges two submissions the CRM matched to differently-named accounts ("CBS Corporation" and "CBS Corporate Business Solutions MY") that share the same cbs-consulting.com email domain. A fifth combined entry, Accenture, merges five submissions from the accenture.com domain that the CRM matched to differently-named accounts — "Accenture LLP" (Jigish Belani), "Accenture Solutions Pvt Ltd (IN)" (Mohammed Arslan Mir), "Accenture AS" (Vijetha Nayak), "Accenture India (IN)" (Ankur Mittal), and one with the company field blank (Priya Saidavaram). The separate "Accenture CIO HR Organization" submission (Greg Wanroy) is deliberately excluded from this merge — its email domain is stanza.ai, not accenture.com, so it's tracked on its own pending confirmation of which label is correct. Combined entries list each submitter's Date/Name/Contact as its own three-line group. Two additional entries came in through Sales rather than the Labs form — no form timestamp, and they're counted separately from the 85 form submissions above: Freddie Mac (Kaleb Jackson, 2026-08-28) and Meta Platforms, Inc. (Sri Pulleti, 2026-09-10).
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -10,14 +10,15 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos | Pending betas | Active betas |
 |---|---|---|---|---|
-| 69 | 6 | 5 | 1 | 0 |
+| 71 | 9 | 8 | 1 | 0 |
 
-Source breakdown: 67 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.) = 69 total.
+Source breakdown: 68 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.), 1 via David (VP of AI/ML) (Eaton) = 71 total.
 
 Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
 
 | Company | Contact | Status |
 |---|---|---|
+| Eaton | Amit Ghag | Demo Scheduled — 2026-10-01 |
 | Meta Platforms, Inc. | Sri Pulleti | Demo Scheduled — POC scoping |
 | Freddie Mac | Kaleb Jackson | Replied |
 | Workday, Inc. | Vijay Mummaneni | Demo Scheduled |
@@ -52,7 +53,6 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Wolters Kluwer United States Inc. | Chris Allanson | Demo Scheduled |
 | J. R. Simplot Company | Neeraja Kusuma | Email sent |
 | Crown Equipment Corporation | Vinay Patlolla | Email sent |
-| Accenture LLP | Jigish Belani | Pending Beta — on-prem/private AWS setup (on behalf of Meta) |
 | Stanza | Anirban Toy Choudhury | Email sent |
 | Sunbelt Rentals | Arya Shrey | Email sent |
 | Merito Solutions | Chris Carpenter, Gerard Trimberger | Email sent |
@@ -79,16 +79,77 @@ Update the per-company Status column below as accounts move, and keep the summar
 | SAP North America | Thomas Zimmermann | Interested |
 | Defence Science and Technology Agency (SG) | cydnie na | Interested |
 | Housing Development Board (SG) | Swee Chyuan Koh | Interested |
-| L'OREAL | Khadim KASHANI | Interested |
+| L'OREAL | Khadim KASHANI | Demo Scheduled — 2026-09-24 |
 | City Dev (SG) | Davin Ng | Interested |
 | Testing IT Consulting S.A. de C.V. | Hector Santa Maria | Interested |
 | Brillar Pte Ltd (SG) | Zuzan Win | Interested |
 | Harrods Ltd (UK) | Shanita Helyar | Interested |
 | Ally Financial Inc. | Jana Kethamreddy | Interested |
-| BearingPoint GmbH (DE) - HQ | Rohan Patil | Replied |
+| BearingPoint GmbH (DE) - HQ | Rohan Patil | Demo Scheduled — 2026-09-23 |
 | xAmplify (AU) | Prakash Panchal | Interested |
+| Accenture (multiple entities) | Jigish Belani, Mohammed Arslan Mir, Vijetha Nayak, Priya Saidavaram, Ankur Mittal | Pending Beta — on-prem/private AWS setup (on behalf of Meta), per Belani; other four submitters still Interested, not individually contacted |
+| Singapore Pools (form blank, domain-resolved) | Nai Hau Lui | Interested |
 
 *(Status values: Interested → Email sent → Replied → Demo scheduled → Pending beta → Active beta.)*
+
+---
+
+### Accenture (multiple entities)
+Date: 2026-09-22 11:09  
+Name: Mohammed Arslan Mir  
+Contact: e.arslan.mir@accenture.com  
+Title: Test Automation Manager  
+Relationship: Customer  
+Submitted as: Accenture Solutions Pvt Ltd (IN)  
+
+Date: 2026-09-21 13:48  
+Name: Vijetha Nayak  
+Contact: vijetha.nayak@accenture.com  
+Title: Quality engineering manager  
+Relationship: Partner  
+Submitted as: Accenture AS  
+
+Date: 2026-09-21 13:48  
+Name: Priya Saidavaram  
+Contact: priya.saidavaram@accenture.com  
+Title: Quality engineering associate manager  
+Relationship: Evaluating Tricentis  
+Submitted as: (form blank; email domain resolved to Accenture)  
+
+Date: 2026-09-20 11:00  
+Name: Ankur Mittal  
+Contact: ankur.e.mittal@accenture.com  
+Title: Test Automation Manager  
+Relationship: Partner  
+Submitted as: Accenture India (IN)  
+
+Date: 2026-08-20 14:48  
+Name: Jigish Belani  
+Contact: jigish.belani@accenture.com  
+Submitted as: Accenture LLP (repeat submission 2026-09-09, not tracked separately)  
+
+what they do: World's largest IT/management consultancy (~750,000+ employees).
+
+likely use case: the relationship values span Customer, Partner (×2), and "Evaluating Tricentis," so most plausibly a mix of internal delivery-QA evaluation and using Agent Score to extend Accenture's own QE practice into agentic-AI testing for its client base — consistent with Jigish Belani's submission, which has already progressed to scoping a beta on behalf of Meta as a delivery/SI-partner engagement (see status note below).
+
+known agent tooling: "AI Refinery" distiller framework/SDK (agent memory, multi-agent collaboration, governance/observability, built-in model evaluation), agentic procurement systems for HPE, partnerships with ServiceNow/Google Cloud/OpenAI, training 700,000 staff in agentic AI ([Accenture Newsroom](https://newsroom.accenture.com/news/2025/accenture-expands-ai-refinery-and-launches-new-industry-agent-solutions-to-accelerate-agentic-ai-adoption)).
+
+beta evaluation status (as of 2026-09-18, Jigish Belani only): in the process of scoping a beta evaluation for Accenture, who will evaluate on Meta's behalf — the same delivery/SI-partner engagement referenced in the Meta Platforms, Inc. entry above. Still working out Accenture's setup, since they require an on-prem (private AWS) instance. The other four submitters above are separate individuals who have not been individually contacted on this basis.
+
+---
+
+### — (form blank; email domain suggests Singapore Pools)
+Date: 2026-09-21 01:30  
+Name: Nai Hau Lui  
+Contact: luinaihau@singaporepools.com.sg  
+Title: Lead, Quality Engineering  
+Relationship: Customer  
+
+what they do: Singapore's sole legal lottery/betting operator (Toto, 4D, horse racing and sports betting), incorporated 1968, wholly owned since 2004 by Tote Board, a statutory board under the Ministry of Finance; run not-for-profit, with surplus channeled to community/charity causes ([Wikipedia](https://en.wikipedia.org/wiki/Singapore_Pools); [Tote Board](https://www.toteboard.gov.sg/about-us/our-subsidiaries/)).
+
+likely use case: given the Lead, Quality Engineering title and Customer relationship, most plausibly evaluating Agent Score for internal QA of AI-driven components in their customer-facing betting platforms — an inference, not a confirmed need.
+
+known agent tooling: no public information found tying Singapore Pools to a deployed agent product.
 
 ---
 
@@ -367,6 +428,8 @@ Title: Senior Technology Consultant
 Relationship: Partner  
 
 what they do: European management and technology consultancy (13,000+ people, 70+ countries).
+
+confirmed use case (from 2026-09-23 demo): confirmed the inference below, with a partner/SI lens like Tritusa and Wolters Kluwer. Rohan Patil is testing/QA architecture lead running BearingPoint's internal, SAP-focused testing factory, which has no agent-evaluation tooling today. Wants AgentScore for two things: run it against BearingPoint's own QTest ATC test-case-generation agent, and build an answer he can show his own clients when they ask "how do you know the agent works" (BearingPoint's GenAIQ launch makes that question likely soon). Top asks: expose the non-deterministic run-count setting to users, and visibility into Tricentis's own agents (e.g. QTest ATC) inside AgentScore so a partner can prove an agent works to a client - currently withheld for proprietary/IP reasons, the one wall his most concrete use case hit. Debrief: [BearingPoint Feedback Session](feedback-sessions/BearingPoint%20Feedback%20Session.md).
 
 likely use case: given its own agentic-AI platform launch, most plausibly evaluating Agent Score to extend its consulting practice into agentic-AI QA for client engagements — same profile as TCS and ABeam above.
 
@@ -951,21 +1014,6 @@ what they do: Large private manufacturer of forklifts and warehouse material-han
 likely use case: evaluating the reliability/decision-quality of the AI powering their autonomous lift trucks or InfoLink analytics layer.
 
 known agent tooling: autonomous lift trucks with real-time navigation decisions; InfoLink Operator/Fleet Management system using AI as an "intermediary layer between data collection and human evaluation" ([Crown Equipment blog](https://www.crown.com/en-us/blog/articles/connectivity/when-ai-meets-kpis-how-connected-services-and-ai-can-streamline-data-analysis.html)).
-
----
-
-### Accenture LLP
-Date: 2026-08-20 14:48  
-Name: Jigish Belani  
-Contact: jigish.belani@accenture.com  
-
-what they do: World's largest IT/management consultancy (~750,000+ employees).
-
-likely use case: evaluating agent quality either for internal delivery QA or as part of client engagements.
-
-known agent tooling: "AI Refinery" distiller framework/SDK (agent memory, multi-agent collaboration, governance/observability, built-in model evaluation), agentic procurement systems for HPE, partnerships with ServiceNow/Google Cloud/OpenAI, training 700,000 staff in agentic AI ([Accenture Newsroom](https://newsroom.accenture.com/news/2025/accenture-expands-ai-refinery-and-launches-new-industry-agent-solutions-to-accelerate-agentic-ai-adoption)).
-
-beta evaluation status (as of 2026-09-18): in the process of scoping a beta evaluation for Accenture, who will evaluate on Meta's behalf — the same delivery/SI-partner engagement referenced in the Meta Platforms, Inc. entry above. Still working out Accenture's setup, since they require an on-prem (private AWS) instance.
 
 ---
 
