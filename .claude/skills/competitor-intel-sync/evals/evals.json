@@ -1,0 +1,35 @@
+{
+  "skill_name": "competitor-intel-sync",
+  "evals": [
+    {
+      "id": 0,
+      "name": "daily-full-sweep",
+      "prompt": "hey can you run the daily competitor check for AgentScore - see what's new with langfuse, arize, patronus, all of them, and write it up",
+      "expected_output": "A new dated markdown file at docs/research/competitive-intel/YYYY-MM-DD.md, with a section per competitor pulled from docs/research/competitive-analysis-report.md, each with dated/sourced bullets across the three buckets (update, customers love, using it for) where findings exist, empty-handed competitors omitted, and a short final report summarizing counts.",
+      "files": [],
+      "assertions": [
+        "Competitor list was read from docs/research/competitive-analysis-report.md rather than invented/hardcoded",
+        "Each finding has a real, working source link",
+        "\"Customers love\" bullets name a specific feature/workflow, not generic praise (e.g. not just \"great tool\")",
+        "\"Using it for\" bullets describe concrete usage/integration, distinct in substance from the \"love\" bullets",
+        "A competitor with nothing new is omitted entirely rather than given an empty/placeholder section",
+        "First-run dedup handling is correct: no prior digest exists, so nothing is wrongly filtered out as a duplicate",
+        "\"So what for AgentScore\" synthesis is present only if something materially matters, not forced every time",
+        "Final report states counts (competitors with findings vs. skipped) and the output file path"
+      ]
+    },
+    {
+      "id": 1,
+      "name": "single-competitor-focus",
+      "prompt": "what's new with Patronus AI specifically? anything customers are raving about lately",
+      "expected_output": "Focuses research on Patronus AI (still checks/writes the dated digest file per the skill's normal workflow, or at minimum surfaces the three-bucket findings for Patronus AI specifically), with sourced, specific claims rather than generic praise.",
+      "files": [],
+      "assertions": [
+        "Research stays scoped to Patronus AI rather than sweeping unrelated competitors",
+        "Findings are specific and sourced, not generic sentiment",
+        "Handles the single-competitor scope sensibly (doesn't force the full multi-competitor digest workflow onto a one-company ask, or if it does, does so in a way that still reads naturally)",
+        "Distinguishes 'customers love' (sentiment) from 'using it for' (behavior) rather than collapsing them into one bucket"
+      ]
+    }
+  ]
+}
