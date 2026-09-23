@@ -10,7 +10,7 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
 
 | Ask | Sessions raised in | Status |
 |---|---|---|
-| On-prem / no-cloud deployment | Meta (x2) | Progressing - self-hosting in customer's own AWS/EC2 floated in the 09-11 POC-scoping call, not yet confirmed with engineering |
+| On-prem / no-cloud deployment | Meta (x2) | Confirmed with engineering (2026-09-23) - self-hosted deployment in customer's own AWS/EC2 is a go |
 | Firm, consistent timeline (POC/beta dates that don't move mid-call) | Workday, Meta | Open - need one rehearsed slide every speaker uses |
 | Clear answer to "is this a testing tool or an observability tool?" | Workday | Answered - name the category, don't fight the word: something else drives the agent, AgentScore grades. Boundary picture: Driver -> Agent -> Traces -> AgentScore grades. Ready to ship to the deck |
 | Crisp, rehearsed answer to "why trust the LLM judge / how do you know it's accurate?" | Workday | Answered - tiered: (1) deterministic/hybrid checks wherever ground truth exists, (2) LLM-judge dimensions with pass@k + confidence intervals + minimum-sample gating where it doesn't, (3) golden-dataset back-testing. Close on a live correctness-dimension walkthrough, not narration. Ready to ship to the deck |
@@ -30,6 +30,8 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
 | Point AgentScore at Tricentis's own agents (e.g. QTest ATC) so a partner can prove to their client that agent works | BearingPoint | Open - deliberately not exposed today for proprietary/IP reasons; blocks BearingPoint's most concrete use case |
 
 *Audit note (2026-09-11): reviewed every row for a question that can now be answered vs. a genuine product/roadmap/business gap. Category framing and judge-trust (rows above) now have rehearsed answers and are ready to ship. Cross-ecosystem OTel ingestion is confirmed solved. Everything else - on-prem self-hosting, internal-LLM judge, scenario bank/red-teaming, fleet-level scoring, Agentforce integration, RBAC, compliance validation, alerting, bulk export, synthetic datasets, partner co-sell - is still a real engineering, roadmap, or business decision pending confirmation, not something answerable today.*
+
+*Update (2026-09-23): on-prem self-hosting confirmed with engineering - no longer pending (see row above).*
 
 ---
 

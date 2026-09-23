@@ -1,3 +1,44 @@
+## September 23, 2026 Update
+
+### Manage your whole fleet from one workspace
+My Agents is now a full workspace instead of a read-only list.
+- Filter and page through your fleet, then dig into Score, Improve, Agent Card, Traces, Profile, and Labeling for any agent - all without waiting on us.
+- Set an agent-specific model yourself, so an agent can run on the model that fits it instead of your account default.
+- Deleted an agent by mistake? Restore it yourself - permanent removal is the only step still handled by our team.
+
+### A home base for your fleet
+- A new Home page greets you with your fleet's health at a glance - real-agent totals, recent activity, scoring status, and what needs your attention.
+- Try Agent Score risk-free with example agents you launch yourself - they're excluded from your real fleet counts and scores, so they never skew what you're actually measuring.
+
+### Talk to your agents from your own workspace
+- The chat assistant and full agent-detail experience, previously only available to our team acting on your behalf, are now built directly into your own workspace - ask about an agent's scores and evidence yourself, no back-and-forth required.
+
+### Clearer setup info when you connect an agent
+- The Add Agent dialog and your Integrations tab now show the exact ingest endpoint and exporter configuration for your account, with a one-click copy - no more guessing which URL your agent should send traces to.
+
+### Internal note: platform migration to TAIS advances further
+- Filled in the staging deployment tier and gated the Kubernetes release pipeline on a staging approval; retired the old AWS ECS deployment entirely now that the Kubernetes lane serves every environment, so `/release` ships to staging only from here.
+- Fixed a chart-bump race where two of the three TAIS Helm charts could merge concurrently and get rejected; moved the chart-tag source from values files to each chart's release file to match how the shared release pipeline now expects it.
+- RDS IAM auth: Postgres connections on TAIS now mint a short-lived, per-connection IAM token instead of a static password, gated behind a flag so it can roll out safely.
+- Standardized how TAIS-specific settings (ports, buckets, regions) get derived automatically from a deployment profile instead of being hand-copied into two repositories for every new environment.
+
+### Internal note: Tosca Cloud sign-in and cross-tenant auth
+- Built the full Tosca Cloud customer sign-in flow behind the TAIS gateway - tenant mapping, consent, token renewal, and admin revocation controls - and exercised it against real sign-in attempts on TAIS dev, fixing bugs it surfaced along the way (an unmapped tenant refusing every customer, a staff/customer email conflict).
+- A Tricentis staff member who's also an Agent Score customer can now hold one login for each without the two accounts colliding.
+- Expanded browser-test coverage of customer flows, including the Tosca sign-in states and the controls that spend model money, since those paths were previously barely tested.
+
+### Internal note: model calls on TAIS now route through the Tricentis AI Hub
+- Every model call made while scoring on TAIS now goes through the Tricentis AI Hub with PayGo metering, so usage is billed to the correct customer tenant instead of hitting Bedrock directly with no metering at all.
+- Fixed a permissions bug that silently zeroed out billed model calls on external tenants right after this switch.
+
+### Internal note: engineering process and CI hardening
+- Every merge into the product repo now enforces branch/commit/PR naming conventions through a shared lint check, whether a human or an AI coding agent opens the pull request.
+- Pinned all 44 third-party GitHub Actions to commit hashes instead of floating version tags, so a moved tag can no longer silently change what a deploy or release workflow executes.
+- Routine dependency bumps and CI plumbing (secret-scanner fixes, action version bumps, stale test-assertion fixes) kept the pipeline green.
+
+### Coming next
+- Signing in with your existing Tosca Cloud account, so you won't need a separate one-off login just for Agent Score - built and now rolling out on the new infrastructure, launch timing still to be decided
+
 ## September 17, 2026 Update
 
 ### Internal note: platform migration to Tricentis' shared Kubernetes infrastructure

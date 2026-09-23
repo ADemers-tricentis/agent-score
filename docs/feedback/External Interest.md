@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 90 form submissions found (as of 2026-09-22), sorted newest first. Company is the form's own value (subject-line CRM match noted only where the form field was blank). Nine submissions came from `@tricentis.com` addresses — internal test/QA submissions, not external prospects — and are excluded from the tracker below: Brad Purcell (submitted twice, 2026-08-21 and 2026-09-07), Michal Hrncirik (submitted twice, 2026-09-08 and 2026-09-10, the second time under "Tecra Systems, Inc."), Maria Argulla, Caitlin Bowers, Neil Williams (submitted twice, both 2026-09-08, under "Tricentis (UK)"), Karthick S (2026-09-11, under "Tricentis"), and Kevin Demancsik (2026-09-10, under "TRICENTIS USA"). A seventh submission (VIJESH Vijayan, 2026-08-27, "Neotys (FR) - HQ") came from a `@neotys.com` address; Neotys/NeoLoad has been a Tricentis-owned brand since the 2021 acquisition, so it's excluded on the same basis pending confirmation of whether this is a legacy-domain Tricentis employee or a genuine external NeoLoad customer. One more (Jigish Belani / Accenture LLP, 2026-09-09) is a repeat submission from a contact already tracked below (original: 2026-08-20) — noted, but not added as a second entry. One submission (Rohan Patil / BearingPoint GmbH (DE) - HQ, 2026-09-14) was submitted five times within about 90 seconds and is recorded once. Entries are combined where multiple people from the same company submitted (Love's Travel Stops, Merck, Capgemini, McKesson, Merito Solutions, PVH Corp, Tritusa Consulting, Ariba, Inc.) — 72 distinct entries as a result. One more combined entry, cbs Corporate Business Solutions (DE/MY), merges two submissions the CRM matched to differently-named accounts ("CBS Corporation" and "CBS Corporate Business Solutions MY") that share the same cbs-consulting.com email domain. A fifth combined entry, Accenture, merges five submissions from the accenture.com domain that the CRM matched to differently-named accounts — "Accenture LLP" (Jigish Belani), "Accenture Solutions Pvt Ltd (IN)" (Mohammed Arslan Mir), "Accenture AS" (Vijetha Nayak), "Accenture India (IN)" (Ankur Mittal), and one with the company field blank (Priya Saidavaram). The separate "Accenture CIO HR Organization" submission (Greg Wanroy) is deliberately excluded from this merge — its email domain is stanza.ai, not accenture.com, so it's tracked on its own pending confirmation of which label is correct. Combined entries list each submitter's Date/Name/Contact as its own three-line group. Two additional entries came in through Sales rather than the Labs form — no form timestamp, and they're counted separately from the 85 form submissions above: Freddie Mac (Kaleb Jackson, 2026-08-28) and Meta Platforms, Inc. (Sri Pulleti, 2026-09-10).
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 90 form submissions found (as of 2026-09-22), sorted newest first. C
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -97,35 +97,30 @@ Update the per-company Status column below as accounts move, and keep the summar
 ### Accenture (multiple entities)
 Date: 2026-09-22 11:09  
 Name: Mohammed Arslan Mir  
-Contact: e.arslan.mir@accenture.com  
 Title: Test Automation Manager  
 Relationship: Customer  
 Submitted as: Accenture Solutions Pvt Ltd (IN)  
 
 Date: 2026-09-21 13:48  
 Name: Vijetha Nayak  
-Contact: vijetha.nayak@accenture.com  
 Title: Quality engineering manager  
 Relationship: Partner  
 Submitted as: Accenture AS  
 
 Date: 2026-09-21 13:48  
 Name: Priya Saidavaram  
-Contact: priya.saidavaram@accenture.com  
 Title: Quality engineering associate manager  
 Relationship: Evaluating Tricentis  
 Submitted as: (form blank; email domain resolved to Accenture)  
 
 Date: 2026-09-20 11:00  
 Name: Ankur Mittal  
-Contact: ankur.e.mittal@accenture.com  
 Title: Test Automation Manager  
 Relationship: Partner  
 Submitted as: Accenture India (IN)  
 
 Date: 2026-08-20 14:48  
 Name: Jigish Belani  
-Contact: jigish.belani@accenture.com  
 Submitted as: Accenture LLP (repeat submission 2026-09-09, not tracked separately)  
 
 what they do: World's largest IT/management consultancy (~750,000+ employees).
@@ -141,7 +136,6 @@ beta evaluation status (as of 2026-09-18, Jigish Belani only): in the process of
 ### — (form blank; email domain suggests Singapore Pools)
 Date: 2026-09-21 01:30  
 Name: Nai Hau Lui  
-Contact: luinaihau@singaporepools.com.sg  
 Title: Lead, Quality Engineering  
 Relationship: Customer  
 
@@ -156,13 +150,11 @@ known agent tooling: no public information found tying Singapore Pools to a depl
 ### cbs Corporate Business Solutions (DE/MY)
 Date: 2026-09-17 05:36  
 Name: Ashish Chavan  
-Contact: ashish.chavan@cbs-consulting.com  
 Title: SAP Consultant  
 Relationship: Evaluating Tricentis  
 
 Date: 2026-09-17 01:45  
 Name: Arumugam Lekshmanan  
-Contact: arumugam.lekshmanan@cbs-consulting.com  
 Title: Test Manager  
 Relationship: Partner  
 
@@ -177,13 +169,11 @@ known agent tooling: no public information found tying cbs to a deployed agent p
 ### Ariba, Inc.
 Date: 2026-09-17 01:59  
 Name: Akihiko Yamano  
-Contact: akihiko.yamano@sap.com  
 Title: Lead Architect  
 Relationship: Partner  
 
 Date: 2026-09-17 01:44  
 Name: Sina Döbbelin  
-Contact: sina.doebbelin@sap.com  
 Title: BTM Partner Management  
 Relationship: Partner  
 
@@ -198,7 +188,6 @@ known agent tooling: next-gen SAP Ariba embeds a Joule Bid Analysis Agent and AI
 ### Seatrium (SG)
 Date: 2026-09-17 01:51  
 Name: Florance Yong  
-Contact: florance.yong@seatrium.com  
 Title: IT QA Manager  
 Relationship: Customer  
 
@@ -213,7 +202,6 @@ known agent tooling: partnered with A*STAR on AI and new-energy R&D for offshore
 ### Singapore Power Digital Private Limited
 Date: 2026-09-17 01:47  
 Name: Ritu Agrawal  
-Contact: rituka@spgroup.com.sg  
 Title: Test manager  
 Relationship: Customer  
 
@@ -228,7 +216,6 @@ known agent tooling: builds AI- and IoT-driven products for energy efficiency an
 ### ABeam Consulting (Malaysia) Sdn. Bhd.
 Date: 2026-09-17 01:47  
 Name: Sharifah Nadiah Alhabshi  
-Contact: salhabshi@abeam.com  
 Title: Manager  
 Relationship: Partner  
 
@@ -243,7 +230,6 @@ known agent tooling: offers a generative-AI agent utilization/construction suppo
 ### Singapore Institute of Technology (SG)
 Date: 2026-09-17 01:46  
 Name: Dennis Fung  
-Contact: dennis.fung@singaporetech.edu.sg  
 Title: Senior IT Consultant  
 Relationship: Evaluating Tricentis  
 
@@ -258,7 +244,6 @@ known agent tooling: co-runs an Offshore & Marine Digital Learning Lab with Seat
 ### Olam Agri (form blank; email domain suggests Olam Agri)
 Date: 2026-09-17 01:46  
 Name: Vanitha Velusamy  
-Contact: vanitha.velusamy@olamagri.com  
 Title: IT Project Manager  
 Relationship: Customer  
 
@@ -273,7 +258,6 @@ known agent tooling: deploying RISE with SAP on AWS with Joule generative-AI cap
 ### Tata Consultancy Services Asia Pacific Pte. Ltd. (SG)
 Date: 2026-09-17 01:46  
 Name: Balaji Sampathkumar  
-Contact: sampathkumar.balaji@tcs.com  
 Title: Associate Consultant  
 Relationship: Partner  
 
@@ -288,7 +272,6 @@ known agent tooling: has launched multiple agentic-AI platforms including TCS AD
 ### SAP North America
 Date: 2026-09-17 01:45  
 Name: Thomas Zimmermann  
-Contact: thomas.zimmermann03@sap.com  
 Title: VP  
 Relationship: Partner  
 
@@ -303,7 +286,6 @@ known agent tooling: SAP is actively building agentic AI (Joule) across Ariba, S
 ### Defence Science and Technology Agency (SG)
 Date: 2026-09-17 01:45  
 Name: cydnie na  
-Contact: cnaxinye@dsta.gov.sg  
 Title: Developer  
 Relationship: Partner  
 
@@ -318,7 +300,6 @@ known agent tooling: launched Gaia, a generative-AI assistant for MOD/SAF staff,
 ### Housing Development Board (SG)
 Date: 2026-09-17 01:44  
 Name: Swee Chyuan Koh  
-Contact: Koh_swee_chyuan@hdb.gov.sg  
 Title: Principal Software Quality Engineer  
 Relationship: Customer  
 
@@ -333,7 +314,6 @@ known agent tooling: reported use of LiDAR + AI for automated estate mapping (Ge
 ### L'OREAL
 Date: 2026-09-17 01:44  
 Name: Khadim KASHANI  
-Contact: khadim.kashani@loreal.com  
 Title: SME Test Automation  
 Relationship: Customer  
 
@@ -348,7 +328,6 @@ known agent tooling: deployed the "Beauty Genius" AI agent (built on Azure OpenA
 ### City Dev (SG)
 Date: 2026-09-17 01:44  
 Name: Davin Ng  
-Contact: davin.ng@cdl.com.sg  
 Title: QA Lead  
 Relationship: Customer  
 
@@ -363,7 +342,6 @@ known agent tooling: has adopted machine-learning, computer-vision, and generati
 ### Testing IT Consulting S.A. de C.V.
 Date: 2026-09-16 15:34  
 Name: Hector Santa Maria  
-Contact: hector.santamaria@testingit.com.mx  
 Title: CEO  
 Relationship: Partner  
 
@@ -378,7 +356,6 @@ known agent tooling: no public information found tying Testing IT Consulting to 
 ### Brillar Pte Ltd (SG)
 Date: 2026-09-16 06:17  
 Name: Zuzan Win  
-Contact: zuzan.win@brillar.io  
 Title: Test Automation Engineer  
 Relationship: Partner  
 
@@ -393,7 +370,6 @@ known agent tooling: no public information found tying Brillar to a deployed age
 ### Harrods Ltd (UK)
 Date: 2026-09-15 11:37  
 Name: Shanita Helyar  
-Contact: shanita.helyar@harrods.com  
 Title: Senior Test Manager  
 Relationship: Customer  
 
@@ -408,7 +384,6 @@ known agent tooling: uses AI-based inventory replenishment and an AI-driven digi
 ### Ally Financial Inc.
 Date: 2026-09-14 16:17  
 Name: Jana Kethamreddy  
-Contact: jana.kethamreddy@ally.com  
 Title: Principal Cloud Engg  
 Relationship: Other  
 
@@ -423,7 +398,6 @@ known agent tooling: runs the proprietary enterprise AI platform Ally.ai (10,000
 ### BearingPoint GmbH (DE) - HQ
 Date: 2026-09-14 12:27  
 Name: Rohan Patil  
-Contact: rohan.patil@bearingpoint.com  
 Title: Senior Technology Consultant  
 Relationship: Partner  
 
@@ -440,7 +414,6 @@ known agent tooling: launched GenAIQ, a proprietary agentic-AI platform for ente
 ### xAmplify (AU)
 Date: 2026-09-14 11:04  
 Name: Prakash Panchal  
-Contact: prakash.panchal@xamplify.com.au  
 Title: Test Automation Architect  
 Relationship: Partner  
 
@@ -455,7 +428,6 @@ known agent tooling: no public information found tying xAmplify to a deployed ag
 ### Meta Platforms, Inc.
 Date: 2026-09-10 (Sales conversation — no Labs form submission)  
 Name: Sri Pulleti  
-Contact: sripulleti@meta.com  
 
 what they do: Global social-media/technology conglomerate (Facebook, Instagram, WhatsApp, Messenger, Reality Labs) with a large open-model AI research arm (the Llama model family).
 
@@ -470,7 +442,6 @@ known agent tooling: launched Meta Business Agent (a customer-facing agent live 
 ### Saudi Telecom Company STC (SA) - HQ
 Date: 2026-09-09 09:51  
 Name: Farhan Shaikh  
-Contact: falishaikh.c@stc.com.sa  
 
 what they do: Saudi Arabia's largest telecom operator and self-described "digital enabler" — a strategic LEAP partner building AI-ready data-center capacity (via its center3 subsidiary) and Kingdom-wide AI infrastructure alongside HUMAIN.
 
@@ -483,7 +454,6 @@ known agent tooling: agentic AI reported live across customer-service automation
 ### Diriyah Gate Company Limited - DGCL (SA)
 Date: 2026-09-09 09:52  
 Name: Ali Alshehri  
-Contact: Alialshehri@diriyah.sa  
 
 what they do: Operating company for Diriyah, the Saudi giga-project redeveloping the historic birthplace of the first Saudi state (northwest of Riyadh) into a heritage/culture/tourism destination — 38+ hotels, 20 cultural landmarks, 100+ restaurants planned — under the Diriyah Gate Development Authority ([dgda.gov.sa](https://www.dgda.gov.sa/en)).
 
@@ -496,7 +466,6 @@ known agent tooling: no public information found tying Diriyah/DGCL to a deploye
 ### TestCrew
 Date: 2026-09-09 09:53  
 Name: Ramesh Panthangi  
-Contact: rpanthangi@testcrew.com  
 
 what they do: Riyadh-headquartered global software-testing/QA firm (founded 2018; 700+ experts across KSA, UAE, Jordan, Egypt, India, and Europe) serving banking, government, telecom, aviation, retail, and sports-tech clients; first MENA testing company to reach TMMi Level 5, named a top-10 QA company on the 2024 Software Testing Leaders list ([clutch.co/profile/testcrew](https://clutch.co/profile/testcrew)).
 
@@ -509,7 +478,6 @@ known agent tooling: no public information found tying TestCrew to a deployed ag
 ### Dolpheen IT Solutions
 Date: 2026-09-09 14:41  
 Name: Jia Jun Zhan  
-Contact: jiajun.zhan@dolpheen-it.com  
 
 what they do: Vienna, Austria-based test-automation/RPA consultancy focused on SAP S/4HANA migration testing (founded by Yunus Saylan and Simon Kreitmayer). Already a Tricentis partner ([tricentis.com/partners/dolpheen-it-solutions-gmbh](https://www.tricentis.com/partners/dolpheen-it-solutions-gmbh)).
 
@@ -522,7 +490,6 @@ known agent tooling: no public information found tying Dolpheen to a deployed AI
 ### Cengage Learning, Inc.
 Date: 2026-09-03 15:20  
 Name: Ajan Nattamai  
-Contact: ajan.nattamai@cengage.com  
 
 what they do: Education-content/EdTech publisher spanning higher ed, workforce training, and K-12; part of Cengage Group.
 
@@ -535,7 +502,6 @@ known agent tooling: shipped a GenAI-powered Student Assistant (beta) and an AI 
 ### Pegasystems Inc.
 Date: 2026-09-02 14:51  
 Name: Kiran kadarla  
-Contact: kiran.kadarla@pega.com  
 
 what they do: Enterprise low-code/BPM software vendor; recently launched "Pega Agentic Process Fabric" with MCP-powered agent orchestration for mission-critical business processes.
 
@@ -548,7 +514,6 @@ known agent tooling: launched Pega Agentic Process Fabric with MCP support (lett
 ### Freddie Mac
 Date: 2026-08-28 (Sales conversation — no Labs form submission)  
 Name: Kaleb Jackson  
-Contact: (via Sales, not the Labs form)  
 
 what they do: Government-sponsored enterprise providing liquidity/stability to the US residential mortgage market by purchasing and securitizing mortgages.
 
@@ -561,7 +526,6 @@ known agent tooling: not stated in the transcript — Kaleb didn't name specific
 ### Workday, Inc.
 Date: 2026-08-28 18:28  
 Name: Vijay Mummaneni  
-Contact: vijay.mummaneni@workday.com  
 
 what they do: Enterprise HR/Finance/IT SaaS platform (Pleasanton, CA); ~19,000+ employees, ~$8.4B revenue; core HCM and Financial Management products used across thousands of enterprises.
 
@@ -574,15 +538,12 @@ known agent tooling: extensive and directly adjacent to Agent Score's space — 
 ### PVH Corp
 Date: 2026-08-28 15:39  
 Name: Beena P K  
-Contact: beenapk@pvh.com  
 
 Date: 2026-08-28 12:53  
 Name: Beena P K  
-Contact: beenapk@pvh.com  
 
 Date: 2026-08-28 12:52  
 Name: Aimee Martin  
-Contact: aimeemartin@pvh.com  
 
 what they do: Global apparel/fashion conglomerate (New York, NY) — owns Calvin Klein and Tommy Hilfiger; ~$8.6B revenue, operations in 40+ countries.
 
@@ -595,7 +556,6 @@ known agent tooling: announced a company-wide collaboration with OpenAI (January
 ### Charter Communications Operating, LLC
 Date: 2026-08-24 16:26  
 Name: Sarvesh Peddi  
-Contact: C-Sarvesh.Peddi@spectrum.com  
 
 what they do: Operates as Spectrum — one of the largest US cable/broadband/telecom providers (~32M+ customers, ~$55B revenue, HQ Stamford, CT).
 
@@ -608,7 +568,6 @@ known agent tooling: AI-powered call-summarization and knowledge-search tools al
 ### — (form blank; email domain suggests Artizent)
 Date: 2026-08-24 13:13  
 Name: Alan Mayfus  
-Contact: sammayfusak@artizent.com  
 
 what they do: Enterprise technology engineering firm (Edison, NJ) — software/product engineering, data & analytics, cloud modernization, quality engineering, applied AI, with a focus on banking/financial services/insurance. Formerly Nous Infosystems, rebranded Artizent in July 2026 with TA Associates backing; founded 1996 ([artizent.com/company](https://www.artizent.com/company)).
 
@@ -621,15 +580,12 @@ known agent tooling: self-described focus on building/operating "production grad
 ### Tritusa Consulting (AU)
 Date: 2026-08-24 02:46  
 Name: Pankaj Kumar Sinha  
-Contact: pankaj.sinha@tritusa.com.au  
 
 Date: 2026-08-24 00:49  
 Name: Deephan Mohanraj  
-Contact: deephan.mohanraj@tritusa.com.au  
 
 Date: 2026-09-01 10:25  
 Name: Jawahar Govindaraj  
-Contact: jawahar.govindaraj@tritusa.com.au  
 
 what they do: Sydney-headquartered SAP Technical Services & software-testing consultancy (~51 employees, ~$6M revenue, founded 2011) with presence in Melbourne, Canberra, Brisbane — 150+ projects delivered to 100+ Australian customers, specializing in SAP-focused quality engineering, automation, and performance testing ([tritusa.com.au/about-us](https://tritusa.com.au/about-us/)).
 
@@ -646,7 +602,6 @@ Responded: Curious about evaluation using AIW *and* third party agents
 ### SAP Labs India (IN)
 Date: 2026-08-22 08:25  
 Name: SaiDeepak Ayyagari  
-Contact: s.ayyagari@sap.com  
 
 what they do: SAP's R&D subsidiary in India — engineering hub developing SAP's cloud and AI product lines.
 
@@ -659,7 +614,6 @@ known agent tooling: SAP Business AI and the Joule generative-AI assistant embed
 ### Regeneron Pharmaceuticals Inc.
 Date: 2026-08-21 06:12  
 Name: Murali Sundaram  
-Contact: murali.sundaram@regeneron.com  
 
 what they do: Biotechnology/pharma company (Tarrytown, NY; Dupixent, Eylea, Kevzara); proprietary VelociSuite platform (VelocImmune) for antibody discovery; ~15,500 employees, ~$15.5B TTM revenue.
 
@@ -672,7 +626,6 @@ known agent tooling: no public information found tying Regeneron specifically to
 ### Acadia Healthcare
 Date: 2026-08-20 19:03  
 Name: Pratiksha Arora  
-Contact: pratiksha.arora@acadiahealthcare.com  
 
 what they do: Largest stand-alone behavioral-health company in the US (Franklin, TN) — 279 facilities, ~12,600 beds across 40 states + Puerto Rico, ~23,500 employees, ~$3.3B revenue; operates the largest US chain of methadone clinics ([Wikipedia](https://en.wikipedia.org/wiki/Acadia_Healthcare)).
 
@@ -685,7 +638,6 @@ known agent tooling: no public information found tying Acadia specifically to a 
 ### New Vision Software Inc.
 Date: 2026-08-20 16:12  
 Name: Rohan Bansod  
-Contact: rohan.bansod@newvision-software.com  
 
 what they do: India-based (Pune) IT services/QA consultancy (~687 employees) — application/data/infrastructure modernization plus a dedicated QA automation practice. Already a Tricentis partner — lists Tricentis/Tosca alongside Oracle, PEGA, Microsoft, and Google Cloud in its partner roster.
 
@@ -698,7 +650,6 @@ known agent tooling: runs Tosca-based automation delivery for clients (e.g. a ut
 ### Hilti Asia IT Services (MY)
 Date: 2026-08-20 15:00  
 Name: ASHWIN MOR  
-Contact: morash@hilti.com  
 
 what they do: Global IT hub/shared-services arm of Hilti Group (construction tools/fastening/software) — software development, analytics, IT infrastructure for 34,000+ employees across 120+ countries; based in Petaling Jaya, Malaysia.
 
@@ -711,7 +662,6 @@ known agent tooling: no public information found.
 ### Panasonic Avionics (US)
 Date: 2026-08-20 14:58  
 Name: Ronica Brisbon  
-Contact: ronica.brisbon@us.panasonic.com  
 
 what they do: World's leading in-flight entertainment & connectivity (IFEC) supplier; ~4,100 employees, 80 locations, systems on 3,700+ aircraft, ~$1.1B revenue.
 
@@ -724,7 +674,6 @@ known agent tooling: no public information found.
 ### The Boeing Company
 Date: 2026-08-20 14:50  
 Name: Gurucharan Bijinepally  
-Contact: gurucharan.bijinepally@boeing.com  
 
 what they do: Aerospace/defense manufacturer — commercial aircraft, defense, space systems.
 
@@ -737,7 +686,6 @@ known agent tooling: prototype onboard AI for spacecraft anomaly detection/self-
 ### — (form blank; email domain suggests The Hartford)
 Date: 2026-08-20 14:49  
 Name: Sathish kumar Backiam  
-Contact: sathishkumar.backiam@thehartford.com *(same person also submitted separately under Capgemini — see the combined Capgemini entry below; unresolved which company he actually represents)*  
 
 what they do: Top-10 US commercial/personal insurance carrier.
 
@@ -750,7 +698,6 @@ known agent tooling: "several hundred AI models in production" per CEO Chris Swi
 ### Southern Glazer's Wine and Spirits, LLC
 Date: 2026-08-20 14:49  
 Name: Jay Gajulapalli  
-Contact: jayachandra.gajulapa@sgws.com  
 
 what they do: Largest wine & spirits distributor in the US (~1/3 of all US wine/spirits bottles), family-owned, 7,000+ brands, ~24,000 employees, ~$21B revenue.
 
@@ -763,7 +710,6 @@ known agent tooling: no public information found.
 ### Chevron Phillips Chemical (US)
 Date: 2026-08-20 14:49  
 Name: Ramesh Jeyagopalan  
-Contact: rameshjeyagopalan@chevron.com *(email domain chevron.com)*  
 
 what they do: Petrochemicals/polymers manufacturer, 50/50 Chevron–Phillips 66 JV.
 
@@ -776,7 +722,6 @@ known agent tooling: adopted Databricks Data Intelligence Platform for manufactu
 ### Dominion Energy, Inc.
 Date: 2026-08-20 14:49  
 Name: Anand Shekaraiah  
-Contact: anand.k.shekaraiah@dominionenergy.com  
 
 what they do: Regulated electric/gas utility (Virginia, South Carolina) plus contracted renewables; ~30.7 GW capacity.
 
@@ -789,11 +734,9 @@ known agent tooling: USAN AI Contact Analytics (GenAI) in the contact center ([U
 ### Love's Travel Stops
 Date: 2026-08-20 14:48  
 Name: Jag Mallampati  
-Contact: jag.mallampati@loves.com  
 
 Date: 2026-08-20 14:48  
 Name: Thomas Cody  
-Contact: thomas.cody@loves.com  
 
 what they do: ~670 travel-stop/convenience locations across 42 states, plus Speedco/Love's Truck Care; ~10,000+ employees.
 
@@ -806,17 +749,14 @@ known agent tooling: Gravitate AI-powered Supply & Dispatch solution live at the
 ### Capgemini
 Date: 2026-08-20 14:48  
 Name: Mathankumar Kanagaraj  
-Contact: mathankumar.kanagaraj@capgemini.com  
 Entity: Capgemini Technologies LLC  
 
 Date: 2026-08-20 14:47  
 Name: ARUN PRAKASH Shivakumar  
-Contact: arun-prakash.shivakumar@capgemini.com  
 Entity: Capgemini Technologies LLC  
 
 Date: 2026-08-20 14:48  
 Name: Sathish kumar Backiam  
-Contact: sathish-kumar.backiam@capgemini.com  
 Entity: CAPGEMINI TECHNOLOGY SERVICES INDIA LIMITED *(this same person also submitted separately with the company field blank and a thehartford.com email — see the flagged Hartford entry above)*  
 
 what they do: Global IT/management consulting and systems integrator (~340,000+ employees worldwide).
@@ -830,7 +770,6 @@ known agent tooling: this is a core service line, not just internal tooling — 
 ### Cummins Inc.
 Date: 2026-08-20 14:48  
 Name: Lakshmi Sree Thirukonda  
-Contact: tw145@cummins.com  
 
 what they do: Manufacturer of diesel/natural gas engines, power generation equipment, and increasingly data-center battery storage.
 
@@ -843,7 +782,6 @@ known agent tooling: Axion partnership for AI-driven failure prediction/warranty
 ### Home Depot Store Support, Inc.
 Date: 2026-08-20 14:48  
 Name: Joe Pope  
-Contact: joe_pope@homedepot.com  
 
 what they do: Largest US home-improvement retailer, ~2,300+ stores.
 
@@ -856,11 +794,9 @@ known agent tooling: one of the most publicly documented deployments on this lis
 ### McKesson Corporation
 Date: 2026-08-20 14:48  
 Name: Nitin Malik  
-Contact: Nitin.Malik@McKesson.com  
 
 Date: 2026-08-21 12:53  
 Name: Cathy Soller  
-Contact: cathy.soller@mckesson.com  
 
 what they do: Largest US pharmaceutical distributor (~1/3 of North American distribution); FY2026 revenue ~$403B.
 
@@ -873,11 +809,9 @@ known agent tooling: Five9 Intelligent Virtual Assistants deflecting 40,000+ cal
 ### Merck Co. Inc.
 Date: 2026-08-20 14:48  
 Name: Ramesh Magdum  
-Contact: ramesh.magdum@merck.com  
 
 Date: 2026-08-20 14:48  
 Name: Sateesh Rajegowda  
-Contact: sateesh.muddanahalli.rajegowda@merck.com  
 
 what they do: Global pharma company (Keytruda-led immuno-oncology, Gardasil vaccines); ~$60B+ scale.
 
@@ -890,7 +824,6 @@ known agent tooling: April 2026, signed a $1B multi-year deal with Google Cloud 
 ### Genpact (HQ)
 Date: 2026-08-20 14:48  
 Name: Richard Hand  
-Contact: richard.hand@genpact.com  
 
 what they do: Global professional services/BPO firm (~141,000 employees, $5B+ revenue, 800+ clients including 25% of Fortune 500).
 
@@ -903,7 +836,6 @@ known agent tooling: self-described applied-AI/process-intelligence positioning 
 ### HP Inc.
 Date: 2026-08-20 14:48  
 Name: Ejaz Siddiqui  
-Contact: Ejaz.siddiqui1@hp.com  
 
 what they do: PC/printer hardware giant, large global enterprise.
 
@@ -916,7 +848,6 @@ known agent tooling: June 2026, expanded a strategic partnership with OpenAI's F
 ### Sub-Zero Group Inc
 Date: 2026-08-20 14:48  
 Name: Guy Hall  
-Contact: Guy.Hall@subzero.com  
 
 what they do: Privately held luxury kitchen appliance maker (Sub-Zero, Wolf, Cove); ~$728M revenue, ~1,800 employees.
 
@@ -929,7 +860,6 @@ known agent tooling: no public information found.
 ### Kiewit Corporation
 Date: 2026-08-20 14:48  
 Name: Damilola Agboola  
-Contact: damilola.agboola@kiewit.com  
 
 what they do: One of North America's largest construction/engineering firms (employee-owned, ~$16.8B revenue, 31,800+ workers).
 
@@ -942,7 +872,6 @@ known agent tooling: KADE (Kiewit Algorithmic Design and Engineering), ADAPT in-
 ### Tachyon Technologies
 Date: 2026-08-20 14:48  
 Name: Subba Rao Gonugunta  
-Contact: subba.gonugunta@tachyontech.com  
 
 what they do: Digital transformation/SAP consultancy (TX; 201–500 employees, ~$110M revenue), Inc 5000-listed, top SAP Solution Provider.
 
@@ -955,7 +884,6 @@ known agent tooling: no public information found beyond a generic "AI & Generati
 ### Xebia - Partner
 Date: 2026-08-20 14:48  
 Name: Anmol Jain  
-Contact: anmol.jain1@xebia.com  
 
 what they do: Global IT consultancy/software engineering firm (Netherlands-based) specializing in cloud, data, and AI-native engineering.
 
@@ -968,7 +896,6 @@ known agent tooling: builds and sells its own agentic AI products — "Agentic A
 ### Cargill Incorporated
 Date: 2026-08-20 14:48  
 Name: Alfonso Garbanzo  
-Contact: Alfonso_garbanzo_lee@cargill.com  
 
 what they do: Privately held global agribusiness/commodities giant (~160,000 employees).
 
@@ -981,7 +908,6 @@ known agent tooling: a Support AI Agent automates ~70% of order processing (~$15
 ### Wolters Kluwer United States Inc.
 Date: 2026-08-20 14:48  
 Name: Chris Allanson  
-Contact: chris.allanson@wolterskluwer.com  
 
 what they do: Global information-services/software company for legal, tax, health, and compliance professionals.
 
@@ -994,7 +920,6 @@ known agent tooling: "Ovid Guidelines AI" (agentic clinical-guideline authoring)
 ### J. R. Simplot Company
 Date: 2026-08-20 14:48  
 Name: Neeraja Kusuma  
-Contact: neeraja.kusuma@simplot.com  
 
 what they do: Large private US agribusiness (potato/food processing, agriculture, phosphate/fertilizer).
 
@@ -1007,7 +932,6 @@ known agent tooling: no public information found on specific deployed agents; co
 ### Crown Equipment Corporation
 Date: 2026-08-20 14:48  
 Name: Vinay Patlolla  
-Contact: vinay.patlolla@crown.com  
 
 what they do: Large private manufacturer of forklifts and warehouse material-handling equipment.
 
@@ -1020,7 +944,6 @@ known agent tooling: autonomous lift trucks with real-time navigation decisions;
 ### Stanza
 Date: 2026-08-20 14:48  
 Name: Anirban Toy Choudhury  
-Contact: anirban@stanza.ai  
 
 what they do: An AI-agent company itself — sells AI agents that automate service-delivery workflows for agencies/consultancies ([trystanza.com](https://trystanza.com)).
 
@@ -1033,7 +956,6 @@ known agent tooling: confirmed — their entire product is AI agents.
 ### Sunbelt Rentals
 Date: 2026-08-20 14:48  
 Name: Arya Shrey  
-Contact: arya.shrey@sunbeltrentals.com  
 
 what they do: Large equipment-rental company (part of Ashtead Group), UK/US operations.
 
@@ -1046,11 +968,9 @@ known agent tooling: partnered with Salesforce to implement Agentforce (autonomo
 ### Merito Solutions
 Date: 2026-08-20 14:48  
 Name: Chris Carpenter  
-Contact: chris.carpenter@merito.com  
 
 Date: 2026-08-21 16:41  
 Name: Gerard Trimberger  
-Contact: gerard.trimberger@merito.com  
 
 what they do: Enterprise software VAR/consultancy (20+ years) — SDLC tooling, QA automation, app-security reseller. Already a Tricentis partner — lists Tricentis alongside Azure DevOps, TestRail, Planview on their own site.
 
@@ -1063,7 +983,6 @@ known agent tooling: no public information found on Merito operating AI agents t
 ### Amazon Kuiper Manufacturing Enterprises LLC
 Date: 2026-08-20 14:48  
 Name: Saranya Vaithiyanathan  
-Contact: saranvai@amazon.com *(Project Kuiper satellite manufacturing division)*  
 
 what they do: Amazon's satellite manufacturing division for the Kuiper broadband constellation; large production/test facility in Kirkland, WA.
 
@@ -1076,7 +995,6 @@ known agent tooling (mixed evidence): confirmed use of AWS IoT SiteWise for CNC 
 ### Accenture CIO HR Organization
 Date: 2026-08-20 14:48  
 Name: Greg Wanroy  
-Contact: greg@stanza.ai *(email domain is stanza.ai — flagged mismatch below)*  
 
 what they do: Company field says "Accenture CIO HR Organization," but the email domain is stanza.ai (see Anirban Toy Choudhury's Stanza submission above) — not resolved which label is correct.
 
@@ -1089,7 +1007,6 @@ known agent tooling: the "Accenture CIO HR Organization" label looks like a form
 ### Aspire Systems Digital Transformation Inc.
 Date: 2026-08-20 14:48  
 Name: Naveen Srinivasan  
-Contact: naveen.srinivasan@aspiresys.com  
 
 what they do: IT services/digital-transformation consultancy with a strong insurance-industry vertical practice.
 
@@ -1102,7 +1019,6 @@ known agent tooling: 2026 ISG Software Innovation Awards finalist for "AI-Powere
 ### Mouser Electronics
 Date: 2026-08-20 14:47  
 Name: Mohammad Mahboob  
-Contact: mohammad.mahboob@mouser.com  
 
 what they do: Global authorized distributor of semiconductors/electronic components (6.8M+ products, 1,200+ manufacturer brands), $3.4B revenue, Berkshire Hathaway company.
 
@@ -1115,7 +1031,6 @@ known agent tooling: 21 customer-service bots across 13 languages on LivePerson'
 ### Cox Automotive
 Date: 2026-08-20 14:47  
 Name: Balaji Gandsi Krishna Prakash  
-Contact: balaji.prakash@coxautoinc.com  
 
 what they do: Atlanta-based, ~$9B revenue automotive services conglomerate under Cox Enterprises; owns Autotrader, Kelley Blue Book, Manheim, Dealertrack, vAuto, NextGear Capital.
 
@@ -1128,7 +1043,6 @@ known agent tooling: strongest public documentation on this list — built 5 age
 ### Bayone Solutions
 Date: 2026-08-19 19:18  
 Name: Mathi Natarajan  
-Contact: mathi.n@bayone.com  
 
 what they do: Pleasanton, CA-based IT consulting/staffing firm (founded 2012, minority-owned) — Quality Engineering, Project Management, Software Development, UX, cloud/big-data services.
 
