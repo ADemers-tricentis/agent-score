@@ -94,6 +94,16 @@ Update the per-company Status column below as accounts move, and keep the summar
 
 ---
 
+### Eaton
+Date: (sourced via David, VP of AI/ML — not a Labs form submission)  
+Name: Amit Ghag  
+Email sent: —  
+Beta scheduled: 2026-10-01  
+
+what they do: no public profile researched yet — added straight to the Pipeline Tracker from an internal referral; back-fill company research when time allows.
+
+---
+
 ### Accenture (multiple entities)
 Date: 2026-09-22 11:09  
 Name: Mohammed Arslan Mir  
@@ -123,6 +133,9 @@ Date: 2026-08-20 14:48
 Name: Jigish Belani  
 Submitted as: Accenture LLP (repeat submission 2026-09-09, not tracked separately)  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: World's largest IT/management consultancy (~750,000+ employees).
 
 likely use case: the relationship values span Customer, Partner (×2), and "Evaluating Tricentis," so most plausibly a mix of internal delivery-QA evaluation and using Agent Score to extend Accenture's own QE practice into agentic-AI testing for its client base — consistent with Jigish Belani's submission, which has already progressed to scoping a beta on behalf of Meta as a delivery/SI-partner engagement (see status note below).
@@ -138,6 +151,9 @@ Date: 2026-09-21 01:30
 Name: Nai Hau Lui  
 Title: Lead, Quality Engineering  
 Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Singapore's sole legal lottery/betting operator (Toto, 4D, horse racing and sports betting), incorporated 1968, wholly owned since 2004 by Tote Board, a statutory board under the Ministry of Finance; run not-for-profit, with surplus channeled to community/charity causes ([Wikipedia](https://en.wikipedia.org/wiki/Singapore_Pools); [Tote Board](https://www.toteboard.gov.sg/about-us/our-subsidiaries/)).
 
@@ -158,6 +174,9 @@ Name: Arumugam Lekshmanan
 Title: Test Manager  
 Relationship: Partner  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: German SAP consultancy founded by former SAP consultants in 1995, now part of the Materna Group — 1,700+ employees across 40+ locations including a Malaysia office and the US ([cbs-consulting.com](https://www.cbs-consulting.com/en/about-cbs/company/)).
 
 likely use case: as an SAP implementation partner, most plausibly evaluating Agent Score to extend its SAP-testing practice into agentic-AI QA for its own client base — same profile as Dolpheen IT Solutions and Merito Solutions above.
@@ -177,6 +196,9 @@ Name: Sina Döbbelin
 Title: BTM Partner Management  
 Relationship: Partner  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: SAP Ariba, SAP's cloud-based procurement and supply-chain collaboration platform.
 
 likely use case: both submitters are `@sap.com` addresses, so this most plausibly reflects an internal SAP evaluation of Agent Score against SAP's own emerging Ariba agentic-procurement features, rather than an external customer need.
@@ -190,6 +212,9 @@ Date: 2026-09-17 01:51
 Name: Florance Yong  
 Title: IT QA Manager  
 Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Singapore-headquartered offshore/marine and shipbuilding group formed from the 2023 Sembcorp Marine–Keppel O&M merger.
 
@@ -205,6 +230,9 @@ Name: Ritu Agrawal
 Title: Test manager  
 Relationship: Customer  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: SP Digital, the digital-solutions subsidiary of Singapore Power (SP) Group, Singapore's national electricity and gas transmission utility.
 
 likely use case: given SP Digital's existing AI/IoT energy-management products, most plausibly evaluating Agent Score to test agentic features within those products before rollout.
@@ -218,6 +246,9 @@ Date: 2026-09-17 01:47
 Name: Sharifah Nadiah Alhabshi  
 Title: Manager  
 Relationship: Partner  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Japanese-origin SAP consultancy with 180+ consultants in Malaysia (Petaling Jaya and Penang), one of the largest SAP partners in the country.
 
@@ -233,6 +264,9 @@ Name: Dennis Fung
 Title: Senior IT Consultant  
 Relationship: Evaluating Tricentis  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Singapore's university of applied learning, focused on industry-integrated degree programs.
 
 likely use case (weak inference): no confirmed Agent Score initiative; plausibly evaluating for its own IT/QA teaching labs, given its existing AI-focused industry labs.
@@ -246,6 +280,9 @@ Date: 2026-09-17 01:46
 Name: Vanitha Velusamy  
 Title: IT Project Manager  
 Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Singapore-headquartered agri-business (food, feed, and fiber) spun off from Olam International in 2020.
 
@@ -261,6 +298,9 @@ Name: Balaji Sampathkumar
 Title: Associate Consultant  
 Relationship: Partner  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Indian IT-services and consulting major, one of the world's largest technology services firms.
 
 likely use case: as a systems-integration partner, most plausibly evaluating Agent Score to extend its own agentic-AI QA offering into client engagements — same profile as ABeam and TestCrew above.
@@ -274,6 +314,9 @@ Date: 2026-09-17 01:45
 Name: Thomas Zimmermann  
 Title: VP  
 Relationship: Partner  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: SAP's North American business unit.
 
@@ -289,6 +332,9 @@ Name: cydnie na
 Title: Developer  
 Relationship: Partner  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: statutory board under Singapore's Ministry of Defence responsible for defense technology acquisition and systems development for MINDEF and the SAF.
 
 likely use case: given DSTA's active build-out of in-house AI agents, most plausibly evaluating Agent Score to test/validate those agents before deployment.
@@ -302,6 +348,9 @@ Date: 2026-09-17 01:44
 Name: Swee Chyuan Koh  
 Title: Principal Software Quality Engineer  
 Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Singapore's public-housing statutory board under the Ministry of National Development.
 
@@ -317,6 +366,9 @@ Name: Khadim KASHANI
 Title: SME Test Automation  
 Relationship: Customer  
 
+Email sent: —  
+Beta scheduled: 2026-09-24  
+
 what they do: French multinational cosmetics and beauty group.
 
 likely use case: given the submitter's "SME Test Automation" title and L'Oréal's rapid rollout of consumer-facing AI agents, most plausibly evaluating Agent Score to test those agents' quality/behavior before release.
@@ -330,6 +382,9 @@ Date: 2026-09-17 01:44
 Name: Davin Ng  
 Title: QA Lead  
 Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: City Developments Limited (CDL), a major Singapore-listed real-estate group operating in 29 countries.
 
@@ -345,6 +400,9 @@ Name: Hector Santa Maria
 Title: CEO  
 Relationship: Partner  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Mexico City-based software-testing/QA consultancy (founded 2008, 51–200 employees) offering testing consulting, ISTQB certification training, and agile/DevOps testing frameworks ([testingit.com.mx](https://www.testingit.com.mx/en/home)).
 
 likely use case: as a QA/testing-services vendor, most plausibly evaluating Agent Score to extend its testing practice into agentic-AI QA for its own client base — same profile as TestCrew and Bayone Solutions above.
@@ -358,6 +416,9 @@ Date: 2026-09-16 06:17
 Name: Zuzan Win  
 Title: Test Automation Engineer  
 Relationship: Partner  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Singapore-based digital-transformation solution provider and Tricentis partner (named SEA Tricentis Partner of the Year), focused on test automation, cloud, cybersecurity, and analytics/ML for financial-services, banking, and telco clients ([Tricentis](https://www.tricentis.com/partners/brillar)).
 
@@ -373,6 +434,9 @@ Name: Shanita Helyar
 Title: Senior Test Manager  
 Relationship: Customer  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: iconic London luxury department store.
 
 likely use case: given the submitter's "Senior Test Manager" title and Harrods' recent AI-driven marketing/inventory rollouts, most plausibly evaluating Agent Score to test those systems as it scales further AI-powered retail features.
@@ -387,6 +451,9 @@ Name: Jana Kethamreddy
 Title: Principal Cloud Engg  
 Relationship: Other  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: US digital-only bank and financial-services company (auto finance, banking, mortgage).
 
 likely use case: given the submitter's "Principal Cloud Engg" title and Ally's plans to experiment with autonomous agents via Amazon Bedrock, most plausibly evaluating Agent Score to test those emerging agents.
@@ -400,6 +467,9 @@ Date: 2026-09-14 12:27
 Name: Rohan Patil  
 Title: Senior Technology Consultant  
 Relationship: Partner  
+
+Email sent: —  
+Beta scheduled: 2026-09-23  
 
 what they do: European management and technology consultancy (13,000+ people, 70+ countries).
 
@@ -417,6 +487,9 @@ Name: Prakash Panchal
 Title: Test Automation Architect  
 Relationship: Partner  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Canberra-based, 100%-Australian-owned test automation, DevOps, and AI integrator (156 employees), already a Tricentis partner ([Tricentis](https://www.tricentis.com/partners/xamplify)).
 
 likely use case: as an existing Tricentis partner, most plausibly evaluating Agent Score to extend its test-automation practice into agentic-AI QA for its own client base — same profile as Dolpheen IT Solutions and Brillar above.
@@ -428,6 +501,9 @@ known agent tooling: no public information found tying xAmplify to a deployed ag
 ### Meta Platforms, Inc.
 Date: 2026-09-10 (Sales conversation — no Labs form submission)  
 Name: Sri Pulleti  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Global social-media/technology conglomerate (Facebook, Instagram, WhatsApp, Messenger, Reality Labs) with a large open-model AI research arm (the Llama model family).
 
@@ -443,6 +519,9 @@ known agent tooling: launched Meta Business Agent (a customer-facing agent live 
 Date: 2026-09-09 09:51  
 Name: Farhan Shaikh  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Saudi Arabia's largest telecom operator and self-described "digital enabler" — a strategic LEAP partner building AI-ready data-center capacity (via its center3 subsidiary) and Kingdom-wide AI infrastructure alongside HUMAIN.
 
 likely use case: validating/testing the agentic AI it's already rolling out across customer service, network operations, and enterprise sales — a near-direct fit given the scale of that deployment, similar profile to Cox Automotive and Home Depot above.
@@ -454,6 +533,9 @@ known agent tooling: agentic AI reported live across customer-service automation
 ### Diriyah Gate Company Limited - DGCL (SA)
 Date: 2026-09-09 09:52  
 Name: Ali Alshehri  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Operating company for Diriyah, the Saudi giga-project redeveloping the historic birthplace of the first Saudi state (northwest of Riyadh) into a heritage/culture/tourism destination — 38+ hotels, 20 cultural landmarks, 100+ restaurants planned — under the Diriyah Gate Development Authority ([dgda.gov.sa](https://www.dgda.gov.sa/en)).
 
@@ -467,6 +549,9 @@ known agent tooling: no public information found tying Diriyah/DGCL to a deploye
 Date: 2026-09-09 09:53  
 Name: Ramesh Panthangi  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Riyadh-headquartered global software-testing/QA firm (founded 2018; 700+ experts across KSA, UAE, Jordan, Egypt, India, and Europe) serving banking, government, telecom, aviation, retail, and sports-tech clients; first MENA testing company to reach TMMi Level 5, named a top-10 QA company on the 2024 Software Testing Leaders list ([clutch.co/profile/testcrew](https://clutch.co/profile/testcrew)).
 
 likely use case: as a QA/testing-services vendor, most plausibly evaluating Agent Score to extend its testing practice into agentic-AI QA for its own enterprise client base — same profile as Bayone Solutions and Aspire Systems above.
@@ -478,6 +563,9 @@ known agent tooling: no public information found tying TestCrew to a deployed ag
 ### Dolpheen IT Solutions
 Date: 2026-09-09 14:41  
 Name: Jia Jun Zhan  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Vienna, Austria-based test-automation/RPA consultancy focused on SAP S/4HANA migration testing (founded by Yunus Saylan and Simon Kreitmayer). Already a Tricentis partner ([tricentis.com/partners/dolpheen-it-solutions-gmbh](https://www.tricentis.com/partners/dolpheen-it-solutions-gmbh)).
 
@@ -491,6 +579,9 @@ known agent tooling: no public information found tying Dolpheen to a deployed AI
 Date: 2026-09-03 15:20  
 Name: Ajan Nattamai  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Education-content/EdTech publisher spanning higher ed, workforce training, and K-12; part of Cengage Group.
 
 likely use case: evaluating/testing the output quality and personalization accuracy of its GenAI-powered Student Assistant and AI Leveler tools before or during wider rollout.
@@ -502,6 +593,9 @@ known agent tooling: shipped a GenAI-powered Student Assistant (beta) and an AI 
 ### Pegasystems Inc.
 Date: 2026-09-02 14:51  
 Name: Kiran kadarla  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Enterprise low-code/BPM software vendor; recently launched "Pega Agentic Process Fabric" with MCP-powered agent orchestration for mission-critical business processes.
 
@@ -515,6 +609,9 @@ known agent tooling: launched Pega Agentic Process Fabric with MCP support (lett
 Date: 2026-08-28 (Sales conversation — no Labs form submission)  
 Name: Kaleb Jackson  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Government-sponsored enterprise providing liquidity/stability to the US residential mortgage market by purchasing and securitizing mortgages.
 
 likely use case: auditing/scoring the quality of Freddie Mac's own internally-built agentic workflows. Kaleb's stated pain points were fragmented AI ownership across teams (the product team and the AI accelerator team are building overlapping agents) and no shared way to validate agent behavior/tool-use org-wide. Agent Score's ship/warn/block scoring model was the part he reacted to most directly.
@@ -526,6 +623,9 @@ known agent tooling: not stated in the transcript — Kaleb didn't name specific
 ### Workday, Inc.
 Date: 2026-08-28 18:28  
 Name: Vijay Mummaneni  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Enterprise HR/Finance/IT SaaS platform (Pleasanton, CA); ~19,000+ employees, ~$8.4B revenue; core HCM and Financial Management products used across thousands of enterprises.
 
@@ -545,6 +645,9 @@ Name: Beena P K
 Date: 2026-08-28 12:52  
 Name: Aimee Martin  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Global apparel/fashion conglomerate (New York, NY) — owns Calvin Klein and Tommy Hilfiger; ~$8.6B revenue, operations in 40+ countries.
 
 likely use case: evaluating output quality/consistency of the generative-AI tools it's co-developing with OpenAI across design, demand planning, inventory, and consumer-facing engagement, given the scale of that rollout.
@@ -557,6 +660,9 @@ known agent tooling: announced a company-wide collaboration with OpenAI (January
 Date: 2026-08-24 16:26  
 Name: Sarvesh Peddi  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Operates as Spectrum — one of the largest US cable/broadband/telecom providers (~32M+ customers, ~$55B revenue, HQ Stamford, CT).
 
 likely use case: given Charter's active investment in production customer-service AI, most plausibly evaluating Agent Score to validate agent output quality/consistency before or during wider rollout — same profile as Cox Automotive and Home Depot above.
@@ -568,6 +674,9 @@ known agent tooling: AI-powered call-summarization and knowledge-search tools al
 ### — (form blank; email domain suggests Artizent)
 Date: 2026-08-24 13:13  
 Name: Alan Mayfus  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Enterprise technology engineering firm (Edison, NJ) — software/product engineering, data & analytics, cloud modernization, quality engineering, applied AI, with a focus on banking/financial services/insurance. Formerly Nous Infosystems, rebranded Artizent in July 2026 with TA Associates backing; founded 1996 ([artizent.com/company](https://www.artizent.com/company)).
 
@@ -587,6 +696,9 @@ Name: Deephan Mohanraj
 Date: 2026-09-01 10:25  
 Name: Jawahar Govindaraj  
 
+Email sent: —  
+Beta scheduled: 2026-09-11  
+
 what they do: Sydney-headquartered SAP Technical Services & software-testing consultancy (~51 employees, ~$6M revenue, founded 2011) with presence in Melbourne, Canberra, Brisbane — 150+ projects delivered to 100+ Australian customers, specializing in SAP-focused quality engineering, automation, and performance testing ([tritusa.com.au/about-us](https://tritusa.com.au/about-us/)).
 
 confirmed use case (from 2026-09-11 demo): confirmed the inference below. As a Tricentis gold-sponsor partner/SI they want AgentScore both to evaluate the agents they build for clients (they demoed two - a Copilot Studio agent and an AI Workspace MCP+A2A agent, each turning a requirements doc into qTest requirements/test cases and Tosca execution) and to arm their own evals-and-assurance advisory practice. Immediate driver: they present an autonomous QA agent at Transatlantic 26 Singapore the week of 2026-09-15 and expect customer questions on trust/models/benchmarks/safety/compliance. Attendees included Jawahar Govindaraj (heads their agent practice), Pankaj Kumar Sinha (Tosca lead), Deephan Mohanraj, and Vedanth (principal architect, ~decade in Tosca; not in the form-submission list). Top asks: compliance validation (bank/pharma clients), alerting, bulk export, and a partner co-sell motion. Debrief: [Tritusa Feedback Session](feedback-sessions/Tritusa%20Feedback%20Session.md).
@@ -603,6 +715,9 @@ Responded: Curious about evaluation using AIW *and* third party agents
 Date: 2026-08-22 08:25  
 Name: SaiDeepak Ayyagari  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: SAP's R&D subsidiary in India — engineering hub developing SAP's cloud and AI product lines.
 
 likely use case: internal evaluation/QA of AI agents built into SAP's own product lines (e.g., Joule, SAP Business AI) before they ship to SAP's enterprise customers.
@@ -614,6 +729,9 @@ known agent tooling: SAP Business AI and the Joule generative-AI assistant embed
 ### Regeneron Pharmaceuticals Inc.
 Date: 2026-08-21 06:12  
 Name: Murali Sundaram  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Biotechnology/pharma company (Tarrytown, NY; Dupixent, Eylea, Kevzara); proprietary VelociSuite platform (VelocImmune) for antibody discovery; ~15,500 employees, ~$15.5B TTM revenue.
 
@@ -627,6 +745,9 @@ known agent tooling: no public information found tying Regeneron specifically to
 Date: 2026-08-20 19:03  
 Name: Pratiksha Arora  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Largest stand-alone behavioral-health company in the US (Franklin, TN) — 279 facilities, ~12,600 beds across 40 states + Puerto Rico, ~23,500 employees, ~$3.3B revenue; operates the largest US chain of methadone clinics ([Wikipedia](https://en.wikipedia.org/wiki/Acadia_Healthcare)).
 
 likely use case: clinical-documentation or patient-intake/scheduling agents — behavioral health's regulatory and privacy sensitivity makes output verification matter a lot.
@@ -638,6 +759,9 @@ known agent tooling: no public information found tying Acadia specifically to a 
 ### New Vision Software Inc.
 Date: 2026-08-20 16:12  
 Name: Rohan Bansod  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: India-based (Pune) IT services/QA consultancy (~687 employees) — application/data/infrastructure modernization plus a dedicated QA automation practice. Already a Tricentis partner — lists Tricentis/Tosca alongside Oracle, PEGA, Microsoft, and Google Cloud in its partner roster.
 
@@ -651,6 +775,9 @@ known agent tooling: runs Tosca-based automation delivery for clients (e.g. a ut
 Date: 2026-08-20 15:00  
 Name: ASHWIN MOR  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Global IT hub/shared-services arm of Hilti Group (construction tools/fastening/software) — software development, analytics, IT infrastructure for 34,000+ employees across 120+ countries; based in Petaling Jaya, Malaysia.
 
 likely use case: internal IT service automation or analytics-pipeline agents.
@@ -662,6 +789,9 @@ known agent tooling: no public information found.
 ### Panasonic Avionics (US)
 Date: 2026-08-20 14:58  
 Name: Ronica Brisbon  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: World's leading in-flight entertainment & connectivity (IFEC) supplier; ~4,100 employees, 80 locations, systems on 3,700+ aircraft, ~$1.1B revenue.
 
@@ -675,6 +805,9 @@ known agent tooling: no public information found.
 Date: 2026-08-20 14:50  
 Name: Gurucharan Bijinepally  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Aerospace/defense manufacturer — commercial aircraft, defense, space systems.
 
 likely use case: explicitly on their own roadmap — Boeing names "agentic AI" as a next focus area.
@@ -686,6 +819,9 @@ known agent tooling: prototype onboard AI for spacecraft anomaly detection/self-
 ### — (form blank; email domain suggests The Hartford)
 Date: 2026-08-20 14:49  
 Name: Sathish kumar Backiam  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Top-10 US commercial/personal insurance carrier.
 
@@ -699,6 +835,9 @@ known agent tooling: "several hundred AI models in production" per CEO Chris Swi
 Date: 2026-08-20 14:49  
 Name: Jay Gajulapalli  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Largest wine & spirits distributor in the US (~1/3 of all US wine/spirits bottles), family-owned, 7,000+ brands, ~24,000 employees, ~$21B revenue.
 
 likely use case: distribution/logistics optimization agents, or sales-rep-facing order/catalog agents.
@@ -711,6 +850,9 @@ known agent tooling: no public information found.
 Date: 2026-08-20 14:49  
 Name: Ramesh Jeyagopalan  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Petrochemicals/polymers manufacturer, 50/50 Chevron–Phillips 66 JV.
 
 likely use case: predictive-maintenance or supply-chain agents on top of their existing data platform.
@@ -722,6 +864,9 @@ known agent tooling: adopted Databricks Data Intelligence Platform for manufactu
 ### Dominion Energy, Inc.
 Date: 2026-08-20 14:49  
 Name: Anand Shekaraiah  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Regulated electric/gas utility (Virginia, South Carolina) plus contracted renewables; ~30.7 GW capacity.
 
@@ -737,6 +882,9 @@ Name: Jag Mallampati
 
 Date: 2026-08-20 14:48  
 Name: Thomas Cody  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: ~670 travel-stop/convenience locations across 42 states, plus Speedco/Love's Truck Care; ~10,000+ employees.
 
@@ -759,6 +907,9 @@ Date: 2026-08-20 14:48
 Name: Sathish kumar Backiam  
 Entity: CAPGEMINI TECHNOLOGY SERVICES INDIA LIMITED *(this same person also submitted separately with the company field blank and a thehartford.com email — see the flagged Hartford entry above)*  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Global IT/management consulting and systems integrator (~340,000+ employees worldwide).
 
 likely use case: with three separate employees submitting, most plausibly evaluating Tricentis as a QA layer for agentic AI solutions Capgemini builds for its own clients — a partner/reseller angle, not just internal use.
@@ -771,6 +922,9 @@ known agent tooling: this is a core service line, not just internal tooling — 
 Date: 2026-08-20 14:48  
 Name: Lakshmi Sree Thirukonda  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Manufacturer of diesel/natural gas engines, power generation equipment, and increasingly data-center battery storage.
 
 likely use case: predictive-maintenance/warranty-analytics agents (their "Axion" line) or engineering-knowledge copilots.
@@ -782,6 +936,9 @@ known agent tooling: Axion partnership for AI-driven failure prediction/warranty
 ### Home Depot Store Support, Inc.
 Date: 2026-08-20 14:48  
 Name: Joe Pope  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Largest US home-improvement retailer, ~2,300+ stores.
 
@@ -798,6 +955,9 @@ Name: Nitin Malik
 Date: 2026-08-21 12:53  
 Name: Cathy Soller  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Largest US pharmaceutical distributor (~1/3 of North American distribution); FY2026 revenue ~$403B.
 
 likely use case: testing contact-center IVAs and back-office automation agents for quality/compliance, given healthcare's regulatory sensitivity.
@@ -813,6 +973,9 @@ Name: Ramesh Magdum
 Date: 2026-08-20 14:48  
 Name: Sateesh Rajegowda  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Global pharma company (Keytruda-led immuno-oncology, Gardasil vaccines); ~$60B+ scale.
 
 likely use case: evaluating agentic workflows across R&D, regulatory/commercial ops, and manufacturing — pharma's compliance sensitivity makes output verification matter a lot.
@@ -824,6 +987,9 @@ known agent tooling: April 2026, signed a $1B multi-year deal with Google Cloud 
 ### Genpact (HQ)
 Date: 2026-08-20 14:48  
 Name: Richard Hand  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Global professional services/BPO firm (~141,000 employees, $5B+ revenue, 800+ clients including 25% of Fortune 500).
 
@@ -837,6 +1003,9 @@ known agent tooling: self-described applied-AI/process-intelligence positioning 
 Date: 2026-08-20 14:48  
 Name: Ejaz Siddiqui  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: PC/printer hardware giant, large global enterprise.
 
 likely use case: evaluating agents deployed across its own customer/partner support, security, and internal workflows.
@@ -848,6 +1017,9 @@ known agent tooling: June 2026, expanded a strategic partnership with OpenAI's F
 ### Sub-Zero Group Inc
 Date: 2026-08-20 14:48  
 Name: Guy Hall  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Privately held luxury kitchen appliance maker (Sub-Zero, Wolf, Cove); ~$728M revenue, ~1,800 employees.
 
@@ -861,6 +1033,9 @@ known agent tooling: no public information found.
 Date: 2026-08-20 14:48  
 Name: Damilola Agboola  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: One of North America's largest construction/engineering firms (employee-owned, ~$16.8B revenue, 31,800+ workers).
 
 likely use case: agent evaluation likely ties to their existing AI design/estimating tools rather than starting fresh.
@@ -872,6 +1047,9 @@ known agent tooling: KADE (Kiewit Algorithmic Design and Engineering), ADAPT in-
 ### Tachyon Technologies
 Date: 2026-08-20 14:48  
 Name: Subba Rao Gonugunta  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Digital transformation/SAP consultancy (TX; 201–500 employees, ~$110M revenue), Inc 5000-listed, top SAP Solution Provider.
 
@@ -885,6 +1063,9 @@ known agent tooling: no public information found beyond a generic "AI & Generati
 Date: 2026-08-20 14:48  
 Name: Anmol Jain  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Global IT consultancy/software engineering firm (Netherlands-based) specializing in cloud, data, and AI-native engineering.
 
 likely use case: evaluating Agent Score to offer/resell to their client base, or to validate agents they build for clients.
@@ -896,6 +1077,9 @@ known agent tooling: builds and sells its own agentic AI products — "Agentic A
 ### Cargill Incorporated
 Date: 2026-08-20 14:48  
 Name: Alfonso Garbanzo  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Privately held global agribusiness/commodities giant (~160,000 employees).
 
@@ -909,6 +1093,9 @@ known agent tooling: a Support AI Agent automates ~70% of order processing (~$15
 Date: 2026-08-20 14:48  
 Name: Chris Allanson  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Global information-services/software company for legal, tax, health, and compliance professionals.
 
 likely use case: evaluating/testing agent output quality and governance, given heavy existing investment in multi-agent products.
@@ -920,6 +1107,9 @@ known agent tooling: "Ovid Guidelines AI" (agentic clinical-guideline authoring)
 ### J. R. Simplot Company
 Date: 2026-08-20 14:48  
 Name: Neeraja Kusuma  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Large private US agribusiness (potato/food processing, agriculture, phosphate/fertilizer).
 
@@ -933,6 +1123,9 @@ known agent tooling: no public information found on specific deployed agents; co
 Date: 2026-08-20 14:48  
 Name: Vinay Patlolla  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Large private manufacturer of forklifts and warehouse material-handling equipment.
 
 likely use case: evaluating the reliability/decision-quality of the AI powering their autonomous lift trucks or InfoLink analytics layer.
@@ -945,6 +1138,9 @@ known agent tooling: autonomous lift trucks with real-time navigation decisions;
 Date: 2026-08-20 14:48  
 Name: Anirban Toy Choudhury  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: An AI-agent company itself — sells AI agents that automate service-delivery workflows for agencies/consultancies ([trystanza.com](https://trystanza.com)).
 
 likely use case: as an AI-agent vendor, plausibly testing/QA-benchmarking their own agents' outputs before shipping to clients.
@@ -956,6 +1152,9 @@ known agent tooling: confirmed — their entire product is AI agents.
 ### Sunbelt Rentals
 Date: 2026-08-20 14:48  
 Name: Arya Shrey  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Large equipment-rental company (part of Ashtead Group), UK/US operations.
 
@@ -972,6 +1171,9 @@ Name: Chris Carpenter
 Date: 2026-08-21 16:41  
 Name: Gerard Trimberger  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Enterprise software VAR/consultancy (20+ years) — SDLC tooling, QA automation, app-security reseller. Already a Tricentis partner — lists Tricentis alongside Azure DevOps, TestRail, Planview on their own site.
 
 likely use case: given the existing partner relationship, likely evaluating Agent Score to advise/resell to their own enterprise clients doing agentic-AI QA, rather than for their own internal agents.
@@ -983,6 +1185,9 @@ known agent tooling: no public information found on Merito operating AI agents t
 ### Amazon Kuiper Manufacturing Enterprises LLC
 Date: 2026-08-20 14:48  
 Name: Saranya Vaithiyanathan  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Amazon's satellite manufacturing division for the Kuiper broadband constellation; large production/test facility in Kirkland, WA.
 
@@ -996,6 +1201,9 @@ known agent tooling (mixed evidence): confirmed use of AWS IoT SiteWise for CNC 
 Date: 2026-08-20 14:48  
 Name: Greg Wanroy  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Company field says "Accenture CIO HR Organization," but the email domain is stanza.ai (see Anirban Toy Choudhury's Stanza submission above) — not resolved which label is correct.
 
 likely use case: unclear given the mismatch; if it's actually Stanza, same profile as above (an AI-agent vendor testing its own agents).
@@ -1007,6 +1215,9 @@ known agent tooling: the "Accenture CIO HR Organization" label looks like a form
 ### Aspire Systems Digital Transformation Inc.
 Date: 2026-08-20 14:48  
 Name: Naveen Srinivasan  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: IT services/digital-transformation consultancy with a strong insurance-industry vertical practice.
 
@@ -1020,6 +1231,9 @@ known agent tooling: 2026 ISG Software Innovation Awards finalist for "AI-Powere
 Date: 2026-08-20 14:47  
 Name: Mohammad Mahboob  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Global authorized distributor of semiconductors/electronic components (6.8M+ products, 1,200+ manufacturer brands), $3.4B revenue, Berkshire Hathaway company.
 
 likely use case: testing/evaluating their deployed customer-service support agents (accuracy, routing quality, multi-language consistency) — they're a distributor, not a software shop.
@@ -1032,6 +1246,9 @@ known agent tooling: 21 customer-service bots across 13 languages on LivePerson'
 Date: 2026-08-20 14:47  
 Name: Balaji Gandsi Krishna Prakash  
 
+Email sent: —  
+Beta scheduled: —  
+
 what they do: Atlanta-based, ~$9B revenue automotive services conglomerate under Cox Enterprises; owns Autotrader, Kelley Blue Book, Manheim, Dealertrack, vAuto, NextGear Capital.
 
 likely use case: a near-certain fit, not a stretch inference — they're actively shipping customer-facing autonomous agents, so pre-production evaluation/QA is a direct match.
@@ -1043,6 +1260,9 @@ known agent tooling: strongest public documentation on this list — built 5 age
 ### Bayone Solutions
 Date: 2026-08-19 19:18  
 Name: Mathi Natarajan  
+
+Email sent: —  
+Beta scheduled: —  
 
 what they do: Pleasanton, CA-based IT consulting/staffing firm (founded 2012, minority-owned) — Quality Engineering, Project Management, Software Development, UX, cloud/big-data services.
 
