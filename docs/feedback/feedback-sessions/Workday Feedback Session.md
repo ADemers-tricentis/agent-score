@@ -27,6 +27,9 @@ The strongest, clearest part of the pitch. Andrew's closer nailed it: evals are 
 **3. Reliability signals as a maturity marker.**
 Confidence intervals, pass@k, and minimum-sample gating (20 traces before a score) read as credible to a technical QA audience and separate AgentScore from "LLM-judge-in-a-box" tools.
 
+**3a. Configurable judge model.**
+Andrew confirmed the LLM used to judge/score is user-selectable, not fixed to one provider - a minor point, but relevant to a buyer already running multiple model stacks (Workday agents + Agentforce + external Data Cloud/RAG).
+
 **4. Root-cause attribution.**
 The "wrong tool -> bad data -> bad answer, here's the span and a recommended fix" walkthrough was the most compelling capability narrative. The audience engaged with it directly (retriever-failure and polite-decline scenarios).
 

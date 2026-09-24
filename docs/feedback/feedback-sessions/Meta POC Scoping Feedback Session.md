@@ -16,6 +16,8 @@ The partner came in with three explicit questions:
 2. What team/support does Tricentis provide, and how fast can it stand up?
 3. Architecture - how is AgentScore set up and how would it fit? (They had only a high-level slide to go on.)
 
+They also named a concrete date pressure up front: the partner wants to **start the POC a week from this call** and asked directly how long setup takes - a specific number, not just general urgency.
+
 ## Room composition
 
 - **Tricentis side:** Andrew Demers (presenter/PM). Greg (account) referenced, not clearly present.
@@ -55,7 +57,7 @@ Meta runs their own models (internal "meta intern"-style models, "Spark 1.3" men
 
 ## The real subtext: exposure / perception risk
 
-The most important moment was the partner asking point-blank whether it is even a good idea to put AgentScore in front of Meta yet given its maturity. Andrew's honest answer was the right one: for **pure agentic evaluation of production agents, functionally yes** (UI needs polish); for **full pre-prod simulation, not yet**.
+The most important moment was the partner asking point-blank whether it is even a good idea to put AgentScore in front of Meta yet given its maturity. Andrew's honest answer was the right one: for **pure agentic evaluation of production agents, functionally yes** (UI needs polish); for **full pre-prod simulation, not yet**. Concrete context for how early-stage that maturity question actually is: Andrew said AgentScore had at that point been out of internal-only use for roughly a week and a half - zero external reference clients yet - which is the real substance behind the partner's exposure worry, not just a general "is it new" concern.
 
 The partner's worry was reputational, not technical: expose something too raw to a savvy client and "perception gets created... surround sound... much harder to walk back once it's out there... more harm than good." Their proposed framing - and it is a good one - is to scope the POC explicitly to what AgentScore does **today** (production-agent evaluation on the existing Tosca footprint) while being transparent about the roadmap (scenario bank) so nobody feels oversold.
 

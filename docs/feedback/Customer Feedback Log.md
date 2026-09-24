@@ -14,12 +14,12 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
 | Firm, consistent timeline (POC/beta dates that don't move mid-call) | Workday, Meta | Open - need one rehearsed slide every speaker uses |
 | Clear answer to "is this a testing tool or an observability tool?" | Workday | Answered - name the category, don't fight the word: something else drives the agent, AgentScore grades. Boundary picture: Driver -> Agent -> Traces -> AgentScore grades. Ready to ship to the deck |
 | Crisp, rehearsed answer to "why trust the LLM judge / how do you know it's accurate?" | Workday | Answered - tiered: (1) deterministic/hybrid checks wherever ground truth exists, (2) LLM-judge dimensions with pass@k + confidence intervals + minimum-sample gating where it doesn't, (3) golden-dataset back-testing. Close on a live correctness-dimension walkthrough, not narration. Ready to ship to the deck |
-| Deterministic/exploratory "red-team the agent" testing / scenario bank (define + run scenarios, not just passive grading) | Meta (x2) | Open - roadmap, not built. Now the pivotal gap for the Meta POC: separates "evaluate prod agents" (shippable) from "test dev-to-prod" |
+| Deterministic/exploratory "red-team the agent" testing / scenario bank (define + run scenarios, not just passive grading) | Meta (x2), L'Oreal | Open - roadmap, not built as an AgentScore capability. Now the pivotal gap for the Meta POC: separates "evaluate prod agents" (shippable) from "test dev-to-prod". L'Oreal hit the same wall from a different angle - asked twice whether he could hand AgentScore a batch of 10-15 test prompts to run on demand; told no, it only scores organic usage traces. Note: on the first Meta call, David floated Tosca (informally, not AgentScore itself) as a way to drive/simulate scenario inputs - a partial, off-product answer, not a shipped fix |
 | Point the evaluator/judge at customer's own internal/custom LLMs (self-hosted, not a cloud judge) | Meta | Open - technical precondition for Meta on-prem; to be confirmed with engineering |
 | Root-cause attribution (span + fix, not just a score) | Workday, Meta, Wolters Kluwer, Tritusa | Landing well - keep leading with this |
 | Evaluate a *group*/hierarchy of agents, not just one in isolation | Meta, Wolters Kluwer | Lands as a concept, not shipped - Wolters Kluwer needs literal bulk/fleet-level scoring (point at a repo of agents, score together) and called per-agent-only "not useful" at their scale; targeted "hopefully end of month" |
 | Agentforce / Salesforce-native integration | Workday | Open - known gap |
-| Fine-grained access control / RBAC / self-service onboarding | Wolters Kluwer | Open - admin + mostly-view-only today; roles, per-tenant/agent scoping, and self-service all "on the roadmap" - a stated rollout blocker for a governance-driven buyer |
+| Fine-grained access control / RBAC / self-service onboarding | Wolters Kluwer, L'Oreal | Open - admin + mostly-view-only today; roles, per-tenant/agent scoping, and self-service all "on the roadmap" - a stated rollout blocker for a governance-driven buyer; L'Oreal hit the same wall from the other direction - has AI Workspace + credits already purchased, but ingesting into AgentScore from an existing Workspace tenant needs the Workspace admin team to configure it first, so he's trialing standalone instead of waiting |
 | Score agents outside the Tricentis ecosystem (e.g. GitHub Copilot, internal platforms) to benchmark against sanctioned tooling | Wolters Kluwer, Tritusa | Solved - any agent that supports OTel can be ingested, regardless of vendor |
 | Compliance validation (GxP/SOX-style regimes, PII flagging on traces) | Tritusa | Open - "not currently, easy to add"; roadmap only. Blocker for regulated (bank/pharma) clients |
 | Alerting when an agent degrades (Slack/email to managers/admins) | Tritusa | Open - not built, stated "top of the list" |
@@ -36,6 +36,17 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
 ---
 
 ## Sessions
+
+### 2026-09-24 - L'Oreal (Labs beta onboarding)
+
+- **Who:** KASHANI Khadim (Test Automation Manager, L'Oreal India Tech Hub / ITH, covers the APAC zone, leads L'Oreal's test automation factory, works with Tosca). Paul Wagner (Tricentis account contact) joined partway through with org context. Tricentis: Andrew Demers.
+- **What we learned:** A Labs signup converted into a first hands-on intro call, driven by Khadim attending the Transform Singapore event (~week of 2026-09-15) and registering for Labs the same weekend. His team runs a live ELK/Elastic-Cloud-based reconciliation agent internally, and evaluates it entirely manually today - run a prompt, open the dashboard, manually compare the agent's answer to the query results, and manually track accuracy/efficiency/tokens/latency. That manual workflow is exactly what he wants AgentScore to replace, and he wants to run a self-driven POC to build an internal pitch to his own stakeholders as L'Oreal ramps up more AI initiatives across zones. Tool-call/argument-correctness verification against backend query results, two-line OTel + standalone operation, configurable weighting/thresholds, and fleet-level status all landed and answered his questions directly. Separately, Paul Wagner noted L'Oreal has already purchased AI Workspace with 1M+ agent credits provisioned.
+- **Major asks:**
+  - Ability to hand AgentScore a batch of test prompts/scenarios (he asked for 10-15) and have it run them on demand - asked twice, in different words; the answer he got was no, AgentScore only scores traces from real/organic agent usage, it doesn't execute a supplied prompt set. Same scenario-bank/simulation gap raised by Meta.
+  - Self-service access to AgentScore when an agent already lives in AI Workspace - today requires the Workspace admin team (Charles Henry's team) to configure it first, so Khadim is trialing standalone instead of waiting on that dependency.
+  - Faster public trial access - the public-facing signup site is targeted for "next week," not available on the call itself, and he pushed on this repeatedly.
+  - A detailed demo recording/walkthrough (not the existing basic PPT/YouTube asset) to share with his Singapore-based manager ahead of their next call.
+- **Full debrief:** [feedback-sessions/L'Oreal Feedback Session.md](feedback-sessions/L'Oreal%20Feedback%20Session.md)
 
 ### 2026-09-23 - BearingPoint (partner / SI, Labs beta onboarding)
 
