@@ -1,3 +1,38 @@
+## September 24, 2026 Update
+
+### Tune ship/no-ship thresholds for each agent
+- Ship, Ship with note, Needs work, and Don't ship thresholds used to be fixed for every agent under a profile - moving one agent's thresholds meant changing them for everyone on that profile. You (or a Tricentis admin) can now override those thresholds for a single agent, with a clear label showing whether it's using your custom values or the profile default.
+- Resetting back to the profile default is one click.
+
+### See your AI credits at a glance, everywhere
+- Your credits balance now shows on every page, not just when you're looking at a specific agent, so you always know where your account stands.
+- Running low or out of credits now shows a clear banner explaining why and who to contact - and any action that would spend credits (scoring, chat, advice, and more) is disabled with a plain-language reason until credits are available again.
+
+### A clearer way to accept our terms
+- The terms you accept before using Agent Score are now written and managed directly by Tricentis instead of routing through a separate upstream service.
+- The acceptance screen is also redesigned to fill your window, so you can read and scroll through the full document without fighting a second, undersized scrollbar.
+
+### Sign in with your Tosca Cloud account
+- You can now sign in to Agent Score with your existing Tosca Cloud account instead of a separate one-off login.
+- If something goes wrong during sign-in (a deactivated account, a tenant mapping change, a session mismatch) you now see a specific explanation and who can help, instead of a generic "not configured" message.
+
+### Internal note: RDS IAM authentication rolling out
+- Postgres connections on our shared infrastructure now mint a short-lived, per-connection IAM token instead of using a static password, gated behind a flag so it can roll out safely one environment at a time.
+
+### Internal note: old AWS deployment lane retired
+- The AWS ECS deployment lane, unused since September 15, is fully decommissioned - its workflows, task definitions, and infrastructure are removed. `/release` now ships to staging only; promoting to production stays a separate, deliberate step.
+
+### Internal note: clearer environment cues and a reorganized consent view in the back office
+- An operator working a dev tab and a staging tab side by side now gets a bigger environment strip, a chip, and a `[DEV]`/`[STG]`/`[PROD]` browser-tab tag, so it's obvious which environment is which.
+- The Consent page moved under Users, with a new Acceptances table showing every customer user's terms status across all their tenants in one place instead of checking user by user.
+
+### Internal note: AI Hub usage now bills to the right cause
+- Every AI Hub call is now billed to whichever action actually caused it - a customer's own action, our staff acting on their behalf, or automatic scheduled work - instead of bucketing everything under the tenant regardless of who or what triggered it.
+
+### Internal note: back-office tenant overview reorganized around credits and agent health
+- The back-office tenant Overview tab now leads with AI credit balance and agent health (active, provisioning, failed counts) in equal-width cards, replacing a stretched credit summary and per-agent tiles that called every non-active agent "dormant."
+- The tenant list also gained an AI credits column, so an operator can see a tenant's balance without opening it.
+
 ## September 23, 2026 Update
 
 ### Manage your whole fleet from one workspace
