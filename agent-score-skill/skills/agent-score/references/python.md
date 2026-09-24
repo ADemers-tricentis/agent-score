@@ -5,6 +5,13 @@ description: Configure OTEL tracing for Python applications to export to Agent S
 
 # Python - OTEL Configuration for Agent Score
 
+> **Endpoint:** `https://agent-score-ingest.product.tricentis.com/external/otel/v1/traces`,
+> auth `Authorization: Bearer <tk_... ingest key>`, reachable over the Tricentis
+> VPN only. After wiring the exporter, make sure spans carry attributes Agent
+> Score recognizes so the agent is scored, not just ingested - see
+> [semantic-conventions.md](semantic-conventions.md). The framework
+> auto-instrumentation below emits most of them for you.
+
 ## Required packages
 
 ```bash
@@ -36,7 +43,7 @@ def configure_agent_score():
     api_key = os.environ["AGENT_SCORE_API_KEY"]
 
     exporter = OTLPSpanExporter(
-        endpoint="https://agent-score-ingest.product.tricentis.com/internal/otel/v1/traces",
+        endpoint="https://agent-score-ingest.product.tricentis.com/external/otel/v1/traces",
         headers={"Authorization": f"Bearer {api_key}"},
     )
 
@@ -86,7 +93,7 @@ If you prefer environment-variable-only configuration (no code changes), see [en
 ## .env example
 
 ```dotenv
-AGENT_SCORE_API_KEY=as-...
+AGENT_SCORE_API_KEY=tk_...
 OTEL_SERVICE_NAME=my-agent-app
 ```
 
@@ -109,7 +116,7 @@ from agents.tracing.processors import BatchTraceProcessor
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 
 exporter = OTLPSpanExporter(
-    endpoint="https://agent-score-ingest.product.tricentis.com/internal/otel/v1/traces",
+    endpoint="https://agent-score-ingest.product.tricentis.com/external/otel/v1/traces",
     headers={"Authorization": f"Bearer {os.environ['AGENT_SCORE_API_KEY']}"},
 )
 set_trace_processors([BatchTraceProcessor(exporter)])
@@ -118,6 +125,7 @@ set_trace_processors([BatchTraceProcessor(exporter)])
 ## Troubleshooting
 
 - **No traces in Agent Score** - Confirm `AGENT_SCORE_API_KEY` is set and non-empty. Enable OTEL debug logging: `export OTEL_LOG_LEVEL=debug`.
-- **401 errors** - The API key is wrong or expired. Regenerate it in Agent Score UI -> Settings -> API Keys.
-- **Connection errors** - Verify network access to `agent-score-ingest.product.tricentis.com` from your environment.
+- **401 errors** - The ingest key is wrong, disabled, or rotated. Create or rotate it in Agent Score UI -> Integrations (keys look like `tk_...`).
+- **Connection errors** - Verify network access to `agent-score-ingest.product.tricentis.com` from your environment. The endpoint is reachable over the Tricentis VPN only.
+- **Traces ingest but the agent doesn't score** - Spans are missing recognized attributes. See [semantic-conventions.md](semantic-conventions.md).
 - **Missing spans** - Ensure `configure_agent_score()` is called before any instrumented code runs.

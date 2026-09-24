@@ -5,6 +5,12 @@ description: Configure OTEL tracing for Node.js and TypeScript applications to e
 
 # Node.js / TypeScript - OTEL Configuration for Agent Score
 
+> **Endpoint:** `https://agent-score-ingest.product.tricentis.com/external/otel/v1/traces`,
+> auth `Authorization: Bearer <tk_... ingest key>`, reachable over the Tricentis
+> VPN only. After wiring the exporter, make sure spans carry attributes Agent
+> Score recognizes so the agent is scored, not just ingested - see
+> [semantic-conventions.md](semantic-conventions.md).
+
 ## Required packages
 
 ```bash
@@ -34,7 +40,7 @@ import { resourceFromAttributes } from "@opentelemetry/resources";
 import { ATTR_SERVICE_NAME } from "@opentelemetry/semantic-conventions";
 
 const exporter = new OTLPTraceExporter({
-  url: "https://agent-score-ingest.product.tricentis.com/internal/otel/v1/traces",
+  url: "https://agent-score-ingest.product.tricentis.com/external/otel/v1/traces",
   headers: {
     Authorization: `Bearer ${process.env.AGENT_SCORE_API_KEY!}`,
   },
@@ -97,7 +103,7 @@ npm install @opentelemetry/exporter-trace-otlp-http
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 
 const exporter = new OTLPTraceExporter({
-  url: "https://agent-score-ingest.product.tricentis.com/internal/otel/v1/traces",
+  url: "https://agent-score-ingest.product.tricentis.com/external/otel/v1/traces",
   headers: { Authorization: `Bearer ${process.env.AGENT_SCORE_API_KEY!}` },
 });
 ```
@@ -122,7 +128,7 @@ const result = await generateText({
 ## .env example
 
 ```dotenv
-AGENT_SCORE_API_KEY=as-...
+AGENT_SCORE_API_KEY=tk_...
 OTEL_SERVICE_NAME=my-agent-app
 ```
 
@@ -135,6 +141,8 @@ import "dotenv/config"; // must be the first import
 ## Troubleshooting
 
 - **No traces in Agent Score** - Confirm `AGENT_SCORE_API_KEY` is set. Run with `OTEL_LOG_LEVEL=debug` for verbose output.
-- **401 errors** - API key is wrong or expired. Regenerate in Agent Score UI -> Settings -> API Keys.
+- **401 errors** - The ingest key is wrong, disabled, or rotated. Create or rotate it in Agent Score UI -> Integrations (keys look like `tk_...`).
+- **Connection errors** - The ingest endpoint is reachable over the Tricentis VPN only. Confirm the host can reach `agent-score-ingest.product.tricentis.com`.
+- **Traces ingest but the agent doesn't score** - Spans are missing recognized attributes. See [semantic-conventions.md](semantic-conventions.md).
 - **Traces only showing after process exit** - The `BatchSpanProcessor` flushes on shutdown. For short-lived scripts, use `SimpleSpanProcessor` instead, or call `sdk.shutdown()` explicitly.
 - **ESM / import issues** - Use `--import` instead of `--require` for ES modules: `node --import ./instrumentation.js`.
