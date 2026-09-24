@@ -2,36 +2,48 @@
 
 Unified, running log of customer/prospect interviews and demo debriefs. Each entry captures the date, who was in the room, what we learned, and the major asks that came out of the conversation. Full call debriefs (when they exist) live alongside this file in `docs/feedback/` - this doc is the index and summary.
 
-**How to add an entry:** append a new section under "Sessions" using the template at the bottom of this file, newest first. Pull the "Major asks" into the "Recurring asks" table below if they echo a prior session, or add a new row if they don't.
+**How to add an entry:** append a new section under "Sessions" using the template at the bottom of this file, newest first. Pull the "Major asks" into the right category table under "Recurring asks" below if they echo a prior session, or add a new row if they don't - assign it a Priority per the legend below and re-sort.
 
 ---
 
 ## Recurring asks (tracked across sessions)
 
-| Ask | Sessions raised in | Status |
-|---|---|---|
-| On-prem / no-cloud deployment | Meta (x2) | Confirmed with engineering (2026-09-23) - self-hosted deployment in customer's own AWS/EC2 is a go |
-| Firm, consistent timeline (POC/beta dates that don't move mid-call) | Workday, Meta | Open - need one rehearsed slide every speaker uses |
-| Clear answer to "is this a testing tool or an observability tool?" | Workday | Answered - name the category, don't fight the word: something else drives the agent, AgentScore grades. Boundary picture: Driver -> Agent -> Traces -> AgentScore grades. Ready to ship to the deck |
-| Crisp, rehearsed answer to "why trust the LLM judge / how do you know it's accurate?" | Workday | Answered - tiered: (1) deterministic/hybrid checks wherever ground truth exists, (2) LLM-judge dimensions with pass@k + confidence intervals + minimum-sample gating where it doesn't, (3) golden-dataset back-testing. Close on a live correctness-dimension walkthrough, not narration. Ready to ship to the deck |
-| Deterministic/exploratory "red-team the agent" testing / scenario bank (define + run scenarios, not just passive grading) | Meta (x2), L'Oreal | Open - roadmap, not built as an AgentScore capability. Now the pivotal gap for the Meta POC: separates "evaluate prod agents" (shippable) from "test dev-to-prod". L'Oreal hit the same wall from a different angle - asked twice whether he could hand AgentScore a batch of 10-15 test prompts to run on demand; told no, it only scores organic usage traces. Note: on the first Meta call, David floated Tosca (informally, not AgentScore itself) as a way to drive/simulate scenario inputs - a partial, off-product answer, not a shipped fix |
-| Point the evaluator/judge at customer's own internal/custom LLMs (self-hosted, not a cloud judge) | Meta | Open - technical precondition for Meta on-prem; to be confirmed with engineering |
-| Root-cause attribution (span + fix, not just a score) | Workday, Meta, Wolters Kluwer, Tritusa | Landing well - keep leading with this |
-| Evaluate a *group*/hierarchy of agents, not just one in isolation | Meta, Wolters Kluwer | Lands as a concept, not shipped - Wolters Kluwer needs literal bulk/fleet-level scoring (point at a repo of agents, score together) and called per-agent-only "not useful" at their scale; targeted "hopefully end of month" |
-| Agentforce / Salesforce-native integration | Workday | Open - known gap |
-| Fine-grained access control / RBAC / self-service onboarding | Wolters Kluwer, L'Oreal | Open - admin + mostly-view-only today; roles, per-tenant/agent scoping, and self-service all "on the roadmap" - a stated rollout blocker for a governance-driven buyer; L'Oreal hit the same wall from the other direction - has AI Workspace + credits already purchased, but ingesting into AgentScore from an existing Workspace tenant needs the Workspace admin team to configure it first, so he's trialing standalone instead of waiting |
-| Score agents outside the Tricentis ecosystem (e.g. GitHub Copilot, internal platforms) to benchmark against sanctioned tooling | Wolters Kluwer, Tritusa | Solved - any agent that supports OTel can be ingested, regardless of vendor |
-| Compliance validation (GxP/SOX-style regimes, PII flagging on traces) | Tritusa | Open - "not currently, easy to add"; roadmap only. Blocker for regulated (bank/pharma) clients |
-| Alerting when an agent degrades (Slack/email to managers/admins) | Tritusa | Open - not built, stated "top of the list" |
-| Bulk / programmatic export of traces + scores (get the data out, not just view it) | Wolters Kluwer, Tritusa | Open - API in progress, possibly alpha, not shipped. Larger/partner accounts keep asking |
-| Synthetic dataset generation (targeted/edge-case coverage without waiting for real traces) | Tritusa | Open - golden sets are curated from real interactions only; roadmap |
-| Partner co-sell / co-working motion (SIs who implement + evaluate for their own clients) | Tritusa | Open - asked twice, no answer available; gold-sponsor partner presenting our story at Transatlantic 26 |
-| Expose the eval run-count / non-deterministic repetition setting to users (backend-config only today) | BearingPoint | Open - flagged internally as low effort, not yet exposed |
-| Point AgentScore at Tricentis's own agents (e.g. QTest ATC) so a partner can prove to their client that agent works | BearingPoint | Open - deliberately not exposed today for proprietary/IP reasons; blocks BearingPoint's most concrete use case |
+*Priority = severity (is this blocking a live deal/POC right now?) + breadth (how many distinct accounts raised it), with cheap/near-shipping fixes bumped to High regardless of severity - a free win should ship before a hard problem, even if the hard problem hurts more. **High** = blocking now, multi-account, or cheap to close. **Medium** = real and recurring, but roadmap-sized or single-account. **Low** = single account, non-blocking, no committed timeline. **Resolved** = answered or shipped; kept for reference, sorted to the bottom.*
 
-*Audit note (2026-09-11): reviewed every row for a question that can now be answered vs. a genuine product/roadmap/business gap. Category framing and judge-trust (rows above) now have rehearsed answers and are ready to ship. Cross-ecosystem OTel ingestion is confirmed solved. Everything else - on-prem self-hosting, internal-LLM judge, scenario bank/red-teaming, fleet-level scoring, Agentforce integration, RBAC, compliance validation, alerting, bulk export, synthetic datasets, partner co-sell - is still a real engineering, roadmap, or business decision pending confirmation, not something answerable today.*
+*Categories: **Feature Requests** are actual product capabilities to build. **Messaging & Positioning** are not product gaps - they're how we talk about or frame what already exists (a deck slide, a rehearsed answer), fixed with words, not code. **Business & Partnership** are go-to-market/policy calls (IP exposure, co-sell terms) that need a business decision, not an engineering ticket.*
 
-*Update (2026-09-23): on-prem self-hosting confirmed with engineering - no longer pending (see row above).*
+### Feature Requests
+
+| Priority | Ask | Sessions raised in | Status |
+|---|---|---|---|
+| High | Scenario bank / simulation testing: user-defined scenario execution + AgentScore-generated synthetic test data | Meta (x2), L'Oreal, Tritusa | Open - roadmap, not built on either facet. This combines two closely related asks into one capability, since the intended product direction covers both: (1) let a user supply/define their own scenarios or a batch of test prompts and have AgentScore run and grade them on demand - raised by Meta (define scenarios, run them, see how the agent responds - "red-team the agent") and L'Oreal (asked twice whether he could hand AgentScore 10-15 test prompts to execute; told no, it only scores organic usage traces); and (2) have AgentScore itself generate synthetic/edge-case scenarios without waiting on real traces - raised by Tritusa (golden sets are curated from real interactions only today). Now the pivotal gap for the Meta POC: separates "evaluate prod agents" (shippable) from "test dev-to-prod". Note: on the first Meta call, David floated Tosca (informally, not AgentScore itself) as a way to drive/simulate scenario inputs - a partial, off-product answer, not a shipped fix |
+| High | Point the evaluator/judge at customer's own internal/custom LLMs (self-hosted, not a cloud judge) | Meta | Open - technical precondition for Meta on-prem; to be confirmed with engineering |
+| High | Fine-grained access control / RBAC / self-service onboarding | Wolters Kluwer, L'Oreal | Open - admin + mostly-view-only today; roles, per-tenant/agent scoping, and self-service all "on the roadmap" - a stated rollout blocker for a governance-driven buyer; L'Oreal hit the same wall from the other direction - has AI Workspace + credits already purchased, but ingesting into AgentScore from an existing Workspace tenant needs the Workspace admin team to configure it first, so he's trialing standalone instead of waiting |
+| High | Evaluate a *group*/hierarchy of agents, not just one in isolation | Meta, Wolters Kluwer | Lands as a concept, not shipped - Wolters Kluwer needs literal bulk/fleet-level scoring (point at a repo of agents, score together) and called per-agent-only "not useful" at their scale; targeted "hopefully end of month" |
+| High | Bulk / programmatic export of traces + scores (get the data out, not just view it) | Wolters Kluwer, Tritusa | Open - API in progress, possibly alpha, not shipped. Larger/partner accounts keep asking |
+| High | Compliance validation (GxP/SOX-style regimes, PII flagging on traces) | Tritusa | Open - "not currently, easy to add"; roadmap only. Blocker for regulated (bank/pharma) clients |
+| High | Expose the eval run-count / non-deterministic repetition setting to users (backend-config only today) | BearingPoint | Open - flagged internally as low effort, not yet exposed |
+| High | Cost/token report per agent (latency, token usage, estimated cost) | L'Oreal (interest, manual pain point), Tritusa, Meta (POC scoping) | Open - not actually in the customer-facing app despite being described/demoed as working on the Tritusa and Meta POC-scoping calls ("we also track latency, tokens, and cost... estimated cost based on the model you used"). That's a real gap, not just a missed mention - two prior calls described a capability to prospects that customers can't actually see today. L'Oreal separately named this exact pain point (tracks tokens/latency/time manually) as something he wants automated. Needs a product/eng check on what's actually shipped vs. what's been shown on calls |
+| Medium | Alerting when an agent degrades (Slack/email to managers/admins) | Tritusa | Open - not built, stated "top of the list" |
+| Medium | Agentforce / Salesforce-native integration | Workday | Open - known gap |
+| Resolved | On-prem / no-cloud deployment | Meta (x2) | Confirmed with engineering (2026-09-23) - self-hosted deployment in customer's own AWS/EC2 is a go |
+| Resolved | Score agents outside the Tricentis ecosystem (e.g. GitHub Copilot, internal platforms) to benchmark against sanctioned tooling | Wolters Kluwer, Tritusa | Solved - any agent that supports OTel can be ingested, regardless of vendor |
+
+### Messaging & Positioning
+
+| Priority | Ask | Sessions raised in | Status |
+|---|---|---|---|
+| High | Firm, consistent timeline (POC/beta dates that don't move mid-call) | Workday, Meta | Open - need one rehearsed slide every speaker uses |
+| Resolved | Clear answer to "is this a testing tool or an observability tool?" | Workday | Answered - name the category, don't fight the word: something else drives the agent, AgentScore grades. Boundary picture: Driver -> Agent -> Traces -> AgentScore grades. Ready to ship to the deck |
+| Resolved | Crisp, rehearsed answer to "why trust the LLM judge / how do you know it's accurate?" | Workday | Answered - tiered: (1) deterministic/hybrid checks wherever ground truth exists, (2) LLM-judge dimensions with pass@k + confidence intervals + minimum-sample gating where it doesn't, (3) golden-dataset back-testing. Close on a live correctness-dimension walkthrough, not narration. Ready to ship to the deck |
+| Resolved | Root-cause attribution (span + fix, not just a score) | Workday, Meta, Wolters Kluwer, Tritusa | Landing well - keep leading with this |
+
+### Business & Partnership
+
+| Priority | Ask | Sessions raised in | Status |
+|---|---|---|---|
+| Medium | Point AgentScore at Tricentis's own agents (e.g. QTest ATC) so a partner can prove to their client that agent works | BearingPoint | Open - deliberately not exposed today for proprietary/IP reasons; blocks BearingPoint's most concrete use case |
+| Medium | Partner co-sell / co-working motion (SIs who implement + evaluate for their own clients) | Tritusa | Open - asked twice, no answer available; gold-sponsor partner presenting our story at Transatlantic 26 (event has since passed, 2026-09-15) |
 
 ---
 
@@ -42,10 +54,11 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
 - **Who:** KASHANI Khadim (Test Automation Manager, L'Oreal India Tech Hub / ITH, covers the APAC zone, leads L'Oreal's test automation factory, works with Tosca). Paul Wagner (Tricentis account contact) joined partway through with org context. Tricentis: Andrew Demers.
 - **What we learned:** A Labs signup converted into a first hands-on intro call, driven by Khadim attending the Transform Singapore event (~week of 2026-09-15) and registering for Labs the same weekend. His team runs a live ELK/Elastic-Cloud-based reconciliation agent internally, and evaluates it entirely manually today - run a prompt, open the dashboard, manually compare the agent's answer to the query results, and manually track accuracy/efficiency/tokens/latency. That manual workflow is exactly what he wants AgentScore to replace, and he wants to run a self-driven POC to build an internal pitch to his own stakeholders as L'Oreal ramps up more AI initiatives across zones. Tool-call/argument-correctness verification against backend query results, two-line OTel + standalone operation, configurable weighting/thresholds, and fleet-level status all landed and answered his questions directly. Separately, Paul Wagner noted L'Oreal has already purchased AI Workspace with 1M+ agent credits provisioned.
 - **Major asks:**
-  - Ability to hand AgentScore a batch of test prompts/scenarios (he asked for 10-15) and have it run them on demand - asked twice, in different words; the answer he got was no, AgentScore only scores traces from real/organic agent usage, it doesn't execute a supplied prompt set. Same scenario-bank/simulation gap raised by Meta.
+  - Ability to hand AgentScore a batch of test prompts/scenarios (he asked for 10-15) and have it run them on demand - asked twice, in different words; the answer he got was no, AgentScore only scores traces from real/organic agent usage, it doesn't execute a supplied prompt set. Same scenario-bank/simulation gap raised by Meta and Tritusa - see the combined "Scenario bank / simulation testing" row in Recurring asks.
   - Self-service access to AgentScore when an agent already lives in AI Workspace - today requires the Workspace admin team (Charles Henry's team) to configure it first, so Khadim is trialing standalone instead of waiting on that dependency.
   - Faster public trial access - the public-facing signup site is targeted for "next week," not available on the call itself, and he pushed on this repeatedly.
   - A detailed demo recording/walkthrough (not the existing basic PPT/YouTube asset) to share with his Singapore-based manager ahead of their next call.
+  - Strong interest in a cost/token report for the agent - he named tracking "tokens, latency, time" manually as a current pain point. This isn't actually in the customer-facing app despite being described/demoed as available on the Tritusa and Meta POC-scoping calls - a real gap, and a possible expectation mismatch from those two prior calls, not just a missed mention here.
 - **Full debrief:** [feedback-sessions/L'Oreal Feedback Session.md](feedback-sessions/L'Oreal%20Feedback%20Session.md)
 
 ### 2026-09-23 - BearingPoint (partner / SI, Labs beta onboarding)
@@ -65,7 +78,7 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
 - **Major asks:**
   - Self-hosted / on-prem deployment in Meta's own AWS (data can't leave, custom internal models). Now has a floated path (private EC2 + handoff), not yet confirmed.
   - Point the evaluator/judge at Meta's internal/custom LLMs (Spark 1.3, "meta intern"-style models) rather than a cloud judge - the technical precondition for on-prem to work for them.
-  - Scenario bank / adversarial simulation ("define scenarios, run them, see how the agent responds") - the pivotal gap; separates "evaluate prod agents" (shippable) from "test dev-to-prod" (not yet). Same red-team ask Sri raised directly.
+  - Scenario bank / adversarial simulation ("define scenarios, run them, see how the agent responds") - the pivotal gap; separates "evaluate prod agents" (shippable) from "test dev-to-prod" (not yet). Same red-team ask Sri raised directly, and the same underlying capability L'Oreal and Tritusa also asked for from different angles - see the combined "Scenario bank / simulation testing" row in Recurring asks.
   - A carefully-scoped, transparent POC framing so an early-stage product doesn't create bad perception with a savvy client ("harder to walk back once it's out there").
   - Fast answers - Sri's need is urgent and there is another partner circling the account.
 - **Full debrief:** [feedback-sessions/Meta POC Scoping Feedback Session.md](feedback-sessions/Meta%20POC%20Scoping%20Feedback%20Session.md)
@@ -78,7 +91,7 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
   - Compliance validation (GxP/SOX-style, PII flagging) - biggest unmet ask; their clients are banks and pharma. "Not currently, easy to add" won't survive a regulated engagement.
   - Alerting to managers/admins (Slack/email) - not built, "top of the list."
   - Bulk/programmatic export of traces + scores to their own DB for their own reports - API in progress, not shipped.
-  - Synthetic dataset generation - not available; golden sets curated from real traces only.
+  - Synthetic dataset generation - not available; golden sets curated from real traces only. Same underlying capability Meta and L'Oreal also asked for from the other angle (user-defined scenario execution) - see the combined "Scenario bank / simulation testing" row in Recurring asks.
   - Partner enablement before the event: access grant (~a week out), getting-started docs with sample use cases, and a rehearsed "answer guide" for the Singapore Q&A (Andrew is not attending).
   - A partner co-sell/co-working motion - asked twice, no answer available today.
 - **Full debrief:** [feedback-sessions/Tritusa Feedback Session.md](feedback-sessions/Tritusa%20Feedback%20Session.md)
@@ -102,7 +115,7 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
 - **Major asks:**
   - On-prem deployment - stated as the #1 requirement and a dealbreaker (Meta's DMZ policy blocks anything outside it, cloud included).
   - A firm timeline - self-testing is being switched off next week with nothing to replace it; Tricentis dates moved live on the call.
-  - Deterministic/exploratory "make the agent fail" red-teaming - not built yet, but matches Sri's own framing exactly.
+  - Deterministic/exploratory "make the agent fail" red-teaming - not built yet, but matches Sri's own framing exactly. Same underlying capability L'Oreal and Tritusa also asked for (user-defined scenario execution and synthetic test-data generation, respectively) - see the combined "Scenario bank / simulation testing" row in Recurring asks.
   - A resolved answer on the HCL/Accenture coopetition risk (both are Tricentis partners and are separately tasked by Meta to build a competing framework).
 - **Full debrief:** [feedback-sessions/Meta Feedback Session.md](feedback-sessions/Meta%20Feedback%20Session.md)
 

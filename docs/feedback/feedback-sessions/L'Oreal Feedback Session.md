@@ -57,6 +57,9 @@ Khadim said directly that the PPT "does not have those things" and the public Yo
 **5. Messaging on standalone vs. Workspace modes took several exchanges to land.**
 Not a product gap, but it took multiple back-and-forths - and Khadim screen-sharing his own dashboard - before the two-line OTel/API-key model and the standalone-vs-Workspace distinction were clear. Worth tightening for this kind of technical-but-not-yet-hands-on audience.
 
+**6. Cost/token reporting - a real gap, and a possible expectation mismatch from other calls.**
+Describing his team's current manual evaluation process, Khadim said they track "all tokens... latency, time and everything" by hand today - a direct interest in a cost/token report per agent. This is not actually present in the customer-facing app. It was described/demoed as working on both the Tritusa call ("we also do like latency, tokens, and cost of the agent... your estimated cost based on the model that you used") and the Meta POC-scoping call ("we're also tracking latency, tokens, and costs"), which means two prior prospects were shown or told about a capability that isn't actually live for customers today. Needs a product/eng check on what's actually shipped vs. what's been shown on calls before promising it to Khadim.
+
 ---
 
 ## Follow-ups Andrew committed to
@@ -65,6 +68,7 @@ Not a product gap, but it took multiple back-and-forths - and Khadim screen-shar
 2. **Send the detailed demo recording/walkthrough** (not the existing basic PPT/YouTube asset) so Khadim can share it with his Singapore-based manager before their next call.
 3. **Notify Khadim when the public trial site launches** (targeted next week) so he can start his standalone POC with provisioned AI credits.
 4. **Offer a more dedicated/technical walkthrough and setup help** if wanted.
+5. **Confirm with product/eng whether cost/token/latency reporting is actually shipped** before saying anything to Khadim - it was described as available on the Tritusa and Meta POC-scoping calls but does not appear to exist in the customer-facing app today.
 
 ---
 
