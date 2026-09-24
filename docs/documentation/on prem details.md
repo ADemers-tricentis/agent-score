@@ -73,5 +73,5 @@ Legal needs a way to cut off access after a beta window.
 3. **ProdSec evaluation outcome** — report hadn't come back as of 2026-09-23; production push is gated on a satisfactory result.
 4. **Accenture's own environment details** — target agents to evaluate and deployment preferences are expected to come out of a scoping meeting with Accenture that, as of 2026-09-23, hadn't been scheduled yet (blocked on the legal/ProdSec approvals above).
 5. **Where to deploy the container/compose file to** — we need to know the actual target for the on-prem deployment (which host/environment/path within Accenture's AWS account the docker-compose/Kubernetes manifest package should be deployed to). Not yet specified.
-6. **Does this general plan work for Accenture?** Not having the license file or beta agreement will complicate things a lot.
+6. **Does this general plan work for Accenture?** Not having the license file or beta agreement callback will complicate things a lot.
 7. **Can login stay cloud-based?** — can authentication for the on-prem instance be done against Tricentis's cloud identity service instead of running fully self-contained on Accenture's side? If not, this needs its own approval (separate from the on-prem/container approach approvals already in flight).

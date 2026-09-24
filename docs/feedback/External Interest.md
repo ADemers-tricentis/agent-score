@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 90 form submissions found (as of 2026-09-22), sorted newest first. C
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 92 form submissions found (as of 2026-09-23), sorted newest first.
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -10,87 +10,123 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos | Pending betas | Active betas |
 |---|---|---|---|---|
-| 71 | 9 | 8 | 1 | 0 |
+| 73 | 10 | 9 | 1 | 0 |
 
-Source breakdown: 68 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.), 1 via David (VP of AI/ML) (Eaton) = 71 total.
+Source breakdown: 70 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.), 1 via David (VP of AI/ML) (Eaton) = 73 total.
 
 Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
 
 | Company | Contact | Status |
 |---|---|---|
+| Aptiv Global Operations Limited | Meenakshi Sundaram Chockalingam | Email sent |
+| LGT Financial Services Ltd. (LI) | David Klien | Email sent |
 | Eaton | Amit Ghag | Demo Scheduled — 2026-10-01 |
 | Meta Platforms, Inc. | Sri Pulleti | Demo Scheduled — POC scoping |
 | Freddie Mac | Kaleb Jackson | Replied |
 | Workday, Inc. | Vijay Mummaneni | Demo Scheduled |
-| PVH Corp | Beena P K, Aimee Martin | Email sent |
-| Charter Communications Operating, LLC | Sarvesh Peddi | Email sent |
-| Artizent (form blank, domain-resolved) | Alan Mayfus | Email sent |
+| PVH Corp | Beena P K, Aimee Martin | Follow-up sent — 2026-09-24 |
+| Charter Communications Operating, LLC | Sarvesh Peddi | Follow-up sent — 2026-09-24 |
+| Artizent (form blank, domain-resolved) | Alan Mayfus | Follow-up sent — 2026-09-24 |
 | Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj | Demo Scheduled |
-| SAP Labs India (IN) | SaiDeepak Ayyagari | Email sent |
-| Regeneron Pharmaceuticals Inc. | Murali Sundaram | Email sent |
-| Acadia Healthcare | Pratiksha Arora | Email sent |
-| New Vision Software Inc. | Rohan Bansod | Email sent |
-| Hilti Asia IT Services (MY) | Ashwin Mor | Email sent |
-| Panasonic Avionics (US) | Ronica Brisbon | Email sent |
-| The Boeing Company | Gurucharan Bijinepally | Email sent |
-| — (The Hartford, unresolved) | Sathish kumar Backiam | Email sent |
-| Southern Glazer's Wine and Spirits, LLC | Jay Gajulapalli | Email sent |
-| Chevron Phillips Chemical (US) | Ramesh Jeyagopalan | Email sent |
-| Dominion Energy, Inc. | Anand Shekaraiah | Email sent |
-| Love's Travel Stops | Jag Mallampati, Thomas Cody | Email sent |
-| Capgemini | Mathankumar Kanagaraj, ARUN PRAKASH Shivakumar, Sathish kumar Backiam | Email sent |
-| Cummins Inc. | Lakshmi Sree Thirukonda | Email sent |
-| Home Depot Store Support, Inc. | Joe Pope | Email sent |
-| McKesson Corporation | Nitin Malik, Cathy Soller | Email sent |
-| Merck Co. Inc. | Ramesh Magdum, Sateesh Rajegowda | Email sent |
-| Genpact (HQ) | Richard Hand | Email sent |
-| HP Inc. | Ejaz Siddiqui | Email sent |
-| Sub-Zero Group Inc | Guy Hall | Email sent |
-| Kiewit Corporation | Damilola Agboola | Email sent |
-| Tachyon Technologies | Subba Rao Gonugunta | Email sent |
-| Xebia - Partner | Anmol Jain | Email sent |
-| Cargill Incorporated | Alfonso Garbanzo | Email sent |
+| SAP Labs India (IN) | SaiDeepak Ayyagari | Follow-up sent — 2026-09-24 |
+| Regeneron Pharmaceuticals Inc. | Murali Sundaram | Follow-up sent — 2026-09-24 |
+| Acadia Healthcare | Pratiksha Arora | Follow-up sent — 2026-09-24 |
+| New Vision Software Inc. | Rohan Bansod | Follow-up sent — 2026-09-24 |
+| Hilti Asia IT Services (MY) | Ashwin Mor | Follow-up sent — 2026-09-24 |
+| Panasonic Avionics (US) | Ronica Brisbon | Follow-up sent — 2026-09-24 |
+| The Boeing Company | Gurucharan Bijinepally | Follow-up sent — 2026-09-24 |
+| — (The Hartford, unresolved) | Sathish kumar Backiam | Follow-up sent — 2026-09-24 |
+| Southern Glazer's Wine and Spirits, LLC | Jay Gajulapalli | Follow-up sent — 2026-09-24 |
+| Chevron Phillips Chemical (US) | Ramesh Jeyagopalan | Follow-up sent — 2026-09-24 |
+| Dominion Energy, Inc. | Anand Shekaraiah | Follow-up sent — 2026-09-24 |
+| Love's Travel Stops | Jag Mallampati, Thomas Cody | Follow-up sent — 2026-09-24 |
+| Capgemini | Mathankumar Kanagaraj, ARUN PRAKASH Shivakumar, Sathish kumar Backiam | Follow-up sent — 2026-09-24 |
+| Cummins Inc. | Lakshmi Sree Thirukonda | Follow-up sent — 2026-09-24 |
+| Home Depot Store Support, Inc. | Joe Pope | Follow-up sent — 2026-09-24 |
+| McKesson Corporation | Nitin Malik, Cathy Soller | Follow-up sent — 2026-09-24 |
+| Merck Co. Inc. | Ramesh Magdum, Sateesh Rajegowda | Follow-up sent — 2026-09-24 |
+| Genpact (HQ) | Richard Hand | Follow-up sent — 2026-09-24 |
+| HP Inc. | Ejaz Siddiqui | Follow-up sent — 2026-09-24 |
+| Sub-Zero Group Inc | Guy Hall | Follow-up sent — 2026-09-24 |
+| Kiewit Corporation | Damilola Agboola | Follow-up sent — 2026-09-24 |
+| Tachyon Technologies | Subba Rao Gonugunta | Follow-up sent — 2026-09-24 |
+| Xebia - Partner | Anmol Jain | Follow-up sent — 2026-09-24 |
+| Cargill Incorporated | Alfonso Garbanzo | Follow-up sent — 2026-09-24 |
 | Wolters Kluwer United States Inc. | Chris Allanson | Demo Scheduled |
-| J. R. Simplot Company | Neeraja Kusuma | Email sent |
-| Crown Equipment Corporation | Vinay Patlolla | Email sent |
-| Stanza | Anirban Toy Choudhury | Email sent |
-| Sunbelt Rentals | Arya Shrey | Email sent |
-| Merito Solutions | Chris Carpenter, Gerard Trimberger | Email sent |
-| Amazon Kuiper Manufacturing Enterprises LLC | Saranya Vaithiyanathan | Email sent |
-| Accenture CIO HR Organization (unresolved, may be Stanza) | Greg Wanroy | Email sent |
-| Aspire Systems Digital Transformation Inc. | Naveen Srinivasan | Email sent |
-| Mouser Electronics | Mohammad Mahboob | Email sent |
-| Cox Automotive | Balaji Gandsi Krishna Prakash | Email sent |
-| Bayone Solutions | Mathi Natarajan | Email sent |
-| Saudi Telecom Company STC (SA) - HQ | Farhan Shaikh | Interested |
-| Diriyah Gate Company Limited - DGCL (SA) | Ali Alshehri | Interested |
-| TestCrew | Ramesh Panthangi | Interested |
-| Dolpheen IT Solutions | Jia Jun Zhan | Interested |
-| Cengage Learning, Inc. | Ajan Nattamai | Interested |
-| Pegasystems Inc. | Kiran kadarla | Interested |
-| cbs Corporate Business Solutions (DE/MY) | Ashish Chavan, Arumugam Lekshmanan | Interested |
-| Ariba, Inc. | Akihiko Yamano, Sina Döbbelin | Interested |
-| Seatrium (SG) | Florance Yong | Interested |
-| Singapore Power Digital Private Limited | Ritu Agrawal | Interested |
-| ABeam Consulting (Malaysia) Sdn. Bhd. | Sharifah Nadiah Alhabshi | Interested |
-| Singapore Institute of Technology (SG) | Dennis Fung | Interested |
-| Olam Agri (form blank, domain-resolved) | Vanitha Velusamy | Interested |
-| Tata Consultancy Services Asia Pacific Pte. Ltd. (SG) | Balaji Sampathkumar | Interested |
-| SAP North America | Thomas Zimmermann | Interested |
-| Defence Science and Technology Agency (SG) | cydnie na | Interested |
-| Housing Development Board (SG) | Swee Chyuan Koh | Interested |
+| J. R. Simplot Company | Neeraja Kusuma | Follow-up sent — 2026-09-24 |
+| Crown Equipment Corporation | Vinay Patlolla | Follow-up sent — 2026-09-24 |
+| Stanza | Anirban Toy Choudhury | Follow-up sent — 2026-09-24 |
+| Sunbelt Rentals | Arya Shrey | Follow-up sent — 2026-09-24 |
+| Merito Solutions | Chris Carpenter, Gerard Trimberger | Demo Scheduled |
+| Amazon Kuiper Manufacturing Enterprises LLC | Saranya Vaithiyanathan | Follow-up sent — 2026-09-24 |
+| Accenture CIO HR Organization (unresolved, may be Stanza) | Greg Wanroy | Follow-up sent — 2026-09-24 |
+| Aspire Systems Digital Transformation Inc. | Naveen Srinivasan | Follow-up sent — 2026-09-24 |
+| Mouser Electronics | Mohammad Mahboob | Follow-up sent — 2026-09-24 |
+| Cox Automotive | Balaji Gandsi Krishna Prakash | Follow-up sent — 2026-09-24 |
+| Bayone Solutions | Mathi Natarajan | Follow-up sent — 2026-09-24 |
+| Saudi Telecom Company STC (SA) - HQ | Farhan Shaikh | Email sent |
+| Diriyah Gate Company Limited - DGCL (SA) | Ali Alshehri | Email sent |
+| TestCrew | Ramesh Panthangi | Email sent |
+| Dolpheen IT Solutions | Jia Jun Zhan | Email sent |
+| Cengage Learning, Inc. | Ajan Nattamai | Email sent |
+| Pegasystems Inc. | Kiran kadarla | Email sent |
+| cbs Corporate Business Solutions (DE/MY) | Ashish Chavan, Arumugam Lekshmanan | Email sent |
+| Ariba, Inc. | Akihiko Yamano, Sina Döbbelin | Email sent |
+| Seatrium (SG) | Florance Yong | Email sent |
+| Singapore Power Digital Private Limited | Ritu Agrawal | Email sent |
+| ABeam Consulting (Malaysia) Sdn. Bhd. | Sharifah Nadiah Alhabshi | Email sent |
+| Singapore Institute of Technology (SG) | Dennis Fung | Email sent |
+| Olam Agri (form blank, domain-resolved) | Vanitha Velusamy | Email sent |
+| Tata Consultancy Services Asia Pacific Pte. Ltd. (SG) | Balaji Sampathkumar | Email sent |
+| SAP North America | Thomas Zimmermann | Email sent |
+| Defence Science and Technology Agency (SG) | cydnie na | Email sent |
+| Housing Development Board (SG) | Swee Chyuan Koh | Email sent |
 | L'OREAL | Khadim KASHANI | Demo Scheduled — 2026-09-24 |
-| City Dev (SG) | Davin Ng | Interested |
-| Testing IT Consulting S.A. de C.V. | Hector Santa Maria | Interested |
-| Brillar Pte Ltd (SG) | Zuzan Win | Interested |
-| Harrods Ltd (UK) | Shanita Helyar | Interested |
-| Ally Financial Inc. | Jana Kethamreddy | Interested |
+| City Dev (SG) | Davin Ng | Email sent |
+| Testing IT Consulting S.A. de C.V. | Hector Santa Maria | Email sent |
+| Brillar Pte Ltd (SG) | Zuzan Win | Email sent |
+| Harrods Ltd (UK) | Shanita Helyar | Email sent |
+| Ally Financial Inc. | Jana Kethamreddy | Email sent |
 | BearingPoint GmbH (DE) - HQ | Rohan Patil | Demo Scheduled — 2026-09-23 |
-| xAmplify (AU) | Prakash Panchal | Interested |
-| Accenture (multiple entities) | Jigish Belani, Mohammed Arslan Mir, Vijetha Nayak, Priya Saidavaram, Ankur Mittal | Pending Beta — on-prem/private AWS setup (on behalf of Meta), per Belani; other four submitters still Interested, not individually contacted |
-| Singapore Pools (form blank, domain-resolved) | Nai Hau Lui | Interested |
+| xAmplify (AU) | Prakash Panchal | Email sent |
+| Accenture (multiple entities) | Jigish Belani, Mohammed Arslan Mir, Vijetha Nayak, Priya Saidavaram, Ankur Mittal | Pending Beta — on-prem/private AWS setup (on behalf of Meta), per Belani; other four submitters carry the same account-level status, not individually contacted |
+| Singapore Pools (form blank, domain-resolved) | Nai Hau Lui | Email sent |
 
-*(Status values: Interested → Email sent → Replied → Demo scheduled → Pending beta → Active beta.)*
+*(Status values: Interested → Email sent → Follow-up sent → Replied → Demo scheduled → Pending beta → Active beta.)*
+
+---
+
+### Aptiv Global Operations Limited
+Date: 2026-09-23 19:21  
+Name: Meenakshi Sundaram Chockalingam  
+Title: Test Automation Architect  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Global automotive-technology supplier building safety, connectivity, and software-defined-vehicle platforms.
+
+likely use case: given the submitter's Test Automation Architect title and Aptiv's own generative-AI development tooling, most plausibly evaluating Agent Score to test/validate agentic features inside its internal software platforms (e.g. Aptiv LINC) rather than for an external customer-facing need.
+
+known agent tooling: proprietary GenAI tools (AI Requirements Analyzer, AI Code Generation, AI Database) used to speed up development, and Aptiv LINC's AI-driven DevOps capabilities ([Aptiv](https://www.aptiv.com/en/insights/article/3-Use-Cases-of-Aptiv-s-Generative-AI); [Aptiv LINC](https://www.aptiv.com/en/solutions/intelligent-systems)); no public information found tying Aptiv to a specific deployed "agent" product beyond this GenAI dev tooling.
+
+---
+
+### LGT Financial Services Ltd. (LI)
+Date: 2026-09-23 13:26  
+Name: David Klien  
+Title: Application Owner  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Liechtenstein/Switzerland-based international private banking and asset-management group.
+
+likely use case: given the submitter's "Application Owner" title, most plausibly evaluating Agent Score to test/validate AI agents embedded in LGT's own banking applications (see Lumen, below) before wider rollout.
+
+known agent tooling: launched "Lumen," an AI investment-research assistant helping relationship managers pull stock data/fact sheets and draft emails ([Unique.ai case study](https://www.unique.ai/lgt-case-study)); LGT also publishes market research framing agentic AI's growing role in private banking ([LGT](https://www.lgt.com/global-en/market-assessments/insights/investment-strategies/agentic-ai-310636)).
 
 ---
 

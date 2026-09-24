@@ -2,21 +2,24 @@
 name: external-interest-sync
 description: >-
   Pull new Tricentis Labs form submissions out of the labs@tricentis.com
-  inbox, add them to the external-interest tracker, and regenerate the
-  mail-merge CSV for outreach. Use this whenever the user wants to "check the
-  Labs inbox", "sync external interest", "pull new signups", "update the mail
-  merge list", or otherwise process new "New Tricentis Labs Submission for AI
-  Agent Testing and Evaluation" emails into docs/feedback/External
-  Interest.md. Reads unread/new submission emails via the Microsoft 365 MCP
-  connector, applies the tracker's existing exclusion rules (internal
-  @tricentis.com submitters, Tricentis-owned-brand domains, repeat
-  submitters, multi-submitter companies), researches each genuinely new
-  company (what they do / likely use case / known agent tooling) in the
-  tracker's existing voice, updates the Pipeline Tracker table and prepends
-  per-company sections, and overwrites
-  docs/feedback/external-interest-mail-merge.csv with just this run's new
-  companies for the next outreach mail merge - after a review gate, since it
-  writes real prospect contact emails to a file that drives outbound email.
+  inbox, add them to the external-interest tracker, regenerate the
+  mail-merge CSV for outreach, and log them to the running contacts CSV. Use
+  this whenever the user wants to "check the Labs inbox", "sync external
+  interest", "pull new signups", "update the mail merge list", or otherwise
+  process new "New Tricentis Labs Submission for AI Agent Testing and
+  Evaluation" emails into docs/feedback/External Interest.md. Reads
+  unread/new submission emails via the Microsoft 365 MCP connector, applies
+  the tracker's existing exclusion rules (internal @tricentis.com
+  submitters, Tricentis-owned-brand domains, repeat submitters,
+  multi-submitter companies), researches each genuinely new company (what
+  they do / likely use case / known agent tooling) in the tracker's existing
+  voice, updates the Pipeline Tracker table and prepends per-company
+  sections, overwrites docs/feedback/email automation/external-interest-mail-merge.csv
+  with just this run's new companies for the next outreach mail merge, and
+  appends the same new companies to docs/feedback/email
+  automation/external-interest-contacts.csv (the running contact log) -
+  after a review gate, since it writes real prospect contact emails to files
+  that drive outbound email.
 ---
 
 # External Interest Sync
@@ -39,15 +42,23 @@ fresh mail-merge file, without re-processing submissions already recorded.
   `Relationship:` block — multiple submitters from one company get repeated
   Date/Name/Contact/Title/Relationship groups stacked before the prose).
 - **Mail-merge output:**
-  `docs/feedback/external-interest-mail-merge.csv` — header
-  `Company,Name,Email,Status`, quoted fields. **This run's new companies
-  only** — it is fully overwritten every run, not appended, so it always
-  reflects "who still needs the outreach email" rather than the full
-  historical list. (`docs/feedback/test-mail-merge.csv` is a separate,
-  hand-made dry-run file with fake emails — never touch it.)
-- **Outreach template:** `docs/feedback/Beta Outreach Email Draft.md` — what
-  the mail-merge CSV eventually feeds. This skill does not send anything; it
-  only prepares the CSV.
+  `docs/feedback/email automation/external-interest-mail-merge.csv` —
+  header `Company,Name,Email,Status`, quoted fields. **This run's new
+  companies only** — it is fully overwritten every run, not appended, so it
+  always reflects "who still needs the outreach email" rather than the full
+  historical list. (`docs/feedback/email automation/test-mail-merge.csv` is
+  a separate, hand-made dry-run file with fake emails — never touch it.)
+- **Contacts log:** `docs/feedback/email
+  automation/external-interest-contacts.csv` — header `Company,Name,Email,
+  Status,Signup Date,Email Sent Date,Beta Scheduled Date`, quoted fields.
+  The running history of every company/contact this skill has ever added —
+  **appended, never overwritten** (unlike the mail-merge CSV above). Each
+  new run adds one row per new company (Status `Interested`, Signup Date =
+  the submission date, Email Sent Date/Beta Scheduled Date left blank for
+  later hand-updates as the account moves).
+- **Outreach template:** `docs/feedback/email automation/Beta Outreach
+  Email Draft.md` — what the mail-merge CSV eventually feeds. This skill
+  does not send anything; it only prepares the CSVs.
 - **Run marker:**
   `.claude/skills/external-interest-sync/.last-processed` — a single ISO-8601
   timestamp, gitignored (local run state). It's the cutoff for "already
@@ -176,21 +187,33 @@ emails into an outbound mail merge. Wait for their go-ahead before continuing.
 
 ### 8. Regenerate the mail-merge CSV
 
-Overwrite `docs/feedback/external-interest-mail-merge.csv` completely (not
-appended) with **only this run's new companies**: header
+Overwrite `docs/feedback/email automation/external-interest-mail-merge.csv`
+completely (not appended) with **only this run's new companies**: header
 `Company,Name,Email,Status`, one row per new company (first/primary
 submitter's name and real email for multi-submitter companies), Status =
 `Interested`, fields quoted to match the existing file's style.
 
-### 9. Advance the run marker
+### 9. Append to the contacts log
+
+Append (never overwrite) one row per new company to `docs/feedback/email
+automation/external-interest-contacts.csv`: header `Company,Name,Email,
+Status,Signup Date,Email Sent Date,Beta Scheduled Date`, quoted fields
+matching the existing file's style. For each new company: Company/Name/Email
+as in the mail-merge CSV, Status `Interested`, Signup Date = the submission's
+date (`YYYY-MM-DD`), Email Sent Date and Beta Scheduled Date left blank
+(`""`) for later hand-updates as the account moves. Multi-submitter
+companies get one row per submitter, same as the existing file's pattern
+(e.g. the Accenture and PVH Corp blocks).
+
+### 10. Advance the run marker
 
 Write the latest processed submission's timestamp to
 `.claude/skills/external-interest-sync/.last-processed`. Only do this after
-step 7/8 actually completed — if the user declined at the review gate in
+steps 7-9 actually completed — if the user declined at the review gate in
 step 6, leave the marker untouched so the same submissions surface again next
 run.
 
-### 10. Export this run as an AgentScore trace (after the tracker and CSV are updated)
+### 11. Export this run as an AgentScore trace (after the tracker and CSVs are updated)
 
 This skill's own run can be dogfooded as a real traced agent in AgentScore,
 without instrumenting the skill itself: `test-agent/export_claude_session.py`
@@ -228,7 +251,8 @@ meaningful to trace.
 
 Finish with a short report: how many new submissions were found, how many
 were excluded (and why), how many distinct companies were added, the updated
-Interested-companies count, and confirmation that the CSV was regenerated
-with just this run's companies. If you stopped early (no new submissions,
+Interested-companies count, and confirmation that the mail-merge CSV was
+regenerated with just this run's companies and that those same companies
+were appended to the contacts log. If you stopped early (no new submissions,
 blocked on M365 auth, or the user declined at the review gate), say exactly
 where and why.
