@@ -1,5 +1,5 @@
 import { Callout, Card, CardGrid, Dek, Eyebrow, Screenshot, Step, StepList } from "../components/PageChrome";
-import agentsCards from "../assets/agents-cards.png";
+import homeDashboard from "../assets/home-dashboard.png";
 
 export default function Welcome() {
   return (
@@ -16,17 +16,32 @@ export default function Welcome() {
       <p>
         Agent Score watches the real activity your agent already produces, works out what kind of
         agent it is, evaluates it across the dimensions that matter for that kind of work, and
-        hands back a single, defensible answer: a 0-100 score, a letter grade, and a
+        hands back a single, defensible answer: a 0-100 score and a
         ship / review / don't-ship recommendation - with the evidence to back it up.
       </p>
 
       <p>No labeled data. No manual test-writing. No AI expertise required to get started.</p>
 
+      <p>
+        From your first sign-in, you'll also see an <strong>AI credits</strong> balance in the
+        header - that's what pays for scoring and evaluation. See{" "}
+        <a href="#/scoring-over-time">scoring over time</a> for what happens if it runs out.
+      </p>
+
       <Screenshot
-        src={agentsCards}
-        alt="The Agent Score dashboard showing a fleet of agents, each with a composite score, verdict, and a dimension breakdown with weights"
-        caption="Your agents, at a glance - composite score, verdict, and the dimensions behind each one."
+        src={homeDashboard}
+        alt="The Home page, showing real-agent and interaction totals, scoring runs in the last 24 hours, agents needing attention, and a verdict trend table of Ship / Review / Block counts over the last seven days"
+        caption="Home - your fleet's health, scoring activity, and next steps, the moment you sign in."
       />
+
+      <Callout kind="tip" title="New here? Take the tour">
+        <p>
+          Home offers a short guided tour the first time you sign in, and a handful of
+          removable <strong>example agents</strong> you can poke at immediately - safe,
+          self-service, and excluded from your real fleet's counts and scoring, so trying
+          things out never contaminates your own numbers.
+        </p>
+      </Callout>
 
       <h2>The three things this guide covers</h2>
       <CardGrid>
@@ -59,7 +74,7 @@ export default function Welcome() {
           evaluation dimensions suited to what your agent actually does - and runs it.
         </Step>
         <Step title="Decide">
-          You get a scorecard: a composite score, a grade, and a ship / review / don't-ship
+          You get a scorecard: a composite score and a ship / review / don't-ship
           recommendation, with every number traceable back to the evidence behind it.
         </Step>
       </StepList>

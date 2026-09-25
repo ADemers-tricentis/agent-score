@@ -12,6 +12,102 @@ Each audit appends a dated section. Newest first.
 
 ---
 
+## 2026-09-25 — GitHub merge scan + staging walk (Playwright, customer login via Tosca Cloud)
+
+Cross-checked 126 PRs merged on `Tricentis-AI/agent-score` since the
+`.last-github-sync` marker (2026-09-09T11:30:41Z), and walked the customer app
+live on **staging** (`https://agent-score.stg.ai.tricentis.com`, not the usual
+production host - staging is where this pass audited against, per the user's
+request). Login is now Tosca Cloud, not the customer/password form earlier
+audits describe.
+
+**Verdict-label product inconsistency, re-confirmed still open (5th audit in
+a row).** Found this independently before checking this log, and initially
+proposed - and briefly applied - flipping the docs to the Profile tab's
+"Review required" / "Block recommended" wording. **Reverted before commit**
+once this log surfaced the history: 2026-08-17 first found the product
+internally inconsistent; 2026-08-27 deliberately set the docs to "Needs
+work" / "Don't ship (recommended)" to match the Score tab and back-office
+Home worklist; 2026-08-27, 2026-09-08, and 2026-09-09 all re-confirmed the
+Profile tab's "The bar" table is the one stale surface. Checked again today
+on `rag-support-agent`'s Profile tab: still "Review required" / "Block
+recommended," unchanged. Direction: **product-should-catch-up**, unchanged.
+**Do not flip the docs to the Profile-tab wording** - this is now five
+audits confirming the same one-sided product bug.
+
+**Resolved this pass** (docs edited, see CHANGELOG):
+- Welcome, Glossary: two "letter grade" / "grade" references missed in the
+  2026-08-27 letter-grade removal (Welcome's hero paragraph and "Decide"
+  step; Glossary's Scorecard definition). docs-should-update, high.
+- Scoring Engine Settings: judge-model provider/model/region is now
+  self-serve per agent (Settings tab → Model connection, with Test
+  connection / Save settings, credential override optional). The doc said
+  to "ask the Agent Score team." docs-should-update, high.
+- Scoring Engine Settings: the "usage log isn't in the app today" claim is
+  false - a real **Usage & cost** page (`/usage`) exists: traces, tokens
+  in/out, usage cost, eval results, scoring runs, profile fits, eval cost
+  in AI credits, a 30/60/90-day window, Export to Excel. docs-should-update,
+  high.
+- Scoring Engine Settings: added the per-agent **Cost** section (input/
+  output $ per 1M tokens) that feeds the Usage page - net-new content, not
+  previously documented at all.
+- Welcome: the hero screenshot/copy showed a card-grid "Agents" dashboard
+  that no longer matches production. Customers now land on **Home** first
+  (tour banner, real-agent/interaction/scoring-run/needs-attention tiles,
+  verdict trend, removable example agents) - `/agents` itself is now a
+  table, not cards. docs-should-update, high.
+- Welcome, Glossary, Scoring Over Time: **AI credits** - a header balance
+  gating billable actions - had zero doc coverage despite being visible on
+  every page from first login. Added a short mention in each. Net-new,
+  high.
+- Reading Your Scorecard: added per-agent verdict-**band** overrides
+  (distinct from the label-wording bug above - this is the numeric
+  threshold override feature, confirmed on the Settings tab with correct
+  "Needs work" / "Don't ship (recommended)" labels and a "Reset to profile
+  defaults" control). Net-new, medium.
+- Dimensions & Profiles: added the manual "Change profile" / "Re-evaluate
+  fit" controls on the Profile tab - the automatic first pick isn't final.
+  Net-new, medium.
+- Connect Your Agent: the wizard-launch button is "+ Connect Agent," not
+  "+ Add agent." Everything else about that wizard (4 steps, 20-trace
+  note, exact env-var format, now serving a real per-region endpoint per
+  PR #700) still matches. docs-should-update, low.
+- Scoring Over Time: the "Activity" tab this page described (with a
+  screenshot) no longer exists by that name. Confirmed live tabs are Score
+  / Improve / Agent Card / Traces / Profile / Labeling / Settings. The
+  run-history content now lives in the Score tab's own **Score over time**
+  section - re-pointed the doc and screenshot there. Couldn't capture a
+  populated example (no agent in this tenant has 2+ scored runs yet); the
+  screenshot shows the empty "not enough history" state. **Re-capture with
+  real run history next time an agent has one.**
+
+**New page this pass:**
+- **Ask the Assistant** (`workspace-assistant`, under Get Started) - a
+  tenant-scoped chat, new nav item, also reachable as "Ask the assistant"
+  from any agent page. Reads freely; the only write action (starting a
+  scoring run) asks first. PRs: #713 (added to customer app).
+
+**Confirmed live, still undocumented - deferred to a future pass:**
+- The **Improve** and **Labeling** tabs on agent detail exist now (PRs
+  #617-619 were pending-verification as of 2026-09-09; confirmed live
+  today). Neither has any doc coverage. docs-should-update, medium -
+  deferred, not written this pass.
+- **Consent / terms-of-service gate** (PRs #731, #733, #735, #736, #740) -
+  confirmed merged, not confirmed live in this walk (this account had
+  already accepted). Scoped **out** of this pass deliberately: it reads as
+  a legal/compliance gate, not a "how the product works" feature - flagging
+  for the team to confirm that's the right call rather than silently
+  deciding it belongs in the onboarding guide.
+- New MCP-related eval names (`mcp_task_completion`, `multi_turn_mcp_use`)
+  seen on a live Task Agent profile aren't in the Evaluation Catalog's
+  "Agentic & Tool-use" sample row. Low severity - that table is explicitly
+  a sample, not an exhaustive list.
+
+`.last-github-sync` advanced to `2026-09-25T12:50:15Z` (mergedAt of PR
+#747, the newest PR this scan looked at).
+
+---
+
 ## 2026-09-09 — GitHub merge scan + production walk (Playwright, customer login)
 
 Cross-checked PRs merged on `Tricentis-AI/agent-score` since the `.last-github-sync`

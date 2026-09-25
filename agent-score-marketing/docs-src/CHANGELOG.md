@@ -3,6 +3,49 @@
 All notable changes to the AgentScore docs site are recorded here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.38.0] - 2026-09-25
+
+### Added
+- Ask the Assistant: new page documenting the tenant-scoped chat (reads
+  freely, only writes by starting a scoring run, and asks first) - a
+  brand-new nav item and per-agent "Ask the assistant" entry point.
+- Scoring Engine Settings: documented the real **Usage & cost** page
+  (traces, tokens in/out, usage cost, eval results, scoring runs, profile
+  fits, eval cost in credits, Export to Excel) and the per-agent **Cost**
+  section (input/output $ per 1M tokens) that feeds it.
+- Welcome, Glossary, Scoring Over Time: documented **AI credits** - the
+  header balance that gates billable actions (scoring) when exhausted.
+- Reading Your Scorecard: documented per-agent verdict-band overrides
+  (Settings tab, with "Reset to profile defaults").
+- Dimensions & Profiles: documented the manual "Change profile" /
+  "Re-evaluate fit" controls on the Profile tab, alongside the existing
+  automatic first pick.
+
+### Changed
+- Welcome: swapped the hero screenshot and copy from the old card-grid
+  dashboard to **Home**, the actual landing page (tour banner, real-agent/
+  interaction/scoring-run tiles, verdict trend, removable example agents).
+- Scoring Engine Settings: judge-model provider/model/region is now
+  self-serve per agent (Settings tab → Model connection) - removed the
+  "ask the Agent Score team" framing. Glossary's "Judge model" entry
+  updated to match.
+- Scoring Over Time: relocated the "what it looks like in the product"
+  screenshot from a since-retired "Activity" tab to the Score tab's own
+  **Score over time** section, where that content actually lives today.
+- Connect Your Agent: "+ Add agent" → "**+ Connect Agent**" (button label
+  only; the wizard content is unchanged and still matches).
+
+### Fixed
+- Welcome, Glossary: removed remaining stale "a letter grade" / "grade"
+  references missed in the 2026-08-27 pass (Welcome's hero paragraph and
+  the "Decide" step, Glossary's Scorecard definition).
+
+### Not changed (see drift log)
+- Verdict-tier labels ("Needs work" / "Don't ship (recommended)") are
+  unchanged - re-confirmed correct against the live product for the 5th
+  audit in a row. The Profile tab's "The bar" table is still the stale
+  surface (product-should-catch-up); do not flip the docs to match it.
+
 ## [0.37.0] - 2026-09-08
 
 ### Added

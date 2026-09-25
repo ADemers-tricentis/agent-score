@@ -19,7 +19,11 @@ const terms: { term: string; def: string }[] = [
   },
   {
     term: "Judge model",
-    def: "The LLM that reads an interaction and produces an eval's score and reason. Agent Score picks the provider on your behalf today - not yet a self-serve choice.",
+    def: "The LLM that reads an interaction and produces an eval's score and reason. Agent Score picks a provider by default, or you can set one yourself per agent.",
+  },
+  {
+    term: "AI credits",
+    def: "The balance that pays for billable Agent Score work - scoring runs and evaluation. Shown as a chip in the header on every page. Running out pauses billable actions until your balance refreshes or is topped up.",
   },
   {
     term: "Dimension",
@@ -47,7 +51,7 @@ const terms: { term: string; def: string }[] = [
   },
   {
     term: "Scorecard",
-    def: "The full report for a scoring run: composite score, grade, verdict, and the dimension-by-dimension breakdown behind it.",
+    def: "The full report for a scoring run: composite score, verdict, and the dimension-by-dimension breakdown behind it.",
   },
 ];
 

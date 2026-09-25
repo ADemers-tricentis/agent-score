@@ -67,6 +67,13 @@ export default function DimensionsAndProfiles() {
         caption="An agent's Profile tab - why this profile was chosen, the verdict bands for it, and the weighted dimensions behind the score."
       />
 
+      <p>
+        That automatic pick isn't final. From the same Profile tab, you can{" "}
+        <strong>change profile</strong> to any other live profile version yourself, or{" "}
+        <strong>re-evaluate fit</strong> to have Agent Score reconsider its pick against the
+        agent's latest evidence.
+      </p>
+
       <Callout kind="tip" title="Need something the catalog doesn't cover?">
         <p>
           The <strong>Dimension Builder</strong> lets you author an entirely new dimension when

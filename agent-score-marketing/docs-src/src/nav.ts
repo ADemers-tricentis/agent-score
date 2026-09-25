@@ -26,6 +26,11 @@ export const nav: NavSection[] = [
         title: "Connect Your Agent",
         blurb: "Get traces flowing in - no SDK required.",
       },
+      {
+        slug: "workspace-assistant",
+        title: "Ask the Assistant",
+        blurb: "A chat that already knows your agents, traces, and scores.",
+      },
     ],
   },
   {

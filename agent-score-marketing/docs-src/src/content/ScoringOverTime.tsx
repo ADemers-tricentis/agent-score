@@ -1,6 +1,6 @@
 import { Callout, Dek, Eyebrow, Screenshot, Step, StepList } from "../components/PageChrome";
 import { ScoringOverTimeChart } from "../components/diagrams/ScoringOverTimeChart";
-import activityTab from "../assets/activity-tab.png";
+import scoringOverTimeSection from "../assets/score-over-time-section.png";
 
 export default function ScoringOverTime() {
   return (
@@ -48,15 +48,25 @@ export default function ScoringOverTime() {
         available regardless.
       </p>
 
+      <Callout kind="warn" title="Scoring runs on AI credits">
+        <p>
+          Every scoring run - scheduled or manual - draws on your tenant's <strong>AI
+          credits</strong> balance, shown in the header on every page. If that balance runs out,
+          billable actions like "Score now" and autonomous scoring pause until it refreshes or
+          more are added - you won't find out from a failed run partway through.
+        </p>
+      </Callout>
+
       <h3>What it looks like in the product</h3>
       <p>
-        Every scoring run, profile change, and schedule update is kept in a single timeline per
-        agent - so "why did the score move?" always has an answer:
+        The trend lives right on the agent's <strong>Score</strong> tab, in its own{" "}
+        <strong>Score over time</strong> section - it fills in once an agent has at least two
+        scored runs to compare.
       </p>
       <Screenshot
-        src={activityTab}
-        alt="An Activity tab's What happened event log - the first confident score being reached and a run completing - followed by a Runs table listing when each run fired, its trigger, score, verdict, how many interactions were scored, and its state"
-        caption="A real Activity tab - every run and what triggered it, in one timeline."
+        src={scoringOverTimeSection}
+        alt="The Score over time section of an agent's Score tab, reading 'Not enough history yet - a trend needs at least two scored runs'"
+        caption="The Score over time section on the Score tab, before a second run gives it something to compare."
       />
 
       <Callout kind="note" title="More data, not different data">

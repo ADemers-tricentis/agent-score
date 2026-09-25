@@ -50,6 +50,13 @@ export default function Scorecard() {
         </tbody>
       </table>
 
+      <p>
+        These floors come from the profile by default, but they're not fixed - a customer or
+        operator can override any of them for a single agent, on that agent's{" "}
+        <strong>Settings</strong> tab. A "Reset to profile defaults" option puts them back
+        whenever you want.
+      </p>
+
       <h2>How close you are to the next zone</h2>
       <p>
         When a score lands near a verdict boundary, the scorecard says so directly - a note like

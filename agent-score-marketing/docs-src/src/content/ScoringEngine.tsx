@@ -1,4 +1,7 @@
-import { Callout, Dek, Eyebrow } from "../components/PageChrome";
+import { Callout, Dek, Eyebrow, Screenshot } from "../components/PageChrome";
+import modelConnectionSettings from "../assets/model-connection-settings.png";
+import agentCostRateSettings from "../assets/agent-cost-rate-settings.png";
+import usageAndCostPage from "../assets/usage-and-cost-page.png";
 
 export default function ScoringEngine() {
   return (
@@ -24,9 +27,19 @@ export default function ScoringEngine() {
       <p>
         G-Eval and Hybrid evals need an LLM to do the judging. Agent Score supports most common
         providers - Anthropic Claude, OpenAI, Azure OpenAI, and Amazon Bedrock - and picks one on
-        your behalf today. Choosing a provider yourself isn't yet a self-serve setting in the app;
-        ask the Agent Score team if you need a specific one.
+        your behalf by default. Need a specific provider, model, or region instead? It's a
+        self-serve setting on that agent's own <strong>Settings</strong> tab, under{" "}
+        <strong>Model connection</strong>: pick the provider, name the model, and, for Bedrock,
+        the AWS region. You can supply replacement credentials there too, or leave it on
+        environment credentials - either way, stored credentials are never shown back to you.{" "}
+        <strong>Test connection</strong> before <strong>Save settings</strong> to confirm it before
+        it's used for real scoring.
       </p>
+      <Screenshot
+        src={modelConnectionSettings}
+        alt="The Model connection section of an agent's Settings tab, showing a Provider dropdown set to bedrock, Model and AWS region fields, an environment-credentials toggle, replacement credential fields, and Test connection / Save settings buttons"
+        caption="An agent's Settings tab - choose the judge model provider, model, and region yourself, per agent."
+      />
       <p>
         Every score is still stamped with which judge model produced it. That matters more than it
         sounds - LLM judges drift over time, and the same prompt on a newer model can score
@@ -34,11 +47,32 @@ export default function ScoringEngine() {
         two runs trustworthy rather than an artifact of a silent model upgrade.
       </p>
 
-      <h2>Usage log</h2>
+      <h2>Usage &amp; cost</h2>
       <p>
-        A running log of tokens, cost, and outcome per scoring call isn't in the app today. If
-        judge spend needs a closer look in the meantime, the Agent Score team can pull it for you.
+        Every agent's <strong>Usage &amp; cost</strong> page shows what it used and what Agent Score
+        spent evaluating it, over a window you choose (up to 90 days): traces, tokens in/out,
+        usage cost, eval results, scoring runs, profile fits, and eval cost in AI credits. Export
+        the whole table to Excel when you need it outside the app.
       </p>
+      <Screenshot
+        src={usageAndCostPage}
+        alt="The Usage & cost page, showing a Past 30 days window and a table of agents with traces, tokens in/out, usage cost, eval results, scoring runs, profile fits, and eval cost in credits, plus an Export to Excel button"
+        caption="Usage & cost - what each agent used, and what Agent Score spent evaluating it."
+      />
+
+      <h3>Setting your rate</h3>
+      <p>
+        Token counts only become a dollar figure once you tell Agent Score your rate. On the same
+        agent Settings tab as Model connection, the <strong>Cost</strong> section takes an input
+        and an output rate (dollars per 1M tokens). Changing a rate restates every run already in
+        the window, so the usage cost you see always reflects your current rate, not whatever rate
+        was in effect when a given trace arrived.
+      </p>
+      <Screenshot
+        src={agentCostRateSettings}
+        alt="The Cost section of an agent's Settings tab, with Input rate and Output rate fields in dollars per 1M tokens and a Save rates button"
+        caption="Set your input/output token rate here - it's what turns usage into a cost on the Usage & cost page."
+      />
 
       <Callout kind="tip" title="A judge model change never breaks history">
         <p>

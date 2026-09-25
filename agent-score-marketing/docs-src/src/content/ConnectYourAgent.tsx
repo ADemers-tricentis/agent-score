@@ -122,7 +122,7 @@ export default function ConnectYourAgent() {
 
       <Callout kind="tip" title="Or let the wizard fill this in for you">
         <p>
-          From the Agents page, <strong>+ Add agent</strong> opens a guided{" "}
+          From the Agents page, <strong>+ Connect Agent</strong> opens a guided{" "}
           <strong>Connect an agent</strong> flow: pick the tenant, it shows that tenant's key, and
           it hands you the exact exporter configuration to paste in - the same variables shown
           above, with your real key already filled in.
