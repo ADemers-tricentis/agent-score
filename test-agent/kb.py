@@ -8,7 +8,7 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-FAQ_PATH = Path(__file__).resolve().parent.parent / "docs" / "faq.md"
+FAQ_PATH = Path(__file__).resolve().parent.parent / "docs" / "documentation" / "faq.md"
 
 STOPWORDS = {
     "the", "a", "an", "is", "it", "to", "of", "and", "or", "in", "on", "for",

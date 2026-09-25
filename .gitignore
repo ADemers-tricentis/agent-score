@@ -10,3 +10,6 @@ node_modules/
 test-agent/.env
 test-agent/venv
 __pycache__/
+docs/feedback/email automation/external-interest-contacts.csv
+docs/feedback/email automation/external-interest-mail-merge.csv
+docs/feedback/email automation/external-interest-no-response-followup.csv

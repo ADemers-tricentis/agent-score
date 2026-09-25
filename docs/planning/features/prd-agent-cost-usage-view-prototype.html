@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Usage &amp; Cost — Prototype</title>
+<style>
+  :root {
+    --text: #1a1a1a;
+    --muted: #6b6f76;
+    --border: #e3e5e8;
+    --blue: #1565c0;
+    --blue-bg: #eef4fc;
+    --eval-bg: #fafafa;
+    --row-hover: #f7f8fa;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: #fff;
+    font-size: 14px;
+  }
+  .demo-banner {
+    background: #fff4e5;
+    color: #8a5300;
+    text-align: center;
+    font-size: 12px;
+    padding: 5px 12px;
+    border-bottom: 1px solid #f0d9b0;
+  }
+  .page { max-width: 1300px; margin: 0 auto; padding: 28px 32px; }
+  .breadcrumb { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+  .breadcrumb a { color: var(--muted); text-decoration: none; cursor: pointer; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .title-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+  .title-row svg { flex-shrink: 0; }
+  h1 { font-size: 26px; margin: 0; font-weight: 600; }
+  .subtitle { color: var(--muted); font-size: 14px; margin: 6px 0 20px; }
+
+  .tabs { display: flex; gap: 24px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+  .tab { padding-bottom: 10px; font-size: 14px; color: var(--muted); cursor: default; border-bottom: 2px solid transparent; }
+  .tab.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 500; }
+
+  .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .toolbar-left { display: flex; align-items: center; gap: 10px; }
+  .range-pill {
+    display: flex; align-items: center; gap: 6px;
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 6px 10px; font-size: 13px; color: var(--text); background: #fff;
+  }
+  .range-pill .range-badge { background: #f0f0f2; border-radius: 4px; padding: 1px 6px; font-size: 12px; color: var(--muted); }
+  .icon-btn { border: none; background: none; cursor: pointer; color: var(--muted); font-size: 16px; padding: 4px; }
+  .export-btn {
+    display: flex; align-items: center; gap: 6px;
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 7px 14px; font-size: 13px; color: var(--blue); background: #fff; cursor: pointer;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead tr.group-row th {
+    font-size: 11px; text-transform: uppercase; letter-spacing: .03em;
+    color: var(--muted); font-weight: 600; text-align: left;
+    padding: 8px 14px 4px; border-bottom: none;
+  }
+  thead tr.group-row th.group-primary { color: var(--blue); }
+  thead tr.group-row th.group-eval { color: #8a6d00; }
+  thead tr.col-row th {
+    text-align: left; font-weight: 500; color: var(--muted); font-size: 13px;
+    padding: 6px 14px 10px; border-bottom: 1px solid var(--border); white-space: nowrap;
+  }
+  thead tr.col-row th .sort { color: #c7c9cd; margin-left: 3px; font-size: 11px; }
+  tbody td { padding: 12px 14px; border-bottom: 1px solid var(--border); white-space: nowrap; font-size: 13px; }
+  tbody tr:hover { background: var(--row-hover); }
+  tbody tr.clickable { cursor: pointer; }
+  .agent-name { font-weight: 500; color: var(--text); }
+  .hosting-chip {
+    display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 999px; margin-left: 8px;
+    vertical-align: middle;
+  }
+  .hosting-chip.aiw { background: #eaf3ff; color: #1565c0; }
+  .hosting-chip.external { background: #fdf1e4; color: #a45c00; }
+  .muted-cell { color: var(--muted); }
+  .col-divider { border-left: 1px solid var(--border); }
+
+  .section-block { margin-bottom: 36px; }
+  .section-title { font-size: 14px; font-weight: 600; margin: 0 0 2px; }
+  .section-title.eval { color: #8a6d00; }
+  .section-sub { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
+  .eval-summary { font-size: 13px; font-weight: 500; margin: 0 0 14px; }
+
+  .rate-note {
+    font-size: 13px; color: var(--muted); margin-bottom: 16px;
+    background: var(--blue-bg); border-radius: 6px; padding: 10px 14px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .rate-note a { color: var(--blue); font-size: 12px; }
+  .aiw-note { font-size: 13px; color: var(--muted); margin-bottom: 16px; background: #f2f2f4; border-radius: 6px; padding: 10px 14px; }
+
+  .view { display: none; }
+  .view.active { display: block; }
+</style>
+</head>
+<body>
+
+<div class="demo-banner">Prototype for demo purposes only — static mock data, not connected to any real system.</div>
+
+<!-- ===================== LIST VIEW ===================== -->
+<div class="view active" id="view-list">
+  <div class="page">
+    <div class="title-row">
+      <svg width="18" height="18" viewBox="0 0 20 20"><rect x="2" y="10" width="4" height="8" fill="#1a1a1a"/><rect x="8" y="5" width="4" height="13" fill="#1a1a1a"/><rect x="14" y="1" width="4" height="17" fill="#1a1a1a"/></svg>
+      <h1>Usage &amp; Cost</h1>
+    </div>
+    <div class="subtitle">Usage and cost for your agents, over a chosen window.</div>
+
+    <div class="tabs">
+      <div class="tab active">Usage</div>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="range-pill"><span class="range-badge">30d</span> Past 30 days ▾</div>
+        <button class="icon-btn" title="Refresh">↻</button>
+      </div>
+      <button class="export-btn">⬇ Export to Excel</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr class="group-row">
+          <th></th>
+          <th class="group-primary" colspan="4">Agent usage</th>
+          <th class="group-eval" colspan="5">AgentScore evaluation</th>
+        </tr>
+        <tr class="col-row">
+          <th>Agent <span class="sort">⇕</span></th>
+          <th>Traces <span class="sort">⇕</span></th>
+          <th>Tokens in <span class="sort">⇕</span></th>
+          <th>Tokens out <span class="sort">⇕</span></th>
+          <th>Usage cost <span class="sort">⇕</span></th>
+          <th class="col-divider">Eval results <span class="sort">⇕</span></th>
+          <th>Scoring runs <span class="sort">⇕</span></th>
+          <th>Profile fits <span class="sort">⇕</span></th>
+          <th>Agent cards <span class="sort">⇕</span></th>
+          <th>Total cost <span class="sort">⇕</span></th>
+        </tr>
+      </thead>
+      <tbody id="agent-table-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===================== DETAIL VIEW ===================== -->
+<div class="view" id="view-detail">
+  <div class="page">
+    <div class="breadcrumb"><a onclick="showList()">Usage &amp; Cost</a> / <span id="detail-breadcrumb-name"></span></div>
+    <div class="title-row">
+      <svg width="18" height="18" viewBox="0 0 20 20"><rect x="2" y="10" width="4" height="8" fill="#1a1a1a"/><rect x="8" y="5" width="4" height="13" fill="#1a1a1a"/><rect x="14" y="1" width="4" height="17" fill="#1a1a1a"/></svg>
+      <h1 id="detail-title"></h1>
+      <span id="detail-chip"></span>
+    </div>
+    <div class="subtitle">8/25/2026, 2:33:21 PM – 9/24/2026, 2:33:21 PM</div>
+
+    <div class="toolbar" style="margin-bottom:28px;">
+      <div class="toolbar-left">
+        <button class="icon-btn" title="Refresh">↻</button>
+      </div>
+      <button class="export-btn">⬇ Export to Excel</button>
+    </div>
+
+    <!-- Primary: agent usage -->
+    <div class="section-block">
+      <div class="section-title">Agent usage</div>
+      <div class="section-sub">Token usage and cost for running this agent itself.</div>
+
+      <div class="rate-note" id="aiw-note-block" style="display:none;">
+        AI Workspace-hosted — usage cost is calculated automatically in AI credits.
+      </div>
+      <div class="rate-note" id="external-note-block" style="display:none;">
+        <span id="rate-note-text"></span>
+        <a>Manage in Agent Settings → Cost</a>
+      </div>
+
+      <table>
+        <thead>
+          <tr class="col-row">
+            <th>Timestamp <span class="sort">⇕</span></th>
+            <th>Tokens in <span class="sort">⇕</span></th>
+            <th>Tokens out <span class="sort">⇕</span></th>
+            <th>Usage cost <span class="sort">⇕</span></th>
+          </tr>
+        </thead>
+        <tbody id="usage-drill-body"></tbody>
+      </table>
+    </div>
+
+    <!-- AgentScore evaluation -->
+    <div class="section-block" style="background:var(--eval-bg); border-radius:8px; padding:20px;">
+      <div class="section-title eval">AgentScore evaluation</div>
+      <div class="section-sub">What it costs to run AgentScore's own evaluations against this agent, in AI credits - separate from the usage above.</div>
+      <div class="eval-summary" id="eval-summary"></div>
+
+      <table>
+        <thead>
+          <tr class="col-row">
+            <th>Timestamp <span class="sort">⇕</span></th>
+            <th>Operation <span class="sort">⇕</span></th>
+            <th>Cost <span class="sort">⇕</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>2026-09-24 09:12</td><td>Scoring</td><td>0.02 credits</td></tr>
+          <tr><td>2026-09-24 08:47</td><td>Profile fit</td><td>0.01 credits</td></tr>
+          <tr><td>2026-09-23 22:03</td><td>Scoring</td><td>0.02 credits</td></tr>
+          <tr><td>2026-09-23 14:55</td><td>Agent card</td><td>0.02 credits</td></tr>
+          <tr><td>2026-09-23 09:30</td><td>Scoring</td><td>0.02 credits</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  const agents = [
+    {
+      name: "checkout-assistant", hosting: "aiw",
+      traces: 342, tokensIn: "1,204,532", tokensOut: "342,190", usageCost: "128.4 credits",
+      evalResults: 118, scoringRuns: 106, profileFits: 4, agentCards: 5, evalCost: "3.6 credits",
+      drill: [
+        ["2026-09-24 11:02", "3,204", "812", "0.34 credits"],
+        ["2026-09-24 09:47", "2,890", "705", "0.29 credits"],
+        ["2026-09-23 21:15", "4,102", "1,003", "0.44 credits"],
+        ["2026-09-23 15:30", "3,556", "890", "0.37 credits"],
+        ["2026-09-23 08:02", "2,977", "740", "0.30 credits"]
+      ]
+    },
+    {
+      name: "support-router", hosting: "external", rateIn: "2.00", rateOut: "6.00",
+      traces: 210, tokensIn: "856,210", tokensOut: "198,004", usageCost: "$2.90",
+      evalResults: 40, scoringRuns: 36, profileFits: 2, agentCards: 1, evalCost: "0.9 credits",
+      drill: [
+        ["2026-09-24 10:40", "2,410", "560", "$0.008"],
+        ["2026-09-24 08:12", "1,980", "410", "$0.006"],
+        ["2026-09-23 20:55", "3,105", "720", "$0.010"],
+        ["2026-09-23 13:18", "2,640", "600", "$0.009"],
+        ["2026-09-23 07:44", "2,205", "500", "$0.007"]
+      ]
+    },
+    {
+      name: "billing-copilot", hosting: "external", rateIn: "1.50", rateOut: "5.00",
+      traces: 12, tokensIn: "42,010", tokensOut: "9,880", usageCost: "$0.31",
+      evalResults: 3, scoringRuns: 3, profileFits: 0, agentCards: 0, evalCost: "0.1 credits",
+      drill: [
+        ["2026-09-22 16:04", "5,120", "1,210", "$0.014"],
+        ["2026-09-20 11:22", "4,880", "1,040", "$0.012"]
+      ]
+    },
+    {
+      name: "onboarding-flow", hosting: "aiw",
+      traces: 0, tokensIn: "0", tokensOut: "0", usageCost: "0.0 credits",
+      evalResults: 0, scoringRuns: 0, profileFits: 0, agentCards: 0, evalCost: "0.0 credits",
+      drill: []
+    }
+  ];
+
+  function fmtChip(hosting) {
+    return hosting === "aiw"
+      ? '<span class="hosting-chip aiw">AI Workspace</span>'
+      : '<span class="hosting-chip external">External</span>';
+  }
+
+  function renderList() {
+    const body = document.getElementById('agent-table-body');
+    body.innerHTML = agents.map((a, i) => `
+      <tr class="clickable" onclick="showDetail(${i})">
+        <td><span class="agent-name">${a.name}</span>${fmtChip(a.hosting)}</td>
+        <td>${a.traces}</td>
+        <td>${a.tokensIn}</td>
+        <td>${a.tokensOut}</td>
+        <td>${a.usageCost}</td>
+        <td class="col-divider">${a.evalResults || '<span class="muted-cell">—</span>'}</td>
+        <td>${a.scoringRuns || '<span class="muted-cell">—</span>'}</td>
+        <td>${a.profileFits || '<span class="muted-cell">—</span>'}</td>
+        <td>${a.agentCards || '<span class="muted-cell">—</span>'}</td>
+        <td>${a.evalCost}</td>
+      </tr>
+    `).join('');
+  }
+
+  function showList() {
+    document.getElementById('view-list').classList.add('active');
+    document.getElementById('view-detail').classList.remove('active');
+  }
+
+  function showDetail(i) {
+    const a = agents[i];
+    document.getElementById('view-list').classList.remove('active');
+    document.getElementById('view-detail').classList.add('active');
+
+    document.getElementById('detail-breadcrumb-name').textContent = a.name;
+    document.getElementById('detail-title').textContent = a.name;
+    document.getElementById('detail-chip').innerHTML = fmtChip(a.hosting);
+
+    if (a.hosting === 'aiw') {
+      document.getElementById('aiw-note-block').style.display = 'flex';
+      document.getElementById('external-note-block').style.display = 'none';
+    } else {
+      document.getElementById('aiw-note-block').style.display = 'none';
+      document.getElementById('external-note-block').style.display = 'flex';
+      document.getElementById('rate-note-text').textContent =
+        `Cost calculated from your configured rate: $${a.rateIn}/1M tokens in · $${a.rateOut}/1M tokens out.`;
+    }
+
+    document.getElementById('usage-drill-body').innerHTML = a.drill.length
+      ? a.drill.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('')
+      : `<tr><td colspan="4" class="muted-cell">No usage in this window.</td></tr>`;
+
+    document.getElementById('eval-summary').textContent =
+      `${a.evalResults} eval results · ${a.scoringRuns} scoring runs · ${a.profileFits} profile fits · ${a.agentCards} agent card generations · ${a.evalCost} total`;
+  }
+
+  renderList();
+</script>
+
+</body>
+</html>

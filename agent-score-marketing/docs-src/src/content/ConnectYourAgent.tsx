@@ -134,6 +134,44 @@ export default function ConnectYourAgent() {
         caption="The Connect an agent wizard - the fastest way to the exact config for one specific tenant."
       />
 
+      <h2>Works with your existing stack</h2>
+      <p>
+        There's no framework to adopt and none to give up. If your agent already
+        emits OpenTelemetry - on its own, or through a tracing library you've
+        added - Agent Score reads it. These are the common ways traces get in,
+        not a certified list you have to pick from:
+      </p>
+      <ul>
+        <li>
+          <strong>Tracing libraries that already speak the conventions Agent
+          Score reads</strong> - Langfuse, OpenLLMetry (Traceloop), and
+          OpenInference emit recognized attributes out of the box, so their
+          spans are understood with no extra mapping.
+        </li>
+        <li>
+          <strong>Framework instrumentation</strong> - LangChain and LangGraph,
+          LlamaIndex, the OpenAI SDK and OpenAI Agents SDK, the Vercel AI SDK,
+          CrewAI, and similar. Most have an OpenTelemetry integration you enable
+          in a line or two.
+        </li>
+        <li>
+          <strong>A plain OpenTelemetry setup</strong> - no framework at all.
+          Point any OTLP exporter at the ingest endpoint and your spans arrive
+          the same way.
+        </li>
+      </ul>
+      <Callout kind="note" title="The real requirement is the telemetry, not the framework">
+        <p>
+          Agent Score doesn't certify frameworks one by one - it reads standard
+          OpenTelemetry and a few widely used span conventions (Langfuse's,
+          OpenTelemetry's GenAI convention, and OpenInference). If your traces
+          follow one of them, which most instrumentation libraries do by
+          default, your agent is recognized and scored automatically. Traces
+          that carry none of these still arrive, but the leaner they are, the
+          less Agent Score can tell you about the agent behind them.
+        </p>
+      </Callout>
+
       <IngestionFlowDiagram />
 
       <h2>You don't have to tell us what the agent is</h2>
