@@ -13,7 +13,7 @@ export default function EvalCatalog() {
       <Dek>
         An <strong>eval</strong> is a single, focused question about quality - "was this grounded
         in the context it was given?", "did it call the right tool?", "is this valid JSON?" Agent
-        Score ships with over 60 of them, ready to run against your traces on day one.
+        Score ships with 62 of them, ready to run against your traces on day one.
       </Dek>
 
       <p>

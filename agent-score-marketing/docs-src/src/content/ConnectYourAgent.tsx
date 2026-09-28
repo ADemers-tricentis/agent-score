@@ -39,8 +39,8 @@ export default function ConnectYourAgent() {
       </p>
       <Screenshot
         src={integrationsTab}
-        alt="The Integrations page, showing a tenant selector and a table of API keys with status, created date, last used, and Rotate / Revoke actions, plus a New key button"
-        caption="Manage ingest keys yourself - create, rotate, or revoke, per tenant."
+        alt="The Integrations page, showing a table of API keys with status, created date, last used, and Rotate / Revoke actions, plus a New key button"
+        caption="Manage ingest keys yourself - create, rotate, or revoke."
       />
       <Callout kind="warn" title="Reachable over the Tricentis VPN only">
         <p>

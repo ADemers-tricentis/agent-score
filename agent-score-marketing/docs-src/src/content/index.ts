@@ -9,6 +9,9 @@ import ScoringEngine from "./ScoringEngine";
 import AgentCard from "./AgentCard";
 import Scorecard from "./Scorecard";
 import ScoringOverTime from "./ScoringOverTime";
+import Traces from "./Traces";
+import Improve from "./Improve";
+import Labeling from "./Labeling";
 import Glossary from "./Glossary";
 
 export const pages: Record<string, ComponentType> = {
@@ -22,5 +25,8 @@ export const pages: Record<string, ComponentType> = {
   "agent-card": AgentCard,
   scorecard: Scorecard,
   "scoring-over-time": ScoringOverTime,
+  traces: Traces,
+  improve: Improve,
+  labeling: Labeling,
   glossary: Glossary,
 };

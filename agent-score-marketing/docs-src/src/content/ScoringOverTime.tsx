@@ -76,6 +76,12 @@ export default function ScoringOverTime() {
           just keeps improving.
         </p>
       </Callout>
+
+      <p>
+        Every run behind that trend is built from real captured interactions - see{" "}
+        <a href="#/traces">traces</a> for how to open one up and see exactly what happened inside
+        it.
+      </p>
     </>
   );
 }

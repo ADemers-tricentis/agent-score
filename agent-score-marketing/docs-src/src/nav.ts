@@ -40,7 +40,7 @@ export const nav: NavSection[] = [
       {
         slug: "eval-catalog",
         title: "The Evaluation Catalog",
-        blurb: "60+ ready-made evals, from strict rules to human-like judgment.",
+        blurb: "62 ready-made evals, from strict rules to human-like judgment.",
       },
       {
         slug: "dimensions-and-profiles",
@@ -77,6 +77,21 @@ export const nav: NavSection[] = [
         slug: "scoring-over-time",
         title: "Scoring Over Time",
         blurb: "Scheduled runs and why accuracy keeps improving.",
+      },
+      {
+        slug: "traces",
+        title: "Traces",
+        blurb: "The captured interactions behind every score, span by span.",
+      },
+      {
+        slug: "improve",
+        title: "Improve This Agent",
+        blurb: "Prioritized, evidence-backed recommendations from scored traces.",
+      },
+      {
+        slug: "labeling",
+        title: "Labeling",
+        blurb: "Human review that turns judgment into reference evidence.",
       },
     ],
   },

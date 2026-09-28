@@ -50,7 +50,7 @@ export default function Welcome() {
           minutes.
         </Card>
         <Card href="#/eval-catalog" title="Evaluations">
-          What an "eval" is, the 60+ that ship out of the box, and how to build your own in plain
+          What an "eval" is, the 62 that ship out of the box, and how to build your own in plain
           English.
         </Card>
         <Card href="#/agent-card" title="The Scoring Journey">

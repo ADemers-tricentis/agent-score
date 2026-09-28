@@ -3,6 +3,28 @@
 All notable changes to the AgentScore docs site are recorded here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.39.0] - 2026-09-28
+
+### Added
+- The Scoring Journey: three new pages for agent-detail tabs that had no
+  documentation at all - **Traces** (the captured-interaction list, the
+  span waterfall behind a trace, and its per-eval Score details), **Improve
+  This Agent** (generating prioritized, evidence-backed recommendations
+  from scored evidence), and **Labeling** (the human-review queue that
+  turns a correctness judgment into reference evidence).
+
+### Changed
+- Connect Your Agent: removed the per-tenant selector from the
+  Integrations screenshot and its description - API keys are no longer
+  filtered by tenant in the customer-facing app.
+
+### Fixed
+- Scoring Engine Settings: the Usage & cost description and screenshot
+  alt text were missing the **Agent cards** column that's already in the
+  live table.
+- Welcome, The Evaluation Catalog: aligned the eval count copy ("60+" /
+  "over 60") with the catalog's actual count of **62**.
+
 ## [0.38.0] - 2026-09-25
 
 ### Added

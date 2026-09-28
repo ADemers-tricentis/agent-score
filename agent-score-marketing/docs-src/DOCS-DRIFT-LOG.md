@@ -12,6 +12,71 @@ Each audit appends a dated section. Newest first.
 
 ---
 
+## 2026-09-28 — GitHub merge scan + staging walk (Playwright, session already authenticated)
+
+Production (`https://agent-score-customer.product.tricentis.com`) returned
+**404 "no app matched"** from the AWS load balancer for the entire duration of
+this run (TLS/cert fine, so a real routing/deploy gap, not DNS/VPN) - confirmed
+with the user, then audited against the `.env`-configured staging host
+(`https://agent-score.stg.ai.tricentis.com`) instead, per explicit go-ahead.
+Everything below is checked against staging, not confirmed production.
+
+Cross-checked 8 PRs merged on `Tricentis-AI/agent-score` since the
+`.last-github-sync` marker (2026-09-25T12:50:15Z). Only one,
+[#754](https://github.com/Tricentis-AI/agent-score/pull/754) ("Opened every
+trace link by trace id alone, removing the leftover timestamp requirement"),
+was customer-facing; the other seven (#748-753, #755, #756) were internal
+security/audit/logging fixes with no visible UI change.
+
+**PR #754 - confirmed fixed, no doc claim to update.** Opened a trace
+directly by trace ID (`/traces/<id>?view=spans`, no `?timestamp=`) and it
+loaded cleanly. No page in the docs described the old broken behavior, so
+there was nothing to edit - noting here only as confirmation the fix is live
+on staging.
+
+**Missing pages - Traces, Improve, Labeling (docs-should-update, high,
+fixed).** The agent-detail view has grown from the 4 tabs the docs describe
+(Score / Agent Card / Profile / Settings) to 7: **Improve**, **Traces**, and
+**Labeling** had no documentation anywhere. Added three new pages under The
+Scoring Journey - see CHANGELOG 0.39.0.
+
+**Usage & cost table missing a column in prose (docs-should-update, low,
+fixed).** `ScoringEngine.tsx`'s description and screenshot alt text listed
+the Usage & cost columns but omitted **Agent cards**, which was already
+visible in the existing screenshot (the image itself was never stale, only
+the surrounding text). Fixed both.
+
+**Eval count inconsistency, own-doc mismatch (docs-should-update, low,
+fixed).** `EvalCatalog.tsx` said "over 60" / nav said "60+" in prose while
+its own screenshot alt text said "62." Could not independently re-verify the
+live count - the eval catalog/builder lives in Back Office, not reachable
+from the customer app - so this is a lower-confidence fix that trusts the
+screenshot's more specific number over the prose. Aligned Welcome, nav.ts,
+and EvalCatalog.tsx to "62."
+
+**Integrations tenant selector, removed (docs-should-update, medium,
+fixed, per explicit user call).** `ConnectYourAgent.tsx`'s `integrations-tab.png`
+showed a "Tenant" dropdown above the API-keys table; live staging Integrations
+page has no such selector - this account only has one tenant ("tais"), so the
+live walk alone couldn't distinguish "real UI simplification" from
+"single-tenant test-account artifact." User confirmed: tenants are no longer
+customer-facing in this app, all keys show together. Replaced the screenshot
+and removed the selector from the alt text/caption; left the surrounding
+"each key belongs to one tenant" prose alone since nothing observed
+contradicted it.
+
+**"Default" profile, logged only - not resolved (pending-verification,
+medium).** `DimensionsAndProfiles.tsx` says Agent Score ships 7 profiles
+(Grounded Answerer, Summarizer, Tool Caller, Task Agent, Conversational
+Assistant, Policy Guardrail, General Answerer). Production's live "Change
+profile" picker on an agent's Profile tab lists an 8th: **Default**. Per
+user instruction, not resolved this run - could be a real 8th customer-facing
+profile the doc missed, or an internal/system-only profile that's
+deliberately not customer-facing. Needs product-team input before editing
+the doc either way.
+
+---
+
 ## 2026-09-25 — GitHub merge scan + staging walk (Playwright, customer login via Tosca Cloud)
 
 Cross-checked 126 PRs merged on `Tricentis-AI/agent-score` since the
