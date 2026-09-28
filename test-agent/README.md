@@ -40,6 +40,31 @@ python send_synthetic_traces.py --dry-run --count 20   # preview, no network
 python send_synthetic_traces.py --count 32              # send to AgentScore
 ```
 
+**Known gap:** `has_retrieval` isn't confirmed to ever get set from these
+spans (see the module docstring), so a `grounded-answerer`/RAG-profile fit
+can end up with several groundedness/retrieval evals never running -
+tripping AgentScore's `low_coverage` provisional-scoring reason ("too few
+of the profile's evaluations produced a score"). If you hit that, use the
+task-agent sender below instead - it doesn't depend on has_retrieval at all.
+
+## Send synthetic traces for a task agent (no retrieval)
+
+`send_synthetic_task_agent_traces.py` simulates a different agent shape - a
+multi-step, tool-calling order-support agent (look up an order, check refund
+eligibility, issue a refund, update an address, escalate) with no retrieval
+step. It should fit AgentScore's `task-agent` profile (task_completion,
+tool_use, step_efficiency), all three driven by the confirmed-reliable
+`has_tools` signal rather than the unconfirmed `has_retrieval` one used
+above. Covers the happy path plus deliberate failures in each of the three
+dimensions (a thrashing/redundant run, an abandoned task after a tool
+error, and a wrong tool-call sequence).
+
+```bash
+python send_synthetic_task_agent_traces.py --list-scenarios
+python send_synthetic_task_agent_traces.py --dry-run --count 20   # preview, no network
+python send_synthetic_task_agent_traces.py --count 32              # send to AgentScore
+```
+
 ## Export a Claude Code session as a trace
 
 `export_claude_session.py` converts any Claude Code session transcript

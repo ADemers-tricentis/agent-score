@@ -10,7 +10,7 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos | Pending betas | Active betas |
 |---|---|---|---|---|
-| 73 | 11 | 9 | 1 | 0 |
+| 73 | 13 | 11 | 5 | 0 |
 
 Source breakdown: 70 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.), 1 via David (VP of AI/ML) (Eaton) = 73 total.
 
@@ -18,7 +18,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 
 | Company | Contact | Status |
 |---|---|---|
-| Aptiv Global Operations Limited | Meenakshi Sundaram Chockalingam | Email sent |
+| Aptiv Global Operations Limited | Meenakshi Sundaram Chockalingam | Pending Beta |
 | LGT Financial Services Ltd. (LI) | David Klien | Email sent |
 | Eaton | Amit Ghag | Demo Scheduled — 2026-10-01 |
 | Meta Platforms, Inc. | Sri Pulleti | Demo Scheduled — POC scoping |
@@ -27,11 +27,11 @@ Update the per-company Status column below as accounts move, and keep the summar
 | PVH Corp | Beena P K, Aimee Martin | Follow-up sent — 2026-09-24 |
 | Charter Communications Operating, LLC | Sarvesh Peddi | Follow-up sent — 2026-09-24 |
 | Artizent (form blank, domain-resolved) | Alan Mayfus | Follow-up sent — 2026-09-24 |
-| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj | Demo Scheduled |
+| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj | Pending Beta |
 | SAP Labs India (IN) | SaiDeepak Ayyagari | Follow-up sent — 2026-09-24 |
 | Regeneron Pharmaceuticals Inc. | Murali Sundaram | Follow-up sent — 2026-09-24 |
 | Acadia Healthcare | Pratiksha Arora | Follow-up sent — 2026-09-24 |
-| New Vision Software Inc. | Rohan Bansod | Follow-up sent — 2026-09-24 |
+| New Vision Software Inc. | Rohan Bansod | Demo Scheduled — 2026-10-08 |
 | Hilti Asia IT Services (MY) | Ashwin Mor | Follow-up sent — 2026-09-24 |
 | Panasonic Avionics (US) | Ronica Brisbon | Follow-up sent — 2026-09-24 |
 | The Boeing Company | Gurucharan Bijinepally | Follow-up sent — 2026-09-24 |
@@ -52,7 +52,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Tachyon Technologies | Subba Rao Gonugunta | Follow-up sent — 2026-09-24 |
 | Xebia - Partner | Anmol Jain | Follow-up sent — 2026-09-24 |
 | Cargill Incorporated | Alfonso Garbanzo | Follow-up sent — 2026-09-24 |
-| Wolters Kluwer United States Inc. | Chris Allanson | Demo Scheduled |
+| Wolters Kluwer United States Inc. | Chris Allanson | Pending Beta |
 | J. R. Simplot Company | Neeraja Kusuma | Follow-up sent — 2026-09-24 |
 | Crown Equipment Corporation | Vinay Patlolla | Follow-up sent — 2026-09-24 |
 | Stanza | Anirban Toy Choudhury | Replied |
@@ -81,7 +81,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | SAP North America | Thomas Zimmermann | Email sent |
 | Defence Science and Technology Agency (SG) | cydnie na | Email sent |
 | Housing Development Board (SG) | Swee Chyuan Koh | Email sent |
-| L'OREAL | Khadim KASHANI | Demo Scheduled — 2026-09-24 |
+| L'OREAL | Khadim KASHANI | Pending Beta |
 | City Dev (SG) | Davin Ng | Email sent |
 | Testing IT Consulting S.A. de C.V. | Hector Santa Maria | Email sent |
 | Brillar Pte Ltd (SG) | Zuzan Win | Email sent |
@@ -89,7 +89,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Ally Financial Inc. | Jana Kethamreddy | Email sent |
 | BearingPoint GmbH (DE) - HQ | Rohan Patil | Demo Scheduled — 2026-09-23 |
 | xAmplify (AU) | Prakash Panchal | Email sent |
-| Accenture (multiple entities) | Jigish Belani, Mohammed Arslan Mir, Vijetha Nayak, Priya Saidavaram, Ankur Mittal | Pending Beta — on-prem/private AWS setup (on behalf of Meta), per Belani; other four submitters carry the same account-level status, not individually contacted |
+| Accenture (multiple entities) | Jigish Belani, Mohammed Arslan Mir, Vijetha Nayak, Priya Saidavaram, Ankur Mittal | Pending Beta |
 | Singapore Pools (form blank, domain-resolved) | Nai Hau Lui | Email sent |
 
 *(Status values: Interested → Email sent → Follow-up sent → Replied → Demo scheduled → Pending beta → Active beta.)*
@@ -103,9 +103,13 @@ Title: Test Automation Architect
 Relationship: Customer  
 
 Email sent: —  
-Beta scheduled: —  
+Beta scheduled: 2026-09-25  
 
 what they do: Global automotive-technology supplier building safety, connectivity, and software-defined-vehicle platforms.
+
+confirmed use case (from 2026-09-25 demo): a multi-persona intro call, not a single-buyer evaluation. Meenakshi Sundaram Chockalingam ("Sundaram") owns Aptiv's Tricentis tool relationship (Qtest, Tosca, NeoLoad) and brought in colleagues from Aptiv's data and AI team: Ciaran Cooke (leads enterprise analytics & AI delivery, ~2 months in the role, standing up Aptiv's agentic-AI operating model across Copilot Studio, Azure Foundry, and Google Cloud/Gemini Enterprise), Caobhan Mullin (recently joined, moving into a delivery-lead role, owns the enterprise-wide AI-use-case pipeline), and Peter Brennan (data scientist, builds SCM/component-engineering agents on Gemini/ADK, already runs a manual eval practice he wants to streamline). Two-line OTel, root-cause attribution to the tool-call/table level, golden-dataset regression testing, and the three-tier deterministic/LLM-judge/hybrid eval model all landed well. The one hard wall: two of Aptiv's own agent classes (Gemini Enterprise/Dialogflow-built agents, and Google-managed NL2SQL "DQ" data agents) are fully platform-managed with no CLI/API/trace-export access at all - Andrew acknowledged this live as a likely product gap. Top asks: support for agents with no exportable traces (net new gap), multi-agent workflow scoring, bulk/programmatic agent onboarding, and auto-notification when an agent's score drops (AgentScore has no control-plane access to shut agents off). Debrief: [Aptiv Feedback Session](feedback-sessions/Aptiv%20Feedback%20Session.md).
+
+waiting on: onboarding requirements/checklist documentation from Andrew, which Sundaram needs to take AgentScore through Aptiv's internal architecture review board before a POC - no date given for the board's turnaround.
 
 likely use case: given the submitter's Test Automation Architect title and Aptiv's own generative-AI development tooling, most plausibly evaluating Agent Score to test/validate agentic features inside its internal software platforms (e.g. Aptiv LINC) rather than for an external customer-facing need.
 
@@ -411,6 +415,8 @@ likely use case: given the submitter's "SME Test Automation" title and L'Oréal'
 
 confirmed use case (from 2026-09-24 demo): Khadim KASHANI is a Test Automation Manager at L'Oréal India Tech Hub (ITH), covering the APAC zone and leading L'Oréal's test automation factory (uses Tosca). His team runs a live ELK/Elastic-Cloud-based reconciliation agent internally and evaluates it entirely manually today - run a prompt, open the dashboard, manually compare the agent's answer to the query results, and manually track accuracy/efficiency/tokens/latency. He wants AgentScore to replace that manual process, and to run a self-driven POC to build an internal pitch to his own stakeholders as L'Oréal ramps up more AI initiatives across zones. Signed up for Labs right after attending the Transform Singapore event. Top asks: on-demand execution of a supplied batch of test prompts/scenarios (told no - AgentScore only scores organic usage traces; same underlying scenario-bank/simulation capability Meta and Tritusa also asked for, from different angles - tracked as one combined "Scenario bank / simulation testing" ask in the Customer Feedback Log), self-service AgentScore access for agents already in L'Oréal's paid AI Workspace seat (currently gated behind the Workspace admin team), faster public trial access, and a more detailed demo recording to show his Singapore-based manager. Debrief: [L'Oreal Feedback Session](feedback-sessions/L%27Oreal%20Feedback%20Session.md).
 
+waiting on: a short video on how AgentScore works, to share with his Singapore-based manager.
+
 known agent tooling: deployed the "Beauty Genius" AI agent (built on Azure OpenAI/GPT-4o) for consumer beauty advice, with active AI partnerships spanning NVIDIA, IBM, and OpenAI ([Microsoft](https://www.microsoft.com/en/customers/story/25570-loreal-azure-openai); [L'Oréal](https://www.loreal.com/en/press-release/research-and-innovation/l-oreal-and-openai-join-forces-for-transformation-in-beauty-with-ai/)).
 
 ---
@@ -513,6 +519,8 @@ what they do: European management and technology consultancy (13,000+ people, 70
 
 confirmed use case (from 2026-09-23 demo): confirmed the inference below, with a partner/SI lens like Tritusa and Wolters Kluwer. Rohan Patil is testing/QA architecture lead running BearingPoint's internal, SAP-focused testing factory, which has no agent-evaluation tooling today. Wants AgentScore for two things: run it against BearingPoint's own QTest ATC test-case-generation agent, and build an answer he can show his own clients when they ask "how do you know the agent works" (BearingPoint's GenAIQ launch makes that question likely soon). Top asks: expose the non-deterministic run-count setting to users, and visibility into Tricentis's own agents (e.g. QTest ATC) inside AgentScore so a partner can prove an agent works to a client - currently withheld for proprietary/IP reasons, the one wall his most concrete use case hit. Debrief: [BearingPoint Feedback Session](feedback-sessions/BearingPoint%20Feedback%20Session.md).
 
+waiting on: Rohan's manager decision on bringing agents (starting with QTest ATC) into the beta - setup + evaluation-criteria slides were sent 2026-09-25, no date given for his answer.
+
 likely use case: given its own agentic-AI platform launch, most plausibly evaluating Agent Score to extend its consulting practice into agentic-AI QA for client engagements — same profile as TCS and ABeam above.
 
 known agent tooling: launched GenAIQ, a proprietary agentic-AI platform for enterprise-scale automation of knowledge-intensive tasks ([BearingPoint](https://www.bearingpoint.com/en/about-us/news-and-media/press-releases/bearingpoint-launches-genaiq/)).
@@ -546,6 +554,8 @@ Beta scheduled: —
 what they do: Global social-media/technology conglomerate (Facebook, Instagram, WhatsApp, Messenger, Reality Labs) with a large open-model AI research arm (the Llama model family).
 
 confirmed use case (from feedback sessions): Sri owns Meta's autonomous supply chain program and has an urgent need to test 4-5 production agents (order management is the flagship) as more agents ship to prod. Two sessions held: an initial demo with Sri (2026-08-11) and a POC-scoping call on 2026-09-11 run through a delivery/SI partner who wants to build the POC ("your tool, our people") on Meta's existing, underused Tosca footprint. Gating requirements: self-hosted deployment in Meta's own AWS (data can't leave; custom internal models) and pointing the evaluator/judge at Meta's internal LLMs; scenario-bank/adversarial simulation is the deciding roadmap gap. Debriefs: [Meta Feedback Session](feedback-sessions/Meta%20Feedback%20Session.md), [Meta POC Scoping Feedback Session](feedback-sessions/Meta%20POC%20Scoping%20Feedback%20Session.md).
+
+waiting on: engineering confirmation of self-hosted AWS/EC2 deployment + pointing the judge at Meta's internal LLMs (Spark 1.3) - gating items, already overdue against the partner's own ~2026-09-18 POC-start target; another partner is circling the account.
 
 likely use case (original inference, now superseded by the above): given Meta's own push into customer-facing agents at massive scale via its new Business Agent Platform, plausibly evaluating Agent Score either to validate agents built on that platform or as landscape research into third-party agent-testing tools — notable overlap with Agent Score's own positioning, similar profile to the Workday and Pegasystems entries below.
 
@@ -667,6 +677,10 @@ Beta scheduled: —
 
 what they do: Enterprise HR/Finance/IT SaaS platform (Pleasanton, CA); ~19,000+ employees, ~$8.4B revenue; core HCM and Financial Management products used across thousands of enterprises.
 
+confirmed use case (from 2026-07-24 demo): Rushi (delivery director owning agent delivery) and Pradeep (senior QA, agent testing/automation) run Workday agents and Salesforce Agentforce agents against external Data Cloud + RAG. "Knowing what to measure" and root-cause attribution landed well, but the QA persona left unconvinced on whether AgentScore counts as a "testing tool" - raised four times, never resolved. Debrief: [Workday Feedback Session](feedback-sessions/Workday%20Feedback%20Session.md).
+
+waiting on: nothing from Workday - no next call was committed. It's on us to fix the positioning/demo gaps (driver-vs-grader framing, a live root-cause demo) before re-engaging.
+
 likely use case: given Workday's own aggressive build-out of agentic AI tooling (see below), most plausibly evaluating Agent Score either as a complementary evaluation layer for agents built on Workday Build, or as landscape research into third-party agent-testing tools — notable given the direct overlap with Agent Score's own positioning.
 
 known agent tooling: extensive and directly adjacent to Agent Score's space — "Workday Build" now ships a Developer Agent (plugs into Claude Code, Cursor, Codex, etc.), Agent-Ready Tools exposing HR/finance data over MCP, and "Agent Passport," a system explicitly built to test, verify, and continuously monitor every AI agent in the enterprise (early access H2 2026, GA by end of 2026); also shipped new domain-specific agents for IT service management and travel on its Sana platform (May 2026) ([Workday Newsroom](https://newsroom.workday.com/2026-06-02-Workday-Launches-New-Tools-for-Developers-to-Build,-Connect,-and-Verify-AI-Agents-For-HR,-Finance,-and-IT), [Workday Investor Relations](https://investor.workday.com/news-and-events/press-releases/news-details/2026/Workday-Launches-Agent-Passport-to-Test-Verify-and-Continuously-Monitor-Every-AI-Agent-in-the-Enterprise/default.aspx), [SiliconANGLE](https://siliconangle.com/2026/05/21/workday-brings-ai-agents-service-management-travel/)).
@@ -741,6 +755,8 @@ what they do: Sydney-headquartered SAP Technical Services & software-testing con
 
 confirmed use case (from 2026-09-11 demo): confirmed the inference below. As a Tricentis gold-sponsor partner/SI they want AgentScore both to evaluate the agents they build for clients (they demoed two - a Copilot Studio agent and an AI Workspace MCP+A2A agent, each turning a requirements doc into qTest requirements/test cases and Tosca execution) and to arm their own evals-and-assurance advisory practice. Immediate driver: they present an autonomous QA agent at Transatlantic 26 Singapore the week of 2026-09-15 and expect customer questions on trust/models/benchmarks/safety/compliance. Attendees included Jawahar Govindaraj (heads their agent practice), Pankaj Kumar Sinha (Tosca lead), Deephan Mohanraj, and Vedanth (principal architect, ~decade in Tosca; not in the form-submission list). Top asks: compliance validation (bank/pharma clients), alerting, bulk export, and a partner co-sell motion. Debrief: [Tritusa Feedback Session](feedback-sessions/Tritusa%20Feedback%20Session.md).
 
+waiting on: a compliance-flagging position and a partner co-sell answer - access was granted ahead of Transatlantic 26 Singapore, but both asks are still open post-event.
+
 likely use case: as an SAP testing/QA vendor, most plausibly evaluating Agent Score to extend its testing practice into agentic-AI QA for its own client base — same profile as New Vision Software and Merito Solutions above.
 
 known agent tooling: no public information found tying Tritusa specifically to a deployed agent product; core business is SAP test automation and performance testing.
@@ -799,7 +815,7 @@ Date: 2026-08-20 16:12
 Name: Rohan Bansod  
 
 Email sent: —  
-Beta scheduled: —  
+Beta scheduled: 2026-10-08  
 
 what they do: India-based (Pune) IT services/QA consultancy (~687 employees) — application/data/infrastructure modernization plus a dedicated QA automation practice. Already a Tricentis partner — lists Tricentis/Tosca alongside Oracle, PEGA, Microsoft, and Google Cloud in its partner roster.
 
@@ -1135,6 +1151,10 @@ Email sent: —
 Beta scheduled: —  
 
 what they do: Global information-services/software company for legal, tax, health, and compliance professionals.
+
+confirmed use case (from a 2026-09 demo): Paul DiGrazia (quality/AI leader, deeply embedded design partner) and Chris Allanson (Labs signup contact, QA/governance lens) want to score agents outside the Tricentis ecosystem (their own internal "FAB" platform, GitHub Copilot) to steer people back to sanctioned tooling. LLM before/after benchmarking and the dual access model (embedded in AI Workspace + standalone) landed strongly. Debrief: [Wolters Kluwer Feedback Session](feedback-sessions/Wolters%20Kluwer%20Feedback%20Session.md).
+
+waiting on: pilot tenant access (their top priority - "how do we get it in our little hands") and a firm date/shape for bulk/fleet-level scoring, which they targeted for end of Sept 2026.
 
 likely use case: evaluating/testing agent output quality and governance, given heavy existing investment in multi-agent products.
 
