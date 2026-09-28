@@ -1,3 +1,17 @@
+## September 28, 2026 Update
+
+### Internal note: v1.5.0 deployed to dev and staging with TAIS integrations live
+- Release v1.5.0 is fully deployed to dev and staging, with every TAIS integration (AI Hub, Billing, and others) supported and live.
+
+### Internal note: production infrastructure ready to accept AgentScore payloads
+- Thanks to Gershon Alvais's work, the production infrastructure can now accept AgentScore payloads - one of the last pieces needed before flipping the switch to production.
+
+### Coming next
+- ProdSec review continues ahead of the production cutover (three small findings from this release already fixed)
+- Legal review of the consent solution, to confirm it's suitable before production rollout
+- Cutting agent tracing over to push directly from internal agents instead of pulling from Better Stack
+- Small additions to the API gateway and session services to finish production readiness
+
 ## September 24, 2026 Update
 
 ### Tune ship/no-ship thresholds for each agent
