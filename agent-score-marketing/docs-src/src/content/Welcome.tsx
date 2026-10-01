@@ -22,12 +22,6 @@ export default function Welcome() {
 
       <p>No labeled data. No manual test-writing. No AI expertise required to get started.</p>
 
-      <p>
-        From your first sign-in, you'll also see an <strong>AI credits</strong> balance in the
-        header - that's what pays for scoring and evaluation. See{" "}
-        <a href="#/scoring-over-time">scoring over time</a> for what happens if it runs out.
-      </p>
-
       <Screenshot
         src={homeDashboard}
         alt="The Home page, showing real-agent and interaction totals, scoring runs in the last 24 hours, agents needing attention, and a verdict trend table of Ship / Review / Block counts over the last seven days"
@@ -50,7 +44,7 @@ export default function Welcome() {
           minutes.
         </Card>
         <Card href="#/eval-catalog" title="Evaluations">
-          What an "eval" is, the 62 that ship out of the box, and how to build your own in plain
+          What an "eval" is, the 41 that ship out of the box, and how to build your own in plain
           English.
         </Card>
         <Card href="#/agent-card" title="The Scoring Journey">

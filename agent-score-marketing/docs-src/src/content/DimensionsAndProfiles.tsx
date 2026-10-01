@@ -1,4 +1,4 @@
-import { Callout, Dek, Eyebrow, Screenshot } from "../components/PageChrome";
+import { Dek, Eyebrow, Screenshot } from "../components/PageChrome";
 import { DimensionHierarchyDiagram } from "../components/diagrams/DimensionHierarchy";
 import profileTab from "../assets/profile-tab-general-answerer.png";
 
@@ -73,15 +73,6 @@ export default function DimensionsAndProfiles() {
         <strong>re-evaluate fit</strong> to have Agent Score reconsider its pick against the
         agent's latest evidence.
       </p>
-
-      <Callout kind="tip" title="Need something the catalog doesn't cover?">
-        <p>
-          The <strong>Dimension Builder</strong> lets you author an entirely new dimension when
-          your domain needs an axis Agent Score didn't ship with. The <strong>Profile Builder</strong>{" "}
-          lets you compose your own recipe of evals, weights, and thresholds - versioned
-          immutably, so a result can never silently drift.
-        </p>
-      </Callout>
     </>
   );
 }

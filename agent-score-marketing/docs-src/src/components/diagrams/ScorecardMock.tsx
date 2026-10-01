@@ -29,10 +29,7 @@ export function ScorecardMock() {
       <div className="mock-panel">
         <div className="mock-score-row">
           <div className="mock-score-number">87</div>
-          <div>
-            <div className="mock-score-grade">Grade B+</div>
-            <Badge kind="ship">Ship</Badge>
-          </div>
+          <Badge kind="ship">Ship</Badge>
         </div>
         <DimBar name="Correctness" value={91} tone="good" />
         <DimBar name="Agentic / Tool-use" value={88} tone="good" />

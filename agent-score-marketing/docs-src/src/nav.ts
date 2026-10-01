@@ -40,17 +40,12 @@ export const nav: NavSection[] = [
       {
         slug: "eval-catalog",
         title: "The Evaluation Catalog",
-        blurb: "62 ready-made evals, from strict rules to human-like judgment.",
+        blurb: "41 ready-made evals, from strict rules to human-like judgment.",
       },
       {
         slug: "dimensions-and-profiles",
         title: "Dimensions & Profiles",
         blurb: "How individual evals roll up into a single score.",
-      },
-      {
-        slug: "custom-evals",
-        title: "Building a Custom Eval",
-        blurb: "Describe what you want to measure in plain language.",
       },
       {
         slug: "scoring-engine",

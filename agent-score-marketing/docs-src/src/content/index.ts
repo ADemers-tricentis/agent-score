@@ -4,7 +4,6 @@ import ConnectYourAgent from "./ConnectYourAgent";
 import WorkspaceAssistant from "./WorkspaceAssistant";
 import EvalCatalog from "./EvalCatalog";
 import DimensionsAndProfiles from "./DimensionsAndProfiles";
-import CustomEvals from "./CustomEvals";
 import ScoringEngine from "./ScoringEngine";
 import AgentCard from "./AgentCard";
 import Scorecard from "./Scorecard";
@@ -20,7 +19,6 @@ export const pages: Record<string, ComponentType> = {
   "workspace-assistant": WorkspaceAssistant,
   "eval-catalog": EvalCatalog,
   "dimensions-and-profiles": DimensionsAndProfiles,
-  "custom-evals": CustomEvals,
   "scoring-engine": ScoringEngine,
   "agent-card": AgentCard,
   scorecard: Scorecard,

@@ -740,11 +740,6 @@ table.doc-table td strong { color: var(--text-primary); }
   color: var(--text-primary);
 }
 
-.mock-score-grade {
-  font-size: 0.95rem;
-  color: var(--text-muted);
-}
-
 .dim-bar-row { margin-bottom: 12px; }
 
 .dim-bar-label {
