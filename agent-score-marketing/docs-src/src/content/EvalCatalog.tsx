@@ -1,4 +1,4 @@
-import { Callout, Dek, Eyebrow, Screenshot } from "../components/PageChrome";
+import { Dek, Eyebrow, Screenshot } from "../components/PageChrome";
 import { EvalSpectrumDiagram } from "../components/diagrams/EvalSpectrum";
 import catalogDoor from "../assets/catalog-door.png";
 import studioLibrary from "../assets/studio-library.png";
@@ -13,7 +13,7 @@ export default function EvalCatalog() {
       <Dek>
         An <strong>eval</strong> is a single, focused question about quality - "was this grounded
         in the context it was given?", "did it call the right tool?", "is this valid JSON?" Agent
-        Score ships with 62 of them, ready to run against your traces on day one.
+        Score ships with 41 of them, ready to run against your traces on day one.
       </Dek>
 
       <p>
@@ -110,14 +110,6 @@ export default function EvalCatalog() {
           </tr>
         </tbody>
       </table>
-
-      <Callout kind="tip" title="Can't find the eval you need?">
-        <p>
-          The catalog covers most agents out of the box. When it doesn't,{" "}
-          <a href="#/custom-evals">build your own in plain language</a> - no eval-engineering
-          background required.
-        </p>
-      </Callout>
 
       <p>
         Evals are the smallest unit of measurement. The next page covers how they combine into{" "}
