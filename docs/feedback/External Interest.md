@@ -10,7 +10,7 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos | Pending betas | Active betas |
 |---|---|---|---|---|
-| 73 | 13 | 11 | 5 | 0 |
+| 73 | 14 | 12 | 5 | 0 |
 
 Source breakdown: 70 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.), 1 via David (VP of AI/ML) (Eaton) = 73 total.
 
@@ -39,7 +39,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Southern Glazer's Wine and Spirits, LLC | Jay Gajulapalli | Follow-up sent — 2026-09-24 |
 | Chevron Phillips Chemical (US) | Ramesh Jeyagopalan | Follow-up sent — 2026-09-24 |
 | Dominion Energy, Inc. | Anand Shekaraiah | Follow-up sent — 2026-09-24 |
-| Love's Travel Stops | Jag Mallampati, Thomas Cody | Follow-up sent — 2026-09-24 |
+| Love's Travel Stops | Jag Mallampati, Thomas Cody | Demo Scheduled — 2026-10-02 |
 | Capgemini | Mathankumar Kanagaraj, ARUN PRAKASH Shivakumar, Sathish kumar Backiam | Follow-up sent — 2026-09-24 |
 | Cummins Inc. | Lakshmi Sree Thirukonda | Follow-up sent — 2026-09-24 |
 | Home Depot Store Support, Inc. | Joe Pope | Follow-up sent — 2026-09-24 |
@@ -140,7 +140,11 @@ Name: Amit Ghag
 Email sent: —  
 Beta scheduled: 2026-10-01  
 
-what they do: no public profile researched yet — added straight to the Pipeline Tracker from an internal referral; back-fill company research when time allows.
+what they do: no public profile researched yet — added straight to the Pipeline Tracker from an internal referral; back-fill company research when time allows. From the call: a manufacturer with a large custom AI portfolio (BOM similarity engine, portfolio complexity reduction, engineering knowledge-base agents, executive customer-profile agents, tariff monitoring, competitive benchmarking across 700-800 product initiatives).
+
+confirmed use case (from 2026-10-01 demo): Amit Ghag is establishing quality engineering practices for Eaton's custom AI development, built mostly on Azure AI Foundry and Palantir Foundry. His headline requirement is automated testing as a CI/CD quality gate: nothing ships to production unless it clears a score threshold. David Colwell framed Eaton's agents as three classes (RAG, workflow, research) that each need a different definition of "good." Amit first heard of AgentScore at Transform in Singapore; Eran suggested the call. Prashant Saxena joined as the technical stakeholder. Editable success criteria and profiles, weighted dimensions ("that is something that I was looking for"), tool-use/MCP/agent-to-agent scoring, version-tagged scoring runs, and the golden-dataset-from-real-traces answer all landed. Gaps: CI/CD gate is in progress, not shipped (the deciding item); Tricentis Cloud hosting only (on-prem still being explored); no upfront golden-dataset upload in the UI; no project/release-level grouping; adversarial testing is roadmap only. Never answered: Palantir Foundry compatibility. Andrew pitched a design-partner role and the upcoming open beta. Debrief: [Eaton Feedback Session](feedback-sessions/Eaton%20Feedback%20Session.md).
+
+waiting on: (1) Andrew to answer Prashant's data-handling question (what goes to the LLM judge, how PII redaction works, whether Eaton telemetry stays in-boundary) after checking with engineering, likely a gate to any trial; (2) Andrew to send AgentScore overview collateral Amit can use to socialize it inside Eaton; (3) Andrew to put together a comparison against Azure AI Foundry's built-in evals; (4) follow-up email with open beta sign-up. No beta date set.
 
 ---
 
@@ -941,6 +945,10 @@ Email sent: —
 Beta scheduled: —  
 
 what they do: ~670 travel-stop/convenience locations across 42 states, plus Speedco/Love's Truck Care; ~10,000+ employees.
+
+confirmed use case (from 2026-10-02 demo): not an agent-evaluation pull yet. Thomas Cody (implemented Tosca at Love's, ~7+ years with the tool) and Jag Mallampati (senior automation engineer) run on-prem Tosca, evaluated Tosca Cloud earlier this year and preferred on-prem, and are testing the Tosca on-prem MCP with Claude on a test box. When asked, they evaluate no AI agents beyond that MCP work as part of an upgrade evaluation. Interest was genuine ("it is interesting, though") but the blocker was stated plainly: AgentScore is cloud only and Love's is on-prem, so "we probably can't do much with it currently." They would try an on-prem version, or re-evaluate if the cloud product improves; Andrew floated a customer-run container (customer configures the judge LLM) as a possible beta path and Thomas said it might be an option. Jag also asked when the Tosca AI chat reaches on-prem (Andrew did not know). Debrief: [Love's Feedback Session](feedback-sessions/Love%27s%20Feedback%20Session.md).
+
+waiting on: Andrew's follow-up with what an on-prem/container deployment would look like; Love's then decides whether to proceed or wait for a more robust on-prem strategy. No beta date set.
 
 likely use case: agentic automation in dispatch/back-office workflows and customer-service voice/chat agents.
 
