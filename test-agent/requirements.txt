@@ -1,5 +1,0 @@
-anthropic
-flask
-python-dotenv
-opentelemetry-sdk
-opentelemetry-exporter-otlp-proto-http

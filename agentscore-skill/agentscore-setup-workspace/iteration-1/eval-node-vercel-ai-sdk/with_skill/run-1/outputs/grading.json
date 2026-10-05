@@ -1,0 +1,90 @@
+{
+  "expectations": [
+    {
+      "text": "Exactly one bootstrap file carries the agentscore-setup:v1 marker",
+      "passed": true,
+      "evidence": "marker files: ['src/agentscore-otel.ts']"
+    },
+    {
+      "text": "Bootstrap is imported in the entrypoint before any third-party import",
+      "passed": true,
+      "evidence": "order before bootstrap: []"
+    },
+    {
+      "text": ".env is git-ignored",
+      "passed": true,
+      "evidence": ".gitignore: ['.env', '.agentscore-spans.jsonl']"
+    },
+    {
+      "text": ".env.example has the _TRACES_ endpoint ending /external/otel/v1/traces and only a placeholder key",
+      "passed": true,
+      "evidence": ".env.example present=True; files containing a non-placeholder tk_ value: []"
+    },
+    {
+      "text": "The unsuffixed OTEL_EXPORTER_OTLP_ENDPOINT is not used anywhere",
+      "passed": true,
+      "evidence": "found in: []"
+    },
+    {
+      "text": "Dependency manifest declares the OpenTelemetry SDK and OTLP exporter",
+      "passed": false,
+      "evidence": "missing: ['@opentelemetry/exporter-trace-otlp-proto']"
+    },
+    {
+      "text": "No HTTP/web-framework instrumentors added",
+      "passed": true,
+      "evidence": "found: []"
+    },
+    {
+      "text": "Agent still runs and produces its answer",
+      "passed": true,
+      "evidence": "stdout: 'Order A100 shipped yesterday and arrives Friday.' stderr tail: ''"
+    },
+    {
+      "text": "Export reaches /external/otel/v1/traces with the bearer key from the environment",
+      "passed": true,
+      "evidence": "1 request(s): [('/external/otel/v1/traces', 'Bearer tk_GRAD')]"
+    },
+    {
+      "text": "Exporter sends a protobuf body (AgentScore's ingest rejects JSON with a 400)",
+      "passed": false,
+      "evidence": "content types: ['application/json'], body sizes: [16931]"
+    },
+    {
+      "text": "One agent run exports as exactly one trace",
+      "passed": false,
+      "evidence": "0 spans in 0 trace(s)"
+    },
+    {
+      "text": "Exported trace passes every span_tree check (root, model, prompt text, tool spans, accepted operation names, identity)",
+      "passed": false,
+      "evidence": "nothing was exported"
+    },
+    {
+      "text": "plan.md was written before the first project file was changed",
+      "passed": true,
+      "evidence": "plan exists=True, plan mtime=1790870763.1078348, bootstrap mtimes=[1790870778.514864]"
+    },
+    {
+      "text": "A second pass of the skill changes no project files",
+      "passed": true,
+      "evidence": "idempotency.json changed=[]"
+    },
+    {
+      "text": "Report tells the user how to add the key themselves and mentions the ~20 trace threshold",
+      "passed": true,
+      "evidence": "report chars=2139"
+    },
+    {
+      "text": "Vercel AI SDK telemetry is enabled and the OpenInference processor is installed",
+      "passed": true,
+      "evidence": "package.json + agent.ts checked"
+    }
+  ],
+  "summary": {
+    "passed": 12,
+    "failed": 4,
+    "total": 16,
+    "pass_rate": 0.75
+  }
+}

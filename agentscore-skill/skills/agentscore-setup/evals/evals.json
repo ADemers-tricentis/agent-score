@@ -1,0 +1,30 @@
+{
+  "skill_name": "agentscore-setup",
+  "evals": [
+    {
+      "id": 1,
+      "name": "python-openai-sdk",
+      "fixture": "python-openai",
+      "prompt": "I have a small order-support agent in this repo (agent.py, plain OpenAI SDK, Python). Connect it to AgentScore so its traces show up there. Our AgentScore ingest URL is https://agent-score-ingest.product.tricentis.com.",
+      "expected_output": "Bootstrap file + one import, OpenInference OpenAI instrumentor, hand-written invoke_agent root span and execute_tool span (plain SDK loop), env placeholders, .env git-ignored, manifest updated, one exported trace passing every span check.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "langgraph-agent",
+      "fixture": "python-langgraph",
+      "prompt": "This repo is a LangGraph support agent (main.py, uv project). Get it sending traces to AgentScore. Our AgentScore ingest URL is https://agent-score-ingest.product.tricentis.com.",
+      "expected_output": "uv add of OpenTelemetry + openinference-instrumentation-langchain, bootstrap + one import line, no manual spans (framework traces itself), one exported trace with agent, LLM and tool spans.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "node-vercel-ai-sdk",
+      "fixture": "node-vercel-ai",
+      "prompt": "This is a TypeScript agent on the Vercel AI SDK (src/agent.ts, npm). I want its traces in AgentScore. Our AgentScore ingest URL is https://agent-score-ingest.product.tricentis.com.",
+      "expected_output": "npm install of OpenTelemetry + @arizeai/openinference-vercel@2, bootstrap with OpenInference processor, experimental_telemetry enabled on the generateText call, one exported trace with agent, LLM and tool spans.",
+      "files": []
+    }
+  ],
+  "assertions": "Programmatic: see grade.py (16-17 outcome-first checks per run)."
+}

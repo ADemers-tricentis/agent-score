@@ -1,0 +1,6 @@
+{
+  "eval_id": 1,
+  "eval_name": "python-openai-sdk",
+  "prompt": "I have a small order-support agent in this repo (agent.py, plain OpenAI SDK, Python). Connect it to AgentScore so its traces show up there. Our AgentScore ingest URL is https://agent-score-ingest.product.tricentis.com.",
+  "assertions": []
+}

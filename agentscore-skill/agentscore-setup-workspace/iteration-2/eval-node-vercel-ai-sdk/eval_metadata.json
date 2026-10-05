@@ -1,0 +1,6 @@
+{
+  "eval_id": 3,
+  "eval_name": "node-vercel-ai-sdk",
+  "prompt": "This is a TypeScript agent on the Vercel AI SDK (src/agent.ts, npm). I want its traces in AgentScore. Our AgentScore ingest URL is https://agent-score-ingest.product.tricentis.com.",
+  "assertions": []
+}

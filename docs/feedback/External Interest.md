@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 92 form submissions found (as of 2026-09-23), sorted newest first.
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 98 form submissions found (as of 2026-10-02), sorted newest first. Excluded as internal `@tricentis.com` submitters: Ashutosh Kotkar (2026-09-25) and Srinivasa Rao K (2026-10-01), both under Tricentis GmbH (AT) - HQ. Fun Tat Chen (2026-10-02) is a second submitter at Singapore Pools and is stacked on that entry rather than counted as a new company.
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -10,14 +10,19 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos | Pending betas | Active betas |
 |---|---|---|---|---|
-| 73 | 14 | 12 | 5 | 0 |
+| 78 | 14 | 12 | 5 | 0 |
 
-Source breakdown: 70 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.), 1 via David (VP of AI/ML) (Eaton) = 73 total.
+Source breakdown: 75 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.), 1 via David (VP of AI/ML) (Eaton) = 78 total.
 
 Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
 
 | Company | Contact | Status |
 |---|---|---|
+| Sogeti (FR) | Gavaskar Selvarajan | Email sent — 2026-10-05 |
+| Singapore Airlines (SG) | Srinivasan Santhanam | Email sent — 2026-10-05 |
+| Tata Consultancy Services Ltd (IN) | Joji Joseph | Email sent — 2026-10-05 |
+| Skygen USA | Joko Supriyanto | Email sent — 2026-10-05 |
+| Hugo Boss AG (DE) | Marco Esguerra | Email sent — 2026-10-05 |
 | Aptiv Global Operations Limited | Meenakshi Sundaram Chockalingam | Pending Beta |
 | LGT Financial Services Ltd. (LI) | David Klien | Email sent |
 | Eaton | Amit Ghag | Demo Scheduled — 2026-10-01 |
@@ -57,7 +62,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Crown Equipment Corporation | Vinay Patlolla | Follow-up sent — 2026-09-24 |
 | Stanza | Anirban Toy Choudhury | Replied |
 | Sunbelt Rentals | Arya Shrey | Follow-up sent — 2026-09-24 |
-| Merito Solutions | Chris Carpenter, Gerard Trimberger | Demo Scheduled |
+| Merito Solutions | Chris Carpenter, Gerard Trimberger, Louis Tadman | Demo Scheduled — 2026-10-06 |
 | Amazon Kuiper Manufacturing Enterprises LLC | Saranya Vaithiyanathan | Follow-up sent — 2026-09-24 |
 | Accenture CIO HR Organization (unresolved, may be Stanza) | Greg Wanroy | Follow-up sent — 2026-09-24 |
 | Aspire Systems Digital Transformation Inc. | Naveen Srinivasan | Follow-up sent — 2026-09-24 |
@@ -90,9 +95,94 @@ Update the per-company Status column below as accounts move, and keep the summar
 | BearingPoint GmbH (DE) - HQ | Rohan Patil | Demo Scheduled — 2026-09-23 |
 | xAmplify (AU) | Prakash Panchal | Email sent |
 | Accenture (multiple entities) | Jigish Belani, Mohammed Arslan Mir, Vijetha Nayak, Priya Saidavaram, Ankur Mittal | Pending Beta |
-| Singapore Pools (form blank, domain-resolved) | Nai Hau Lui | Email sent |
+| Singapore Pools (form blank, domain-resolved) | Nai Hau Lui, Fun Tat Chen | Email sent |
 
 *(Status values: Interested → Email sent → Follow-up sent → Replied → Demo scheduled → Pending beta → Active beta.)*
+
+---
+
+### Sogeti (FR)
+Date: 2026-10-01 16:08  
+Name: Gavaskar Selvarajan  
+Title: Solution architect  
+Relationship: Partner  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Capgemini's technology and quality-engineering services arm.
+
+likely use case: given the Solution architect title and Partner relationship, most plausibly evaluating Agent Score to test agents Sogeti builds for clients and to support its AI-in-testing practice — an inference, not a confirmed need.
+
+known agent tooling: offers a Generative AI accelerator and an Azure-based GenAI Amplifier for test-case generation and quality engineering ([Microsoft Marketplace](https://marketplace.microsoft.com/fr-ca/product/capgemini-group.aipoweredqualityengineeringandtesting); [Sogeti](https://sogeti.be/fr/nos-solutions/quality-engineering-and-testing)); no public information found tying Sogeti to a specific deployed agent product beyond these accelerators.
+
+---
+
+### Singapore Airlines (SG)
+Date: 2026-09-28 07:03  
+Name: Srinivasan Santhanam  
+Title: Senior Principal Technologist  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Singapore's flag-carrier airline.
+
+likely use case: given the Senior Principal Technologist title and Customer relationship, most plausibly assessing quality gates for the airline's growing set of internal and customer-facing GenAI agents — an inference, not a confirmed need.
+
+known agent tooling: partnered with Salesforce in March 2025 to bring Agentforce, Einstein generative AI, and Data Cloud into customer service, and reports 250+ GenAI use cases developed across the SIA Group ([Salesforce](https://www.salesforce.com/ap/news/press-releases/2025/03/12/singapore-airlines-and-salesforce-collaborate-on-ai-powered-customer-service-applications-plan-to-co-develop-more-solutions-for-the-airline-industry/); [Frontier Enterprise](https://www.frontier-enterprise.com/singapore-airlines-salesforce-collab-on-ai-powered-customer-service/)).
+
+---
+
+### Tata Consultancy Services Ltd (IN)
+Date: 2026-09-26 14:16  
+Name: Joji Joseph  
+Title: PM  
+Relationship: Partner  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: global IT services and consulting group; separate entity from the Tata Consultancy Services Asia Pacific Pte. Ltd. (SG) entry below.
+
+likely use case: given the PM title and Partner relationship, most plausibly evaluating Agent Score for TCS client engagements rather than internal use — an inference, not a confirmed need.
+
+known agent tooling: markets its TCS AI WisdomNext platform for comparing GenAI models and deploying solution blueprints with built-in guardrails ([TCS](https://tcs.com/what-we-do/services/artificial-intelligence/solution/enterprise-generative-ai-adoption-wisdomnext)); no public information found tying TCS to a specific deployed agent-testing product.
+
+---
+
+### Skygen USA
+Date: 2026-09-24 15:25  
+Name: Joko Supriyanto  
+Title: Software automation manager  
+Relationship: Evaluating Tricentis  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Menomonee Falls, WI dental and vision benefits technology company (founded 1993, ~470 employees) offering SaaS automation and tech-enabled services to health-insurer payers ([Built In Colorado](https://www.builtincolorado.com/company/skygen-usa)).
+
+likely use case: given the Software automation manager title and "Evaluating Tricentis" relationship, most plausibly looking to test and gate AI features in claims or member-service automation — an inference, not a confirmed need.
+
+known agent tooling: no public information found tying Skygen to a deployed agent product.
+
+---
+
+### Hugo Boss AG (DE)
+Date: 2026-09-24 08:35  
+Name: Marco Esguerra  
+Title: Senior IT Consultant  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: German premium fashion group (BOSS and HUGO brands) with a large global e-commerce and retail footprint.
+
+likely use case: given the Senior IT Consultant title and Customer relationship, most plausibly an internal IT team evaluating how to test agents built on enterprise AI platforms — an inference, not a confirmed need.
+
+known agent tooling: has launched AI-generated product imagery and video for e-commerce ([Retail Systems](https://retail-systems.com/rs/Hugo_boss_puts_ai_into_action_with_image_and_video_creation.php); [FashionUnited](https://fashionunited.com/news/business/hugo-boss-launches-ai-powered-product-content/2025012364103)); no public information found tying Hugo Boss to a specific deployed agent product.
 
 ---
 
@@ -191,6 +281,11 @@ beta evaluation status (as of 2026-09-18, Jigish Belani only): in the process of
 ---
 
 ### — (form blank; email domain suggests Singapore Pools)
+Date: 2026-10-02 00:07  
+Name: Fun Tat Chen  
+Title: Quality Engineer  
+Relationship: Customer  
+
 Date: 2026-09-21 01:30  
 Name: Nai Hau Lui  
 Title: Lead, Quality Engineering  
@@ -1237,8 +1332,10 @@ Name: Chris Carpenter
 Date: 2026-08-21 16:41  
 Name: Gerard Trimberger  
 
+Demo contact: Louis Tadman (not a form submitter; added when the demo was scheduled)  
+
 Email sent: —  
-Beta scheduled: —  
+Beta scheduled: 2026-10-06 (demo)  
 
 what they do: Enterprise software VAR/consultancy (20+ years) — SDLC tooling, QA automation, app-security reseller. Already a Tricentis partner — lists Tricentis alongside Azure DevOps, TestRail, Planview on their own site.
 

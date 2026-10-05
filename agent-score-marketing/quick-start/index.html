@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Score - Quick Start</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: hsl(240, 5%, 96%); --raised: #fff; --divider: hsl(240, 5%, 84%);
+      --text: #000; --text2: hsl(240, 4%, 46%); --primary: hsl(210, 60%, 47%);
+      --warn: hsl(23, 80%, 45%); --warn-dim: hsla(23, 80%, 45%, .12);
+      --tip: hsl(122, 50%, 35%); --tip-dim: hsla(122, 50%, 35%, .12);
+      --font: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.55; padding: 40px 20px; }
+    main { max-width: 720px; margin: 0 auto; background: var(--raised); border: 1px solid var(--divider); border-radius: 10px; padding: 40px 44px; }
+    .eyebrow { font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--primary); margin-bottom: 8px; }
+    h1 { font-size: 2rem; font-weight: 800; letter-spacing: -.02em; }
+    .dek { color: var(--text2); margin: 8px 0 28px; }
+    h2 { font-size: 1.05rem; margin: 28px 0 10px; }
+    ol { list-style: none; counter-reset: s; }
+    ol li { counter-increment: s; position: relative; padding: 0 0 18px 44px; }
+    ol li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 700; font-size: .85rem; display: flex; align-items: center; justify-content: center; }
+    ol li strong.t { display: block; }
+    li span.d { color: var(--text2); font-size: .95rem; }
+    code { font-family: var(--mono); font-size: .85em; background: var(--bg); padding: 1px 5px; border-radius: 4px; }
+    pre { background: var(--bg); border: 1px solid var(--divider); border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-family: var(--mono); font-size: .8rem; margin: 4px 0 18px; }
+    .callout { border-radius: 8px; padding: 12px 16px; margin: 0 0 12px; font-size: .92rem; }
+    .callout b { display: block; margin-bottom: 2px; }
+    .warn { background: var(--warn-dim); } .tip { background: var(--tip-dim); }
+    ul { padding-left: 20px; } li a, .callout a { color: var(--primary); }
+  </style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Agent Score</div>
+  <h1>Quick start</h1>
+  <p class="dek">From zero to your first score in six steps.</p>
+
+  <ol>
+    <li><strong class="t">Sign in to Tosca Cloud</strong>
+      <span class="d">Agent Score requires a Tosca Cloud login. If you do not have one yet, <a href="https://www.tricentis.com/software-testing-tool-trial-demo">sign up for a Tosca Cloud trial</a> first, then sign in with that account.</span></li>
+    <li><strong class="t">Get your workspace</strong>
+      <span class="d">Your workspace (a tenant) is set up by the Agent Score team on your behalf, and cannot be created from the app. Send us your Tosca Cloud tenant name and we will set up your workspace. Everyone signing in from that Tosca Cloud tenant will then have access. If your agent runs in AI Workspace, its tenant is created automatically when the agent's traces are first ingested and no ingest key is needed, so skip to step 5 (you still need us to give you access).</span></li>
+    <li><strong class="t">Create an ingest key</strong>
+      <span class="d">Open <b>Integrations</b> in the sidebar and create a new key. It looks like <code>tk_...</code> and belongs to exactly one tenant.</span></li>
+    <li><strong class="t">Point your agent's OpenTelemetry export at Agent Score</strong>
+      <span class="d">Add these two variables to the exporter your agent already uses. No new SDK required. <b>+ Connect Agent</b> on the Agents page gives you this exact config with your real key filled in.</span></li>
+  </ol>
+  <pre>OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=&lt;your ingest endpoint&gt;/external/otel/v1/traces
+OTEL_EXPORTER_OTLP_TRACES_HEADERS=Authorization=Bearer &lt;your tk_... ingest key&gt;</pre>
+  <ol style="counter-reset: s 4">
+    <li><strong class="t">Run your agent</strong>
+      <span class="d">It appears on the Agents page on its own, first as <b>Setting up</b>, then <b>Learning your agent</b> with a live count of traces received. No per-agent form to fill out.</span></li>
+    <li><strong class="t">Read your scorecard</strong>
+      <span class="d">After <b>20 traces</b>, scoring starts automatically. Open the agent to see a 0-100 score and a ship / review / don't-ship recommendation, with the evidence behind every number.</span></li>
+  </ol>
+
+  <div class="callout warn"><b>Use the _TRACES_ variables</b>Use the <code>_TRACES_</code>-suffixed variables, not the generic <code>OTEL_EXPORTER_OTLP_ENDPOINT</code>. The endpoint above already ends in <code>/v1/traces</code>, and the generic form would append it a second time.</div>
+  <div class="callout tip"><b>Send real traffic</b>Scoring is only as honest as the traces behind it. Send real or realistic traffic, including the ordinary failures, not a hand-picked set of best outputs.</div>
+
+  <div class="callout tip"><b>Need help?</b>If you need any assistance, reach out to Andrew Demers at <a href="mailto:a.demers@tricentis.com">a.demers@tricentis.com</a>.</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{
+  "expectations": [
+    {
+      "text": "Exactly one bootstrap file carries the agentscore-setup:v1 marker",
+      "passed": false,
+      "evidence": "marker files: []"
+    },
+    {
+      "text": "Bootstrap is imported in the entrypoint before any third-party import",
+      "passed": false,
+      "evidence": "third-party import 'langchain_core' comes before the bootstrap"
+    },
+    {
+      "text": ".env is git-ignored",
+      "passed": true,
+      "evidence": ".gitignore: ['.env', '.agentscore-spans.jsonl']"
+    },
+    {
+      "text": ".env.example has the _TRACES_ endpoint ending /external/otel/v1/traces and only a placeholder key",
+      "passed": false,
+      "evidence": ".env.example present=True; files containing a non-placeholder tk_ value: []"
+    },
+    {
+      "text": "The unsuffixed OTEL_EXPORTER_OTLP_ENDPOINT is not used anywhere",
+      "passed": true,
+      "evidence": "found in: []"
+    },
+    {
+      "text": "Dependency manifest declares the OpenTelemetry SDK and OTLP exporter",
+      "passed": true,
+      "evidence": "missing: []"
+    },
+    {
+      "text": "No HTTP/web-framework instrumentors added",
+      "passed": true,
+      "evidence": "found: []"
+    },
+    {
+      "text": "Agent still runs and produces its answer",
+      "passed": true,
+      "evidence": "stdout: 'Order A100 shipped yesterday and arrives Friday.' stderr tail: 'to `from langchain.agents import create_agent`. Deprecated in LangGraph V1.0 to be removed in V2.0.\\n  agent = create_react_agent(model, [lookup_order], prompt=\"You are a concise order-support agent.\")'"
+    },
+    {
+      "text": "Export reaches /external/otel/v1/traces with the bearer key from the environment",
+      "passed": false,
+      "evidence": "0 request(s): []"
+    },
+    {
+      "text": "Exporter sends a protobuf body (AgentScore's ingest rejects JSON with a 400)",
+      "passed": false,
+      "evidence": "content types: [], body sizes: []"
+    },
+    {
+      "text": "One agent run exports as exactly one trace",
+      "passed": false,
+      "evidence": "0 spans in 0 trace(s)"
+    },
+    {
+      "text": "Exported trace passes every span_tree check (root, model, prompt text, tool spans, accepted operation names, identity)",
+      "passed": false,
+      "evidence": "nothing was exported"
+    },
+    {
+      "text": "plan.md was written before the first project file was changed",
+      "passed": false,
+      "evidence": "plan exists=True, plan mtime=1790870758.2680645, bootstrap mtimes=[]"
+    },
+    {
+      "text": "A second pass of the skill changes no project files",
+      "passed": true,
+      "evidence": "idempotency.json changed=[]"
+    },
+    {
+      "text": "Report tells the user how to add the key themselves and mentions the ~20 trace threshold",
+      "passed": false,
+      "evidence": "report chars=1322"
+    },
+    {
+      "text": "Framework agent code is changed by at most the bootstrap import (LangGraph traces itself)",
+      "passed": false,
+      "evidence": "lines added to main.py: 4"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 10,
+    "total": 16,
+    "pass_rate": 0.375
+  }
+}

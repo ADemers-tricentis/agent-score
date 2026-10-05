@@ -1,0 +1,663 @@
+{
+  "metadata": {
+    "skill_name": "agentscore-setup",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-10-01T16:12:02Z",
+    "evals_run": [
+      1,
+      2,
+      3
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 17,
+        "failed": 0,
+        "total": 17,
+        "time_seconds": 57.7,
+        "tokens": 47385,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Exactly one bootstrap file carries the agentscore-setup:v1 marker",
+          "passed": true,
+          "evidence": "marker files: ['agentscore_otel.py']"
+        },
+        {
+          "text": "Bootstrap is imported in the entrypoint before any third-party import",
+          "passed": true,
+          "evidence": "order before bootstrap: ['sys']"
+        },
+        {
+          "text": ".env is git-ignored",
+          "passed": true,
+          "evidence": ".gitignore: ['.env', '.agentscore-spans.jsonl']"
+        },
+        {
+          "text": ".env.example has the _TRACES_ endpoint ending /external/otel/v1/traces and only a placeholder key",
+          "passed": true,
+          "evidence": ".env.example present=True; files containing a non-placeholder tk_ value: []"
+        },
+        {
+          "text": "The unsuffixed OTEL_EXPORTER_OTLP_ENDPOINT is not used anywhere",
+          "passed": true,
+          "evidence": "found in: []"
+        },
+        {
+          "text": "Dependency manifest declares the OpenTelemetry SDK and OTLP exporter",
+          "passed": true,
+          "evidence": "missing: []"
+        },
+        {
+          "text": "No HTTP/web-framework instrumentors added",
+          "passed": true,
+          "evidence": "found: []"
+        },
+        {
+          "text": "Agent still runs and produces its answer",
+          "passed": true,
+          "evidence": "stdout: 'Order A100 shipped yesterday and arrives Friday.' stderr tail: 'to `from langchain.agents import create_agent`. Deprecated in LangGraph V1.0 to be removed in V2.0.\\n  agent = create_react_agent(model, [lookup_order], prompt=\"You are a concise order-support agent.\")'"
+        },
+        {
+          "text": "Export reaches /external/otel/v1/traces with the bearer key from the environment",
+          "passed": true,
+          "evidence": "1 request(s): [('/external/otel/v1/traces', 'Bearer tk_GRAD')]"
+        },
+        {
+          "text": "Exporter sends a protobuf body (AgentScore's ingest rejects JSON with a 400)",
+          "passed": true,
+          "evidence": "content types: ['application/x-protobuf'], body sizes: [36978]"
+        },
+        {
+          "text": "One agent run exports as exactly one trace",
+          "passed": true,
+          "evidence": "15 spans in 1 trace(s)"
+        },
+        {
+          "text": "Exported trace passes every span_tree check (root, model, prompt text, tool spans, accepted operation names, identity)",
+          "passed": true,
+          "evidence": "all checks pass"
+        },
+        {
+          "text": "No ingest key appears in exported span data",
+          "passed": true,
+          "evidence": ""
+        },
+        {
+          "text": "plan.md was written before the first project file was changed",
+          "passed": true,
+          "evidence": "plan exists=True, plan mtime=1790870762.139363, bootstrap mtimes=[1790870768.0879483]"
+        },
+        {
+          "text": "A second pass of the skill changes no project files",
+          "passed": true,
+          "evidence": "idempotency.json changed=[]"
+        },
+        {
+          "text": "Report tells the user how to add the key themselves and mentions the ~20 trace threshold",
+          "passed": true,
+          "evidence": "report chars=1862"
+        },
+        {
+          "text": "Framework agent code is changed by at most the bootstrap import (LangGraph traces itself)",
+          "passed": true,
+          "evidence": "lines added to main.py: 2"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 12,
+        "failed": 4,
+        "total": 16,
+        "time_seconds": 87.7,
+        "tokens": 59022,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Exactly one bootstrap file carries the agentscore-setup:v1 marker",
+          "passed": true,
+          "evidence": "marker files: ['src/agentscore-otel.ts']"
+        },
+        {
+          "text": "Bootstrap is imported in the entrypoint before any third-party import",
+          "passed": true,
+          "evidence": "order before bootstrap: []"
+        },
+        {
+          "text": ".env is git-ignored",
+          "passed": true,
+          "evidence": ".gitignore: ['.env', '.agentscore-spans.jsonl']"
+        },
+        {
+          "text": ".env.example has the _TRACES_ endpoint ending /external/otel/v1/traces and only a placeholder key",
+          "passed": true,
+          "evidence": ".env.example present=True; files containing a non-placeholder tk_ value: []"
+        },
+        {
+          "text": "The unsuffixed OTEL_EXPORTER_OTLP_ENDPOINT is not used anywhere",
+          "passed": true,
+          "evidence": "found in: []"
+        },
+        {
+          "text": "Dependency manifest declares the OpenTelemetry SDK and OTLP exporter",
+          "passed": false,
+          "evidence": "missing: ['@opentelemetry/exporter-trace-otlp-proto']"
+        },
+        {
+          "text": "No HTTP/web-framework instrumentors added",
+          "passed": true,
+          "evidence": "found: []"
+        },
+        {
+          "text": "Agent still runs and produces its answer",
+          "passed": true,
+          "evidence": "stdout: 'Order A100 shipped yesterday and arrives Friday.' stderr tail: ''"
+        },
+        {
+          "text": "Export reaches /external/otel/v1/traces with the bearer key from the environment",
+          "passed": true,
+          "evidence": "1 request(s): [('/external/otel/v1/traces', 'Bearer tk_GRAD')]"
+        },
+        {
+          "text": "Exporter sends a protobuf body (AgentScore's ingest rejects JSON with a 400)",
+          "passed": false,
+          "evidence": "content types: ['application/json'], body sizes: [16931]"
+        },
+        {
+          "text": "One agent run exports as exactly one trace",
+          "passed": false,
+          "evidence": "0 spans in 0 trace(s)"
+        },
+        {
+          "text": "Exported trace passes every span_tree check (root, model, prompt text, tool spans, accepted operation names, identity)",
+          "passed": false,
+          "evidence": "nothing was exported"
+        },
+        {
+          "text": "plan.md was written before the first project file was changed",
+          "passed": true,
+          "evidence": "plan exists=True, plan mtime=1790870763.1078348, bootstrap mtimes=[1790870778.514864]"
+        },
+        {
+          "text": "A second pass of the skill changes no project files",
+          "passed": true,
+          "evidence": "idempotency.json changed=[]"
+        },
+        {
+          "text": "Report tells the user how to add the key themselves and mentions the ~20 trace threshold",
+          "passed": true,
+          "evidence": "report chars=2139"
+        },
+        {
+          "text": "Vercel AI SDK telemetry is enabled and the OpenInference processor is installed",
+          "passed": true,
+          "evidence": "package.json + agent.ts checked"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 17,
+        "failed": 0,
+        "total": 17,
+        "time_seconds": 74.5,
+        "tokens": 53299,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Exactly one bootstrap file carries the agentscore-setup:v1 marker",
+          "passed": true,
+          "evidence": "marker files: ['agentscore_otel.py']"
+        },
+        {
+          "text": "Bootstrap is imported in the entrypoint before any third-party import",
+          "passed": true,
+          "evidence": "order before bootstrap: ['json', 'sys']"
+        },
+        {
+          "text": ".env is git-ignored",
+          "passed": true,
+          "evidence": ".gitignore: ['.env', '.agentscore-spans.jsonl']"
+        },
+        {
+          "text": ".env.example has the _TRACES_ endpoint ending /external/otel/v1/traces and only a placeholder key",
+          "passed": true,
+          "evidence": ".env.example present=True; files containing a non-placeholder tk_ value: []"
+        },
+        {
+          "text": "The unsuffixed OTEL_EXPORTER_OTLP_ENDPOINT is not used anywhere",
+          "passed": true,
+          "evidence": "found in: []"
+        },
+        {
+          "text": "Dependency manifest declares the OpenTelemetry SDK and OTLP exporter",
+          "passed": true,
+          "evidence": "missing: []"
+        },
+        {
+          "text": "No HTTP/web-framework instrumentors added",
+          "passed": true,
+          "evidence": "found: []"
+        },
+        {
+          "text": "Agent still runs and produces its answer",
+          "passed": true,
+          "evidence": "stdout: 'Order A100 shipped yesterday and arrives Friday.' stderr tail: ''"
+        },
+        {
+          "text": "Export reaches /external/otel/v1/traces with the bearer key from the environment",
+          "passed": true,
+          "evidence": "1 request(s): [('/external/otel/v1/traces', 'Bearer tk_GRAD')]"
+        },
+        {
+          "text": "Exporter sends a protobuf body (AgentScore's ingest rejects JSON with a 400)",
+          "passed": true,
+          "evidence": "content types: ['application/x-protobuf'], body sizes: [5466]"
+        },
+        {
+          "text": "One agent run exports as exactly one trace",
+          "passed": true,
+          "evidence": "4 spans in 1 trace(s)"
+        },
+        {
+          "text": "Exported trace passes every span_tree check (root, model, prompt text, tool spans, accepted operation names, identity)",
+          "passed": true,
+          "evidence": "all checks pass"
+        },
+        {
+          "text": "No ingest key appears in exported span data",
+          "passed": true,
+          "evidence": ""
+        },
+        {
+          "text": "plan.md was written before the first project file was changed",
+          "passed": true,
+          "evidence": "plan exists=True, plan mtime=1790870762.124322, bootstrap mtimes=[1790870767.525769]"
+        },
+        {
+          "text": "A second pass of the skill changes no project files",
+          "passed": true,
+          "evidence": "idempotency.json changed=[]"
+        },
+        {
+          "text": "Report tells the user how to add the key themselves and mentions the ~20 trace threshold",
+          "passed": true,
+          "evidence": "report chars=1719"
+        },
+        {
+          "text": "Hand-written agent and tool spans added around the plain-SDK loop and tool dispatch",
+          "passed": true,
+          "evidence": "invoke_agent/execute_tool present in agent.py"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.375,
+        "passed": 6,
+        "failed": 10,
+        "total": 16,
+        "time_seconds": 70.5,
+        "tokens": 36434,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Exactly one bootstrap file carries the agentscore-setup:v1 marker",
+          "passed": false,
+          "evidence": "marker files: []"
+        },
+        {
+          "text": "Bootstrap is imported in the entrypoint before any third-party import",
+          "passed": false,
+          "evidence": "third-party import 'langchain_core' comes before the bootstrap"
+        },
+        {
+          "text": ".env is git-ignored",
+          "passed": true,
+          "evidence": ".gitignore: ['.env', '.agentscore-spans.jsonl']"
+        },
+        {
+          "text": ".env.example has the _TRACES_ endpoint ending /external/otel/v1/traces and only a placeholder key",
+          "passed": false,
+          "evidence": ".env.example present=True; files containing a non-placeholder tk_ value: []"
+        },
+        {
+          "text": "The unsuffixed OTEL_EXPORTER_OTLP_ENDPOINT is not used anywhere",
+          "passed": true,
+          "evidence": "found in: []"
+        },
+        {
+          "text": "Dependency manifest declares the OpenTelemetry SDK and OTLP exporter",
+          "passed": true,
+          "evidence": "missing: []"
+        },
+        {
+          "text": "No HTTP/web-framework instrumentors added",
+          "passed": true,
+          "evidence": "found: []"
+        },
+        {
+          "text": "Agent still runs and produces its answer",
+          "passed": true,
+          "evidence": "stdout: 'Order A100 shipped yesterday and arrives Friday.' stderr tail: 'to `from langchain.agents import create_agent`. Deprecated in LangGraph V1.0 to be removed in V2.0.\\n  agent = create_react_agent(model, [lookup_order], prompt=\"You are a concise order-support agent.\")'"
+        },
+        {
+          "text": "Export reaches /external/otel/v1/traces with the bearer key from the environment",
+          "passed": false,
+          "evidence": "0 request(s): []"
+        },
+        {
+          "text": "Exporter sends a protobuf body (AgentScore's ingest rejects JSON with a 400)",
+          "passed": false,
+          "evidence": "content types: [], body sizes: []"
+        },
+        {
+          "text": "One agent run exports as exactly one trace",
+          "passed": false,
+          "evidence": "0 spans in 0 trace(s)"
+        },
+        {
+          "text": "Exported trace passes every span_tree check (root, model, prompt text, tool spans, accepted operation names, identity)",
+          "passed": false,
+          "evidence": "nothing was exported"
+        },
+        {
+          "text": "plan.md was written before the first project file was changed",
+          "passed": false,
+          "evidence": "plan exists=True, plan mtime=1790870758.2680645, bootstrap mtimes=[]"
+        },
+        {
+          "text": "A second pass of the skill changes no project files",
+          "passed": true,
+          "evidence": "idempotency.json changed=[]"
+        },
+        {
+          "text": "Report tells the user how to add the key themselves and mentions the ~20 trace threshold",
+          "passed": false,
+          "evidence": "report chars=1322"
+        },
+        {
+          "text": "Framework agent code is changed by at most the bootstrap import (LangGraph traces itself)",
+          "passed": false,
+          "evidence": "lines added to main.py: 4"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.312,
+        "passed": 5,
+        "failed": 11,
+        "total": 16,
+        "time_seconds": 56.6,
+        "tokens": 35335,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Exactly one bootstrap file carries the agentscore-setup:v1 marker",
+          "passed": false,
+          "evidence": "marker files: []"
+        },
+        {
+          "text": "Bootstrap is imported in the entrypoint before any third-party import",
+          "passed": false,
+          "evidence": "import './instrumentation.js' comes before the bootstrap"
+        },
+        {
+          "text": ".env is git-ignored",
+          "passed": true,
+          "evidence": ".gitignore: ['node_modules/', '.env', '.agentscore-spans.jsonl']"
+        },
+        {
+          "text": ".env.example has the _TRACES_ endpoint ending /external/otel/v1/traces and only a placeholder key",
+          "passed": false,
+          "evidence": ".env.example present=True; files containing a non-placeholder tk_ value: []"
+        },
+        {
+          "text": "The unsuffixed OTEL_EXPORTER_OTLP_ENDPOINT is not used anywhere",
+          "passed": true,
+          "evidence": "found in: []"
+        },
+        {
+          "text": "Dependency manifest declares the OpenTelemetry SDK and OTLP exporter",
+          "passed": false,
+          "evidence": "missing: ['@opentelemetry/exporter-trace-otlp-proto']"
+        },
+        {
+          "text": "No HTTP/web-framework instrumentors added",
+          "passed": true,
+          "evidence": "found: []"
+        },
+        {
+          "text": "Agent still runs and produces its answer",
+          "passed": true,
+          "evidence": "stdout: 'Order A100 shipped yesterday and arrives Friday.' stderr tail: '[agentscore] AGENTSCORE_INGEST_KEY not set; traces are not being sent.'"
+        },
+        {
+          "text": "Export reaches /external/otel/v1/traces with the bearer key from the environment",
+          "passed": false,
+          "evidence": "0 request(s): []"
+        },
+        {
+          "text": "Exporter sends a protobuf body (AgentScore's ingest rejects JSON with a 400)",
+          "passed": false,
+          "evidence": "content types: [], body sizes: []"
+        },
+        {
+          "text": "One agent run exports as exactly one trace",
+          "passed": false,
+          "evidence": "0 spans in 0 trace(s)"
+        },
+        {
+          "text": "Exported trace passes every span_tree check (root, model, prompt text, tool spans, accepted operation names, identity)",
+          "passed": false,
+          "evidence": "nothing was exported"
+        },
+        {
+          "text": "plan.md was written before the first project file was changed",
+          "passed": false,
+          "evidence": "plan exists=True, plan mtime=1790870758.7886188, bootstrap mtimes=[]"
+        },
+        {
+          "text": "A second pass of the skill changes no project files",
+          "passed": true,
+          "evidence": "idempotency.json changed=[]"
+        },
+        {
+          "text": "Report tells the user how to add the key themselves and mentions the ~20 trace threshold",
+          "passed": false,
+          "evidence": "report chars=1246"
+        },
+        {
+          "text": "Vercel AI SDK telemetry is enabled and the OpenInference processor is installed",
+          "passed": false,
+          "evidence": "package.json + agent.ts checked"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.375,
+        "passed": 6,
+        "failed": 10,
+        "total": 16,
+        "time_seconds": 101.2,
+        "tokens": 41937,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Exactly one bootstrap file carries the agentscore-setup:v1 marker",
+          "passed": false,
+          "evidence": "marker files: []"
+        },
+        {
+          "text": "Bootstrap is imported in the entrypoint before any third-party import",
+          "passed": false,
+          "evidence": "third-party import 'openai' comes before the bootstrap"
+        },
+        {
+          "text": ".env is git-ignored",
+          "passed": false,
+          "evidence": ".gitignore: []"
+        },
+        {
+          "text": ".env.example has the _TRACES_ endpoint ending /external/otel/v1/traces and only a placeholder key",
+          "passed": false,
+          "evidence": ".env.example present=False; files containing a non-placeholder tk_ value: []"
+        },
+        {
+          "text": "The unsuffixed OTEL_EXPORTER_OTLP_ENDPOINT is not used anywhere",
+          "passed": true,
+          "evidence": "found in: []"
+        },
+        {
+          "text": "Dependency manifest declares the OpenTelemetry SDK and OTLP exporter",
+          "passed": true,
+          "evidence": "missing: []"
+        },
+        {
+          "text": "No HTTP/web-framework instrumentors added",
+          "passed": true,
+          "evidence": "found: []"
+        },
+        {
+          "text": "Agent still runs and produces its answer",
+          "passed": true,
+          "evidence": "stdout: 'Order A100 shipped yesterday and arrives Friday.' stderr tail: ''"
+        },
+        {
+          "text": "Export reaches /external/otel/v1/traces with the bearer key from the environment",
+          "passed": false,
+          "evidence": "0 request(s): []"
+        },
+        {
+          "text": "Exporter sends a protobuf body (AgentScore's ingest rejects JSON with a 400)",
+          "passed": false,
+          "evidence": "content types: [], body sizes: []"
+        },
+        {
+          "text": "One agent run exports as exactly one trace",
+          "passed": false,
+          "evidence": "0 spans in 0 trace(s)"
+        },
+        {
+          "text": "Exported trace passes every span_tree check (root, model, prompt text, tool spans, accepted operation names, identity)",
+          "passed": false,
+          "evidence": "nothing was exported"
+        },
+        {
+          "text": "plan.md was written before the first project file was changed",
+          "passed": false,
+          "evidence": "plan exists=True, plan mtime=1790870818.4962482, bootstrap mtimes=[]"
+        },
+        {
+          "text": "A second pass of the skill changes no project files",
+          "passed": true,
+          "evidence": "idempotency.json changed=[]"
+        },
+        {
+          "text": "Report tells the user how to add the key themselves and mentions the ~20 trace threshold",
+          "passed": false,
+          "evidence": "report chars=1766"
+        },
+        {
+          "text": "Hand-written agent and tool spans added around the plain-SDK loop and tool dispatch",
+          "passed": true,
+          "evidence": "invoke_agent/execute_tool present in agent.py"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.9167,
+        "stddev": 0.1443,
+        "min": 0.75,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 73.3,
+        "stddev": 15.036,
+        "min": 57.7,
+        "max": 87.7
+      },
+      "tokens": {
+        "mean": 53235.3333,
+        "stddev": 5818.7612,
+        "min": 47385,
+        "max": 59022
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.354,
+        "stddev": 0.0364,
+        "min": 0.312,
+        "max": 0.375
+      },
+      "time_seconds": {
+        "mean": 76.1,
+        "stddev": 22.8213,
+        "min": 56.6,
+        "max": 101.2
+      },
+      "tokens": {
+        "mean": 37902.0,
+        "stddev": 3537.3534,
+        "min": 35335,
+        "max": 41937
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.56",
+      "time_seconds": "-2.8",
+      "tokens": "+15333"
+    }
+  },
+  "notes": []
+}

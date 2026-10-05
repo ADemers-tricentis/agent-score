@@ -11,40 +11,42 @@
 | **Title** | AgentScore Business Case |
 | **Author** | Andrew Demers |
 | **Status** | Draft |
-| **Last Updated** | 2026-09-22 |
+| **Last Updated** | 2026-10-02 |
 | **Purpose** | Executive alignment |
 
 ---
 
 ## Overview
 
-Every enterprise we talk to is shipping AI agents faster than they can tell whether those agents work. AgentScore is Tricentis's answer: point it at an agent's OTel trace, and it hands back a defensible 0-100 score, a ship/warn/block verdict, and the exact reasoning failure that caused it - with zero instrumentation. We are not pitching a new investment here. We're laying out why we believe this problem is real, growing, and one that named enterprise buyers are already telling us they'd pay to solve.
+Every enterprise we talk to is shipping AI agents faster than they can tell whether those agents work. AgentScore is Tricentis's answer: point it at an agent's OTel trace, and it hands back a defensible 0-100 score, a ship/warn/block verdict, and the exact reasoning failure that caused it - with zero instrumentation. The market for evaluating agents already exists and is already moving; our angle is that we already own the people who decide whether an agent can go to production, and no one is serving those gatekeepers with a tool. We are not pitching a new investment here. We're laying out why we believe this problem is real, growing, and one that named enterprise buyers are already telling us they'd pay to solve.
 
 ---
 
 ## What AgentScore Is
 
+The positioning is "Apple for agent evaluation": easy to start, smart defaults, works for most teams - not the top-tier data-science scorer. The buyer's problem is that they don't know what to test, how, or whether it's enough; fear leads to ship paralysis, and other tools ask them to go learn to be data scientists.
+
 AgentScore ingests an agent's OTel trace - any agent, any vendor, any orchestration framework, no proprietary SDK or instrumentation required - and returns:
 
 - **A 0-100 score and a ship/warn/block verdict**, not just a pass/fail.
 - **Root-cause attribution down to the span**, paired with a suggested fix - not just "this failed" but where and how to fix it.
-- **60+ evals across 11 dimensions**, auto-selected via zero-setup profiling, so the buyer doesn't have to already know what to measure.
+- **40+ evals**, auto-selected via zero-setup profiling, so the buyer doesn't have to already know what to measure and doesn't need data-science skills.
 - **A tiered evidence model** (deterministic checks, judge + confidence intervals, golden-dataset back-testing) for buyers who need audit-ready proof, not a black box.
 - **Cross-ecosystem ingestion**, so agents built on AI Workspace, GitHub Copilot, Copilot Studio, homegrown frameworks, or MCP servers can all be scored side-by-side on the same scale.
 
-AI Workspace agents get all of this for free with zero setup - auto-provisioned and profiled the moment the agent exists (see [Why Tricentis Should Solve This](#why-tricentis-should-solve-this)).
+AI Workspace agents are auto-provisioned and profiled the moment the agent exists, which makes those accounts easy to demo to. That is proof of fit, not the definition of the target customer (see [Ideal Customer Profile](#ideal-customer-profile-icp)).
 
 ---
 
 ## Why Now
 
-**Agents are being built faster than anyone can validate them.** Gartner puts task-specific agents in under 5% of enterprise apps in 2025, rising to 40% by the end of 2026. The average enterprise already runs ~12 agents and that count is projected to grow 67% in two years; Fortune 500 companies alone are expected to have 150,000+ agents deployed within two years. The AI agent market itself is projected to roughly triple from $7.8B (2025) to $11.5B in 2026 en route to a 49.6% CAGR through 2033. ([Gartner](https://www.gartner.com/en/newsroom/press-releases/2025-08-26-gartner-predicts-40-percent-of-enterprise-apps-will-feature-task-specific-ai-agents-by-2026-up-from-less-than-5-percent-in-2025), [Digital Applied](https://www.digitalapplied.com/blog/ai-agent-adoption-2026-enterprise-data-points))
+**Agents are being built faster than anyone can validate them.** Gartner puts task-specific agents in under 5% of enterprise apps in 2025, rising to 40% by the end of 2026. The average enterprise already runs ~12 agents and that count is projected to grow 67% in two years; Fortune 500 companies alone are expected to have 150,000+ agents deployed within two years. ([Gartner](https://www.gartner.com/en/newsroom/press-releases/2025-08-26-gartner-predicts-40-percent-of-enterprise-apps-will-feature-task-specific-ai-agents-by-2026-up-from-less-than-5-percent-in-2025), [Digital Applied](https://www.digitalapplied.com/blog/ai-agent-adoption-2026-enterprise-data-points))
 
-**Governance has not kept pace with deployment**, and that gap is exactly where AgentScore sells. Only 1 in 5 companies has a mature governance model for autonomous agents - 80% are deploying without the infrastructure to manage them safely at scale. Gartner projects over 40% of agentic AI projects will be canceled by end of 2027 on cost, unclear value, or inadequate risk controls. That's the failure mode AgentScore exists to prevent: agents shipped, then pulled back, because nobody could put a number on whether they were ready. ([Gartner Hype Cycle for Agentic AI](https://www.gartner.com/en/articles/hype-cycle-for-agentic-ai))
+**Governance has not kept pace with deployment**, and that gap is exactly where AgentScore sells. Only 1 in 5 companies has a mature governance model for autonomous agents - 80% are deploying without the infrastructure to manage them safely at scale. Gartner projects over 40% of agentic AI projects will be canceled by end of 2027 on cost, unclear value, or inadequate risk controls. The incident side is already showing up too: 43% of companies say AI-related incidents have exceeded $2M in the past year, and 21% had a single incident cost $1M or more ([CIO Dive](https://www.channeldive.com/news/enterprise-ai-security-risk-costs-millions/826518/)). That's the failure mode AgentScore exists to prevent: agents shipped, then pulled back, because nobody could put a number on whether they were ready. ([Gartner Hype Cycle for Agentic AI](https://www.gartner.com/en/articles/hype-cycle-for-agentic-ai))
 
-**The land grab is happening now, and the money already knows it.** Braintrust raised an $80M Series B at ~$800M (Feb 2026); Galileo was acquired by Cisco into Splunk Observability (May 2026); Patronus AI raised $50M Series B; Langfuse was acquired by ClickHouse. This category is consolidating fast. Every quarter we wait, the "is this a testing tool or an observability tool" question gets answered by someone else's product, not ours. ([Internal competitive analysis](../research/competitive-analysis-report.md))
+**The market already exists, and the money already knows it.** Braintrust raised an $80M Series B at ~$800M (Feb 2026, $116M total raised); Galileo ($68M raised) was acquired by Cisco into Splunk Observability (May 2026); Patronus AI raised a $50M Series B ($70M total); Langfuse ($4.5M raised) was acquired by ClickHouse (Jan 2026). Combined, that is ~$258.5M raised across these four, with two already acquired at undisclosed prices. This category is consolidating fast - and growing: the model evaluation and benchmarking tools market is projected to go from $1.15B in 2025 to $9.57B by 2035, roughly 8x, which is exactly what those acquisitions are being fought over. These companies prove the market is real. They serve expert eval-engineering teams, and none of them is serving the gatekeepers who decide whether an agent can go to production. ([Internal competitive analysis](../research/competitive-analysis-report.md))
 
-**And the demand isn't hypothetical - it's already in our pipeline.** 74 companies have inbound-expressed interest through the Tricentis Labs form and Sales in the last six weeks, 5 have moved to scheduled demos, and named accounts - Meta (autonomous supply chain, 4-5 production agents), Workday, Wolters Kluwer, a Tricentis gold-sponsor partner (Tritusa) - are actively scoping paid engagements, not just kicking tires. One account (Accenture, on behalf of Meta) has moved past scoping into a pending beta for an on-prem/private-AWS setup.
+**And the demand isn't hypothetical - it's already in our pipeline.** 73 companies have inbound-expressed interest through the Tricentis Labs form and Sales in the last six weeks, 14 have replied, 12 have moved to demos (held or scheduled), and 5 have moved to pending betas (Accenture, Aptiv, and L'OREAL included). Zero are active betas yet. Named accounts - Meta (autonomous supply chain, 4-5 production agents), Workday, Wolters Kluwer, a Tricentis gold-sponsor partner (Tritusa) - are actively scoping paid engagements, not just kicking tires.
 
 ---
 
@@ -52,7 +54,7 @@ AI Workspace agents get all of this for free with zero setup - auto-provisioned 
 
 This is a different risk than the one below - it's not what a bad agent costs a customer, it's what a mistimed decision costs us.
 
-**The cost of waiting has a competitor's name attached to it.** Every quarter we don't ship is a quarter Braintrust, Galileo, Patronus, or Langfuse gets closer to answering the "testing tool or observability tool" question for the market instead of us (see Land Grab, above). Named accounts we're actively courting - Meta, Workday, Wolters Kluwer - are evaluating this category right now; whichever vendor closes one first sets the reference architecture the next five buyers compare everyone else against. Waiting doesn't preserve optionality, it hands it to whoever moves first.
+**The cost of waiting has a competitor's name attached to it.** Every quarter we don't ship is a quarter Braintrust, Galileo, Patronus, or Langfuse gets closer to answering the "testing tool or observability tool" question for the market instead of us (see the competitor funding paragraph in Why Now, above). Named accounts we're actively courting - Meta, Workday, Wolters Kluwer - are evaluating this category right now; whichever vendor closes one first sets the reference architecture the next five buyers compare everyone else against. Waiting doesn't preserve optionality, it hands it to whoever moves first.
 
 **The cost of rushing has one of our own named accounts attached to it.** On-prem (Meta's stated #1 requirement), RBAC/SSO (Wolters Kluwer's named blocker), and compliance/PII validation (Tritusa's bank/pharma clients) are not nice-to-haves for these accounts - they're stated dealbreakers. Launching broadly before closing those gaps risks a failed pilot with exactly the marquee logo we most need, and a burned pilot is harder to win back than a delayed one - it costs us the reference, not just the deal.
 
@@ -74,18 +76,28 @@ Neither failure mode announces itself. A hallucinated answer looks identical to 
 
 ## Ideal Customer Profile (ICP)
 
-The clearest-fit customer isn't defined by industry or headcount - it's defined by four things being true at once, plus one bonus signal that makes the fit even stronger:
+The clearest-fit customer isn't defined by industry, headcount, or which Tricentis products they already own - it's defined by problems they answer yes to. A sales rep should be able to ask these of any account:
 
-1. **Already running agents in AI Workspace.** They get zero-setup auto-profiling for free and are a warm lead, not a cold integration decision (see [Why Tricentis Should Solve This](#why-tricentis-should-solve-this)).
-2. **Running multiple agents or workflows, not just one.** Scale is what turns "we'll eyeball this one agent" into a real problem - more agents means more surface area for something to go wrong and more manual effort spent grading each one.
-3. **Motivated by risk, by eval efficiency, or both.** We've seen deals engage for either reason, and they're not mutually exclusive:
-   - **Risk-driven:** worried about governance and spend, not just shipping faster - asking "how do we know this is safe" before "how do we ship more," the gap Gartner quantifies at 1 in 5 companies having a mature agent governance model (see [Why Now](#why-now)); or watching the token bill stop tracking cleanly to work done, with no way to separate a performant agent from a wasteful one (see [Cost of Getting It Wrong](#the-cost-of-getting-it-wrong)).
-   - **Efficiency-driven:** already grading agents themselves - ad hoc scripts, spreadsheet rubrics, a homegrown eval harness - and want to cut the manual time/cost of doing that per agent, or want more rigor than what they've built in-house. AgentScore's zero-setup auto-profiling and 60+ evals across 11 dimensions replaces that manual effort rather than adding a new one.
-4. **Running external agents, tools, or MCPs alongside AI Workspace.** GitHub Copilot, Copilot Studio, homegrown frameworks, other vendors' agents, MCP servers they've wired in - shadow IT and third-party tooling they didn't build and can't currently score side-by-side with their sanctioned AIW agents.
+1. **Are they building agents today?**
+2. **Are they running agents in production every day?**
+3. **Are they running multiple agents or workflows, not just one?** Scale is what turns "we'll eyeball this one agent" into a real problem - more agents means more surface area for something to go wrong and more manual effort spent grading each one.
+4. **Are they running external agents, tools, or MCPs alongside internal ones that they can't score side by side?** GitHub Copilot, Copilot Studio, homegrown frameworks, other vendors' agents, MCP servers they've wired in - tooling they didn't build and can't currently score next to their sanctioned agents.
 
-**Bonus: no dedicated AI engineers or existing eval tooling of their own.** If they don't have the in-house expertise or a homegrown framework to build evals themselves, AgentScore isn't competing against a build option - it's the only realistic path to a rigorous eval, not just the faster one. This is what turns the efficiency-driven motivation in #3 from "nice to have" into "no other option."
+**Why they say yes** comes in two flavors, and they're not mutually exclusive:
 
-Wolters Kluwer is the cleanest real match today: risk-driven (named RBAC/self-service a governance blocker), running agents through AI Workspace, with a stated reason for engaging of scoring agents outside the Tricentis ecosystem (GitHub Copilot, their internal FAB platform) alongside it. Tritusa fits three of four - AI Workspace agent plus a Copilot Studio agent, also risk-driven via a compliance/governance advisory practice layered on top. Both data points confirm the risk-driven motivation; neither yet confirms efficiency-driven independently, and neither confirms the bonus signal either way - those are hypotheses to validate against the next batch of inbound, not yet proven. This profile overall is a hypothesis sharpened by two data points, not a validated segment. [Section 2 of the graduation plan](agentscore-labs-graduation-plan.md#2-build-the-icp-from-the-green-accounts-own-words) is where that validation happens - green-account outreach is designed to directly test the risk/efficiency split and the bonus signal, not just collect more anecdotes.
+- **Risk-driven:** worried about governance and spend, not just shipping faster - asking "how do we know this is safe" before "how do we ship more," the gap Gartner quantifies at 1 in 5 companies having a mature agent governance model (see [Why Now](#why-now)); or watching the token bill stop tracking cleanly to work done, with no way to separate a performant agent from a wasteful one (see [Cost of Getting It Wrong](#the-cost-of-getting-it-wrong)).
+- **Efficiency-driven:** already grading agents themselves - ad hoc scripts, spreadsheet rubrics, a homegrown eval harness - and want to cut the manual time/cost of doing that per agent, or want more rigor than what they've built in-house.
+
+**Not our ICP (common misnomers):**
+
+- Talking about Claude, or AI in general, is not the same as wanting agent evaluation.
+- Accounts at the very start of their AI journey, with no agents built yet.
+
+**Bonus: no dedicated AI engineers or existing eval tooling of their own.** If they don't have the in-house expertise or a homegrown framework to build evals themselves, AgentScore isn't competing against a build option - it's the only realistic path to a rigorous eval, not just the faster one.
+
+**AI Workspace is proof, not the definition.** Nearly all demo customers already have AI Workspace, which makes demos easy and is useful evidence. But defining the ICP as a subset of the AI Workspace base is an internal segmentation lens, and it would shrink the market to our existing customers.
+
+Wolters Kluwer is the cleanest real match today: risk-driven (named RBAC/self-service a governance blocker), running agents through AI Workspace, with a stated reason for engaging of scoring agents outside the Tricentis ecosystem (GitHub Copilot, their internal FAB platform) alongside it. Tritusa also fits - an AI Workspace agent plus a Copilot Studio agent, risk-driven via a compliance/governance advisory practice layered on top. Both data points confirm the risk-driven motivation; neither yet confirms efficiency-driven independently, and neither confirms the bonus signal either way - those are hypotheses to validate against the next batch of inbound, not yet proven. This profile overall is a hypothesis sharpened by two data points, not a validated segment. [Section 2 of the graduation plan](agentscore-labs-graduation-plan.md#2-build-the-icp-from-the-green-accounts-own-words) is where that validation happens - green-account outreach is designed to directly test the risk/efficiency split and the bonus signal, not just collect more anecdotes.
 
 ---
 
@@ -103,7 +115,7 @@ Wolters Kluwer is the cleanest real match today: risk-driven (named RBAC/self-se
 ## Problems We Solve
 
 1. **"We don't know if our agent is actually ready to ship."** Root-cause attribution (span + fix, not just a score) is the single most consistently praised capability across every customer session we've run (Workday, Meta, Wolters Kluwer, Tritusa) - it's what turns a vague "seems fine" into a defensible, evidence-backed decision.
-2. **"Knowing what to measure is the hard part, not the grading."** There is no shortage of open-source eval frameworks. What buyers lack is confidence they've covered every dimension that matters. AgentScore's zero-setup auto-profiling and 60+ evals across 11 dimensions answers that without requiring the buyer to have AI expertise on staff.
+2. **"Knowing what to measure is the hard part, not the grading."** There is no shortage of open-source eval frameworks. What buyers lack is confidence they've covered every dimension that matters. AgentScore's zero-setup auto-profiling and 40+ evals answer that without requiring the buyer to have AI expertise on staff.
 3. **"Our agents came from everywhere and we can't compare them."** Cross-ecosystem OTel ingestion - any agent, any vendor, any orchestration framework - is already confirmed solved and lands well specifically because it lets buyers benchmark sanctioned tooling against shadow IT (Wolters Kluwer scoring GitHub Copilot alongside their own agents; Tritusa benchmarking a Copilot Studio agent against an AI Workspace agent).
 4. **"We have no shared, org-wide way to validate agent behavior."** Fragmented AI ownership (Freddie Mac: product team and AI accelerator team building overlapping agents with no common yardstick) is a named pain point independent of any single agent's quality - AgentScore's evidence-backed scoring model is the shared yardstick.
 
@@ -113,47 +125,51 @@ Open gaps that are currently costing us deals rather than winning them: on-prem/
 
 ## Why Tricentis Should Solve This
 
-Being right about the market isn't the same as being the right company to act on it. Three reasons this specifically belongs at Tricentis:
+Being right about the market isn't the same as being the right company to act on it. The market for agent evaluation already exists and is already moving - the competitors above prove it. The question is not whether the problem is real, but whether there is an angle where Tricentis wins. Three reasons:
 
-- **We start the trust conversation somewhere else has to earn it.** The buyer who owns "is this agent safe to ship" is the same QA/quality leader who has trusted Tricentis for Tosca and qTest for years. A category outsider - Braintrust, Langfuse, Patronus - has to convince that buyer it understands enterprise QA rigor from zero. We don't; we're extending a relationship, not starting one.
-- **We have a distribution and cost advantage no outside vendor can match.** AI Workspace agents auto-provision a tenant and get graded with zero setup. That's a built-in funnel from "agent exists inside Tricentis" to "agent is being scored" that Langfuse, Arize, Braintrust, and Galileo structurally cannot replicate - they all require a separate integration decision. Every AIW customer is a warm lead we don't have to acquire.
-- **Our existing regulated-industry footprint is the hardest part of this sale for anyone else.** Merck, Regeneron, McKesson, and Tritusa's bank/pharma clients already trust Tricentis for compliance-grade software validation. For a category outsider, "how do you know it's accurate" is a cold trust-building exercise; for us, it's a question our existing customer relationships have already answered in an adjacent product.
+- **We own the gatekeepers.** The people responsible for deciding whether an agent can go to production - QA/quality leaders and AI program owners - are already Tricentis customers, including regulated-industry names like Merck, Regeneron, and McKesson. No one is serving that market with a tool. The incumbents (Braintrust, Langfuse, Patronus, Galileo) serve expert eval-engineering teams, and we are not trying to beat them at that game.
+- **We complete the quality loop.** The buyer who owns "is this agent safe to ship" is the same one who has trusted Tricentis for Tosca and qTest for years. Tosca and qTest cover code; AgentScore extends the same trust to the agents that code powers. A category outsider has to earn that trust from zero; we're extending a relationship, not starting one.
+- **Competitors prove the demand.** Eval-first competitors already charge a premium for eval runs, but they serve expert eval engineers. We serve the people who sign off on production.
 
-None of this guarantees we win the category - the open gaps in [Problems We Solve](#problems-we-solve) are real and someone else could close them faster. But it means our odds of winning a category fight are better than a startup's, and worse odds still beat sitting out a market this size (see [Why Now](#why-now)).
+None of this guarantees we win the category - the open gaps in [Problems We Solve](#problems-we-solve) are real and someone else could close them faster. But targeting the gatekeepers, not the incumbents' expert users, means we are not playing catch-up in their sandbox.
 
 ---
 
-## Why Customers Will Pay
+## Customer Value
 
 ### The Value They're Getting
 
-- **A defensible verdict instead of a gut call.** Freddie Mac's Kaleb Jackson reacted most directly to the ship/warn/block verdict model - it replaces "seems fine to me" with a number leadership can act on.
-- **Root-cause attribution, not just a score.** Span-level attribution (span + fix) is the single most consistently praised capability across every customer session we've run (Workday, Meta, Wolters Kluwer, Tritusa) - it turns debugging into a fix, not a re-run.
-- **A shared yardstick across fragmented ownership.** Wolters Kluwer called per-agent scoring "a proof of concept, not the product they need" and is asking for the fleet-level version; Freddie Mac has two teams building overlapping agents with no common way to compare them. AgentScore is the first shared measure either has had.
-- **Coverage without in-house AI expertise.** Zero-setup auto-profiling and 60+ evals across 11 dimensions mean a buyer doesn't need to already know what to measure - a real gap, per [Problems We Solve](#problems-we-solve).
-- **Third-party evidence SIs can resell.** Tritusa, Capgemini, Accenture, and Xebia need evidence of quality to close their own client deals - this is a resale motion for them, not just internal use.
+Ranked by what it costs a team not to have it. Figures marked "number still needed" have no source yet.
+
+- **Velocity: know when you're ready.** Teams with evals ship in days; teams without spend weeks (Anthropic Engineering, "Demystifying evals for AI agents": "teams without evals face weeks of testing while competitors with evals can quickly determine the model's strengths, tune their prompts, and upgrade in days"). Internal example: about 2.5 months from first agent version to a confident "this works"; the target is minutes. The hard part isn't fixing agents, it's knowing when you're there instead of running on customer vibes. The "~7x faster" figure is pending a source. *Cost of not having it: weeks of testing instead of days.*
+- **A defensible verdict instead of a gut call, with one yardstick across fragmented ownership.** Freddie Mac's Kaleb Jackson reacted most directly to the ship/warn/block verdict - it replaces "seems fine to me" with a number leadership can act on. Wolters Kluwer called per-agent scoring "a proof of concept, not the product they need" and is asking for the fleet-level version; Freddie Mac has two teams building overlapping agents with no common way to compare them. *Cost of not having it: ~2.3 AI-driven errors per quarter at $50K-$2.1M each.*
+- **Root-cause attribution: a fix, not a re-run.** Span-level attribution (span + fix) is the single most consistently praised capability across every customer session we've run (Workday, Meta, Wolters Kluwer, Tritusa). *Cost of not having it: engineering hours per issue (number still needed).*
+- **Coverage without in-house AI expertise.** Zero-setup auto-profiling and 40+ evals mean a buyer doesn't need to already know what to measure or hire data scientists - a real gap, per [Problems We Solve](#problems-we-solve). *Cost of not having it: the cost to hire or build eval expertise (number still needed).*
+
+Third-party evidence that SIs can resell (Tritusa, Capgemini, Accenture, Xebia) is a partner motion rather than customer value; it is covered under [Who It's For](#who-its-for).
 
 ### The ROI We Can Measure (and What We're Still Hypothesizing)
 
 What's already market-validated: Braintrust, PromptLayer, Humanloop, and Patronus all meter "scoring/eval runs" as a distinct, premium-priced line separate from raw trace ingestion - and all four are funded or profitable doing it. Our own [billing research](../research/billing-model-research.md) confirms AgentScore's cost driver (a scoring run can fan out to ~10 LLM calls) maps directly to that precedent: give away ingestion, charge for scoring runs in credits, unlimited seats. That's not a novel model we're hoping works - it's the model the category has already proven, and it gives us a real denominator to sell against: the average enterprise already eats 2.3 significant AI-driven errors per quarter at $50K-$2.1M each, and $14K/employee/year verifying whether outputs are true (see [Cost of Getting It Wrong](#the-cost-of-getting-it-wrong)). A subscription only has to prevent a fraction of one incident, or claw back a fraction of that time, to pay for itself many times over.
 
-What's still a hypothesis - none of the below is validated by a paying customer yet, and each needs pilot data before it goes in front of a buyer as a claim rather than a discussion point:
+What we can measure today: four ROI metrics computed from existing AgentScore telemetry, with no pilot required. The telemetry baselines are not pulled yet (the estimates are still "???" in the deck), and the dollar figures are directional until incident-cost estimates are validated with a customer:
 
-- **Savings hypothesis.** If root-cause attribution cuts incident-investigation time by even 25%, that's roughly $3.5K/employee/year reclaimed off the $14K verification-overhead figure above. We have no before/after measurement yet - this needs a pilot that times root-cause investigation with and without AgentScore.
-- **Governance hypothesis.** "Time to produce audit-ready evidence that an agent is safe to ship" is currently unmeasured and ad hoc at every account we've talked to (Wolters Kluwer, Freddie Mac). AgentScore's tiered evidence model could turn that into a reportable SLA metric - but we don't have a baseline from any account to compare against yet.
-- **Token-waste hypothesis.** Gartner's finding that 40-60% of agentic token spend contributes nothing to the answer implies a direct, meterable cost-avoidance story if AgentScore's scoring surfaces that waste. We don't yet have a real customer token bill to benchmark this against.
+1. **Time to production readiness.** Time from an agent's first trace to its first ship verdict. Today's internal example is about 2.5 months from first agent version to a confident "this works"; the target is minutes. ROI = velocity: knowing when you're ready, not guessing.
+2. **Fewer incidents.** Pre-production verdicts flagged, per agent. Baseline needs a telemetry pull; today's visibility without AgentScore is ~0. Cost avoided is about 2.3 AI-driven errors per quarter at $50K-$2.1M each. ROI = risk avoided: every flagged issue is a bug, hallucination, or policy violation that didn't reach production.
+3. **Dollar-justified budget line.** Estimated incident cost avoided versus the subscription price. Directional until a customer validates the incident-cost range. ROI = the number that turns "we flagged 40 issues" into "we avoided an estimated $2M" and justifies the budget line.
+4. **Less engineering time.** Root-cause coverage (share of flagged issues with a populated root cause) and evals auto-generated versus hand-authored, with ~4.3 hours/week/employee spent verifying AI outputs as the labor context. ROI = engineering time saved on debugging, and the cost of the alternative (build vs. buy).
 
-These three belong alongside [Open Questions / Honest Risks](#open-questions--honest-risks) until a pilot gives us real numbers - they're the shape of the ROI story, not the story itself yet.
+Together these map to the four things a buyer pays for: velocity (1), fewer incidents (2), a dollar-justified budget line (3), and less engineering time spent on QA and debugging (4). Regression rate was dropped as a standalone metric because it needs weeks of history and has no cross-customer baseline. Until the telemetry pull produces real baselines and a customer validates the incident-cost range, these are the shape of the ROI story, not the story itself yet - see [Open Questions / Honest Risks](#open-questions--honest-risks).
 
 ### What This Is Worth to Tricentis
 
 This is the flip side of the ROI story above - what closing this pays back to us, not just to the buyer. Same caveat applies: directional, not sized. Pricing isn't finalized (see [Open Questions](#open-questions--honest-risks) #3) and we have no beta usage data yet to convert any of this into a real revenue number.
 
-- **The pipeline is a demand signal, not a revenue figure.** 74 inbound-expressed-interest companies in six weeks, 5 scheduled demos, 1 pending beta (Accenture, on-prem/private-AWS, on behalf of Meta), and named accounts (Meta, Workday, Wolters Kluwer, Tritusa) actively scoping paid engagements (see [Why Now](#why-now)) is evidence people want this - it isn't yet an ARR estimate, because we don't have enough pricing or conversion data to turn a pipeline count into a dollar figure.
-- **The AI Workspace funnel is a structural cost advantage, not yet a modeled one.** Every AIW customer is a warm lead we don't have to acquire (see [Why Tricentis Should Solve This](#why-tricentis-should-solve-this)), which lowers customer-acquisition cost relative to every competitor who needs a separate integration decision - but we haven't modeled what that CAC delta is worth in dollars.
+- **The pipeline is a demand signal, not a revenue figure.** 73 inbound-expressed-interest companies in six weeks, 14 replies, 12 demos, 5 pending betas (Accenture, Aptiv, and L'OREAL included), and named accounts (Meta, Workday, Wolters Kluwer, Tritusa) actively scoping paid engagements (see [Why Now](#why-now)) is evidence people want this - it isn't yet an ARR estimate, because we don't have enough pricing or conversion data to turn a pipeline count into a dollar figure.
+- **The gatekeeper relationship is distribution, not yet a modeled one.** The people who decide whether an agent goes to production are already Tricentis customers (see [Why Tricentis Should Solve This](#why-tricentis-should-solve-this)), which should lower the cost of reaching them relative to a competitor starting cold - but we haven't modeled what that is worth in dollars.
 - **The billing precedent gives us a mechanism, not a number.** Eval-first competitors meter scoring runs as a distinct, premium-priced line, and AgentScore's own cost driver maps to that same mechanism (see above). What we don't have yet: the credit-to-dollar conversion, the volume-discount curve, or a single paying customer to validate either against.
 
-**Bottom line:** the demand signal, the distribution advantage, and the billing mechanism are each independently grounded elsewhere in this doc - but nobody should read this doc as containing a revenue number, because it doesn't have one yet. That's a gap to close with pricing finalization and the first beta cohort (see [How We'll Know We're Ready for Go-to-Market](#how-well-know-were-ready-for-go-to-market)), not a reason to wait (see [Cost of Getting Our Timing Wrong](#the-cost-of-getting-our-timing-wrong)).
+**Bottom line:** the demand signal, the gatekeeper relationship, and the billing mechanism are each independently grounded elsewhere in this doc - but nobody should read this doc as containing a revenue number, because it doesn't have one yet. That's a gap to close with pricing finalization and the first beta cohort (see [How We'll Know We're Ready for Go-to-Market](#how-well-know-were-ready-for-go-to-market)), not a reason to wait (see [Cost of Getting Our Timing Wrong](#the-cost-of-getting-our-timing-wrong)).
 
 ---
 
@@ -179,9 +195,9 @@ This is the flip side of the ROI story above - what closing this pays back to us
 **Two more thresholds, borrowed directly from the Labs graduation bar (criteria #1 and #4 in [the graduation plan](agentscore-labs-graduation-plan.md#the-bar-we-have-to-clear)), have to clear alongside the use-case thresholds above:**
 
 - **Active users, defined as real signal, not signups.** Proposed threshold: **5 tenants** showing real usage in the same rolling period - not 5 signups, not 5 tenants running only unattended schedules. "Real usage" means both (a) at least one manually-triggered scoring run ("Score now," not just an autonomous schedule - metric #11 in the Beta Metrics doc exists specifically because a schedule nobody looks at is a weak signal even when it runs cleanly) and (b) return usage across 2+ distinct weeks (metric #18, retention/days-active). Validate against the weekly usage dashboard once it's built - Part 2 of [`AgentScore-Beta-Metrics-Instrumentation.md`](../documentation/AgentScore-Beta-Metrics-Instrumentation.md) marks the metrics this threshold depends on (#11, #12, #18) as "needs new instrumentation" today, so this is a build dependency before it's a reportable number.
-- **ROI materials, defined as measured, not hypothesized.** The three hypotheses above - savings, governance, token-waste - have to move from "directional" to "measured" using the timed study's output ([graduation plan §4](agentscore-labs-graduation-plan.md#4-turn-the-study-into-roisizing-materials)): the FTE-cost conversion, the accuracy delta, and at least one draft credit/pricing package. We are not ready on ROI messaging while all three are still discussion points rather than numbers we'd put in front of a buyer.
+- **ROI materials, defined as measured, not hypothesized.** The four ROI metrics above - time to production readiness, fewer incidents, a dollar-justified budget line, less engineering time - have to move from "baseline not pulled" to "measured" using the timed study's output ([graduation plan §4](agentscore-labs-graduation-plan.md#4-turn-the-study-into-roisizing-materials)): the FTE-cost conversion, the accuracy delta, and at least one draft credit/pricing package. We are not ready on ROI messaging while the baselines are still "???" rather than numbers we'd put in front of a buyer.
 
-**Where we actually stand on both, today:** effectively zero. Zero *active* betas per the External Interest pipeline tracker - one account (Accenture, on-prem/private-AWS, on behalf of Meta) is pending but hasn't converted to active usage yet - and zero measured ROI numbers, all three hypotheses above still open. Naming that plainly, rather than rounding either number up, is the point (see [Section 5 of the graduation plan](agentscore-labs-graduation-plan.md#5-package-it-as-an-honest-ask-not-a-pitch)).
+**Where we actually stand on both, today:** effectively zero. Zero *active* betas per the External Interest pipeline tracker - five accounts (Accenture, Aptiv, and L'OREAL included) are pending but haven't converted to active usage yet - and zero measured ROI numbers, all four metrics above still awaiting baselines. Naming that plainly, rather than rounding either number up, is the point (see [Section 5 of the graduation plan](agentscore-labs-graduation-plan.md#5-package-it-as-an-honest-ask-not-a-pitch)).
 
 **Next steps to get a real read on this (not yet started):**
 
@@ -196,15 +212,17 @@ This is the flip side of the ROI story above - what closing this pays back to us
 1. We have zero external paying customers today - this is a strong internal alpha with real inbound interest, not a market participant yet. The competitors we're benchmarked against are all GA with marquee logos.
 2. On-prem and RBAC/SSO are named dealbreakers for at least two of our most active named accounts (Meta, Wolters Kluwer) - closing them is a multi-quarter infra investment, not a packaging decision.
 3. Pricing is directionally validated by the market but not finalized for AgentScore - exact credit-to-dollar conversion and volume-discount curve are still open per the July 2026 billing research.
-4. The ROI hypotheses in [Why Customers Will Pay](#why-customers-will-pay) (savings, governance SLA, token-waste capture) are directional, not measured - no pilot has produced a before/after number yet.
+4. The ROI metrics in [Customer Value](#customer-value) (time to production readiness, fewer incidents, dollar-justified budget line, less engineering time) are computable from existing telemetry but have no baselines pulled yet, and the cost-avoided dollar figure is directional until a customer validates the incident-cost range.
 5. The ICP in [Ideal Customer Profile](#ideal-customer-profile-icp) and the use-case clusters in [How We'll Know We're Ready for Go-to-Market](#how-well-know-were-ready-for-go-to-market) are built from two to four named accounts each - directionally useful, but a small enough sample that the next few pipeline conversations could reshape both.
+6. Response to our outreach is thin and late. Of roughly 70 form-sourced companies, 9 (13%) have responded to the welcome email. Median time to respond is about 11 days. Only 3 responded within a day (Aptiv, BearingPoint, Tritusa), and 4 responded only after the 2026-09-24 follow-up, 33 to 35 days after the first email. Once a company responds, the demo follows in about 5 days (median). Our own first email is also batched (six batches in 34 days, median about 13 hours to send), and six real signups from 2026-09-24 onward are still unanswered (oldest 8.5 days). The 2026-08-20 signup spike (35 in about 3 minutes) looks like a batch or launch push rather than organic demand, so the 73-company count overstates organic inbound.
 
 ---
 
 ## References
 
 * `docs/feedback/Customer Feedback Log.md` - session-by-session buyer evidence
-* `docs/feedback/External Interest.md` - 74-company pipeline tracker
+* `docs/feedback/External Interest.md` - 73-company pipeline tracker
+* `docs/decks/agentscore-offer-and-pipeline-status-outline.md` - signup counts by date, response time, and time-to-demo (Labs inbox, 2026-10-02)
 * `docs/research/competitive-analysis-report.md` - market map, capability gaps, positioning recommendations
 * `docs/research/billing-model-research.md` - pricing precedent across 13 competitors
 * Gartner: [40% of enterprise apps will feature task-specific AI agents by 2026](https://www.gartner.com/en/newsroom/press-releases/2025-08-26-gartner-predicts-40-percent-of-enterprise-apps-will-feature-task-specific-ai-agents-by-2026-up-from-less-than-5-percent-in-2025)

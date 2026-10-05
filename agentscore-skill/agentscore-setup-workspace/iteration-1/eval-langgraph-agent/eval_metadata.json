@@ -1,0 +1,6 @@
+{
+  "eval_id": 2,
+  "eval_name": "langgraph-agent",
+  "prompt": "This repo is a LangGraph support agent (main.py, uv project). Get it sending traces to AgentScore. Our AgentScore ingest URL is https://agent-score-ingest.product.tricentis.com.",
+  "assertions": []
+}

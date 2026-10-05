@@ -1,0 +1,11 @@
+{
+  "name": "agentscore",
+  "description": "Onboard an AI agent to Tricentis AgentScore: detects your stack, adds OpenTelemetry instrumentation, verifies the spans, and connects the agent with an ingest key.",
+  "version": "2.0.0",
+  "author": {
+    "name": "Tricentis"
+  },
+  "homepage": "https://agent-score.product.tricentis.com",
+  "license": "MIT",
+  "keywords": ["agentscore", "tricentis", "opentelemetry", "otel", "tracing", "llm", "agents", "onboarding"]
+}
