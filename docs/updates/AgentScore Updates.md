@@ -1,3 +1,27 @@
+## October 6, 2026 Update
+
+### Beta terms and consent gate approved by Legal
+- Before your first visit, you now see the beta terms and can print them or download them as a PDF right from the screen.
+- Your acceptance is recorded permanently, including the exact version and wording you agreed to, and you can download that same accepted version later from your Account page.
+- Accounts that aren't eligible for the beta, or that have AI turned off, are stopped before any terms are shown.
+
+### Clearer trends and easier selection
+- The verdict trend on your Home page is now a chart that shows Ship, Review and Block on one shared scale, with each total beside its line, so you can compare them at a glance.
+- Multi-select fields now show a checkbox on every option and list your picks as removable tags.
+- Removing one example on your Home page no longer greys out every Remove button.
+
+### Fixes
+- Opening a trace from Usage & cost now works from every link, with no more "Missing timestamp" error.
+- Sign-in and page loads now work in Firefox and in Safari versions before 17.4.
+
+### Internal note: security review findings closed
+- The ProdSec pentest findings from September 30 are fixed, including protection against names that could run as formulas in usage exports and a stricter browser security policy on the hosted app.
+
+### Coming next
+- Loading Legal's final terms document into the consent gate
+- Cutting agent tracing over to push directly from internal agents instead of pulling from Better Stack
+- Small additions to the API gateway and session services to finish production readiness
+
 ## September 28, 2026 Update
 
 ### Internal note: v1.5.0 deployed to dev and staging with TAIS integrations live
