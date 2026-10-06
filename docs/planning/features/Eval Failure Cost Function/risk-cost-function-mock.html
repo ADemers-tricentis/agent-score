@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AgentScore - Risk cost function (mock, in-product layout)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* Tokens mirror agentscore-frontend: Aura light theme, zinc neutrals, dimension-palette accents. */
+  :root {
+    --text: #18181b; --text2: #52525b; --disabled: #a1a1aa; --divider: #e4e4e7; --hover: #f4f4f5; --paper: #fff;
+    --success: #16a34a; --warning: #d97706; --error: #dc2626; --primary: #4f46e5;
+    --a-indigo: #4f46e5; --a-sky: #0284c7; --a-teal: #0d9488; --a-green: #059669;
+    --h-reg: #e11d48; --h-priv: #ea580c; --h-rep: #7c3aed; --h-fin: #0284c7; --h-ops: #0d9488;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { font: 14px/1.43 Inter, -apple-system, "Helvetica Neue", Arial, sans-serif; color: var(--text); background: var(--paper); }
+  .shell { display: flex; height: 100vh; }
+
+  /* Sidebar (MinimalShell: 220px, right divider) */
+  .side { width: 220px; flex-shrink: 0; border-right: 1px solid var(--divider); padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .side .brand { font-weight: 700; font-size: 14px; margin-bottom: 8px; }
+  .side a { display: flex; align-items: center; gap: 8px; color: inherit; text-decoration: none; font-size: 14px; padding: 4px 0; }
+  .side a.on { font-weight: 600; color: var(--primary); }
+  .ico { width: 18px; height: 18px; border-radius: 4px; background: var(--hover); border: 1px solid var(--divider); flex-shrink: 0; }
+  .side a.on .ico { background: rgba(79,70,229,.12); border-color: rgba(79,70,229,.35); }
+  .demo { margin-top: auto; border-top: 1px solid var(--divider); padding-top: 12px; font-size: 12px; color: var(--text2); }
+
+  .main { flex: 1; overflow: auto; }
+  .page { max-width: 1040px; margin: 0 auto; padding: 24px 32px 64px; }
+  .banner { font-size: 12px; color: var(--text2); border: 1px dashed var(--divider); border-radius: 8px; padding: 8px 12px; margin-bottom: 20px; }
+  .crumb { font-size: 12px; color: var(--text2); }
+  .crumb b { color: var(--text); font-weight: 500; }
+  h1 { font-size: 22px; line-height: 1.3; margin: 6px 0 2px; font-weight: 600; }
+  .desc { color: var(--text2); font-size: 13px; }
+  .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  .btn { height: 32px; padding: 0 14px; border-radius: 8px; border: 1px solid var(--divider); background: var(--paper); font: inherit; font-size: 13px; cursor: pointer; }
+  .btn.pri { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+  /* Agent tabs: Score / Improve / Agent Card / Traces / Profile / Labeling / Settings */
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--divider); margin: 18px 0 20px; }
+  .tab { padding: 8px 12px; font-size: 14px; color: var(--text2); border-bottom: 2px solid transparent; margin-bottom: -1px; position: relative; }
+  .tab.on { color: var(--primary); border-color: var(--primary); font-weight: 600; }
+
+  .box { border: 1px solid var(--divider); border-radius: 8px; padding: 24px; margin-bottom: 16px; background: var(--paper); }
+  .box h6 { font-size: 16px; font-weight: 600; margin: 0; }
+  .rowh { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; }
+  .muted { color: var(--text2); font-size: 13px; }
+  .chip { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 9999px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+  .chip.muted { background: rgba(82,82,91,.12); color: var(--text2); }
+  .chip.success { background: rgba(22,163,74,.15); color: var(--success); }
+  .chip.warning { background: rgba(217,119,6,.15); color: var(--warning); }
+  .chip.error { background: rgba(220,38,38,.15); color: var(--error); }
+  .new { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .05em; color: var(--primary); background: rgba(79,70,229,.12); border-radius: 4px; padding: 1px 5px; vertical-align: middle; margin-left: 6px; }
+  .newbox { box-shadow: 0 0 0 2px rgba(79,70,229,.18); border-color: rgba(79,70,229,.5); }
+
+  .hero { display: grid; grid-template-columns: minmax(180px, .5fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+  .score { font-size: 48px; line-height: 1.1; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .score small { font-size: 20px; font-weight: 500; color: var(--text2); }
+  .sub2 { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+  .unc { position: relative; height: 10px; border-radius: 9999px; display: flex; overflow: hidden; margin: 14px 0 6px; }
+  .unc i { display: block; height: 100%; }
+  .unc .range { position: absolute; top: -4px; height: 18px; border: 2px solid var(--text); border-radius: 4px; }
+
+  .tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--divider); }
+  .tile { border-radius: 8px; background: var(--hover); padding: 12px; }
+  .tile .n { font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .tile .l { font-size: 13px; color: var(--text2); }
+  .tile.risk { background: rgba(220,38,38,.07); }
+
+  /* Risk exposure card (new) */
+  .riskgrid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 28px; margin-top: 4px; }
+  .bar { display: grid; grid-template-columns: 112px 1fr 96px; gap: 10px; align-items: center; margin-bottom: 10px; }
+  .bar .nm { font-size: 13px; display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 9999px; flex-shrink: 0; }
+  .track { height: 10px; background: var(--hover); border-radius: 9999px; overflow: hidden; }
+  .fill { height: 100%; border-radius: 9999px; transition: width .3s; }
+  .amt { text-align: right; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .amt small { color: var(--text2); }
+  .heat { display: grid; grid-template-columns: 40px repeat(5, 1fr); gap: 3px; font-size: 11px; color: var(--text2); }
+  .heat .c { height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; gap: 3px; }
+  .heat .ax { display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; }
+  .heat .xl { text-align: center; padding-top: 3px; }
+  .mk { width: 20px; height: 20px; border-radius: 9999px; background: var(--text); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+
+  /* Evaluation breakdown = PerPointGrid pattern */
+  .tools { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+  .seg { display: inline-flex; border: 1px solid var(--divider); border-radius: 8px; overflow: hidden; }
+  .seg button { height: 30px; padding: 0 12px; border: 0; background: var(--paper); font: inherit; font-size: 13px; color: var(--text2); cursor: pointer; }
+  .seg button.on { background: rgba(79,70,229,.1); color: var(--primary); font-weight: 600; }
+  .grp { border: 1px solid var(--divider); border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
+  .gh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 16px; border-bottom: 1px solid var(--divider); }
+  .gh .l { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; text-transform: capitalize; }
+  .gh .r { font-size: 12px; color: var(--text2); font-variant-numeric: tabular-nums; display: flex; gap: 12px; align-items: center; }
+  .pr { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding: 12px 16px; border-top: 1px solid var(--divider); cursor: pointer; }
+  .gh + .pr { border-top: 0; }
+  .pr:hover { background: var(--hover); }
+  .pr .nm { flex: 1; min-width: 180px; }
+  .pr .nm .t { font-size: 14px; font-weight: 500; text-transform: capitalize; }
+  .pr .nm .s { font-size: 12px; color: var(--text2); }
+  .pr .m { font-size: 12px; color: var(--text2); font-variant-numeric: tabular-nums; width: 108px; }
+  .sev { display: inline-block; min-width: 22px; text-align: center; border-radius: 5px; padding: 1px 6px; font-weight: 700; font-size: 12px; }
+  .s5 { background: rgba(220,38,38,.18); color: var(--error); } .s4 { background: rgba(234,88,12,.16); color: #c2410c; }
+  .s3 { background: rgba(217,119,6,.15); color: var(--warning); } .s2 { background: rgba(82,82,91,.12); color: var(--text2); }
+  .s1 { background: rgba(82,82,91,.08); color: var(--disabled); }
+  .cost { width: 84px; text-align: right; font-weight: 600; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .cost.zero { color: var(--disabled); font-weight: 400; }
+  .why { padding: 12px 16px 14px 16px; background: var(--hover); border-top: 1px solid var(--divider); font-size: 13px; color: var(--text2); }
+  .why code { background: var(--paper); border: 1px solid var(--divider); border-radius: 4px; padding: 1px 6px; font-size: 12px; color: var(--text); }
+  .chev { color: var(--disabled); font-size: 12px; }
+  .note { font-size: 12px; color: var(--text2); margin-top: 10px; }
+  .where { font-size: 12px; color: var(--text2); border-left: 3px solid var(--primary); padding: 8px 12px; background: rgba(79,70,229,.05); border-radius: 0 6px 6px 0; margin-bottom: 16px; }
+  select { font: inherit; font-size: 13px; height: 30px; border: 1px solid var(--divider); border-radius: 8px; padding: 0 8px; background: var(--paper); color: var(--text); }
+  @media (max-width: 900px) { .hero, .riskgrid { grid-template-columns: 1fr; } .tiles { grid-template-columns: repeat(2, 1fr); } .side { display: none; } }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="side">
+    <div class="brand">AgentScore</div>
+    <nav style="display:flex;flex-direction:column;gap:8px">
+      <a><span class="ico"></span>Home</a>
+      <a class="on"><span class="ico"></span>My Agents</a>
+      <a><span class="ico"></span>Evals Catalog</a>
+      <a><span class="ico"></span>Reports</a>
+      <a><span class="ico"></span>Docs</a>
+    </nav>
+    <div class="demo">Demo controls<br>Role: Admin</div>
+  </aside>
+
+  <div class="main"><div class="page">
+    <div class="banner">MOCK - built on the real Score tab layout (ScorecardTab + PerPointGrid). Elements marked <span class="new" style="margin:0">NEW</span> are the proposed risk cost function. Data is illustrative. The 0-100 score and the Ship / Needs work / Don't ship verdict are existing behavior.</div>
+
+    <div class="crumb">My Agents / <b>Claims Triage Bot</b></div>
+    <div class="head">
+      <div>
+        <h1>Claims Triage Bot</h1>
+        <div class="desc">Customer-facing agent that triages incoming insurance claims</div>
+      </div>
+      <button class="btn pri">Score now</button>
+    </div>
+
+    <div class="tabs">
+      <div class="tab on">Score</div><div class="tab">Improve</div><div class="tab">Agent Card</div>
+      <div class="tab">Traces</div><div class="tab">Profile<span class="new">RISK PROFILE</span></div><div class="tab">Labeling</div><div class="tab">Settings</div>
+    </div>
+
+    <!-- Existing: Latest scored run -->
+    <div class="box">
+      <div class="rowh">
+        <h6>Latest scored run</h6>
+        <span class="muted">Oct 6, 2026, 9:42 AM</span>
+        <span class="chip muted">Completed</span>
+        <button class="btn">View run</button>
+      </div>
+      <div class="hero">
+        <div>
+          <div class="score">78<small> / 100</small></div>
+          <div style="margin-top:8px"><span class="chip" id="verdict">-</span></div>
+          <div class="muted" id="verdictWhy" style="margin-top:6px;max-width:260px">-</div>
+        </div>
+        <div>
+          <div class="sub2">How stable is this score?</div>
+          <div class="unc">
+            <i style="width:50%;background:rgba(220,38,38,.35)"></i><i style="width:25%;background:rgba(217,119,6,.35)"></i><i style="width:25%;background:rgba(22,163,74,.35)"></i>
+            <div class="range" style="left:68%;width:20%"></div>
+          </div>
+          <div class="muted">Likely between 73 and 83 if re-tested. Verdict bands: Don't ship below 50, Needs work 50-75, Ship above 75.</div>
+        </div>
+      </div>
+      <div class="tiles">
+        <div class="tile"><div class="n">20</div><div class="l">interactions scored</div></div>
+        <div class="tile"><div class="n">9/9</div><div class="l">checks contributed</div></div>
+        <div class="tile"><div class="n">0</div><div class="l">checks could not be evidenced</div></div>
+        <div class="tile"><div class="n">0</div><div class="l">interactions retired</div></div>
+      </div>
+    </div>
+
+    <!-- NEW: Risk exposure -->
+    <div class="box newbox">
+      <div class="rowh" style="margin-bottom:14px">
+        <h6>Risk exposure<span class="new">NEW</span></h6>
+        <span class="muted">What the failures above could cost</span>
+        <span style="margin-left:auto;display:flex;align-items:center;gap:8px">
+          <span class="muted">Risk profile</span>
+          <select id="profile"></select>
+        </span>
+      </div>
+      <div class="tiles" style="margin-top:0;padding-top:0;border-top:0;margin-bottom:22px">
+        <div class="tile risk"><div class="n" id="total">-</div><div class="l">estimated exposure / year</div></div>
+        <div class="tile"><div class="n" id="crit">-</div><div class="l">critical (severity 5) failures</div></div>
+        <div class="tile"><div class="n" id="topcat">-</div><div class="l">largest harm category</div></div>
+        <div class="tile"><div class="n" id="nfail">-</div><div class="l">checks adding cost</div></div>
+      </div>
+      <div class="riskgrid">
+        <div>
+          <div class="sub2">Exposure by harm category</div>
+          <div id="bars"></div>
+        </div>
+        <div>
+          <div class="sub2">Severity x likelihood</div>
+          <div class="heat" id="heat"></div>
+        </div>
+      </div>
+      <div class="note">Exposure = impact per incident x observed failure rate x exposed volume x profile weight. Profiles are presets set on the Profile tab; weights and dollar basis are editable per category. Severity tiers reference EU AI Act, NIST AI RMF and OWASP LLM Top 10.</div>
+    </div>
+
+    <!-- Existing breakdown, extended with harm/severity/cost columns -->
+    <div class="box">
+      <div class="tools">
+        <h6>Evaluation breakdown</h6>
+        <span class="chip warning" id="needAttn">-</span>
+        <span style="margin-left:auto;display:flex;gap:10px;align-items:center">
+          <span class="muted">Group by<span class="new">NEW</span></span>
+          <span class="seg"><button class="on" data-g="dim">Dimension</button><button data-g="harm">Harm category</button><button data-g="cost">Cost</button></span>
+        </span>
+      </div>
+      <div class="where">Each check now carries a harm category and severity tier (set in the <b>Evals Catalog</b>), so the existing dimension grid can show what a miss costs. Click a row to see the math.</div>
+      <div id="grid"></div>
+    </div>
+  </div></div>
+</div>
+
+<script>
+const DIMS = { correctness: "var(--a-indigo)", relevance: "var(--a-sky)", quality_efficiency: "var(--a-teal)", safety: "var(--a-green)" };
+const HARM = {
+  reg:  { name: "Regulatory",   c: "var(--h-reg)" },
+  priv: { name: "Data privacy", c: "var(--h-priv)" },
+  rep:  { name: "Reputational", c: "var(--h-rep)" },
+  fin:  { name: "Financial",    c: "var(--h-fin)" },
+  ops:  { name: "Operational",  c: "var(--h-ops)" },
+};
+// impact = $ per incident at that severity; vol = share of annual interactions exposed. failed/runs = observed.
+const EVALS = [
+  { slug: "correctness.answer_accuracy",          dim: "correctness",        harm: "fin",  sev: 3, mean: .71, target: .70, failed: 2,  impact: 40000,  vol: .6,  trend: "flat" },
+  { slug: "correctness.task_completion",          dim: "correctness",        harm: "ops",  sev: 2, mean: .88, target: .70, failed: 0,  impact: 6000,   vol: 1,   trend: "up" },
+  { slug: "relevance.context_alignment",          dim: "relevance",          harm: "rep",  sev: 2, mean: .83, target: .70, failed: 0,  impact: 8000,   vol: .8,  trend: "up" },
+  { slug: "quality_efficiency.conciseness",       dim: "quality_efficiency", harm: "rep",  sev: 1, mean: .79, target: .70, failed: 0,  impact: 2000,   vol: 1,   trend: "flat" },
+  { slug: "quality_efficiency.latency",           dim: "quality_efficiency", harm: "ops",  sev: 1, mean: .92, target: .70, failed: 0,  impact: 1500,   vol: 1,   trend: "up" },
+  { slug: "safety.harmlessness",                  dim: "safety",             harm: "rep",  sev: 3, mean: .91, target: .90, failed: 0,  impact: 30000,  vol: .5,  trend: "flat" },
+  { slug: "safety.pii_leakage",                   dim: "safety",             harm: "priv", sev: 4, mean: .68, target: .95, failed: 2,  impact: 90000,  vol: .55, trend: "down" },
+  { slug: "safety.prompt_injection_resistance",   dim: "safety",             harm: "reg",  sev: 3, mean: .74, target: .90, failed: 3,  impact: 30000,  vol: 1,   trend: "down" },
+  { slug: "safety.regulated_advice",              dim: "safety",             harm: "reg",  sev: 5, mean: .62, target: .95, failed: 4,  impact: 250000, vol: .21, trend: "down" },
+];
+const RUNS = 20;
+const PROFILES = {
+  "Financial Services": { reg: 10, priv: 8, rep: 3, fin: 5, ops: 1 },
+  "Healthcare":         { reg: 9,  priv: 10, rep: 4, fin: 2, ops: 3 },
+  "Retail / Consumer":  { reg: 3,  priv: 5, rep: 8, fin: 4, ops: 2 },
+  "Internal Tools":     { reg: 2,  priv: 3, rep: 1, fin: 2, ops: 4 },
+};
+const fmt = n => n >= 1e6 ? "$" + (n/1e6).toFixed(1) + "M" : n >= 1000 ? "$" + Math.round(n/1000) + "K" : "$" + Math.round(n);
+const pretty = s => s.slice(s.indexOf(".") + 1).replace(/_/g, " ");
+const pct = v => Math.round(v * 100) + "%";
+const status = e => e.mean >= e.target ? "good" : (e.target - e.mean <= .05 ? "partial" : "fail");
+const statusLbl = { good: ["success", "Meets threshold"], partial: ["warning", "Partially meets threshold"], fail: ["error", "Needs attention"] };
+const arrow = { up: ["success", "↑"], down: ["error", "↓"], flat: ["", "→"] };
+
+const sel = document.getElementById("profile");
+Object.keys(PROFILES).forEach(p => sel.add(new Option(p, p)));
+let group = "dim", open = null;
+
+function scored() {
+  const w = PROFILES[sel.value];
+  return EVALS.map(e => {
+    const rate = e.failed / RUNS;
+    const cost = e.impact * rate * e.vol * (w[e.harm] / 5);
+    return { ...e, rate, cost, wt: w[e.harm], st: status(e) };
+  });
+}
+
+function render() {
+  const S = scored(), total = S.reduce((a, e) => a + e.cost, 0);
+  const crit = S.filter(e => e.sev === 5 && e.failed > 0);
+  document.getElementById("total").textContent = fmt(total);
+  document.getElementById("crit").textContent = crit.length;
+  document.getElementById("nfail").textContent = S.filter(e => e.cost > 0).length + " of " + S.length;
+
+  // Verdict reuses the existing 3-state ship decision; a critical failure caps it at Don't ship.
+  const v = document.getElementById("verdict"), why = document.getElementById("verdictWhy");
+  if (crit.length) { v.className = "chip error"; v.textContent = "Don't ship"; why.innerHTML = "Capped by risk: 1 critical failure (<b>" + pretty(crit[0].slug) + "</b>) regardless of score"; }
+  else if (total > 100000) { v.className = "chip warning"; v.textContent = "Needs work"; why.textContent = "Exposure is elevated for this profile"; }
+  else { v.className = "chip success"; v.textContent = "Ship"; why.textContent = "No critical failures, exposure within tolerance"; }
+  const needs = S.filter(e => e.st !== "good").length;
+  document.getElementById("needAttn").textContent = needs + " need attention";
+
+  const byH = {}; S.forEach(e => byH[e.harm] = (byH[e.harm] || 0) + e.cost);
+  const order = Object.keys(HARM).sort((a, b) => (byH[b] || 0) - (byH[a] || 0));
+  document.getElementById("topcat").textContent = HARM[order[0]].name;
+  document.getElementById("bars").innerHTML = order.map(h => {
+    const a = byH[h] || 0, p = total ? a / total * 100 : 0;
+    return `<div class="bar"><div class="nm"><span class="dot" style="background:${HARM[h].c}"></span>${HARM[h].name}</div>
+      <div class="track"><div class="fill" style="width:${p}%;background:${HARM[h].c}"></div></div>
+      <div class="amt">${fmt(a)} <small>${Math.round(p)}%</small></div></div>`;
+  }).join("");
+
+  // Heatmap: markers are the ranked top failures (numbers match nothing else; kept to cost-bearing checks).
+  const ranked = S.filter(e => e.cost > 0).sort((a, b) => b.cost - a.cost);
+  const bucket = r => r >= .4 ? 4 : r >= .25 ? 3 : r >= .15 ? 2 : r >= .05 ? 1 : 0;
+  const xl = ["Rare", "Unlikely", "Possible", "Likely", "Frequent"];
+  let h = "";
+  for (let s = 5; s >= 1; s--) {
+    h += `<div class="ax">Sev ${s}</div>`;
+    for (let b = 0; b < 5; b++) {
+      const r = s * (b + 1), bg = r >= 15 ? "rgba(220,38,38,.22)" : r >= 8 ? "rgba(217,119,6,.18)" : "rgba(22,163,74,.10)";
+      const here = ranked.map((e, i) => ({ e, i })).filter(x => x.e.sev === s && bucket(x.e.rate) === b);
+      h += `<div class="c" style="background:${bg}">${here.map(x => `<div class="mk" title="${pretty(x.e.slug)}">${x.i + 1}</div>`).join("")}</div>`;
+    }
+  }
+  h += "<div></div>" + xl.map(x => `<div class="xl">${x}</div>`).join("");
+  document.getElementById("heat").innerHTML = h;
+  document.querySelectorAll(".mk").forEach(m => { /* hover title carries the check name */ });
+
+  renderGrid(S, ranked);
+}
+
+function row(e, rank) {
+  const [pc, pl] = statusLbl[e.st], [tc, ta] = arrow[e.trend], isOpen = open === e.slug;
+  return `<div>
+    <div class="pr" data-slug="${e.slug}">
+      <span class="chip ${pc}">${pl}</span>
+      <div class="nm"><div class="t">${pretty(e.slug)}</div><div class="s">${e.dim.replace(/_/g, " ")}</div></div>
+      <span class="chip" style="background:${HARM[e.harm].c}22;color:${HARM[e.harm].c}">${HARM[e.harm].name}</span>
+      <span class="sev s${e.sev}" title="Severity tier">${e.sev}</span>
+      <div class="m">${pct(e.mean)} <span style="color:var(--disabled)">/ target ${pct(e.target)}</span></div>
+      <span class="${tc ? "" : ""}" style="color:${tc ? "var(--" + tc + ")" : "var(--disabled)"};width:14px">${ta}</span>
+      <div class="cost ${e.cost ? "" : "zero"}">${e.cost ? fmt(e.cost) : "-"}</div>
+      <span class="chev">${isOpen ? "▲" : "▼"}</span>
+    </div>
+    ${isOpen ? `<div class="why"><b>How this cost is computed</b><br>
+      <code>${fmt(e.impact)}</code> impact per severity-${e.sev} incident x <code>${e.failed}/${RUNS}</code> observed failure rate x <code>${Math.round(e.vol * 100)}%</code> of interactions exposed x <code>x${e.wt}/5</code> ${sel.value} weight for ${HARM[e.harm].name.toLowerCase()} = <b>${fmt(e.cost)} / year</b>.
+      <br>Drill into the run to see the ${e.failed} failing interactions and evidence spans.</div>` : ""}
+  </div>`;
+}
+
+function renderGrid(S, ranked) {
+  let groups;
+  if (group === "dim") groups = Object.keys(DIMS).map(d => ({ key: d, label: d.replace(/_/g, " "), color: DIMS[d], rows: S.filter(e => e.dim === d) }));
+  else if (group === "harm") groups = Object.keys(HARM).map(k => ({ key: k, label: HARM[k].name, color: HARM[k].c, rows: S.filter(e => e.harm === k) })).filter(g => g.rows.length);
+  else groups = [{ key: "all", label: "All checks, highest cost first", color: "var(--primary)", rows: [...S].sort((a, b) => b.cost - a.cost) }];
+
+  document.getElementById("grid").innerHTML = groups.map(g => {
+    const passing = g.rows.filter(e => e.st === "good").length, cost = g.rows.reduce((a, e) => a + e.cost, 0);
+    return `<div class="grp"><div class="gh" style="background:color-mix(in srgb, ${g.color} 6%, white)">
+      <div class="l"><span class="dot" style="background:${g.color}"></span>${g.label}</div>
+      <div class="r"><span>${passing} of ${g.rows.length} passing</span><span class="chip ${cost ? "error" : "muted"}" style="${cost ? "" : ""}">${cost ? fmt(cost) + " exposure" : "No exposure"}</span></div></div>
+      ${g.rows.map(e => row(e)).join("")}</div>`;
+  }).join("");
+  document.querySelectorAll(".pr").forEach(el => el.addEventListener("click", () => { open = open === el.dataset.slug ? null : el.dataset.slug; render(); }));
+}
+
+sel.addEventListener("change", render);
+document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".seg button").forEach(x => x.classList.remove("on")); b.classList.add("on"); group = b.dataset.g; render();
+}));
+render();
+</script>
+</body>
+</html>

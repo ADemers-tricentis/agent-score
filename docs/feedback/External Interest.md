@@ -10,7 +10,7 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos | Pending betas | Active betas |
 |---|---|---|---|---|
-| 78 | 14 | 12 | 5 | 0 |
+| 78 | 14 | 11 (+1 scheduled) | 6 | 0 |
 
 Source breakdown: 75 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.), 1 via David (VP of AI/ML) (Eaton) = 78 total.
 
@@ -62,7 +62,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Crown Equipment Corporation | Vinay Patlolla | Follow-up sent — 2026-09-24 |
 | Stanza | Anirban Toy Choudhury | Replied |
 | Sunbelt Rentals | Arya Shrey | Follow-up sent — 2026-09-24 |
-| Merito Solutions | Chris Carpenter, Gerard Trimberger, Louis Tadman | Demo Scheduled — 2026-10-06 |
+| Merito Solutions | Chris Carpenter, Gerard Trimberger, Louis Tadman, Andrew Carpenter | Pending Beta |
 | Amazon Kuiper Manufacturing Enterprises LLC | Saranya Vaithiyanathan | Follow-up sent — 2026-09-24 |
 | Accenture CIO HR Organization (unresolved, may be Stanza) | Greg Wanroy | Follow-up sent — 2026-09-24 |
 | Aspire Systems Digital Transformation Inc. | Naveen Srinivasan | Follow-up sent — 2026-09-24 |
@@ -1333,15 +1333,20 @@ Date: 2026-08-21 16:41
 Name: Gerard Trimberger  
 
 Demo contact: Louis Tadman (not a form submitter; added when the demo was scheduled)  
+Also on the demo: Andrew Carpenter (Director of Professional Services)  
 
 Email sent: —  
 Beta scheduled: 2026-10-06 (demo)  
 
 what they do: Enterprise software VAR/consultancy (20+ years) — SDLC tooling, QA automation, app-security reseller. Already a Tricentis partner — lists Tricentis alongside Azure DevOps, TestRail, Planview on their own site.
 
+confirmed use case (from 2026-10-06 demo): not a live agent-evaluation pull yet. Louis Tadman (CTO) and Andrew Carpenter (Director of Professional Services) described a long partner history (QA Symphony before the acquisition, RIPT alpha/beta for AI Workspace) and a team with many Claude-certified architects who build agentic solutions, but no production or customer-facing agents today. Louis said they are "absolutely interested" and want to learn by doing and give feedback. Zero-setup profiles, configurable thresholds, staging plus production monitoring, the cost view, and the upcoming MCP all landed without objection. Louis asked whether access is a seat license or a team invite, and whether their partner not-for-resale Tosca Cloud tenant is tied to auth (it was required for the AI Workspace RIPT); not answered on the call. Capacity is the limit: a couple of weeks to stand up a test agent (a fantasy-football analysis agent was floated), planned around backlog work, no promises of heavy use. Chris Carpenter, the Labs signer, was not on the call. Debrief: [Merito Feedback Session](feedback-sessions/Merito%20Feedback%20Session.md).
+
+waiting on: (1) Andrew to send onboarding instructions, including the answer on seat license vs team invite and whether the partner NFR Tosca Cloud tenant is needed; (2) Merito to pick a first test agent and onboard, expected in a couple of weeks; (3) a follow-up session once they have feedback. No beta date set.
+
 likely use case: given the existing partner relationship, likely evaluating Agent Score to advise/resell to their own enterprise clients doing agentic-AI QA, rather than for their own internal agents.
 
-known agent tooling: no public information found on Merito operating AI agents themselves.
+known agent tooling: no public information found on Merito operating AI agents themselves; on the call, Merito said it builds agentic solutions with Claude-certified architects but runs no production agents.
 
 ---
 

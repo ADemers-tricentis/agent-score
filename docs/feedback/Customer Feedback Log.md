@@ -52,10 +52,19 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
 |---|---|---|---|
 | Medium | Point AgentScore at Tricentis's own agents (e.g. QTest ATC) so a partner can prove to their client that agent works | BearingPoint | Open - deliberately not exposed today for proprietary/IP reasons; blocks BearingPoint's most concrete use case |
 | Medium | Partner co-sell / co-working motion (SIs who implement + evaluate for their own clients) | Tritusa | Open - asked twice, no answer available; gold-sponsor partner presenting our story at Transatlantic 26 (event has since passed, 2026-09-15) |
+| Low | Clear partner access path: seat license vs inviting the team, and whether a partner not-for-resale Tosca Cloud tenant is required for auth (as it was for the RIPT AI Workspace) | Merito | Open - Louis asked on the 2026-10-06 call; not answered, owed in the onboarding email |
 
 ---
 
 ## Sessions
+
+### 2026-10-06 - Merito Solutions (partner/SI, Labs intro and beta onboarding)
+
+- **Who:** Louis Tadman (CTO), Andrew Carpenter (Director of Professional Services, resourcing). Chris Carpenter, the Labs signer, was not on the call. Tricentis: Andrew Demers. *(Transcript mis-hears "Louis" as "Lewis" and "Merito" as "Meritos"; Merito's director is labeled "Andrew Carpenter" on the final line only.)*
+- **What we learned:** Merito is a long-time partner (QA Symphony before the acquisition, RIPT alpha/beta for AI Workspace) with many Claude-certified architects, but no production or customer-facing agents. Interest is real and framed around learning by doing and giving feedback; Louis said "absolutely interested." Zero-setup profiles, configurable thresholds, staging plus production monitoring, cost view, and the upcoming MCP all went down without objection. Capacity is the limit: a couple of weeks to stand up a test agent (a fantasy-football analysis agent was floated), planned around backlog work, no promises of heavy use. Andrew will send onboarding instructions and leave the next move with Merito.
+- **Major asks:**
+  - Partner access path: seat license vs team invite, and whether the partner NFR Tosca Cloud tenant is tied to auth - not answered on the call.
+- **Full debrief:** [feedback-sessions/Merito Feedback Session.md](feedback-sessions/Merito%20Feedback%20Session.md)
 
 ### 2026-10-02 - Love's Travel Stops (Labs intro, Tosca customer)
 
