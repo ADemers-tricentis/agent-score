@@ -38,14 +38,20 @@ you run on the user's behalf, or span attributes.
 
 - `.env.example` gets `tk_REPLACE_ME` only. `scripts/configure_env.py` writes it.
 - `.env` must be in `.gitignore` before the real key exists. `configure_env.py` does that first.
-- The user adds the key themselves. Offer this one-liner, to run with the `!` prefix so the value never
-  passes through the conversation (the prompt hides what they type):
+- The user adds the key themselves, with `scripts/add_key.py`. Easiest path: they copy the key in
+  AgentScore (**Integrations**), then run this with the `!` prefix so the value never passes through the
+  conversation:
 
 ```
-! printf 'AgentScore ingest key (tk_...): '; stty -echo; read k; stty echo; echo; printf 'OTEL_EXPORTER_OTLP_TRACES_HEADERS=Authorization=Bearer%%20%s\n' "$k" >> .env; unset k
+! python3 <skill>/scripts/add_key.py --clipboard
 ```
 
-  If the prompt cannot take hidden input in their terminal, tell them to open `.env` and paste the
+  Use the real absolute path to the script. The script checks the key looks right (`tk_...`), refuses to
+  write unless `.env` is git-ignored, replaces an earlier value in place (so it also rotates a key), sets
+  `.env` to owner-only, and prints only the last four characters.
+- Without `--clipboard` it prompts with hidden input, but `!` commands often have no terminal for that and
+  the script then stops with a message instead of echoing. In that case use `--clipboard`, or have them run
+  the same command in their own terminal. Last resort: open `.env` and paste the
   `OTEL_EXPORTER_OTLP_TRACES_HEADERS=Authorization=Bearer%20tk_...` line by hand.
 - If the user pastes a key into the chat anyway, do not repeat it, do not write it anywhere, and tell them
   to use the command above (and to rotate the key if the chat is shared).

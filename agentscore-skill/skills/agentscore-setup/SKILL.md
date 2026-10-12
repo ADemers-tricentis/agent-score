@@ -23,7 +23,8 @@ Read these as needed, not all up front:
 - `references/manual-spans.md`: root agent span, tool spans, LLM spans written by hand
 
 `scripts/` (stdlib-only; run with system `python3`):
-`detect.py` (project facts), `configure_env.py` (env files and .gitignore), `span_tree.py` (span-content
+`detect.py` (project facts), `configure_env.py` (env files and .gitignore), `add_key.py` (the user adds
+the key), `span_tree.py` (span-content
 check), `wire_check.py` (transport check against a local receiver).
 `assets/` has the bootstrap templates `agentscore_otel.py` and `agentscore-otel.ts`.
 
@@ -64,8 +65,7 @@ Ask for two things in a single message:
 2. **Whether they already have an ingest key**, and if not, where to create one (AgentScore UI,
    **Integrations**). Do not ask them to paste it in chat.
 
-Later, in step 6, give them the `!` command from `references/endpoint-and-auth.md` to add the key to
-`.env` themselves.
+Later, in step 6, give them the `add_key.py` command to add the key to `.env` themselves.
 
 ### 3. Present the plan and wait for confirmation
 
@@ -126,9 +126,10 @@ Delete `.agentscore-spans.jsonl` afterwards (it is git-ignored, but it can conta
 
 ### 6. Switch to real export
 
-1. Ask the user to add the key with the `!` command (see `references/endpoint-and-auth.md`). It is the
-   only manual step: step 4 already put everything else in `.env`. Confirm by checking the variable name
-   is present in `.env`, never by printing it.
+1. Ask the user to copy the key in AgentScore (**Integrations**), then run
+   `! python3 <skill>/scripts/add_key.py --clipboard` (absolute path, see `references/endpoint-and-auth.md`
+   for fallbacks). It is the only manual step: step 4 already put everything else in `.env`. Confirm by
+   checking the variable name is present in `.env`, never by printing it.
 2. Ask before sending: "Run the agent once and send a real trace to AgentScore?" On yes, run it without
    `AGENTSCORE_EXPORTER`. Watch stderr for 401/403/429/503 and use the status table to explain any failure.
 3. Tell the user how to confirm arrival: in AgentScore, open **Agents**; the agent appears as

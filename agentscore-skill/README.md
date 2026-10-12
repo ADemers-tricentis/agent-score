@@ -35,7 +35,7 @@ skills/agentscore-setup/
   SKILL.md                workflow
   references/             endpoint and auth, attributes AgentScore reads, instrumentors, python, node, manual spans
   assets/                 bootstrap templates (Python, TypeScript)
-  scripts/                detect.py, configure_env.py, span_tree.py
+  scripts/                detect.py, configure_env.py, add_key.py, span_tree.py, wire_check.py
   evals/                  test prompts and offline fixtures
 ```
 

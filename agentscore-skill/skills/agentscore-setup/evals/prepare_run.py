@@ -28,7 +28,7 @@ def main():
     sh(["git", "init", "-q"], dest)
     sh(["git", "add", "-A"], dest)
     sh(["git", "-c", "user.name=eval", "-c", "user.email=eval@example.com", "commit", "-q", "-m", "untouched agent"], dest)
-    if name == "python-openai":
+    if name in ("python-openai", "python-anthropic"):
         sh(["uv", "venv", "-q", ".venv"], dest)
         sh(["uv", "pip", "install", "-q", "--python", ".venv/bin/python", "-r", "requirements.txt"], dest)
     elif name == "python-langgraph":

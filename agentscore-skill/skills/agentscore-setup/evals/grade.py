@@ -28,9 +28,10 @@ import span_tree  # noqa: E402
 
 FAKE_KEY = "tk_GRADERFAKEKEY0001"
 STUB_PORT, CAPTURE_PORT = 9101, 9102
-ENTRY = {"python-openai": ["agent.py"], "python-langgraph": ["main.py"], "node-vercel-ai": ["src/agent.ts"]}
+ENTRY = {"python-openai": ["agent.py"], "python-anthropic": ["agent.py"], "python-langgraph": ["main.py"], "node-vercel-ai": ["src/agent.ts"]}
 RUN = {
     "python-openai": [".venv/bin/python", "agent.py"],
+    "python-anthropic": [".venv/bin/python", "agent.py"],
     "python-langgraph": [".venv/bin/python", "main.py"],
     "node-vercel-ai": ["npx", "tsx", "src/agent.ts"],
 }
@@ -102,11 +103,13 @@ def run_agent(project: Path, fixture: str):
     Capture.requests = []
     cap = HTTPServer(("127.0.0.1", CAPTURE_PORT), Capture)
     threading.Thread(target=cap.serve_forever, daemon=True).start()
-    stub = subprocess.Popen([sys.executable, str(HERE / "fixtures" / "stub_openai_server.py"), str(STUB_PORT)])
+    stub_script = "stub_anthropic_server.py" if fixture == "python-anthropic" else "stub_openai_server.py"
+    stub = subprocess.Popen([sys.executable, str(HERE / "fixtures" / stub_script), str(STUB_PORT)])
     time.sleep(1)
-    env = {k: v for k, v in os.environ.items() if not k.startswith(("OTEL_", "AGENTSCORE", "OPENAI"))}
+    env = {k: v for k, v in os.environ.items() if not k.startswith(("OTEL_", "AGENTSCORE", "OPENAI", "ANTHROPIC"))}
     env.update({
         "OPENAI_BASE_URL": f"http://127.0.0.1:{STUB_PORT}/v1", "OPENAI_API_KEY": "stub",
+        "ANTHROPIC_BASE_URL": f"http://127.0.0.1:{STUB_PORT}", "ANTHROPIC_API_KEY": "stub",
         "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT": f"http://127.0.0.1:{CAPTURE_PORT}/external/otel/v1/traces",
         "OTEL_EXPORTER_OTLP_TRACES_HEADERS": f"Authorization=Bearer%20{FAKE_KEY}",
     })
@@ -230,7 +233,7 @@ def grade(run_dir: Path, fixture: str):
     add("A second pass of the skill changes no project files", idem.exists() and changed == [], f"idempotency.json changed={changed}")
     report = (run_dir / "report.md").read_text() if (run_dir / "report.md").exists() else ""
     add("Report tells the user how to add the key themselves and mentions the ~20 trace threshold",
-        bool(report) and re.search(r"stty|read -s|\.env", report) and re.search(r"\b20\b", report) and not re.search(r"tk_[A-Za-z0-9]{12,}", report),
+        bool(report) and re.search(r"add_key|stty|read -s|\.env", report) and re.search(r"\b20\b", report) and not re.search(r"tk_[A-Za-z0-9]{12,}", report),
         f"report chars={len(report)}")
 
     # per-fixture checks
@@ -239,7 +242,7 @@ def grade(run_dir: Path, fixture: str):
         added = int(diff[0]) if diff else 0
         add("Framework agent code is changed by at most the bootstrap import (LangGraph traces itself)",
             added <= 3 and "tracer" not in (project / "main.py").read_text(), f"lines added to main.py: {added}")
-    if fixture == "python-openai":
+    if fixture in ("python-openai", "python-anthropic"):
         src = (project / "agent.py").read_text()
         add("Hand-written agent and tool spans added around the plain-SDK loop and tool dispatch",
             "invoke_agent" in src and "execute_tool" in src, "invoke_agent/execute_tool present in agent.py")
