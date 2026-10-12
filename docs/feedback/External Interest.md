@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 98 form submissions found (as of 2026-10-02), sorted newest first. Excluded as internal `@tricentis.com` submitters: Ashutosh Kotkar (2026-09-25) and Srinivasa Rao K (2026-10-01), both under Tricentis GmbH (AT) - HQ. Fun Tat Chen (2026-10-02) is a second submitter at Singapore Pools and is stacked on that entry rather than counted as a new company.
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 103 form submissions found (as of 2026-10-12), sorted newest first. Excluded as internal `@tricentis.com` submitters: Ashutosh Kotkar (2026-09-25) and Srinivasa Rao K (2026-10-01), both under Tricentis GmbH (AT) - HQ. Fun Tat Chen (2026-10-02) is a second submitter at Singapore Pools and is stacked on that entry rather than counted as a new company.
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -10,14 +10,19 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos | Pending betas | Active betas |
 |---|---|---|---|---|
-| 78 | 14 | 12 | 1 | 5 |
+| 83 | 14 | 12 | 1 | 5 |
 
-Source breakdown: 75 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.), 1 via David (VP of AI/ML) (Eaton) = 78 total.
+Source breakdown: 80 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.), 1 via David (VP of AI/ML) (Eaton) = 83 total.
 
 Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
 
 | Company | Contact | Status |
 |---|---|---|
+| Itecor (CH)-HQ | Alexandre Thibaud | Email sent — 2026-10-12 |
+| Ferrara Candy Company | Sudha Damacherla | Email sent — 2026-10-12 |
+| Department of Jobs, Skills, Industry and Regions (DJSIR) (AU) | Subhasis Dhar | Email sent — 2026-10-12 |
+| Turing Consulting Pty. Ltd. (AU) | Archana Madhusudhan | Email sent — 2026-10-12 |
+| Bloomberg Finance L.P. | Joe Zacchio | Email sent — 2026-10-12 |
 | Sogeti (FR) | Gavaskar Selvarajan | Email sent — 2026-10-05 |
 | Singapore Airlines (SG) | Srinivasan Santhanam | Email sent — 2026-10-05 |
 | Tata Consultancy Services Ltd (IN) | Joji Joseph | Email sent — 2026-10-05 |
@@ -98,6 +103,91 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Singapore Pools (form blank, domain-resolved) | Nai Hau Lui, Fun Tat Chen | Email sent |
 
 *(Status values: Interested → Email sent → Follow-up sent → Replied → Demo scheduled → Pending beta → Active beta.)*
+
+---
+
+### Itecor (CH)-HQ
+Date: 2026-10-12 10:07  
+Name: Alexandre Thibaud  
+Title: QA Expert  
+Relationship: Partner  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Swiss IT boutique consultancy (HQ Switzerland, about 240 staff across 8 offices including Vevey, Geneva and Zurich) focused on governance, digital solution implementation and quality assurance ([Hirebase profile](https://www.hirebase.org/company/itecor)).
+
+likely use case: given the QA Expert title, Partner relationship and a testing-heavy consultancy, most plausibly evaluating Agent Score for its own client base rather than as an end customer - an inference, not a confirmed need. Its public job postings list Selenium/BDD, X-Ray and Micro Focus tooling, not Tricentis.
+
+known agent tooling: no public information found tying Itecor to a deployed agent product. No evidence found that it is a listed Tricentis partner.
+
+---
+
+### Ferrara Candy Company
+Date: 2026-10-08 18:44  
+Name: Sudha Damacherla  
+Title: Sr. IT Product Manager  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: US confectionery manufacturer (Brach's, Nerds, Laffy Taffy). Completed a 25-module single-cutover SAP S/4HANA (RISE with SAP) program ([SAP Innovation Awards 2026](https://www.sap.com/documents/2026/03/6eaef23c-437f-0010-bca6-c68f7e60039b.html)).
+
+likely use case: given the fresh SAP landscape and a Customer-relationship IT product manager, most plausibly evaluating AI/agent features layered on SAP (planning, exception handling, testing) - a weak inference.
+
+known agent tooling: SAP's self-reported award story says the company can now begin using AI and automation for planning, exception handling, testing and governance ([SAP](https://www.sap.com/documents/2026/03/6eaef23c-437f-0010-bca6-c68f7e60039b.html)); no public information found on specific deployed agents.
+
+---
+
+### Department of Jobs, Skills, Industry and Regions (DJSIR) (AU)
+Date: 2026-10-08 04:58  
+Name: Subhasis Dhar  
+Title: Salesforce QA Lead  
+Relationship: Evaluating Tricentis  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Victorian State Government department covering jobs, skills, industry and regional development (submitter email domain `ecodev.vic.gov.au`).
+
+likely use case: given a Salesforce QA Lead who is evaluating Tricentis, most plausibly testing AI features added to a Salesforce-based platform or assessing agents under the department's AI adoption work - a weak inference.
+
+known agent tooling: Victoria published an [AI Mission Statement in January 2026](https://www.premier.vic.gov.au/victorias-ai-future-driving-jobs-opportunity-and-growth), and DJSIR has advertised [AI Enablement](https://jobs.careers.vic.gov.au/jobs/VG-101545) and [AI Support](https://jobs.careers.vic.gov.au/jobs/VG-101546) roles; no public information found tying DJSIR to a deployed agent product.
+
+---
+
+### Turing Consulting Pty. Ltd. (AU)
+Date: 2026-10-08 04:32  
+Name: Archana Madhusudhan  
+Title: QE  
+Relationship: Partner  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Australian consultancy (domain `turingconsulting.com.au`); services could not be confirmed from public sources.
+
+likely use case: given a Partner-relationship QE, most plausibly evaluating Agent Score for client QA engagements - a weak inference.
+
+known agent tooling: no public information found tying Turing Consulting to a deployed agent product.
+
+---
+
+### Bloomberg Finance L.P.
+Date: 2026-10-07 18:20  
+Name: Joe Zacchio  
+Title: QA Testing Mgr  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Financial data, analytics and news company behind the Bloomberg Terminal.
+
+likely use case: given a QA Testing Manager at a Customer account and Bloomberg's own agent products, most plausibly evaluating how to test and monitor ASKB-style multi-agent features for accuracy and attribution - an inference, not a confirmed need.
+
+known agent tooling: ASKB, a conversational AI interface for the Terminal, entered beta in February 2026; it runs a network of agents in parallel over Bloomberg data, uses multiple commercial and open-weight LLMs, and outputs BQL code ([Markets Media](https://www.marketsmedia.com/bloomberg-introduces-agentic-ai-to-the-terminal/); [AI Magazine](https://aimagazine.com/news/how-bloomberg-is-using-agentic-ai-for-complex-workflows)).
 
 ---
 
