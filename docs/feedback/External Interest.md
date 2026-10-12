@@ -10,7 +10,7 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos | Pending betas | Active betas |
 |---|---|---|---|---|
-| 78 | 14 | 11 (+1 scheduled) | 6 | 0 |
+| 78 | 14 | 11 (+1 scheduled) | 1 | 5 |
 
 Source breakdown: 75 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.), 1 via David (VP of AI/ML) (Eaton) = 78 total.
 
@@ -23,7 +23,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Tata Consultancy Services Ltd (IN) | Joji Joseph | Email sent — 2026-10-05 |
 | Skygen USA | Joko Supriyanto | Email sent — 2026-10-05 |
 | Hugo Boss AG (DE) | Marco Esguerra | Email sent — 2026-10-05 |
-| Aptiv Global Operations Limited | Meenakshi Sundaram Chockalingam | Pending Beta |
+| Aptiv Global Operations Limited | Meenakshi Sundaram Chockalingam | Active Beta |
 | LGT Financial Services Ltd. (LI) | David Klien | Email sent |
 | Eaton | Amit Ghag | Demo Scheduled — 2026-10-01 |
 | Meta Platforms, Inc. | Sri Pulleti | Demo Scheduled — POC scoping |
@@ -32,7 +32,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | PVH Corp | Beena P K, Aimee Martin | Follow-up sent — 2026-09-24 |
 | Charter Communications Operating, LLC | Sarvesh Peddi | Follow-up sent — 2026-09-24 |
 | Artizent (form blank, domain-resolved) | Alan Mayfus | Follow-up sent — 2026-09-24 |
-| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj | Pending Beta |
+| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj | Active Beta |
 | SAP Labs India (IN) | SaiDeepak Ayyagari | Follow-up sent — 2026-09-24 |
 | Regeneron Pharmaceuticals Inc. | Murali Sundaram | Follow-up sent — 2026-09-24 |
 | Acadia Healthcare | Pratiksha Arora | Follow-up sent — 2026-09-24 |
@@ -57,12 +57,12 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Tachyon Technologies | Subba Rao Gonugunta | Follow-up sent — 2026-09-24 |
 | Xebia - Partner | Anmol Jain | Follow-up sent — 2026-09-24 |
 | Cargill Incorporated | Alfonso Garbanzo | Follow-up sent — 2026-09-24 |
-| Wolters Kluwer United States Inc. | Chris Allanson | Pending Beta |
+| Wolters Kluwer United States Inc. | Chris Allanson | Active Beta |
 | J. R. Simplot Company | Neeraja Kusuma | Follow-up sent — 2026-09-24 |
 | Crown Equipment Corporation | Vinay Patlolla | Follow-up sent — 2026-09-24 |
 | Stanza | Anirban Toy Choudhury | Replied |
 | Sunbelt Rentals | Arya Shrey | Follow-up sent — 2026-09-24 |
-| Merito Solutions | Chris Carpenter, Gerard Trimberger, Louis Tadman, Andrew Carpenter | Pending Beta |
+| Merito Solutions | Chris Carpenter, Gerard Trimberger, Louis Tadman, Andrew Carpenter | Active Beta |
 | Amazon Kuiper Manufacturing Enterprises LLC | Saranya Vaithiyanathan | Follow-up sent — 2026-09-24 |
 | Accenture CIO HR Organization (unresolved, may be Stanza) | Greg Wanroy | Follow-up sent — 2026-09-24 |
 | Aspire Systems Digital Transformation Inc. | Naveen Srinivasan | Follow-up sent — 2026-09-24 |
@@ -86,7 +86,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | SAP North America | Thomas Zimmermann | Email sent |
 | Defence Science and Technology Agency (SG) | cydnie na | Email sent |
 | Housing Development Board (SG) | Swee Chyuan Koh | Email sent |
-| L'OREAL | Khadim KASHANI | Pending Beta |
+| L'OREAL | Khadim KASHANI | Active Beta |
 | City Dev (SG) | Davin Ng | Email sent |
 | Testing IT Consulting S.A. de C.V. | Hector Santa Maria | Email sent |
 | Brillar Pte Ltd (SG) | Zuzan Win | Email sent |
@@ -194,6 +194,7 @@ Relationship: Customer
 
 Email sent: —  
 Beta scheduled: 2026-09-25  
+Beta invite sent: 2026-10-12  
 
 what they do: Global automotive-technology supplier building safety, connectivity, and software-defined-vehicle platforms.
 
@@ -507,6 +508,7 @@ Relationship: Customer
 
 Email sent: —  
 Beta scheduled: 2026-09-24  
+Beta invite sent: 2026-10-12  
 
 what they do: French multinational cosmetics and beauty group.
 
@@ -849,6 +851,7 @@ Name: Jawahar Govindaraj
 
 Email sent: —  
 Beta scheduled: 2026-09-11  
+Beta invite sent: 2026-10-12  
 
 what they do: Sydney-headquartered SAP Technical Services & software-testing consultancy (~51 employees, ~$6M revenue, founded 2011) with presence in Melbourne, Canberra, Brisbane — 150+ projects delivered to 100+ Australian customers, specializing in SAP-focused quality engineering, automation, and performance testing ([tritusa.com.au/about-us](https://tritusa.com.au/about-us/)).
 
@@ -1252,12 +1255,13 @@ Name: Chris Allanson
 
 Email sent: —  
 Beta scheduled: —  
+Beta invite sent: 2026-10-12  
 
 what they do: Global information-services/software company for legal, tax, health, and compliance professionals.
 
 confirmed use case (from a 2026-09 demo): Paul DiGrazia (quality/AI leader, deeply embedded design partner) and Chris Allanson (Labs signup contact, QA/governance lens) want to score agents outside the Tricentis ecosystem (their own internal "FAB" platform, GitHub Copilot) to steer people back to sanctioned tooling. LLM before/after benchmarking and the dual access model (embedded in AI Workspace + standalone) landed strongly. Debrief: [Wolters Kluwer Feedback Session](feedback-sessions/Wolters%20Kluwer%20Feedback%20Session.md).
 
-waiting on: pilot tenant access (their top priority - "how do we get it in our little hands") and a firm date/shape for bulk/fleet-level scoring, which they targeted for end of Sept 2026.
+waiting on: pilot tenant access (beta invite with signup steps sent 2026-10-12; their top priority - "how do we get it in our little hands") and a firm date/shape for bulk/fleet-level scoring, which they targeted for end of Sept 2026.
 
 likely use case: evaluating/testing agent output quality and governance, given heavy existing investment in multi-agent products.
 
@@ -1337,12 +1341,13 @@ Also on the demo: Andrew Carpenter (Director of Professional Services)
 
 Email sent: —  
 Beta scheduled: 2026-10-06 (demo)  
+Beta invite sent: 2026-10-12  
 
 what they do: Enterprise software VAR/consultancy (20+ years) — SDLC tooling, QA automation, app-security reseller. Already a Tricentis partner — lists Tricentis alongside Azure DevOps, TestRail, Planview on their own site.
 
 confirmed use case (from 2026-10-06 demo): not a live agent-evaluation pull yet. Louis Tadman (CTO) and Andrew Carpenter (Director of Professional Services) described a long partner history (QA Symphony before the acquisition, RIPT alpha/beta for AI Workspace) and a team with many Claude-certified architects who build agentic solutions, but no production or customer-facing agents today. Louis said they are "absolutely interested" and want to learn by doing and give feedback. Zero-setup profiles, configurable thresholds, staging plus production monitoring, the cost view, and the upcoming MCP all landed without objection. Louis asked whether access is a seat license or a team invite, and whether their partner not-for-resale Tosca Cloud tenant is tied to auth (it was required for the AI Workspace RIPT); not answered on the call. Capacity is the limit: a couple of weeks to stand up a test agent (a fantasy-football analysis agent was floated), planned around backlog work, no promises of heavy use. Chris Carpenter, the Labs signer, was not on the call. Debrief: [Merito Feedback Session](feedback-sessions/Merito%20Feedback%20Session.md).
 
-waiting on: (1) Andrew to send onboarding instructions, including the answer on seat license vs team invite and whether the partner NFR Tosca Cloud tenant is needed; (2) Merito to pick a first test agent and onboard, expected in a couple of weeks; (3) a follow-up session once they have feedback. No beta date set.
+waiting on: (1) Andrew to answer the open onboarding questions (welcome email with signup steps sent 2026-10-12), including the answer on seat license vs team invite and whether the partner NFR Tosca Cloud tenant is needed; (2) Merito to pick a first test agent and onboard, expected in a couple of weeks; (3) a follow-up session once they have feedback. No beta date set.
 
 likely use case: given the existing partner relationship, likely evaluating Agent Score to advise/resell to their own enterprise clients doing agentic-AI QA, rather than for their own internal agents.
 

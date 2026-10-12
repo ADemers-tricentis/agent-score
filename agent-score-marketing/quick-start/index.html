@@ -44,7 +44,8 @@
 
   <ol>
     <li><strong class="t">Sign in to Tosca Cloud</strong>
-      <span class="d">Agent Score requires a Tosca Cloud login. If you do not have one yet, <a href="https://www.tricentis.com/software-testing-tool-trial-demo">sign up for a Tosca Cloud trial</a> first, then sign in with that account.</span></li>
+      <span class="d">Agent Score requires a Tosca Cloud login. If you do not have one yet, <a href="https://www.tricentis.com/software-testing-tool-trial-demo">sign up for a Tosca Cloud trial</a> first, then sign in with that account.</span>
+      <span class="d" style="display:block; margin-top:6px"><b>Note:</b> Agent Score is currently unavailable for SAP tenants and organizations that have previously selected the "Block AI" flag.</span></li>
     <li><strong class="t">Get your workspace</strong>
       <span class="d">Your workspace (a tenant) is set up by the Agent Score team on your behalf, and cannot be created from the app. Send us your Tosca Cloud tenant name and we will set up your workspace. Everyone signing in from that Tosca Cloud tenant will then have access. If your agent runs in AI Workspace, its tenant is created automatically when the agent's traces are first ingested and no ingest key is needed, so skip to step 5 (you still need us to give you access).</span></li>
     <li><strong class="t">Create an ingest key</strong>
@@ -56,7 +57,7 @@
 OTEL_EXPORTER_OTLP_TRACES_HEADERS=Authorization=Bearer &lt;your tk_... ingest key&gt;</pre>
   <ol style="counter-reset: s 4">
     <li><strong class="t">Run your agent</strong>
-      <span class="d">It appears on the Agents page on its own, first as <b>Setting up</b>, then <b>Learning your agent</b> with a live count of traces received. No per-agent form to fill out.</span></li>
+      <span class="d">Interact with your agent as you normally would.It appears on the Agents page on its own, first as <b>Setting up</b>, then <b>Learning your agent</b> with a live count of traces received. No per-agent form to fill out.</span></li>
     <li><strong class="t">Read your scorecard</strong>
       <span class="d">After <b>20 traces</b>, scoring starts automatically. Open the agent to see a 0-100 score and a ship / review / don't-ship recommendation, with the evidence behind every number.</span></li>
   </ol>

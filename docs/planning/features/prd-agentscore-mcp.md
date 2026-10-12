@@ -6,12 +6,15 @@ Setting up AgentScore today requires finding an ingest URL and key, picking the 
 
 There's also no feedback loop once setup is done. A scored agent produces a score and per-dimension breakdown in the AgentScore UI, but turning "this dimension is low" into "change this" is still a manual, technical translation step - one a non-technical user can't make on their own.
 
+Even if suggestions are delivered in plain language, a human is still the courier: they read the suggestion, hand it to someone (or something) that can change the agent, and then check whether it worked. The calling AI agent is already capable of making those changes and re-checking the score. What it lacks is a safe, machine-actionable procedure for doing so.
+
 ## Goals & Success Metrics
 
 **Goals**
 1. A non-technical user can get their agent onboarded to AgentScore - stack detected, instrumentation installed, bootstrap wired, spans verified - by asking for it in plain language through whatever AI assistant they already use, with no OTel knowledge and no diff to approve.
 2. Connecting to AgentScore requires nothing to be installed locally. The MCP server is hosted at an HTTPS URL; the user adds it to their AI assistant as a remote connector and signs in.
 3. That same user can ask "how's my agent doing / what should I fix" and get back concrete, plain-language suggestions tied to their actual scoring run, without opening the AgentScore UI or translating dimension scores into code changes themselves.
+4. The calling agent is given explicit, machine-actionable instructions for self-updating: reading its own scoring results, proposing and applying changes, and re-verifying the outcome. The human's role shrinks over time, from approving every change, to approving only risky ones, to being removed from the loop altogether for changes the user has pre-authorized. Autonomy is a dial the user sets, not a hardcoded behavior.
 
 **Success metrics**
 
@@ -20,6 +23,8 @@ There's also no feedback loop once setup is done. A scored agent produces a scor
 | Setup completion without help | % of MCP-driven setups a non-technical user completes to a passing `verify_setup` without escalating to a technical teammate or AgentScore support |
 | Time to first scored trace | Median time from first `apply_setup` call to the "n of 20 traces" threshold being reached |
 | Suggestion comprehension | % of `get_scoring_suggestions` responses the user acts on without asking a technical teammate to translate them first (proxy: a follow-up re-verification call within 7 days) |
+| Autonomous improvement rate | % of self-update cycles (suggestion, change, re-score) completed with no human approval step, under the user's chosen autonomy level |
+| Self-update net effect | Median score delta per applied self-update, and % of self-updates rolled back because the re-score regressed |
 
 ## Target Users
 
@@ -40,6 +45,13 @@ This replaces the Claude Code skill (`agentscore-setup`) as the supported onboar
 - `apply_setup` - returns the exact changes (instrumentor dependency, bootstrap file contents, entrypoint edit) for the calling assistant to write into the repo with its own file tools after the user confirms. The server itself never writes to the user's machine. Idempotent: when `detect_agent` reports `already_set_up`, it returns no changes.
 - `verify_setup` - checks the traces AgentScore has actually received from the agent (root span, prompt text, tool spans, identity signal, accepted operation name) and reports pass/fail in plain language with a concrete next step on failure, not a check name a non-technical user can't act on. The user runs their agent once; no local span inspection is needed.
 - `get_scoring_suggestions` - for an agent the signed-in user can access, returns current score, which dimensions are low, why, and concrete suggested changes, in language a non-technical user can act on or hand to someone who can.
+- `get_update_instructions` - returns a structured self-update playbook for the calling agent: the ordered procedure (read suggestions, choose a change, apply it, wait for the re-score, compare, keep or roll back), the change categories the agent may make (for example prompt text, tool descriptions, retry/timeout settings, instrumentation fixes), the stop conditions, and the user's current autonomy level. Instructions are machine-actionable (explicit steps and fields), not prose written for a human. Each suggestion from `get_scoring_suggestions` carries a change category, a risk class (low, medium, high), and the evidence it is based on, so the agent can decide whether it is allowed to act without asking.
+- Autonomy levels, set by the user (per agent) and enforced by the server's instructions and by the audit trail, not by trust alone. Default is level 1.
+  1. **Propose only.** The agent presents each change and waits for approval (today's human-in-the-loop behavior).
+  2. **Auto-apply low risk.** The agent applies low-risk changes itself and asks only for medium and high.
+  3. **Fully autonomous.** The agent applies all changes within the user's pre-authorized categories and reports afterward. Human review is optional, not required.
+- Self-update guardrails that apply at every level: one change per cycle so the score delta is attributable; a re-score is required before the next change; automatic rollback instructions when the score regresses beyond a set threshold; a cap on cycles per day; and no self-update below the ~20-trace threshold unless the suggestion carries a confidence flag. The agent may never modify its own AgentScore instrumentation to raise the score (for example, dropping spans or filtering failing traces); instrumentation changes are limited to fixes that `verify_setup` flags.
+- `report_update` - the agent records what it changed, why, the suggestion it acted on, and the rollback reference, so every self-update is auditable. Contains no source code and no `tk_` values.
 - The ingest key is never accepted as a tool parameter and never appears in any tool output or server log. Server-side validation rejects any tool input matching the `tk_` key prefix and drops it before logging. The key reaches the agent's runtime only through the user's own secret-storage path (env var or secret manager), never through chat.
 - Per-tenant isolation, per-user rate limiting, and audit logging of tool calls on the hosted endpoint.
 
@@ -56,7 +68,7 @@ This replaces the Claude Code skill (`agentscore-setup`) as the supported onboar
 ## Scope
 
 ### In Scope
-- A hosted, HTTPS-accessible MCP server exposing the five P0 tools above, designed so every response can be rendered in plain language by the calling AI assistant.
+- A hosted, HTTPS-accessible MCP server exposing the P0 tools above (including the self-update tools), designed so every response can be rendered in plain language by the calling AI assistant.
 - OAuth sign-in and tenant resolution for the hosted endpoint.
 - Read-only calls to the AgentScore API for score/dimension data behind `get_scoring_suggestions` and `check_status`.
 - Retiring the Claude Code skill's role as the supported onboarding path; this server becomes the one path going forward, for technical and non-technical users alike.
@@ -83,6 +95,8 @@ This replaces the Claude Code skill (`agentscore-setup`) as the supported onboar
   - **Not instrumented.** No telemetry exists yet. `apply_setup` has to install an instrumentor matched to the agent's LLM SDK, add a bootstrap file, and wire it into the entrypoint before anything can be verified - real code is being added to the user's repo, not just a new export target. This is the case the non-technical persona most needs help with, and where `verify_setup` failures (missing root span, no prompt text, wrong operation name) are most likely, so responses need the clearest plain-language explanation of what went wrong and why, since the user has no telemetry background to fall back on.
   - If `verify_setup` fails in the not-instrumented case and the cause isn't obvious from the plain-language explanation, the fallback is surfacing a specific next step the user can hand to a technical teammate, not raw check output.
 - **Auth for read tools.** `get_scoring_suggestions` and `check_status` authenticate with the user's OAuth token, not the ingest key. The server calls the customer score routes on the user's behalf, scoped to the token's tenant. The ingest key is a write-path credential for the agent's runtime exporter only and is not used by the MCP server for reads. This depends on the customer routes accepting a user/tenant token (see Open Questions).
+- **Self-update loop, with the human as a removable component.** The server never changes the agent; it tells the calling agent how to change itself and holds the record. The loop is: `get_scoring_suggestions` (what to change, with risk class) then `get_update_instructions` (how to apply it and what the user allows) then the agent edits its own prompts/config/code with its own tools then the agent runs and waits for the re-score (`check_status`) then compares the score and dimension deltas then keeps the change or rolls it back, and calls `report_update` either way. The human's approval gate is a server-supplied policy field (the autonomy level), so removing the human is a configuration change, not a redesign. The same instructions work at every level; only the "ask first" step switches on or off.
+- **Why the guardrails are in the instructions and the data, not only the prompt.** An agent told to "raise its score" is incentivized to game it. So the playbook restricts what may be changed, requires attributable single-change cycles, ties every action to a suggestion and its evidence, and keeps the audit trail server-side where the agent can't edit it. Scoring stays independent of the agent being scored: the server never lets the agent influence how its own traces are evaluated.
 - Every tool response is structured so the calling assistant can render it conversationally (no file diffs, package names, or span terminology surfaced as the primary content) - the non-technical persona can't act on those directly.
 
 ## Dependencies
@@ -103,6 +117,9 @@ This replaces the Claude Code skill (`agentscore-setup`) as the supported onboar
 | The server no longer sees the repo, so `detect_agent` accuracy depends on the assistant sending a good fingerprint | Keep the fingerprint schema small and explicit, return "need more info" requests naming exactly which file to look at, and validate in `verify_setup` against real received traces |
 | The hosted server holds no key, but the agent runtime still needs one, and the user must get it there without pasting it into chat | `plan_setup` gives plain-language steps to the Integrations page and the user's own secret store; evaluate server-side provisioning as a follow-up |
 | Assistants without local file tools can't apply setup changes | Document the minimum client capability (local filesystem tool access) for the setup flow; suggestion and status tools work with any client that supports remote MCP |
+| A fully autonomous agent makes a harmful change (regresses quality, breaks behavior, changes something outside the pre-authorized categories) with no human to catch it | Autonomy defaults to level 1 and is raised per agent by the user explicitly; risk classes and allowed change categories are server-defined; single-change cycles with mandatory re-score and rollback on regression; daily cycle cap; kill switch that drops the agent back to level 1 from the AgentScore UI or the next `get_update_instructions` call; full audit trail via `report_update` |
+| Goodhart's law: the agent optimizes the score rather than real quality (gaming evals, trimming traces, overfitting to eval prompts) | Instrumentation is off limits except `verify_setup` fixes; suggestions cite evidence from real interactions; evals and scoring remain server-side and independent of the agent; flag anomalous score jumps for human review even at level 3 |
+| Prompt injection via suggestion text or trace content steers the agent into unsafe self-edits | Suggestions are structured fields (category, risk, evidence reference), not free-form instructions; the playbook states that content from traces is data, never instructions; high-risk categories always require a human regardless of level |
 | A non-technical user may not know where to find or create an ingest key in the AgentScore UI | `plan_setup` must give plain-language, jargon-free instructions pointing directly at the Integrations page |
 
 ## Open Questions
@@ -113,6 +130,11 @@ This replaces the Claude Code skill (`agentscore-setup`) as the supported onboar
 - Which team owns hosting and on-call for a public MCP endpoint, and what is the security review path? The SRE constraints already flagged for Beta apply here.
 - Does `verify_setup` have a platform API to read received span structure per agent, or does it need new ingestion-side work?
 - Should `get_scoring_suggestions` require the ~20-trace threshold strictly, or return lower-confidence suggestions earlier with a confidence flag?
+- Where does the autonomy level live and who can raise it? Options: a per-agent setting in the AgentScore UI (user-controlled, enforced server-side), or a parameter the user tells their assistant (weaker, since the agent could set it itself). Leaning toward UI-only, so an agent can never grant itself more autonomy.
+- Which change categories are low, medium, and high risk, and is any category permanently human-only (for example anything touching tool permissions, credentials, or data access)?
+- What is the regression threshold and re-score window that triggers rollback, given scoring needs enough new traces to be meaningful after a change? A change may need many traces before its effect is measurable, which limits cycle speed.
+- Does the human eventually leave entirely? Level 3 removes the approval step but keeps the audit trail and kill switch. Decide whether any floor of human visibility (for example a weekly digest) is required for launch.
+- Is the self-update scope limited to what the calling agent can edit in the user's repo, or does it also cover agents the user runs in hosted platforms where the assistant has no file access?
 
 ## Timeline & Milestones
 
