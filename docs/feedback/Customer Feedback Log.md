@@ -39,7 +39,7 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
 
 | Priority | Ask | Sessions raised in | Status |
 |---|---|---|---|
-| High | Written answer on data handling: what is sent to the LLM judge, how PII redaction works, whether customer telemetry stays inside their cloud boundary (e.g. Azure-only data guarantees) | Eaton (also implicit in Meta's self-hosting need) | Open - Andrew described PII redaction and sending only the relevant span fields, but did not know the technical details; owes Prashant an answer after checking with engineering. Likely a gate to any trial |
+| High | Written answer on data handling: what is sent to the LLM judge, how PII redaction works, whether customer telemetry stays inside their cloud boundary (e.g. Azure-only data guarantees) | Eaton (also implicit in Meta's self-hosting need; New Vision asked about retention and no-training, answered verbally) | Open - Andrew described PII redaction and sending only the relevant span fields, but did not know the technical details; owes Prashant an answer after checking with engineering. Likely a gate to any trial |
 | Medium | Comparison against Microsoft / Azure AI Foundry built-in evals ("which one should we use where") | Eaton | Open - no document exists. Verbal line: Microsoft is stronger on its own stack (sees data beyond traces), but anything off-platform is out of reach. Generalizes to every Azure shop |
 | High | Firm, consistent timeline (POC/beta dates that don't move mid-call) | Workday, Meta | Open - need one rehearsed slide every speaker uses |
 | Resolved | Clear answer to "is this a testing tool or an observability tool?" | Workday | Answered - name the category, don't fight the word: something else drives the agent, AgentScore grades. Boundary picture: Driver -> Agent -> Traces -> AgentScore grades. Ready to ship to the deck |
@@ -52,11 +52,22 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
 |---|---|---|---|
 | Medium | Point AgentScore at Tricentis's own agents (e.g. QTest ATC) so a partner can prove to their client that agent works | BearingPoint | Open - deliberately not exposed today for proprietary/IP reasons; blocks BearingPoint's most concrete use case |
 | Medium | Partner co-sell / co-working motion (SIs who implement + evaluate for their own clients) | Tritusa | Open - asked twice, no answer available; gold-sponsor partner presenting our story at Transatlantic 26 (event has since passed, 2026-09-15) |
+| Low | Published pricing / AI-credit rate per scoring run (and what a scoring run costs at a given cadence and eval count) | New Vision | Open - asked on the 2026-10-08 call; answer was free in beta, AI credits per scoring run later, "not exactly sure what the rate will be" |
 | Low | Clear partner access path: seat license vs inviting the team, and whether a partner not-for-resale Tosca Cloud tenant is required for auth (as it was for the RIPT AI Workspace) | Merito | Open - Louis asked on the 2026-10-06 call; not answered, owed in the onboarding email |
 
 ---
 
 ## Sessions
+
+### 2026-10-08 - New Vision Software (partner/SI, Labs beta onboarding)
+
+- **Who:** Rohan Bansod (Quality Architect, ~10.5 years in IT; oversees projects across Tosca, other Tricentis products, and open-source tools like Playwright for clients). New Vision is now part of SoftServe. Tricentis: Andrew Demers. *(Transcript mis-hears "Tricentis" as "Presentis" and "SoftServe" as "Soft Serve"/"Saucer".)*
+- **What we learned:** Rohan both uses and tests agents, mostly open source (Playwright) because customers care about token consumption; a separate team runs agent POCs. The auto-derived agent card, editable success criteria, configurable verdict thresholds, and the 41 out-of-the-box evals with custom dimensions all landed without objection. His data questions (retention, whether data trains other models) were answered and accepted; he framed data as what his customers care about most. No agent was named to connect and no client-facing offering was stated, so the partner lens is plausible but unconfirmed. Ended with "looking forward to explore it further" and asked for a quick-start guide.
+- **Major asks:**
+  - Quick-start guide / how to get started - Andrew will email it.
+  - Pricing: asked about cost; free in beta, AI credits per scoring run later, rate unknown.
+  - Data retention: Tricentis can set a deletion period but the end user cannot - a likely follow-up for a partner whose customers prioritize data.
+- **Full debrief:** [feedback-sessions/New Vision Feedback Session.md](feedback-sessions/New%20Vision%20Feedback%20Session.md)
 
 ### 2026-10-06 - Merito Solutions (partner/SI, Labs intro and beta onboarding)
 

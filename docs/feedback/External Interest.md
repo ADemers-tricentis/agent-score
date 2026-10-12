@@ -10,7 +10,7 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 | Interested companies | Companies replied | Demos | Pending betas | Active betas |
 |---|---|---|---|---|
-| 78 | 14 | 11 (+1 scheduled) | 1 | 5 |
+| 78 | 14 | 12 | 1 | 5 |
 
 Source breakdown: 75 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.), 1 via David (VP of AI/ML) (Eaton) = 78 total.
 
@@ -920,6 +920,10 @@ Email sent: —
 Beta scheduled: 2026-10-08  
 
 what they do: India-based (Pune) IT services/QA consultancy (~687 employees) — application/data/infrastructure modernization plus a dedicated QA automation practice. Already a Tricentis partner — lists Tricentis/Tosca alongside Oracle, PEGA, Microsoft, and Google Cloud in its partner roster.
+
+confirmed use case (from 2026-10-08 demo): Rohan Bansod is a Quality Architect overseeing client projects across Tosca, other Tricentis products, and open-source tools like Playwright. New Vision is now part of SoftServe (Ukraine-based, moving into AI and engineering). They both use agents (mostly Playwright, because customers care about token consumption: task automation, spreading tester workload, dashboards, framework optimization) and test them, with a separate team on agent POCs. No specific agent was named to connect and no client-facing offering was stated, so the partner lens below is still an inference. Landed without objection: auto-derived agent card, editable success criteria, configurable verdict thresholds, 41 out-of-the-box evals with custom dimensions. He asked about data retention and whether data trains other models (answered; retention deletion period is set by Tricentis, not the end user), beta cost (free now, AI credits per scoring run later, rate unknown), and support (Andrew directly). Debrief: [New Vision Feedback Session](feedback-sessions/New%20Vision%20Feedback%20Session.md).
+
+waiting on: (1) Andrew to send the follow-up email with the quick-start guide and signup steps; (2) Rohan to explore and email questions, no date given and no agent named yet.
 
 likely use case: given the existing partner relationship and Tosca-based QA automation practice, most plausibly evaluating Agent Score to extend their QA offering into agentic-AI testing for their own client base, rather than for internal use — same profile as Merito Solutions above.
 
