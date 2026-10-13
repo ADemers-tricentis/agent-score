@@ -26,7 +26,7 @@ Here's how to get up and running:
 
 **Send real traffic.** Scoring is only as honest as the traces behind it. Send real or realistic traffic, including the ordinary failures, not a hand-picked set of best outputs.
 
-AgentScore is fully cloud-hosted, so there's nothing to install. If you'd like help with setup, or just want a walkthrough, pick a time here and we'll go through it together: https://outlook.office.com/bookwithme/user/1886f4bba1704d4e8eb8ea165a20e7ce@tricentis.com/meetingtype/8weBliFkdkau1K4MhueOyQ2?anonymous&ismsaljsauthenabled&ep=mlink
+AgentScore is fully cloud-hosted, so there's nothing to install. If you'd like help with setup, or just want a walkthrough, pick a time here and we'll go through it together: https://scheduler.zoom.us/andrew-demers/agentscore-overview
 
 Any feedback is appreciated, big or small, whether it's a bug, a rough edge, or something you wish it did. Questions at any point, just reply to this email. Looking forward to seeing what you find.
 

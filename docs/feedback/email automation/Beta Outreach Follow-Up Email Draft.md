@@ -6,7 +6,7 @@ Wanted to circle back - I reached out a little while ago about getting {{Company
 
 Still happy to get you moving if the timing works: AgentScore is fully cloud-hosted, so there's nothing to install - just a browser and the agent(s) you want to evaluate. Quick look at what it does: https://youtu.be/OHPpTQevgpE?si=13BdeTMB1IdCGqFd
 
-If you're still interested, pick a time for a short intro session here: https://outlook.office.com/bookwithme/user/1886f4bba1704d4e8eb8ea165a20e7ce@tricentis.com/meetingtype/8weBliFkdkau1K4MhueOyQ2?anonymous&ismsaljsauthenabled&ep=mlink
+If you're still interested, pick a time for a short intro session here: https://scheduler.zoom.us/andrew-demers/agentscore-overview
 
 And if now's not a good time or priorities have shifted, no worries at all - just let me know and I'll close this out on my end.
 

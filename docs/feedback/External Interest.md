@@ -6,18 +6,39 @@ Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI
 
 ---
 
+## Agent Stacks (stated on calls)
+
+What accounts we have talked to say they build or run agents on. Counts are companies and overlap, since one account can use several stacks. Only the 11 accounts with a feedback session are covered; everyone else is "not yet known". This is stated by the customer, unlike "known agent tooling" below, which is public research. Per-company detail is in each section's `agent stack (stated)` line.
+
+| Agent stack | Companies | Accounts |
+|---|---|---|
+| Custom / in-house platform | 4 | Meta, L'Oreal, Wolters Kluwer (FAB), BearingPoint (GenAIQ) |
+| Tricentis agents (AI Workspace, qTest ATC) | 3 | Tritusa, Wolters Kluwer, BearingPoint |
+| Microsoft Copilot Studio | 2 | Aptiv, Tritusa |
+| Azure AI Foundry | 2 | Aptiv, Eaton |
+| Claude (not in production yet) | 2 | Merito, Love's (candidate) |
+| Google Cloud (Gemini Enterprise, ADK) | 1 | Aptiv |
+| Palantir Foundry | 1 | Eaton |
+| Salesforce Agentforce | 1 | Workday |
+| Workday agents | 1 | Workday |
+| GitHub Copilot | 1 | Wolters Kluwer |
+| Open source (Playwright) | 1 | New Vision |
+
+---
+
 ## Pipeline Tracker
 
 | Interested companies | Companies replied | Demos | Pending betas | Active betas |
 |---|---|---|---|---|
-| 83 | 14 | 12 | 1 | 5 |
+| 84 | 14 | 12 | 1 | 5 |
 
-Source breakdown: 80 via the Labs form, 2 via Sales (Freddie Mac, Meta Platforms, Inc.), 1 via David (VP of AI/ML) (Eaton) = 83 total.
+Source breakdown: 80 via the Labs form, 3 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E), 1 via David (VP of AI/ML) (Eaton) = 84 total.
 
 Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
 
 | Company | Contact | Status |
 |---|---|---|
+| PG&E (Pacific Gas and Electric) | — (via Sales: Greg Campbell) | Interested |
 | Itecor (CH)-HQ | Alexandre Thibaud | Email sent — 2026-10-12 |
 | Ferrara Candy Company | Sudha Damacherla | Email sent — 2026-10-12 |
 | Department of Jobs, Skills, Industry and Regions (DJSIR) (AU) | Subhasis Dhar | Email sent — 2026-10-12 |
@@ -103,6 +124,23 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Singapore Pools (form blank, domain-resolved) | Nai Hau Lui, Fun Tat Chen | Email sent |
 
 *(Status values: Interested → Email sent → Follow-up sent → Replied → Demo scheduled → Pending beta → Active beta.)*
+
+---
+
+### PG&E (Pacific Gas and Electric)
+Date: 2026-10-13 11:28 (Sales conversation — no Labs form submission)  
+Name: — (contact not captured; came in via Sales rep Greg Campbell)  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Northern and central California's largest investor-owned electric and natural gas utility.
+
+confirmed use case (from Sales, 2026-10-13): looking for tools to test their chatbot during the implementation stage, and read AgentScore as only covering chatbot performance (response quality, etc.) in QA/PROD after implementation. Quote: "We are looking for solutions/tools to test the chatbot during the implementation stage, looks like AgentScore tool assists with chatbot performance in QA/PROD (quality of the responses etc.) post implementation". They did not sign up for anything. Pre-release scenario/simulation testing is the gap they hit; logged under the scenario bank / simulation testing ask in [Customer Feedback Log](Customer%20Feedback%20Log.md).
+
+likely use case: pre-release testing of PG&E's customer-facing virtual assistant during build-out. AgentScore today scores real traces from QA/PROD, so this needs the scenario/simulation capability on the roadmap.
+
+known agent tooling: runs a customer-service virtual assistant named "Peggy" and an internal "Agent Assist" tool for service reps; a vendor case study from PolyAI describes a conversational AI replacing the legacy IVR ([PolyAI](https://poly.ai/customers/pge); [PG&E newsroom](https://www.pge.com/en/newsroom/currents/customer-service/pg-e-wins-chartwell-award-and-showcased-as-industry-case-study.html)). Which of these is the chatbot being implemented is not confirmed.
 
 ---
 
@@ -296,6 +334,8 @@ likely use case: given the submitter's Test Automation Architect title and Aptiv
 
 known agent tooling: proprietary GenAI tools (AI Requirements Analyzer, AI Code Generation, AI Database) used to speed up development, and Aptiv LINC's AI-driven DevOps capabilities ([Aptiv](https://www.aptiv.com/en/insights/article/3-Use-Cases-of-Aptiv-s-Generative-AI); [Aptiv LINC](https://www.aptiv.com/en/solutions/intelligent-systems)); no public information found tying Aptiv to a specific deployed "agent" product beyond this GenAI dev tooling.
 
+agent stack (stated): Microsoft Copilot Studio, Azure AI Foundry, and Google Cloud (Gemini Enterprise, ADK); building agentic use cases across three teams (source: Aptiv Feedback Session, 2026-09-25)
+
 ---
 
 ### LGT Financial Services Ltd. (LI)
@@ -326,6 +366,8 @@ what they do: no public profile researched yet — added straight to the Pipelin
 confirmed use case (from 2026-10-01 demo): Amit Ghag is establishing quality engineering practices for Eaton's custom AI development, built mostly on Azure AI Foundry and Palantir Foundry. His headline requirement is automated testing as a CI/CD quality gate: nothing ships to production unless it clears a score threshold. David Colwell framed Eaton's agents as three classes (RAG, workflow, research) that each need a different definition of "good." Amit first heard of AgentScore at Transform in Singapore; Eran suggested the call. Prashant Saxena joined as the technical stakeholder. Editable success criteria and profiles, weighted dimensions ("that is something that I was looking for"), tool-use/MCP/agent-to-agent scoring, version-tagged scoring runs, and the golden-dataset-from-real-traces answer all landed. Gaps: CI/CD gate is in progress, not shipped (the deciding item); Tricentis Cloud hosting only (on-prem still being explored); no upfront golden-dataset upload in the UI; no project/release-level grouping; adversarial testing is roadmap only. Never answered: Palantir Foundry compatibility. Andrew pitched a design-partner role and the upcoming open beta. Debrief: [Eaton Feedback Session](feedback-sessions/Eaton%20Feedback%20Session.md).
 
 waiting on: (1) Andrew to answer Prashant's data-handling question (what goes to the LLM judge, how PII redaction works, whether Eaton telemetry stays in-boundary) after checking with engineering, likely a gate to any trial; (2) Andrew to send AgentScore overview collateral Amit can use to socialize it inside Eaton; (3) Andrew to put together a comparison against Azure AI Foundry's built-in evals; (4) follow-up email with open beta sign-up. No beta date set.
+
+agent stack (stated): custom-built agents on Azure AI Foundry and Palantir Foundry; RAG, workflow and research agent classes (source: Eaton Feedback Session, 2026-10-01)
 
 ---
 
@@ -610,6 +652,8 @@ waiting on: a short video on how AgentScore works, to share with his Singapore-b
 
 known agent tooling: deployed the "Beauty Genius" AI agent (built on Azure OpenAI/GPT-4o) for consumer beauty advice, with active AI partnerships spanning NVIDIA, IBM, and OpenAI ([Microsoft](https://www.microsoft.com/en/customers/story/25570-loreal-azure-openai); [L'Oréal](https://www.loreal.com/en/press-release/research-and-innovation/l-oreal-and-openai-join-forces-for-transformation-in-beauty-with-ai/)).
 
+agent stack (stated): Elastic Cloud (ELK)-based reconciliation agent connected to L'Oreal's own agent platform and LLM cloud; AI Workspace purchased but not the stated agent platform (source: L'Oreal Feedback Session, 2026-09-24)
+
 ---
 
 ### City Dev (SG)
@@ -716,6 +760,8 @@ likely use case: given its own agentic-AI platform launch, most plausibly evalua
 
 known agent tooling: launched GenAIQ, a proprietary agentic-AI platform for enterprise-scale automation of knowledge-intensive tasks ([BearingPoint](https://www.bearingpoint.com/en/about-us/news-and-media/press-releases/bearingpoint-launches-genaiq/)).
 
+agent stack (stated): qTest ATC agent (test-case generation) and Tosca AI Workspace internally; launched its own agentic-AI platform, GenAIQ, for clients (source: BearingPoint Feedback Session, 2026-09-23)
+
 ---
 
 ### xAmplify (AU)
@@ -751,6 +797,8 @@ waiting on: engineering confirmation of self-hosted AWS/EC2 deployment + pointin
 likely use case (original inference, now superseded by the above): given Meta's own push into customer-facing agents at massive scale via its new Business Agent Platform, plausibly evaluating Agent Score either to validate agents built on that platform or as landscape research into third-party agent-testing tools — notable overlap with Agent Score's own positioning, similar profile to the Workday and Pegasystems entries below.
 
 known agent tooling: launched Meta Business Agent (a customer-facing agent live across WhatsApp, Messenger, and Instagram handling Q&A, appointment booking, lead qualification, and multilingual responses) and the enterprise Business Agent Platform (integrating with 100+ systems including Shopify and Zendesk) at Conversations 2026 in London (June 3, 2026), building on over 1 million businesses already using earlier chatbot pilots in India, Mexico, and Brazil; separately ships Llama Stack, a toolchain interface for customizing Llama models and building agentic applications ([Digital Applied](https://www.digitalapplied.com/blog/meta-ai-business-agents-enterprise-llama-launch-2026), [Meta AI blog](https://ai.meta.com/blog/future-of-ai-built-with-llama/)).
+
+agent stack (stated): custom in-house agents (autonomous supply chain program, functional to enterprise hierarchy) plus Metamate internal chatbot; not LangChain/LangGraph or SAP first-party, to be confirmed before POC scoping (source: Meta Feedback Sessions, 2026-08-11 and 2026-09-11)
 
 ---
 
@@ -876,6 +924,8 @@ likely use case: given Workday's own aggressive build-out of agentic AI tooling 
 
 known agent tooling: extensive and directly adjacent to Agent Score's space — "Workday Build" now ships a Developer Agent (plugs into Claude Code, Cursor, Codex, etc.), Agent-Ready Tools exposing HR/finance data over MCP, and "Agent Passport," a system explicitly built to test, verify, and continuously monitor every AI agent in the enterprise (early access H2 2026, GA by end of 2026); also shipped new domain-specific agents for IT service management and travel on its Sana platform (May 2026) ([Workday Newsroom](https://newsroom.workday.com/2026-06-02-Workday-Launches-New-Tools-for-Developers-to-Build,-Connect,-and-Verify-AI-Agents-For-HR,-Finance,-and-IT), [Workday Investor Relations](https://investor.workday.com/news-and-events/press-releases/news-details/2026/Workday-Launches-Agent-Passport-to-Test-Verify-and-Continuously-Monitor-Every-AI-Agent-in-the-Enterprise/default.aspx), [SiliconANGLE](https://siliconangle.com/2026/05/21/workday-brings-ai-agents-service-management-travel/)).
 
+agent stack (stated): Workday agents and Salesforce Agentforce agents, against external Data Cloud and RAG (source: Workday Feedback Session, 2026-07-24)
+
 ---
 
 ### PVH Corp
@@ -955,6 +1005,8 @@ known agent tooling: no public information found tying Tritusa specifically to a
 
 Responded: Curious about evaluation using AIW *and* third party agents
 
+agent stack (stated): Microsoft Copilot Studio agent (spec to test cases, pushed to qTest) and an AI Workspace agent (MCP + A2A, end-to-end QA through Tosca) (source: Tritusa Feedback Session, 2026-09-11)
+
 ---
 
 ### SAP Labs India (IN)
@@ -1018,6 +1070,8 @@ waiting on: (1) Andrew to send the follow-up email with the quick-start guide an
 likely use case: given the existing partner relationship and Tosca-based QA automation practice, most plausibly evaluating Agent Score to extend their QA offering into agentic-AI testing for their own client base, rather than for internal use — same profile as Merito Solutions above.
 
 known agent tooling: runs Tosca-based automation delivery for clients (e.g. a utility-services C2M/Tosca implementation reducing manual effort 29%); no public information found on New Vision operating AI agents themselves ([newvision-software.com/partners](https://newvision-software.com/partners/)).
+
+agent stack (stated): mostly open-source agents, mainly Playwright, driven by what customers ask for (source: New Vision Feedback Session, 2026-10-08)
 
 ---
 
@@ -1145,6 +1199,8 @@ waiting on: Andrew's follow-up with what an on-prem/container deployment would l
 likely use case: agentic automation in dispatch/back-office workflows and customer-service voice/chat agents.
 
 known agent tooling: Gravitate AI-powered Supply & Dispatch solution live at their Gemini Motor Transport fleet ([csnews.com](https://csnews.com/loves-launches-ai-powered-supply-dispatch-solution)); first CTO (June 2025) explicitly tasked with responsible AI deployment ([ciodive.com](https://www.ciodive.com/news/loves-chief-technology-officer/751759/)); automation team confirmed experimenting with agentic automation/orchestration.
+
+agent stack (stated): no agent in production; closest candidate is a Tosca MCP plus Claude setup, not confirmed to emit traces (source: Love's Feedback Session, 2026-10-02)
 
 ---
 
@@ -1361,6 +1417,8 @@ likely use case: evaluating/testing agent output quality and governance, given h
 
 known agent tooling: "Ovid Guidelines AI" (agentic clinical-guideline authoring), "LegalVIEW BillAnalyzer Invoice Review Agent" (10+ specialized agents on their own "FAB" LLM platform), agentic medication-workflow tooling in development ([Legal IT Insider](https://legaltechnology.com/2026/05/07/governance-was-designed-in-from-day-one-inside-wolters-kluwers-new-invoice-review-ai-agent/)).
 
+agent stack (stated): AI Workspace agents, agents on WK's internal FAB LLM platform, and GitHub Copilot (source: Wolters Kluwer Feedback Session, 2026-09)
+
 ---
 
 ### J. R. Simplot Company
@@ -1446,6 +1504,8 @@ waiting on: (1) Andrew to answer the open onboarding questions (welcome email wi
 likely use case: given the existing partner relationship, likely evaluating Agent Score to advise/resell to their own enterprise clients doing agentic-AI QA, rather than for their own internal agents.
 
 known agent tooling: no public information found on Merito operating AI agents themselves; on the call, Merito said it builds agentic solutions with Claude-certified architects but runs no production agents.
+
+agent stack (stated): builds agentic solutions with Claude (Claude-certified architects) but no production agents or customer-facing agent yet (source: Merito Feedback Session, 2026-10-06)
 
 ---
 
