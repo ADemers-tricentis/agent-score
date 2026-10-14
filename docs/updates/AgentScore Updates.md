@@ -1,3 +1,24 @@
+## October 14, 2026 Update
+
+### Jump from a score to its trace
+- On the Score tab, each interaction under "Where the score comes from" now links straight to its trace, so you no longer copy the trace id and search for it.
+
+### Smoother sign-in
+- Returning from sign-in now goes straight into the app, with no flash of login buttons while your identity is still being verified.
+- Sign-in, error and consent screens are sized to their content, so a Microsoft-only sign-in or a service error no longer sits in a mostly empty card.
+- The Better Stack Stream tab is hidden where traces arrive directly, so you only see ingestion controls that apply to you.
+
+### Docs that match the product
+- The in-app docs now match the shipped product, including Improve This Agent, Labeling, Traces and the workspace screens, with refreshed screenshots.
+
+### Internal note: scores ready for AI Workspace
+- A read-only internal API now lets sibling Tricentis services, starting with AI Workspace, read each hosted agent's Agent Score.
+
+### Coming next
+- Loading Legal's final terms document into the consent gate
+- Cutting agent tracing over to push directly from internal agents instead of pulling from Better Stack
+- Small additions to the API gateway and session services to finish production readiness
+
 ## October 6, 2026 Update
 
 ### Beta terms and consent gate approved by Legal

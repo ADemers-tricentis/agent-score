@@ -50,7 +50,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Skygen USA | Joko Supriyanto | Email sent — 2026-10-05 |
 | Hugo Boss AG (DE) | Marco Esguerra | Email sent — 2026-10-05 |
 | Aptiv Global Operations Limited | Meenakshi Sundaram Chockalingam | Active Beta |
-| LGT Financial Services Ltd. (LI) | David Klien | Email sent |
+| LGT Financial Services Ltd. (LI) | David Klien | Email sent — 2026-09-23 |
 | Eaton | Amit Ghag | Demo Scheduled — 2026-10-01 |
 | Meta Platforms, Inc. | Sri Pulleti | Demo Scheduled — POC scoping |
 | Freddie Mac | Kaleb Jackson | Replied |
@@ -95,33 +95,33 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Mouser Electronics | Mohammad Mahboob | Follow-up sent — 2026-09-24 |
 | Cox Automotive | Balaji Gandsi Krishna Prakash | Follow-up sent — 2026-09-24 |
 | Bayone Solutions | Mathi Natarajan | Follow-up sent — 2026-09-24 |
-| Saudi Telecom Company STC (SA) - HQ | Farhan Shaikh | Email sent |
-| Diriyah Gate Company Limited - DGCL (SA) | Ali Alshehri | Email sent |
-| TestCrew | Ramesh Panthangi | Email sent |
-| Dolpheen IT Solutions | Jia Jun Zhan | Email sent |
-| Cengage Learning, Inc. | Ajan Nattamai | Email sent |
-| Pegasystems Inc. | Kiran kadarla | Email sent |
-| cbs Corporate Business Solutions (DE/MY) | Ashish Chavan, Arumugam Lekshmanan | Email sent |
-| Ariba, Inc. | Akihiko Yamano, Sina Döbbelin | Email sent |
-| Seatrium (SG) | Florance Yong | Email sent |
-| Singapore Power Digital Private Limited | Ritu Agrawal | Email sent |
-| ABeam Consulting (Malaysia) Sdn. Bhd. | Sharifah Nadiah Alhabshi | Email sent |
-| Singapore Institute of Technology (SG) | Dennis Fung | Email sent |
-| Olam Agri (form blank, domain-resolved) | Vanitha Velusamy | Email sent |
-| Tata Consultancy Services Asia Pacific Pte. Ltd. (SG) | Balaji Sampathkumar | Email sent |
-| SAP North America | Thomas Zimmermann | Email sent |
-| Defence Science and Technology Agency (SG) | cydnie na | Email sent |
-| Housing Development Board (SG) | Swee Chyuan Koh | Email sent |
+| Saudi Telecom Company STC (SA) - HQ | Farhan Shaikh | Email sent — 2026-09-09 |
+| Diriyah Gate Company Limited - DGCL (SA) | Ali Alshehri | Email sent — 2026-09-09 |
+| TestCrew | Ramesh Panthangi | Email sent — 2026-09-09 |
+| Dolpheen IT Solutions | Jia Jun Zhan | Email sent — 2026-09-09 |
+| Cengage Learning, Inc. | Ajan Nattamai | Email sent — 2026-09-09 |
+| Pegasystems Inc. | Kiran kadarla | Email sent — 2026-09-09 |
+| cbs Corporate Business Solutions (DE/MY) | Ashish Chavan, Arumugam Lekshmanan | Email sent — 2026-09-17 |
+| Ariba, Inc. | Akihiko Yamano, Sina Döbbelin | Email sent — 2026-09-17 |
+| Seatrium (SG) | Florance Yong | Email sent — 2026-09-17 |
+| Singapore Power Digital Private Limited | Ritu Agrawal | Email sent — 2026-09-17 |
+| ABeam Consulting (Malaysia) Sdn. Bhd. | Sharifah Nadiah Alhabshi | Email sent — 2026-09-17 |
+| Singapore Institute of Technology (SG) | Dennis Fung | Email sent — 2026-09-17 |
+| Olam Agri (form blank, domain-resolved) | Vanitha Velusamy | Email sent — 2026-09-17 |
+| Tata Consultancy Services Asia Pacific Pte. Ltd. (SG) | Balaji Sampathkumar | Email sent — 2026-09-17 |
+| SAP North America | Thomas Zimmermann | Email sent — 2026-09-17 |
+| Defence Science and Technology Agency (SG) | cydnie na | Email sent — 2026-09-17 |
+| Housing Development Board (SG) | Swee Chyuan Koh | Email sent — 2026-09-17 |
 | L'OREAL | Khadim KASHANI | Active Beta |
-| City Dev (SG) | Davin Ng | Email sent |
-| Testing IT Consulting S.A. de C.V. | Hector Santa Maria | Email sent |
-| Brillar Pte Ltd (SG) | Zuzan Win | Email sent |
-| Harrods Ltd (UK) | Shanita Helyar | Email sent |
-| Ally Financial Inc. | Jana Kethamreddy | Email sent |
+| City Dev (SG) | Davin Ng | Email sent — 2026-09-17 |
+| Testing IT Consulting S.A. de C.V. | Hector Santa Maria | Email sent — 2026-09-17 |
+| Brillar Pte Ltd (SG) | Zuzan Win | Email sent — 2026-09-17 |
+| Harrods Ltd (UK) | Shanita Helyar | Email sent — 2026-09-17 |
+| Ally Financial Inc. | Jana Kethamreddy | Email sent — 2026-09-17 |
 | BearingPoint GmbH (DE) - HQ | Rohan Patil | Demo Scheduled — 2026-09-23 |
-| xAmplify (AU) | Prakash Panchal | Email sent |
+| xAmplify (AU) | Prakash Panchal | Email sent — 2026-09-17 |
 | Accenture (multiple entities) | Jigish Belani, Mohammed Arslan Mir, Vijetha Nayak, Priya Saidavaram, Ankur Mittal | Pending Beta |
-| Singapore Pools (form blank, domain-resolved) | Nai Hau Lui, Fun Tat Chen | Email sent |
+| Singapore Pools (form blank, domain-resolved) | Nai Hau Lui, Fun Tat Chen | Email sent — 2026-09-23 |
 
 *(Status values: Interested → Email sent → Follow-up sent → Replied → Demo scheduled → Pending beta → Active beta.)*
 
