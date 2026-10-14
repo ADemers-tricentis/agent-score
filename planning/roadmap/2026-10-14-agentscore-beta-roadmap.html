@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgentScore Roadmap - Beta Onboarding and Self-Improvement</title>
+<style>
+  :root {
+    --bg: #f5f7fb;
+    --ink: #14213d;
+    --muted: #5b6785;
+    --card: #ffffff;
+    --line: #e1e6f0;
+    --now: #1f9d63;   --now-bg: #e6f6ee;  --now-ink: #0d4a2e;
+    --next: #2f6fdd;  --next-bg: #e8f0fd; --next-ink: #12356f;
+    --later: #7a5bd0; --later-bg: #f0ebfb; --later-ink: #3d2a78;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .wrap { max-width: 1400px; margin: 0 auto; padding: 0 28px 64px; }
+  header {
+    background: linear-gradient(120deg, #0f1b3d 0%, #1d3a7a 60%, #2f6fdd 100%);
+    color: #fff; padding: 44px 0 40px; margin-bottom: 28px;
+  }
+  header h1 { margin: 0 0 6px; font-size: 32px; letter-spacing: -0.5px; }
+  header p { margin: 0; color: #c9d6f5; }
+  header .meta { margin-top: 14px; font-size: 13px; color: #a9bcec; }
+
+  .intro { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 36px; }
+  .intro .card { padding: 20px 22px; }
+  .intro h3 { margin: 0 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+  .intro p { margin: 0; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 1px 2px rgba(20,33,61,.05); }
+
+  h2.section { font-size: 22px; margin: 0 0 6px; letter-spacing: -0.3px; }
+  .sub { color: var(--muted); margin: 0 0 20px; }
+
+  /* ---------- Flow diagram ---------- */
+  .flow { padding: 26px; margin-bottom: 44px; }
+  .phase { border-radius: 12px; padding: 14px 16px 18px; margin-bottom: 16px; border: 1px solid; }
+  .phase.now { background: var(--now-bg); border-color: #bfe5d0; }
+  .phase.next { background: var(--next-bg); border-color: #c6d9f8; }
+  .phase-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .phase-head .tag { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 9px; border-radius: 99px; color: #fff; }
+  .now .tag { background: var(--now); } .next .tag { background: var(--next); }
+  .phase-head .name { font-weight: 700; }
+  .phase-head .range { color: var(--muted); font-size: 13px; }
+  .steps { display: flex; align-items: stretch; flex-wrap: wrap; gap: 0; row-gap: 14px; }
+  .step {
+    position: relative; background: #fff; border-radius: 10px; padding: 10px 12px 10px 44px;
+    width: 178px; min-height: 66px; font-size: 13px; line-height: 1.35; border: 1px solid var(--line);
+    margin-right: 30px; display: flex; align-items: center;
+  }
+  .step .n {
+    position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+    width: 24px; height: 24px; border-radius: 50%; color: #fff; font-weight: 700; font-size: 12px;
+    display: grid; place-items: center;
+  }
+  .now .step .n { background: var(--now); } .next .step .n { background: var(--next); }
+  .step:not(:last-child)::after {
+    content: ""; position: absolute; right: -24px; top: 50%; width: 18px; height: 2px;
+    background: #9aa6c4; transform: translateY(-50%);
+  }
+  .step:not(:last-child)::before {
+    content: ""; position: absolute; right: -25px; top: 50%; transform: translateY(-50%);
+    border-left: 7px solid #9aa6c4; border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+  }
+  .step.decision { border: 2px dashed var(--now); background: #fbfffd; flex-direction: column; align-items: flex-start; justify-content: center; }
+  .branches { display: flex; gap: 6px; margin-top: 6px; font-size: 11px; }
+  .branches span { background: var(--now-bg); color: var(--now-ink); border-radius: 6px; padding: 2px 6px; }
+  .loopnote {
+    margin: 12px 0 0; font-size: 13px; color: var(--next-ink); background: #fff; border: 1px dashed var(--next);
+    border-radius: 10px; padding: 8px 12px; display: inline-flex; gap: 8px; align-items: center;
+  }
+  .between { text-align: center; color: #9aa6c4; font-size: 20px; line-height: 1; margin: -6px 0 10px; }
+
+
+  .down { position: relative; height: 44px; margin: -2px 0 2px; }
+  .down .stem { position: absolute; left: 105px; top: 0; width: 4px; height: 32px; background: var(--now); transform: translateX(-2px); }
+  .down .head { position: absolute; left: 105px; top: 30px; transform: translateX(-9px); border-left: 9px solid transparent; border-right: 9px solid transparent; border-top: 12px solid var(--now); }
+  .down .lbl { position: absolute; left: 125px; top: 10px; font-size: 12.5px; font-weight: 600; color: var(--now-ink); }
+  .loopwrap { background: #fafbff; border: 1px solid var(--line); border-radius: 12px; padding: 8px; margin-top: 4px; }
+  .loopwrap svg { width: 100%; height: auto; display: block; font-family: inherit; }
+  .loopwrap .num { fill: #fff; font-weight: 700; font-size: 13px; }
+  .loopwrap .ttl { fill: #14213d; font-weight: 700; font-size: 14px; }
+  .loopwrap .sm { fill: #5b6785; font-size: 12px; }
+  .loopwrap .looplbl { fill: #4c5fd5; font-weight: 800; font-size: 15px; letter-spacing: 2px; }
+  .loopwrap .loopsub { fill: #4c5fd5; font-size: 13px; }
+  .loopwrap .loopico { fill: #4c5fd5; font-size: 34px; }
+  .legend { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 12px; font-size: 13px; color: var(--muted); }
+  .legend i { display: inline-block; width: 18px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+
+  /* ---------- Columns ---------- */
+  .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
+  .col { border-radius: 16px; padding: 0 0 16px; background: #eef1f8; border: 1px solid var(--line); overflow: hidden; }
+  .col-head { padding: 16px 18px; color: #fff; }
+  .col.now .col-head { background: linear-gradient(120deg, #178652, #1f9d63); }
+  .col.next .col-head { background: linear-gradient(120deg, #2559b8, #2f6fdd); }
+  .col.later .col-head { background: linear-gradient(120deg, #61449f, #7a5bd0); }
+  .col-head h2 { margin: 0; font-size: 22px; }
+  .col-head p { margin: 2px 0 0; font-size: 13px; opacity: .9; }
+  .theme { margin: 16px 14px 0; padding: 16px; }
+  .col.now .theme { border-top: 4px solid var(--now); }
+  .col.next .theme { border-top: 4px solid var(--next); }
+  .col.later .theme { border-top: 4px solid var(--later); }
+  .theme h3 { margin: 0 0 4px; font-size: 17px; }
+  .theme .what { margin: 0 0 10px; font-size: 13.5px; color: var(--muted); }
+  details { margin: 0 0 10px; }
+  summary { cursor: pointer; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); }
+  details p { margin: 6px 0 0; font-size: 13.5px; }
+  .goal { font-size: 13px; background: #f6f8fc; border-radius: 8px; padding: 8px 10px; margin: 0 0 12px; }
+  .goal b { color: var(--ink); }
+  .features { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+  .features li { border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; background: #fff; }
+  .features .t { font-weight: 600; font-size: 14px; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+  .features .d { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .badge { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 99px; white-space: nowrap; }
+  .now .badge { background: var(--now-bg); color: var(--now-ink); }
+  .next .badge { background: var(--next-bg); color: var(--next-ink); }
+  .later .badge { background: var(--later-bg); color: var(--later-ink); }
+  .jira { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; font-size: 11.5px; color: var(--muted); }
+  .jira a { text-decoration: none; color: #0b5cad; background: #eaf2fb; border-radius: 6px; padding: 1px 6px; font-weight: 600; }
+  .jira a:hover { background: #d5e6f8; }
+  .jira .none { font-style: italic; }
+  .jira .gap { color: #b4531a; background: #fdf0e6; border-radius: 6px; padding: 1px 6px; font-weight: 600; font-style: normal; }
+  .note { font-size: 12.5px; color: var(--muted); margin-top: 8px; border-left: 3px solid var(--later); padding-left: 9px; }
+  .risk { font-size: 12.5px; background: #fff8e6; border: 1px solid #f1deaa; border-radius: 8px; padding: 7px 10px; margin-top: 10px; color: #6b5200; }
+
+  footer { margin-top: 36px; color: var(--muted); font-size: 13px; }
+  footer a { color: #0b5cad; }
+
+  @media (max-width: 1100px) { .board { grid-template-columns: 1fr; } .intro { grid-template-columns: 1fr; } }
+  @media print { header { background: #1d3a7a; -webkit-print-color-adjust: exact; print-color-adjust: exact; } details { display: block; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap" style="padding-bottom:0">
+    <h1>AgentScore Roadmap</h1>
+    <p>Beta onboarding and self-improvement</p>
+    <div class="meta">Last updated 10-14-2026 &middot; Horizons: Now / Next / Later</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="intro">
+    <div class="card">
+      <h3>Target persona</h3>
+      <p>A semi-technical user who can create agents but does not know how to configure traces, instrumentation, or agent updates. They create or evaluate agents and make the final call before an agent ships to production.</p>
+    </div>
+    <div class="card">
+      <h3>North star</h3>
+      <p>Get AgentScore to as many beta users as possible. The product must prove its value, and users must actually use it and benefit from it.</p>
+    </div>
+  </section>
+
+  <!-- ================= USER FLOW ================= -->
+  <h2 class="section">Target user flow</h2>
+  <p class="sub">From sign-up to measurable improvement. Step numbers match the feature cards below.</p>
+
+  <section class="card flow">
+
+    <div class="phase now">
+      <div class="phase-head"><span class="tag">Now</span><span class="name">Simplify onboarding</span><span class="range">Steps 1 to 7</span></div>
+      <div class="steps">
+        <div class="step"><span class="n">1</span>User signs up for Tosca Cloud or brings an existing account</div>
+        <div class="step decision"><span class="n">2</span>User signs into AgentScore. Tenant exists?
+          <div class="branches"><span>No: create tenant</span><span>Yes: log in, welcome</span></div>
+        </div>
+        <div class="step"><span class="n">3</span>All agents, internal and external, shown in one place</div>
+        <div class="step"><span class="n">4</span>Getting Started guide gives MCP connection instructions</div>
+        <div class="step"><span class="n">5</span>User points their agent at the MCP</div>
+        <div class="step"><span class="n">6</span>Agent runs connect commands, AgentScore ingests traces</div>
+        <div class="step"><span class="n">7</span>User gets agent description, score, and suggested improvements</div>
+      </div>
+    </div>
+
+    <div class="down"><span class="stem"></span><span class="head"></span><span class="lbl">After the first score</span></div>
+    <div class="loopwrap"><svg viewBox="0 0 1300 520" role="img" aria-label="Stimulation testing and self-improvement loop">
+<defs>
+<filter id="sh" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#14213d" flood-opacity=".12"/></filter>
+<marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4c5fd5"/></marker>
+<marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#7b86a6"/></marker>
+</defs>
+<rect x="240" y="40" width="780" height="400" rx="26" fill="#eef0fd" stroke="#4c5fd5" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="266" y="72" class="looplbl">THE LOOP</text>
+<text x="400" y="72" class="loopsub">repeat steps 9 to 13 until the agent is ready to ship</text>
+<g fill="none" stroke="#4c5fd5" stroke-width="4" marker-end="url(#ar)">
+<path d="M225,142 L282,142"/>
+<path d="M497,142 L528,142"/><path d="M743,142 L774,142"/>
+<path d="M882,184 L882,296"/><path d="M774,342 L497,342"/><path d="M390,296 L390,190"/>
+</g>
+<g><circle cx="635" cy="242" r="46" fill="#fff" stroke="#4c5fd5" stroke-width="2"/>
+<text x="635" y="240" text-anchor="middle" class="loopico">&#8635;</text>
+<text x="635" y="262" text-anchor="middle" class="sm" fill="#4c5fd5" font-weight="700">REPEAT</text></g>
+<path d="M390,384 L390,478 L1034,478 L1034,150 L1046,150" fill="none" stroke="#7b86a6" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#ag)"/>
+<rect x="520" y="462" width="300" height="28" rx="14" fill="#fff" stroke="#7b86a6"/>
+<text x="670" y="481" text-anchor="middle" class="sm" fill="#4a5578" font-weight="700">Exit when the score meets the ship bar</text>
+<g><rect x="10" y="100" width="215" height="84" rx="12" fill="#fff" stroke="#1f9d63" stroke-width="2" filter="url(#sh)"/>
+<circle cx="36" cy="142.0" r="15" fill="#1f9d63"/><text x="36" y="147.0" text-anchor="middle" class="num">8</text>
+<text x="60" y="132.0" class="ttl">Profile the agent</text><text x="60" y="149.0" class="sm">Type, success criteria,</text><text x="60" y="164.0" class="sm">failure modes</text></g>
+<g><rect x="282" y="100" width="215" height="84" rx="12" fill="#fff" stroke="#1f9d63" stroke-width="2" filter="url(#sh)"/>
+<circle cx="308" cy="142.0" r="15" fill="#1f9d63"/><text x="308" y="147.0" text-anchor="middle" class="num">9</text>
+<text x="332" y="132.0" class="ttl">Pick test categories</text><text x="332" y="149.0" class="sm">Relevant stimulation</text><text x="332" y="164.0" class="sm">tests for this agent</text></g>
+<g><rect x="528" y="100" width="215" height="84" rx="12" fill="#fff" stroke="#1f9d63" stroke-width="2" filter="url(#sh)"/>
+<circle cx="554" cy="142.0" r="15" fill="#1f9d63"/><text x="554" y="147.0" text-anchor="middle" class="num">10</text>
+<text x="578" y="132.0" class="ttl">Run the tests</text><text x="578" y="149.0" class="sm">Automatic, generates</text><text x="578" y="164.0" class="sm">trace data</text></g>
+<g><rect x="774" y="100" width="215" height="84" rx="12" fill="#fff" stroke="#1f9d63" stroke-width="2" filter="url(#sh)"/>
+<circle cx="800" cy="142.0" r="15" fill="#1f9d63"/><text x="800" y="147.0" text-anchor="middle" class="num">11</text>
+<text x="824" y="132.0" class="ttl">Score the tests</text><text x="824" y="149.0" class="sm">Generate suggested</text><text x="824" y="164.0" class="sm">improvements</text></g>
+<g><rect x="774" y="300" width="215" height="84" rx="12" fill="#fff" stroke="#2f6fdd" stroke-width="2" filter="url(#sh)"/>
+<circle cx="800" cy="342.0" r="15" fill="#2f6fdd"/><text x="800" y="347.0" text-anchor="middle" class="num">12</text>
+<text x="824" y="332.0" class="ttl">Feed improvements</text><text x="824" y="349.0" class="sm">To the user's agent</text><text x="824" y="364.0" class="sm">so it can apply them</text></g>
+<g><rect x="282" y="300" width="215" height="84" rx="12" fill="#fff" stroke="#2f6fdd" stroke-width="2" filter="url(#sh)"/>
+<circle cx="308" cy="342.0" r="15" fill="#2f6fdd"/><text x="308" y="347.0" text-anchor="middle" class="num">13</text>
+<text x="332" y="332.0" class="ttl">Score the new version</text><text x="332" y="349.0" class="sm">Compare to the</text><text x="332" y="364.0" class="sm">previous score</text></g>
+<g><rect x="1050" y="100" width="235" height="100" rx="12" fill="#fff" stroke="#7a5bd0" stroke-width="2" filter="url(#sh)"/>
+<circle cx="1076" cy="150.0" r="15" fill="#7a5bd0"/><text x="1076" y="155.0" text-anchor="middle" class="num">14</text>
+<text x="1100" y="140.0" class="ttl">See the gains</text><text x="1100" y="157.0" class="sm">Measurable improvements</text><text x="1100" y="172.0" class="sm">by category + cost function</text></g>
+<path d="M1167,204 L1167,296" fill="none" stroke="#4c5fd5" stroke-width="4" marker-end="url(#ar)"/>
+<g><rect x="1050" y="300" width="235" height="100" rx="12" fill="#fff" stroke="#7a5bd0" stroke-width="2" filter="url(#sh)"/>
+<circle cx="1076" cy="350.0" r="15" fill="#7a5bd0"/><text x="1076" y="355.0" text-anchor="middle" class="num">15</text>
+<text x="1100" y="340.0" class="ttl">Report generated</text><text x="1100" y="357.0" class="sm">For the organization and</text><text x="1100" y="372.0" class="sm">all of their agents</text></g>
+</svg></div>
+<div class="legend"><span><i style="background:#1f9d63"></i>Now: stimulation testing (8 to 11)</span><span><i style="background:#2f6fdd"></i>Next: self-improvement loop (12 to 13)</span><span><i style="background:#7a5bd0"></i>Later: gains and reporting (14 to 15)</span><span><i style="background:#4c5fd5;height:4px"></i>Loop path</span></div>
+</section>
+
+  <!-- ================= BOARD ================= -->
+  <h2 class="section">Roadmap by horizon</h2>
+  <p class="sub">Each theme lists its features and the Jira work found for them. Expand "Why it matters" for the reasoning.</p>
+
+  <section class="board">
+
+    <!-- ============ NOW ============ -->
+    <div class="col now">
+      <div class="col-head"><h2>Now</h2><p>2 themes &middot; 11 features</p></div>
+
+      <div class="card theme">
+        <h3>Simplify onboarding</h3>
+        <p class="what">The path from signing up to a first actionable score, with no manual instrumentation, trace configuration, or agent changes. Steps 1 to 7.</p>
+        <details>
+          <summary>Why it matters</summary>
+          <p>The persona can create agents but cannot configure traces. Every step of friction between sign-up and first score loses a beta user. Self-service onboarding is a High recurring ask from Wolters Kluwer and L'Oreal. This is the direct path to the north star.</p>
+        </details>
+        <div class="goal"><b>Goal:</b> a user signs up, connects an agent, and sees a score and suggested improvements quickly, with backoffice admins out of the loop for tenant creation.</div>
+        <ul class="features">
+          <li>
+            <div class="t">Tosca Cloud sign-in with login-or-create tenant <span class="badge">Steps 1, 2</span></div>
+            <div class="d">Sign in with a Tosca Cloud account. No tenant means one is created; an existing tenant means log in and welcome.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15137">AI-15137</a><a href="https://tricentis.atlassian.net/browse/AI-15270">AI-15270</a><a href="https://tricentis.atlassian.net/browse/AI-15139">AI-15139</a><a href="https://tricentis.atlassian.net/browse/AI-15269">AI-15269 bug</a></div>
+          </li>
+          <li>
+            <div class="t">Automatic tenant provisioning <span class="badge">Step 2</span></div>
+            <div class="d">Tenants are created from the user's Tosca Cloud tenant, so admins stop creating them by hand.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15138">AI-15138</a><a href="https://tricentis.atlassian.net/browse/AI-15142">AI-15142</a><a href="https://tricentis.atlassian.net/browse/AI-15143">AI-15143</a></div>
+          </li>
+          <li>
+            <div class="t">Join existing tenants <span class="badge">Step 2</span></div>
+            <div class="d">Users can join a tenant that already exists.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15140">AI-15140</a></div>
+          </li>
+          <li>
+            <div class="t">Unified agent view <span class="badge">Step 3</span></div>
+            <div class="d">All of a user's agents, internal and external, in one place.</div>
+            <div class="jira"><span class="gap">No Jira found</span></div>
+          </li>
+          <li>
+            <div class="t">Getting Started guide <span class="badge">Step 4</span></div>
+            <div class="d">In-app guide with MCP connection instructions.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15163">AI-15163</a><span class="none">partial: reads as a document, not an in-app guide</span></div>
+          </li>
+          <li>
+            <div class="t">Zero-config agent connection via MCP <span class="badge">Steps 5, 6</span></div>
+            <div class="d">Point the agent at the MCP; it connects itself and traces flow in. No manual agent updates.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15146">AI-15146</a><a href="https://tricentis.atlassian.net/browse/AI-15147">AI-15147</a><a href="https://tricentis.atlassian.net/browse/AI-15150">AI-15150</a></div>
+          </li>
+          <li>
+            <div class="t">First-score output <span class="badge">Step 7</span></div>
+            <div class="d">After ingestion: agent description, score, and suggested improvements.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15148">AI-15148</a></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card theme">
+        <h3>Stimulation testing</h3>
+        <p class="what">AgentScore profiles an agent, runs targeted tests, and scores the results, so users can test without waiting for organic traces. Steps 8 to 11.</p>
+        <details>
+          <summary>Why it matters</summary>
+          <p>Scenario bank and simulation testing is the top High ask across Meta (x2), L'Oreal, Tritusa, Eaton, and PG&amp;E, and the pivotal gap for the Meta POC. It makes AgentScore an end-to-end testing solution across the ADLC.</p>
+        </details>
+        <div class="goal"><b>Goal:</b> an agent is profiled, given the test categories that fit it, tested automatically, and scored, with improvements generated from the results. No more waiting on organic traces for scoring.</div>
+        <ul class="features">
+          <li>
+            <div class="t">Agent profiling prompt <span class="badge">Step 8</span></div>
+            <div class="d">Agent reports its type, success criteria, and common failure modes.</div>
+            <div class="jira"><span class="gap">No open Jira</span><span class="none">related: AI-11885 (Backlog)</span></div>
+          </li>
+          <li>
+            <div class="t">Category-based test selection <span class="badge">Step 9</span></div>
+            <div class="d">Compliance, security and PII, safety and harm, functional, usability, bias, robustness, multi-agent, MCP, cost and efficiency.</div>
+            <div class="jira"><span class="gap">No Jira found</span></div>
+          </li>
+          <li>
+            <div class="t">Automated stimulation test runs <span class="badge">Step 10</span></div>
+            <div class="d">Selected tests run automatically and generate trace data.</div>
+            <div class="jira"><span class="gap">No Jira found</span></div>
+          </li>
+          <li>
+            <div class="t">Stimulation scoring and improvements <span class="badge">Step 11</span></div>
+            <div class="d">Results are scored and improvements generated. Separate from first-score suggestions, which come from organic traces.</div>
+            <div class="jira"><span class="gap">No Jira found</span></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============ NEXT ============ -->
+    <div class="col next">
+      <div class="col-head"><h2>Next</h2><p>2 themes &middot; 4 features</p></div>
+
+      <div class="card theme">
+        <h3>Self-improvement loop</h3>
+        <p class="what">AgentScore feeds improvements back to the user's agent, re-scores the new version, and repeats. Steps 12 and 13. Showing gains and reporting (steps 14 and 15) are Later.</p>
+        <details>
+          <summary>Why it matters</summary>
+          <p>Fast loops where an agent is evaluated, improved, and retested are how AgentScore wins. Nailing this loop is the single biggest source of value for users, and it turns a one-time test into repeat use.</p>
+        </details>
+        <div class="goal"><b>Goal:</b> an agent improves across versions as improvements are fed back and the new version is re-scored.</div>
+        <ul class="features">
+          <li>
+            <div class="t">Improvement feedback to the agent <span class="badge">Step 12</span></div>
+            <div class="d">Generated improvements are fed to the user's agent so it can apply them.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15149">AI-15149</a><span class="none">playbook, guardrails, audit, anomaly flagging</span></div>
+          </li>
+          <li>
+            <div class="t">Re-score and iterate loop <span class="badge">Step 13</span></div>
+            <div class="d">A new version is scored and the process repeats from test selection.</div>
+            <div class="jira"><span class="gap">No Jira found</span></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card theme">
+        <h3>App usability</h3>
+        <p class="what">Polish that makes AgentScore legible to non-technical users while they wait and when they read results.</p>
+        <details>
+          <summary>Why it matters</summary>
+          <p>Long-running actions with no feedback, and technical dimension and eval names, make results hard to trust or act on. These do not block the first score, so they follow Now.</p>
+        </details>
+        <div class="goal"><b>Goal:</b> users always see progress, and understand every dimension and eval in plain language.</div>
+        <ul class="features">
+          <li>
+            <div class="t">Progress bars for all actions</div>
+            <div class="d">Every long-running action shows progress.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15178">AI-15178</a><a href="https://tricentis.atlassian.net/browse/AI-15179">AI-15179</a><a href="https://tricentis.atlassian.net/browse/AI-15180">AI-15180</a><a href="https://tricentis.atlassian.net/browse/AI-15181">AI-15181</a></div>
+          </li>
+          <li>
+            <div class="t">Plain-language dimensions and evals</div>
+            <div class="d">Every dimension and eval gets a non-technical explanation.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15268">AI-15268</a></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============ LATER ============ -->
+    <div class="col later">
+      <div class="col-head"><h2>Later</h2><p>4 themes &middot; 9 features</p></div>
+
+      <div class="card theme">
+        <h3>Trace data protection</h3>
+        <p class="what">Keeping sensitive information out of stored traces.</p>
+        <details>
+          <summary>Why it matters</summary>
+          <p>Tritusa raised compliance and PII flagging as a High blocker for regulated (bank and pharma) clients. Wolters Kluwer and Eaton raised data handling concerns. None blocked the first beta cohort.</p>
+        </details>
+        <div class="goal"><b>Goal:</b> regulated users can send traces without exposing PII or other sensitive data.</div>
+        <ul class="features">
+          <li>
+            <div class="t">PII and sensitive-data redaction from traces</div>
+            <div class="d">Redact sensitive information from traces. Separate from AIWS integration.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-11914">AI-11914</a><a href="https://tricentis.atlassian.net/browse/AI-11882">AI-11882 epic</a></div>
+          </li>
+        </ul>
+        <div class="risk"><b>Dispute risk:</b> if regulated beta accounts need this before onboarding, it moves up.</div>
+      </div>
+
+      <div class="card theme">
+        <h3>AIWS integration</h3>
+        <p class="what">Show AgentScore results on agents inside AI Workspace. Score and ship decision come from <code>/v1/tenants/{slug}/agents/{name}/score</code>.</p>
+        <details>
+          <summary>Why it matters</summary>
+          <p>L'Oreal has AI Workspace and 1M+ agent credits but could not ingest without the Workspace admin team. AI Workspace is the easiest surface for reaching AgentScore. Optional for beta, and the AI Workspace UI owner is not yet engaged.</p>
+        </details>
+        <div class="goal"><b>Goal:</b> an AIWS agent's score and ship decision appear next to it, users are told when a rescore is worthwhile, and later see status and score movement.</div>
+        <ul class="features">
+          <li>
+            <div class="t">Score and ship decision next to the agent</div>
+            <div class="d">Read <code>ship_decision</code> from the score endpoint. Confirm AI-11912 includes it.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-11912">AI-11912</a><a href="https://tricentis.atlassian.net/browse/AI-11881">AI-11881 epic</a></div>
+          </li>
+          <li>
+            <div class="t">"New evidence available. Rescore?" prompt</div>
+            <div class="d">Appears when new traces arrived since the last score. Open: minimum trace count before it shows.</div>
+            <div class="jira"><span class="gap">No Jira found</span></div>
+          </li>
+          <li>
+            <div class="t">Scoring status</div>
+            <div class="d">Show whether a score is running. Open: feasible when all endpoints are GETs?</div>
+            <div class="jira"><span class="gap">No Jira found</span></div>
+          </li>
+          <li>
+            <div class="t">Score change indicator</div>
+            <div class="d">An arrow showing how the score moved since the last run.</div>
+            <div class="jira"><span class="gap">No Jira found</span></div>
+          </li>
+        </ul>
+        <div class="note">Existing AI-11881 stories not in this list: AI-12669, AI-12670, AI-11911, AI-11910. Decide whether to keep, defer, or drop.</div>
+      </div>
+
+      <div class="card theme">
+        <h3>Quantitative cost function</h3>
+        <p class="what">Measurable improvements by category, each with a cost impact, backed by a quantitative model that puts a dollar or risk value on each. Step 14.</p>
+        <details>
+          <summary>Why it matters</summary>
+          <p>Showing impact such as "saves $X in token spend" proves the value of each improvement. A quantitative model makes those numbers defensible for the person who makes the final ship call.</p>
+        </details>
+        <div class="goal"><b>Goal:</b> every improvement carries a calculated cost or risk value the user can trust and compare.</div>
+        <ul class="features">
+          <li>
+            <div class="t">Measurable improvements by category <span class="badge">Step 14</span></div>
+            <div class="d">Improvements by category with cost impact, e.g. "saves $X in token spend" or "avoided a GDPR violation."</div>
+            <div class="jira"><span class="gap">No Jira found</span></div>
+          </li>
+          <li>
+            <div class="t">Quantitative cost function for improvements</div>
+            <div class="d">Each improvement is valued with a quantitative cost model, e.g. token spend saved or risk exposure avoided.</div>
+            <div class="jira"><span class="none">Jira not yet checked</span></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card theme">
+        <h3>Tenant-wide agent reporting</h3>
+        <p class="what">Generate a report for the organization covering all agents in a tenant. Step 15.</p>
+        <details>
+          <summary>Why it matters</summary>
+          <p>The person who decides what ships needs one view across every agent, not one report per agent.</p>
+        </details>
+        <div class="goal"><b>Goal:</b> a user generates a single report for all agents in their tenant.</div>
+        <ul class="features">
+          <li>
+            <div class="t">Report generation for all agents in a tenant <span class="badge">Step 15</span></div>
+            <div class="d">One report covering every agent in the tenant.</div>
+            <div class="jira"><span class="none">Jira not yet checked</span></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </section>
+
+  <footer>
+    Source: <code>planning/roadmap/2026-10-14-agentscore-beta-roadmap.md</code> &middot; Jira alignment: <code>planning/jira-alignment/2026-10-14-agentscore-beta-roadmap-jira.md</code>.
+    Orange "No Jira" tags mark features with no matching epic or story found on board 8084.
+  </footer>
+</div>
+
+</body>
+</html>
