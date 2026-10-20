@@ -4,14 +4,15 @@ Tracks each AgentScore beta cohort: who was invited, when, and how long it took 
 
 No contact info is kept here (names and companies only). Missing dates are marked "not recorded" rather than estimated.
 
-Last updated: 2026-10-13
+Last updated: 2026-10-20
 
 ## Summary
 
 | Cohort | Invite sent | Users invited | Companies | Companies signed in | Median days signup to invite (per company) | Median days invite to first sign-in |
 |---|---|---|---|---|---|---|
 | 1 | 2026-10-12 | 8 | 5 | 0 of 5 | 49 (range 19-53) | n/a (no sign-ins yet) |
-| 2 | not sent yet | 4 planned | 4 | - | - | - |
+| 2 | not sent yet | 3 planned | 3 | - | - | - |
+| 3 | 2026-10-20 | 1 | 1 | 0 of 1 | 61 | n/a (no sign-in yet) |
 
 ## Cohort 1 - invited 2026-10-12
 
@@ -34,14 +35,21 @@ Last updated: 2026-10-13
 
 **How they were chosen:** Excited about AgentScore but had hangups - it would be great if... or let me ask my (boss/exec/engineer).
 
-**Status: no invites have been sent for this cohort.** The companies below are the planned send list (`beta-welcome-round2-mail-merge.csv`). Invite dates and sign-in columns stay blank until the send goes out.
+**Status: no invites have been sent for this cohort.** The companies below are the planned send list (`beta-welcome-round2-mail-merge.csv`). Invite dates and sign-in columns stay blank until the send goes out. New Vision was on this list and was invited separately on 2026-10-20; they are Cohort 3 below, and they are off the unsent mail-merge file.
 
 | Company | Users planned | Form signup | Demo/beta scheduled | Invite sent | First sign-in |
 |---|---|---|---|---|---|
 | Eaton | Amit Ghag | not recorded | 2026-10-01 | not sent | - |
 | BearingPoint GmbH (DE) - HQ | Rohan Patil | 2026-09-14 | 2026-09-23 | not sent | - |
 | Workday, Inc. | Vijay Mummaneni | 2026-08-28 | not recorded | not sent | - |
-| New Vision Software Inc. | Rohan Bansod | 2026-08-20 | 2026-10-08 | not sent | - |
+
+## Cohort 3 - invited 2026-10-20
+
+**How they were chosen:** Pulled out of the planned Cohort 2 list once access was granted. New Vision had the 2026-10-08 demo and moved to active beta on their own, ahead of the rest of that batch.
+
+| Company | Users invited | Earliest form signup | Earliest demo/beta scheduled | Invite sent | Days signup to invite | First sign-in | Days invite to sign-in |
+|---|---|---|---|---|---|---|---|
+| New Vision Software Inc. | Rohan Bansod | 2026-08-20 | 2026-10-08 | 2026-10-20 | 61 | not yet | - |
 
 ## How to update
 - When a user first signs into the product, add the date in the First sign-in column and the day count.

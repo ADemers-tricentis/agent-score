@@ -1,6 +1,6 @@
 **AgentScore Roadmap - Beta Onboarding and Self-Improvement**
 
-Last updated: 10-14-2026
+Last updated: 10-20-2026
 
 | Now | Next | Later |
 |---|---|---|
@@ -11,7 +11,7 @@ Last updated: 10-14-2026
 
 **Taget persona:** The target persona is a semi-technical user who can create agents but does not know how to configure traces, instrumentation, or agent updates. This user is creating agents or evaluating agents and makes the final call before an agent is shipped to production.
 
-**North star:** get AgentScore to as many beta users as possible.  The product must prove its value, and users must actually use it and benefit from it.
+**North star:** get AgentScore to as many beta users as possible.  The product must prove its value, and users must actually use it and benefit from it. Users should be able to onboard, score, and improve their agents as simply and quickly as possible.
 
 ## Target user flow
 
@@ -71,7 +71,7 @@ Green is Now. Blue is Next. Purple is Later.
 ### Features and epics
 
 - **Tosca Cloud sign-in with login-or-create tenant** (steps 1, 2). A user signs in with a Tosca Cloud account (or brings an existing one). If no AgentScore tenant exists for them, one is created. If one exists, the user is logged in and welcomed.
-  - Jira: epic [AI-15137](https://tricentis.atlassian.net/browse/AI-15137) (To Do); stories [AI-15270](https://tricentis.atlassian.net/browse/AI-15270) (Ready to Deploy), [AI-15139](https://tricentis.atlassian.net/browse/AI-15139) (To Do); related bug [AI-15269](https://tricentis.atlassian.net/browse/AI-15269) (To Do) (Wolters Kluwer login failure); prior SSO epic [AI-12369](https://tricentis.atlassian.net/browse/AI-12369) (Done).
+  - Jira: epic [AI-15137](https://tricentis.atlassian.net/browse/AI-15137) (To Do); stories [AI-15270](https://tricentis.atlassian.net/browse/AI-15270) (Ready to Deploy), [AI-15139](https://tricentis.atlassian.net/browse/AI-15139) (To Do); prior SSO epic [AI-12369](https://tricentis.atlassian.net/browse/AI-12369) (✅ **Done**).
 - **Automatic tenant provisioning** (step 2). Tenants are created from the user's Tosca Cloud tenant, so backoffice admins no longer create tenants by hand. *(Merged with flow step 2.)*
   - Jira: epic [AI-15137](https://tricentis.atlassian.net/browse/AI-15137) (To Do); stories [AI-15138](https://tricentis.atlassian.net/browse/AI-15138) (To Do), [AI-15139](https://tricentis.atlassian.net/browse/AI-15139) (To Do), [AI-15142](https://tricentis.atlassian.net/browse/AI-15142) (Backlog), [AI-15143](https://tricentis.atlassian.net/browse/AI-15143) (To Do).
 - **Join existing tenants** (step 2). Users can join a tenant that already exists.
@@ -79,7 +79,7 @@ Green is Now. Blue is Next. Purple is Later.
 - **Unified agent view** (step 3). All of a user's agents, internal and external, appear in one place.
   - Jira: none found.
 - **Getting Started guide** (step 4). An in-app guide gives the connection instructions for the MCP.
-  - Jira: partial. [AI-15163](https://tricentis.atlassian.net/browse/AI-15163) (To Do) (client capability matrix and one-page user guide) reads as a document, not an in-app guide. [AI-11888](https://tricentis.atlassian.net/browse/AI-11888) (Done) was the internal onboarding guide.
+  - Jira: partial. [AI-15163](https://tricentis.atlassian.net/browse/AI-15163) (To Do) (client capability matrix and one-page user guide) reads as a document, not an in-app guide. [AI-11888](https://tricentis.atlassian.net/browse/AI-11888) (✅ **Done**) was the internal onboarding guide.
 - **Zero-config agent connection via MCP** (steps 5, 6). The user points their agent at the MCP, the agent runs the commands to connect itself, and traces flow into AgentScore automatically. Non-technical users can score their first agent with no manual agent updates. *(Merged: plain-language agent setup, flow steps 5 and 6, and automatic trace sending.)*
   - Jira: epics [AI-15146](https://tricentis.atlassian.net/browse/AI-15146) (To Do) (hosted MCP server, stories AI-15151 to AI-15157), [AI-15147](https://tricentis.atlassian.net/browse/AI-15147) (To Do) (plain-language agent setup, stories AI-15158 to AI-15164), [AI-15150](https://tricentis.atlassian.net/browse/AI-15150) (Backlog) (status and error handling, [AI-15176](https://tricentis.atlassian.net/browse/AI-15176), [AI-15177](https://tricentis.atlassian.net/browse/AI-15177)). Likely superseded: [AI-11886](https://tricentis.atlassian.net/browse/AI-11886) (Backlog) (skill-based agent setup).
 - **First-score output** (step 7). After ingestion the user sees an agent description, a score, and suggested improvements.
@@ -139,7 +139,7 @@ Green is Now. Blue is Next. Purple is Later.
 - **Progress bars for all actions.** Every long-running action shows progress.
   - Jira: under epic [AI-10597](https://tricentis.atlassian.net/browse/AI-10597) (AgentScore Improvements): [AI-15178](https://tricentis.atlassian.net/browse/AI-15178) (To Do) (shared component), [AI-15179](https://tricentis.atlassian.net/browse/AI-15179) (To Do) (ingestion), [AI-15180](https://tricentis.atlassian.net/browse/AI-15180) (To Do) (scorecard building), [AI-15181](https://tricentis.atlassian.net/browse/AI-15181) (To Do) (scoring run).
 - **Plain-language descriptions of dimensions and evals.** Every dimension and eval gets a non-technical explanation.
-  - Jira: [AI-15268](https://tricentis.atlassian.net/browse/AI-15268) (To Do) under epic [AI-10597](https://tricentis.atlassian.net/browse/AI-10597); prior story [AI-11884](https://tricentis.atlassian.net/browse/AI-11884) (Done) (plain-language evaluations in scoring UI).
+  - Jira: [AI-15268](https://tricentis.atlassian.net/browse/AI-15268) (To Do) under epic [AI-10597](https://tricentis.atlassian.net/browse/AI-10597); prior story [AI-11884](https://tricentis.atlassian.net/browse/AI-11884) (✅ **Done**) (plain-language evaluations in scoring UI).
 
 # Later
 

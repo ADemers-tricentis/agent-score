@@ -4,6 +4,7 @@
 **Source:** WebVTT call transcript (speaker-labeled)
 **Format:** Introductions, short slide overview of the problem, live screen-share demo of AgentScore, open Q&A and beta next steps (~21 minutes)
 **Analyst:** Lead PM review
+**Status:** Active beta as of 2026-10-20. First sign-in not yet recorded.
 
 ## Room composition
 
@@ -71,7 +72,6 @@ There is a ~20-second hole around 20:00 before Rohan's closing remark ("...by an
 
 ## Recommended next steps
 
-1. **Send the quick-start email.** It is the only concrete commitment out of the call and Rohan asked for it by name.
-2. **Ask early which agent he will connect first, and whether it emits OTel.** His agents are Playwright-based, so confirm the instrumentation path before he hits it alone.
-3. **Prepare a clear answer on retention control and pricing.** Both were soft on the call, and both matter to a partner whose customers care about data and token cost.
-4. **Track New Vision as another partner/SI prospect** (alongside Tritusa, BearingPoint, Merito, Wolters Kluwer), and confirm whether the intent is internal use, a client-facing offering, or both.
+1. **Ask which agent he will connect first, and whether it emits OTel.** Access was granted 2026-10-20. His agents are Playwright-based, so confirm the instrumentation path before he hits it alone.
+2. **Prepare a clear answer on retention control and pricing.** Both were soft on the call, and both matter to a partner whose customers care about data and token cost.
+3. **Track New Vision as another partner/SI prospect** (alongside Tritusa, BearingPoint, Merito, Wolters Kluwer), and confirm whether the intent is internal use, a client-facing offering, or both.

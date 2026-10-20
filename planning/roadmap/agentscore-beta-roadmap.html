@@ -125,6 +125,8 @@
   .jira { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; font-size: 11.5px; color: var(--muted); }
   .jira a { text-decoration: none; color: #0b5cad; background: #eaf2fb; border-radius: 6px; padding: 1px 6px; font-weight: 600; }
   .jira a:hover { background: #d5e6f8; }
+  .jira a.done { color: #0d4a2e; background: #e6f6ee; }
+  .jira a.done::before { content: "\2713 "; }
   .jira .none { font-style: italic; }
   .jira .gap { color: #b4531a; background: #fdf0e6; border-radius: 6px; padding: 1px 6px; font-weight: 600; font-style: normal; }
   .note { font-size: 12.5px; color: var(--muted); margin-top: 8px; border-left: 3px solid var(--later); padding-left: 9px; }
@@ -143,7 +145,7 @@
   <div class="wrap" style="padding-bottom:0">
     <h1>AgentScore Roadmap</h1>
     <p>Beta onboarding and self-improvement</p>
-    <div class="meta">Last updated 10-14-2026 &middot; Horizons: Now / Next / Later</div>
+    <div class="meta">Last updated 10-20-2026 &middot; Horizons: Now / Next / Later</div>
   </div>
 </header>
 
@@ -156,13 +158,13 @@
     </div>
     <div class="card">
       <h3>North star</h3>
-      <p>Get AgentScore to as many beta users as possible. The product must prove its value, and users must actually use it and benefit from it.</p>
+      <p>Get AgentScore to as many beta users as possible. The product must prove its value, and users must actually use it and benefit from it. Users should be able to onboard, score, and improve their agents as simply and quickly as possible.</p>
     </div>
   </section>
 
   <!-- ================= USER FLOW ================= -->
   <h2 class="section">Target user flow</h2>
-  <p class="sub">From sign-up to measurable improvement. Step numbers match the feature cards below.</p>
+  <p class="sub">From sign-up to measurable improvement. Step numbers match the feature cards below. Dynamic scoring is Next and is not a numbered step.</p>
 
   <section class="card flow">
 
@@ -228,7 +230,7 @@
 <circle cx="1076" cy="350.0" r="15" fill="#7a5bd0"/><text x="1076" y="355.0" text-anchor="middle" class="num">15</text>
 <text x="1100" y="340.0" class="ttl">Report generated</text><text x="1100" y="357.0" class="sm">For the organization and</text><text x="1100" y="372.0" class="sm">all of their agents</text></g>
 </svg></div>
-<div class="legend"><span><i style="background:#1f9d63"></i>Now: stimulation testing (8 to 11)</span><span><i style="background:#2f6fdd"></i>Next: self-improvement loop (12 to 13)</span><span><i style="background:#7a5bd0"></i>Later: gains and reporting (14 to 15)</span><span><i style="background:#4c5fd5;height:4px"></i>Loop path</span></div>
+<div class="legend"><span><i style="background:#1f9d63"></i>Now: stimulation testing (8 to 11)</span><span><i style="background:#2f6fdd"></i>Next: self-improvement loop (12 to 13) and dynamic scoring</span><span><i style="background:#7a5bd0"></i>Later: gains and reporting (14 to 15)</span><span><i style="background:#4c5fd5;height:4px"></i>Loop path</span></div>
 </section>
 
   <!-- ================= BOARD ================= -->
@@ -253,7 +255,7 @@
           <li>
             <div class="t">Tosca Cloud sign-in with login-or-create tenant <span class="badge">Steps 1, 2</span></div>
             <div class="d">Sign in with a Tosca Cloud account. No tenant means one is created; an existing tenant means log in and welcome.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15137">AI-15137</a><a href="https://tricentis.atlassian.net/browse/AI-15270">AI-15270</a><a href="https://tricentis.atlassian.net/browse/AI-15139">AI-15139</a><a href="https://tricentis.atlassian.net/browse/AI-15269">AI-15269 bug</a></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15137">AI-15137</a><a href="https://tricentis.atlassian.net/browse/AI-15270">AI-15270</a><a href="https://tricentis.atlassian.net/browse/AI-15139">AI-15139</a><a class="done" href="https://tricentis.atlassian.net/browse/AI-12369">AI-12369 SSO done</a></div>
           </li>
           <li>
             <div class="t">Automatic tenant provisioning <span class="badge">Step 2</span></div>
@@ -273,7 +275,7 @@
           <li>
             <div class="t">Getting Started guide <span class="badge">Step 4</span></div>
             <div class="d">In-app guide with MCP connection instructions.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15163">AI-15163</a><span class="none">partial: reads as a document, not an in-app guide</span></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15163">AI-15163</a><a class="done" href="https://tricentis.atlassian.net/browse/AI-11888">AI-11888 internal guide done</a><span class="none">partial: reads as a document, not an in-app guide</span></div>
           </li>
           <li>
             <div class="t">Zero-config agent connection via MCP <span class="badge">Steps 5, 6</span></div>
@@ -323,7 +325,7 @@
 
     <!-- ============ NEXT ============ -->
     <div class="col next">
-      <div class="col-head"><h2>Next</h2><p>2 themes &middot; 4 features</p></div>
+      <div class="col-head"><h2>Next</h2><p>3 themes &middot; 6 features</p></div>
 
       <div class="card theme">
         <h3>Self-improvement loop</h3>
@@ -348,6 +350,30 @@
       </div>
 
       <div class="card theme">
+        <h3>Dynamic scoring</h3>
+        <p class="what">A scorecard written for each agent, plus session grouping so a score covers a whole task or conversation. Fixed profiles stay available during beta, and dynamic scoring runs beside them. Not a numbered step in the flow.</p>
+        <details>
+          <summary>Why it matters</summary>
+          <p>A fixed profile catalog force-fits agents that do not match it, and a score on one trace misses a multi-step task. Eaton reacted to editable success criteria, profiles, and weighted dimensions. New Vision accepted editable success criteria and custom dimensions.</p>
+        </details>
+        <div class="goal"><b>Goal:</b> a user can score an agent on criteria that fit that agent, across a whole session, without giving up the fixed profiles already in the product.</div>
+        <ul class="features">
+          <li>
+            <div class="t">Per-agent scorecard</div>
+            <div class="d">Written for one agent, from a conversation with the owner, from the agent's traces and behavior, or from dimensions and weights the user sets. Runs beside the fixed profile catalog during beta.</div>
+            <div class="jira"><span class="none">Jira not yet checked</span></div>
+          </li>
+          <li>
+            <div class="t">Session grouping</div>
+            <div class="d">Related traces are grouped into a task or conversation, and the score covers that whole session.</div>
+            <div class="jira"><span class="none">Jira not yet checked</span></div>
+          </li>
+        </ul>
+      
+        <div class="note">Open: does stimulation testing (steps 8 to 11) score against this scorecard, or keep today's scoring?</div>
+      </div>
+
+      <div class="card theme">
         <h3>App usability</h3>
         <p class="what">Polish that makes AgentScore legible to non-technical users while they wait and when they read results.</p>
         <details>
@@ -364,7 +390,7 @@
           <li>
             <div class="t">Plain-language dimensions and evals</div>
             <div class="d">Every dimension and eval gets a non-technical explanation.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15268">AI-15268</a></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15268">AI-15268</a><a class="done" href="https://tricentis.atlassian.net/browse/AI-11884">AI-11884 done</a></div>
           </li>
         </ul>
       </div>
@@ -468,7 +494,7 @@
   </section>
 
   <footer>
-    Source: <code>planning/roadmap/2026-10-14-agentscore-beta-roadmap.md</code> &middot; Jira alignment: <code>planning/jira-alignment/2026-10-14-agentscore-beta-roadmap-jira.md</code>.
+    Source: <code>planning/roadmap/2026-10-20-agentscore-beta-roadmap.md</code> &middot; Jira alignment: <code>planning/jira-alignment/2026-10-14-agentscore-beta-roadmap-jira.md</code>.
     Orange "No Jira" tags mark features with no matching epic or story found on board 8084.
   </footer>
 </div>

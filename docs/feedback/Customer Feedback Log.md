@@ -63,6 +63,7 @@ Unified, running log of customer/prospect interviews and demo debriefs. Each ent
 
 - **Who:** Rohan Bansod (Quality Architect, ~10.5 years in IT; oversees projects across Tosca, other Tricentis products, and open-source tools like Playwright for clients). New Vision is now part of SoftServe. Tricentis: Andrew Demers. *(Transcript mis-hears "Tricentis" as "Presentis" and "SoftServe" as "Soft Serve"/"Saucer".)*
 - **What we learned:** Rohan both uses and tests agents, mostly open source (Playwright) because customers care about token consumption; a separate team runs agent POCs. The auto-derived agent card, editable success criteria, configurable verdict thresholds, and the 41 out-of-the-box evals with custom dimensions all landed without objection. His data questions (retention, whether data trains other models) were answered and accepted; he framed data as what his customers care about most. No agent was named to connect and no client-facing offering was stated, so the partner lens is plausible but unconfirmed. Ended with "looking forward to explore it further" and asked for a quick-start guide.
+- **Status (2026-10-20):** Active beta. First sign-in not yet recorded, and no agent named yet.
 - **Major asks:**
   - Quick-start guide / how to get started - Andrew will email it.
   - Pricing: asked about cost; free in beta, AI credits per scoring run later, rate unknown.

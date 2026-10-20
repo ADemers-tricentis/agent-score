@@ -30,9 +30,9 @@ What accounts we have talked to say they build or run agents on. Counts are comp
 
 | Interested companies | Companies replied | Demos | Pending betas | Active betas |
 |---|---|---|---|---|
-| 84 | 14 | 12 | 1 | 5 |
+| 83 | 14 | 12 | 1 | 6 |
 
-Source breakdown: 80 via the Labs form, 3 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E), 1 via David (VP of AI/ML) (Eaton) = 84 total.
+Source breakdown: 79 via the Labs form, 3 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E), 1 via David (VP of AI/ML) (Eaton) = 83 total. Ferrara Candy Company is listed below but not counted: Sudha Damacherla signed up by accident for a different product (2026-10-20).
 
 Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
 
@@ -40,7 +40,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 |---|---|---|
 | PG&E (Pacific Gas and Electric) | — (via Sales: Greg Campbell) | Interested |
 | Itecor (CH)-HQ | Alexandre Thibaud | Email sent — 2026-10-12 |
-| Ferrara Candy Company | Sudha Damacherla | Email sent — 2026-10-12 |
+| Ferrara Candy Company | Sudha Damacherla | Not a fit — accidental signup |
 | Department of Jobs, Skills, Industry and Regions (DJSIR) (AU) | Subhasis Dhar | Email sent — 2026-10-12 |
 | Turing Consulting Pty. Ltd. (AU) | Archana Madhusudhan | Email sent — 2026-10-12 |
 | Bloomberg Finance L.P. | Joe Zacchio | Email sent — 2026-10-12 |
@@ -62,7 +62,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | SAP Labs India (IN) | SaiDeepak Ayyagari | Follow-up sent — 2026-09-24 |
 | Regeneron Pharmaceuticals Inc. | Murali Sundaram | Follow-up sent — 2026-09-24 |
 | Acadia Healthcare | Pratiksha Arora | Follow-up sent — 2026-09-24 |
-| New Vision Software Inc. | Rohan Bansod | Demo Scheduled — 2026-10-08 |
+| New Vision Software Inc. | Rohan Bansod | Active Beta |
 | Hilti Asia IT Services (MY) | Ashwin Mor | Follow-up sent — 2026-09-24 |
 | Panasonic Avionics (US) | Ronica Brisbon | Follow-up sent — 2026-09-24 |
 | The Boeing Company | Gurucharan Bijinepally | Follow-up sent — 2026-09-24 |
@@ -123,7 +123,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Accenture (multiple entities) | Jigish Belani, Mohammed Arslan Mir, Vijetha Nayak, Priya Saidavaram, Ankur Mittal | Pending Beta |
 | Singapore Pools (form blank, domain-resolved) | Nai Hau Lui, Fun Tat Chen | Email sent — 2026-09-23 |
 
-*(Status values: Interested → Email sent → Follow-up sent → Replied → Demo scheduled → Pending beta → Active beta.)*
+*(Status values: Interested → Email sent → Follow-up sent → Replied → Demo scheduled → Pending beta → Active beta. Not a fit is terminal, for accidental or wrong-product signups.)*
 
 ---
 
@@ -167,12 +167,14 @@ Name: Sudha Damacherla
 Title: Sr. IT Product Manager  
 Relationship: Customer  
 
-Email sent: —  
+Email sent: 2026-10-12  
 Beta scheduled: —  
+
+Not a fit (2026-10-20): Sudha signed up by accident. She was interested in a different product.
 
 what they do: US confectionery manufacturer (Brach's, Nerds, Laffy Taffy). Completed a 25-module single-cutover SAP S/4HANA (RISE with SAP) program ([SAP Innovation Awards 2026](https://www.sap.com/documents/2026/03/6eaef23c-437f-0010-bca6-c68f7e60039b.html)).
 
-likely use case: given the fresh SAP landscape and a Customer-relationship IT product manager, most plausibly evaluating AI/agent features layered on SAP (planning, exception handling, testing) - a weak inference.
+likely use case: none for Agent Score. The earlier SAP inference was wrong. She signed up by accident and was interested in a different product.
 
 known agent tooling: SAP's self-reported award story says the company can now begin using AI and automation for planning, exception handling, testing and governance ([SAP](https://www.sap.com/documents/2026/03/6eaef23c-437f-0010-bca6-c68f7e60039b.html)); no public information found on specific deployed agents.
 
@@ -1060,12 +1062,13 @@ Name: Rohan Bansod
 
 Email sent: —  
 Beta scheduled: 2026-10-08  
+Beta invite sent: 2026-10-20  
 
 what they do: India-based (Pune) IT services/QA consultancy (~687 employees) — application/data/infrastructure modernization plus a dedicated QA automation practice. Already a Tricentis partner — lists Tricentis/Tosca alongside Oracle, PEGA, Microsoft, and Google Cloud in its partner roster.
 
 confirmed use case (from 2026-10-08 demo): Rohan Bansod is a Quality Architect overseeing client projects across Tosca, other Tricentis products, and open-source tools like Playwright. New Vision is now part of SoftServe (Ukraine-based, moving into AI and engineering). They both use agents (mostly Playwright, because customers care about token consumption: task automation, spreading tester workload, dashboards, framework optimization) and test them, with a separate team on agent POCs. No specific agent was named to connect and no client-facing offering was stated, so the partner lens below is still an inference. Landed without objection: auto-derived agent card, editable success criteria, configurable verdict thresholds, 41 out-of-the-box evals with custom dimensions. He asked about data retention and whether data trains other models (answered; retention deletion period is set by Tricentis, not the end user), beta cost (free now, AI credits per scoring run later, rate unknown), and support (Andrew directly). Debrief: [New Vision Feedback Session](feedback-sessions/New%20Vision%20Feedback%20Session.md).
 
-waiting on: (1) Andrew to send the follow-up email with the quick-start guide and signup steps; (2) Rohan to explore and email questions, no date given and no agent named yet.
+waiting on: Rohan to explore the beta and email questions. Access was granted 2026-10-20. No agent named yet, and no date given.
 
 likely use case: given the existing partner relationship and Tosca-based QA automation practice, most plausibly evaluating Agent Score to extend their QA offering into agentic-AI testing for their own client base, rather than for internal use — same profile as Merito Solutions above.
 
