@@ -1,0 +1,48 @@
+name: Land competitor intel on main
+
+# The weekday cloud routine is instructed to push each digest to its own
+# competitor-intel/YYYY-MM-DD branch and not to main. That leaves the digest
+# off main, so the next run cannot see it when it dedups. This workflow
+# copies the new file onto main and deletes the dated branch.
+
+on:
+  push:
+    branches:
+      - "competitor-intel/**"
+
+permissions:
+  contents: write
+
+jobs:
+  land:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Copy the digest onto main and delete the dated branch
+        run: |
+          set -euo pipefail
+          branch="${GITHUB_REF_NAME}"
+          date="${branch#competitor-intel/}"
+          file="docs/research/competitive-intel/${date}.md"
+          git fetch origin "$branch"
+          if ! git cat-file -e "origin/${branch}:${file}"; then
+            echo "No ${file} on ${branch}; leaving the branch in place."
+            exit 0
+          fi
+          git checkout "origin/${branch}" -- "$file"
+          git add -- "$file"
+          if git diff --cached --quiet; then
+            echo "${file} already matches main."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "research: add competitive intel digest for ${date}"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+          git push origin --delete "$branch"
