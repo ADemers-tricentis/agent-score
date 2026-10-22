@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 103 form submissions found (as of 2026-10-12), sorted newest first. Excluded as internal `@tricentis.com` submitters: Ashutosh Kotkar (2026-09-25) and Srinivasa Rao K (2026-10-01), both under Tricentis GmbH (AT) - HQ. Fun Tat Chen (2026-10-02) is a second submitter at Singapore Pools and is stacked on that entry rather than counted as a new company.
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 138 form submissions found (as of 2026-10-22), sorted newest first. Excluded as internal `@tricentis.com` submitters: Ashutosh Kotkar (2026-09-25) and Srinivasa Rao K (2026-10-01), both under Tricentis GmbH (AT) - HQ. Fun Tat Chen (2026-10-02) is a second submitter at Singapore Pools and is stacked on that entry rather than counted as a new company. Ajay Kharb and Praveer Bakshi (2026-10-19/20, Accenture), Konrad Greszata (2026-10-13, Capgemini) and Jeroen Kuijper (2026-10-21, Sogeti Netherlands) are likewise stacked on existing company entries. Antonio Sglavo (2026-10-22, Accenture SpA), Julian Raach and Yash Jawale (2026-10-22, Hugo Boss), Edmundo Barahona (2026-10-22, Sogeti Deutschland), Mathieu Philippe (2026-10-22, Itecor FR) and Simon Kreitmayer (2026-10-22, SKYPhoenix IT GmbH, which appears to be the renamed Dolpheen IT Solutions) are also stacked on existing entries. Repeats not tracked separately: Rohan Bansod (New Vision Software, two submissions 2026-10-15) and Praveer Bakshi (a second 2026-10-19 submission with the company field blank).
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -30,25 +30,47 @@ What accounts we have talked to say they build or run agents on. Counts are comp
 
 | Interested companies | Companies replied | Demos | Pending betas | Active betas |
 |---|---|---|---|---|
-| 83 | 14 | 12 | 1 | 6 |
+| 105 | 14 | 12 | 1 | 6 |
 
-Source breakdown: 79 via the Labs form, 3 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E), 1 via David (VP of AI/ML) (Eaton) = 83 total. Ferrara Candy Company is listed below but not counted: Sudha Damacherla signed up by accident for a different product (2026-10-20).
+Source breakdown: 101 via the Labs form, 3 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E), 1 via David (VP of AI/ML) (Eaton) = 105 total. Ferrara Candy Company is listed below but not counted: Sudha Damacherla signed up by accident for a different product (2026-10-20).
 
 Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
 
 | Company | Contact | Status |
 |---|---|---|
+| Ashurst LLP (UK) | Ankush Shrivastava | Interested |
+| Sky Plc (UK) - HQ | Mario D'Amico | Interested |
+| TotalEnergies (FR) - HQ | Olivier Soulard | Interested |
+| Barratt Redrow | Bhavinkumar Patel | Interested |
+| Epson Europe - UK | Simon Berryman | Interested |
+| Slaughter and May (UK) | Idowu Adeyemi | Interested |
+| QualityAI | Stuart Flynn | Interested |
+| Heidelberg Materials AG (DE) | Sara Bailey | Interested |
+| Benefact Group (Ecclesiastical Insurance) | Angela Wallace | Interested |
+| Vestas (DK) - HQ | Romy Mehta | Interested |
+| Deloitte LLP (UK) | Chetana Bangaradka | Interested |
+| Jysk | Ole Madsen | Interested |
+| The Tech Collective | Nadia Grundholm | Interested |
+| University of Leeds | Andrew Peckett | Interested |
+| IBM India Private Limited | Vaibhav Sharma | Interested |
+| M2Q | Jurgen Meheus | Interested |
+| AI-Celerates Business | Agnes Goh | Interested |
+| Teck Resources Limited | Snigdha Priyadarshini | Interested |
+| CPKC | Nazlie Shahmir | Interested |
+| Ontario Power Generation Inc. | Ajay Nandepu | Interested |
+| Bayer AG (DE) - HQ | Gunnar Moog | Interested |
+| Siemens Financial Services GmbH (DE) (email domain suggests Siemens Energy) | Palash Gupta | Interested |
 | PG&E (Pacific Gas and Electric) | — (via Sales: Greg Campbell) | Interested |
-| Itecor (CH)-HQ | Alexandre Thibaud | Email sent — 2026-10-12 |
+| Itecor (CH)-HQ | Alexandre Thibaud, Mathieu Philippe | Email sent — 2026-10-12 |
 | Ferrara Candy Company | Sudha Damacherla | Not a fit — accidental signup |
 | Department of Jobs, Skills, Industry and Regions (DJSIR) (AU) | Subhasis Dhar | Email sent — 2026-10-12 |
 | Turing Consulting Pty. Ltd. (AU) | Archana Madhusudhan | Email sent — 2026-10-12 |
 | Bloomberg Finance L.P. | Joe Zacchio | Email sent — 2026-10-12 |
-| Sogeti (FR) | Gavaskar Selvarajan | Email sent — 2026-10-05 |
+| Sogeti (FR) | Gavaskar Selvarajan, Jeroen Kuijper, Edmundo Barahona | Email sent — 2026-10-05 |
 | Singapore Airlines (SG) | Srinivasan Santhanam | Email sent — 2026-10-05 |
 | Tata Consultancy Services Ltd (IN) | Joji Joseph | Email sent — 2026-10-05 |
 | Skygen USA | Joko Supriyanto | Email sent — 2026-10-05 |
-| Hugo Boss AG (DE) | Marco Esguerra | Email sent — 2026-10-05 |
+| Hugo Boss AG (DE) | Marco Esguerra, Julian Raach, Yash Jawale | Email sent — 2026-10-05 |
 | Aptiv Global Operations Limited | Meenakshi Sundaram Chockalingam | Active Beta |
 | LGT Financial Services Ltd. (LI) | David Klien | Email sent — 2026-09-23 |
 | Eaton | Amit Ghag | Demo Scheduled — 2026-10-01 |
@@ -71,7 +93,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Chevron Phillips Chemical (US) | Ramesh Jeyagopalan | Follow-up sent — 2026-09-24 |
 | Dominion Energy, Inc. | Anand Shekaraiah | Follow-up sent — 2026-09-24 |
 | Love's Travel Stops | Jag Mallampati, Thomas Cody | Demo Scheduled — 2026-10-02 |
-| Capgemini | Mathankumar Kanagaraj, ARUN PRAKASH Shivakumar, Sathish kumar Backiam | Follow-up sent — 2026-09-24 |
+| Capgemini | Mathankumar Kanagaraj, ARUN PRAKASH Shivakumar, Sathish kumar Backiam, Konrad Greszata | Follow-up sent — 2026-09-24 |
 | Cummins Inc. | Lakshmi Sree Thirukonda | Follow-up sent — 2026-09-24 |
 | Home Depot Store Support, Inc. | Joe Pope | Follow-up sent — 2026-09-24 |
 | McKesson Corporation | Nitin Malik, Cathy Soller | Follow-up sent — 2026-09-24 |
@@ -98,7 +120,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Saudi Telecom Company STC (SA) - HQ | Farhan Shaikh | Email sent — 2026-09-09 |
 | Diriyah Gate Company Limited - DGCL (SA) | Ali Alshehri | Email sent — 2026-09-09 |
 | TestCrew | Ramesh Panthangi | Email sent — 2026-09-09 |
-| Dolpheen IT Solutions | Jia Jun Zhan | Email sent — 2026-09-09 |
+| Dolpheen IT Solutions | Jia Jun Zhan, Simon Kreitmayer | Email sent — 2026-09-09 |
 | Cengage Learning, Inc. | Ajan Nattamai | Email sent — 2026-09-09 |
 | Pegasystems Inc. | Kiran kadarla | Email sent — 2026-09-09 |
 | cbs Corporate Business Solutions (DE/MY) | Ashish Chavan, Arumugam Lekshmanan | Email sent — 2026-09-17 |
@@ -120,10 +142,384 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Ally Financial Inc. | Jana Kethamreddy | Email sent — 2026-09-17 |
 | BearingPoint GmbH (DE) - HQ | Rohan Patil | Demo Scheduled — 2026-09-23 |
 | xAmplify (AU) | Prakash Panchal | Email sent — 2026-09-17 |
-| Accenture (multiple entities) | Jigish Belani, Mohammed Arslan Mir, Vijetha Nayak, Priya Saidavaram, Ankur Mittal | Pending Beta |
+| Accenture (multiple entities) | Jigish Belani, Mohammed Arslan Mir, Vijetha Nayak, Priya Saidavaram, Ankur Mittal, Ajay Kharb, Praveer Bakshi, Antonio Sglavo | Pending Beta |
 | Singapore Pools (form blank, domain-resolved) | Nai Hau Lui, Fun Tat Chen | Email sent — 2026-09-23 |
 
 *(Status values: Interested → Email sent → Follow-up sent → Replied → Demo scheduled → Pending beta → Active beta. Not a fit is terminal, for accidental or wrong-product signups.)*
+
+---
+
+### Ashurst LLP (UK)
+Date: 2026-10-22 08:57  
+Name: Ankush Shrivastava  
+Title: Automation Test Lead  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: UK-headquartered international law firm with roughly 4,000 staff across about 30 offices.
+
+likely use case: given an Automation Test Lead at a Customer account and a firmwide Harvey rollout, most plausibly testing the quality of GenAI legal tools before and after updates - an inference, not a confirmed need.
+
+known agent tooling: rolled Harvey out to all staff worldwide after a 525+ user pilot across 23 offices ([Ashurst](https://www.ashurst.com/en/who-we-are/our-news-work-market-recognition/ashurst-launches-global-harvey-partnership-following-extensive-firmwide-trial); [Legal IT Insider](https://legaltechnology.com/ashurst-launches-global-harvey-partnership-following-firmwide-trial/)), and published trial data comparing three GenAI platforms ([Ashurst](https://ashurst.com/en/who-we-are/our-news-work-market-recognition/ashurst-pulls-back-the-curtain-on-genai-data-from-its-latest-trials)).
+
+---
+
+### Sky Plc (UK) - HQ
+Date: 2026-10-22 08:52  
+Name: Mario D'Amico  
+Title: Head of integration and test  
+Relationship: Evaluating Tricentis  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Comcast-owned pay-TV, broadband and mobile provider operating in the UK and several European markets.
+
+likely use case: given a Head of integration and test who is evaluating Tricentis, most plausibly testing customer-service virtual agents like Kyla and the conversational/RAG tools its Group AI team is building - an inference, not a confirmed need.
+
+known agent tooling: the "Kyla" messaging virtual agent runs on LivePerson, which says it handles about 1 in 5 new enquiries end to end (vendor-reported) ([LivePerson](https://www.liveperson.com/blog/sky-virtual-agent/)). Group AI job postings describe conversational agents and RAG tools, which signals intent rather than confirmed deployments ([job posting](https://bebee.com/gb/jobs/head-of-group-ai-customer-service-sky-osterley--t7xk-782695260)).
+
+---
+
+### TotalEnergies (FR) - HQ
+Date: 2026-10-22 08:51  
+Name: Olivier Soulard  
+Title: Program Test Lead  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: French integrated energy company (oil, gas, power and renewables) with roughly 100,000 employees.
+
+likely use case: given a Program Test Lead at a Customer account and a Mistral-backed AI lab, most plausibly assessing how to test internal AI assistants as they move into production - an inference, not a confirmed need.
+
+known agent tooling: announced a joint AI lab with Mistral AI in June 2025 ([TotalEnergies](https://totalenergies.com/node/26871)); first projects include an AI assistant for about 1,000 researchers ([The Energy Year](https://theenergyyear.com/news/totalenergies-and-mistral-ai-to-launch-joint-ai-lab/)). No public figures found on rollout status.
+
+---
+
+### Barratt Redrow
+Date: 2026-10-22 08:51  
+Name: Bhavinkumar Patel  
+Title: Test Automation Engineer  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: UK housebuilder formed by Barratt Developments' 2024 acquisition of Redrow (email domain `barrattredrow.co.uk`).
+
+likely use case: given a Test Automation Engineer at a Customer account, most plausibly an internal QA team scoping how to test AI features - a weak inference.
+
+known agent tooling: no public information found tying Barratt Redrow to a deployed agent product.
+
+---
+
+### Epson Europe - UK
+Date: 2026-10-22 08:50  
+Name: Simon Berryman  
+Title: SAP Functional Lead  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: European arm of Japan's Seiko Epson (printers, projectors, robots), with a UK subsidiary.
+
+likely use case: given an SAP Functional Lead at a Customer account, most plausibly evaluating Agent Score for AI features in their SAP landscape - a weak inference.
+
+known agent tooling: no public information found tying Epson Europe to a deployed agent product. Epson Korea runs an "Epson Assist" GenAI chatbot ([Epson Korea](https://www.epson.co.kr/AI_Chatbot_terms)).
+
+---
+
+### Slaughter and May (UK)
+Date: 2026-10-22 08:50  
+Name: Idowu Adeyemi  
+Title: Quality Assurance Lead  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: London "Magic Circle" law firm focused on corporate, M&A, finance and regulatory work.
+
+likely use case: given a QA Lead at a Customer account and a recent firmwide Harvey adoption that cited agentic capabilities, most plausibly looking to test agentic legal workflows - an inference, not a confirmed need.
+
+known agent tooling: adopted Harvey firmwide in April 2026 after testing it against Legora, citing Harvey's agentic capabilities ([Harvey](https://www.harvey.ai/blog/slaughter-and-may-adopts-harvey-firmwide); [Legal IT Insider](https://legaltechnology.com/slaughter-and-may-goes-firmwide-with-harvey/)). Planned uses include due diligence, regulatory research and document analysis.
+
+---
+
+### QualityAI
+Date: 2026-10-22 08:50  
+Name: Stuart Flynn  
+Title: Enterprise Delivery Head  
+Relationship: Partner  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: AI-focused quality engineering and testing services company; appears to be the renamed Qualitest (rebranded around June 2026, about 7,000 staff) ([Calcalist](https://www.calcalistech.com/ctechnews/article/skbeb2rggl)). Listed as a Tricentis partner ([Tricentis](https://www.tricentis.com/partners/qualityai)).
+
+likely use case: given an Enterprise Delivery Head at a Partner testing firm, most plausibly evaluating Agent Score for its own client base rather than as an end customer - an inference, not a confirmed need.
+
+known agent tooling: no public information found tying QualityAI to a deployed agent product. Its own Qualisense tool does AI-driven risk-based test prioritization ([StartupHub](https://www.startuphub.ai/startups/qualitest.md)).
+
+---
+
+### Heidelberg Materials AG (DE)
+Date: 2026-10-22 08:50  
+Name: Sara Bailey  
+Title: Head of Applications management  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: German building-materials group (cement, aggregates, ready-mix) headquartered in Heidelberg, with roughly 50,000 employees.
+
+likely use case: given a Head of Applications management at a Customer account, most plausibly scoping testing for AI added to its enterprise application estate - a weak inference.
+
+known agent tooling: no public information found tying Heidelberg Materials to a deployed agent product. Its documented AI work is non-generative kiln optimization with Carbon Re and ABB ([Cambridge Enterprise](https://www.enterprise.cam.ac.uk/news/heidelberg-materials-adopts-carbon-res-ai-and-abb-ability-for-improved-kiln-operations/)).
+
+---
+
+### Benefact Group (Ecclesiastical Insurance)
+Date: 2026-10-22 08:50  
+Name: Angela Wallace  
+Title: Group Technology development director  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: UK charity-owned financial services group; its main business, Ecclesiastical Insurance, insures faith, heritage, charity and education organisations ([Insurance Business](https://www.insurancebusinessmag.com/uk/news/breaking-news/ecclesiastical-insurances-parent-company-rebrands-397774.aspx)).
+
+likely use case: given a Group Technology development director at a Customer account, most plausibly an early assessment of how to govern and test AI in underwriting and service - an inference, not a confirmed need.
+
+known agent tooling: no public information found tying Benefact Group to a deployed agent product.
+
+---
+
+### Vestas (DK) - HQ
+Date: 2026-10-22 08:50  
+Name: Romy Mehta  
+Title: Enterprise Test Manager  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Danish wind turbine maker headquartered in Aarhus, with about 30,000 employees.
+
+likely use case: given an Enterprise Test Manager at a Customer account, most plausibly an enterprise QA function scoping how to test AI features entering its application estate - a weak inference.
+
+known agent tooling: no public information found tying Vestas to a deployed agent product. Its public AI work is a non-generative wake-steering proof of concept with Microsoft and minds.ai ([Microsoft](https://news.microsoft.com/source/emea/features/winds-of-change-how-one-of-the-worlds-largest-wind-companies-is-using-ai-to-capture-more-energy/)).
+
+---
+
+### Deloitte LLP (UK)
+Date: 2026-10-22 08:50  
+Name: Chetana Bangaradka  
+Title: Senior Manager  
+Relationship: Partner  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: UK member firm of the global Deloitte network (audit, tax, consulting, advisory).
+
+likely use case: given a Senior Manager at a Partner firm that sells its own agent platform, most plausibly evaluating Agent Score for client agent-assurance work - an inference, not a confirmed need.
+
+known agent tooling: expanded its Anthropic alliance to make Claude available to 470,000+ staff globally ([Anthropic](https://www.anthropic.com/news/deloitte-anthropic-partnership)); sells the Zora AI agentic platform and says it uses it internally for expense management (self-reported) ([AI Business](https://aibusiness.com/generative-ai/deloitte-unveils-agentic-ai-platform-zora-ai-nvidia-gtc-2025)). No UK-specific deployment details found.
+
+---
+
+### Jysk
+Date: 2026-10-22 08:50  
+Name: Ole Madsen  
+Title: Team Lead SAP Test Automation  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Danish home-furnishings retailer with more than 3,600 stores in about 50 countries.
+
+likely use case: given a Team Lead for SAP Test Automation at a Customer account, most plausibly extending SAP test automation to AI features in that landscape - a weak inference.
+
+known agent tooling: no public information found tying Jysk to a deployed agent product. It uses Capturi speech analytics across its contact centres, which is analytics rather than an agent (vendor case study) ([Puzzel](https://www.puzzel.com/blog/unlocking-seamless-customer-experiences-with-jysk)).
+
+---
+
+### The Tech Collective
+Date: 2026-10-22 08:49  
+Name: Nadia Grundholm  
+Title: Test Automation Specialist  
+Relationship: Partner  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Copenhagen-based tech consultancy "powered by Implement Consulting Group", offering conversational AI, SAP, Salesforce, cyber and data services ([Built In](https://builtin.com/job/junior-consultant-our-salesforce-team/7521507)).
+
+likely use case: given a Partner-relationship Test Automation Specialist and a conversational-AI service line, most plausibly evaluating Agent Score for client work - an inference, not a confirmed need.
+
+known agent tooling: no public information found tying The Tech Collective to a deployed agent product.
+
+---
+
+### University of Leeds
+Date: 2026-10-22 08:49  
+Name: Andrew Peckett  
+Title: Platform and Service Owner (QA and Testing)  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Large UK public research university with about 38,000 students.
+
+likely use case: given a Platform and Service Owner for QA and Testing, most plausibly assessing how to test GenAI services offered to staff and students - an inference, not a confirmed need.
+
+known agent tooling: positions Microsoft Copilot as its approved GenAI tool ([Leeds](https://students.business.leeds.ac.uk/digital-learning/using-gen-ai/)) and made a GenAI training course mandatory (self-reported completion figures) ([Leeds](https://digitaleducation.leeds.ac.uk/news/university-of-leeds-shares-free-version-of-ai-staff-training-course/)); no evidence found of agent deployments.
+
+---
+
+### IBM India Private Limited
+Date: 2026-10-22 08:49  
+Name: Vaibhav Sharma  
+Title: Application Archietect  
+Relationship: Partner  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: IBM's Indian subsidiary (consulting, software, delivery), headquartered in Bengaluru.
+
+likely use case: given a Partner-relationship Application Architect, most plausibly exploring Agent Score alongside client agent builds on watsonx Orchestrate - an inference, not a confirmed need.
+
+known agent tooling: opened an Agentic AI Innovation Center in Bengaluru built around watsonx Orchestrate in July 2025, where clients build and audit agents ([IBM India](https://in.newsroom.ibm.com/2025-07-16-IBM-opens-agentic-AI-innovation-center-in-India)).
+
+---
+
+### M2Q
+Date: 2026-10-22 08:49  
+Name: Jurgen Meheus  
+Title: Ceo  
+Relationship: Partner  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Belgian software testing and QA consultancy in the Cronos group, roughly 25-30 staff ([Datanyze](https://www.datanyze.com/companies/m2q/425027251)).
+
+likely use case: given the CEO submitting as a Partner, most plausibly evaluating Agent Score as an add-on to its testing services - an inference, not a confirmed need.
+
+known agent tooling: no public information found tying M2Q to a deployed agent product.
+
+---
+
+### AI-Celerates Business
+Date: 2026-10-21 16:48  
+Name: Agnes Goh  
+Title: Founder  
+Relationship: Evaluating Tricentis  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: AI-Celerates Business (email domain `aiceleratesbusiness.com`). Nothing further turned up in public sources.
+
+likely use case: given a Founder who is evaluating Tricentis, most plausibly a small AI consultancy exploring Agent Score - a weak inference.
+
+known agent tooling: no public information found.
+
+---
+
+### Teck Resources Limited
+Date: 2026-10-21 16:47  
+Name: Snigdha Priyadarshini  
+Title: Business Stream Lead  
+Relationship: Other  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Vancouver-based mining company focused on copper and zinc, currently pursuing a merger of equals with Anglo American.
+
+likely use case: given a Business Stream Lead with an "Other" relationship, the use case is unclear; possibly an early look at AI governance - a weak inference.
+
+known agent tooling: no public information found tying Teck Resources to a deployed agent product. Its documented digital work is automation and predictive maintenance (vendor-reported) ([AspenTech](https://solutions.aspentech.com/ja/resources/articles/ai-bringing-mining-companies-closer-to-their-data)).
+
+---
+
+### CPKC
+Date: 2026-10-21 16:47  
+Name: Nazlie Shahmir  
+Title: QA manager  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: North American Class I railroad formed by the 2023 merger of Canadian Pacific and Kansas City Southern (email domain `cpkcr.com`).
+
+likely use case: given a QA manager at a Customer account, most plausibly an internal QA team scoping AI testing - a weak inference.
+
+known agent tooling: no public information found tying CPKC to a deployed agent product. Its documented AI is machine-vision railcar inspection with Duos Technologies ([Railway Age](https://www.railwayage.com/cs/duos-cpkc-enter-into-three-year-agreement/)).
+
+---
+
+### Ontario Power Generation Inc.
+Date: 2026-10-21 16:46  
+Name: Ajay Nandepu  
+Title: Sr Solution Architect  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: Provincially owned utility that generates about half of Ontario's electricity from nuclear, hydro and other sources.
+
+likely use case: given a Sr Solution Architect at a Customer account, most plausibly scoping how to test AI solutions built on its Microsoft stack - a weak inference.
+
+known agent tooling: no public information found tying Ontario Power Generation to a deployed agent product. It signed a 2022 Azure/AI partnership with Microsoft ([Power Engineering](https://www.power-eng.com/renewables/hydropower/microsoft-partnership-spurs-use-of-ontarios-hydro-and-nuclear-assets/)).
+
+---
+
+### Bayer AG (DE) - HQ
+Date: 2026-10-21 10:25  
+Name: Gunnar Moog  
+Title: Product Manager  
+Relationship: Customer  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: German multinational in pharmaceuticals, consumer health and crop science.
+
+likely use case: given a Product Manager at a Customer account and Bayer's in-house GenAI agent work in Crop Science, most plausibly evaluating how to test and monitor agents like E.L.Y. for answer accuracy and compliance before wider rollout - an inference, not a confirmed need.
+
+known agent tooling: E.L.Y. ("Expert Learning for You"), a GenAI agronomy agent built with Microsoft on RAG over a Phi-3-based small language model; Bayer says it serves over 1,500 US frontline employees and is "the first in a series of AI agents" ([Bayer](https://www.bayer.com/en/agriculture/article/genai-for-good); [GlobeNewswire](https://www.globenewswire.com/news-release/2025/06/25/3105218/0/en/EY-US-Bayer-Win-Artificial-Intelligence-for-Good-Award-in-2025-AI-Breakthrough-Awards-Program.html)). Performance figures are self-reported.
+
+---
+
+### Siemens Financial Services GmbH (DE) (email domain suggests Siemens Energy)
+Date: 2026-10-21 10:09  
+Name: Palash Gupta  
+Title: Test Engineer  
+Relationship: Other  
+
+Email sent: —  
+Beta scheduled: —  
+
+what they do: the form names Siemens Financial Services (Siemens AG's financing arm), but the submitter's email is @siemens-energy.com. Siemens Energy is a separately listed energy-technology company, so the two may be mixed up - not resolved.
+
+likely use case: given a Test Engineer with a siemens-energy.com address, most plausibly evaluating Agent Score for QA of the Copilot Studio / Azure AI Foundry agents Siemens Energy is building - an inference, not a confirmed need.
+
+known agent tooling: Siemens Energy India job postings describe an "Agent Factory" running purpose-built agents for engineering, commercial and operations teams in Asia Pacific, on Microsoft Copilot Studio and Azure AI Foundry, with regression testing for hallucinations and retrieval accuracy ([iagora listing](https://www.iagora.com/work/en/offer/job-india-engineering/6194891)). No public information found tying Siemens Financial Services itself to a deployed agent product.
 
 ---
 
@@ -145,6 +541,12 @@ known agent tooling: runs a customer-service virtual assistant named "Peggy" and
 ---
 
 ### Itecor (CH)-HQ
+Date: 2026-10-22 08:49  
+Name: Mathieu Philippe  
+Title: Senior consultant  
+Relationship: Partner  
+Submitted as: Itecor (FR)  
+
 Date: 2026-10-12 10:07  
 Name: Alexandre Thibaud  
 Title: QA Expert  
@@ -232,6 +634,18 @@ known agent tooling: ASKB, a conversational AI interface for the Terminal, enter
 ---
 
 ### Sogeti (FR)
+Date: 2026-10-22 08:50  
+Name: Edmundo Barahona  
+Title: SAP Business Assurance  
+Relationship: Partner  
+Submitted as: Sogeti Deutschland GmbH (DE) (email local part does not match the name: edmundo.harbin@)  
+
+Date: 2026-10-21 10:09  
+Name: Jeroen Kuijper  
+Title: Community lead  
+Relationship: Partner  
+Submitted as: Sogeti Netherlands BV (NL)  
+
 Date: 2026-10-01 16:08  
 Name: Gavaskar Selvarajan  
 Title: Solution architect  
@@ -300,6 +714,16 @@ known agent tooling: no public information found tying Skygen to a deployed agen
 ---
 
 ### Hugo Boss AG (DE)
+Date: 2026-10-22 08:50  
+Name: Julian Raach  
+Title: Test Automation Specialist  
+Relationship: Customer  
+
+Date: 2026-10-22 08:50  
+Name: Yash Jawale  
+Title: Omnichannel Process Manager  
+Relationship: Customer  
+
 Date: 2026-09-24 08:35  
 Name: Marco Esguerra  
 Title: Senior IT Consultant  
@@ -374,6 +798,24 @@ agent stack (stated): custom-built agents on Azure AI Foundry and Palantir Found
 ---
 
 ### Accenture (multiple entities)
+Date: 2026-10-22 08:53  
+Name: Antonio Sglavo  
+Title: Test Manager  
+Relationship: Partner  
+Submitted as: Accenture SpA (IT)  
+
+Date: 2026-10-20 00:44  
+Name: Praveer Bakshi  
+Title: Director  
+Relationship: Evaluating Tricentis  
+Submitted as: Accenture LLP (also submitted 2026-10-19 with the company field blank, not tracked separately)  
+
+Date: 2026-10-19 13:23  
+Name: Ajay Kharb  
+Title: Quality Engineering Associate Manager  
+Relationship: Partner  
+Submitted as: Accenture LLP  
+
 Date: 2026-09-22 11:09  
 Name: Mohammed Arslan Mir  
 Title: Test Automation Manager  
@@ -411,7 +853,7 @@ likely use case: the relationship values span Customer, Partner (×2), and "Eval
 
 known agent tooling: "AI Refinery" distiller framework/SDK (agent memory, multi-agent collaboration, governance/observability, built-in model evaluation), agentic procurement systems for HPE, partnerships with ServiceNow/Google Cloud/OpenAI, training 700,000 staff in agentic AI ([Accenture Newsroom](https://newsroom.accenture.com/news/2025/accenture-expands-ai-refinery-and-launches-new-industry-agent-solutions-to-accelerate-agentic-ai-adoption)).
 
-beta evaluation status (as of 2026-09-18, Jigish Belani only): in the process of scoping a beta evaluation for Accenture, who will evaluate on Meta's behalf — the same delivery/SI-partner engagement referenced in the Meta Platforms, Inc. entry above. Still working out Accenture's setup, since they require an on-prem (private AWS) instance. The other four submitters above are separate individuals who have not been individually contacted on this basis.
+beta evaluation status (as of 2026-09-18, Jigish Belani only): in the process of scoping a beta evaluation for Accenture, who will evaluate on Meta's behalf — the same delivery/SI-partner engagement referenced in the Meta Platforms, Inc. entry above. Still working out Accenture's setup, since they require an on-prem (private AWS) instance. The other seven submitters above are separate individuals who have not been individually contacted on this basis.
 
 ---
 
@@ -850,6 +1292,12 @@ known agent tooling: no public information found tying TestCrew to a deployed ag
 ---
 
 ### Dolpheen IT Solutions
+Date: 2026-10-22 13:36  
+Name: Simon Kreitmayer  
+Title: CEO  
+Relationship: Partner  
+Submitted as: SKYPhoenix IT GmbH (North Data lists it as formerly Dolpheen IT Solutions, with Simon Kreitmayer as managing director, so it appears to be a rename ([North Data](https://www.northdata.de/Kreitmayer,%20Simon,%20Wien/79c)); not confirmed against the Austrian Firmenbuch)  
+
 Date: 2026-09-09 14:41  
 Name: Jia Jun Zhan  
 
@@ -1208,6 +1656,12 @@ agent stack (stated): no agent in production; closest candidate is a Tosca MCP p
 ---
 
 ### Capgemini
+Date: 2026-10-13 08:47  
+Name: Konrad Greszata  
+Title: CTO  
+Relationship: Partner  
+Entity: Capgemini Global Parent  
+
 Date: 2026-08-20 14:48  
 Name: Mathankumar Kanagaraj  
 Entity: Capgemini Technologies LLC  
