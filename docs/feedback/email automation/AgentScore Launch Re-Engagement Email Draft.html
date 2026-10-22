@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AgentScore is live</title>
+</head>
+<body style="font-family:Calibri, Arial, sans-serif; font-size:15px; color:#000000;">
+
+<p>Hi {{Name}},</p>
+
+<p>You expressed interest in AgentScore through Tricentis Labs, and I reached out a while back about getting {{Company}} into the beta. I wanted to try you once more because AgentScore is now live and ready to use.</p>
+
+<p>You can access AgentScore here: <a href="https://agent-score.ai.tricentis.com">https://agent-score.ai.tricentis.com</a></p>
+
+<p>Point AgentScore at an agent running on real traffic and you get a 0-100 score, a ship / review / don't-ship recommendation, and the evidence behind it.</p>
+
+<p><b>Here's how to get up and running:</b></p>
+
+<ol>
+<li><b>Sign in to Tosca Cloud.</b> Agent Score requires a Tosca Cloud login. If you do not have one yet, <a href="https://www.tricentis.com/software-testing-tool-trial-demo">sign up for a Tosca Cloud trial</a> first, then sign in with that account.</li>
+<li><b>Get your workspace.</b> Your workspace (a tenant) is set up by the Agent Score team on your behalf, and cannot be created from the app. Send us your Tosca Cloud tenant name and we will set up your workspace. Everyone signing in from that Tosca Cloud tenant will then have access. If your agent runs in AI Workspace, its tenant is created automatically when the agent's traces are first ingested and no ingest key is needed, so skip to step 5 (you still need us to give you access).</li>
+<li><b>Create an ingest key.</b> Open <b>Integrations</b> in the sidebar and create a new key. It looks like <code>tk_...</code> and belongs to exactly one tenant.</li>
+<li><b>Point your agent's OpenTelemetry export at Agent Score.</b> Add these two variables to the exporter your agent already uses. No new SDK required. <b>+ Connect Agent</b> on the Agents page gives you this exact config with your real key filled in.
+<pre style="font-family:Consolas, Menlo, monospace; font-size:13px; background:#f4f4f4; padding:10px; white-space:pre-wrap;">OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=&lt;your ingest endpoint&gt;/external/otel/v1/traces
+OTEL_EXPORTER_OTLP_TRACES_HEADERS=Authorization=Bearer &lt;your tk_... ingest key&gt;</pre></li>
+<li><b>Run your agent.</b> Interact with your agent as you normally would. It appears on the Agents page on its own, first as <b>Setting up</b>, then <b>Learning your agent</b> with a live count of traces received. No per-agent form to fill out.</li>
+<li><b>Read your scorecard.</b> After <b>20 traces</b>, scoring starts automatically. Open the agent to see a 0-100 score and a ship / review / don't-ship recommendation, with the evidence behind every number.</li>
+</ol>
+
+<p><b>Use the _TRACES_ variables.</b> Use the <code>_TRACES_</code>-suffixed variables, not the generic <code>OTEL_EXPORTER_OTLP_ENDPOINT</code>. The endpoint above already ends in <code>/v1/traces</code>, and the generic form would append it a second time.</p>
+
+<p><b>Send real traffic.</b> Scoring is only as honest as the traces behind it. Send real or realistic traffic, including the ordinary failures, not a hand-picked set of best outputs.</p>
+
+<p>If you have any questions, or want more info, just reply to this email, or schedule a time <a href="https://scheduler.zoom.us/andrew-demers/agentscore-overview">here</a>.</p>
+
+<p>Thanks,</p>
+
+<p>Andrew Demers<br>
+AgentScore Lead PM | Tricentis</p>
+
+</body>
+</html>
