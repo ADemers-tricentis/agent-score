@@ -1,3 +1,14 @@
+## October 22, 2026 Update
+
+### More internal-agent traces reach scoring
+- Traces from Tricentis agents that identify their tenant with the standard `tenant` attribute now route to the right account instead of being held in quarantine.
+- More runs from internal agents can now reach Agent Score without requiring each service to add a product-specific identity field.
+
+### Coming next
+- Loading Legal's final terms document into the consent gate
+- Cutting agent tracing over to push directly from internal agents instead of pulling from Better Stack
+- Small additions to the API gateway and session services to finish production readiness
+
 ## October 14, 2026 Update
 
 ### Jump from a score to its trace
