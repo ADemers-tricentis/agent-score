@@ -2,10 +2,20 @@
     "hooks": {
         "Stop": [
             {
-                "hooks" : [
+                "hooks": [
                     {
                         "type": "command",
-                        "command" : "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/export-docs-sync-trace.py\""
+                        "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/export-docs-sync-trace.py\""
+                    }
+                ]
+            }
+        ],
+        "SubagentStop": [
+            {
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/export-subagent-trace.py\""
                     }
                 ]
             }

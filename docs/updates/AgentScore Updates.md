@@ -4,8 +4,12 @@
 - Traces from Tricentis agents that identify their tenant with the standard `tenant` attribute now route to the right account instead of being held in quarantine.
 - More runs from internal agents can now reach Agent Score without requiring each service to add a product-specific identity field.
 
+### Internal note: custom checks and profiles are on dev
+- An operator can write a check for one account: what is checked, what earns a full score, and what earns zero. That check can sit on a scoring profile next to the shared checks.
+- Saving the profile leaves existing scores in place. A separate action shows how many agents are bound and an estimate from the last run, then queues the re-score.
+- This is on dev, in the back office and the customer API. Workspace pages where you write checks yourself are the next step. Staging was not part of this deploy.
+
 ### Coming next
-- Loading Legal's final terms document into the consent gate
 - Cutting agent tracing over to push directly from internal agents instead of pulling from Better Stack
 - Small additions to the API gateway and session services to finish production readiness
 

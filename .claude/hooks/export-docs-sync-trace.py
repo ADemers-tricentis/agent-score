@@ -22,7 +22,7 @@ from pathlib import Path
 SKILL_NAME = "agent-score-docs-sync"
 REPO_ROOT = Path(__file__).resolve().parents[2]
 STATE_FILE = REPO_ROOT / ".claude" / "skills" / SKILL_NAME / ".last-exported.json"
-VENV_PYTHON = REPO_ROOT / "test-agent" / "venv" / "bin" / "python"
+VENV_PYTHON = REPO_ROOT / "test-agent" / ".venv" / "bin" / "python"
 EXPORT_SCRIPT = REPO_ROOT / "test-agent" / "export_claude_session.py"
 
 

@@ -30,7 +30,7 @@ What accounts we have talked to say they build or run agents on. Counts are comp
 
 | Interested companies | Companies replied | Demos | Pending betas | Active betas |
 |---|---|---|---|---|
-| 105 | 14 | 12 | 1 | 6 |
+| 105 | 14 | 13 | 1 | 6 |
 
 Source breakdown: 101 via the Labs form, 3 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E), 1 via David (VP of AI/ML) (Eaton) = 105 total. Ferrara Candy Company is listed below but not counted: Sudha Damacherla signed up by accident for a different product (2026-10-20).
 
@@ -38,29 +38,29 @@ Update the per-company Status column below as accounts move, and keep the summar
 
 | Company | Contact | Status |
 |---|---|---|
-| Ashurst LLP (UK) | Ankush Shrivastava | Interested |
-| Sky Plc (UK) - HQ | Mario D'Amico | Interested |
-| TotalEnergies (FR) - HQ | Olivier Soulard | Interested |
-| Barratt Redrow | Bhavinkumar Patel | Interested |
-| Epson Europe - UK | Simon Berryman | Interested |
-| Slaughter and May (UK) | Idowu Adeyemi | Interested |
-| QualityAI | Stuart Flynn | Interested |
-| Heidelberg Materials AG (DE) | Sara Bailey | Interested |
-| Benefact Group (Ecclesiastical Insurance) | Angela Wallace | Interested |
-| Vestas (DK) - HQ | Romy Mehta | Interested |
-| Deloitte LLP (UK) | Chetana Bangaradka | Interested |
-| Jysk | Ole Madsen | Interested |
-| The Tech Collective | Nadia Grundholm | Interested |
-| University of Leeds | Andrew Peckett | Interested |
-| IBM India Private Limited | Vaibhav Sharma | Interested |
-| M2Q | Jurgen Meheus | Interested |
-| AI-Celerates Business | Agnes Goh | Interested |
-| Teck Resources Limited | Snigdha Priyadarshini | Interested |
-| CPKC | Nazlie Shahmir | Interested |
-| Ontario Power Generation Inc. | Ajay Nandepu | Interested |
-| Bayer AG (DE) - HQ | Gunnar Moog | Interested |
-| Siemens Financial Services GmbH (DE) (email domain suggests Siemens Energy) | Palash Gupta | Interested |
-| PG&E (Pacific Gas and Electric) | — (via Sales: Greg Campbell) | Interested |
+| Ashurst LLP (UK) | Ankush Shrivastava | Email sent — 2026-10-22 |
+| Sky Plc (UK) - HQ | Mario D'Amico | Email sent — 2026-10-22 |
+| TotalEnergies (FR) - HQ | Olivier Soulard | Email sent — 2026-10-22 |
+| Barratt Redrow | Bhavinkumar Patel | Email sent — 2026-10-22 |
+| Epson Europe - UK | Simon Berryman | Email sent — 2026-10-22 |
+| Slaughter and May (UK) | Idowu Adeyemi | Email sent — 2026-10-22 |
+| QualityAI | Stuart Flynn | Email sent — 2026-10-22 |
+| Heidelberg Materials AG (DE) | Sara Bailey | Email sent — 2026-10-22 |
+| Benefact Group (Ecclesiastical Insurance) | Angela Wallace | Email sent — 2026-10-22 |
+| Vestas (DK) - HQ | Romy Mehta | Email sent — 2026-10-22 |
+| Deloitte LLP (UK) | Chetana Bangaradka | Email sent — 2026-10-22 |
+| Jysk | Ole Madsen | Email sent — 2026-10-22 |
+| The Tech Collective | Nadia Grundholm | Email sent — 2026-10-22 |
+| University of Leeds | Andrew Peckett | Email sent — 2026-10-22 |
+| IBM India Private Limited | Vaibhav Sharma | Email sent — 2026-10-22 |
+| M2Q | Jurgen Meheus | Email sent — 2026-10-22 |
+| AI-Celerates Business | Agnes Goh | Email sent — 2026-10-22 |
+| Teck Resources Limited | Snigdha Priyadarshini | Email sent — 2026-10-22 |
+| CPKC | Nazlie Shahmir | Email sent — 2026-10-22 |
+| Ontario Power Generation Inc. | Ajay Nandepu | Email sent — 2026-10-22 |
+| Bayer AG (DE) - HQ | Gunnar Moog | Email sent — 2026-10-22 |
+| Siemens Financial Services GmbH (DE) (email domain suggests Siemens Energy) | Palash Gupta | Email sent — 2026-10-22 |
+| PG&E (Pacific Gas and Electric) | — (via Sales: Greg Campbell) | Demo Scheduled — 2026-10-27 |
 | Itecor (CH)-HQ | Alexandre Thibaud, Mathieu Philippe | Email sent — 2026-10-12 |
 | Ferrara Candy Company | Sudha Damacherla | Not a fit — accidental signup |
 | Department of Jobs, Skills, Industry and Regions (DJSIR) (AU) | Subhasis Dhar | Email sent — 2026-10-12 |
@@ -155,7 +155,7 @@ Name: Ankush Shrivastava
 Title: Automation Test Lead  
 Relationship: Customer  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: UK-headquartered international law firm with roughly 4,000 staff across about 30 offices.
@@ -172,7 +172,7 @@ Name: Mario D'Amico
 Title: Head of integration and test  
 Relationship: Evaluating Tricentis  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: Comcast-owned pay-TV, broadband and mobile provider operating in the UK and several European markets.
@@ -189,7 +189,7 @@ Name: Olivier Soulard
 Title: Program Test Lead  
 Relationship: Customer  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: French integrated energy company (oil, gas, power and renewables) with roughly 100,000 employees.
@@ -206,7 +206,7 @@ Name: Bhavinkumar Patel
 Title: Test Automation Engineer  
 Relationship: Customer  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: UK housebuilder formed by Barratt Developments' 2024 acquisition of Redrow (email domain `barrattredrow.co.uk`).
@@ -223,7 +223,7 @@ Name: Simon Berryman
 Title: SAP Functional Lead  
 Relationship: Customer  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: European arm of Japan's Seiko Epson (printers, projectors, robots), with a UK subsidiary.
@@ -240,7 +240,7 @@ Name: Idowu Adeyemi
 Title: Quality Assurance Lead  
 Relationship: Customer  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: London "Magic Circle" law firm focused on corporate, M&A, finance and regulatory work.
@@ -257,7 +257,7 @@ Name: Stuart Flynn
 Title: Enterprise Delivery Head  
 Relationship: Partner  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: AI-focused quality engineering and testing services company; appears to be the renamed Qualitest (rebranded around June 2026, about 7,000 staff) ([Calcalist](https://www.calcalistech.com/ctechnews/article/skbeb2rggl)). Listed as a Tricentis partner ([Tricentis](https://www.tricentis.com/partners/qualityai)).
@@ -274,7 +274,7 @@ Name: Sara Bailey
 Title: Head of Applications management  
 Relationship: Customer  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: German building-materials group (cement, aggregates, ready-mix) headquartered in Heidelberg, with roughly 50,000 employees.
@@ -291,7 +291,7 @@ Name: Angela Wallace
 Title: Group Technology development director  
 Relationship: Customer  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: UK charity-owned financial services group; its main business, Ecclesiastical Insurance, insures faith, heritage, charity and education organisations ([Insurance Business](https://www.insurancebusinessmag.com/uk/news/breaking-news/ecclesiastical-insurances-parent-company-rebrands-397774.aspx)).
@@ -308,7 +308,7 @@ Name: Romy Mehta
 Title: Enterprise Test Manager  
 Relationship: Customer  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: Danish wind turbine maker headquartered in Aarhus, with about 30,000 employees.
@@ -325,7 +325,7 @@ Name: Chetana Bangaradka
 Title: Senior Manager  
 Relationship: Partner  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: UK member firm of the global Deloitte network (audit, tax, consulting, advisory).
@@ -342,7 +342,7 @@ Name: Ole Madsen
 Title: Team Lead SAP Test Automation  
 Relationship: Customer  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: Danish home-furnishings retailer with more than 3,600 stores in about 50 countries.
@@ -359,7 +359,7 @@ Name: Nadia Grundholm
 Title: Test Automation Specialist  
 Relationship: Partner  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: Copenhagen-based tech consultancy "powered by Implement Consulting Group", offering conversational AI, SAP, Salesforce, cyber and data services ([Built In](https://builtin.com/job/junior-consultant-our-salesforce-team/7521507)).
@@ -376,7 +376,7 @@ Name: Andrew Peckett
 Title: Platform and Service Owner (QA and Testing)  
 Relationship: Customer  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: Large UK public research university with about 38,000 students.
@@ -393,7 +393,7 @@ Name: Vaibhav Sharma
 Title: Application Archietect  
 Relationship: Partner  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: IBM's Indian subsidiary (consulting, software, delivery), headquartered in Bengaluru.
@@ -410,7 +410,7 @@ Name: Jurgen Meheus
 Title: Ceo  
 Relationship: Partner  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: Belgian software testing and QA consultancy in the Cronos group, roughly 25-30 staff ([Datanyze](https://www.datanyze.com/companies/m2q/425027251)).
@@ -427,7 +427,7 @@ Name: Agnes Goh
 Title: Founder  
 Relationship: Evaluating Tricentis  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: AI-Celerates Business (email domain `aiceleratesbusiness.com`). Nothing further turned up in public sources.
@@ -444,7 +444,7 @@ Name: Snigdha Priyadarshini
 Title: Business Stream Lead  
 Relationship: Other  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: Vancouver-based mining company focused on copper and zinc, currently pursuing a merger of equals with Anglo American.
@@ -461,7 +461,7 @@ Name: Nazlie Shahmir
 Title: QA manager  
 Relationship: Customer  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: North American Class I railroad formed by the 2023 merger of Canadian Pacific and Kansas City Southern (email domain `cpkcr.com`).
@@ -478,7 +478,7 @@ Name: Ajay Nandepu
 Title: Sr Solution Architect  
 Relationship: Customer  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: Provincially owned utility that generates about half of Ontario's electricity from nuclear, hydro and other sources.
@@ -495,7 +495,7 @@ Name: Gunnar Moog
 Title: Product Manager  
 Relationship: Customer  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: German multinational in pharmaceuticals, consumer health and crop science.
@@ -512,7 +512,7 @@ Name: Palash Gupta
 Title: Test Engineer  
 Relationship: Other  
 
-Email sent: —  
+Email sent: 2026-10-22  
 Beta scheduled: —  
 
 what they do: the form names Siemens Financial Services (Siemens AG's financing arm), but the submitter's email is @siemens-energy.com. Siemens Energy is a separately listed energy-technology company, so the two may be mixed up - not resolved.
@@ -528,7 +528,7 @@ Date: 2026-10-13 11:28 (Sales conversation — no Labs form submission)
 Name: — (contact not captured; came in via Sales rep Greg Campbell)  
 
 Email sent: —  
-Beta scheduled: —  
+Beta scheduled: 2026-10-27 (demo)  
 
 what they do: Northern and central California's largest investor-owned electric and natural gas utility.
 

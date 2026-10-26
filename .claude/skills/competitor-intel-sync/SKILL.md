@@ -9,11 +9,10 @@ description: >-
   refresh on competitor product moves, customer sentiment, or adoption
   patterns - even if they just say "anything new in the eval space" or ask
   about one specific competitor by name. Reads the competitor list straight
-  from docs/research/competitive-analysis-report.md, searches the web for
-  each one's recent product updates/news, what customers explicitly praise
-  (G2, Capterra, Reddit, Hacker News, X/LinkedIn), and what customers are
-  actually using it for, skips anything already reported in a prior digest,
-  and writes docs/research/competitive-intel/YYYY-MM-DD.md - built to run
+  from docs/research/competitive-analysis-report.md, searches a deliberately
+  varied mix of first-party, repository, independent-news, and practitioner
+  sources, checks findings against the full digest history so old releases do
+  not resurface, and writes docs/research/competitive-intel/YYYY-MM-DD.md - built to run
   unattended once a day (e.g. via the `loop` or `schedule` skill) with no
   review gate, since it only ever adds a new dated research file.
 ---
@@ -47,15 +46,13 @@ notice one of them shipped something that matters.
 - **Output (one file per run):**
   `docs/research/competitive-intel/YYYY-MM-DD.md`, dated by the day the
   sweep runs.
-- **Dedup baseline:** the most recent existing file in
-  `docs/research/competitive-intel/` (by filename date, not necessarily
-  yesterday - the skill may not run every single day). If the directory
-  doesn't exist yet or is empty, this is the first run: there's no prior
-  digest to dedup against, so everything found is by definition new. Don't
-  reach further back than the single most recent file - if something
-  resurfaced that was reported two digests ago but not the last one, it's
-  fair to resurface (it may reflect renewed momentum, and chasing multi-file
-  history adds cost for little benefit).
+- **Dedup corpus:** every earlier dated Markdown file in
+  `docs/research/competitive-intel/`. The point of this archive is cumulative
+  memory: a release reported three days ago is still old even if it was absent
+  from yesterday's digest. Exclude today's target file when building the
+  corpus; if today's file already exists, read it separately and preserve or
+  improve it rather than treating it as evidence that the finding predates
+  today.
 
 ## Workflow
 
@@ -67,26 +64,40 @@ headings no longer match this pattern, say so and stop rather than guessing
 - silently falling back to a stale hardcoded list would defeat the point of
   reading it fresh.
 
-### 2. Load yesterday's (or the last) digest, if any
+### 2. Build the seen-facts ledger
 
-Find the most recent file in `docs/research/competitive-intel/` and read it.
-This is your dedup reference for step 4 - keep the URLs/headlines it already
-reported in mind as you search.
+Read all earlier `YYYY-MM-DD.md` files in
+`docs/research/competitive-intel/`, not just the latest one. Build a compact
+working ledger with:
 
-### 3. Search each competitor, three buckets at a time
+- normalized source URL (remove tracking parameters and fragments);
+- release/version number, announcement title, or other stable event ID;
+- the underlying claim in a short canonical form;
+- event/publication date when the source provides one.
+
+Deduplicate on the underlying event, not wording. A roundup, repost,
+syndicated article, generic releases-page URL, or newly discovered source
+about an already reported release does not make the event new. A later
+version, material follow-up, changed pricing, newly named customer, or
+substantive new evidence does.
+
+If no earlier files exist, start with an empty ledger. If today's file already
+exists, read it too; update it only when this run finds genuinely new evidence
+or a better specific source.
+
+### 3. Search each competitor across source families
 
 For each competitor, run web searches for:
 
 1. **Updates/news** - product releases, changelog entries, funding,
-   partnerships, pricing changes. Bias toward the last 24-48 hours, but a
-   slightly older item is fine to include if it's still new *to this
-   digest* (e.g. the skill didn't run yesterday). Good query shapes:
-   `"<name>" changelog OR "release notes" 2026`, `"<name>" funding OR
-   partnership OR pricing`, plus news-site coverage (TechCrunch, VentureBeat,
-   trade press). For competitors with a public GitHub repo (Langfuse, Comet/
-   Opik, and others on the watch list are OSS), check the repo's Releases
-   and Discussions tabs directly - GitHub often has the release before any
-   blog post or news coverage picks it up.
+   partnerships, pricing changes. Bias toward the last 72 hours. An older
+   item may be included only if it has never appeared in the ledger and there
+   is a clear publication/event date. Search the competitor's changelog,
+   product blog, docs/release notes, pricing page, newsroom, and newsletter;
+   then check relevant trade press and general tech/business news. For OSS
+   products, inspect exact GitHub release/tag pages plus recent repository
+   activity. Link to the specific release or post rather than a generic
+   `/releases` or blog landing page whenever possible.
 2. **What customers love** - specific, recurring praise, not generic
    sentiment ("great tool!" tells you nothing; "cut our eval-writing time in
    half because of X" does). Search G2, Capterra, Reddit, Hacker News,
@@ -111,12 +122,53 @@ three ways - they tend to live on different kinds of pages (blog vs. review
 site vs. case study vs. GitHub), and conflating them is how digests end up
 thin on one bucket and padded on another.
 
-### 4. Filter against the dedup baseline
+Use this source-family checklist for the sweep. It is a coverage guide, not a
+reason to include low-quality claims:
 
-Drop any item whose URL (or, if the URL differs but the substance is
-identical - e.g. syndicated coverage of the same release - the underlying
-fact) already appears in the digest you loaded in step 2. What's left is
-what's actually new since last time.
+1. **First-party product:** changelog, release notes, docs, blog, newsroom,
+   pricing page, newsletter/RSS.
+2. **Code and community:** GitHub Releases, tags, merged PRs, Discussions,
+   issues, package registries, public Discord/forum pages.
+3. **Independent reporting:** TechCrunch, VentureBeat, Business Wire/press
+   release wires, analyst/trade publications, acquisition/funding databases.
+4. **Practitioner conversation:** Hacker News, Reddit, Stack Overflow,
+   public LinkedIn/X posts, engineering blogs, conference talks, podcasts,
+   YouTube demos/webinars.
+5. **Customer evidence:** named case studies, G2/Capterra reviews, integration
+   partner stories, implementation write-ups, job posts that name the stack.
+
+For each competitor, search at least one first-party source and one source
+outside the vendor's own site. Across the whole run, inspect at least four
+source families and report which families were checked. Do not let GitHub
+Releases become the default answer for every OSS competitor: it is one source
+family, not the entire sweep. If external sources have no credible new
+evidence, say so instead of recycling a release.
+
+Vary queries from the previous run. In addition to the competitor name, use
+product aliases and intent terms such as `changelog`, `release notes`,
+`pricing`, `customer`, `case study`, `migration`, `switched to`, `production`,
+`evaluation`, `tracing`, `integration`, and `review`. Prefer date filters and
+source-specific searches over broad result pages that tend to return the same
+high-ranking links every day.
+
+### 4. Apply freshness, evidence, and dedup gates
+
+Keep a candidate only when all of these are true:
+
+1. **New fact:** its stable event ID and underlying claim do not occur
+   anywhere in the seen-facts ledger.
+2. **Fresh enough:** it was published or materially updated since the most
+   recent successful sweep, or it is an older never-reported item whose date
+   and relevance are explicit. Search-result recency is not evidence.
+3. **Specific source:** the link resolves to the exact release, article,
+   review, thread, case study, or post supporting the claim. A generic landing
+   page is insufficient when a permalink exists.
+4. **Substantive:** it changes product capability, positioning, pricing,
+   adoption evidence, or customer understanding. Patch churn and dependency
+   maintenance belong only when they materially affect buyers or AgentScore.
+
+When uncertain, omit the candidate. A true “nothing new” day is more useful
+than a digest padded with familiar facts.
 
 If a competitor has nothing left after filtering, drop that competitor from
 today's digest entirely - don't write an empty section or an "nothing new
@@ -132,24 +184,30 @@ if it doesn't exist yet):
 ```markdown
 # Competitor Intel — YYYY-MM-DD
 
+_Coverage: checked <N> competitors across <source families>. Compared against
+<N> prior digests through <latest prior date>._
+
 ## <Competitor Name>
-- **Update:** <one-line bullet> ([source](url))
-- **Customers love:** <one-line bullet, specific feature/workflow named> ([source](url))
-- **Using it for:** <one-line bullet, concrete use case> ([source](url))
+- **Update (YYYY-MM-DD):** <one-line bullet> ([specific source](url))
+- **Customers love (YYYY-MM-DD):** <one-line bullet, specific feature/workflow named> ([specific source](url))
+- **Using it for (YYYY-MM-DD):** <one-line bullet, concrete use case> ([specific source](url))
 
 ## <Next Competitor Name>
 ...
 ```
 
-Only include the three sub-bullets that actually have new findings for that
+Use the source's event/publication date in each bullet, not the day it was
+discovered. Only include the three sub-bullets that actually have new findings for that
 competitor - a competitor with only a pricing update and nothing on
 sentiment/usage that day just gets the one bullet. Every bullet needs a
 source link; a claim with no link isn't verifiable later and shouldn't ship.
+When two independent sources materially strengthen an important claim, cite
+both. Do not add a second citation that merely syndicates the first.
 
 If, across every competitor, nothing new turned up at all, still write the
-file, but keep it to a single line saying so - a future reader scanning the
-directory should be able to tell "the sweep ran and found nothing" apart
-from "the sweep didn't run."
+file with the heading, coverage line, and one sentence saying so - a future
+reader scanning the directory should be able to tell "the sweep ran broadly
+and found nothing" apart from "the sweep didn't run."
 
 ### 6. Add the synthesis, only if something earns it
 
@@ -199,6 +257,6 @@ be loaded) - there's nothing meaningful to trace.
 ## Output
 
 Finish with a short report: how many competitors had new findings, how many
-were skipped as unchanged, and whether a "So what for AgentScore" synthesis
-was included or omitted (and why, if omitted). Point to the file path you
-wrote.
+were skipped as unchanged, which source families were inspected, and whether
+a "So what for AgentScore" synthesis was included or omitted (and why, if
+omitted). Point to the file path you wrote.
