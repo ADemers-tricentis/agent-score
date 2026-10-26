@@ -24,7 +24,7 @@ export default function Welcome() {
 
       <Screenshot
         src={homeDashboard}
-        alt="The Home page, showing real-agent and interaction totals, scoring runs in the last 24 hours, agents needing attention, and a verdict trend table of Ship / Review / Block counts over the last seven days"
+        alt="The Home page, showing real-agent and interaction totals, scoring runs in the last 24 hours, agents needing attention, and a verdict trend chart with one Ship / Review / Block line each and its seven-day total"
         caption="Home - your fleet's health, scoring activity, and next steps, the moment you sign in."
       />
 
@@ -34,6 +34,13 @@ export default function Welcome() {
           removable <strong>example agents</strong> you can poke at immediately - safe,
           self-service, and excluded from your real fleet's counts and scoring, so trying
           things out never contaminates your own numbers.
+        </p>
+      </Callout>
+
+      <Callout kind="note" title="Your terms, on file">
+        <p>
+          Your <strong>Settings</strong> page shows the Terms of Service version you accepted for
+          each tenant, and when. You can download that exact version from there at any time.
         </p>
       </Callout>
 

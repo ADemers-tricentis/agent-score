@@ -1,6 +1,6 @@
 import { Dek, Eyebrow, Screenshot } from "../components/PageChrome";
 import { DimensionHierarchyDiagram } from "../components/diagrams/DimensionHierarchy";
-import profileTab from "../assets/profile-tab-general-answerer.png";
+import profileTab from "../assets/profile-tab-task-agent.png";
 
 export default function DimensionsAndProfiles() {
   return (
@@ -36,8 +36,10 @@ export default function DimensionsAndProfiles() {
         A <strong>profile</strong> is a curated bundle - the right evals, dimensions, weights, and
         pass thresholds - tuned for a kind of agent. Agent Score ships seven: Grounded Answerer,
         Summarizer, Tool Caller, Task Agent, Conversational Assistant, Policy Guardrail, and
-        General Answerer (the fallback for general-purpose agents that don't fit a more specific
-        shape).
+        General Answerer (for plain question-and-answer agents with no tools, retrieved context, or
+        stated scope). You'll also see an eighth entry, <strong>Default</strong>, in profile
+        lists - that's a placeholder, not a real profile: it carries no evals, and no scoring run
+        is created against it.
       </p>
       <p>
         Every profile shows a complete, transparent breakdown of how its score is calculated - no
@@ -54,24 +56,27 @@ export default function DimensionsAndProfiles() {
         <a href="#/agent-card">the Agent Card page</a>.
       </p>
       <p>
-        Brand-new agents start on <strong>General Answerer</strong> - a simple, four-dimension
-        profile (Correctness, Relevance, Safety, Quality / Efficiency) Agent Score falls back to
-        until your agent has produced enough varied behavior to justify a more specific profile.
-        You'll see this any time an agent's evidence diversity hasn't yet crossed the threshold for
-        a confident match - it's a real, functioning profile, not a placeholder.
+        Brand-new agents sit on the <strong>Default</strong> placeholder while they're still{" "}
+        <strong>Learning your agent</strong> - the Profile tab shows how many of the 20 traces
+        needed have arrived. Once the 20th lands, a real profile is chosen automatically; nothing
+        is needed from you. That first pick is revisited as more evidence comes in, and the
+        Profile tab's <strong>Fit history</strong> records each decision and why.
       </p>
 
       <Screenshot
         src={profileTab}
-        alt="The Profile tab for an agent, showing why the General Answerer profile was chosen, the full verdict band table from Ship down to Block, and the dimensions and their weights"
-        caption="An agent's Profile tab - why this profile was chosen, the verdict bands for it, and the weighted dimensions behind the score."
+        alt="The Profile tab for an agent, showing an Evals for this agent section with its bound Task Agent profile and Create an eval / Create a profile buttons, why the Task Agent profile was chosen, the verdict band table from Ship down to Block, and the dimensions, evals, thresholds, and weights"
+        caption="An agent's Profile tab - the bound profile, why it was chosen, the verdict bands for it, and the weighted dimensions behind the score."
       />
 
       <p>
         That automatic pick isn't final. From the same Profile tab, you can{" "}
         <strong>change profile</strong> to any other live profile version yourself, or{" "}
         <strong>re-evaluate fit</strong> to have Agent Score reconsider its pick against the
-        agent's latest evidence.
+        agent's latest evidence. And if no built-in profile measures what matters for this agent,{" "}
+        <strong>Create an eval for this agent</strong> and{" "}
+        <strong>Create a profile for this agent</strong> at the top of the tab start one of{" "}
+        <a href="#/custom-evals">your own</a>.
       </p>
     </>
   );

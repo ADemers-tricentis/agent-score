@@ -3,6 +3,40 @@
 All notable changes to the AgentScore docs site are recorded here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.40.0] - 2026-10-26
+
+### Added
+- Building Your Own Evals: new page for the customer **Evals** area - writing
+  a check as three plain-language answers, previewing it on up to five of an
+  agent's traces, and keeping it a private draft until you publish it.
+- Connect Your Agent: documented the **Connect from your coding agent** card
+  on Integrations - the MCP server URL, setup steps for Claude Code, Cursor
+  and Claude Desktop, and browser sign-in with no key or token.
+- Welcome: noted where to find and download the Terms of Service version you
+  accepted.
+- Glossary: added **Custom eval**.
+
+### Changed
+- The Evaluation Catalog: the built-in catalog is now browsable yourself in
+  the Evals area's **Built-in evals** tab, not only through the Agent Score
+  team.
+- Dimensions & Profiles: brand-new agents sit on a **Default** placeholder
+  (no evals, never scored) until their first 20 traces arrive, then get a
+  real profile automatically. Also covered the new "Evals for this agent"
+  shortcuts on the Profile tab.
+- Ask the Assistant: the Assistant can now draft, preview, and publish evals
+  and profiles and queue re-scoring, in addition to starting a scoring run -
+  each behind your approval. Sessions are described per organization.
+- Reading Your Scorecard: trace IDs in the score breakdown now link straight
+  to the trace.
+- Refreshed screenshots of Home, Integrations, the Score tab, the Profile
+  tab, the Agent Card, and the Assistant to match the current app.
+
+### Fixed
+- Reading Your Scorecard, Glossary: the lowest verdict band (0-39) is labeled
+  **Don't ship** in the app, not "Block".
+- Connect Your Agent: the wizard opens from **My Agents** -> **Connect Agent**.
+
 ## [0.39.0] - 2026-09-28
 
 ### Added

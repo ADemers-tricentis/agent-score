@@ -45,7 +45,7 @@ export default function Scorecard() {
           </tr>
           <tr>
             <td>0-39</td>
-            <td><Badge kind="block">Block</Badge></td>
+            <td><Badge kind="block">Don't ship</Badge></td>
           </tr>
         </tbody>
       </table>
@@ -71,11 +71,12 @@ export default function Scorecard() {
         The dimension breakdown isn't a black box - each bar traces back to the evals that fed it,
         and each eval result carries its own plain-language reason and the trace span it came
         from. If a dimension scored low, you can see exactly which interactions dragged it down
-        and why.
+        and why - and each interaction's trace ID links straight to that{" "}
+        <a href="#/traces">trace</a>, so you can open the evidence behind a verdict in one click.
       </p>
       <Screenshot
         src={scorecardTab}
-        alt="A real Score tab showing a composite score of 100 out of 100 with a Ship verdict, how many points above the Ship threshold, scored/skipped/failed/retired counts, and a dimension breakdown listing each dimension's weight and score with a link to the evaluations behind it"
+        alt="A real Score tab showing a composite score of 99.8 out of 100 with a Ship verdict, how many points above the Ship threshold, scored / could not be evidenced / retired counts, a Score over time chart, and a dimension breakdown listing each dimension's weight and score with the number of evaluations behind it"
         caption='A real Score tab - the composite score, how far above or below the Ship threshold it is, and the dimension breakdown behind the number.'
       />
 

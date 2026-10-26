@@ -1,6 +1,6 @@
 import { Dek, Eyebrow, Screenshot } from "../components/PageChrome";
 import { EvalSpectrumDiagram } from "../components/diagrams/EvalSpectrum";
-import catalogDoor from "../assets/catalog-door.png";
+import builtInCatalog from "../assets/evals-builtin-catalog.png";
 import studioLibrary from "../assets/studio-library.png";
 import studioGeval from "../assets/studio-geval.png";
 import studioHybrid from "../assets/studio-hybrid.png";
@@ -64,15 +64,16 @@ export default function EvalCatalog() {
 
       <h2>Browsing the catalog</h2>
       <p>
-        Every eval - library metric, custom G-Eval, or hybrid - lives in one searchable catalog,
-        organized by family. This catalog lives in Agent Score's Back Office, maintained by the
-        Agent Score team rather than browsed self-serve in the customer app - the families table
-        below is the customer-facing summary of what's in it.
+        Open <strong>Evals</strong> in the left nav and the <strong>Built-in evals</strong> tab
+        lists every eval that ships with Agent Score, each with the dimensions it feeds and a
+        one-line description of what it checks. Search by name or slug, or filter by dimension.
+        The neighboring <strong>Dimensions</strong> and <strong>Profiles</strong> tabs show how
+        those evals are grouped and bundled.
       </p>
       <Screenshot
-        src={catalogDoor}
-        alt="The eval catalog, showing 62 evals as a grid of templates and metrics like Template: Tool Success Rate, Template: Safe Non-Toxic Output, Failure Attribution, and Faithfulness (EvalClaw), filterable by kind, status, and dimension"
-        caption="The catalog view - browse by category, or search templates and metrics directly."
+        src={builtInCatalog}
+        alt="The Evals area's Built-in evals tab, showing eval cards such as Template: Safe, Non-Toxic Output, Template: Helpful, On-Point Answer, Out-of-Scope Request, and User Disagreement, each with its slug, dimensions, a short description, and a Built-in tag, with a search box and a Dimension filter"
+        caption="The Built-in evals tab - every eval that ships with Agent Score, searchable and filterable by dimension."
       />
 
       <h2>Families in the catalog</h2>
@@ -112,7 +113,9 @@ export default function EvalCatalog() {
       </table>
 
       <p>
-        Evals are the smallest unit of measurement. The next page covers how they combine into{" "}
+        Need a check the catalog doesn't have? You can write your own - see{" "}
+        <a href="#/custom-evals">building your own evals</a>. Evals are the smallest unit of
+        measurement; the next page covers how they combine into{" "}
         <a href="#/dimensions-and-profiles">dimensions and profiles</a> to produce a single score.
       </p>
     </>

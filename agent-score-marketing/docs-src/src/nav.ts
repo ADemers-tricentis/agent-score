@@ -43,6 +43,11 @@ export const nav: NavSection[] = [
         blurb: "41 ready-made evals, from strict rules to human-like judgment.",
       },
       {
+        slug: "custom-evals",
+        title: "Building Your Own Evals",
+        blurb: "Write a check in plain language, preview it, and publish it.",
+      },
+      {
         slug: "dimensions-and-profiles",
         title: "Dimensions & Profiles",
         blurb: "How individual evals roll up into a single score.",

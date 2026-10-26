@@ -43,9 +43,14 @@ export default function AgentCard() {
       </p>
       <Screenshot
         src={agentCardCustomer}
-        alt="A real Agent Card for testcase.generate, showing a purpose labeled as synthesized by the judge model, behavioral patterns, success criteria, failure modes, and an observed tools table with call counts and success rates"
-        caption='An actual Agent Card from the Agent Score app. Purpose is labeled "Synthesized by the model - a draft, not a verified declaration," and tool descriptions are marked inferred.'
+        alt="A real Agent Card for rag-support-agent, showing an evidence snapshot (32 sampled traces, 1 observed tool), a purpose labeled as synthesized by the model, an observed tool activity table with calls and successful calls, and collapsible Typical behavior, Suggested success criteria, and Potential failure modes sections marked Draft, not verified"
+        caption='An actual Agent Card from the Agent Score app. Purpose is labeled "Synthesized by the model - a draft, not a verified declaration," and the interpretation sections are marked "Draft - not verified."'
       />
+      <p>
+        The card opens with an <strong>evidence snapshot</strong> - how many traces it sampled,
+        over which dates, and how many tools it saw - so you know exactly what it's based on.{" "}
+        <strong>Regenerate</strong> rebuilds it from your agent's latest traces.
+      </p>
 
       <Callout kind="note" title="Nothing here is hand-entered">
         <p>

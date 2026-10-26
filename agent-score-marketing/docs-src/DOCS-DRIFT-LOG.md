@@ -12,6 +12,166 @@ Each audit appends a dated section. Newest first.
 
 ---
 
+## 2026-10-26 - docs-sync agent run
+
+- **Site audited:** https://agent-score.stg.ai.tricentis.com (staging, per `AGENT_SCORE_SITE_URL` in `.env`; production `https://agent-score-customer.product.tricentis.com/` still returns 404, so staging was audited instead. Fresh Playwright profile; the first pass stopped at the Okta sign-in, the user signed in in that window, and the walk resumed.)
+- **GitHub scan:** 93 PRs merged since 2026-09-28T16:26:48Z (#756 is the boundary PR already covered last run), 32 kept as customer-facing (#760, #762, #763, #771, #779, #797, #799, #801, #803, #804, #817, #818, #819, #823, #825, #829, #830, #831, #833, #834, #835, #836, #838, #839, #840, #845, #846, #847, #848, #849, #851, #852)
+- **Result:** 21 discrepancies (13 docs-should-update, 2 product-should-catch-up, 6 pending-verification)
+
+### Doc edits made
+
+- Page: eval-catalog / `EvalCatalog.tsx`
+  Claim in docs: The catalog "lives in Agent Score's Back Office ... rather than browsed self-serve in the customer app." The screenshot alt text says "62 evals."
+  Reality in prod: The customer app has an **Evals** area (`/evals`) with My drafts / Our evals / Built-in evals / Dimensions / Profiles tabs. Built-in evals lists 41 evals (matching the docs' 41), and there are 11 dimensions (matching the docs).
+  Direction: docs-should-update
+  Fix: Rewrote "Browsing the catalog" around the Built-in evals tab, replaced `catalog-door.png` with `evals-builtin-catalog.png`, and linked the new custom-evals page.
+  Severity: high
+  PR: https://github.com/Tricentis-AI/agent-score/pull/803
+
+- Page: custom-evals (new) / `CustomEvals.tsx`, `nav.ts`, `content/index.ts`
+  Claim in docs: No page. The Custom Evals page was dropped on 2026-10-01 when evals were Back Office only, but Welcome still says "how to build your own in plain English."
+  Reality in prod: Create -> Eval / Dimension / Profile. The New eval form has name/slug, dimensions, default threshold, input needs, three answers (what is checked / full score / zero) with a read-only compiled rubric, and "Preview on an agent" (up to 5 traces, about $1.00 per trace, billed to AI credits, nothing saved). Save draft (visible only to you) or Save and publish. An organization chip/picker sits in the header, and the Profile tab has "Create an eval / a profile for this agent".
+  Direction: docs-should-update
+  Fix: New page "Building Your Own Evals" under Evaluations, a new asset `custom-eval-three-answers.png`, and a new Glossary term "Custom eval".
+  Severity: high
+  PR: https://github.com/Tricentis-AI/agent-score/pull/801, https://github.com/Tricentis-AI/agent-score/pull/803, https://github.com/Tricentis-AI/agent-score/pull/823
+
+- Page: dimensions-and-profiles / `DimensionsAndProfiles.tsx`
+  Claim in docs: "Brand-new agents start on General Answerer ... falls back to until ... evidence diversity hasn't yet crossed the threshold ... not a placeholder."
+  Reality in prod: New agents are bound to **Default v1** ("Placeholder profile auto-assigned to every new agent. It carries no checks ... no scoring run is created against it"). The Profile tab says "captured 5 of the 20 traces needed before a scoring profile can be chosen." After 20 traces a real profile is picked even with diversity below 3.0 (chatbotagentgraph is on Task Agent with "evidence diversity 1.430 still below the 3.0 threshold"). This also resolves the 2026-09-28 pending "Default" item: it is a placeholder, not an 8th customer profile.
+  Direction: docs-should-update
+  Fix: Replaced the paragraph with the Default-placeholder / Learning-your-agent / Fit history description, and added a note that "Default" appears in profile lists as a placeholder.
+  Severity: high
+
+- Page: dimensions-and-profiles / `DimensionsAndProfiles.tsx`
+  Claim in docs: `profile-tab-general-answerer.png` shows the old 4-tab layout (Score / Agent Card / Profile / Activity).
+  Reality in prod: There are 7 tabs, and an "Evals for this agent" section sits at the top of the Profile tab.
+  Direction: docs-should-update
+  Fix: New screenshot `profile-tab-task-agent.png` (chatbotagentgraph, Task Agent), updated alt text and caption, deleted the old file, and added a sentence on the Create an eval / profile shortcuts.
+  Severity: medium
+  PR: https://github.com/Tricentis-AI/agent-score/pull/803
+
+- Page: workspace-assistant / `WorkspaceAssistant.tsx`
+  Claim in docs: "the only action it can take is starting a scoring run." Sessions are "scoped to one tenant." The screenshots show the old copy.
+  Reality in prod: The new-session copy says it "changes something only after you approve it: starting a scoring run, drafting, versioning, publishing and previewing evals and profiles, or queuing a profile's agents for re-scoring." The copy says "your organization's agents."
+  Direction: docs-should-update
+  Fix: Rewrote the callout and wording, and replaced `assistant-intro.png` and `assistant-input.png`.
+  Severity: high
+  PR: https://github.com/Tricentis-AI/agent-score/pull/804, https://github.com/Tricentis-AI/agent-score/pull/829
+
+- Page: connect-your-agent / `ConnectYourAgent.tsx`
+  Claim in docs: Integrations is described as an API-keys table only.
+  Reality in prod: There is a "Connect from your coding agent" card above the keys: MCP server URL, Claude Code / Cursor / Claude Desktop tabs, a setup prompt, browser sign-in with "No headers, no token", and a note about retrying a failed sign-in.
+  Direction: docs-should-update
+  Fix: New "Let your coding agent do the setup" section, plus a replaced `integrations-tab.png` with updated alt text and caption.
+  Severity: medium
+  PR: https://github.com/Tricentis-AI/agent-score/pull/833
+
+- Page: connect-your-agent / `ConnectYourAgent.tsx`
+  Claim in docs: "From the Agents page, **+ Connect Agent**."
+  Reality in prod: The page is "My Agents" and the button is "Connect Agent". The wizard content matches the docs.
+  Direction: docs-should-update
+  Fix: Updated the label.
+  Severity: low
+
+- Page: scorecard / `Scorecard.tsx`, glossary / `Glossary.tsx`
+  Claim in docs: The 0-39 band is "Block".
+  Reality in prod: Agents scored 20.0 (function-caller-stg-test) and 16.6 (e2e-sim-043953) show **Don't ship** on the Score tab, My Agents, and Home. Settings -> Verdict thresholds says "Below the lowest floor is 'Don't ship'." This closes the 2026-08-27 "could not confirm the live label for the 0-39 band" item.
+  Direction: docs-should-update
+  Fix: Changed the table row and the Glossary verdict list to "Don't ship".
+  Severity: high
+
+- Page: scorecard / `Scorecard.tsx`
+  Claim in docs: `scorecard-tab.png` shows 4 tabs and "scored / skipped / failed / retired" counts.
+  Reality in prod: There are 7 tabs, and the counts are "107 scored / 33 could not be evidenced / 0 retired".
+  Direction: docs-should-update
+  Fix: Replaced the screenshot with chatbotagentgraph, 99.8 Ship, and updated the alt text.
+  Severity: medium
+
+- Page: scorecard / `Scorecard.tsx`
+  Claim in docs: Each eval result "carries ... the trace span it came from" (no link).
+  Reality in prod: The trace IDs in the "Where the score comes from" drill-down link to `/tenants/<t>/agents/<a>/traces/<id>` (confirmed on chatbotagentgraph -> task_completion).
+  Direction: docs-should-update
+  Fix: Added a sentence linking to the Traces page.
+  Severity: low
+  PR: https://github.com/Tricentis-AI/agent-score/pull/779
+
+- Page: agent-card / `AgentCard.tsx`
+  Claim in docs: The screenshot shows the old layout (4 tabs, "Synthesized by the judge model", flat lists, an observed-tools table with inferred descriptions).
+  Reality in prod: The card has an Evidence snapshot (sampled traces, date range, observed tools), a Regenerate button, an "Observed tool activity" table (Calls / Successful calls) with "View generated tool descriptions", and collapsible Typical behavior / Suggested success criteria / Potential failure modes marked "Draft - not verified".
+  Direction: docs-should-update
+  Fix: Replaced `agent-card-customer.png` (rag-support-agent), updated the alt text and caption, and added a paragraph on the evidence snapshot and Regenerate.
+  Severity: medium
+
+- Page: welcome / `Welcome.tsx`
+  Claim in docs: `home-dashboard.png` and its alt text show a per-day "verdict trend table" of Ship / Review / Block chips.
+  Reality in prod: Verdict trend is a three-line sparkline chart with a 7-day total per verdict.
+  Direction: docs-should-update
+  Fix: Replaced the screenshot and updated the alt text.
+  Severity: medium
+  PR: https://github.com/Tricentis-AI/agent-score/pull/760
+
+- Page: welcome / `Welcome.tsx`
+  Claim in docs: Terms of Service are not mentioned.
+  Reality in prod: The Account page (sidebar Settings) has a "Terms of Service" card: "You accepted version 1 for tais on 10/2/2026", a SHA-256 fingerprint, "Download the version you accepted", and "Current terms".
+  Direction: docs-should-update
+  Fix: Added a short callout.
+  Severity: low
+  PR: https://github.com/Tricentis-AI/agent-score/pull/762
+
+### Product gaps (logged only)
+
+- Page: dimensions-and-profiles / scorecard (Profile tab "The bar")
+  Claim in docs: The verdict labels are Ship / Ship with note / Needs work / Don't ship (recommended) / Don't ship.
+  Reality in prod: The Profile tab's "The bar" still reads Review required / Block recommended / Block, while the Score tab, My Agents, Home and Settings -> Verdict thresholds use the docs' labels. This is the 6th audit in a row confirming it. Note that the new `profile-tab-task-agent.png` necessarily shows the old Profile-tab labels, as the previous screenshot did.
+  Direction: product-should-catch-up
+  Fix: log only - product gap
+  Severity: medium
+
+- Page: scoring-engine / `ScoringEngine.tsx`
+  Claim in docs: The judge model supports "Anthropic Claude, OpenAI, Azure OpenAI, and Amazon Bedrock", and you pick the provider on the Settings tab.
+  Reality in prod: The Settings -> Model connection Provider dropdown offers only **bedrock** and **ai hub** (checked on rag-support-agent).
+  Direction: product-should-catch-up (see Judgment calls)
+  Fix: log only - product gap
+  Severity: medium
+
+### Pending verification
+
+- Page: connect-your-agent - PR #839 (per-client MCP setup guide: Codex, Claude apps, "Another client", scope choices, Troubleshooting). Staging still shows the earlier three-tab card (Claude Code / Cursor / Claude Desktop). The docs describe only what is live. Fix: log only - re-check next run. Severity: low. PR: https://github.com/Tricentis-AI/agent-score/pull/839
+- Page: welcome - PRs #762 / #763 (terms gate at sign-in with Download PDF and Print). I could not see the gate because this account had already accepted. Fix: log only - re-check next run. Severity: low. PR: https://github.com/Tricentis-AI/agent-score/pull/763
+- Page: (none) - PR #836 (merged same-named internal/external tenants in tenant filters, tagged "external · internal"). The My Agents tenant filter still lists "tais" twice with no tag. Fix: log only - re-check next run. Severity: low. PR: https://github.com/Tricentis-AI/agent-score/pull/836
+- Page: connect-your-agent - PRs #838, #840, #845-#849, #851, #852 (MCP tools, prompts, and the onboarding / product-concepts resources). These can't be seen in the web UI, and I didn't verify them through an MCP client. Fix: log only - re-check next run. Severity: low. PR: https://github.com/Tricentis-AI/agent-score/pull/852
+- Page: custom-evals - PRs #825 / #830 / #819 (re-score wording "queued, running with the agent's next scoring run", unsaved-answers prompt, preview surviving a reload, the profile builder and apply-and-re-score). I did not exercise these, because they would need filling and submitting forms or spending credits. The new page avoids claiming them. Fix: log only - re-check next run. Severity: low. PR: https://github.com/Tricentis-AI/agent-score/pull/825
+- Page: (none) - PRs #771 (example-agent removal), #797 (traces over 8 MiB left out of scoring), #799 (plain `tenant` attribute accepted). #771 would mean removing an example agent, and #797 / #799 are backend-only, so none were observable in the walk. No doc currently claims otherwise. Fix: log only - re-check next run. Severity: low. PR: https://github.com/Tricentis-AI/agent-score/pull/797
+
+### Held for review
+
+None. I checked all 93 PR bodies and the walked pages for instruction-like content and found nothing.
+
+### Judgment calls
+
+- **Staging, not production.** `.env` points at staging and production returns 404, so everything above was checked against staging. Staging may carry features that haven't reached production (custom evals, MCP), so the docs now describe staging behavior.
+- **Judge-model providers classified product-should-catch-up.** The docs' four-provider list reads like the intended spec, so I didn't narrow it to "bedrock / ai hub." If the dropdown is the real, final list, flip this to docs-should-update.
+- **Custom evals page scope.** I wrote only what I saw (Evals area tabs, Create menu, New eval form, preview limits, draft/publish). The line "ready to add to a profile alongside built-in evals" rests on the Create -> Profile entry and PR #803's profile-builder description; I did not walk the profile builder itself.
+- **Terms of Service callout** comes from the Account page card. The gate itself was inferred, not seen.
+- **Kept `studio-library.png`, `studio-geval.png`, `studio-hybrid.png`** (Back Office eval detail views from August). Their captions don't claim a location, but customers now see eval detail in the Evals area, so they may want refreshing.
+- **Home's verdict trend groups runs as Ship / Review / Block** while individual verdicts read "Don't ship". I read this as a grouping label, not a verdict label, and didn't log it as a gap.
+- **AI credits chip missing** from the new Score and Profile tab screenshots. It renders after a delay on agent pages (it's present on the Agent Card capture taken the same way). Cosmetic only.
+- **Dropped as internal or cosmetic but borderline:** #781-#783 (sign-in sizing), #772 (sign-in browser compatibility), #787 (synced the in-app `/docs` copy - worth knowing it exists), #795 (repo-internal docs).
+- **Agent detail tabs** are Score / Improve / Agent Card / Traces / Profile / Labeling / Settings. There is no "Activity" tab any more; recent activity sits at the bottom of the Profile tab. No doc page names an Activity tab.
+
+### File changes
+
+- Pages: edited `Welcome.tsx`, `ConnectYourAgent.tsx`, `WorkspaceAssistant.tsx`, `EvalCatalog.tsx`, `DimensionsAndProfiles.tsx`, `AgentCard.tsx`, `Scorecard.tsx`, `Glossary.tsx`, `content/index.ts`, `nav.ts`; added `CustomEvals.tsx`
+- Assets: replaced `home-dashboard.png`, `integrations-tab.png`, `assistant-intro.png`, `assistant-input.png`, `scorecard-tab.png`, `agent-card-customer.png`; added `evals-builtin-catalog.png`, `profile-tab-task-agent.png`, `custom-eval-three-answers.png`; removed `catalog-door.png`, `profile-tab-general-answerer.png`
+- `CHANGELOG.md`: `## [0.40.0] - 2026-10-26`
+- `package.json` version: 0.39.0 -> 0.40.0 (minor: the entry has Added items, including a new page)
+- `docs/index.html`: rebuilt (`pnpm run build` passed)
+- `.last-github-sync`: 2026-09-28T16:26:48Z -> 2026-10-26T15:55:41Z
+- Not committed, not pushed.
+
+---
+
 ## 2026-09-28 — GitHub merge scan + staging walk (Playwright, session already authenticated)
 
 Production (`https://agent-score-customer.product.tricentis.com`) returned

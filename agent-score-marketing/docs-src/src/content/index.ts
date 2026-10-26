@@ -3,6 +3,7 @@ import Welcome from "./Welcome";
 import ConnectYourAgent from "./ConnectYourAgent";
 import WorkspaceAssistant from "./WorkspaceAssistant";
 import EvalCatalog from "./EvalCatalog";
+import CustomEvals from "./CustomEvals";
 import DimensionsAndProfiles from "./DimensionsAndProfiles";
 import ScoringEngine from "./ScoringEngine";
 import AgentCard from "./AgentCard";
@@ -18,6 +19,7 @@ export const pages: Record<string, ComponentType> = {
   "connect-your-agent": ConnectYourAgent,
   "workspace-assistant": WorkspaceAssistant,
   "eval-catalog": EvalCatalog,
+  "custom-evals": CustomEvals,
   "dimensions-and-profiles": DimensionsAndProfiles,
   "scoring-engine": ScoringEngine,
   "agent-card": AgentCard,

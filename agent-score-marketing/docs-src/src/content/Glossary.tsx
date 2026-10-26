@@ -38,12 +38,16 @@ const terms: { term: string; def: string }[] = [
     def: "An automatically generated summary of what an agent does - its purpose, behavior patterns, tools used, success criteria, and common failure modes.",
   },
   {
+    term: "Custom eval",
+    def: "An eval your organization writes itself in the Evals area, by answering three questions: what is checked, what earns a full score, and what earns zero. A draft is visible only to its author until it's published.",
+  },
+  {
     term: "Composite score",
     def: "The single 0-100 number produced by combining every weighted dimension in an agent's profile.",
   },
   {
     term: "Verdict",
-    def: "The plain-language recommendation the composite score maps to: Ship, Ship with note, Needs work, Don't ship (recommended), or Block.",
+    def: "The plain-language recommendation the composite score maps to: Ship, Ship with note, Needs work, Don't ship (recommended), or Don't ship.",
   },
   {
     term: "Threshold",
