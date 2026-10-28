@@ -1,3 +1,19 @@
+## October 26, 2026 Update
+
+### Connect Agent Score from your coding agent
+- The Integrations page now walks through setup for Claude Code, Cursor, Codex, and Claude. Sign-in happens in your browser.
+- Paste the server URL whole. It names your account. After you approve the connection, your coding agent can create an ingest key and check that traces are arriving.
+- A connected agent can also read how to instrument an agent and how a score is produced.
+
+### Score and tune the agent from the same connection
+- Your coding agent can start a scoring run, read the score and the interactions behind it, and open the trace when a run fails.
+- It can fit or switch the scoring profile, ask how to improve the agent, and label interactions. Labels it writes are marked as coming from the coding agent, and you can retire them.
+- It can draft a check, a dimension, and a profile, and preview a check on your own traces. Scoring, preview, and re-score started this way are capped on the server.
+
+### Coming next
+- Cutting agent tracing over to push directly from internal agents instead of pulling from Better Stack
+- Small additions to the API gateway and session services to finish production readiness
+
 ## October 22, 2026 Update
 
 ### More internal-agent traces reach scoring

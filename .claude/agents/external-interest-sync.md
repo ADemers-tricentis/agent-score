@@ -215,6 +215,3 @@ confirmation that the mail-merge CSV was regenerated and the contacts log
 appended, and the audit-log entry's timestamp. Lead with anything in
 **Held for review** or **Judgment calls** so the user sees it first. If you
 stopped early, say exactly where and why.
-
-Tracing is handled outside you: a SubagentStop hook exports this run's
-transcript to AgentScore. Don't run any export yourself.

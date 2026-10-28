@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 138 form submissions found (as of 2026-10-22), sorted newest first. Excluded as internal `@tricentis.com` submitters: Ashutosh Kotkar (2026-09-25) and Srinivasa Rao K (2026-10-01), both under Tricentis GmbH (AT) - HQ. Fun Tat Chen (2026-10-02) is a second submitter at Singapore Pools and is stacked on that entry rather than counted as a new company. Ajay Kharb and Praveer Bakshi (2026-10-19/20, Accenture), Konrad Greszata (2026-10-13, Capgemini) and Jeroen Kuijper (2026-10-21, Sogeti Netherlands) are likewise stacked on existing company entries. Antonio Sglavo (2026-10-22, Accenture SpA), Julian Raach and Yash Jawale (2026-10-22, Hugo Boss), Edmundo Barahona (2026-10-22, Sogeti Deutschland), Mathieu Philippe (2026-10-22, Itecor FR) and Simon Kreitmayer (2026-10-22, SKYPhoenix IT GmbH, which appears to be the renamed Dolpheen IT Solutions) are also stacked on existing entries. Repeats not tracked separately: Rohan Bansod (New Vision Software, two submissions 2026-10-15) and Praveer Bakshi (a second 2026-10-19 submission with the company field blank).
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 144 form submissions found (as of 2026-10-26), sorted newest first. Excluded as internal `@tricentis.com` submitters: Ashutosh Kotkar (2026-09-25) and Srinivasa Rao K (2026-10-01), both under Tricentis GmbH (AT) - HQ. Fun Tat Chen (2026-10-02) is a second submitter at Singapore Pools and is stacked on that entry rather than counted as a new company. Ajay Kharb and Praveer Bakshi (2026-10-19/20, Accenture), Konrad Greszata (2026-10-13, Capgemini) and Jeroen Kuijper (2026-10-21, Sogeti Netherlands) are likewise stacked on existing company entries. Antonio Sglavo (2026-10-22, Accenture SpA), Julian Raach and Yash Jawale (2026-10-22, Hugo Boss), Edmundo Barahona (2026-10-22, Sogeti Deutschland), Mathieu Philippe (2026-10-22, Itecor FR) and Simon Kreitmayer (2026-10-22, SKYPhoenix IT GmbH, which appears to be the renamed Dolpheen IT Solutions) are also stacked on existing entries. Repeats not tracked separately: Rohan Bansod (New Vision Software, two submissions 2026-10-15) and Praveer Bakshi (a second 2026-10-19 submission with the company field blank).
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -30,14 +30,20 @@ What accounts we have talked to say they build or run agents on. Counts are comp
 
 | Interested companies | Companies replied | Demos | Pending betas | Active betas |
 |---|---|---|---|---|
-| 105 | 14 | 13 | 1 | 6 |
+| 111 | 14 | 13 | 1 | 6 |
 
-Source breakdown: 101 via the Labs form, 3 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E), 1 via David (VP of AI/ML) (Eaton) = 105 total. Ferrara Candy Company is listed below but not counted: Sudha Damacherla signed up by accident for a different product (2026-10-20).
+Source breakdown: 107 via the Labs form, 3 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E), 1 via David (VP of AI/ML) (Eaton) = 111 total. Ferrara Candy Company is listed below but not counted: Sudha Damacherla signed up by accident for a different product (2026-10-20).
 
 Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
 
 | Company | Contact | Status |
 |---|---|---|
+| Sun Life (form blank, domain-resolved) | Kishore Kumar | Interested |
+| Thought Frameworks | Roopa S | Interested |
+| NTT Data (UK) | Stinu Easo | Interested |
+| Mattoni 1873 a.s. | Ondrej Kyzek | Interested |
+| QACooper LLC | Michael W Cooper | Interested |
+| Telekom Deutschland GmbH | André Hoffmann | Interested |
 | Ashurst LLP (UK) | Ankush Shrivastava | Email sent — 2026-10-22 |
 | Sky Plc (UK) - HQ | Mario D'Amico | Email sent — 2026-10-22 |
 | TotalEnergies (FR) - HQ | Olivier Soulard | Email sent — 2026-10-22 |
@@ -146,6 +152,108 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Singapore Pools (form blank, domain-resolved) | Nai Hau Lui, Fun Tat Chen | Email sent — 2026-09-23 |
 
 *(Status values: Interested → Email sent → Follow-up sent → Replied → Demo scheduled → Pending beta → Active beta. Not a fit is terminal, for accidental or wrong-product signups.)*
+
+---
+
+### - (form blank; email domain suggests Sun Life)
+Date: 2026-10-26 17:37  
+Name: Kishore Kumar  
+Title: Test Lead  
+Relationship: Other  
+
+Email sent: -  
+Beta scheduled: -  
+
+what they do: Canadian life insurance, wealth and asset management group (Sun Life Financial), operating across Canada, the US and Asia.
+
+likely use case: given a Test Lead and Sun Life's advisor-facing GenAI tools now in production, most plausibly testing the quality of those assistants as they change - an inference, not a confirmed need. "Other" as the relationship gives little extra signal.
+
+known agent tooling: a GenAI notes assistant that summarizes advisor meetings and drafts follow-ups ([Sun Life](https://www.sunlife.ca/en/about-us/newsroom/news-releases/announcement/sun-life-puts-ai-to-work-so-advisors-can-spend-more-time-delivering-trusted-advice/124122/); [Advisor.ca](https://advisor.ca/industry-news/tech-roundup-sun-life-uses-generative-ai-notetaking-tool/)), and an AI concierge for advisors that Sun Life says was used in more than 11,000 client conversations in its first month (company-reported) ([Wealth Professional](https://www.wealthprofessional.ca/news/industry-news/sun-life-ai-concierge-fields-11000-client-conversations-in-its-first-month/393321)). Coverage also mentions an internal agentic AI platform for technology architects ([Coverager](https://coverager.com/sun-life-expands-ai-tools-for-advisors/)). Older client-facing assistant "Ella" dates from 2017 ([BrainStation](https://brainstation.io/magazine/sun-life-introduces-intelligent-digital-coach-ella)).
+
+---
+
+### Thought Frameworks
+Date: 2026-10-26 06:02  
+Name: Roopa S  
+Title: Automation Lead  
+Relationship: Partner  
+
+Email sent: -  
+Beta scheduled: -  
+
+what they do: QA and software services firm founded in 2009, headquartered in Covina, CA, with offices in Bengaluru, Eindhoven and Munich; services include test automation, performance and SAP quality engineering ([LinkedIn](https://www.linkedin.com/company/thought-frameworks); [Indeed](https://in.indeed.com/cmp/Thought-Frameworks)).
+
+likely use case: given an Automation Lead at a Tricentis Partner (they sponsored Transform London 2026 and market Tosca-based automation), most plausibly evaluating Agent Score to offer AI agent testing to their own clients - an inference, not a confirmed need.
+
+known agent tooling: no public information found tying Thought Frameworks to a deployed agent product; their public posts talk about "AI Quality Engineering" and AI-powered testing as a service line ([LinkedIn](https://www.linkedin.com/company/thought-frameworks)).
+
+---
+
+### NTT Data (UK)
+Date: 2026-10-23 14:25  
+Name: Stinu Easo  
+Title: QA  
+Relationship: Partner  
+
+Email sent: -  
+Beta scheduled: -  
+
+what they do: UK arm of NTT DATA; the submitter's email domain points to NTT DATA Business Solutions, the group's SAP-focused services business (formerly itelligence) ([NTT DATA Business Solutions](https://nttdata-solutions.com/uk/blog/ntt-data-sap-uk-ntt-data-sap-or-ntt-data-business-solutions/)).
+
+likely use case: given a QA role at a Partner SI that sells agentic AI build and managed services, most plausibly evaluating ways to test the agents it delivers for clients, possibly SAP-adjacent ones - an inference, not a confirmed need.
+
+known agent tooling: NTT DATA markets a "Smart AI Agent" ecosystem of industry agents, a platform and an agent marketplace ([NTT DATA UK](https://uk.nttdata.com/news/ntt-data-unveils-smart-ai-agent-ecosystem)), and launched agentic AI services for hyperscaler platforms from London ([Business Wire](https://www.businesswire.com/news/home/20250320628624/en/NTT-DATA-Launches-Agentic-AI-Services-for-Hyperscaler-AI-Technologies)). No public information found on agent testing as a specific NTT DATA UK service.
+
+---
+
+### Mattoni 1873 a.s.
+Date: 2026-10-23 11:43  
+Name: Ondrej Kyzek  
+Title: Business Solutions IT manager  
+Relationship: Customer  
+
+Email sent: -  
+Beta scheduled: -  
+
+what they do: Czech mineral water and soft drinks group (formerly Karlovarské minerální vody, renamed 2019) with about 12 production sites and 3,200 employees in 8 countries ([Mattoni 1873](https://www.mattoni1873.cz/en/media/karlovarske-mineralni-vody-adopt-new-identity-mattoni-1873); [Wikipedia](https://en.wikipedia.org/wiki/Mattoni_1873)).
+
+likely use case: given a Business Solutions IT manager at a Customer account, most plausibly exploring how to test AI features in business applications before rolling them out - an inference, not a confirmed need, and there is little public detail to go on.
+
+known agent tooling: no public information found tying Mattoni 1873 to a deployed agent product; the only public AI use found is in marketing, for its 150th-anniversary campaign ([MediaGuru](https://www.mediaguru.cz/mattoni-1873-prilezitosti-hledame-neustale)).
+
+---
+
+### QACooper LLC
+Date: 2026-10-22 22:02  
+Name: Michael W Cooper  
+Title: CEO  
+Relationship: Partner  
+
+Email sent: -  
+Beta scheduled: -  
+
+what they do: no public company information found; the name and domain suggest a small QA consultancy. A QA leader named Michael Cooper has public profiles (Transamerica, Healthcare IT Leaders), but nothing found links him to QACooper LLC ([TechWell](https://members.techwell.com/speakers/michael-cooper); [Healthcare IT Leaders](https://www.healthcareitleaders.com/blog/healthcare-leaders-healthcare-leaders-adds-chief-quality-officervp-enterprise-qa-testing-services/)).
+
+likely use case: given a CEO at a Partner-relationship QA firm, most plausibly evaluating Agent Score as something to offer consulting clients - an inference, not a confirmed need.
+
+known agent tooling: no public information found tying QACooper LLC to a deployed agent product.
+
+---
+
+### Telekom Deutschland GmbH
+Date: 2026-10-22 14:26  
+Name: André Hoffmann  
+Title: Senior Test Automation Architect  
+Relationship: Partner  
+
+Email sent: -  
+Beta scheduled: -  
+
+what they do: German operating company of Deutsche Telekom, providing mobile, fixed-line and broadband services in Germany.
+
+likely use case: given a Senior Test Automation Architect and a large production customer-service assistant built on many agents, most plausibly testing those agents (e.g. Frag Magenta) for quality and regressions - an inference, not a confirmed need. "Partner" as the relationship is unusual for an operator and may reflect a Tricentis partnership rather than consulting.
+
+known agent tooling: "Frag Magenta" customer-service assistant, on Rasa NLU and connected to the service hotline by voice ([Deutsche Telekom](https://www.telekom.com/en/company/digital-responsibility/details/artificial-intelligence-at-deutsche-telekom-1055154); [Rasa](https://rasa.com/customers/deutsche-telekom-cs), vendor-reported figures); Deutsche Telekom's open-source LMOS agent platform runs agents for contracts, billing and technical support ([Eclipse LMOS](https://eclipse.dev/lmos/blog/LMOS-Accelerated-Agent-Dev/)); a network-embedded Magenta AI Call Assistant built with ElevenLabs ([ElevenLabs](https://elevenlabs.io/de/blog/deutsche-telekom)).
 
 ---
 

@@ -6,7 +6,7 @@ description: >-
   Agent Score onboarding docs against production, "sync the docs", "audit the
   onboarding flow", find where the docs drifted from the real product, or update
   the docs site after the product changed. Walks the production onboarding flow
-  at agent-score-customer.product.tricentis.com, cross-checks merged PRs on the
+  at agent-score.ai.tricentis.com, cross-checks merged PRs on the
   Tricentis-AI/agent-score GitHub repo so new features don't get missed, records
   every discrepancy against the docs in agent-score-marketing/docs-src, updates
   the doc pages, logs the changes to a CHANGELOG, and (after you approve the
@@ -33,7 +33,7 @@ those gaps, and closes them.
   file produced by `pnpm run build`. It is committed alongside the source, and
   the deploy/build is triggered by pushing that file. **Always rebuild and commit
   it together with the source change.**
-- **Production site to audit:** `https://agent-score-customer.product.tricentis.com`
+- **Production site to audit:** `https://agent-score.ai.tricentis.com`
 - **Product GitHub source** (a different repo from this one):
   `https://github.com/Tricentis-AI/agent-score`. Only merged, customer-facing
   PRs count - this is a signal of what to go look for, not a substitute for
@@ -55,7 +55,7 @@ Read non-secret config from `agent-score-marketing/docs-src/.env` if it exists.
 Recognized keys (all optional; fall back to the defaults above):
 
 ```
-AGENT_SCORE_SITE_URL=https://agent-score-customer.product.tricentis.com
+AGENT_SCORE_SITE_URL=https://agent-score.ai.tricentis.com
 ```
 
 **Never read a password or token out of `.env` and type it into a login form.**
@@ -147,7 +147,7 @@ Open the site in the browser and go through the onboarding exactly as a new
 customer would. Specifically check for anything you flagged in step 3.
 
 **Getting a browser that can reach the site.** The site is an internal Tricentis
-domain (`*.product.tricentis.com`). Two things block the obvious paths:
+domain (`*.ai.tricentis.com`). Two things block the obvious paths:
 
 - The **in-app Browser pane is blocked by policy** for this domain -
   `preview_start`/`navigate` there will refuse it. Don't rely on it.
@@ -157,7 +157,7 @@ domain (`*.product.tricentis.com`). Two things block the obvious paths:
 The reliable path is **Playwright driving a headed browser that the user logs into
 manually**. The host machine (on VPN) can reach the site even though the browser
 tool can't - confirm with
-`curl -sS -o /dev/null -w "%{http_code}" https://agent-score-customer.product.tricentis.com/`
+`curl -sS -o /dev/null -w "%{http_code}" https://agent-score.ai.tricentis.com/`
 (expect `200`). Then:
 
 1. Playwright is installed as the Homebrew **Python** package. Find the browser

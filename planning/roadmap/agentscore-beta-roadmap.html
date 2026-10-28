@@ -70,6 +70,7 @@
     border-left: 7px solid #9aa6c4; border-top: 5px solid transparent; border-bottom: 5px solid transparent;
   }
   .step.decision { border: 2px dashed var(--now); background: #fbfffd; flex-direction: column; align-items: flex-start; justify-content: center; }
+  .step.wide { width: 248px; min-height: 92px; }
   .branches { display: flex; gap: 6px; margin-top: 6px; font-size: 11px; }
   .branches span { background: var(--now-bg); color: var(--now-ink); border-radius: 6px; padding: 2px 6px; }
   .loopnote {
@@ -145,7 +146,7 @@
   <div class="wrap" style="padding-bottom:0">
     <h1>AgentScore Roadmap</h1>
     <p>Beta onboarding and self-improvement</p>
-    <div class="meta">Last updated 10-20-2026 &middot; Horizons: Now / Next / Later</div>
+    <div class="meta">Last updated 10-22-2026 &middot; Horizons: Now / Next / Later</div>
   </div>
 </header>
 
@@ -158,13 +159,13 @@
     </div>
     <div class="card">
       <h3>North star</h3>
-      <p>Get AgentScore to as many beta users as possible. The product must prove its value, and users must actually use it and benefit from it. Users should be able to onboard, score, and improve their agents as simply and quickly as possible.</p>
+      <p>Get as many users, including internal users, as possible using AgentScore regularly. The product must prove its value: users must actually use it and benefit from it. Users should be able to onboard, score, and improve their agents as simply and quickly as possible.</p>
     </div>
   </section>
 
   <!-- ================= USER FLOW ================= -->
   <h2 class="section">Target user flow</h2>
-  <p class="sub">From sign-up to measurable improvement. Step numbers match the feature cards below. Dynamic scoring is Next and is not a numbered step.</p>
+  <p class="sub">From sign-up to measurable improvement. Step numbers match the feature cards below. Step 7 is the Now part of dynamic scoring. The scorecard and session grouping stay Next and are not numbered steps.</p>
 
   <section class="card flow">
 
@@ -179,11 +180,11 @@
         <div class="step"><span class="n">4</span>Getting Started guide gives MCP connection instructions</div>
         <div class="step"><span class="n">5</span>User points their agent at the MCP</div>
         <div class="step"><span class="n">6</span>Agent runs connect commands, AgentScore ingests traces</div>
-        <div class="step"><span class="n">7</span>User gets agent description, score, and suggested improvements</div>
+        <div class="step wide"><span class="n">7</span>Best-fit profile and evals are chosen automatically. If none fit, they are created, with a clear explanation of why.</div>
       </div>
     </div>
 
-    <div class="down"><span class="stem"></span><span class="head"></span><span class="lbl">After the first score</span></div>
+    <div class="down"><span class="stem"></span><span class="head"></span><span class="lbl">After profile and evals are set</span></div>
     <div class="loopwrap"><svg viewBox="0 0 1300 520" role="img" aria-label="Stimulation testing and self-improvement loop">
 <defs>
 <filter id="sh" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#14213d" flood-opacity=".12"/></filter>
@@ -230,7 +231,7 @@
 <circle cx="1076" cy="350.0" r="15" fill="#7a5bd0"/><text x="1076" y="355.0" text-anchor="middle" class="num">15</text>
 <text x="1100" y="340.0" class="ttl">Report generated</text><text x="1100" y="357.0" class="sm">For the organization and</text><text x="1100" y="372.0" class="sm">all of their agents</text></g>
 </svg></div>
-<div class="legend"><span><i style="background:#1f9d63"></i>Now: stimulation testing (8 to 11)</span><span><i style="background:#2f6fdd"></i>Next: self-improvement loop (12 to 13) and dynamic scoring</span><span><i style="background:#7a5bd0"></i>Later: gains and reporting (14 to 15)</span><span><i style="background:#4c5fd5;height:4px"></i>Loop path</span></div>
+<div class="legend"><span><i style="background:#1f9d63"></i>Now: stimulation testing (8 to 11). Step 7, above, is the Now part of dynamic scoring.</span><span><i style="background:#2f6fdd"></i>Next: self-improvement loop (12 to 13) and the rest of dynamic scoring</span><span><i style="background:#7a5bd0"></i>Later: gains and reporting (14 to 15)</span><span><i style="background:#4c5fd5;height:4px"></i>Loop path</span></div>
 </section>
 
   <!-- ================= BOARD ================= -->
@@ -245,17 +246,17 @@
 
       <div class="card theme">
         <h3>Simplify onboarding</h3>
-        <p class="what">The path from signing up to a first actionable score, with no manual instrumentation, trace configuration, or agent changes. Steps 1 to 7.</p>
+        <p class="what">The path from signing up to a best-fit profile and eval set, with no manual instrumentation, trace configuration, or agent changes. Steps 1 to 7. Step 7 is the Now part of dynamic scoring.</p>
         <details>
           <summary>Why it matters</summary>
           <p>The persona can create agents but cannot configure traces. Every step of friction between sign-up and first score loses a beta user. Self-service onboarding is a High recurring ask from Wolters Kluwer and L'Oreal. This is the direct path to the north star.</p>
         </details>
-        <div class="goal"><b>Goal:</b> a user signs up, connects an agent, and sees a score and suggested improvements quickly, with backoffice admins out of the loop for tenant creation.</div>
+        <div class="goal"><b>Goal:</b> a user signs up, connects an agent, and gets the best-fit profile and evals automatically. If none fit, AgentScore creates them and explains why. Backoffice admins are out of the loop for tenant creation.</div>
         <ul class="features">
           <li>
             <div class="t">Tosca Cloud sign-in with login-or-create tenant <span class="badge">Steps 1, 2</span></div>
             <div class="d">Sign in with a Tosca Cloud account. No tenant means one is created; an existing tenant means log in and welcome.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15137">AI-15137</a><a href="https://tricentis.atlassian.net/browse/AI-15270">AI-15270</a><a href="https://tricentis.atlassian.net/browse/AI-15139">AI-15139</a><a class="done" href="https://tricentis.atlassian.net/browse/AI-12369">AI-12369 SSO done</a></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15270">AI-15270</a><a href="https://tricentis.atlassian.net/browse/AI-15139">AI-15139</a><span class="none">prior SSO AI-12369 is done</span></div>
           </li>
           <li>
             <div class="t">Automatic tenant provisioning <span class="badge">Step 2</span></div>
@@ -270,29 +271,29 @@
           <li>
             <div class="t">Unified agent view <span class="badge">Step 3</span></div>
             <div class="d">All of a user's agents, internal and external, in one place.</div>
-            <div class="jira"><span class="gap">No Jira found</span></div>
+            <div class="jira"><span class="gap">No open Jira</span></div>
           </li>
           <li>
             <div class="t">Getting Started guide <span class="badge">Step 4</span></div>
             <div class="d">In-app guide with MCP connection instructions.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15163">AI-15163</a><a class="done" href="https://tricentis.atlassian.net/browse/AI-11888">AI-11888 internal guide done</a><span class="none">partial: reads as a document, not an in-app guide</span></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15163">AI-15163</a><span class="none">a document, not the in-app guide. AI-11888, the internal guide, is done.</span></div>
           </li>
           <li>
             <div class="t">Zero-config agent connection via MCP <span class="badge">Steps 5, 6</span></div>
             <div class="d">Point the agent at the MCP; it connects itself and traces flow in. No manual agent updates.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15146">AI-15146</a><a href="https://tricentis.atlassian.net/browse/AI-15147">AI-15147</a><a href="https://tricentis.atlassian.net/browse/AI-15150">AI-15150</a></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15146">AI-15146</a><a href="https://tricentis.atlassian.net/browse/AI-15147">AI-15147</a><a href="https://tricentis.atlassian.net/browse/AI-15150">AI-15150</a><span class="none">AI-15146 phase 1 is browser sign-in. Three earlier stories on that epic were closed.</span></div>
           </li>
           <li>
-            <div class="t">First-score output <span class="badge">Step 7</span></div>
-            <div class="d">After ingestion: agent description, score, and suggested improvements.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15148">AI-15148</a></div>
+            <div class="t">Automatic profile and eval selection <span class="badge">Step 7</span></div>
+            <div class="d">After ingestion, the best-fit profile and evals are chosen automatically. If none fit, they are created, with a clear explanation of why. This is the Now part of dynamic scoring.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15827">AI-15827</a></div>
           </li>
         </ul>
       </div>
 
       <div class="card theme">
         <h3>Stimulation testing</h3>
-        <p class="what">AgentScore profiles an agent, runs targeted tests, and scores the results, so users can test without waiting for organic traces. Steps 8 to 11.</p>
+        <p class="what">AgentScore profiles an agent, runs targeted tests, and scores the results, so users can test without waiting for organic traces. Steps 8 to 11, after the profile and evals are set.</p>
         <details>
           <summary>Why it matters</summary>
           <p>Scenario bank and simulation testing is the top High ask across Meta (x2), L'Oreal, Tritusa, Eaton, and PG&amp;E, and the pivotal gap for the Meta POC. It makes AgentScore an end-to-end testing solution across the ADLC.</p>
@@ -302,22 +303,22 @@
           <li>
             <div class="t">Agent profiling prompt <span class="badge">Step 8</span></div>
             <div class="d">Agent reports its type, success criteria, and common failure modes.</div>
-            <div class="jira"><span class="gap">No open Jira</span><span class="none">related: AI-11885 (Backlog)</span></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15844">AI-15844</a></div>
           </li>
           <li>
             <div class="t">Category-based test selection <span class="badge">Step 9</span></div>
             <div class="d">Compliance, security and PII, safety and harm, functional, usability, bias, robustness, multi-agent, MCP, cost and efficiency.</div>
-            <div class="jira"><span class="gap">No Jira found</span></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15851">AI-15851</a><a href="https://tricentis.atlassian.net/browse/AI-15852">AI-15852</a><a href="https://tricentis.atlassian.net/browse/AI-15853">AI-15853</a><a href="https://tricentis.atlassian.net/browse/AI-15854">AI-15854</a><a href="https://tricentis.atlassian.net/browse/AI-15855">AI-15855</a></div>
           </li>
           <li>
             <div class="t">Automated stimulation test runs <span class="badge">Step 10</span></div>
             <div class="d">Selected tests run automatically and generate trace data.</div>
-            <div class="jira"><span class="gap">No Jira found</span></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15845">AI-15845</a><a href="https://tricentis.atlassian.net/browse/AI-15846">AI-15846</a><a href="https://tricentis.atlassian.net/browse/AI-15847">AI-15847</a><a href="https://tricentis.atlassian.net/browse/AI-15848">AI-15848</a><a href="https://tricentis.atlassian.net/browse/AI-15849">AI-15849</a><a href="https://tricentis.atlassian.net/browse/AI-15850">AI-15850</a></div>
           </li>
           <li>
             <div class="t">Stimulation scoring and improvements <span class="badge">Step 11</span></div>
-            <div class="d">Results are scored and improvements generated. Separate from first-score suggestions, which come from organic traces.</div>
-            <div class="jira"><span class="gap">No Jira found</span></div>
+            <div class="d">Results are scored and improvements generated.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15856">AI-15856</a><a href="https://tricentis.atlassian.net/browse/AI-15857">AI-15857</a></div>
           </li>
         </ul>
       </div>
@@ -339,34 +340,34 @@
           <li>
             <div class="t">Improvement feedback to the agent <span class="badge">Step 12</span></div>
             <div class="d">Generated improvements are fed to the user's agent so it can apply them.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15149">AI-15149</a><span class="none">playbook, guardrails, audit, anomaly flagging</span></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15171">AI-15171</a><a href="https://tricentis.atlassian.net/browse/AI-15172">AI-15172</a><a href="https://tricentis.atlassian.net/browse/AI-15173">AI-15173</a><a href="https://tricentis.atlassian.net/browse/AI-15174">AI-15174</a><a href="https://tricentis.atlassian.net/browse/AI-15175">AI-15175</a></div>
           </li>
           <li>
             <div class="t">Re-score and iterate loop <span class="badge">Step 13</span></div>
             <div class="d">A new version is scored and the process repeats from test selection.</div>
-            <div class="jira"><span class="gap">No Jira found</span></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15861">AI-15861</a><a href="https://tricentis.atlassian.net/browse/AI-15862">AI-15862</a><a href="https://tricentis.atlassian.net/browse/AI-15863">AI-15863</a></div>
           </li>
         </ul>
       </div>
 
       <div class="card theme">
         <h3>Dynamic scoring</h3>
-        <p class="what">A scorecard written for each agent, plus session grouping so a score covers a whole task or conversation. Fixed profiles stay available during beta, and dynamic scoring runs beside them. Not a numbered step in the flow.</p>
+        <p class="what">The rest of dynamic scoring, after step 7. A scorecard written for each agent, plus session grouping so a score covers a whole task or conversation. Fixed profiles stay available during beta. Not a numbered step in the flow.</p>
         <details>
           <summary>Why it matters</summary>
-          <p>A fixed profile catalog force-fits agents that do not match it, and a score on one trace misses a multi-step task. Eaton reacted to editable success criteria, profiles, and weighted dimensions. New Vision accepted editable success criteria and custom dimensions.</p>
+          <p>A fixed profile catalog force-fits agents that do not match it, and a score on one trace misses a multi-step task. Eaton reacted to editable success criteria, profiles, and weighted dimensions. New Vision accepted editable success criteria and custom dimensions. Automatic best-fit selection is already Now, in step 7. This card stays Next so stimulation testing is not blocked on the fuller model.</p>
         </details>
-        <div class="goal"><b>Goal:</b> a user can score an agent on criteria that fit that agent, across a whole session, without giving up the fixed profiles already in the product.</div>
+        <div class="goal"><b>Goal:</b> a user can score an agent on a richer scorecard across a whole session, without giving up the fixed profiles already in the product.</div>
         <ul class="features">
           <li>
             <div class="t">Per-agent scorecard</div>
             <div class="d">Written for one agent, from a conversation with the owner, from the agent's traces and behavior, or from dimensions and weights the user sets. Runs beside the fixed profile catalog during beta.</div>
-            <div class="jira"><span class="none">Jira not yet checked</span></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15831">AI-15831</a><span class="none">In Progress. Custom checks and profiles are underway.</span></div>
           </li>
           <li>
             <div class="t">Session grouping</div>
             <div class="d">Related traces are grouped into a task or conversation, and the score covers that whole session.</div>
-            <div class="jira"><span class="none">Jira not yet checked</span></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15832">AI-15832</a></div>
           </li>
         </ul>
       
@@ -385,7 +386,7 @@
           <li>
             <div class="t">Progress bars for all actions</div>
             <div class="d">Every long-running action shows progress.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15178">AI-15178</a><a href="https://tricentis.atlassian.net/browse/AI-15179">AI-15179</a><a href="https://tricentis.atlassian.net/browse/AI-15180">AI-15180</a><a href="https://tricentis.atlassian.net/browse/AI-15181">AI-15181</a></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15178">AI-15178</a><a href="https://tricentis.atlassian.net/browse/AI-15179">AI-15179</a><a href="https://tricentis.atlassian.net/browse/AI-15180">AI-15180</a><a href="https://tricentis.atlassian.net/browse/AI-15181">AI-15181</a><a href="https://tricentis.atlassian.net/browse/AI-15870">AI-15870</a></div>
           </li>
           <li>
             <div class="t">Plain-language dimensions and evals</div>
@@ -412,7 +413,7 @@
           <li>
             <div class="t">PII and sensitive-data redaction from traces</div>
             <div class="d">Redact sensitive information from traces. Separate from AIWS integration.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-11914">AI-11914</a><a href="https://tricentis.atlassian.net/browse/AI-11882">AI-11882 epic</a></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-11914">AI-11914</a></div>
           </li>
         </ul>
         <div class="risk"><b>Dispute risk:</b> if regulated beta accounts need this before onboarding, it moves up.</div>
@@ -430,7 +431,7 @@
           <li>
             <div class="t">Score and ship decision next to the agent</div>
             <div class="d">Read <code>ship_decision</code> from the score endpoint. Confirm AI-11912 includes it.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-11912">AI-11912</a><a href="https://tricentis.atlassian.net/browse/AI-11881">AI-11881 epic</a></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-11912">AI-11912</a><span class="none">confirm ship_decision is in scope</span></div>
           </li>
           <li>
             <div class="t">"New evidence available. Rescore?" prompt</div>
@@ -463,12 +464,12 @@
           <li>
             <div class="t">Measurable improvements by category <span class="badge">Step 14</span></div>
             <div class="d">Improvements by category with cost impact, e.g. "saves $X in token spend" or "avoided a GDPR violation."</div>
-            <div class="jira"><span class="gap">No Jira found</span></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15833">AI-15833</a><span class="none">AI-11896 is billing, not this value</span></div>
           </li>
           <li>
             <div class="t">Quantitative cost function for improvements</div>
             <div class="d">Each improvement is valued with a quantitative cost model, e.g. token spend saved or risk exposure avoided.</div>
-            <div class="jira"><span class="none">Jira not yet checked</span></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15833">AI-15833</a></div>
           </li>
         </ul>
       </div>
@@ -485,7 +486,7 @@
           <li>
             <div class="t">Report generation for all agents in a tenant <span class="badge">Step 15</span></div>
             <div class="d">One report covering every agent in the tenant.</div>
-            <div class="jira"><span class="none">Jira not yet checked</span></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15834">AI-15834</a></div>
           </li>
         </ul>
       </div>
@@ -494,7 +495,7 @@
   </section>
 
   <footer>
-    Source: <code>planning/roadmap/2026-10-20-agentscore-beta-roadmap.md</code> &middot; Jira alignment: <code>planning/jira-alignment/2026-10-14-agentscore-beta-roadmap-jira.md</code>.
+    Source: <code>planning/roadmap/2026-10-20-agentscore-beta-roadmap.md</code> &middot; Jira alignment: <code>planning/jira-alignment/2026-10-20-agentscore-beta-roadmap-jira.md</code>.
     Orange "No Jira" tags mark features with no matching epic or story found on board 8084.
   </footer>
 </div>
