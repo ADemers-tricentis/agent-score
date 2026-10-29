@@ -10,6 +10,10 @@ const terms: { term: string; def: string }[] = [
     def: "The open telemetry standard most agent frameworks already export. Agent Score reads it directly - no proprietary SDK required.",
   },
   {
+    term: "MCP",
+    def: "The connection on Integrations that lets your coding agent act in Agent Score as you. You sign in through the browser. The client does not take an API key, token, or header.",
+  },
+  {
     term: "Tenant",
     def: "Your isolated Agent Score workspace - every agent, trace, and API key you own lives under it. Provisioned by the Agent Score team when you're onboarded, not something you self-serve today.",
   },

@@ -1,6 +1,5 @@
 import { Callout, CodeBlock, Dek, Eyebrow, Screenshot } from "../components/PageChrome";
 import { IngestionFlowDiagram } from "../components/diagrams/IngestionFlow";
-import integrationsTab from "../assets/integrations-tab.png";
 import connectAgentWizard from "../assets/connect-agent-wizard.png";
 
 export default function ConnectYourAgent() {
@@ -9,8 +8,10 @@ export default function ConnectYourAgent() {
       <Eyebrow>Get Started</Eyebrow>
       <h1>Connect your agent</h1>
       <Dek>
-        Setup happens once per workspace, not once per agent. After that, every agent you ever run -
-        today's and next year's - is measured automatically the moment it starts sending activity.
+        The setup to use is your coding agent, from{" "}
+        <a href="#/connect-with-mcp">Connect with MCP</a>. It signs in through the browser and
+        writes the tracing config for you. This page is what that connection is setting up, and
+        what happens once traces arrive.
       </Dek>
 
       <h2>Your workspace comes first</h2>
@@ -33,15 +34,12 @@ export default function ConnectYourAgent() {
         Traces authenticate with an <strong>ingest key</strong> (shown as <code>tk_...</code>), not
         a generic API key. Each key belongs to exactly one tenant. From{" "}
         <strong>Integrations</strong> in the sidebar, you can create a new key, rotate one, or
-        revoke it, independently of any other key on the tenant.
+        revoke it, independently of any other key on the tenant. The usual way to create one is
+        to ask your coding agent, on <a href="#/connect-with-mcp">Connect with MCP</a>. The key
+        then shows up in the same list.
       </p>
-      <Screenshot
-        src={integrationsTab}
-        alt="The Integrations page, showing a Connect from your coding agent card with the MCP server URL, Claude Code / Cursor / Claude Desktop tabs and a setup prompt, above a table of API keys with status, created date, last used, and Rotate / Revoke actions, plus a New key button"
-        caption="Integrations - connect a coding agent over MCP, and manage ingest keys yourself: create, rotate, or revoke."
-      />
 
-      <h2>Two ways in</h2>
+      <h2>How traces get in</h2>
       <p>
         <strong>Agents built in AI Workspace</strong> need no setup at all - no ingest key, no
         registration step. Traces start flowing the moment the agent runs, your tenant is created
@@ -52,8 +50,8 @@ export default function ConnectYourAgent() {
       <p>
         <strong>External agents</strong> connect through an OpenTelemetry export - the same
         telemetry standard almost every modern agent framework already speaks. There's no new SDK
-        to install and no per-agent library to learn. In most cases it's two additional lines
-        added to an exporter you already have:
+        to install and no per-agent library to learn. Ask your coding agent to add these two
+        lines. If you paste them in yourself, they are:
       </p>
       <CodeBlock>
         {"OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=<your ingest endpoint>/external/otel/v1/traces\n" +
@@ -67,35 +65,20 @@ export default function ConnectYourAgent() {
         append that path a second time.
       </p>
 
-      <Callout kind="tip" title="Or let the wizard fill this in for you">
+      <Callout kind="tip" title="Or paste the config yourself">
         <p>
           From <strong>My Agents</strong>, <strong>Connect Agent</strong> opens a guided{" "}
           <strong>Connect an agent</strong> flow: pick the tenant, it shows that tenant's key, and
-          it hands you the exact exporter configuration to paste in - the same variables shown
-          above, with your real key already filled in.
+          it hands you the exact exporter configuration to paste in, with your real key already
+          filled in. Use this when you are wiring the exporter by hand. Otherwise ask your coding
+          agent to write it.
         </p>
       </Callout>
       <Screenshot
         src={connectAgentWizard}
         alt="The Connect an agent dialog, showing a tenant picker, that tenant's ingest key, the exact OTel exporter environment variables to paste in with a Copy button, and a note that scoring begins automatically after 20 traces"
-        caption="The Connect an agent wizard - the fastest way to the exact config for one specific tenant."
+        caption="The Connect an agent wizard fills in the exporter variables for one tenant."
       />
-
-      <h2>Let your coding agent do the setup</h2>
-      <p>
-        If you work with an AI coding agent, it can connect to Agent Score directly. The top of{" "}
-        <strong>Integrations</strong> has a <strong>Connect from your coding agent</strong> card
-        with your <strong>MCP server URL</strong>, a ready-to-paste setup step for{" "}
-        <strong>Claude Code</strong>, <strong>Cursor</strong>, and <strong>Claude Desktop</strong>,
-        and a setup prompt you can hand straight to your agent.
-      </p>
-      <p>
-        Paste the URL whole - the part after the <code>?</code> names your tenant. There's no key,
-        token, or header to add: the first time your coding agent connects, you sign in through
-        your browser. If sign-in fails, start it again from your client (in Claude Code, run{" "}
-        <code>/mcp</code> and choose <strong>Authenticate</strong>; in Cursor, click{" "}
-        <strong>Login</strong>) - a failed attempt can't be resumed.
-      </p>
 
       <h2>Works with your existing stack</h2>
       <p>

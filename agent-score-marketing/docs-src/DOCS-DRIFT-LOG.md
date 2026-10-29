@@ -12,6 +12,71 @@ Each audit appends a dated section. Newest first.
 
 ---
 
+## 2026-10-29 - docs-sync agent run
+
+- **Site audited:** https://agent-score.stg.ai.tricentis.com (staging, per `AGENT_SCORE_SITE_URL` in `.env`). `https://agent-score.ai.tricentis.com/` returned 200 this run and was not walked. `https://agent-score-customer.product.tricentis.com/` still returns 404.
+- **GitHub scan:** 38 PRs merged after 2026-10-26T15:55:41Z. Kept as customer-facing: #868 (MCP URL inline in each setup step), #879 (what the tools do, on the connect copy and the concepts resource), #883 (hosted-client consent warning), #877 (single-trace scoring and run resume gated on credits). #855 and #880 are sign-in hardening that shows up in the troubleshooting copy.
+- **Result:** 3 discrepancies edited, plus items left pending. The in-app `/docs` page on staging is a separate copy in the product repo and was not edited. Customer docs for this run are `agent-score-marketing/docs-src`.
+
+### Doc edits made
+
+- Page: connect-with-mcp (new) / `ConnectWithMcp.tsx`, `nav.ts`, `content/index.ts`
+  Claim in docs: No page. Connect Your Agent described a three-tab card (Claude Code, Cursor, Claude Desktop) and treated MCP as an optional extra under the OpenTelemetry steps.
+  Reality in prod: Integrations leads with **Connect a coding agent (MCP)**. Tabs are Claude Code, Cursor, Codex, Claude apps, and Another client. Each tab is add, sign in, check. Transport is Streamable HTTP. Sign-in is the Tosca Cloud account in the browser, with no key, token, header, or client ID. The URL must be pasted whole.
+  Direction: docs-should-update
+  Fix: New page, screenshot `mcp-connect-card.png`, glossary term MCP. Welcome's getting-started card and Connect step point here.
+  Severity: high
+  PR: https://github.com/Tricentis-AI/agent-score/pull/868
+
+- Page: welcome / `Welcome.tsx`
+  Claim in docs: Connect is "a two-line OpenTelemetry export." The Getting Started card links to Connect Your Agent.
+  Reality in prod: The customer-facing setup on Integrations is the MCP card. The user asked the quick start to send people there.
+  Direction: docs-should-update
+  Fix: Getting Started links to Connect with MCP. The Connect step says the coding agent signs in, creates the ingest key, and checks that traces arrived.
+  Severity: high
+
+- Page: connect-your-agent / `ConnectYourAgent.tsx`
+  Claim in docs: "Let your coding agent do the setup" names Claude Code, Cursor, and Claude Desktop, and says Cursor sign-in is a Login button. The Integrations screenshot matches that older card. The wizard caption calls itself the fastest way.
+  Reality in prod: Five clients, and Cursor sign-in is Customize, then MCP. The wizard is still on My Agents as Connect Agent.
+  Direction: docs-should-update
+  Fix: The page now opens on the MCP path and keeps the exporter lines and the wizard as the manual path. Removed the stale Integrations screenshot.
+  Severity: high
+  PR: https://github.com/Tricentis-AI/agent-score/pull/839 (confirmed this run; was pending on 2026-10-26)
+
+### Product gaps (logged only)
+
+- Page: dimensions-and-profiles (Profile tab "The bar")
+  Not re-walked this run. The 2026-10-26 gap still stands: the Profile tab's verdict labels lag the Score tab.
+  Direction: product-should-catch-up
+  Fix: log only - product gap
+  Severity: medium
+
+### Pending verification
+
+- Page: connect-with-mcp - The Integrations card intro only says the client can create ingest keys and check that traces arrived. The "what you can ask for" list (score, failed trace, advice, compare a change, write an eval) and the "a change takes effect when you ask" callout come from the MCP prompts and `connect_from_your_coding_agent.md` in the product repo (PR #879), not from a tool call made during this walk. Re-check by using a connected client next run.
+  Severity: medium
+  PR: https://github.com/Tricentis-AI/agent-score/pull/879
+- Page: (none) - PR #883. The hosted-client consent page now warns that a forwarded link hands the account to the sender. This walk did not open a consent page.
+  Severity: low
+  PR: https://github.com/Tricentis-AI/agent-score/pull/883
+- Page: (none) - PR #877. Single-trace scoring and run resume are gated on credits. Not exercised.
+  Severity: low
+  PR: https://github.com/Tricentis-AI/agent-score/pull/877
+- Page: welcome - PR #836, still pending from 2026-10-26. The My Agents tenant filter still lists "tais" twice, with no external/internal tag.
+  Severity: low
+  PR: https://github.com/Tricentis-AI/agent-score/pull/836
+- Page: welcome - Terms gate at sign-in (PRs #762 / #763). This account has already accepted, so the gate was not on screen. The Account page was not re-opened this run.
+  Severity: low
+
+### Judgment calls
+
+- **Staging, not production.** `.env` points at staging. `agent-score.ai.tricentis.com` returned 200 and was not walked, so these edits describe staging.
+- **Screenshot shows the staging host and the tais tenant.** Same practice as earlier captures: a real page, not a mock. The URL in the picture is that tenant's URL.
+- **Did not re-walk** the scorecard, profile, evals catalog, assistant, or settings. No doc edits on those pages this run.
+- **In-app Docs** at `/docs` on staging still has its own nav (including "Your Own Evals") and does not pick up this repo until the product copies it. Left untouched, per the request that customer docs live in `agent-score-marketing/docs-src`.
+
+---
+
 ## 2026-10-26 - docs-sync agent run
 
 - **Site audited:** https://agent-score.stg.ai.tricentis.com (staging, per `AGENT_SCORE_SITE_URL` in `.env`; production `https://agent-score-customer.product.tricentis.com/` still returns 404, so staging was audited instead. Fresh Playwright profile; the first pass stopped at the Okta sign-in, the user signed in in that window, and the walk resumed.)

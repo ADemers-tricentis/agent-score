@@ -3,6 +3,23 @@
 All notable changes to the AgentScore docs site are recorded here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.41.0] - 2026-10-29
+
+### Added
+- Connect with MCP: new page for the Integrations card. How to add Agent Score
+  in Claude Code, Cursor, Codex, the Claude apps, or another client, how
+  browser sign-in works, and what you can ask the coding agent to do once it
+  is connected.
+- Glossary: added **MCP**.
+
+### Changed
+- Welcome: getting started now starts on Connect with MCP. The coding agent
+  signs in through the browser, creates the ingest key, and checks that traces
+  arrived.
+- Connect Your Agent: the coding agent is the setup to use. The OpenTelemetry
+  lines and the Connect Agent wizard are the manual path. Removed the old
+  three-client card (Claude Code, Cursor, Claude Desktop).
+
 ## [0.40.0] - 2026-10-26
 
 ### Added

@@ -46,9 +46,9 @@ export default function Welcome() {
 
       <h2>The three things this guide covers</h2>
       <CardGrid>
-        <Card href="#/connect-your-agent" title="Getting Started">
-          Point your agent at Agent Score and watch traces start flowing in - usually in under ten
-          minutes.
+        <Card href="#/connect-with-mcp" title="Getting Started">
+          Connect your coding agent from Integrations. It signs in through the browser and sets up
+          tracing for you, usually in under ten minutes.
         </Card>
         <Card href="#/eval-catalog" title="Evaluations">
           What an "eval" is, the 41 that ship out of the box, and how to build your own in plain
@@ -63,8 +63,9 @@ export default function Welcome() {
       <h2>How it fits together</h2>
       <StepList>
         <Step title="Connect">
-          Traces start arriving - automatically for Tricentis-built agents, or via a two-line
-          OpenTelemetry export for everything else.
+          From <a href="#/connect-with-mcp">Integrations</a>, connect your coding agent. It signs
+          in through your browser, creates the ingest key, and checks that traces arrived. Agents
+          in AI Workspace are picked up on their own.
         </Step>
         <Step title="Recognize">
           Agent Score names and categorizes your agent from its behavior. No setup form to fill
