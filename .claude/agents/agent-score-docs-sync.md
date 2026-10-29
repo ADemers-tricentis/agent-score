@@ -255,6 +255,16 @@ is written. Pending-verification PRs still count as scanned; they're in the
 drift log for the next run to re-check. Leave the marker alone if step 3 was
 skipped or you stopped before step 7.
 
+## Export the run
+
+After the drift log is written, export this run through the Agent Score MCP.
+Follow step 11 of `.claude/skills/agent-score-docs-sync/SKILL.md`:
+`create_ingest_key` (name `cursor-docs-sync-local`), write `exporter_env` into
+the gitignored `test-agent/.env`, run `export_cursor_session.py` for a Cursor
+session or `export_claude_session.py` for a Claude Code session, then
+`check_agent_connection`. Never print the ingest key. A failed export does
+not undo the doc edits.
+
 ## Final report
 
 Lead with anything under **Held for review** or **Judgment calls**. Then:

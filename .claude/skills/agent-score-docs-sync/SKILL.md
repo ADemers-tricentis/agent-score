@@ -343,33 +343,43 @@ changelog entry), then commit and push.
 
 ### 11. Export this run as an AgentScore trace (after push)
 
-This skill's own run can be dogfooded as a real traced agent in AgentScore,
-without instrumenting the skill itself: `test-agent/export_claude_session.py`
-reads the Claude Code session transcript this run just produced and replays
-it as OTel spans (real tool calls, real token usage/cost) to AgentScore.
+Use the Agent Score MCP. Do not mint a key by hand and do not read an existing
+key out of `.env` to type it anywhere.
 
-The script refuses a bare `--latest` (it once turned an entire multi-hour
-session into one giant trace) - scope it with `--since`, read from the shared
-marker `.claude/skills/agent-score-docs-sync/.last-exported.json` (a
-session-id -> ISO-timestamp map, also written by the Stop hook that
-auto-exports other sessions). Look up the current session id's entry:
+1. Call `create_ingest_key` with `name` `cursor-docs-sync-local` and
+   `agent_hint` `agent-score-docs-sync`. If `already_existed` is true, the
+   secret is not in the response. Keep the headers already in
+   `test-agent/.env`. If that file has no `OTEL_EXPORTER_OTLP_TRACES_HEADERS`,
+   call `create_ingest_key` again with a new name.
+2. Write `exporter_env` verbatim, plus
+   `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL=http/protobuf` and
+   `OTEL_SERVICE_NAME=agent-score-docs-sync`, into `test-agent/.env`. That
+   file is gitignored. Never print the key, and never commit the file.
+3. Export the session that just ran:
 
 ```bash
 cd /Users/a.demers/dev/Tricentis/AgentScore/test-agent
-source venv/bin/activate
-# If the current session id has an entry in .last-exported.json, use it:
-python export_claude_session.py --latest --agent-name agent-score-docs-sync --since <that timestamp>
-# If it has no entry yet (nothing exported this session so far), export the whole thing instead:
-python export_claude_session.py --latest --agent-name agent-score-docs-sync --full-session
+.venv/bin/python export_cursor_session.py --latest \
+  --cwd /Users/a.demers/dev/Tricentis/AgentScore \
+  --agent-name agent-score-docs-sync
 ```
 
-Requires `AGENT_SCORE_API_KEY` set in `test-agent/.env` (a tenant ingest key
-from Agent Score UI -> Integrations) - without it, spans print to the console
-instead of exporting. Run this step automatically, every run, once the rest
-of the workflow is done - don't wait for the user to ask. This step never
-blocks the doc sync: skip it only if the key isn't set. Note: this manual
-export doesn't update `.last-exported.json` itself (only the Stop hook does),
-so a small overlap with the next Stop-hook export is expected and fine.
+`--latest` is the newest transcript file. If another Cursor chat was saved
+more recently, pass `--session` with this chat's jsonl instead.
+
+A Claude Code session still uses `export_claude_session.py` (scope it with
+`--since` from `.last-exported.json`, or `--full-session` when that session
+has no marker yet). A Cursor session uses `export_cursor_session.py`. The
+Cursor transcript has no token counts, so those spans carry the turn text and
+the tool calls only.
+
+4. Call `check_agent_connection` with `key_name` `cursor-docs-sync-local`,
+   `agent_name` `agent-score-docs-sync`, and `wait_seconds` 25. Repeat at most
+   four times while `traces.accepted` is 0. A key whose `last_used_at` is set
+   means the export reached Agent Score.
+
+This step never blocks the doc sync. Skip it only when the MCP is not
+connected. Do not fall back to printing spans in the chat.
 
 ## Output
 

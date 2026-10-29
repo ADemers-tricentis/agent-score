@@ -1,7 +1,4 @@
 {
   "mcpServers": {
-    "agent-score": {
-      "url": "https://api-eu-west-3.ai.tricentis.com/agent-score/customer/v1/mcp?tenant_name=tais&product_name=tosca-cloud"
-    }
   }
 }

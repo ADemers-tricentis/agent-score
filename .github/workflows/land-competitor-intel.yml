@@ -1,9 +1,10 @@
 name: Land competitor intel on main
 
-# The weekday cloud routine is instructed to push each digest to its own
-# competitor-intel/YYYY-MM-DD branch and not to main. That leaves the digest
-# off main, so the next run cannot see it when it dedups. This workflow
-# copies the new file onto main and deletes the dated branch.
+# The weekly routine pushes each digest to its own competitor-intel/YYYY-MM-DD
+# branch and not to main. YYYY-MM-DD is the Monday of the week covered, and
+# the file on that branch must be docs/research/competitive-intel/YYYY-MM-DD.md.
+# Leaving the digest off main would hide it from the next run's dedup. This
+# workflow copies the new file onto main and deletes the dated branch.
 
 on:
   push:

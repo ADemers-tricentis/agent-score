@@ -13,13 +13,39 @@ DEFAULT_ENDPOINT = "https://agent-score-ingest.product.tricentis.com/external/ot
 _configured = False
 
 
-def configure_agent_score(service_name: str = "rag-support-agent", force_console: bool = False) -> TracerProvider:
+def _parse_otlp_headers(raw: str) -> dict[str, str]:
+    """Parse OTEL_EXPORTER_OTLP_TRACES_HEADERS (comma-separated k=v)."""
+    headers: dict[str, str] = {}
+    for part in raw.split(","):
+        part = part.strip().strip('"').strip("'")
+        if not part or "=" not in part:
+            continue
+        name, value = part.split("=", 1)
+        headers[name.strip()] = value.strip()
+    return headers
+
+
+def configure_agent_score(
+    service_name: str = "rag-support-agent",
+    force_console: bool = False,
+    max_export_batch_size: int = 64,
+) -> TracerProvider:
     """Set the global TracerProvider to export to AgentScore (or console if no API key is set)."""
     global _configured
     provider = TracerProvider(resource=Resource.create({SERVICE_NAME: service_name}))
 
     api_key = None if force_console else os.environ.get("AGENT_SCORE_API_KEY")
-    if api_key:
+    headers_env = None if force_console else os.environ.get("OTEL_EXPORTER_OTLP_TRACES_HEADERS")
+    # The MCP connect flow writes the standard _TRACES_ variables. Prefer those
+    # over AGENT_SCORE_API_KEY so a key minted for this agent is the one used.
+    if headers_env:
+        endpoint = os.environ.get("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT", DEFAULT_ENDPOINT)
+        exporter = OTLPSpanExporter(
+            endpoint=endpoint,
+            headers=_parse_otlp_headers(headers_env),
+            timeout=30,
+        )
+    elif api_key:
         endpoint = os.environ.get("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT", DEFAULT_ENDPOINT)
         exporter = OTLPSpanExporter(
             endpoint=endpoint,
@@ -37,7 +63,11 @@ def configure_agent_score(service_name: str = "rag-support-agent", force_console
     # Smaller batches so a big synthetic run (hundreds of spans) doesn't
     # queue into one slow request the ingest service times out on.
     provider.add_span_processor(
-        BatchSpanProcessor(exporter, max_export_batch_size=64, schedule_delay_millis=2000)
+        BatchSpanProcessor(
+            exporter,
+            max_export_batch_size=max_export_batch_size,
+            schedule_delay_millis=2000,
+        )
     )
     trace.set_tracer_provider(provider)
     _configured = True
