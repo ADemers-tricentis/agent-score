@@ -12,6 +12,135 @@ Each audit appends a dated section. Newest first.
 
 ---
 
+## 2026-10-29 - docs-sync agent run (4th pass, 16:30Z)
+
+- **Site audited:** https://agent-score.stg.ai.tricentis.com (staging, per `AGENT_SCORE_SITE_URL` in `.env`; signed-in Playwright session on port 9222 reused). `https://agent-score.ai.tricentis.com/` returned 200 and was not walked.
+- **GitHub scan:** 93 PRs merged since 2026-10-15 (14-day fallback, because `.last-github-sync` was missing: the whole `.claude/skills/agent-score-docs-sync/` folder is deleted in the working tree). The newest is #891 at 2026-10-29T15:48:21Z, the marker the 3rd pass recorded. Every PR was scanned by an earlier entry. 0 new, 0 kept.
+- **Result:** 2 new discrepancies (1 docs-should-update, 1 product-should-catch-up, 0 pending-verification). Two older product gaps confirmed again.
+
+### Doc edits made
+
+- Page: scoring-engine / `ScoringEngine.tsx` (Usage & cost)
+  Claim in docs: "Every agent's Usage & cost page shows what it used and what Agent Score spent evaluating it, over a window you choose (up to 90 days)".
+  Reality in prod: Usage & cost is one sidebar page per tenant, with one row per agent ("What each agent used, and what Agent Score spent evaluating it, over the selected window"). The window menu runs from Past 30 min to Past 90 days, plus "Select from calendar". The agent Settings → Cost copy also calls it "the Usage page".
+  Direction: docs-should-update
+  Fix: Reworded to "Usage & cost in the sidebar lists every agent in a tenant, one row each", and added the calendar option. The screenshot and alt text already showed the table of agents.
+  Severity: low
+
+### Product gaps (logged only)
+
+- Page: connect-with-mcp / `ConnectWithMcp.tsx` (step 3)
+  Claim in docs: Step 3 is "Send this agent's traces". In the agent's project, ask "Set this agent up to send its traces to Agent Score. Name it checkout-agent." Then the check sentence confirms traces for that name. (From the uncommitted 0.41.2 edit made earlier today.)
+  Reality in prod: All four client tabs still end on "3 Check it works" with "Use agent-score to check my agent connection." It answers with keys and traces in the last hour. Only the Claude Code tab goes on to "Next, ask it to 'create an Agent Score ingest key for this project and write the exporter settings to .env'". No tab mentions naming the agent or `OTEL_SERVICE_NAME`.
+  Direction: product-should-catch-up (see Judgment calls)
+  Fix: log only - product gap
+  Severity: medium
+
+- Page: dimensions-and-profiles (Profile tab "The bar"). Confirmed again on chatbotagentgraph: Ship / Ship with note / Review required / Block recommended / Block. The Score tab and Settings → Verdict thresholds use the docs' labels.
+  Direction: product-should-catch-up. Fix: log only - product gap. Severity: medium.
+
+- Page: scoring-engine (judge-model providers). Confirmed again on chatbotagentgraph (internal) and rag-support-agent (external): the Provider dropdown offers only `bedrock` and `ai hub`. The docs list Anthropic Claude, OpenAI, Azure OpenAI, and Amazon Bedrock.
+  Direction: product-should-catch-up. Fix: log only - product gap. Severity: medium.
+
+### Pending verification
+
+- PR #836: still open. My Agents and Usage & cost both list "tais" twice in the tenant picker, with no external/internal tag.
+- Still open and not exercised in this walk: the sign-in terms gate (#762 / #763; the Account page still shows "You accepted version 1 for tais on 10/2/2026"), the hosted-client consent warning (#883), credit gating for single-trace scoring and run resume (#877), and the MCP capability list beyond connection checks (#879).
+
+### Held for review
+
+None. No new PR bodies were in scope. The walked pages had no instruction-like content aimed at the auditor. The Integrations card's paste-in prompt for Claude Code ("Add the Agent Score MCP server to Claude Code. Run exactly: ...") is product copy for the customer's coding agent. It was recorded, not followed.
+
+### Judgment calls
+
+- **Step 3 of Connect with MCP left as written.** The docs lead with the named-agent setup, and the live card leads with the connection check. The docs text was a deliberate edit earlier today, and it describes a flow the MCP supports (create the key, write the env, set the service name). So I read the docs as the intended spec and the card copy as lagging. If the card is the intended flow, revert step 3 to "Check that it works".
+- **Marker fallback.** The marker file was gone, so the scan used the 14-day window as the rules say. The 3rd pass's recorded marker (15:48:21Z) matched the newest PR, so nothing was re-reviewed. Writing the marker recreates `.claude/skills/agent-score-docs-sync/` with only the gitignored marker file in it. The rest of that folder (`SKILL.md`, `.last-exported.json`) stays deleted.
+- **Settings tab duplicates scheduling.** The agent Settings tab now has an "Automatic scoring" section ("Check frequency (minutes)", "History window (days)"). It sits beside the Profile tab's "Schedule" (Autonomous scoring, Cadence, Lookback). The docs describe only the Profile tab, which is still accurate. I didn't add the second location because it is unclear which control is meant to stay.
+- **Staging, not production.** As in earlier runs, `.env` points at staging.
+- **Walk coverage.** Integrations (all client tabs), Home, My Agents, Evals (drafts, built-in 41, dimensions 11, profiles 7 plus Default), Usage & cost, Account, Assistant, and every agent detail tab on chatbotagentgraph, plus Settings on rag-support-agent. No screenshot changed enough to need replacing.
+
+### File changes
+
+- Pages: `src/content/ScoringEngine.tsx` edited
+- Assets: none
+- `CHANGELOG.md`: `## [0.41.3] - 2026-10-29`
+- `DOCS-CHANGE-LOG.md`: new entry "Scoring Engine Settings, Usage & cost is one page"
+- `package.json` version: 0.41.2 -> 0.41.3 (patch; Fixed-only entry)
+- `docs/index.html`: rebuilt (`pnpm run build` passed)
+- `.last-github-sync`: missing -> 2026-10-29T15:48:21Z
+- Not committed, not pushed.
+
+---
+
+## 2026-10-29 - docs-sync agent run (3rd pass, 15:57Z)
+
+- **Site audited:** https://agent-score.stg.ai.tricentis.com (staging, per `AGENT_SCORE_SITE_URL` in `.env`; signed-in Playwright session on port 9222 reused). `https://agent-score.ai.tricentis.com/` returned 200 and was not walked.
+- **GitHub scan:** 2 PRs returned by the inclusive query since 2026-10-29T15:16:37Z. #890 sits at the marker and was scanned in an earlier run. #891 is new and was dropped as internal. 0 kept as customer-facing.
+- **Result:** 4 discrepancies (4 docs-should-update, 0 product-should-catch-up, 0 pending-verification). All four are low-severity omissions on Connect with MCP. The page was accurate but left out options the live Integrations card shows.
+
+### Doc edits made
+
+- Page: connect-with-mcp / `ConnectWithMcp.tsx` (Add the server, Sign in)
+  Claim in docs: "Claude Code: run the command from the tab in your project folder." Sign-in is `/mcp`, then Authenticate.
+  Reality in prod: The Claude Code tab opens with "Who should get it?": Only me, in this project (default); Everyone working in this project ("Writes .mcp.json in the project; commit it. Claude Code asks each teammate to approve the server once, and each signs in as themselves."); Only me, in every project. Sign-in also offers `claude mcp login agent-score` from a terminal.
+  Direction: docs-should-update
+  Fix: Added the scope choice and the terminal sign-in command.
+  Severity: low
+
+- Page: connect-with-mcp / `ConnectWithMcp.tsx` (Add the server, Claude apps)
+  Claim in docs: Add a custom connector named Agent Score and leave the OAuth client ID and secret empty.
+  Reality in prod: Free, Pro and Max add it under Customize → Connectors. On Team and Enterprise, "an owner adds it once in Organization settings → Connectors → Add → Custom → Web. Members then find it under Customize → Connectors, marked Custom, and click Connect."
+  Direction: docs-should-update
+  Fix: Added the Team and Enterprise owner path.
+  Severity: low
+
+- Page: connect-with-mcp / `ConnectWithMcp.tsx` (If sign-in fails, Claude could not reach)
+  Claim in docs: "Check that the URL was pasted whole." No next step after that.
+  Reality in prod: "If it is, contact your Tricentis contact: the connection from Anthropic's network may be blocked."
+  Direction: docs-should-update
+  Fix: Added the next step.
+  Severity: low
+
+- Page: connect-with-mcp / `ConnectWithMcp.tsx` (If sign-in fails, disconnect)
+  Claim in docs: Disconnect with `/mcp` in Claude Code, Customize then MCP in Cursor, connector settings, or `codex mcp logout agent-score`.
+  Reality in prod: Also lists `claude mcp logout agent-score`. Cursor: "Cloud agents keep their own sign-in; sign out on the server's Cloud row too." And: "To revoke it everywhere, ask your Tosca Cloud administrator to end your sessions."
+  Direction: docs-should-update
+  Fix: Added all three.
+  Severity: low
+
+### Product gaps (logged only)
+
+None found in this pass. The 2026-10-26 Profile-tab verdict-label gap was not re-walked.
+
+### Pending verification
+
+- Resolved this run: Welcome's "Your terms, on file" callout. The Account page (`/settings`) shows "You accepted version 1 for tais on 10/2/2026", a document fingerprint, and "Download the version you accepted". The sign-in terms gate itself was still not on screen, because this account has already accepted.
+- Still open from the earlier 2026-10-29 entries: hosted-client consent warning (#883), credit gating for single-trace scoring and run resume (#877), the MCP capability list beyond connection checks (#879), and the duplicated "tais" tenant filter on My Agents (#836, seen again this run).
+
+### Held for review
+
+None. The #891 body and the walked pages had no instruction-like content aimed at the auditor. The paste-in prompts on the Integrations card ("Add the Agent Score MCP server to Claude Code. Run exactly: ...") are product copy written for the customer's coding agent. They were recorded, not followed.
+
+### Judgment calls
+
+- **Staging, not production.** As in earlier runs, `.env` points at staging, so these edits describe staging.
+- **Omissions treated as docs-should-update.** The page was not wrong. The four additions are options and next steps a customer would act on (team-wide setup, enterprise connector, who to contact, full sign-out). Smaller card details were left out on purpose: the Codex "a second section makes the file invalid" warning, `--no-browser` sign-in, the "sign-in lasts as long as your Tosca Cloud session policy allows" line, and "Claude Code shows a claude.ai connector automatically".
+- **Version bump on a Changed-only entry.** The rule covers Fixed-only (patch) and any Added or Removed (minor). This entry is Changed only, so it got a patch: 0.41.0 -> 0.41.1.
+- **#891 dropped as internal (borderline).** MCP tool calls whose arguments contain a NUL character are now refused with `invalid_params` (`nul_character`), so the audit row is always written. A customer would only see this by sending malformed input, and the docs say nothing about argument validation.
+- **Narrow walk.** Covered Integrations (all five client tabs and every troubleshooting item), Home, the My Agents Connect Agent wizard, and Account. No agent detail tabs, Evals, Assistant, or Usage. `mcp-connect-card.png` and `connect-agent-wizard.png` still match what's live.
+
+### File changes
+
+- Pages: `src/content/ConnectWithMcp.tsx` edited
+- Assets: none
+- `CHANGELOG.md`: `## [0.41.1] - 2026-10-29`
+- `package.json` version: 0.41.0 -> 0.41.1 (patch; Changed-only entry, no Added or Removed)
+- `docs/index.html`: rebuilt (`pnpm run build` passed)
+- `.last-github-sync`: 2026-10-29T15:16:37Z -> 2026-10-29T15:48:21Z
+- Not committed, not pushed.
+
+---
+
 ## 2026-10-29 - docs-sync agent run
 
 - **Site audited:** https://agent-score.stg.ai.tricentis.com (staging, per `AGENT_SCORE_SITE_URL` in `.env`; authenticated Playwright session reused). `https://agent-score.ai.tricentis.com/` was not walked in this pass.

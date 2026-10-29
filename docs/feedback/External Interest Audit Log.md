@@ -4,6 +4,36 @@ Every run of the external-interest-sync agent, newest first. Each entry lists
 what changed in the tracker and CSVs and why. Contact emails are deliberately
 left out; they live in the contacts CSV.
 
+## 2026-10-29T16:22:23Z
+
+- **Cutoff:** 2026-10-29T13:18:33.000Z -> **new marker:** 2026-10-29T13:18:33.000Z (unchanged)
+- **Emails found:** 0 new matching submissions (1 other message ignored: The Future Group (NL) - HQ submission (Jean Delissen), received exactly at the cutoff and already processed in the 2026-10-29T16:08:24Z run)
+
+### Added
+None
+
+### Excluded
+None
+
+### Held for review
+None
+
+### Replies
+- **Reply cutoff:** 2026-10-29T15:49:48.000Z -> **new reply marker:** 2026-10-29T15:49:48.000Z (unchanged)
+- **Search:** user's mailbox, all folders, `afterDateTime` only; 1 message (one page): a GitHub workflow-failure notification received exactly at the cutoff, already seen in the previous run. Not from a contact in the log.
+
+None
+
+### Judgment calls
+- **Markers left as-is:** the only message each search returned was the one already recorded at its marker, so neither `.last-processed` nor `.last-reply-check` moved.
+
+### File changes
+- `External Interest.md`: no changes (0 sections added, 0 submitter groups added, 0 Pipeline Tracker rows added; counts, as-of date and Companies replied unchanged)
+- `external-interest-mail-merge.csv`: not regenerated (no new companies; still holds The Future Group (NL) - HQ from the previous run)
+- `external-interest-contacts.csv`: 0 rows appended; 0 Status cells set to Replied
+- `.last-processed`: 2026-10-29T13:18:33.000Z -> unchanged
+- `.last-reply-check`: 2026-10-29T15:49:48.000Z -> unchanged
+
 ## 2026-10-29T16:08:24Z
 
 - **Cutoff:** 2026-10-26T17:37:30.000Z (recovered from the 2026-10-26 audit entry; `.last-processed` was missing) -> **new marker:** 2026-10-29T13:18:33.000Z

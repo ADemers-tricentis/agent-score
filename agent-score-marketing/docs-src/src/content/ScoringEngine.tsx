@@ -49,8 +49,9 @@ export default function ScoringEngine() {
 
       <h2>Usage &amp; cost</h2>
       <p>
-        Every agent's <strong>Usage &amp; cost</strong> page shows what it used and what Agent Score
-        spent evaluating it, over a window you choose (up to 90 days): traces, tokens in/out,
+        <strong>Usage &amp; cost</strong> in the sidebar lists every agent in a tenant, one row each,
+        with what it used and what Agent Score spent evaluating it, over a window you choose (up
+        to 90 days, or dates from a calendar): traces, tokens in/out,
         usage cost, eval results, scoring runs, profile fits, agent cards, and eval cost in AI
         credits. Export the whole table to Excel when you need it outside the app.
       </p>

@@ -60,7 +60,7 @@ export function Step({
   return (
     <li>
       <h4>{title}</h4>
-      <p>{children}</p>
+      <div className="step-body">{children}</div>
     </li>
   );
 }

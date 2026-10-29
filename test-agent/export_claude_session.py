@@ -148,6 +148,18 @@ def convert(events: list[dict], tracer, agent_name: str) -> tuple[int, int]:
 
     tool_results = build_tool_result_index(events)
 
+    pending_user = ""
+    turn_inputs: list[str] = []
+    for e in events:
+        if e.get("type") == "user":
+            content = e.get("message", {}).get("content")
+            if isinstance(content, str):
+                text = content.strip()
+                if text and not text.lstrip().startswith("<"):
+                    pending_user = text
+        elif e.get("type") == "assistant":
+            turn_inputs.append(pending_user)
+
     first_user_text = next(
         (
             e["message"]["content"]
@@ -171,8 +183,10 @@ def convert(events: list[dict], tracer, agent_name: str) -> tuple[int, int]:
     root_end = _to_ns(events[-1]["timestamp"])
     root_span = tracer.start_span(f"{agent_name}.run", start_time=root_start)
     root_span.set_attribute(lf.OBSERVATION_TYPE, "agent")
-    root_span.set_attribute(lf.TRACE_INPUT, first_user_text)
-    root_span.set_attribute(lf.OBSERVATION_INPUT, first_user_text)
+    root_input = _truncate(first_user_text)
+    root_span.set_attribute(lf.TRACE_INPUT, root_input)
+    root_span.set_attribute(lf.OBSERVATION_INPUT, root_input)
+    root_span.set_attribute(gs.INPUT, root_input)
     root_span.set_attribute(gs.GEN_AI_AGENT_NAME, agent_name)
     root_span.set_attribute(gs.GEN_AI_OPERATION_NAME, "invoke_agent")
     root_span.set_attribute(gs.OPENINFERENCE_SPAN_KIND, "AGENT")
@@ -206,6 +220,10 @@ def convert(events: list[dict], tracer, agent_name: str) -> tuple[int, int]:
         turn_span.set_attribute(gs.GEN_AI_USAGE_OUTPUT_TOKENS, output_tokens)
         turn_span.set_attribute(lf.OBSERVATION_USAGE_DETAILS, lf.usage_details(input_tokens, output_tokens))
         turn_span.set_attribute(lf.OBSERVATION_COST_DETAILS, lf.cost_details(input_tokens, output_tokens, price_in, price_out))
+        turn_input = _truncate(turn_inputs[i] if i < len(turn_inputs) else first_user_text)
+        if turn_input:
+            turn_span.set_attribute(lf.OBSERVATION_INPUT, turn_input)
+            turn_span.set_attribute(gs.INPUT, turn_input)
         turn_ctx = set_span_in_context(turn_span)
         turn_count += 1
 
@@ -241,10 +259,16 @@ def convert(events: list[dict], tracer, agent_name: str) -> tuple[int, int]:
                         tool_span.set_status(Status(StatusCode.ERROR, "tool call failed"))
                 tool_span.end(end_time=tool_end)
 
+        if text_out:
+            turn_output = _truncate(text_out)
+            turn_span.set_attribute(lf.OBSERVATION_OUTPUT, turn_output)
+            turn_span.set_attribute(gs.OUTPUT, turn_output)
         turn_span.end(end_time=turn_end)
 
-    root_span.set_attribute(lf.TRACE_OUTPUT, last_assistant_text)
-    root_span.set_attribute(lf.OBSERVATION_OUTPUT, last_assistant_text)
+    root_output = _truncate(last_assistant_text)
+    root_span.set_attribute(lf.TRACE_OUTPUT, root_output)
+    root_span.set_attribute(lf.OBSERVATION_OUTPUT, root_output)
+    root_span.set_attribute(gs.OUTPUT, root_output)
     root_span.end(end_time=root_end)
     return turn_count, tool_call_count
 

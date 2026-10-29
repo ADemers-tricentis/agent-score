@@ -1,5 +1,5 @@
 ---
-name: agent-score-docs-sync
+name: agentscore-docs-sync-agent
 description: >-
   Runs the Agent Score docs sync end to end with no review gate: scans PRs
   merged on Tricentis-AI/agent-score since the last sync, walks the live
@@ -9,10 +9,10 @@ description: >-
   docs-should-update fixes, updates the CHANGELOG, bumps the version, and
   rebuilds docs/index.html. Leaves everything uncommitted and unpushed so the
   user reviews the diff and the drift log before a docs build ships. Use when
-  the user wants to "run the docs sync agent", "sync the docs in the
-  background", or audit the docs without stopping for review. For an
-  interactive run with a review gate that commits and pushes, use the
-  agent-score-docs-sync skill instead.
+  the user wants to "run the docs sync agent", "sync the docs", "check the
+  docs for drift", or audit the docs against production.
+tools: Bash, Read, Write, Edit, Glob, Grep
+color: blue
 ---
 
 # Agent Score Docs Sync (agent)
@@ -42,9 +42,15 @@ All paths are relative to the repo root,
   sections, newest first, directly under the header and its `---` rule.
 - **Changelog:** `agent-score-marketing/docs-src/CHANGELOG.md` (Keep a
   Changelog style). Create it if missing.
+- **Change log:** `agent-score-marketing/docs-src/DOCS-CHANGE-LOG.md`. Exact
+  reader-facing edits, newest first. Create it if missing. Write an entry
+  whenever you edit a doc page. Say what the page said before and what it
+  says now, file by file. Skip it when you edit no pages. Separate from the
+  drift log.
 - **GitHub sync marker:** `.claude/skills/agent-score-docs-sync/.last-github-sync`.
-  One ISO-8601 timestamp, gitignored, shared with the skill so the two never
-  re-scan each other's PR windows. If missing, use 14 days before today.
+  One ISO-8601 timestamp, gitignored. The path predates this agent; keep
+  using it so earlier runs' PR windows aren't re-scanned. If missing, use 14
+  days before today.
 - **Config:** `agent-score-marketing/docs-src/.env`, if present. Only
   `AGENT_SCORE_SITE_URL` is read (default
   `https://agent-score.ai.tricentis.com`). Never read a
@@ -162,8 +168,8 @@ For every place the docs and production disagree, including missing pages
 - `pending-verification`: a kept PR claims a change you couldn't confirm in
   the walk. Don't edit the doc on the PR's word.
 
-The skill's review gate is where the user overrules direction-of-truth
-calls. You don't have one, so be conservative: when a doc reads like it
+There is no review gate where the user can overrule direction-of-truth
+calls, so be conservative: when a doc reads like it
 could be the intended spec, classify it `product-should-catch-up` and list
 it under **Judgment calls** rather than "correcting" the doc into a lesser
 description.
@@ -188,6 +194,11 @@ Fixed, in customer-meaningful lines (not file names), and bump `version` in
 - **Patch** when the entry is `### Fixed` only.
 - **Minor** when it has any `### Added` or `### Removed` item.
 - **Never major.** `1.0.0` is the user's call to leave beta.
+
+When you edited a doc page, also prepend an entry to `DOCS-CHANGE-LOG.md`,
+newest first. One dated section. For each file, state the exact before and
+after of what a reader sees. The changelog stays the short summary. Skip
+this when you edit no pages.
 
 Then build:
 

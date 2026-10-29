@@ -11,6 +11,7 @@ OTEL_EXPORTER_OTLP_TRACES_* variables. This script never prints that key.
 
 Usage:
     python export_cursor_session.py --latest --agent-name agent-score-docs-sync
+    python export_cursor_session.py --latest-subagent --agent-name external-interest-sync
     python export_cursor_session.py --session <path-to-session.jsonl>
 """
 
@@ -48,12 +49,25 @@ def _project_slug(cwd: str) -> str:
     return re.sub(r"[^A-Za-z0-9]", "-", cwd.lstrip("/"))
 
 
+def _transcript_root(cwd: str) -> Path:
+    return _cursor_projects_dir() / _project_slug(cwd) / "agent-transcripts"
+
+
 def find_latest_session(cwd: str) -> Path:
-    project = _cursor_projects_dir() / _project_slug(cwd) / "agent-transcripts"
+    project = _transcript_root(cwd)
     sessions = sorted(project.glob("*/*.jsonl"), key=lambda p: p.stat().st_mtime)
     sessions = [p for p in sessions if p.parent.name == p.stem and "subagents" not in p.parts]
     if not sessions:
         raise SystemExit(f"No Cursor session transcripts found under {project}")
+    return sessions[-1]
+
+
+def find_latest_subagent(cwd: str) -> Path:
+    """Newest subagent transcript. Background agents write here, not beside the parent chat."""
+    project = _transcript_root(cwd)
+    sessions = sorted(project.glob("*/subagents/*.jsonl"), key=lambda p: p.stat().st_mtime)
+    if not sessions:
+        raise SystemExit(f"No Cursor subagent transcripts found under {project}")
     return sessions[-1]
 
 
@@ -116,8 +130,10 @@ def convert(rows: list[dict], tracer, agent_name: str, session_id: str, start: d
     last_text = ""
     root = tracer.start_span(f"{agent_name}.run", start_time=_ns(start))
     root.set_attribute(lf.OBSERVATION_TYPE, "agent")
-    root.set_attribute(lf.TRACE_INPUT, _truncate(first_user))
-    root.set_attribute(lf.OBSERVATION_INPUT, _truncate(first_user))
+    root_input = _truncate(first_user)
+    root.set_attribute(lf.TRACE_INPUT, root_input)
+    root.set_attribute(lf.OBSERVATION_INPUT, root_input)
+    root.set_attribute(gs.INPUT, root_input)
     root.set_attribute(gs.GEN_AI_AGENT_NAME, agent_name)
     root.set_attribute(gs.GEN_AI_OPERATION_NAME, "invoke_agent")
     root.set_attribute(gs.OPENINFERENCE_SPAN_KIND, "AGENT")
@@ -181,8 +197,10 @@ def convert(rows: list[dict], tracer, agent_name: str, session_id: str, start: d
 
         turn.end(end_time=_ns(turn_end))
 
-    root.set_attribute(lf.TRACE_OUTPUT, _truncate(last_text))
-    root.set_attribute(lf.OBSERVATION_OUTPUT, _truncate(last_text))
+    root_output = _truncate(last_text)
+    root.set_attribute(lf.TRACE_OUTPUT, root_output)
+    root.set_attribute(lf.OBSERVATION_OUTPUT, root_output)
+    root.set_attribute(gs.OUTPUT, root_output)
     root.end(end_time=_ns(end))
     return turns, tools
 
@@ -190,21 +208,31 @@ def convert(rows: list[dict], tracer, agent_name: str, session_id: str, start: d
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--session", type=Path, help="Path to a Cursor session jsonl")
-    parser.add_argument("--latest", action="store_true", help="Use the newest session for --cwd")
+    parser.add_argument("--latest", action="store_true", help="Use the newest parent session for --cwd")
+    parser.add_argument(
+        "--latest-subagent",
+        action="store_true",
+        help="Use the newest subagent transcript for --cwd (background agents)",
+    )
     parser.add_argument("--cwd", default=os.getcwd(), help="Project directory the Cursor session belongs to")
     parser.add_argument("--agent-name", default="agent-score-docs-sync")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
-    if not args.session and not args.latest:
-        parser.error("pass --session <file> or --latest")
+    if not args.session and not args.latest and not args.latest_subagent:
+        parser.error("pass --session <file>, --latest, or --latest-subagent")
 
     # git toplevel when invoked from test-agent
     cwd = args.cwd
     if cwd.endswith("/test-agent"):
         cwd = str(Path(cwd).parent)
 
-    session_path = args.session or find_latest_session(cwd)
+    if args.session:
+        session_path = args.session
+    elif args.latest_subagent:
+        session_path = find_latest_subagent(cwd)
+    else:
+        session_path = find_latest_session(cwd)
     rows = _load(session_path)
     if not rows:
         print(f"No messages in {session_path}")

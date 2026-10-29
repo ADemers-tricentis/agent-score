@@ -63,9 +63,10 @@ export default function Welcome() {
       <h2>How it fits together</h2>
       <StepList>
         <Step title="Connect">
-          From <a href="#/connect-with-mcp">Integrations</a>, connect your coding agent. It signs
-          in through your browser, creates the ingest key, and checks that traces arrived. Agents
-          in AI Workspace are picked up on their own.
+          From <a href="#/connect-with-mcp">Integrations</a>, connect your coding agent. In the
+          project you have open, ask it to send that agent's traces to Agent Score under a name
+          you choose. It signs in through your browser and writes the ingest key. Agents in AI
+          Workspace are picked up on their own.
         </Step>
         <Step title="Recognize">
           Agent Score names and categorizes your agent from its behavior. No setup form to fill

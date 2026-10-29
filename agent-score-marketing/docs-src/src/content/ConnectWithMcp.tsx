@@ -7,9 +7,10 @@ export default function ConnectWithMcp() {
       <Eyebrow>Get Started</Eyebrow>
       <h1>Connect with MCP</h1>
       <Dek>
-        Set Agent Score up from the coding agent you already use. It signs in as you, creates the
-        ingest key, and checks that traces arrived. After that, you ask it for the same jobs the
-        rest of this guide describes.
+        Set Agent Score up from the coding agent you already use. It signs in as you. In the
+        project you have open, you name the agent you want scored, and it writes the ingest key
+        and starts the traces. After that, you ask it for the same jobs the rest of this guide
+        describes.
       </Dek>
 
       <h2>Open Integrations</h2>
@@ -36,37 +37,84 @@ export default function ConnectWithMcp() {
         another tenant, sign in to it on Integrations and copy that tenant's URL.
       </p>
 
-      <h2>Add it, sign in, then check</h2>
+      <h2>Add it, sign in, then send traces</h2>
       <p>
         Pick your client on the card. The tab has the exact command or file, with your URL already
         filled in. Every client follows the same three steps.
       </p>
       <StepList>
         <Step title="Add the server">
-          Claude Code: run the command from the tab in your project folder. Cursor: use Add to
-          Cursor, or write the <code>.cursor/mcp.json</code> entry the tab shows (this project, or
-          every project). Codex: one configuration covers the ChatGPT desktop app, the IDE
-          extension, and the CLI. The Claude apps: add a custom connector named Agent Score and
-          leave the OAuth client ID and secret empty. Another client: Streamable HTTP, which some
-          clients call HTTP or remote, and a localhost callback. A client that insists on its own
-          client ID cannot connect.
+          <ul>
+            <li>
+              <strong>Claude Code.</strong> Choose who gets it, then run the command from the tab
+              in your project folder. Only you in this project is the default. For everyone
+              working in this project, the tab writes a <code>.mcp.json</code> you commit. Each
+              teammate approves the server once and signs in as themselves.
+            </li>
+            <li>
+              <strong>Cursor.</strong> Use Add to Cursor, or write the <code>.cursor/mcp.json</code>{" "}
+              entry the tab shows, for this project or for every project.
+            </li>
+            <li>
+              <strong>Codex.</strong> One configuration covers the ChatGPT desktop app, the IDE
+              extension, and the CLI.
+            </li>
+            <li>
+              <strong>Claude apps.</strong> Add a custom connector named Agent Score and leave the
+              OAuth client ID and secret empty. On Team and Enterprise plans, an owner adds it
+              once in Organization settings, and members click Connect.
+            </li>
+            <li>
+              <strong>Another client.</strong> Use Streamable HTTP, which some clients call HTTP
+              or remote, and a localhost callback. A client that insists on its own client ID
+              cannot connect.
+            </li>
+          </ul>
         </Step>
         <Step title="Sign in">
-          Your browser opens Agent Score. Sign in to Tosca Cloud if asked, check the request, and
-          click Allow. Claude Code: run <code>/mcp</code>, choose <strong>agent-score</strong>,
-          then <strong>Authenticate</strong>. Cursor: open <strong>Customize</strong>, go to{" "}
-          <strong>MCP</strong>, and sign in on agent-score. Codex: click{" "}
-          <strong>Authenticate</strong> beside agent-score, then start a new session. The Claude
-          apps: click <strong>Connect</strong> on the connector, and in a chat turn Agent Score on
-          under <strong>Connectors</strong>.
+          <p>
+            Your browser opens Agent Score. Sign in to Tosca Cloud if asked, check the request,
+            and click Allow. Then finish in the client you added.
+          </p>
+          <ul>
+            <li>
+              <strong>Claude Code.</strong> Run <code>/mcp</code>, choose <strong>agent-score</strong>,
+              then <strong>Authenticate</strong>. Or run <code>claude mcp login agent-score</code> in
+              a terminal.
+            </li>
+            <li>
+              <strong>Cursor.</strong> Open <strong>Customize</strong>, go to <strong>MCP</strong>,
+              and sign in on agent-score.
+            </li>
+            <li>
+              <strong>Codex.</strong> Click <strong>Authenticate</strong> beside agent-score, then
+              start a new session.
+            </li>
+            <li>
+              <strong>Claude apps.</strong> Click <strong>Connect</strong> on the connector. In a
+              chat, turn Agent Score on under <strong>Connectors</strong>.
+            </li>
+          </ul>
         </Step>
-        <Step title="Check that it works">
-          Ask your coding agent the question below. It answers with your ingest keys and whether
-          traces arrived in the last hour. Then ask it to create an ingest key for this project
-          and write the exporter settings to the project's env file.
+        <Step title="Send this agent's traces">
+          <p>Open the project for the agent you want scored, and ask:</p>
+          <CodeBlock>Set this agent up to send its traces to Agent Score. Name it checkout-agent.</CodeBlock>
+          <p>
+            Use a name you want that agent to keep. <code>checkout-agent</code> above is an
+            example. The coding agent creates an ingest key, writes the exporter settings into an
+            environment file that version control ignores, and sets <code>OTEL_SERVICE_NAME</code>{" "}
+            to that name. Agent Score files the traces under it. Restart the agent and run it
+            once.
+          </p>
+          <p>Then ask:</p>
+          <CodeBlock>Use agent-score to check my agent connection.</CodeBlock>
+          <p>
+            The answer lists your ingest keys and whether traces for that name arrived in the
+            last hour. Scoring starts on its own after about 20 traces. An agent that already
+            runs in AI Workspace sends traces when it runs, with no ingest key.
+          </p>
         </Step>
       </StepList>
-      <CodeBlock>Use agent-score to check my agent connection.</CodeBlock>
       <Callout kind="tip" title="The ingest key is shown once">
         <p>
           Have the agent write the key to an environment file that version control ignores. Keep
@@ -124,13 +172,16 @@ export default function ConnectWithMcp() {
         </li>
         <li>
           Claude says it could not reach the MCP server. The Claude apps connect from Anthropic's
-          network, not from your computer. Check that the URL was pasted whole.
+          network, not from your computer. Check that the URL was pasted whole. If it was, contact
+          your Tricentis contact. The connection from Anthropic's network may be blocked.
         </li>
         <li>
           Signing out of Agent Score does not disconnect a client. Each client keeps its own
-          sign-in. Disconnect it there: <code>/mcp</code> in Claude Code, Customize then MCP in
-          Cursor, the connector settings in the Claude apps, or{" "}
-          <code>codex mcp logout agent-score</code> for Codex.
+          sign-in. Disconnect it there: <code>claude mcp logout agent-score</code> or{" "}
+          <code>/mcp</code> in Claude Code, Customize then MCP in Cursor (Cursor's cloud agents
+          sign in separately, so sign out on the server's Cloud row too), the connector settings
+          in the Claude apps, or <code>codex mcp logout agent-score</code> for Codex. To end the
+          sign-in everywhere at once, ask your Tosca Cloud administrator to end your sessions.
         </li>
       </ul>
 

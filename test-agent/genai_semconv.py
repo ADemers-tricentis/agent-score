@@ -26,8 +26,10 @@ GEN_AI_USAGE_OUTPUT_TOKENS = "gen_ai.usage.output_tokens"
 # path from the has_tools/has_retrieval scoring-shape derivation).
 OPENINFERENCE_SPAN_KIND = "openinference.span.kind"  # AGENT | LLM | TOOL | RETRIEVER | CHAIN
 
-# Bare (non-namespaced) input/output/tool_definitions - the exact attribute
-# names agent-score's reference corpus uses alongside gen_ai.*.
-INPUT = "input"
-OUTPUT = "output"
+# Agent Score's OTLP mapper stores a span's input and output from
+# `input.value` / `output.value` (then gen_ai.*.messages). Bare `input` /
+# `output` and `langfuse.observation.input` are not in that chain, so a span
+# that only sets those is stored with a null payload.
+INPUT = "input.value"
+OUTPUT = "output.value"
 TOOL_DEFINITIONS = "tool_definitions"

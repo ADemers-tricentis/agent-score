@@ -3,6 +3,36 @@
 All notable changes to the AgentScore docs site are recorded here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.41.3] - 2026-10-29
+
+### Fixed
+- Scoring Engine Settings: Usage & cost is one page in the sidebar that lists
+  every agent in the tenant, not a page per agent. The window also takes dates
+  from a calendar.
+
+## [0.41.2] - 2026-10-29
+
+### Changed
+- Connect with MCP: Add the server and Sign in are one item per client.
+- Connect with MCP: to start traces, open that agent's project and ask the
+  coding agent to set it up under a name you choose. The check sentence then
+  confirms traces for that name. The name is what Agent Score files the traces
+  under.
+- Welcome: the Connect step says to name the agent in the project you have
+  open.
+
+## [0.41.1] - 2026-10-29
+
+### Changed
+- Connect with MCP: Claude Code setup now covers the choice of who gets the
+  server, including a project-wide `.mcp.json` each teammate signs in to
+  themselves, and signing in from a terminal.
+- Connect with MCP: on Claude Team and Enterprise plans, an owner adds the
+  connector once and members click Connect.
+- Connect with MCP: if Claude cannot reach the server and the URL is whole,
+  contact your Tricentis contact. Disconnecting now covers Cursor's cloud
+  agents and ending every sign-in through your Tosca Cloud administrator.
+
 ## [0.41.0] - 2026-10-29
 
 ### Added
