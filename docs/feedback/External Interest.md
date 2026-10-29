@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 144 form submissions found (as of 2026-10-26), sorted newest first. Excluded as internal `@tricentis.com` submitters: Ashutosh Kotkar (2026-09-25) and Srinivasa Rao K (2026-10-01), both under Tricentis GmbH (AT) - HQ. Fun Tat Chen (2026-10-02) is a second submitter at Singapore Pools and is stacked on that entry rather than counted as a new company. Ajay Kharb and Praveer Bakshi (2026-10-19/20, Accenture), Konrad Greszata (2026-10-13, Capgemini) and Jeroen Kuijper (2026-10-21, Sogeti Netherlands) are likewise stacked on existing company entries. Antonio Sglavo (2026-10-22, Accenture SpA), Julian Raach and Yash Jawale (2026-10-22, Hugo Boss), Edmundo Barahona (2026-10-22, Sogeti Deutschland), Mathieu Philippe (2026-10-22, Itecor FR) and Simon Kreitmayer (2026-10-22, SKYPhoenix IT GmbH, which appears to be the renamed Dolpheen IT Solutions) are also stacked on existing entries. Repeats not tracked separately: Rohan Bansod (New Vision Software, two submissions 2026-10-15) and Praveer Bakshi (a second 2026-10-19 submission with the company field blank).
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 145 form submissions found (as of 2026-10-29), sorted newest first. Excluded as internal `@tricentis.com` submitters: Ashutosh Kotkar (2026-09-25) and Srinivasa Rao K (2026-10-01), both under Tricentis GmbH (AT) - HQ. Fun Tat Chen (2026-10-02) is a second submitter at Singapore Pools and is stacked on that entry rather than counted as a new company. Ajay Kharb and Praveer Bakshi (2026-10-19/20, Accenture), Konrad Greszata (2026-10-13, Capgemini) and Jeroen Kuijper (2026-10-21, Sogeti Netherlands) are likewise stacked on existing company entries. Antonio Sglavo (2026-10-22, Accenture SpA), Julian Raach and Yash Jawale (2026-10-22, Hugo Boss), Edmundo Barahona (2026-10-22, Sogeti Deutschland), Mathieu Philippe (2026-10-22, Itecor FR) and Simon Kreitmayer (2026-10-22, SKYPhoenix IT GmbH, which appears to be the renamed Dolpheen IT Solutions) are also stacked on existing entries. Repeats not tracked separately: Rohan Bansod (New Vision Software, two submissions 2026-10-15) and Praveer Bakshi (a second 2026-10-19 submission with the company field blank).
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -30,14 +30,15 @@ What accounts we have talked to say they build or run agents on. Counts are comp
 
 | Interested companies | Companies replied | Demos | Pending betas | Active betas |
 |---|---|---|---|---|
-| 111 | 17 | 13 | 1 | 6 |
+| 112 | 17 | 13 | 1 | 6 |
 
-Source breakdown: 107 via the Labs form, 3 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E), 1 via David (VP of AI/ML) (Eaton) = 111 total. Ferrara Candy Company is listed below but not counted: Sudha Damacherla signed up by accident for a different product (2026-10-20).
+Source breakdown: 108 via the Labs form, 3 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E), 1 via David (VP of AI/ML) (Eaton) = 112 total. Ferrara Candy Company is listed below but not counted: Sudha Damacherla signed up by accident for a different product (2026-10-20).
 
 Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
 
 | Company | Contact | Status |
 |---|---|---|
+| The Future Group (NL) - HQ | Jean Delissen | Interested |
 | Sun Life (form blank, domain-resolved) | Kishore Kumar | Email sent — 2026-10-28 |
 | Thought Frameworks | Roopa S | Email sent — 2026-10-28 |
 | NTT Data (UK) | Stinu Easo | Email sent — 2026-10-28 |
@@ -152,6 +153,23 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Singapore Pools (form blank, domain-resolved) | Nai Hau Lui, Fun Tat Chen | Email sent — 2026-09-23 |
 
 *(Status values: Interested → Email sent → Follow-up sent → Replied → Demo scheduled → Pending beta → Active beta. Not a fit is terminal, for accidental or wrong-product signups.)*
+
+---
+
+### The Future Group (NL) - HQ
+Date: 2026-10-29 13:18  
+Name: Jean Delissen  
+Title: Test manager  
+Relationship: Partner  
+
+Email sent: -  
+Beta scheduled: -  
+
+what they do: Dutch IT collaboration network of independent entrepreneurs organised as autonomous partnerships, founded in 2000 and based in Zoetermeer, with a second office in 's-Hertogenbosch ([Craft](https://craft.co/the-future-group-335)). One listed team covers data engineering, test automation and agile testing, and a public profile lists the submitter as an SAP test manager there ([TheOrg](https://theorg.com/org/the-future-group/teams/data-engineering-and-testing); [TheOrg](https://theorg.com/org/the-future-group/org-chart/jean-delissen)).
+
+likely use case: given a Test manager at a Partner-relationship consultancy with an SAP testing background, most plausibly evaluating Agent Score to offer AI agent testing to their own clients - an inference, not a confirmed need. No public information found on a formal Tricentis partnership.
+
+known agent tooling: no public information found tying The Future Group to a deployed agent product.
 
 ---
 
