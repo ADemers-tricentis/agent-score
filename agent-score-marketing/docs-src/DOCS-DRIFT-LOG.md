@@ -14,6 +14,39 @@ Each audit appends a dated section. Newest first.
 
 ## 2026-10-29 - docs-sync agent run
 
+- **Site audited:** https://agent-score.stg.ai.tricentis.com (staging, per `AGENT_SCORE_SITE_URL` in `.env`; authenticated Playwright session reused). `https://agent-score.ai.tricentis.com/` was not walked in this pass.
+- **GitHub scan:** 0 PRs merged after 2026-10-29T15:16:37Z. The inclusive API query returned #890 at that exact marker, already scanned in the preceding run.
+- **Result:** no drift.
+
+### Doc edits made
+
+None. The live **Connect a coding agent (MCP)** card still names Claude Code, Cursor, Codex, Claude apps, and Another client; uses Streamable HTTP; requires the whole tenant URL; and signs in with Tosca Cloud in the browser, with no key, token, header, or client ID. Its Claude Code tab still follows Add / Sign in / Check it works, including the `check my agent connection` prompt. This matches Connect with MCP and the MCP-first quick start added earlier today.
+
+### Product gaps (logged only)
+
+None found in this pass. The existing Profile-tab verdict-label gap was not re-walked.
+
+### Pending verification
+
+The existing 2026-10-29 pending items remain: hosted-client consent warning, customer credit gating for single-trace scoring and run resume, the MCP capability list beyond connection checks, the duplicated tenant filter, and the accepted-terms gate. No new PR made one of them newly testable.
+
+### Judgment calls
+
+This was a narrow confirmation run. The scan found no newly merged PRs and the walk revisited the MCP onboarding card only. Other customer screens and the in-app `/docs` copy were not re-walked.
+
+### File changes
+
+- Pages: none
+- Assets: none
+- `CHANGELOG.md`: unchanged
+- `package.json` version: unchanged
+- `docs/index.html`: not rebuilt (no doc edits)
+- `.last-github-sync`: unchanged (2026-10-29T15:16:37Z; no newer PR)
+
+---
+
+## 2026-10-29 - docs-sync agent run
+
 - **Site audited:** https://agent-score.stg.ai.tricentis.com (staging, per `AGENT_SCORE_SITE_URL` in `.env`). `https://agent-score.ai.tricentis.com/` returned 200 this run and was not walked. `https://agent-score-customer.product.tricentis.com/` still returns 404.
 - **GitHub scan:** 38 PRs merged after 2026-10-26T15:55:41Z. Kept as customer-facing: #868 (MCP URL inline in each setup step), #879 (what the tools do, on the connect copy and the concepts resource), #883 (hosted-client consent warning), #877 (single-trace scoring and run resume gated on credits). #855 and #880 are sign-in hardening that shows up in the troubleshooting copy.
 - **Result:** 3 discrepancies edited, plus items left pending. The in-app `/docs` page on staging is a separate copy in the product repo and was not edited. Customer docs for this run are `agent-score-marketing/docs-src`.
