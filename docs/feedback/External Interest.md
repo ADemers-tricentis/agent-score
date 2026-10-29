@@ -30,7 +30,7 @@ What accounts we have talked to say they build or run agents on. Counts are comp
 
 | Interested companies | Companies replied | Demos | Pending betas | Active betas |
 |---|---|---|---|---|
-| 111 | 14 | 13 | 1 | 6 |
+| 111 | 17 | 13 | 1 | 6 |
 
 Source breakdown: 107 via the Labs form, 3 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E), 1 via David (VP of AI/ML) (Eaton) = 111 total. Ferrara Candy Company is listed below but not counted: Sudha Damacherla signed up by accident for a different product (2026-10-20).
 
@@ -38,12 +38,12 @@ Update the per-company Status column below as accounts move, and keep the summar
 
 | Company | Contact | Status |
 |---|---|---|
-| Sun Life (form blank, domain-resolved) | Kishore Kumar | Interested |
-| Thought Frameworks | Roopa S | Interested |
-| NTT Data (UK) | Stinu Easo | Interested |
-| Mattoni 1873 a.s. | Ondrej Kyzek | Interested |
-| QACooper LLC | Michael W Cooper | Interested |
-| Telekom Deutschland GmbH | André Hoffmann | Interested |
+| Sun Life (form blank, domain-resolved) | Kishore Kumar | Email sent — 2026-10-28 |
+| Thought Frameworks | Roopa S | Email sent — 2026-10-28 |
+| NTT Data (UK) | Stinu Easo | Email sent — 2026-10-28 |
+| Mattoni 1873 a.s. | Ondrej Kyzek | Email sent — 2026-10-28 |
+| QACooper LLC | Michael W Cooper | Replied |
+| Telekom Deutschland GmbH | André Hoffmann | Replied |
 | Ashurst LLP (UK) | Ankush Shrivastava | Email sent — 2026-10-22 |
 | Sky Plc (UK) - HQ | Mario D'Amico | Email sent — 2026-10-22 |
 | TotalEnergies (FR) - HQ | Olivier Soulard | Email sent — 2026-10-22 |
@@ -56,7 +56,7 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Vestas (DK) - HQ | Romy Mehta | Email sent — 2026-10-22 |
 | Deloitte LLP (UK) | Chetana Bangaradka | Email sent — 2026-10-22 |
 | Jysk | Ole Madsen | Email sent — 2026-10-22 |
-| The Tech Collective | Nadia Grundholm | Email sent — 2026-10-22 |
+| The Tech Collective | Nadia Grundholm | Replied |
 | University of Leeds | Andrew Peckett | Email sent — 2026-10-22 |
 | IBM India Private Limited | Vaibhav Sharma | Email sent — 2026-10-22 |
 | M2Q | Jurgen Meheus | Email sent — 2026-10-22 |
@@ -161,7 +161,7 @@ Name: Kishore Kumar
 Title: Test Lead  
 Relationship: Other  
 
-Email sent: -  
+Email sent: 2026-10-28  
 Beta scheduled: -  
 
 what they do: Canadian life insurance, wealth and asset management group (Sun Life Financial), operating across Canada, the US and Asia.
@@ -178,7 +178,7 @@ Name: Roopa S
 Title: Automation Lead  
 Relationship: Partner  
 
-Email sent: -  
+Email sent: 2026-10-28  
 Beta scheduled: -  
 
 what they do: QA and software services firm founded in 2009, headquartered in Covina, CA, with offices in Bengaluru, Eindhoven and Munich; services include test automation, performance and SAP quality engineering ([LinkedIn](https://www.linkedin.com/company/thought-frameworks); [Indeed](https://in.indeed.com/cmp/Thought-Frameworks)).
@@ -195,7 +195,7 @@ Name: Stinu Easo
 Title: QA  
 Relationship: Partner  
 
-Email sent: -  
+Email sent: 2026-10-28  
 Beta scheduled: -  
 
 what they do: UK arm of NTT DATA; the submitter's email domain points to NTT DATA Business Solutions, the group's SAP-focused services business (formerly itelligence) ([NTT DATA Business Solutions](https://nttdata-solutions.com/uk/blog/ntt-data-sap-uk-ntt-data-sap-or-ntt-data-business-solutions/)).
@@ -212,7 +212,7 @@ Name: Ondrej Kyzek
 Title: Business Solutions IT manager  
 Relationship: Customer  
 
-Email sent: -  
+Email sent: 2026-10-28  
 Beta scheduled: -  
 
 what they do: Czech mineral water and soft drinks group (formerly Karlovarské minerální vody, renamed 2019) with about 12 production sites and 3,200 employees in 8 countries ([Mattoni 1873](https://www.mattoni1873.cz/en/media/karlovarske-mineralni-vody-adopt-new-identity-mattoni-1873); [Wikipedia](https://en.wikipedia.org/wiki/Mattoni_1873)).
@@ -229,7 +229,8 @@ Name: Michael W Cooper
 Title: CEO  
 Relationship: Partner  
 
-Email sent: -  
+Email sent: 2026-10-28  
+Replied: 2026-10-28  
 Beta scheduled: -  
 
 what they do: no public company information found; the name and domain suggest a small QA consultancy. A QA leader named Michael Cooper has public profiles (Transamerica, Healthcare IT Leaders), but nothing found links him to QACooper LLC ([TechWell](https://members.techwell.com/speakers/michael-cooper); [Healthcare IT Leaders](https://www.healthcareitleaders.com/blog/healthcare-leaders-healthcare-leaders-adds-chief-quality-officervp-enterprise-qa-testing-services/)).
@@ -246,7 +247,8 @@ Name: André Hoffmann
 Title: Senior Test Automation Architect  
 Relationship: Partner  
 
-Email sent: -  
+Email sent: 2026-10-28  
+Replied: 2026-10-29  
 Beta scheduled: -  
 
 what they do: German operating company of Deutsche Telekom, providing mobile, fixed-line and broadband services in Germany.
@@ -468,6 +470,7 @@ Title: Test Automation Specialist
 Relationship: Partner  
 
 Email sent: 2026-10-22  
+Replied: 2026-10-28  
 Beta scheduled: —  
 
 what they do: Copenhagen-based tech consultancy "powered by Implement Consulting Group", offering conversational AI, SAP, Salesforce, cyber and data services ([Built In](https://builtin.com/job/junior-consultant-our-salesforce-team/7521507)).

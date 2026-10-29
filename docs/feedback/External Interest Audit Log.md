@@ -4,6 +4,38 @@ Every run of the external-interest-sync agent, newest first. Each entry lists
 what changed in the tracker and CSVs and why. Contact emails are deliberately
 left out; they live in the contacts CSV.
 
+## 2026-10-29T15:31:23Z
+
+Reply check only (run by hand, not a full sync). The labs@tricentis.com inbox was not checked, and `.last-processed` is unchanged.
+
+### Replies
+- **Reply cutoff:** none (first reply check, fell back to the earliest Email Sent Date, 2026-09-09) -> **new reply marker:** 2026-10-29T15:14:09.000Z
+- **Search:** Inbox folder, query "AgentScore", 22 messages (one page, no more results). Other folders were not searched.
+
+| Company | Contact | Replied | Status change | Detail |
+|---|---|---|---|---|
+| Telekom Deutschland GmbH | André Hoffmann | 2026-10-29 | Email sent -> Replied | Very interested as a Tricentis partner; says he has only had the welcome email so far and asks when access and next steps will come. Three Telekom colleagues cc'd. |
+| QACooper LLC | Michael W Cooper | 2026-10-28 | Email sent -> Replied | One-word "Thanks" reply to the welcome email; no times or questions. |
+| The Tech Collective | Nadia Grundholm | 2026-10-28 | already Replied, no change | Asked for an intro for a small team next week. |
+| Stanza | Anirban Toy Choudhury | 2026-09-24 | already Replied, no change | Introduced Matt Mahowald (Platform Engineering Lead), who asked for availability. |
+| Tritusa Consulting (AU) | Jawahar Govindaraj | 2026-10-22, 2026-10-23 | already Active Beta, no change | Beta support threads (scoring and Agent Card questions). |
+| Wolters Kluwer United States Inc. | Chris Allanson | 2026-10-13 to 2026-10-15 | already Active Beta, no change | Tenant and access setup thread. |
+| Aptiv Global Operations Limited | Meenakshi Sundaram Chockalingam | 2026-10-12 | already Active Beta, no change | Sign-in error and workaround question. |
+
+### Judgment calls
+- Reply dates use US Central time, so QACooper's reply (01:04 UTC on 10-29) is dated 2026-10-28, matching how The Tech Collective's date was recorded.
+- QACooper's reply is only "Thanks". It counts as a reply under the rules, but it isn't a real engagement signal.
+- Deephan Mohanraj (Tritusa): automatic out-of-office reply, 2026-10-22, ignored.
+- Alex Syed (Accenture) and Matt Mahowald (Stanza) are not in the contacts log. Accenture is already Pending Beta and Stanza is already Replied, so nothing was applied.
+
+### Held for review
+None
+
+### File changes
+- `External Interest.md`: Pipeline Tracker Status for QACooper LLC and Telekom Deutschland GmbH set to Replied; `Replied:` line added to both sections; Companies replied 15 -> 17
+- `external-interest-contacts.csv`: 2 Status cells set to Replied (QACooper LLC, Telekom Deutschland GmbH)
+- `.last-reply-check`: created, 2026-10-29T15:14:09.000Z
+
 ## 2026-10-26T17:50:45Z
 
 - **Cutoff:** 2026-10-22T13:36:58.000Z -> **new marker:** 2026-10-26T17:37:30.000Z
