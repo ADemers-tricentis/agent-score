@@ -49,7 +49,7 @@ export default function ScoringEngine() {
 
       <h2>Usage &amp; cost</h2>
       <p>
-        <strong>Usage &amp; cost</strong> in the sidebar lists every agent in a tenant, one row each,
+        <strong>Usage</strong> in the sidebar opens <strong>Usage &amp; cost</strong>, which lists every agent in a tenant, one row each,
         with what it used and what Agent Score spent evaluating it, over a window you choose (up
         to 90 days, or dates from a calendar): traces, tokens in/out,
         usage cost, eval results, scoring runs, profile fits, agent cards, and eval cost in AI

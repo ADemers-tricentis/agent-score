@@ -12,6 +12,56 @@ Each audit appends a dated section. Newest first.
 
 ---
 
+## 2026-10-29 - docs-sync agent run (5th pass, 17:00Z)
+
+- **Site audited:** https://agent-score.stg.ai.tricentis.com (staging, per `AGENT_SCORE_SITE_URL` in `.env`; signed-in Playwright session on port 9222 reused).
+- **GitHub scan:** 1 PR merged since 2026-10-29T15:48:21Z (#891, the marker itself, already scanned by the 3rd pass). 0 new, 0 kept.
+- **Result:** 1 new discrepancy (1 docs-should-update, 0 product-should-catch-up, 0 pending-verification). Three older product gaps confirmed again.
+
+### Doc edits made
+
+- Page: scoring-engine / `ScoringEngine.tsx` (Usage & cost)
+  Claim in docs: "**Usage & cost** in the sidebar lists every agent in a tenant" (written by the 4th pass).
+  Reality in prod: The sidebar item is labeled "Usage" (link `/usage`, aria-label "Usage"). It opens a page titled "Usage & cost". The agent Settings → Cost copy also says "on the Usage page".
+  Direction: docs-should-update
+  Fix: Now reads "**Usage** in the sidebar opens **Usage & cost**, which lists every agent in a tenant, one row each". The heading, captions and screenshot keep the page title "Usage & cost".
+  Severity: low
+
+### Product gaps (logged only)
+
+- Page: connect-with-mcp / `ConnectWithMcp.tsx` (step 3). Confirmed again: the Claude Code tab still ends on "3 Check it works" with "Use agent-score to check my agent connection." It is followed by "Next, ask it to 'create an Agent Score ingest key for this project and write the exporter settings to .env'". The card says nothing about naming the agent or `OTEL_SERVICE_NAME`.
+  Direction: product-should-catch-up. Fix: log only - product gap. Severity: medium.
+- Page: dimensions-and-profiles (Profile tab "The bar"). Confirmed again on chatbotagentgraph: Ship / Ship with note / Review required / Block recommended / Block. Settings → Verdict thresholds and the Score tab use the docs' labels (Needs work, Don't ship (recommended)).
+  Direction: product-should-catch-up. Fix: log only - product gap. Severity: medium.
+- Page: scoring-engine (judge-model providers). Confirmed again on chatbotagentgraph: the Provider dropdown offers only `bedrock` and `ai hub`. The docs list Anthropic Claude, OpenAI, Azure OpenAI and Amazon Bedrock.
+  Direction: product-should-catch-up. Fix: log only - product gap. Severity: medium.
+
+### Pending verification
+
+- Carried over, not exercised this walk: PR #836 (the tenant picker on My Agents and Usage & cost still lists "tais" twice), the sign-in terms gate (#762 / #763; Account still shows "You accepted version 1 for tais on 10/2/2026"), the hosted-client consent warning (#883), credit gating for single-trace scoring and run resume (#877), and the MCP capability list beyond connection checks (#879).
+
+### Held for review
+
+None. No new PR bodies were in scope. The Integrations card's paste-in prompt for Claude Code ("Add the Agent Score MCP server to Claude Code. Run exactly: ...") is product copy for the customer's coding agent. It was recorded, not followed.
+
+### Judgment calls
+
+- **Agent Card shows leaked markup (product defect, not doc drift).** On chatbotagentgraph, the generated Purpose ends with raw model output: `</parameter> <parameter name="tool_descriptions">{"creditusagemcp_get_user_usage": ...}`. That is a JSON blob of tool descriptions, rendered as prose. The evidence snapshot also gives the sample range as "10/30/2021 – 10/29/2026", which looks wrong for an agent seen since October 2026. The docs describe the card correctly, so no edit was made. Worth a product ticket.
+- **The 4th pass's wording.** The 4th pass described the sidebar item as "Usage & cost", which was its own error. I corrected only the label and kept the rest of its paragraph, which still matches the page.
+- **Settings tab duplicates scheduling.** This is unchanged from the 4th pass. Settings has "Automatic scoring" (Check frequency, History window) beside the Profile tab's Schedule. Docs left describing the Profile tab only.
+- **Staging, not production.** As in earlier runs, `.env` points at staging.
+- **Walk coverage.** Integrations (Claude Code tab), Home, My Agents, the Connect Agent wizard, Evals (drafts, built-in 41, dimensions 11, profiles 7 plus Default), Usage & cost, Account, Assistant, a Learning agent ("4 of 20 traces"), and every detail tab on chatbotagentgraph. No screenshot changed enough to need replacing.
+
+### File changes
+- Pages: `src/content/ScoringEngine.tsx`
+- Assets: none
+- `CHANGELOG.md`: `[0.41.4] - 2026-10-29` (Fixed)
+- `DOCS-CHANGE-LOG.md`: "2026-10-29 — Scoring Engine Settings, the sidebar item is Usage"
+- `package.json` version: 0.41.3 -> 0.41.4 (patch; Fixed only)
+- `docs/index.html`: rebuilt (`pnpm run build` passed)
+- `.last-github-sync`: unchanged at 2026-10-29T15:48:21Z (the newest merged PR is still #891). Rewritten with the same value.
+- Not committed, not pushed.
+
 ## 2026-10-29 - docs-sync agent run (4th pass, 16:30Z)
 
 - **Site audited:** https://agent-score.stg.ai.tricentis.com (staging, per `AGENT_SCORE_SITE_URL` in `.env`; signed-in Playwright session on port 9222 reused). `https://agent-score.ai.tricentis.com/` returned 200 and was not walked.

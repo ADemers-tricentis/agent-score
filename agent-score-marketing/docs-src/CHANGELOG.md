@@ -3,6 +3,24 @@
 All notable changes to the AgentScore docs site are recorded here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.42.1] - 2026-10-29
+
+### Fixed
+- Signing in with a Tosca Cloud account creates the workspace. No one on the
+  Agent Score team has to set it up.
+
+## [0.42.0] - 2026-10-29
+
+### Added
+- Quick start: connect your coding agent, ask it to send one named agent's
+  traces, then ask it to check that those traces arrived.
+
+## [0.41.4] - 2026-10-29
+
+### Fixed
+- Scoring Engine Settings: the sidebar item is called Usage. It opens the
+  Usage & cost page.
+
 ## [0.41.3] - 2026-10-29
 
 ### Fixed

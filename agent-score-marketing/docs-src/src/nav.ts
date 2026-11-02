@@ -22,6 +22,11 @@ export const nav: NavSection[] = [
         blurb: "What Agent Score does and why it exists.",
       },
       {
+        slug: "quick-start",
+        title: "Quick start",
+        blurb: "Connect your coding agent, name the agent, and confirm traces.",
+      },
+      {
         slug: "connect-with-mcp",
         title: "Connect with MCP",
         blurb: "Let your coding agent set Agent Score up and work in it as you.",

@@ -1,3 +1,69 @@
+## October 30, 2026 Update
+
+### Choose what your coding agent is allowed to do
+- On Integrations, you can turn off groups of actions for your own connection, or stop every coding agent.
+- The groups are Read, Change, Spend credits, Delete & credentials, and Prompts & guides.
+- A Tricentis admin can turn a group off for the whole account. You cannot turn that group back on. A call that is off tells the agent it is not allowed.
+
+### Secrets in a trace stay out of your coding agent
+- Recognisable API keys, tokens, and passwords are replaced before your coding agent reads a trace, a span, or a search result.
+- The trace in the app is unchanged, so scoring still uses the original text.
+- Results that include text from your traces now open and close with a notice that the text is untrusted. A copy of that notice planted in the text cannot pose as the end of the result.
+
+### Fixes
+- Judge calls on Claude Sonnet 5 now have a price. Those calls were recorded with none.
+
+### Internal note: Insights is easier to hand to a coding agent
+- Export is a zip instead of a one-tab spreadsheet: overview, accounts, timelines, journeys, friction, value, attention, and day or week series, with a data dictionary and a starter prompt.
+- A wizard sets contents, filters, and whether names are replaced. The file is built in short pieces so other screens stay responsive.
+- Routine coverage sits in the toolbar. A banner appears only for a real gap. Participant counts no longer depend on a secret that was never set, which had marked every report unavailable, and a period that starts before recording began says so.
+
+### Internal note: a model still in use cannot be removed out from under scoring
+- Changing or removing a model that an agent version is still set to use is refused. An in-place edit had left scoring with no model to call.
+
+### Internal note: large traces and large fleets stay responsive
+- Opening a large trace no longer holds every other request while the page is built.
+- The back-office dashboard no longer fails once a region has more than 32,767 agents.
+
+### Coming next
+- Cutting agent tracing over to push directly from internal agents instead of pulling from Better Stack
+- Promoting the API gateway build and the firewall change so the coding-agent connection works in production
+
+## October 29, 2026 Update
+
+### Your coding agent can reach AI Workspace agents
+- A connected coding agent used to list only the agents on your external account. It now includes the AI Workspace agents you already see in the app, and each one is marked AI Workspace or external.
+- A request about one agent runs in the account that holds that agent.
+
+### Check a change from the same connection
+- When a trace fails, the agent can list only the failed spans.
+- You can mark when a change started, then compare the new score with the run from before it.
+- A cancelled run is released immediately, so a new run can start.
+
+### Clearer connect steps, and a warning if the link was forwarded
+- The server URL now appears in the step where you paste it, for Claude, Codex, and other clients, with the connector name in its own copy block.
+- The setup guide states that the connected agent can read and change agents, labels, and checks, revoke an ingest key, and start scoring. Those actions run immediately, and scoring stays capped on the server.
+- If someone sends you a connect link for Claude on the web or Cursor on the web, the consent page warns you to deny it unless you started the connection yourself. Allowing it lets that account act as you.
+
+### Claude 5.5 models respond
+- Scoring, chat, improvement advice, and a connection test now succeed on Claude Sonnet 5.5 and Opus 5.5. Those calls were failing.
+- New environments start on Sonnet 5.5. An account that already has a model keeps it until you switch.
+
+### Fixes
+- Approving the coding-agent connection no longer ends with "Agent Score could not complete this step."
+- Scoring a single trace, or resuming a run, now stops when the account is out of credits.
+
+### Internal note: adoption Insights in the back office
+- Operators can see regional adoption, where a workflow stalls, and a read-only account investigation. The page does not read customer content or change customer settings.
+- It opens on an overview and sits ahead of Reports, with its own icon.
+
+### Internal note: memory stays bounded on large traces
+- Ingest, the scoring worker, and the usage export now read and write in bounded batches, after a production ingest pod was killed by an unbounded trace merge.
+
+### Coming next
+- Cutting agent tracing over to push directly from internal agents instead of pulling from Better Stack
+- Promoting the API gateway build and the firewall change so the coding-agent connection works in production
+
 ## October 26, 2026 Update
 
 ### Connect Agent Score from your coding agent

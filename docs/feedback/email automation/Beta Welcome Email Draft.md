@@ -11,18 +11,24 @@ You can access AgentScore here: https://agent-score.ai.tricentis.com/
 Here's how to get up and running:
 
 1. **Sign in to Tosca Cloud.** Agent Score requires a Tosca Cloud login. If you do not have one yet, [sign up for a Tosca Cloud trial](https://www.tricentis.com/software-testing-tool-trial-demo) first, then sign in with that account.
-2. **Get your workspace.** Your workspace (a tenant) is set up by the Agent Score team on your behalf, and cannot be created from the app. Send us your Tosca Cloud tenant name and we will set up your workspace. Everyone signing in from that Tosca Cloud tenant will then have access. If your agent runs in AI Workspace, its tenant is created automatically when the agent's traces are first ingested and no ingest key is needed, so skip to step 5 (you still need us to give you access).
-3. **Create an ingest key.** Open **Integrations** in the sidebar and create a new key. It looks like `tk_...` and belongs to exactly one tenant.
-4. **Point your agent's OpenTelemetry export at Agent Score.** Add these two variables to the exporter your agent already uses. No new SDK required. **+ Connect Agent** on the Agents page gives you this exact config with your real key filled in.
+2. **Sign in, and your workspace is ready.** Signing in with your Tosca Cloud account creates your workspace (a tenant). No one on the Agent Score team has to set it up. Everyone signing in from that Tosca Cloud tenant shares it. If your agent runs in AI Workspace, no ingest key is needed, so skip to step 4.
+3. **Connect your coding agent, then start traces.** In the sidebar, open **Integrations**. Copy the server URL from **Connect a coding agent (MCP)** and paste it whole. The part after the `?` names your tenant. Add it in Claude Code, Cursor, Codex, or the Claude apps, and sign in through the browser with your Tosca Cloud account. There is no API key to paste. Then open the project for the agent you want scored and ask:
 
    ```
-   OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=<your ingest endpoint>/external/otel/v1/traces
-   OTEL_EXPORTER_OTLP_TRACES_HEADERS=Authorization=Bearer <your tk_... ingest key>
+   Set this agent up to send its traces to Agent Score. Name it checkout-agent.
    ```
-5. **Run your agent.** Interact with your agent as you normally would. It appears on the Agents page on its own, first as **Setting up**, then **Learning your agent** with a live count of traces received. No per-agent form to fill out.
-6. **Read your scorecard.** After **20 traces**, scoring starts automatically. Open the agent to see a 0-100 score and a ship / review / don't-ship recommendation, with the evidence behind every number.
 
-**Use the _TRACES_ variables.** Use the `_TRACES_`-suffixed variables, not the generic `OTEL_EXPORTER_OTLP_ENDPOINT`. The endpoint above already ends in `/v1/traces`, and the generic form would append it a second time.
+   `checkout-agent` is an example. Use the name you want that agent to keep. Your coding agent creates an ingest key, writes it to an environment file that version control ignores, and sets `OTEL_SERVICE_NAME` to that name. Restart the agent and run it once. Then ask:
+
+   ```
+   Use agent-score to check my agent connection.
+   ```
+
+   The answer says whether traces for that name arrived in the last hour.
+4. **Run your agent.** Interact with your agent as you normally would. It appears on the Agents page on its own, first as **Setting up**, then **Learning your agent** with a live count of traces received. No per-agent form to fill out.
+5. **Read your scorecard.** After **20 traces**, scoring starts automatically. Open the agent to see a 0-100 score and a ship / review / don't-ship recommendation, with the evidence behind every number.
+
+**Wiring the exporter yourself.** If you would rather not use a coding agent, **+ Connect Agent** on the Agents page gives you the exporter config with your real key filled in. Use the `_TRACES_` variables, not the generic `OTEL_EXPORTER_OTLP_ENDPOINT`. The endpoint already ends in `/v1/traces`, and the generic form would append it a second time.
 
 **Send real traffic.** Scoring is only as honest as the traces behind it. Send real or realistic traffic, including the ordinary failures, not a hand-picked set of best outputs.
 

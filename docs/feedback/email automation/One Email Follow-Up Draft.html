@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Following up on AgentScore</title>
+</head>
+<body style="font-family:Calibri, Arial, sans-serif; font-size:15px; color:#000000;">
+
+<p>Hi {{First Name}},</p>
+
+<p>I reached out recently about getting {{Company}} into AgentScore. We have made a lot of updates and improvements since you last heard from us, and getting started is much simpler now. Sign up and onboarding is now 100% self-service so you no longer need to wait for us to set it up and a coding agent can wire the traces for you.</p>
+
+<p>Open AgentScore here: <a href="https://agent-score.ai.tricentis.com/">https://agent-score.ai.tricentis.com/</a></p>
+
+<ol>
+<li><b>Sign in to Tosca Cloud.</b> Agent Score needs a Tosca Cloud login. If you do not have one yet, <a href="https://www.tricentis.com/software-testing-tool-trial-demo">sign up for a Tosca Cloud trial</a> first, then sign in with that account.</li>
+<li><b>Your workspace is ready when you sign in.</b> Signing in with your Tosca Cloud account creates your workspace (a tenant). Everyone signing in from that Tosca Cloud tenant shares it. If your agent runs in AI Workspace, its traces arrive when it runs, with no ingest key, so you can skip the rest of these steps.</li>
+<li><b>Connect your coding agent, then start traces.</b> In the sidebar, open <b>Integrations</b>. Copy the server URL from <b>Connect a coding agent (MCP)</b> and paste it whole. The part after the <code>?</code> names your tenant. Add it in Claude Code, Cursor, Codex, or the Claude apps, and sign in through the browser with your Tosca Cloud account. There is no API key to paste. Then open the project for the agent you want scored and ask:
+<pre style="font-family:Consolas, Menlo, monospace; font-size:13px; background:#f4f4f4; padding:10px; white-space:pre-wrap;">Set this agent up to send its traces to Agent Score. Name it checkout-agent.</pre>
+<code>checkout-agent</code> is an example. Use the name you want that agent to keep. Your coding agent creates an ingest key, writes it to an environment file that version control ignores, and sets <code>OTEL_SERVICE_NAME</code> to that name. Restart the agent and run it once. Then ask:
+<pre style="font-family:Consolas, Menlo, monospace; font-size:13px; background:#f4f4f4; padding:10px; white-space:pre-wrap;">Use agent-score to check my agent connection.</pre>
+The answer says whether traces for that name arrived in the last hour.</li>
+<li><b>Read your scorecard.</b> After about 20 traces, scoring starts on its own. Open the agent for a 0-100 score and a ship / review / don't-ship recommendation, with the evidence behind each number.</li>
+</ol>
+
+<p><b>Send real traffic.</b> Send real or realistic traffic, including the ordinary failures. A hand-picked set of best outputs makes a weaker score.</p>
+
+<p><b>Wiring the exporter yourself.</b> If you would rather not use a coding agent, <b>+ Connect Agent</b> on the Agents page gives you the exporter config with your real key filled in. Use the <code>_TRACES_</code> variables, not the generic <code>OTEL_EXPORTER_OTLP_ENDPOINT</code>. The endpoint already ends in <code>/v1/traces</code>, and the generic form appends that path a second time.</p>
+
+<p>If you want a walkthrough, <a href="https://scheduler.zoom.us/andrew-demers/agentscore-overview">pick a time here</a> and we'll go through it together.</p>
+
+<p>Questions at any point, reply to this email.</p>
+
+<p>Andrew Demers<br>
+AgentScore Lead PM | Tricentis</p>
+
+</body>
+</html>

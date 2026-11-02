@@ -46,9 +46,9 @@ export default function Welcome() {
 
       <h2>The three things this guide covers</h2>
       <CardGrid>
-        <Card href="#/connect-with-mcp" title="Getting Started">
-          Connect your coding agent from Integrations. It signs in through the browser and sets up
-          tracing for you, usually in under ten minutes.
+        <Card href="#/quick-start" title="Quick start">
+          Connect your coding agent, name the agent you want scored, and check that its traces
+          arrived. Usually under ten minutes.
         </Card>
         <Card href="#/eval-catalog" title="Evaluations">
           What an "eval" is, the 41 that ship out of the box, and how to build your own in plain
@@ -63,10 +63,10 @@ export default function Welcome() {
       <h2>How it fits together</h2>
       <StepList>
         <Step title="Connect">
-          From <a href="#/connect-with-mcp">Integrations</a>, connect your coding agent. In the
-          project you have open, ask it to send that agent's traces to Agent Score under a name
-          you choose. It signs in through your browser and writes the ingest key. Agents in AI
-          Workspace are picked up on their own.
+          Follow the <a href="#/quick-start">Quick start</a>. In the project you have open, ask
+          your coding agent to send that agent's traces to Agent Score under a name you choose.
+          It signs in through your browser and writes the ingest key. Agents in AI Workspace are
+          picked up on their own.
         </Step>
         <Step title="Recognize">
           Agent Score names and categorizes your agent from its behavior. No setup form to fill

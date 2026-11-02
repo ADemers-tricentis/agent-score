@@ -1,13 +1,9 @@
 # Setting Up Your Tenant and Connecting Agents — Customer Guide (DRAFT)
 
-**Status: draft, not yet reconciled with the published `ConnectYourAgent.tsx`
-page or verified against production UI.** This describes what the
-`agent-score` backend code actually supports today. Before this replaces or
-merges into the live "Connect your agent" doc page, someone needs to confirm
-with engineering whether the self-serve tenant endpoint below is actually
-exposed to customers yet, or only exists as a backend API ahead of any UI —
-see the flag at the end. Treat this as source material, not a page to
-publish as-is.
+**Status: draft.** The published Quick start and Connect your agent page now
+say signing in with a Tosca Cloud account creates the workspace. No one on
+the Agent Score team sets it up. The rest of this file is still source
+material, not a page to publish as-is.
 
 ## What's a tenant?
 
@@ -18,10 +14,8 @@ production).
 
 ## Getting a tenant
 
-**If you're an external customer:** tenant creation is self-serve and
-instant — there's no approval queue. Creating one requires being logged in;
-give it a display name and it's ready immediately (the backend derives a
-unique internal name from what you enter).
+**If you're an external customer:** sign in with your Tosca Cloud account.
+That creates your workspace. No one on the Agent Score team has to set it up.
 
 **If your agent runs in AI Workspace, or is a Tricentis-internal agent
 (e.g. the Quality Agent):** you don't do this at all. These are "internal"
@@ -85,25 +79,11 @@ what it's given.
 
 ## Flag for whoever reconciles this with the published docs
 
-The currently live `ConnectYourAgent.tsx` page states tenant setup is
-"set up by the Agent Score team on your behalf, not a self-serve signup
-form." This draft says the opposite (self-serve, approval-free) based on a
-real, working backend endpoint (`POST /customer/v1/tenants` —
-see the companion internal runbook,
-`agent-score/docs/tenant-and-agent-setup-runbook.md`, §2.B, for the exact
-code reference). Before merging this draft in:
+The published Quick start and Connect your agent page now say signing in
+with a Tosca Cloud account creates the workspace. No one on the Agent Score
+team sets it up. The older "team provisions it on your behalf" line is gone.
 
-1. Confirm whether that self-serve endpoint is actually reachable from the
-   customer-facing product UI today, or whether it's backend-only ahead of
-   a UI that doesn't exist yet — if the latter, the *live* page describing
-   Tricentis-team provisioning may currently be the accurate one from a
-   customer's point of view, even though the code disagrees.
-2. Reconcile the internal-agent ingestion story: the live page describes a
-   BetterStack pull-based path; the runbook found a separate push-based
-   `/internal/otel/v1/traces` endpoint in code. Both may be real for
-   different services — worth a direct check with the ingestion team rather
-   than assuming either doc is simply wrong.
-
-This is exactly the kind of drift `agent-score-docs-sync` is built to catch
-against a live production walkthrough — worth running that skill against
-this specific page rather than trusting this draft's framing blind.
+The internal-agent ingestion story is still open: the live page describes a
+BetterStack pull-based path; the runbook found a separate push-based
+`/internal/otel/v1/traces` endpoint in code. Both may be real for different
+services.

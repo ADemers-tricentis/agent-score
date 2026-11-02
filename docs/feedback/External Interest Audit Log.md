@@ -4,6 +4,73 @@ Every run of the external-interest-sync agent, newest first. Each entry lists
 what changed in the tracker and CSVs and why. Contact emails are deliberately
 left out; they live in the contacts CSV.
 
+## 2026-11-02 (manual note)
+
+Cohort 2 beta invites marked sent. Not a sync run. Eaton, BearingPoint, and Workday moved from Demo scheduled to Invited to beta.
+
+### File changes
+- `external-interest-contacts.csv`: Status set to Invited to beta and Beta Invite Sent Date set to 11/2/26 for Amit Ghag (Eaton), Rohan Patil (BearingPoint), and Vijay Mummaneni (Workday).
+- `External Interest.md`: those three company rows and sections set to Invited to beta, with Beta invite sent: 2026-11-02. Current Demo scheduled 6 -> 3, Current Invited to beta 6 -> 9. Cumulative Pending beta 7 -> 10, Cumulative Invited to beta 6 -> 9.
+- `Beta Cohorts.md`: Cohort 2 marked invited 2026-11-02 (3 users, 3 companies, no sign-ins).
+- `.last-processed` and `.last-reply-check`: unchanged
+
+## 2026-11-02 (manual note)
+
+Cohort 1 beta check-in marked sent. Not a sync run. Pipeline stage stays Invited to beta.
+
+### File changes
+- `external-interest-contacts.csv`: Status set to Beta check-in sent — 2026-11-02 for Chris Allanson (Wolters Kluwer), Chris Carpenter and Gerard Trimberger (Merito), Pankaj Kumar Sinha, Deephan Mohanraj and Jawahar Govindaraj (Tritusa), Khadim KASHANI (L'OREAL), Meenakshi Sundaram Chockalingam (Aptiv), Rohan Bansod (New Vision). Louis Tadman and Andrew Carpenter (Merito) unchanged.
+- `External Interest.md`: Beta check-in sent: 2026-11-02 added on those six company sections. Pipeline counts unchanged.
+- `.last-processed` and `.last-reply-check`: unchanged
+
+## 2026-11-02 (manual note)
+
+Mario D'Amico (Sky Plc) replied to the beta welcome that he is not interested and does not want further emails. Removed from the tracker. Not a sync run.
+
+### File changes
+- `External Interest.md`: Sky Plc row removed from the company table. Cumulative Interested 112 -> 111, Cumulative Email sent 111 -> 110, Current Email sent 59 -> 58. Labs-form source count 108 -> 107. Company section marked do not email.
+- `external-interest-contacts.csv`: Sky Plc status set to Do not email
+- `.last-processed` and `.last-reply-check`: unchanged
+
+## 2026-10-29 (manual note)
+
+Andrew replied to André Hoffmann (Telekom Deutschland GmbH) on 2026-10-29. Not a sync run: no inbox check, and pipeline status stays Replied.
+
+### File changes
+- `External Interest.md`: `Our reply: 2026-10-29` added to the Telekom Deutschland GmbH section
+- `external-interest-contacts.csv`: no change (Status stays Replied)
+- `.last-processed` and `.last-reply-check`: unchanged
+
+## 2026-10-29T17:00:50Z
+
+- **Cutoff:** 2026-10-29T13:18:33.000Z -> **new marker:** 2026-10-29T13:18:33.000Z (unchanged)
+- **Emails found:** 0 new matching submissions (1 other message ignored: The Future Group (NL) - HQ submission (Jean Delissen), received exactly at the cutoff and already processed earlier today)
+
+### Added
+None
+
+### Excluded
+None
+
+### Held for review
+None
+
+### Replies
+- **Reply cutoff:** 2026-10-29T15:49:48.000Z -> **new reply marker:** 2026-10-29T15:49:48.000Z (unchanged)
+- **Search:** user's mailbox, all folders, `afterDateTime` only; 0 messages returned.
+
+None
+
+### Judgment calls
+- **Markers left as-is:** the labs search returned only the already-processed message at the cutoff, and the inbox search returned nothing, so neither marker moved.
+
+### File changes
+- `External Interest.md`: no changes
+- `external-interest-mail-merge.csv`: not touched (no new companies)
+- `external-interest-contacts.csv`: no changes
+- `.last-processed`: 2026-10-29T13:18:33.000Z (unchanged)
+- `.last-reply-check`: 2026-10-29T15:49:48.000Z (unchanged)
+
 ## 2026-10-29T16:22:23Z
 
 - **Cutoff:** 2026-10-29T13:18:33.000Z -> **new marker:** 2026-10-29T13:18:33.000Z (unchanged)

@@ -12,6 +12,10 @@ export default function ConnectWithMcp() {
         and starts the traces. After that, you ask it for the same jobs the rest of this guide
         describes.
       </Dek>
+      <p>
+        The short path is the <a href="#/quick-start">Quick start</a>: add the server, name the
+        agent, and check that traces arrived. This page is the setup for each client.
+      </p>
 
       <h2>Open Integrations</h2>
       <p>

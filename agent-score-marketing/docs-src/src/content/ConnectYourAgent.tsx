@@ -14,18 +14,16 @@ export default function ConnectYourAgent() {
         what happens once traces arrive.
       </Dek>
 
-      <h2>Your workspace comes first</h2>
+      <h2>Your workspace comes with sign-in</h2>
       <p>
-        Before any traces can flow in, your workspace - what Agent Score calls a <strong>tenant</strong> -
-        has to exist. Today that's set up by the Agent Score team on your behalf, not a self-serve
-        signup form: someone on our side provisions your workspace. Once it exists, everything from
-        here on is yours to drive.
+        Sign in with your Tosca Cloud account. Agent Score creates your workspace, what it calls a{" "}
+        <strong>tenant</strong>, from that account. No one on the Agent Score team has to set it
+        up. Everyone who signs in from the same Tosca Cloud tenant shares that workspace.
       </p>
       <Callout kind="note" title="Onboarding through AI Workspace">
         <p>
-          If your agent runs in AI Workspace, there's nothing to request - your tenant is
-          created in Agent Score automatically, the moment that agent's traces are first
-          ingested.
+          If your agent runs in AI Workspace, there's nothing to connect. Traces start when the
+          agent runs, and no ingest key is needed.
         </p>
       </Callout>
 
@@ -42,10 +40,9 @@ export default function ConnectYourAgent() {
       <h2>How traces get in</h2>
       <p>
         <strong>Agents built in AI Workspace</strong> need no setup at all - no ingest key, no
-        registration step. Traces start flowing the moment the agent runs, your tenant is created
-        automatically on first ingestion (see above), and session identity is captured
-        automatically too, since the OTel stack underlying AI Workspace agents generates a session
-        ID per trace on its own.
+        registration step. The workspace already exists from sign-in. Traces start flowing the
+        moment the agent runs, and session identity is captured automatically too, since the OTel
+        stack underlying AI Workspace agents generates a session ID per trace on its own.
       </p>
       <p>
         <strong>External agents</strong> connect through an OpenTelemetry export - the same

@@ -177,13 +177,10 @@ on disable/rotate via Postgres LISTEN/NOTIFY.
   client is the plain `tk_` bearer scheme in `endpoints/external.py`. Left
   behind from an older design (commit `58e7ea7f` updated adjacent
   Langfuse-forwarding language but not this).
-- **The live customer docs page (`ConnectYourAgent.tsx` in
-  `agent-score-marketing/docs-src`) says tenant setup is "set up by the Agent
-  Score team on your behalf, not a self-serve signup form."** That contradicts
-  §2.B above — a working, approval-free self-serve endpoint exists. Whichever
-  is true in production (endpoint exists in code vs. exposed to customers)
-  needs confirming with the team that owns customer docs before this doc's
-  companion customer-facing guide is trusted as current.
+- **The published Quick start and Connect your agent page say signing in
+  with a Tosca Cloud account creates the workspace.** No one on the Agent
+  Score team sets it up. That replaced the older line that the team
+  provisioned the tenant on the customer's behalf.
 - **`ConnectYourAgent.tsx` describes internal-agent ingestion via BetterStack
   pull** (Back Office App → Ingestion → Stream → Configuration → Services),
   not the `/internal/otel/v1/traces` push path with `InternalProducer` tokens

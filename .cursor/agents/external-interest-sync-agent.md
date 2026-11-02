@@ -159,8 +159,8 @@ Note the URLs you relied on for each company; they go in the audit log.
 - Insert new `### <Company>` sections newest-first, directly after the
   Pipeline Tracker table and before the current first company section.
 - Add one Pipeline Tracker row per new company, Status `Interested`.
-- Bump only the **Interested companies** count in the summary row. Leave
-  replied / demos / active betas alone; those are hand-managed.
+- Bump **Interested** by 1 in both the Cumulative table and the Current
+  stage table. Leave every other stage count alone; those are hand-managed.
 - Update the intro's submission count and "as of" date, and append this
   run's exclusion and repeat notes to its existing sentences without
   replacing them.
@@ -273,12 +273,15 @@ to labs@tricentis.com.
      Tech Collective.
    - Contacts log: set that contact's Status cell to `Replied`. Leave every
      other cell and row untouched.
-   - Bump **Companies replied** in the summary row by the number of
-     companies newly moved to Replied. This is the one hand-managed count
-     the agent may change.
+   - For each company newly moved to Replied, add 1 to **Replied** in the
+     Cumulative table and in the Current stage table, and subtract 1 from
+     the Current stage row they left (Email sent or Follow-up sent).
+     Cumulative only grows. This is the one stage-count change the agent
+     may make besides new Interested rows.
    - Never move a company backwards: if it is already `Replied`, `Demo
-     scheduled`, `Pending beta`, `Active beta` or `Not a fit`, change
-     nothing and just record the reply in the audit log.
+     scheduled`, `Pending beta`, `Invited to beta`, `Actively using`,
+     `Active beta`, `Not a fit` or `Do not email`, change nothing and just record the
+     reply in the audit log.
 6. **Marker:** write the received time of the newest message the search
    returned to `.last-reply-check`, once the edits above succeeded. Leave it
    unchanged if the search returned nothing.

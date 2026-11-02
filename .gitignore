@@ -10,6 +10,7 @@ node_modules/
 .vite/
 test-agent/.env
 test-agent/venv
+test-agent/.export-state.json
 __pycache__/
 docs/feedback/email automation/external-interest-contacts.csv
 docs/feedback/email automation/external-interest-mail-merge.csv

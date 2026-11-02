@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "hooks": {
+    "subagentStop": [
+      {
+        "command": ".cursor/hooks/export-docs-sync-agent-trace.py",
+        "matcher": "^agentscore-docs-sync-agent$",
+        "timeout": 60
+      }
+    ]
+  }
+}

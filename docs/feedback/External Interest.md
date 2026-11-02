@@ -28,13 +28,39 @@ What accounts we have talked to say they build or run agents on. Counts are comp
 
 ## Pipeline Tracker
 
-| Interested companies | Companies replied | Demos | Pending betas | Active betas |
-|---|---|---|---|---|
-| 112 | 17 | 13 | 1 | 6 |
+Source breakdown: 107 via the Labs form, 3 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E), 1 via David (VP of AI/ML) (Eaton) = 111 total. Ferrara Candy Company is listed below but not counted: Sudha Damacherla signed up by accident for a different product (2026-10-20). Sky Plc (Mario D'Amico) is not counted: on 2026-11-02 he replied to the beta welcome that he is not interested and does not want further emails.
 
-Source breakdown: 108 via the Labs form, 3 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E), 1 via David (VP of AI/ML) (Eaton) = 112 total. Ferrara Candy Company is listed below but not counted: Sudha Damacherla signed up by accident for a different product (2026-10-20).
+Both tables use the same stages. Cumulative counts every company at that stage or a later one, so each cumulative cell equals its current cell plus every current cell below it. Current counts companies whose Status is that stage today. Ferrara Candy is in neither. Counts are manual: when a status changes, subtract 1 from the old Current row, add 1 to the new Current row, and add 1 to each Cumulative row the company has newly reached.
 
-Update the per-company Status column below as accounts move, and keep the summary row above in sync (it's a manual count, not a live formula).
+Invited to beta means the invite went out. Actively using means Beta Cohorts has a first sign-in. As of 2026-11-02 the nine invites have no sign-in, so Actively using is 0. The nine are Aptiv, Tritusa Consulting, New Vision Software, Wolters Kluwer, Merito Solutions, L'OREAL, Eaton, BearingPoint, and Workday.
+
+### Cumulative
+
+| Stage | Companies |
+|---|---|
+| Interested | 111 |
+| Email sent | 110 |
+| Follow-up sent | 52 |
+| Replied | 18 |
+| Demo scheduled | 13 |
+| Pending beta | 10 |
+| Invited to beta | 9 |
+| Actively using | 0 |
+
+### Current stage
+
+| Stage | Companies |
+|---|---|
+| Interested | 1 |
+| Email sent | 58 |
+| Follow-up sent | 34 |
+| Replied | 5 |
+| Demo scheduled | 3 |
+| Pending beta | 1 |
+| Invited to beta | 9 |
+| Actively using | 0 |
+
+## Details
 
 | Company | Contact | Status |
 |---|---|---|
@@ -46,7 +72,6 @@ Update the per-company Status column below as accounts move, and keep the summar
 | QACooper LLC | Michael W Cooper | Replied |
 | Telekom Deutschland GmbH | André Hoffmann | Replied |
 | Ashurst LLP (UK) | Ankush Shrivastava | Email sent — 2026-10-22 |
-| Sky Plc (UK) - HQ | Mario D'Amico | Email sent — 2026-10-22 |
 | TotalEnergies (FR) - HQ | Olivier Soulard | Email sent — 2026-10-22 |
 | Barratt Redrow | Bhavinkumar Patel | Email sent — 2026-10-22 |
 | Epson Europe - UK | Simon Berryman | Email sent — 2026-10-22 |
@@ -78,20 +103,20 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Tata Consultancy Services Ltd (IN) | Joji Joseph | Email sent — 2026-10-05 |
 | Skygen USA | Joko Supriyanto | Email sent — 2026-10-05 |
 | Hugo Boss AG (DE) | Marco Esguerra, Julian Raach, Yash Jawale | Email sent — 2026-10-05 |
-| Aptiv Global Operations Limited | Meenakshi Sundaram Chockalingam | Active Beta |
+| Aptiv Global Operations Limited | Meenakshi Sundaram Chockalingam | Invited to beta |
 | LGT Financial Services Ltd. (LI) | David Klien | Email sent — 2026-09-23 |
-| Eaton | Amit Ghag | Demo Scheduled — 2026-10-01 |
+| Eaton | Amit Ghag | Invited to beta |
 | Meta Platforms, Inc. | Sri Pulleti | Demo Scheduled — POC scoping |
 | Freddie Mac | Kaleb Jackson | Replied |
-| Workday, Inc. | Vijay Mummaneni | Demo Scheduled |
+| Workday, Inc. | Vijay Mummaneni | Invited to beta |
 | PVH Corp | Beena P K, Aimee Martin | Follow-up sent — 2026-09-24 |
 | Charter Communications Operating, LLC | Sarvesh Peddi | Follow-up sent — 2026-09-24 |
 | Artizent (form blank, domain-resolved) | Alan Mayfus | Follow-up sent — 2026-09-24 |
-| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj | Active Beta |
+| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj | Invited to beta |
 | SAP Labs India (IN) | SaiDeepak Ayyagari | Follow-up sent — 2026-09-24 |
 | Regeneron Pharmaceuticals Inc. | Murali Sundaram | Follow-up sent — 2026-09-24 |
 | Acadia Healthcare | Pratiksha Arora | Follow-up sent — 2026-09-24 |
-| New Vision Software Inc. | Rohan Bansod | Active Beta |
+| New Vision Software Inc. | Rohan Bansod | Invited to beta |
 | Hilti Asia IT Services (MY) | Ashwin Mor | Follow-up sent — 2026-09-24 |
 | Panasonic Avionics (US) | Ronica Brisbon | Follow-up sent — 2026-09-24 |
 | The Boeing Company | Gurucharan Bijinepally | Follow-up sent — 2026-09-24 |
@@ -112,12 +137,12 @@ Update the per-company Status column below as accounts move, and keep the summar
 | Tachyon Technologies | Subba Rao Gonugunta | Follow-up sent — 2026-09-24 |
 | Xebia - Partner | Anmol Jain | Follow-up sent — 2026-09-24 |
 | Cargill Incorporated | Alfonso Garbanzo | Follow-up sent — 2026-09-24 |
-| Wolters Kluwer United States Inc. | Chris Allanson | Active Beta |
+| Wolters Kluwer United States Inc. | Chris Allanson | Invited to beta |
 | J. R. Simplot Company | Neeraja Kusuma | Follow-up sent — 2026-09-24 |
 | Crown Equipment Corporation | Vinay Patlolla | Follow-up sent — 2026-09-24 |
 | Stanza | Anirban Toy Choudhury | Replied |
 | Sunbelt Rentals | Arya Shrey | Follow-up sent — 2026-09-24 |
-| Merito Solutions | Chris Carpenter, Gerard Trimberger, Louis Tadman, Andrew Carpenter | Active Beta |
+| Merito Solutions | Chris Carpenter, Gerard Trimberger, Louis Tadman, Andrew Carpenter | Invited to beta |
 | Amazon Kuiper Manufacturing Enterprises LLC | Saranya Vaithiyanathan | Follow-up sent — 2026-09-24 |
 | Accenture CIO HR Organization (unresolved, may be Stanza) | Greg Wanroy | Follow-up sent — 2026-09-24 |
 | Aspire Systems Digital Transformation Inc. | Naveen Srinivasan | Follow-up sent — 2026-09-24 |
@@ -141,18 +166,18 @@ Update the per-company Status column below as accounts move, and keep the summar
 | SAP North America | Thomas Zimmermann | Email sent — 2026-09-17 |
 | Defence Science and Technology Agency (SG) | cydnie na | Email sent — 2026-09-17 |
 | Housing Development Board (SG) | Swee Chyuan Koh | Email sent — 2026-09-17 |
-| L'OREAL | Khadim KASHANI | Active Beta |
+| L'OREAL | Khadim KASHANI | Invited to beta |
 | City Dev (SG) | Davin Ng | Email sent — 2026-09-17 |
 | Testing IT Consulting S.A. de C.V. | Hector Santa Maria | Email sent — 2026-09-17 |
 | Brillar Pte Ltd (SG) | Zuzan Win | Email sent — 2026-09-17 |
 | Harrods Ltd (UK) | Shanita Helyar | Email sent — 2026-09-17 |
 | Ally Financial Inc. | Jana Kethamreddy | Email sent — 2026-09-17 |
-| BearingPoint GmbH (DE) - HQ | Rohan Patil | Demo Scheduled — 2026-09-23 |
+| BearingPoint GmbH (DE) - HQ | Rohan Patil | Invited to beta |
 | xAmplify (AU) | Prakash Panchal | Email sent — 2026-09-17 |
 | Accenture (multiple entities) | Jigish Belani, Mohammed Arslan Mir, Vijetha Nayak, Priya Saidavaram, Ankur Mittal, Ajay Kharb, Praveer Bakshi, Antonio Sglavo | Pending Beta |
 | Singapore Pools (form blank, domain-resolved) | Nai Hau Lui, Fun Tat Chen | Email sent — 2026-09-23 |
 
-*(Status values: Interested → Email sent → Follow-up sent → Replied → Demo scheduled → Pending beta → Active beta. Not a fit is terminal, for accidental or wrong-product signups.)*
+*(Status values: Interested → Email sent → Follow-up sent → Replied → Demo scheduled → Pending beta → Invited to beta → Actively using. Not a fit and Do not email are terminal. Not a fit is an accidental or wrong-product signup. Do not email is an opt-out: remove the company from both count tables and send nothing further.)*
 
 ---
 
@@ -267,6 +292,7 @@ Relationship: Partner
 
 Email sent: 2026-10-28  
 Replied: 2026-10-29  
+Our reply: 2026-10-29  
 Beta scheduled: -  
 
 what they do: German operating company of Deutsche Telekom, providing mobile, fixed-line and broadband services in Germany.
@@ -302,6 +328,7 @@ Relationship: Evaluating Tricentis
 
 Email sent: 2026-10-22  
 Beta scheduled: —  
+Do not email: 2026-11-02. Replied to the beta welcome that he is not interested and does not want further emails. Removed from the tracker.
 
 what they do: Comcast-owned pay-TV, broadband and mobile provider operating in the UK and several European markets.
 
@@ -878,6 +905,7 @@ Relationship: Customer
 Email sent: —  
 Beta scheduled: 2026-09-25  
 Beta invite sent: 2026-10-12  
+Beta check-in sent: 2026-11-02  
 
 what they do: Global automotive-technology supplier building safety, connectivity, and software-defined-vehicle platforms.
 
@@ -915,12 +943,13 @@ Date: (sourced via David, VP of AI/ML — not a Labs form submission)
 Name: Amit Ghag  
 Email sent: —  
 Beta scheduled: 2026-10-01  
+Beta invite sent: 2026-11-02  
 
 what they do: no public profile researched yet — added straight to the Pipeline Tracker from an internal referral; back-fill company research when time allows. From the call: a manufacturer with a large custom AI portfolio (BOM similarity engine, portfolio complexity reduction, engineering knowledge-base agents, executive customer-profile agents, tariff monitoring, competitive benchmarking across 700-800 product initiatives).
 
 confirmed use case (from 2026-10-01 demo): Amit Ghag is establishing quality engineering practices for Eaton's custom AI development, built mostly on Azure AI Foundry and Palantir Foundry. His headline requirement is automated testing as a CI/CD quality gate: nothing ships to production unless it clears a score threshold. David Colwell framed Eaton's agents as three classes (RAG, workflow, research) that each need a different definition of "good." Amit first heard of AgentScore at Transform in Singapore; Eran suggested the call. Prashant Saxena joined as the technical stakeholder. Editable success criteria and profiles, weighted dimensions ("that is something that I was looking for"), tool-use/MCP/agent-to-agent scoring, version-tagged scoring runs, and the golden-dataset-from-real-traces answer all landed. Gaps: CI/CD gate is in progress, not shipped (the deciding item); Tricentis Cloud hosting only (on-prem still being explored); no upfront golden-dataset upload in the UI; no project/release-level grouping; adversarial testing is roadmap only. Never answered: Palantir Foundry compatibility. Andrew pitched a design-partner role and the upcoming open beta. Debrief: [Eaton Feedback Session](feedback-sessions/Eaton%20Feedback%20Session.md).
 
-waiting on: (1) Andrew to answer Prashant's data-handling question (what goes to the LLM judge, how PII redaction works, whether Eaton telemetry stays in-boundary) after checking with engineering, likely a gate to any trial; (2) Andrew to send AgentScore overview collateral Amit can use to socialize it inside Eaton; (3) Andrew to put together a comparison against Azure AI Foundry's built-in evals; (4) follow-up email with open beta sign-up. No beta date set.
+waiting on: (1) Andrew to answer Prashant's data-handling question (what goes to the LLM judge, how PII redaction works, whether Eaton telemetry stays in-boundary) after checking with engineering, likely a gate to any trial; (2) Andrew to send AgentScore overview collateral Amit can use to socialize it inside Eaton; (3) Andrew to put together a comparison against Azure AI Foundry's built-in evals. Beta invite sent 2026-11-02.
 
 agent stack (stated): custom-built agents on Azure AI Foundry and Palantir Foundry; RAG, workflow and research agent classes (source: Eaton Feedback Session, 2026-10-01)
 
@@ -1214,6 +1243,7 @@ Relationship: Customer
 Email sent: —  
 Beta scheduled: 2026-09-24  
 Beta invite sent: 2026-10-12  
+Beta check-in sent: 2026-11-02  
 
 what they do: French multinational cosmetics and beauty group.
 
@@ -1322,6 +1352,7 @@ Relationship: Partner
 
 Email sent: —  
 Beta scheduled: 2026-09-23  
+Beta invite sent: 2026-11-02  
 
 what they do: European management and technology consultancy (13,000+ people, 70+ countries).
 
@@ -1492,6 +1523,7 @@ Name: Vijay Mummaneni
 
 Email sent: —  
 Beta scheduled: —  
+Beta invite sent: 2026-11-02  
 
 what they do: Enterprise HR/Finance/IT SaaS platform (Pleasanton, CA); ~19,000+ employees, ~$8.4B revenue; core HCM and Financial Management products used across thousands of enterprises.
 
@@ -1571,6 +1603,7 @@ Name: Jawahar Govindaraj
 Email sent: —  
 Beta scheduled: 2026-09-11  
 Beta invite sent: 2026-10-12  
+Beta check-in sent: 2026-11-02 (Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj)  
 
 what they do: Sydney-headquartered SAP Technical Services & software-testing consultancy (~51 employees, ~$6M revenue, founded 2011) with presence in Melbourne, Canberra, Brisbane — 150+ projects delivered to 100+ Australian customers, specializing in SAP-focused quality engineering, automation, and performance testing ([tritusa.com.au/about-us](https://tritusa.com.au/about-us/)).
 
@@ -1640,6 +1673,7 @@ Name: Rohan Bansod
 Email sent: —  
 Beta scheduled: 2026-10-08  
 Beta invite sent: 2026-10-20  
+Beta check-in sent: 2026-11-02  
 
 what they do: India-based (Pune) IT services/QA consultancy (~687 employees) — application/data/infrastructure modernization plus a dedicated QA automation practice. Already a Tricentis partner — lists Tricentis/Tosca alongside Oracle, PEGA, Microsoft, and Google Cloud in its partner roster.
 
@@ -1992,6 +2026,7 @@ Name: Chris Allanson
 Email sent: —  
 Beta scheduled: —  
 Beta invite sent: 2026-10-12  
+Beta check-in sent: 2026-11-02  
 
 what they do: Global information-services/software company for legal, tax, health, and compliance professionals.
 
@@ -2080,6 +2115,7 @@ Also on the demo: Andrew Carpenter (Director of Professional Services)
 Email sent: —  
 Beta scheduled: 2026-10-06 (demo)  
 Beta invite sent: 2026-10-12  
+Beta check-in sent: 2026-11-02 (Chris Carpenter, Gerard Trimberger)  
 
 what they do: Enterprise software VAR/consultancy (20+ years) — SDLC tooling, QA automation, app-security reseller. Already a Tricentis partner — lists Tricentis alongside Azure DevOps, TestRail, Planview on their own site.
 
