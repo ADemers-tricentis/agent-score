@@ -24,46 +24,76 @@
     .dek { color: var(--text2); margin: 8px 0 28px; }
     h2 { font-size: 1.05rem; margin: 28px 0 10px; }
     ol { list-style: none; counter-reset: s; }
-    ol li { counter-increment: s; position: relative; padding: 0 0 18px 44px; }
-    ol li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 700; font-size: .85rem; display: flex; align-items: center; justify-content: center; }
-    ol li strong.t { display: block; }
+    ol > li { counter-increment: s; position: relative; padding: 0 0 18px 44px; }
+    ol > li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 700; font-size: .85rem; display: flex; align-items: center; justify-content: center; }
+    ol > li strong.t { display: block; }
     li span.d { color: var(--text2); font-size: .95rem; }
+    ol > li ul { margin: 8px 0 0; padding-left: 18px; color: var(--text2); font-size: .95rem; }
+    ol > li ul li { margin-bottom: 4px; }
     code { font-family: var(--mono); font-size: .85em; background: var(--bg); padding: 1px 5px; border-radius: 4px; }
-    pre { background: var(--bg); border: 1px solid var(--divider); border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-family: var(--mono); font-size: .8rem; margin: 4px 0 18px; }
+    pre { background: var(--bg); border: 1px solid var(--divider); border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-family: var(--mono); font-size: .8rem; margin: 8px 0 10px; white-space: pre-wrap; }
     .callout { border-radius: 8px; padding: 12px 16px; margin: 0 0 12px; font-size: .92rem; }
     .callout b { display: block; margin-bottom: 2px; }
     .warn { background: var(--warn-dim); } .tip { background: var(--tip-dim); }
-    ul { padding-left: 20px; } li a, .callout a { color: var(--primary); }
+    ul.asks { padding-left: 20px; margin-bottom: 16px; }
+    li a, .callout a, .dek a, span.d a { color: var(--primary); }
+    @page { size: letter; margin: 0.55in; }
+    @media print {
+      body { background: #fff; padding: 0; font-size: 14.5px; line-height: 1.45; }
+      main { max-width: none; margin: 0; border: none; border-radius: 0; padding: 0; }
+      .dek { margin-bottom: 16px; }
+      ol > li { padding-bottom: 12px; }
+      h2 { margin: 14px 0 6px; break-after: avoid; }
+      .callout { margin-bottom: 8px; }
+      ul.asks { margin-bottom: 10px; break-inside: avoid; }
+      ol > li, .callout, pre { break-inside: avoid; }
+      a { text-decoration: none; }
+    }
   </style>
 </head>
 <body>
 <main>
   <div class="eyebrow">Agent Score</div>
   <h1>Quick start</h1>
-  <p class="dek">From zero to your first score in six steps.</p>
+  <p class="dek">Connect your coding agent, name the agent you want scored, and check that its traces arrived. Open Agent Score at <a href="https://agent-score.ai.tricentis.com/">agent-score.ai.tricentis.com</a>.</p>
 
   <ol>
     <li><strong class="t">Sign in to Tosca Cloud</strong>
-      <span class="d">Agent Score requires a Tosca Cloud login. If you do not have one yet, <a href="https://www.tricentis.com/software-testing-tool-trial-demo">sign up for a Tosca Cloud trial</a> first, then sign in with that account.</span>
-      <span class="d" style="display:block; margin-top:6px"><b>Note:</b> Agent Score is currently unavailable for SAP tenants and organizations that have previously selected the "Block AI" flag.</span></li>
-    <li><strong class="t">Sign in, and your workspace is ready</strong>
-      <span class="d">Signing in with your Tosca Cloud account creates your workspace (a tenant). No one on the Agent Score team has to set it up. Everyone signing in from that Tosca Cloud tenant shares it. If your agent runs in AI Workspace, no ingest key is needed, so skip to step 5.</span></li>
-    <li><strong class="t">Create an ingest key</strong>
-      <span class="d">Open <b>Integrations</b> in the sidebar and create a new key. It looks like <code>tk_...</code> and belongs to exactly one tenant.</span></li>
-    <li><strong class="t">Point your agent's OpenTelemetry export at Agent Score</strong>
-      <span class="d">Add these two variables to the exporter your agent already uses. No new SDK required. <b>+ Connect Agent</b> on the Agents page gives you this exact config with your real key filled in.</span></li>
-  </ol>
-  <pre>OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=&lt;your ingest endpoint&gt;/external/otel/v1/traces
-OTEL_EXPORTER_OTLP_TRACES_HEADERS=Authorization=Bearer &lt;your tk_... ingest key&gt;</pre>
-  <ol style="counter-reset: s 4">
-    <li><strong class="t">Run your agent</strong>
-      <span class="d">Interact with your agent as you normally would.It appears on the Agents page on its own, first as <b>Setting up</b>, then <b>Learning your agent</b> with a live count of traces received. No per-agent form to fill out.</span></li>
+      <span class="d">Agent Score uses your Tosca Cloud account. If you do not have one yet, <a href="https://www.tricentis.com/software-testing-tool-trial-demo">sign up for a Tosca Cloud trial</a> first, then sign in. Signing in creates your workspace. Everyone who signs in from that Tosca Cloud tenant shares it.</span>
+      <span class="d" style="display:block; margin-top:6px"><b>Note:</b> Agent Score is currently unavailable for SAP tenants and organizations that have previously selected the "Block AI" flag.</span>
+      <span class="d" style="display:block; margin-top:6px">If your agent already runs in AI Workspace, its traces arrive when it runs. No ingest key. You can skip the rest of this page.</span></li>
+    <li><strong class="t">Add Agent Score and sign in</strong>
+      <span class="d">In the sidebar, open <b>Integrations</b>. The card at the top is <b>Connect a coding agent (MCP)</b>. Copy the server URL whole. The part after the <code>?</code> names your tenant. A client that drops it cannot sign in.</span>
+      <span class="d" style="display:block; margin-top:6px">Add that URL in Claude Code, Cursor, Codex, or the Claude apps. There is no API key to paste. The card shows the command or file for your client, with your URL already filled in. Your browser opens Agent Score. Sign in with your Tosca Cloud account, check the request, and click Allow. Then finish in the client:</span>
+      <ul>
+        <li><b>Claude Code.</b> Run <code>/mcp</code>, choose <b>agent-score</b>, then <b>Authenticate</b>.</li>
+        <li><b>Cursor.</b> Open <b>Customize</b>, go to <b>MCP</b>, and sign in on agent-score.</li>
+        <li><b>Codex.</b> Click <b>Authenticate</b> beside agent-score, then start a new session.</li>
+        <li><b>Claude apps.</b> Add a custom connector named Agent Score and leave the OAuth client ID and secret empty. Click <b>Connect</b>. In a chat, turn Agent Score on under <b>Connectors</b>.</li>
+      </ul></li>
+    <li><strong class="t">Name the agent and start its traces</strong>
+      <span class="d">Open the project for the agent you want scored, and ask:</span>
+      <pre>Set this agent up to send its traces to Agent Score. Name it checkout-agent.</pre>
+      <span class="d"><code>checkout-agent</code> is an example. Use the name you want that agent to keep. The coding agent creates an ingest key, writes the exporter settings into an environment file that version control ignores, and sets <code>OTEL_SERVICE_NAME</code> to that name. Agent Score files the traces under it. Restart the agent and run it once, on a real request.</span></li>
+    <li><strong class="t">Check that the traces arrived</strong>
+      <span class="d">Ask:</span>
+      <pre>Use agent-score to check my agent connection.</pre>
+      <span class="d">The answer lists your ingest keys and whether traces for that name arrived in the last hour.</span></li>
     <li><strong class="t">Read your scorecard</strong>
-      <span class="d">After <b>20 traces</b>, scoring starts automatically. Open the agent to see a 0-100 score and a ship / review / don't-ship recommendation, with the evidence behind every number.</span></li>
+      <span class="d">After about <b>20 traces</b>, scoring starts on its own. Open the agent to see a 0-100 score and a ship / review / don't-ship recommendation, with the evidence behind every number.</span></li>
   </ol>
 
-  <div class="callout warn"><b>Use the _TRACES_ variables</b>Use the <code>_TRACES_</code>-suffixed variables, not the generic <code>OTEL_EXPORTER_OTLP_ENDPOINT</code>. The endpoint above already ends in <code>/v1/traces</code>, and the generic form would append it a second time.</div>
-  <div class="callout tip"><b>Send real traffic</b>Scoring is only as honest as the traces behind it. Send real or realistic traffic, including the ordinary failures, not a hand-picked set of best outputs.</div>
+  <div class="callout tip"><b>The ingest key is shown once</b>Have the agent write the key to an environment file that version control ignores. Keep it out of source, chat, and logs. If that reply is lost, rotate the key on Integrations. The old secret cannot be shown again.</div>
+  <div class="callout tip"><b>Send real traffic</b>Scoring is only as honest as the traces behind it. Send real or realistic traffic, including the ordinary failures.</div>
+  <div class="callout warn"><b>A change takes effect when you ask</b>Your coding agent acts as you. Starting a scoring run, publishing an eval, or deleting an agent happens immediately. Ask only for a change you want made.</div>
+
+  <h2>What to ask next</h2>
+  <ul class="asks">
+    <li>How is this agent scoring, and what is the weakest part?</li>
+    <li>Score this agent now.</li>
+    <li>Why did this trace fail?</li>
+    <li>What should I change, based on the latest scores?</li>
+  </ul>
 
   <div class="callout tip"><b>Need help?</b>If you need any assistance, reach out to Andrew Demers at <a href="mailto:a.demers@tricentis.com">a.demers@tricentis.com</a>.</div>
 </main>
