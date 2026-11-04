@@ -44,9 +44,12 @@
   .phase { border-radius: 12px; padding: 14px 16px 18px; margin-bottom: 16px; border: 1px solid; }
   .phase.now { background: var(--now-bg); border-color: #bfe5d0; }
   .phase.next { background: var(--next-bg); border-color: #c6d9f8; }
+  .phase.later { background: var(--later-bg); border-color: #ddd4f3; }
   .phase-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
   .phase-head .tag { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 9px; border-radius: 99px; color: #fff; }
-  .now .tag { background: var(--now); } .next .tag { background: var(--next); }
+  .phase.now .tag { background: var(--now); }
+  .phase.next .tag { background: var(--next); }
+  .phase.later .tag { background: var(--later); }
   .phase-head .name { font-weight: 700; }
   .phase-head .range { color: var(--muted); font-size: 13px; }
   .steps { display: flex; align-items: stretch; flex-wrap: wrap; gap: 0; row-gap: 14px; }
@@ -60,7 +63,9 @@
     width: 24px; height: 24px; border-radius: 50%; color: #fff; font-weight: 700; font-size: 12px;
     display: grid; place-items: center;
   }
-  .now .step .n { background: var(--now); } .next .step .n { background: var(--next); }
+  .phase.now .step .n { background: var(--now); }
+  .phase.next .step .n { background: var(--next); }
+  .phase.later .step .n { background: var(--later); }
   .step:not(:last-child)::after {
     content: ""; position: absolute; right: -24px; top: 50%; width: 18px; height: 2px;
     background: #9aa6c4; transform: translateY(-50%);
@@ -74,7 +79,7 @@
   .branches { display: flex; gap: 6px; margin-top: 6px; font-size: 11px; }
   .branches span { background: var(--now-bg); color: var(--now-ink); border-radius: 6px; padding: 2px 6px; }
   .loopnote {
-    margin: 12px 0 0; font-size: 13px; color: var(--next-ink); background: #fff; border: 1px dashed var(--next);
+    margin: 12px 0 0; font-size: 13px; color: var(--now-ink); background: #fff; border: 1px dashed var(--now);
     border-radius: 10px; padding: 8px 12px; display: inline-flex; gap: 8px; align-items: center;
   }
   .between { text-align: center; color: #9aa6c4; font-size: 20px; line-height: 1; margin: -6px 0 10px; }
@@ -146,7 +151,7 @@
   <div class="wrap" style="padding-bottom:0">
     <h1>AgentScore Roadmap</h1>
     <p>Beta onboarding and self-improvement</p>
-    <div class="meta">Last updated 10-22-2026 &middot; Horizons: Now / Next / Later</div>
+    <div class="meta">Last updated 11-04-2026 &middot; Horizons: Now / Next / Later</div>
   </div>
 </header>
 
@@ -159,146 +164,164 @@
     </div>
     <div class="card">
       <h3>North star</h3>
-      <p>Get as many users, including internal users, as possible using AgentScore regularly. The product must prove its value: users must actually use it and benefit from it. Users should be able to onboard, score, and improve their agents as simply and quickly as possible.</p>
+      <p>Get as many users, including internal users, as possible using AgentScore regularly. The product must prove its value: users must actually use it and benefit from it. Onboarding should be so straightforward that the next action is never in question, and the user reaches a score they can act on as quickly as possible.</p>
     </div>
   </section>
 
   <!-- ================= USER FLOW ================= -->
   <h2 class="section">Target user flow</h2>
-  <p class="sub">From sign-up to measurable improvement. Step numbers match the feature cards below. Step 7 is the Now part of dynamic scoring. The scorecard and session grouping stay Next and are not numbered steps.</p>
+  <p class="sub">Steps 1 to 4 are Now. Steps 8 to 11 are Next, and they repeat until the score meets the ship bar. Steps 14 and 15 are Later. Internal coverage of Tricentis agents is Now and is not a numbered step. App usability, the JEV / decision model, and session grouping are Next and are not numbered steps. Steps 12 and 13, the previous self-improvement loop, are marked done and are not on this diagram.</p>
 
   <section class="card flow">
 
     <div class="phase now">
-      <div class="phase-head"><span class="tag">Now</span><span class="name">Simplify onboarding</span><span class="range">Steps 1 to 7</span></div>
+      <div class="phase-head"><span class="tag">Now</span><span class="name">First session and workflows</span><span class="range">Steps 1 to 4</span></div>
       <div class="steps">
-        <div class="step"><span class="n">1</span>User signs up for Tosca Cloud or brings an existing account</div>
-        <div class="step decision"><span class="n">2</span>User signs into AgentScore. Tenant exists?
-          <div class="branches"><span>No: create tenant</span><span>Yes: log in, welcome</span></div>
-        </div>
-        <div class="step"><span class="n">3</span>All agents, internal and external, shown in one place</div>
-        <div class="step"><span class="n">4</span>Getting Started guide gives MCP connection instructions</div>
-        <div class="step"><span class="n">5</span>User points their agent at the MCP</div>
-        <div class="step"><span class="n">6</span>Agent runs connect commands, AgentScore ingests traces</div>
-        <div class="step wide"><span class="n">7</span>Best-fit profile and evals are chosen automatically. If none fit, they are created, with a clear explanation of why.</div>
+        <div class="step"><span class="n">1</span>User signs in with Trident</div>
+        <div class="step"><span class="n">2</span>Every screen shows one next action</div>
+        <div class="step"><span class="n">3</span>User reads the first score</div>
+        <div class="step wide"><span class="n">4</span>A multi-agent flow is shown as one workflow</div>
       </div>
+      <p class="loopnote">Also Now, and not a numbered step: every internal Tricentis agent is scored. No AgentScore product work.</p>
     </div>
 
-    <div class="down"><span class="stem"></span><span class="head"></span><span class="lbl">After profile and evals are set</span></div>
-    <div class="loopwrap"><svg viewBox="0 0 1300 520" role="img" aria-label="Stimulation testing and self-improvement loop">
+    <div class="down"><span class="stem"></span><span class="head"></span><span class="lbl">After the first score</span></div>
+
+    <div class="loopwrap"><svg viewBox="0 0 1360 460" role="img" aria-label="Stimulation testing loop, then gains and a report">
 <defs>
-<filter id="sh" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#14213d" flood-opacity=".12"/></filter>
 <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4c5fd5"/></marker>
 <marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#7b86a6"/></marker>
+<marker id="ap" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#7a5bd0"/></marker>
 </defs>
-<rect x="240" y="40" width="780" height="400" rx="26" fill="#eef0fd" stroke="#4c5fd5" stroke-width="2" stroke-dasharray="8 6"/>
-<text x="266" y="72" class="looplbl">THE LOOP</text>
-<text x="400" y="72" class="loopsub">repeat steps 9 to 13 until the agent is ready to ship</text>
+<rect x="20" y="16" width="960" height="420" rx="26" fill="#eef0fd" stroke="#4c5fd5" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="44" y="48" class="looplbl">THE LOOP</text>
+<text x="168" y="48" class="loopsub">repeat steps 8 to 11 until the score meets the ship bar</text>
 <g fill="none" stroke="#4c5fd5" stroke-width="4" marker-end="url(#ar)">
-<path d="M225,142 L282,142"/>
-<path d="M497,142 L528,142"/><path d="M743,142 L774,142"/>
-<path d="M882,184 L882,296"/><path d="M774,342 L497,342"/><path d="M390,296 L390,190"/>
+<path d="M236,132 L270,132"/>
+<path d="M470,132 L504,132"/>
+<path d="M704,132 L738,132"/>
+<path d="M938,176 L938,300 L136,300 L136,176"/>
 </g>
-<g><circle cx="635" cy="242" r="46" fill="#fff" stroke="#4c5fd5" stroke-width="2"/>
-<text x="635" y="240" text-anchor="middle" class="loopico">&#8635;</text>
-<text x="635" y="262" text-anchor="middle" class="sm" fill="#4c5fd5" font-weight="700">REPEAT</text></g>
-<path d="M390,384 L390,478 L1034,478 L1034,150 L1046,150" fill="none" stroke="#7b86a6" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#ag)"/>
-<rect x="520" y="462" width="300" height="28" rx="14" fill="#fff" stroke="#7b86a6"/>
-<text x="670" y="481" text-anchor="middle" class="sm" fill="#4a5578" font-weight="700">Exit when the score meets the ship bar</text>
-<g><rect x="10" y="100" width="215" height="84" rx="12" fill="#fff" stroke="#1f9d63" stroke-width="2" filter="url(#sh)"/>
-<circle cx="36" cy="142.0" r="15" fill="#1f9d63"/><text x="36" y="147.0" text-anchor="middle" class="num">8</text>
-<text x="60" y="132.0" class="ttl">Profile the agent</text><text x="60" y="149.0" class="sm">Type, success criteria,</text><text x="60" y="164.0" class="sm">failure modes</text></g>
-<g><rect x="282" y="100" width="215" height="84" rx="12" fill="#fff" stroke="#1f9d63" stroke-width="2" filter="url(#sh)"/>
-<circle cx="308" cy="142.0" r="15" fill="#1f9d63"/><text x="308" y="147.0" text-anchor="middle" class="num">9</text>
-<text x="332" y="132.0" class="ttl">Pick test categories</text><text x="332" y="149.0" class="sm">Relevant stimulation</text><text x="332" y="164.0" class="sm">tests for this agent</text></g>
-<g><rect x="528" y="100" width="215" height="84" rx="12" fill="#fff" stroke="#1f9d63" stroke-width="2" filter="url(#sh)"/>
-<circle cx="554" cy="142.0" r="15" fill="#1f9d63"/><text x="554" y="147.0" text-anchor="middle" class="num">10</text>
-<text x="578" y="132.0" class="ttl">Run the tests</text><text x="578" y="149.0" class="sm">Automatic, generates</text><text x="578" y="164.0" class="sm">trace data</text></g>
-<g><rect x="774" y="100" width="215" height="84" rx="12" fill="#fff" stroke="#1f9d63" stroke-width="2" filter="url(#sh)"/>
-<circle cx="800" cy="142.0" r="15" fill="#1f9d63"/><text x="800" y="147.0" text-anchor="middle" class="num">11</text>
-<text x="824" y="132.0" class="ttl">Score the tests</text><text x="824" y="149.0" class="sm">Generate suggested</text><text x="824" y="164.0" class="sm">improvements</text></g>
-<g><rect x="774" y="300" width="215" height="84" rx="12" fill="#fff" stroke="#2f6fdd" stroke-width="2" filter="url(#sh)"/>
-<circle cx="800" cy="342.0" r="15" fill="#2f6fdd"/><text x="800" y="347.0" text-anchor="middle" class="num">12</text>
-<text x="824" y="332.0" class="ttl">Feed improvements</text><text x="824" y="349.0" class="sm">To the user's agent</text><text x="824" y="364.0" class="sm">so it can apply them</text></g>
-<g><rect x="282" y="300" width="215" height="84" rx="12" fill="#fff" stroke="#2f6fdd" stroke-width="2" filter="url(#sh)"/>
-<circle cx="308" cy="342.0" r="15" fill="#2f6fdd"/><text x="308" y="347.0" text-anchor="middle" class="num">13</text>
-<text x="332" y="332.0" class="ttl">Score the new version</text><text x="332" y="349.0" class="sm">Compare to the</text><text x="332" y="364.0" class="sm">previous score</text></g>
-<g><rect x="1050" y="100" width="235" height="100" rx="12" fill="#fff" stroke="#7a5bd0" stroke-width="2" filter="url(#sh)"/>
-<circle cx="1076" cy="150.0" r="15" fill="#7a5bd0"/><text x="1076" y="155.0" text-anchor="middle" class="num">14</text>
-<text x="1100" y="140.0" class="ttl">See the gains</text><text x="1100" y="157.0" class="sm">Measurable improvements</text><text x="1100" y="172.0" class="sm">by category + cost function</text></g>
-<path d="M1167,204 L1167,296" fill="none" stroke="#4c5fd5" stroke-width="4" marker-end="url(#ar)"/>
-<g><rect x="1050" y="300" width="235" height="100" rx="12" fill="#fff" stroke="#7a5bd0" stroke-width="2" filter="url(#sh)"/>
-<circle cx="1076" cy="350.0" r="15" fill="#7a5bd0"/><text x="1076" y="355.0" text-anchor="middle" class="num">15</text>
-<text x="1100" y="340.0" class="ttl">Report generated</text><text x="1100" y="357.0" class="sm">For the organization and</text><text x="1100" y="372.0" class="sm">all of their agents</text></g>
+<g><circle cx="540" cy="248" r="46" fill="#fff" stroke="#4c5fd5" stroke-width="2"/>
+<text x="540" y="246" text-anchor="middle" class="loopico">&#8635;</text>
+<text x="540" y="268" text-anchor="middle" class="sm" fill="#4c5fd5" font-weight="700">REPEAT</text></g>
+<path d="M980,132 L1040,132" fill="none" stroke="#7b86a6" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#ag)"/>
+<g><rect x="36" y="88" width="200" height="88" rx="12" fill="#fff" stroke="#2f6fdd" stroke-width="2"/>
+<circle cx="62" cy="132" r="15" fill="#2f6fdd"/><text x="62" y="137" text-anchor="middle" class="num">8</text>
+<text x="86" y="122" class="ttl">Profile the agent</text><text x="86" y="140" class="sm">Type, success criteria,</text><text x="86" y="156" class="sm">failure modes</text></g>
+<g><rect x="270" y="88" width="200" height="88" rx="12" fill="#fff" stroke="#2f6fdd" stroke-width="2"/>
+<circle cx="296" cy="132" r="15" fill="#2f6fdd"/><text x="296" y="137" text-anchor="middle" class="num">9</text>
+<text x="320" y="122" class="ttl">Pick test categories</text><text x="320" y="140" class="sm">The stimulation tests</text><text x="320" y="156" class="sm">that fit this agent</text></g>
+<g><rect x="504" y="88" width="200" height="88" rx="12" fill="#fff" stroke="#2f6fdd" stroke-width="2"/>
+<circle cx="530" cy="132" r="15" fill="#2f6fdd"/><text x="530" y="137" text-anchor="middle" class="num">10</text>
+<text x="554" y="122" class="ttl">Run the tests</text><text x="554" y="140" class="sm">Automatic, generates</text><text x="554" y="156" class="sm">trace data</text></g>
+<g><rect x="738" y="88" width="200" height="88" rx="12" fill="#fff" stroke="#2f6fdd" stroke-width="2"/>
+<circle cx="764" cy="132" r="15" fill="#2f6fdd"/><text x="764" y="137" text-anchor="middle" class="num">11</text>
+<text x="788" y="122" class="ttl">Score the tests</text><text x="788" y="140" class="sm">Improvements are</text><text x="788" y="156" class="sm">generated</text></g>
+<g><rect x="1040" y="80" width="290" height="104" rx="12" fill="#fff" stroke="#7a5bd0" stroke-width="2"/>
+<circle cx="1066" cy="132" r="15" fill="#7a5bd0"/><text x="1066" y="137" text-anchor="middle" class="num">14</text>
+<text x="1090" y="118" class="ttl">See the gains</text><text x="1090" y="136" class="sm">Measurable improvements</text><text x="1090" y="152" class="sm">by category, with a</text><text x="1090" y="168" class="sm">cost function</text></g>
+<path d="M1185,184 L1185,268" fill="none" stroke="#7a5bd0" stroke-width="4" marker-end="url(#ap)"/>
+<g><rect x="1040" y="268" width="290" height="104" rx="12" fill="#fff" stroke="#7a5bd0" stroke-width="2"/>
+<circle cx="1066" cy="320" r="15" fill="#7a5bd0"/><text x="1066" y="325" text-anchor="middle" class="num">15</text>
+<text x="1090" y="306" class="ttl">Report generated</text><text x="1090" y="324" class="sm">For the organization and</text><text x="1090" y="340" class="sm">all of their agents</text></g>
 </svg></div>
-<div class="legend"><span><i style="background:#1f9d63"></i>Now: stimulation testing (8 to 11). Step 7, above, is the Now part of dynamic scoring.</span><span><i style="background:#2f6fdd"></i>Next: self-improvement loop (12 to 13) and the rest of dynamic scoring</span><span><i style="background:#7a5bd0"></i>Later: gains and reporting (14 to 15)</span><span><i style="background:#4c5fd5;height:4px"></i>Loop path</span></div>
-</section>
+    <div class="legend"><span><i style="background:#1f9d63"></i>Now: steps 1 to 4</span><span><i style="background:#2f6fdd"></i>Next: stimulation testing (8 to 11)</span><span><i style="background:#7a5bd0"></i>Later: gains and reporting (14 and 15)</span><span><i style="background:#4c5fd5;height:4px"></i>Loop path</span></div>
+  </section>
 
   <!-- ================= BOARD ================= -->
   <h2 class="section">Roadmap by horizon</h2>
-  <p class="sub">Each theme lists its features and the Jira work found for them. Expand "Why it matters" for the reasoning.</p>
+  <p class="sub">Each theme lists its features. Expand "Why it matters" for the reasoning.</p>
 
   <section class="board">
 
     <!-- ============ NOW ============ -->
     <div class="col now">
-      <div class="col-head"><h2>Now</h2><p>2 themes &middot; 11 features</p></div>
+      <div class="col-head"><h2>Now</h2><p>4 themes &middot; 4 features</p></div>
 
       <div class="card theme">
-        <h3>Simplify onboarding</h3>
-        <p class="what">The path from signing up to a best-fit profile and eval set, with no manual instrumentation, trace configuration, or agent changes. Steps 1 to 7. Step 7 is the Now part of dynamic scoring.</p>
+        <h3>Improved onboarding</h3>
+        <p class="what">The first session, from sign-in to a first score, where every screen has one next action. Steps 2 and 3. The old Simplify onboarding feature list is marked done. This theme is the remaining bar.</p>
         <details>
           <summary>Why it matters</summary>
-          <p>The persona can create agents but cannot configure traces. Every step of friction between sign-up and first score loses a beta user. Self-service onboarding is a High recurring ask from Wolters Kluwer and L'Oreal. This is the direct path to the north star.</p>
+          <p>The persona can create agents and does not know how to configure traces. A screen with several ways forward loses them before the first score. Self-service onboarding is a High ask from Wolters Kluwer and L'Oreal. Labs graduation criterion 1 is real active use, which depends on people reaching a score quickly. Open gaps remain: Home does not open the connect card, the first score does not start on its own, and verdict names differ by screen.</p>
         </details>
-        <div class="goal"><b>Goal:</b> a user signs up, connects an agent, and gets the best-fit profile and evals automatically. If none fit, AgentScore creates them and explains why. Backoffice admins are out of the loop for tenant creation.</div>
+        <div class="goal"><b>Goal:</b> a user always knows the single next action, and reaches one score and one verdict for an agent they already run.</div>
         <ul class="features">
           <li>
-            <div class="t">Tosca Cloud sign-in with login-or-create tenant <span class="badge">Steps 1, 2</span></div>
-            <div class="d">Sign in with a Tosca Cloud account. No tenant means one is created; an existing tenant means log in and welcome.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15270">AI-15270</a><a href="https://tricentis.atlassian.net/browse/AI-15139">AI-15139</a><span class="none">prior SSO AI-12369 is done</span></div>
-          </li>
-          <li>
-            <div class="t">Automatic tenant provisioning <span class="badge">Step 2</span></div>
-            <div class="d">Tenants are created from the user's Tosca Cloud tenant, so admins stop creating them by hand.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15138">AI-15138</a><a href="https://tricentis.atlassian.net/browse/AI-15142">AI-15142</a><a href="https://tricentis.atlassian.net/browse/AI-15143">AI-15143</a></div>
-          </li>
-          <li>
-            <div class="t">Join existing tenants <span class="badge">Step 2</span></div>
-            <div class="d">Users can join a tenant that already exists.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15140">AI-15140</a></div>
-          </li>
-          <li>
-            <div class="t">Unified agent view <span class="badge">Step 3</span></div>
-            <div class="d">All of a user's agents, internal and external, in one place.</div>
-            <div class="jira"><span class="gap">No open Jira</span></div>
-          </li>
-          <li>
-            <div class="t">Getting Started guide <span class="badge">Step 4</span></div>
-            <div class="d">In-app guide with MCP connection instructions.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15163">AI-15163</a><span class="none">a document, not the in-app guide. AI-11888, the internal guide, is done.</span></div>
-          </li>
-          <li>
-            <div class="t">Zero-config agent connection via MCP <span class="badge">Steps 5, 6</span></div>
-            <div class="d">Point the agent at the MCP; it connects itself and traces flow in. No manual agent updates.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15146">AI-15146</a><a href="https://tricentis.atlassian.net/browse/AI-15147">AI-15147</a><a href="https://tricentis.atlassian.net/browse/AI-15150">AI-15150</a><span class="none">AI-15146 phase 1 is browser sign-in. Three earlier stories on that epic were closed.</span></div>
-          </li>
-          <li>
-            <div class="t">Automatic profile and eval selection <span class="badge">Step 7</span></div>
-            <div class="d">After ingestion, the best-fit profile and evals are chosen automatically. If none fit, they are created, with a clear explanation of why. This is the Now part of dynamic scoring.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15827">AI-15827</a></div>
+            <div class="t">Guided first session <span class="badge">Steps 2, 3</span></div>
+            <div class="d">Each screen offers one next action until the user reads a score and a verdict. No trace setup, profile picking, or eval writing on this path.</div>
+            <div class="jira"><span class="none">Not re-checked against Jira</span></div>
           </li>
         </ul>
       </div>
 
       <div class="card theme">
-        <h3>Stimulation testing</h3>
-        <p class="what">AgentScore profiles an agent, runs targeted tests, and scores the results, so users can test without waiting for organic traces. Steps 8 to 11, after the profile and evals are set.</p>
+        <h3>Tricentis identity</h3>
+        <p class="what">Sign-in through Tricentis identity (Trident). Step 1. This replaces Tosca Cloud sign-in.</p>
         <details>
           <summary>Why it matters</summary>
-          <p>Scenario bank and simulation testing is the top High ask across Meta (x2), L'Oreal, Tritusa, Eaton, and PG&amp;E, and the pivotal gap for the Meta POC. It makes AgentScore an end-to-end testing solution across the ADLC.</p>
+          <p>Sign-in is the front door of the first session. Merito still has an open question on whether a Tosca Cloud tenant is required for auth. Trident makes the account a user already has the way in.</p>
         </details>
-        <div class="goal"><b>Goal:</b> an agent is profiled, given the test categories that fit it, tested automatically, and scored, with improvements generated from the results. No more waiting on organic traces for scoring.</div>
+        <div class="goal"><b>Goal:</b> a user signs in with Trident and lands in AgentScore with one obvious next action.</div>
+        <ul class="features">
+          <li>
+            <div class="t">Trident sign-in <span class="badge">Step 1</span></div>
+            <div class="d">Tricentis identity replaces Tosca Cloud sign-in. Tenant login-or-create from the old sign-in stays shipped.</div>
+            <div class="jira"><span class="none">Not re-checked against Jira</span></div>
+          </li>
+        </ul>
+        <div class="risk"><b>Dispute risk:</b> this swaps the identity provider. It does not reopen tenant provisioning, joining a tenant, or AI Workspace tenant reconciliation.</div>
+      </div>
+
+      <div class="card theme">
+        <h3>Workflow management</h3>
+        <p class="what">A multi-agent flow is shown as one workflow. Step 4.</p>
+        <details>
+          <summary>Why it matters</summary>
+          <p>Evaluating a group or hierarchy of agents is a High ask from Meta, Wolters Kluwer, Aptiv, Eaton, and Accenture. Aptiv asked to store and score a workflow as a whole. Accenture marked multi-agent workflow testing as priority 1. This theme is the showing and grouping.</p>
+        </details>
+        <div class="goal"><b>Goal:</b> a user who runs several agents together sees that flow as one workflow.</div>
+        <ul class="features">
+          <li>
+            <div class="t">Workflow-level grouping <span class="badge">Step 4</span></div>
+            <div class="d">Multi-agent flows are grouped and shown as one workflow.</div>
+            <div class="jira"><span class="none">Not re-checked against Jira</span></div>
+          </li>
+        </ul>
+        <div class="risk"><b>Dispute risk:</b> session grouping stays Next. It rolls one agent's traces into a task. Scoring or testing the workflow is a wider ask than showing the group.</div>
+      </div>
+
+      <div class="card theme">
+        <h3>Internal Tricentis agents</h3>
+        <p class="what">Every internal Tricentis agent is scored in AgentScore. An adoption outcome. It should not require AgentScore product work.</p>
+        <details>
+          <summary>Why it matters</summary>
+          <p>The north star is regular use, including by internal users. A full internal footprint is the proof that AgentScore is where Tricentis scores its own agents. It is on Now because it matters now and it does not wait on a product change.</p>
+        </details>
+        <div class="goal"><b>Goal:</b> internal Tricentis agents are connected and scoring, without a new AgentScore feature.</div>
+        <ul class="features">
+          <li>
+            <div class="t">Score every internal Tricentis agent</div>
+            <div class="d">Rollout and adoption. No AgentScore product work is expected. The guided first session is the connection path, and that is separate work.</div>
+            <div class="jira"><span class="none">No AgentScore product work expected</span></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============ NEXT ============ -->
+    <div class="col next">
+      <div class="col-head"><h2>Next</h2><p>4 themes &middot; 8 features</p></div>
+
+      <div class="card theme">
+        <h3>Stimulation testing</h3>
+        <p class="what">AgentScore profiles an agent, runs targeted tests, and scores the results, so a user can test without waiting for organic traces. Steps 8 to 11. Moved from Now on 11-04.</p>
+        <details>
+          <summary>Why it matters</summary>
+          <p>Scenario bank and simulation testing is the top High ask across Meta (x2), L'Oreal, Tritusa, Eaton, PG&amp;E, and Accenture, and the pivotal gap for the Meta POC. It is Next so the first session can reach a score on real use first.</p>
+        </details>
+        <div class="goal"><b>Goal:</b> an agent is profiled, given the test categories that fit it, tested automatically, and scored, with improvements generated from the results.</div>
         <ul class="features">
           <li>
             <div class="t">Agent profiling prompt <span class="badge">Step 8</span></div>
@@ -321,65 +344,15 @@
             <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15856">AI-15856</a><a href="https://tricentis.atlassian.net/browse/AI-15857">AI-15857</a></div>
           </li>
         </ul>
-      </div>
-    </div>
-
-    <!-- ============ NEXT ============ -->
-    <div class="col next">
-      <div class="col-head"><h2>Next</h2><p>3 themes &middot; 6 features</p></div>
-
-      <div class="card theme">
-        <h3>Self-improvement loop</h3>
-        <p class="what">AgentScore feeds improvements back to the user's agent, re-scores the new version, and repeats. Steps 12 and 13. Showing gains and reporting (steps 14 and 15) are Later.</p>
-        <details>
-          <summary>Why it matters</summary>
-          <p>Fast loops where an agent is evaluated, improved, and retested are how AgentScore wins. Nailing this loop is the single biggest source of value for users, and it turns a one-time test into repeat use.</p>
-        </details>
-        <div class="goal"><b>Goal:</b> an agent improves across versions as improvements are fed back and the new version is re-scored.</div>
-        <ul class="features">
-          <li>
-            <div class="t">Improvement feedback to the agent <span class="badge">Step 12</span></div>
-            <div class="d">Generated improvements are fed to the user's agent so it can apply them.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15171">AI-15171</a><a href="https://tricentis.atlassian.net/browse/AI-15172">AI-15172</a><a href="https://tricentis.atlassian.net/browse/AI-15173">AI-15173</a><a href="https://tricentis.atlassian.net/browse/AI-15174">AI-15174</a><a href="https://tricentis.atlassian.net/browse/AI-15175">AI-15175</a></div>
-          </li>
-          <li>
-            <div class="t">Re-score and iterate loop <span class="badge">Step 13</span></div>
-            <div class="d">A new version is scored and the process repeats from test selection.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15861">AI-15861</a><a href="https://tricentis.atlassian.net/browse/AI-15862">AI-15862</a><a href="https://tricentis.atlassian.net/browse/AI-15863">AI-15863</a></div>
-          </li>
-        </ul>
-      </div>
-
-      <div class="card theme">
-        <h3>Dynamic scoring</h3>
-        <p class="what">The rest of dynamic scoring, after step 7. A scorecard written for each agent, plus session grouping so a score covers a whole task or conversation. Fixed profiles stay available during beta. Not a numbered step in the flow.</p>
-        <details>
-          <summary>Why it matters</summary>
-          <p>A fixed profile catalog force-fits agents that do not match it, and a score on one trace misses a multi-step task. Eaton reacted to editable success criteria, profiles, and weighted dimensions. New Vision accepted editable success criteria and custom dimensions. Automatic best-fit selection is already Now, in step 7. This card stays Next so stimulation testing is not blocked on the fuller model.</p>
-        </details>
-        <div class="goal"><b>Goal:</b> a user can score an agent on a richer scorecard across a whole session, without giving up the fixed profiles already in the product.</div>
-        <ul class="features">
-          <li>
-            <div class="t">Per-agent scorecard</div>
-            <div class="d">Written for one agent, from a conversation with the owner, from the agent's traces and behavior, or from dimensions and weights the user sets. Runs beside the fixed profile catalog during beta.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15831">AI-15831</a><span class="none">In Progress. Custom checks and profiles are underway.</span></div>
-          </li>
-          <li>
-            <div class="t">Session grouping</div>
-            <div class="d">Related traces are grouped into a task or conversation, and the score covers that whole session.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15832">AI-15832</a></div>
-          </li>
-        </ul>
-      
-        <div class="note">Open: does stimulation testing (steps 8 to 11) score against this scorecard, or keep today's scoring?</div>
+        <div class="risk"><b>Dispute risk:</b> the High demand would support Now. It stays Next because the current bet is the guided first session, Trident, and workflow grouping.</div>
       </div>
 
       <div class="card theme">
         <h3>App usability</h3>
-        <p class="what">Polish that makes AgentScore legible to non-technical users while they wait and when they read results.</p>
+        <p class="what">Polish that makes AgentScore legible while a user waits and when they read results.</p>
         <details>
           <summary>Why it matters</summary>
-          <p>Long-running actions with no feedback, and technical dimension and eval names, make results hard to trust or act on. These do not block the first score, so they follow Now.</p>
+          <p>Long-running actions with no feedback, and technical dimension and eval names, make results hard to trust. These do not block the guided first session, so they stay Next.</p>
         </details>
         <div class="goal"><b>Goal:</b> users always see progress, and understand every dimension and eval in plain language.</div>
         <ul class="features">
@@ -392,6 +365,42 @@
             <div class="t">Plain-language dimensions and evals</div>
             <div class="d">Every dimension and eval gets a non-technical explanation.</div>
             <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15268">AI-15268</a><a class="done" href="https://tricentis.atlassian.net/browse/AI-11884">AI-11884 done</a></div>
+          </li>
+        </ul>
+        <div class="risk"><b>Dispute risk:</b> a waiting page and one verdict vocabulary are part of reaching the first score. If those are required for step 3, they belong on Now.</div>
+      </div>
+
+      <div class="card theme">
+        <h3>JEV / decision model</h3>
+        <p class="what">A hybrid scorer. JEV runs where it applies. The fuller judge runs where it does not. The point is less scoring time and less scoring cost.</p>
+        <details>
+          <summary>Why it matters</summary>
+          <p>Scoring cost and latency cap how often a user can run, and how many agents a tenant can keep on a score. A cheaper model on the cases it can decide keeps the fuller judge for the cases that need it.</p>
+        </details>
+        <div class="goal"><b>Goal:</b> each eval uses the cheaper model when that model is fit for the check, and the judge when it is not.</div>
+        <ul class="features">
+          <li>
+            <div class="t">Hybrid JEV and judge</div>
+            <div class="d">Use JEV where it applies, and the current judge where it does not, to save scoring time and cost.</div>
+            <div class="jira"><span class="none">Not re-checked against Jira</span></div>
+          </li>
+        </ul>
+        <div class="risk"><b>Dispute risk:</b> what JEV expands to is unconfirmed. This card treats it as a cheaper decision model beside the current judge.</div>
+      </div>
+
+      <div class="card theme">
+        <h3>Session grouping</h3>
+        <p class="what">Related traces from one agent are grouped into a task or conversation, and the score covers that whole session. The per-agent scorecard is marked done.</p>
+        <details>
+          <summary>Why it matters</summary>
+          <p>A score on one trace misses a multi-step task. The August 24 working session called session-based scoring one of the two highest-priority product gaps. Workflow-level grouping is Now and is a different cut.</p>
+        </details>
+        <div class="goal"><b>Goal:</b> a user can score a whole task or conversation, not only a single trace.</div>
+        <ul class="features">
+          <li>
+            <div class="t">Session grouping</div>
+            <div class="d">Related traces are grouped into a task or conversation, and the score covers that whole session.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15832">AI-15832</a></div>
           </li>
         </ul>
       </div>
@@ -449,7 +458,7 @@
             <div class="jira"><span class="gap">No Jira found</span></div>
           </li>
         </ul>
-        <div class="note">Existing AI-11881 stories not in this list: AI-12669, AI-12670, AI-11911, AI-11910. Decide whether to keep, defer, or drop.</div>
+        <div class="note">Existing AI-11881 stories not in this list: AI-12669, AI-12670, AI-11911, AI-11910. Decide whether to keep, defer, or drop. AI-15142 was counted under the old sign-in work, which is now marked done.</div>
       </div>
 
       <div class="card theme">
@@ -495,8 +504,7 @@
   </section>
 
   <footer>
-    Source: <code>planning/roadmap/2026-10-20-agentscore-beta-roadmap.md</code> &middot; Jira alignment: <code>planning/jira-alignment/2026-10-20-agentscore-beta-roadmap-jira.md</code>.
-    Orange "No Jira" tags mark features with no matching epic or story found on board 8084.
+    Last updated 11-04-2026. Orange tags mark Later items with no matching Jira issue.
   </footer>
 </div>
 
