@@ -5,9 +5,10 @@ Date: 11-04-2026. Status: draft.
 | Now | Next | Later |
 |---|---|---|
 | Improved onboarding | Stimulation testing | Trace data protection |
-| Tricentis identity | App usability | AIWS integration |
-| Workflow management | JEV / decision model | Quantitative cost function |
-| Internal Tricentis agents | Session grouping | Tenant-wide agent reporting |
+| Workflow management | App usability | AIWS integration |
+| Internal Tricentis agents | JEV / decision model | Quantitative cost function |
+|  | Session grouping | Tenant-wide agent reporting |
+|  | Tricentis identity |  |
 
 **Target persona:** a semi-technical user who can create agents but does not know how to configure traces, instrumentation, or agent updates. This user creates or evaluates agents and makes the final call before an agent ships.
 
@@ -15,7 +16,7 @@ Date: 11-04-2026. Status: draft.
 
 ## Target user flow
 
-Steps 1 to 4 are Now. Steps 8 to 11 (stimulation testing) are Next, and they repeat until the score meets the ship bar. Steps 14 and 15 are Later. Internal coverage of Tricentis agents is Now and is not a numbered step. App usability, the JEV / decision model, and session grouping are Next and are not numbered steps. Steps 12 and 13, the previous self-improvement loop, are marked done and are not on this diagram. Step numbers on steps 8 to 11 and 14 to 15 are unchanged.
+Steps 2 to 4 are Now. Step 1 (Trident sign-in) and steps 8 to 11 (stimulation testing) are Next. Steps 8 to 11 repeat until the score meets the ship bar. Steps 14 and 15 are Later. Internal coverage of Tricentis agents is Now and is not a numbered step. App usability, the JEV / decision model, and session grouping are Next and are not numbered steps. Steps 12 and 13, the previous self-improvement loop, are marked done and are not on this diagram. Step numbers on steps 8 to 11 and 14 to 15 are unchanged.
 
 ```mermaid
 flowchart TD
@@ -40,8 +41,8 @@ flowchart TD
     classDef now fill:#d9f2e3,stroke:#2e7d52,color:#12331f
     classDef next fill:#dbe8fb,stroke:#2f5fa8,color:#10264a
     classDef later fill:#eceff3,stroke:#6b7280,color:#1f2933
-    class S1,S2,S3,S4 now
-    class S8,S9,S10,S11 next
+    class S2,S3,S4 now
+    class S1,S8,S9,S10,S11 next
     class S14,S15 later
 ```
 
@@ -62,20 +63,6 @@ Green is Now. Blue is Next. Grey is Later.
 ### Features and epics
 
 - **Guided first session** (steps 2, 3). From the moment after sign-in, each screen offers one next action until the user reads a score and a verdict. They are not asked to configure traces, pick a profile, or write an eval on this path.
-
-## Tricentis identity
-
-**What it is:** sign-in through Tricentis identity (Trident). Flow step 1. This replaces Tosca Cloud sign-in.
-
-**Why it matters:** sign-in is the front door of the first session. Merito still has an open question on whether a Tosca Cloud tenant is required for auth. Replacing that sign-in with Trident makes the account a user already has the way in. **Dispute risk:** tenant login-or-create, joining an existing tenant, and AI Workspace tenant reconciliation shipped under the old sign-in. This theme does not reopen that work. It swaps the identity provider.
-
-**What we hope to accomplish:** a user signs in with Trident and lands in AgentScore with one obvious next action.
-
-**North star tie:** a familiar Tricentis login removes one reason a new user stops before the first score.
-
-### Features and epics
-
-- **Trident sign-in** (step 1). Tricentis identity replaces Tosca Cloud sign-in. *(Replaces the shipped Tosca Cloud sign-in feature.)*
 
 ## Workflow management
 
@@ -111,7 +98,7 @@ Green is Now. Blue is Next. Grey is Later.
 
 **What it is:** AgentScore profiles an agent, runs targeted tests against it, and scores the results, so a user can test an agent without waiting for organic traces. Flow steps 8 to 11. Moved from Now on 11-04 so the first session can reach a score on real use first.
 
-**Why it matters:** scenario bank and simulation testing is the top High ask across Meta (x2), L'Oreal, Tritusa, Eaton, PG&E, and Accenture, and it is the pivotal gap for the Meta POC. Compliance validation with PII flagging (Tritusa, High) supports the compliance and PII test categories. **Dispute risk:** that demand would support Now. It is Next because the current bet is the guided first session, Trident, and workflow grouping.
+**Why it matters:** scenario bank and simulation testing is the top High ask across Meta (x2), L'Oreal, Tritusa, Eaton, PG&E, and Accenture, and it is the pivotal gap for the Meta POC. Compliance validation with PII flagging (Tritusa, High) supports the compliance and PII test categories. **Dispute risk:** that demand would support Now. It is Next because the current bet is the guided first session and workflow grouping.
 
 **What we hope to accomplish:** an agent is profiled, given the test categories that fit it, tested automatically, and scored, with improvements generated from the results.
 
@@ -173,6 +160,22 @@ Green is Now. Blue is Next. Grey is Later.
 
 - **Session grouping.** Related traces are grouped into a task or conversation, and the score covers that whole session.
   - Jira: epic [AI-15832](https://tricentis.atlassian.net/browse/AI-15832) (Backlog).
+
+## Tricentis identity
+
+**What it is:** sign-in through Tricentis identity (Trident). Flow step 1. This replaces Tosca Cloud sign-in.
+
+**Timing:** probably not ready until Q1 2027. It stays on Next until the identity work is close to ready.
+
+**Why it matters:** sign-in is the front door of the first session. Merito still has an open question on whether a Tosca Cloud tenant is required for auth. Replacing that sign-in with Trident makes the account a user already has the way in. **Dispute risk:** tenant login-or-create, joining an existing tenant, and AI Workspace tenant reconciliation shipped under the old sign-in. This theme does not reopen that work. It swaps the identity provider.
+
+**What we hope to accomplish:** a user signs in with Trident and lands in AgentScore with one obvious next action.
+
+**North star tie:** a familiar Tricentis login removes one reason a new user stops before the first score.
+
+### Features and epics
+
+- **Trident sign-in** (step 1). Tricentis identity replaces Tosca Cloud sign-in. *(Replaces the shipped Tosca Cloud sign-in feature.)*
 
 # Later
 
@@ -252,7 +255,7 @@ Since the previous version:
 
 - **Marked done:** every feature under Simplify onboarding (Tosca Cloud sign-in, automatic tenant provisioning, join existing tenants, unified agent view, Getting Started guide, zero-config MCP connection, automatic profile and eval selection). Per-agent scorecard. The self-improvement loop (improvement feedback to the agent, and the re-score and iterate loop).
 - **Added:** Improved onboarding (one next action through the first score). Tricentis identity (Trident), which replaces Tosca Cloud sign-in. Workflow management (workflow-level grouping for multi-agent flows). Internal Tricentis agents (every internal agent scored; no AgentScore product work expected). JEV / decision model (hybrid, to save scoring time and cost).
-- **Moved:** Stimulation testing from Now to Next.
+- **Moved:** Stimulation testing from Now to Next. Tricentis identity (Trident) from Now to Next, with readiness probably not until Q1 2027.
 - **Stayed:** App usability on Next. Session grouping on Next. The four Later themes are unchanged: trace data protection, AIWS integration, quantitative cost function, tenant-wide agent reporting.
 - **Dropped:** none. Done items left the active horizons. They are not deleted from the product story.
 

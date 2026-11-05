@@ -170,14 +170,22 @@
 
   <!-- ================= USER FLOW ================= -->
   <h2 class="section">Target user flow</h2>
-  <p class="sub">Steps 1 to 4 are Now. Steps 8 to 11 are Next, and they repeat until the score meets the ship bar. Steps 14 and 15 are Later. Internal coverage of Tricentis agents is Now and is not a numbered step. App usability, the JEV / decision model, and session grouping are Next and are not numbered steps. Steps 12 and 13, the previous self-improvement loop, are marked done and are not on this diagram.</p>
+  <p class="sub">Steps 2 to 4 are Now. Step 1 (Trident sign-in) and steps 8 to 11 are Next, and steps 8 to 11 repeat until the score meets the ship bar. Steps 14 and 15 are Later. Internal coverage of Tricentis agents is Now and is not a numbered step. App usability, the JEV / decision model, and session grouping are Next and are not numbered steps. Steps 12 and 13, the previous self-improvement loop, are marked done and are not on this diagram.</p>
 
   <section class="card flow">
 
-    <div class="phase now">
-      <div class="phase-head"><span class="tag">Now</span><span class="name">First session and workflows</span><span class="range">Steps 1 to 4</span></div>
+    <div class="phase next">
+      <div class="phase-head"><span class="tag">Next</span><span class="name">Trident sign-in</span><span class="range">Step 1</span></div>
       <div class="steps">
         <div class="step"><span class="n">1</span>User signs in with Trident</div>
+      </div>
+    </div>
+
+    <div class="down"><span class="stem" style="background:var(--next)"></span><span class="head" style="border-top-color:var(--next)"></span><span class="lbl" style="color:var(--next-ink)">Then the first session</span></div>
+
+    <div class="phase now">
+      <div class="phase-head"><span class="tag">Now</span><span class="name">First session and workflows</span><span class="range">Steps 2 to 4</span></div>
+      <div class="steps">
         <div class="step"><span class="n">2</span>Every screen shows one next action</div>
         <div class="step"><span class="n">3</span>User reads the first score</div>
         <div class="step wide"><span class="n">4</span>A multi-agent flow is shown as one workflow</div>
@@ -226,7 +234,7 @@
 <circle cx="1066" cy="320" r="15" fill="#7a5bd0"/><text x="1066" y="325" text-anchor="middle" class="num">15</text>
 <text x="1090" y="306" class="ttl">Report generated</text><text x="1090" y="324" class="sm">For the organization and</text><text x="1090" y="340" class="sm">all of their agents</text></g>
 </svg></div>
-    <div class="legend"><span><i style="background:#1f9d63"></i>Now: steps 1 to 4</span><span><i style="background:#2f6fdd"></i>Next: stimulation testing (8 to 11)</span><span><i style="background:#7a5bd0"></i>Later: gains and reporting (14 and 15)</span><span><i style="background:#4c5fd5;height:4px"></i>Loop path</span></div>
+    <div class="legend"><span><i style="background:#2f6fdd"></i>Next: Trident sign-in (1) and stimulation testing (8 to 11)</span><span><i style="background:#1f9d63"></i>Now: steps 2 to 4</span><span><i style="background:#7a5bd0"></i>Later: gains and reporting (14 and 15)</span><span><i style="background:#4c5fd5;height:4px"></i>Loop path</span></div>
   </section>
 
   <!-- ================= BOARD ================= -->
@@ -237,7 +245,7 @@
 
     <!-- ============ NOW ============ -->
     <div class="col now">
-      <div class="col-head"><h2>Now</h2><p>4 themes &middot; 4 features</p></div>
+      <div class="col-head"><h2>Now</h2><p>3 themes &middot; 3 features</p></div>
 
       <div class="card theme">
         <h3>Improved onboarding</h3>
@@ -254,24 +262,6 @@
             <div class="jira"><span class="none">Not re-checked against Jira</span></div>
           </li>
         </ul>
-      </div>
-
-      <div class="card theme">
-        <h3>Tricentis identity</h3>
-        <p class="what">Sign-in through Tricentis identity (Trident). Step 1. This replaces Tosca Cloud sign-in.</p>
-        <details>
-          <summary>Why it matters</summary>
-          <p>Sign-in is the front door of the first session. Merito still has an open question on whether a Tosca Cloud tenant is required for auth. Trident makes the account a user already has the way in.</p>
-        </details>
-        <div class="goal"><b>Goal:</b> a user signs in with Trident and lands in AgentScore with one obvious next action.</div>
-        <ul class="features">
-          <li>
-            <div class="t">Trident sign-in <span class="badge">Step 1</span></div>
-            <div class="d">Tricentis identity replaces Tosca Cloud sign-in. Tenant login-or-create from the old sign-in stays shipped.</div>
-            <div class="jira"><span class="none">Not re-checked against Jira</span></div>
-          </li>
-        </ul>
-        <div class="risk"><b>Dispute risk:</b> this swaps the identity provider. It does not reopen tenant provisioning, joining a tenant, or AI Workspace tenant reconciliation.</div>
       </div>
 
       <div class="card theme">
@@ -312,7 +302,7 @@
 
     <!-- ============ NEXT ============ -->
     <div class="col next">
-      <div class="col-head"><h2>Next</h2><p>4 themes &middot; 8 features</p></div>
+      <div class="col-head"><h2>Next</h2><p>5 themes &middot; 9 features</p></div>
 
       <div class="card theme">
         <h3>Stimulation testing</h3>
@@ -344,7 +334,7 @@
             <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15856">AI-15856</a><a href="https://tricentis.atlassian.net/browse/AI-15857">AI-15857</a></div>
           </li>
         </ul>
-        <div class="risk"><b>Dispute risk:</b> the High demand would support Now. It stays Next because the current bet is the guided first session, Trident, and workflow grouping.</div>
+        <div class="risk"><b>Dispute risk:</b> the High demand would support Now. It stays Next because the current bet is the guided first session and workflow grouping.</div>
       </div>
 
       <div class="card theme">
@@ -403,6 +393,24 @@
             <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15832">AI-15832</a></div>
           </li>
         </ul>
+      </div>
+
+      <div class="card theme">
+        <h3>Tricentis identity</h3>
+        <p class="what">Sign-in through Tricentis identity (Trident). Step 1. This replaces Tosca Cloud sign-in. Probably not ready until Q1 2027.</p>
+        <details>
+          <summary>Why it matters</summary>
+          <p>Sign-in is the front door of the first session. Merito still has an open question on whether a Tosca Cloud tenant is required for auth. Trident makes the account a user already has the way in.</p>
+        </details>
+        <div class="goal"><b>Goal:</b> a user signs in with Trident and lands in AgentScore with one obvious next action.</div>
+        <ul class="features">
+          <li>
+            <div class="t">Trident sign-in <span class="badge">Step 1</span></div>
+            <div class="d">Tricentis identity replaces Tosca Cloud sign-in. Tenant login-or-create from the old sign-in stays shipped.</div>
+            <div class="jira"><span class="none">Not re-checked against Jira</span></div>
+          </li>
+        </ul>
+        <div class="risk"><b>Dispute risk:</b> this swaps the identity provider. It does not reopen tenant provisioning, joining a tenant, or AI Workspace tenant reconciliation.</div>
       </div>
     </div>
 
