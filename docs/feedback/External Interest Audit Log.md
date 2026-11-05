@@ -4,6 +4,51 @@ Every run of the external-interest-sync agent, newest first. Each entry lists
 what changed in the tracker and CSVs and why. Contact emails are deliberately
 left out; they live in the contacts CSV.
 
+## 2026-11-05T19:20:00Z
+
+- **Cutoff:** 2026-11-04T06:53:03.000Z -> **new marker:** 2026-11-04T06:53:03.000Z (unchanged, nothing new)
+- **Emails found:** 0 new matching submissions (1 message returned at the cutoff: the Qnovate submission already processed in the previous run; 0 other messages ignored)
+- **Sent-items review (requested for this run):** 67 messages in the user's Sent Items since 2026-10-29 were listed. Three new intro emails sent 2026-11-05 matched tracked companies still at Interested and were applied below. Every other prospect-facing message in the window (the 2026-11-02 "Following Up on AgentScore" batch, the 2026-11-02 beta welcomes to Workday, BearingPoint and Eaton, the 2026-11-02 "How's AgentScore Going?" check-ins, the 2026-10-29 Telekom and Tech Collective replies, and the 2026-11-04/05 Tritusa deep-dive thread) was already reflected in the contacts log and tracker, so nothing changed for them. The rest were internal Tricentis threads and calendar responses.
+
+### Added
+| Company | Submitter(s) | Submitted | Why added | Sources used |
+|---|---|---|---|---|
+| None | - | - | - | - |
+
+### Excluded
+| Submitter | Submitted | Rule | Detail |
+|---|---|---|---|
+| None | - | - | - |
+
+### Held for review
+None.
+
+### Outreach recorded from Sent Items
+| Company | Contact(s) | Sent | Status change | Detail |
+|---|---|---|---|---|
+| Qnovate | Utkarsh Verma | 2026-11-05 | Interested -> Email sent | "Welcome to AgentScore!" intro: self-service sign-up via Tosca Cloud, overview video, booking link. |
+| AIS (TH) | Sirichai Wantong, Poonsiri Chingburanakij, Juralak Panpreeda, ketmanee Ruksa | 2026-11-05 | Interested -> Email sent | One email to all four. Subject reads "Welcome to the AgentScore Beta!" but the body is the same self-service intro, so it is recorded as the intro email, not a beta invite. |
+| The Future Group (NL) - HQ | Jean Delissen | 2026-11-05 | Interested -> Email sent | "Welcome to AgentScore!" intro, same body as Qnovate. |
+
+### Replies
+- **Reply cutoff:** 2026-11-05T14:34:25.000Z -> **new reply marker:** 2026-11-05T19:05:25.000Z
+
+None. The six messages since the cutoff were the user's own three intro emails, a canceled standup, the user's 14:34 Tritusa reply (the marker message itself), and an internal reply from Greg Campbell on the Meta/Accenture thread. No sender matched a counted contact.
+
+### Judgment calls
+- AIS (TH) intro subject says "Beta" while the body is the generic self-service intro. Recorded as Email sent, not Invited to beta. Change it if the user meant this as a beta invite.
+- Status cells for the three companies were set to plain "Email sent" per the user's instruction. Older Email sent rows in the Pipeline Tracker still carry a date in the Status cell (for example "Email sent" followed by a dash and 2026-10-28); those were left as they were.
+- Each section got an "outreach:" line and a "waiting on:" line under Email sent / Beta scheduled. This line format is new; earlier Email sent sections carry only the date.
+- The mail-merge CSV still holds only the Qnovate row from the previous run. Qnovate has now been emailed, so re-running that merge would send a duplicate. Step 7 is skipped on zero-submission runs, so the file was left as it is. Clear it by hand before the next merge.
+- The Meta/Accenture internal thread (Greg Campbell, 2026-11-05) concerns a Sales-sourced account. It is internal, not a prospect reply, so nothing was changed.
+
+### File changes
+- `External Interest.md`: 0 sections added, 0 submitter groups added, 0 Pipeline Tracker rows added; 3 Pipeline Tracker Status cells Interested -> Email sent (Qnovate, AIS (TH), The Future Group (NL) - HQ); 3 sections updated: `Email sent: -` -> `Email sent: 2026-11-05` plus outreach and waiting-on lines. Submission count 150 -> 150; as-of 2026-11-05 -> 2026-11-05; Interested companies (cumulative) 114 -> 114; Cumulative Email sent 110 -> 113; Current Interested 4 -> 1; Current Email sent 25 -> 28; Companies replied 18 -> 18 (none). Demo scheduled and every other stage count unchanged. Intro notes appended: none
+- `external-interest-mail-merge.csv`: not touched (zero new submissions); still holds 1 row (Qnovate)
+- `external-interest-contacts.csv`: 0 rows appended; 6 rows had Status Interested -> Email sent and Email Sent Date set to 11/5/26 (Qnovate x1, AIS (TH) x4, The Future Group x1); 0 Status cells set to Replied
+- `.last-processed`: 2026-11-04T06:53:03.000Z -> unchanged
+- `.last-reply-check`: 2026-11-05T14:34:25.000Z -> 2026-11-05T19:05:25.000Z
+
 ## 2026-11-05T15:00:00Z
 
 - **Cutoff:** 2026-10-30T10:12:30.000Z -> **new marker:** 2026-11-04T06:53:03.000Z
