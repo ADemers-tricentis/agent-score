@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgentScore interest, sorted by fit</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f6f6f4;
+    --surface: #ffffff;
+    --text: #1c1c1c;
+    --secondary: #4d4d4d;
+    --tertiary: #6f6f6f;
+    --line: #e3e3df;
+    --fill: #f0f0ec;
+    --pill: #ffffff;
+    --pill-active: #1c1c1c;
+    --pill-active-text: #ffffff;
+    --success: #1a7f37;
+    --warning: #9a6700;
+    --danger: #cf222e;
+    --info: #0969da;
+    --callout: #fff8e6;
+    --callout-line: #d4a017;
+    --stripe: #fafaf8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1e1e1e;
+      --surface: #252526;
+      --text: #e6e6e6;
+      --secondary: #c2c2c2;
+      --tertiary: #9a9a9a;
+      --line: #3a3a3a;
+      --fill: #2a2a2a;
+      --pill: #2a2a2a;
+      --pill-active: #e6e6e6;
+      --pill-active-text: #1c1c1c;
+      --success: #3fb950;
+      --warning: #d29922;
+      --danger: #f85149;
+      --info: #58a6ff;
+      --callout: #2a2416;
+      --callout-line: #d29922;
+      --stripe: #222222;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  main { max-width: 1120px; margin: 0 auto; padding: 32px 24px 64px; }
+  h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 8px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 0 0 8px; }
+  h3 { font-size: 14px; font-weight: 600; margin: 0 0 8px; }
+  p { margin: 0; }
+  .secondary { color: var(--secondary); }
+  .tertiary { color: var(--tertiary); font-size: 12px; }
+  .stack { display: flex; flex-direction: column; gap: 24px; }
+  .block { display: flex; flex-direction: column; gap: 8px; }
+  .stats { display: flex; flex-wrap: wrap; gap: 28px; }
+  .stat .value { font-size: 28px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; }
+  .stat .label { color: var(--tertiary); font-size: 12px; margin-top: 2px; }
+  .stat.success .value { color: var(--success); }
+  .stat.warning .value { color: var(--warning); }
+  .stat.danger .value { color: var(--danger); }
+  .bars { display: flex; flex-direction: column; gap: 6px; }
+  .bar-row { display: grid; grid-template-columns: minmax(180px, 280px) 1fr 36px; gap: 10px; align-items: center; }
+  .bar-label { font-size: 12px; color: var(--secondary); }
+  .bar-track { height: 14px; background: var(--fill); border-radius: 2px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--info); }
+  .bar-n { font-size: 12px; font-variant-numeric: tabular-nums; text-align: right; }
+  .callout {
+    background: var(--callout);
+    border-left: 3px solid var(--callout-line);
+    padding: 12px 14px;
+  }
+  .callout strong { display: block; margin-bottom: 4px; }
+  hr { border: 0; border-top: 1px solid var(--line); margin: 0; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  button.pill {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: var(--pill);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  button.pill.active {
+    background: var(--pill-active);
+    color: var(--pill-active-text);
+    border-color: var(--pill-active);
+  }
+  input[type="search"] {
+    width: 100%;
+    max-width: 420px;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font: inherit;
+  }
+  .table-wrap {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: auto;
+    background: var(--surface);
+    max-height: 720px;
+  }
+  .table-wrap.short { max-height: none; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; vertical-align: top; border-bottom: 1px solid var(--line); }
+  th {
+    position: sticky; top: 0;
+    background: var(--surface);
+    font-size: 12px; font-weight: 600;
+    color: var(--secondary);
+    z-index: 1;
+  }
+  tr.stripe td { background: var(--stripe); }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.fit { white-space: nowrap; }
+  .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
+  .dot.success { background: var(--success); }
+  .dot.warning { background: var(--warning); }
+  .dot.danger { background: var(--danger); }
+  .dot.info { background: var(--info); }
+  .dot.neutral { background: var(--tertiary); }
+  @media (max-width: 720px) {
+    .bar-row { grid-template-columns: 1fr; gap: 2px; }
+    .bar-n { text-align: left; }
+    main { padding: 20px 14px 48px; }
+  }
+</style>
+</head>
+<body>
+<main class="stack">
+  <div class="block">
+    <h1>AgentScore interest, sorted by fit</h1>
+    <p class="secondary">115 companies in the External Interest tracker as of 2 Nov 2026. The contacts log has no Gmail, Hotmail, or spam mailbox. A few raw form messages are low-quality signups. None of them are spam. They sit in the signup-quality filter: a missing company, an internal or test submission, or the same person submitting again.</p>
+    <p class="tertiary">ICP means they build or run agents, or a partner whose work is delivering agents. SAP-only and no-agents-yet sit in Potential, not now. Evidence is the tracker research plus the 11 call notes, not a qualification interview.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat success"><div class="value">14</div><div class="label">ICP and motivated</div></div>
+    <div class="stat warning"><div class="value">29</div><div class="label">ICP, no real reply</div></div>
+    <div class="stat"><div class="value">47</div><div class="label">Not building agents yet</div></div>
+    <div class="stat success"><div class="value">1 / 9</div><div class="label">Beta invites with a sign-in</div></div>
+  </div>
+
+  <div class="block">
+    <h3>Companies in each fit bucket</h3>
+    <div class="bars" id="bars"></div>
+    <p class="tertiary">Horizontal axis is the number of companies. One bar per fit bucket. Source: External Interest.md and external-interest-contacts.csv, snapshot 2 Nov 2026.</p>
+  </div>
+
+  <div class="callout">
+    <strong>Where the funnel is actually leaking</strong>
+    <p>The 19 silent end customers already run agents, and the follow-up does not name the agent. AIS sent four people on 30 Oct and has not been emailed. Partners with no named client fill the top of the form. Nine beta invites, one sign-in (Tritusa, using AgentScore as of 4 Nov). Several of the rest are stuck on on-prem, missing traces, or a CI/CD gate.</p>
+  </div>
+
+  <div class="block">
+    <h2>Chase these first</h2>
+    <p class="secondary">End customers with a public fleet or a live multi-agent rollout, and no reply. AIS is on this list because outreach never started.</p>
+    <div class="table-wrap short" id="chase"></div>
+  </div>
+
+  <div class="block">
+    <h2>What would move the funnel</h2>
+    <div class="table-wrap short" id="leaks"></div>
+  </div>
+
+  <hr>
+
+  <div class="block">
+    <h2>Signup quality</h2>
+    <p class="secondary">Low-quality form messages. None are spam. A dash or "Company Not Found" is still a person, and the tracker kept the ones it could resolve. Internal and test messages were left out of the 115. Repeat submits were folded into the company row, so they do not add companies.</p>
+    <div class="pills" id="quality-pills"></div>
+    <p class="tertiary" id="quality-count"></p>
+    <div class="table-wrap short" id="quality"></div>
+  </div>
+
+  <hr>
+
+  <div class="block">
+    <h2>Every company</h2>
+    <div class="pills" id="fit-pills"></div>
+    <input id="search" type="search" placeholder="Filter by company, stage, or reason">
+    <p class="tertiary" id="company-count"></p>
+    <div class="table-wrap" id="companies"></div>
+  </div>
+</main>
+<script type="application/json" id="payload">{"accounts":[{"company":"Aptiv","bucket":"motivated","people":1,"stage":"Invited to beta","evidence":"Call: building a fleet","why":"Standing up agents on Copilot Studio, Azure AI Foundry, and Gemini. Blocked on agents that cannot export traces, and on their architecture board."},{"company":"Eaton","bucket":"motivated","people":1,"stage":"Invited to beta","evidence":"Call: fleet in build","why":"Custom agents on Azure AI Foundry and Palantir. Wants a CI/CD score gate. Waiting on data-handling answers and a Foundry comparison."},{"company":"Wolters Kluwer","bucket":"motivated","people":1,"stage":"Invited to beta","evidence":"Call: fleet","why":"Cleanest ICP match. Scores agents outside Tricentis (GitHub Copilot, internal FAB) next to AI Workspace. Asked for RBAC and fleet-level scoring."},{"company":"L'Oreal","bucket":"motivated","people":1,"stage":"Invited to beta","evidence":"Call: one live agent","why":"Reconciliation agent in production, graded by hand today. Also ships consumer Beauty Genius. Invited, no sign-in."},{"company":"Tritusa","bucket":"motivated","people":3,"stage":"Actively using","evidence":"Call: two agents","why":"SAP-testing partner running an AI Workspace agent and a Copilot Studio agent. Using AgentScore as of 4 Nov 2026."},{"company":"BearingPoint","bucket":"motivated","people":1,"stage":"Invited to beta","evidence":"Call: own agent platform","why":"Wants AgentScore on their QTest ATC agent and as proof for GenAIQ clients. Hit a wall on seeing Tricentis's own agents."},{"company":"New Vision","bucket":"motivated","people":1,"stage":"Invited to beta","evidence":"Call: uses and tests agents","why":"Partner. Uses open-source agents (Playwright) and a separate team is POCing agent testing. No named agent connected yet."},{"company":"Meta","bucket":"motivated","people":1,"stage":"Demo scheduled","evidence":"Call: in-house fleet","why":"Autonomous supply chain agents. POC scoping. On-prem is the stated dealbreaker."},{"company":"Accenture","bucket":"motivated","people":8,"stage":"Pending beta","evidence":"Partner, live thread","why":"Eight signups. Pending beta to evaluate on Meta's behalf. Needs a private AWS instance. Alex Syed asked for a capability deck on 29 Oct."},{"company":"Workday","bucket":"motivated","people":1,"stage":"Invited to beta","evidence":"Call: runs agents","why":"Runs Workday agents and Salesforce Agentforce. QA persona never accepted it as a testing tool. They are also shipping Agent Passport, a competing monitor."},{"company":"Freddie Mac","bucket":"motivated","people":1,"stage":"Replied","evidence":"Sales call: two teams building","why":"Product team and AI accelerator building overlapping agents with no shared yardstick. Reacted to ship/warn/block. No demo on the calendar."},{"company":"Telekom Deutschland","bucket":"motivated","people":1,"stage":"Replied","evidence":"Production assistant fleet","why":"Frag Magenta and the LMOS agent platform are in production. Andre replied 29 Oct that he is very interested and asked for access. Three colleagues cc'd. Not scheduled."},{"company":"PG&E","bucket":"motivated","people":1,"stage":"Demo scheduled","evidence":"Virtual assistant live","why":"Demo 27 Oct via Sales. Peggy and an internal Agent Assist exist. Their ask is pre-release simulation, which AgentScore does not do yet."},{"company":"Stanza","bucket":"motivated","people":1,"stage":"Replied","evidence":"Agent vendor","why":"Their product is agents for agencies. Anirban introduced Matt Mahowald (platform engineering), who asked for time. No demo recorded."},{"company":"Cox Automotive","bucket":"silent-customer","people":1,"stage":"Follow-up sent","evidence":"Fleet in production","why":"17 agentic solutions on Bedrock, including an after-hours dealership assistant with no human in the loop. One signup, no reply."},{"company":"Home Depot","bucket":"silent-customer","people":1,"stage":"Follow-up sent","evidence":"Fleet in production","why":"Magic Apron, a 50-store voice-agent pilot, and Sidekick. One signup, no reply."},{"company":"Merck","bucket":"silent-customer","people":2,"stage":"Follow-up sent","evidence":"Fleet rollout","why":"April 2026 Google Cloud deal to put Gemini Enterprise agents across R&D, manufacturing, and commercial. Two signups, no reply."},{"company":"HP","bucket":"silent-customer","people":1,"stage":"Follow-up sent","evidence":"Fleet deployment","why":"OpenAI Frontier agents moving from pilot to broad deployment, and HP says it wants outcome evaluation. No reply."},{"company":"Cargill","bucket":"silent-customer","people":1,"stage":"Follow-up sent","evidence":"Agent in production","why":"A support agent automates about 70% of order processing. Freight-exception agent in pilot. No reply."},{"company":"McKesson","bucket":"silent-customer","people":2,"stage":"Follow-up sent","evidence":"IVA fleet","why":"Five9 virtual assistants deflect 40,000+ calls a month. Two signups, no reply."},{"company":"Mouser Electronics","bucket":"silent-customer","people":1,"stage":"Follow-up sent","evidence":"Bot fleet","why":"21 customer-service bots in 13 languages on LivePerson. No reply."},{"company":"Bloomberg","bucket":"silent-customer","people":1,"stage":"Follow-up sent","evidence":"Multi-agent beta","why":"ASKB runs a network of agents over Terminal data. In beta since Feb 2026. QA manager, no reply."},{"company":"Singapore Airlines","bucket":"silent-customer","people":1,"stage":"Follow-up sent","evidence":"Agentforce plus broad GenAI","why":"Salesforce Agentforce for service, and 250+ GenAI use cases claimed. No reply."},{"company":"Charter","bucket":"silent-customer","people":1,"stage":"Follow-up sent","evidence":"Contact-center AI live","why":"Call-summarization and knowledge search are live. RingCX deploying for Spectrum Business. No reply."},{"company":"STC","bucket":"silent-customer","people":1,"stage":"Follow-up sent","evidence":"Reported live agents","why":"Coverage of LEAP 2026 says agentic AI is live in customer service, network ops, and enterprise sales. No reply."},{"company":"AIS (TH)","bucket":"silent-customer","people":4,"stage":"Interested","evidence":"Voicebots live","why":"Four QA people signed up within two hours on 30 Oct. AIS runs customer voicebots. No email has gone out."},{"company":"Bayer","bucket":"silent-customer","people":1,"stage":"Email sent","evidence":"Named agent in production","why":"E.L.Y. agronomy agent serves 1,500+ US employees, described as the first of a series. Email only, no reply."},{"company":"Sun Life","bucket":"silent-customer","people":1,"stage":"Email sent","evidence":"Assistants in production","why":"Advisor notes assistant and an AI concierge used in 11,000+ conversations in month one. Test lead. Email only."},{"company":"LGT","bucket":"silent-customer","people":1,"stage":"Follow-up sent","evidence":"Assistant in production","why":"Lumen investment-research assistant is live for relationship managers. Application owner. No reply."},{"company":"DSTA (Singapore)","bucket":"silent-customer","people":1,"stage":"Follow-up sent","evidence":"Assistant in production","why":"Gaia assistant for defence staff, plus a Mistral partnership on agents. Public sector, so a slower cycle. No reply."},{"company":"Cengage","bucket":"silent-customer","people":1,"stage":"Follow-up sent","evidence":"One shipped assistant","why":"GenAI Student Assistant shipped in beta. Single product, not a fleet. No reply."},{"company":"Ashurst","bucket":"silent-customer","people":1,"stage":"Email sent","evidence":"Harvey firmwide","why":"Harvey rolled out to all staff after a 525-person pilot. Agentic use is inferred from Harvey, not a named internal fleet. Email only."},{"company":"Slaughter and May","bucket":"silent-customer","people":1,"stage":"Email sent","evidence":"Harvey, agentic cited","why":"Adopted Harvey in April 2026 and cited its agentic capabilities. Email only, no reply."},{"company":"Capgemini","bucket":"silent-partner","people":4,"stage":"Follow-up sent","evidence":"Partner delivers agents","why":"Agentic delivery is a core service. Four people including a CTO. Konrad, the newest, is still Interested. Nobody has replied."},{"company":"Deloitte UK","bucket":"silent-partner","people":1,"stage":"Email sent","evidence":"Sells an agent platform","why":"Sells Zora and says it uses Zora internally. Senior manager. Email only."},{"company":"IBM India","bucket":"silent-partner","people":1,"stage":"Email sent","evidence":"Partner builds agents","why":"Agentic AI Innovation Center in Bengaluru on watsonx Orchestrate. Email only."},{"company":"NTT Data (UK)","bucket":"silent-partner","people":1,"stage":"Email sent","evidence":"Partner sells agents","why":"NTT DATA markets a Smart AI Agent ecosystem. This signup is the SAP-focused UK arm. Email only."},{"company":"ABeam Malaysia","bucket":"silent-partner","people":1,"stage":"Follow-up sent","evidence":"Partner builds agents","why":"Offers an agent construction service and runs SAP Joule for Consultants. No reply."},{"company":"TCS India","bucket":"silent-partner","people":1,"stage":"Follow-up sent","evidence":"Partner agent platforms","why":"Markets WisdomNext and agentic blueprints. Separate signup from TCS Singapore. No reply."},{"company":"TCS Singapore","bucket":"silent-partner","people":1,"stage":"Follow-up sent","evidence":"Partner agent platforms","why":"Same parent as TCS India. ADD AgentHub and MasterCraft. Associate consultant. No reply."},{"company":"Genpact","bucket":"silent-partner","people":1,"stage":"Follow-up sent","evidence":"Partner, positioning","why":"Brands itself as Agentic Operations. Public evidence is positioning, not a named client agent. No reply."},{"company":"Xebia","bucket":"silent-partner","people":1,"stage":"Follow-up sent","evidence":"Partner sells agents","why":"Sells its own agentic assistant and test-generation agents. No reply."},{"company":"Aspire Systems","bucket":"silent-partner","people":1,"stage":"Follow-up sent","evidence":"Partner delivers agents","why":"Insurance practice with agentic automation and imagyn.ai. No reply."},{"company":"Love's Travel Stops","bucket":"early","people":2,"stage":"Demo scheduled","evidence":"Call: no production agents","why":"Demo 2 Oct. They said they evaluate no agents beyond a Tosca MCP plus Claude test. On-prem is the blocker. Would look again if AgentScore is not cloud-only."},{"company":"Merito","bucket":"early","people":2,"stage":"Invited to beta","evidence":"Call: no production agents","why":"Partner, Claude-certified architects, no customer-facing agent yet. Invited. Capacity-limited. A fantasy-football test agent was the plan."},{"company":"The Tech Collective","bucket":"early","people":1,"stage":"Replied","evidence":"Asked for a meeting","why":"Conversational-AI consultancy. Nadia asked on 28 Oct for an intro for a small team the next week. No deployed agent found."},{"company":"Jysk","bucket":"not-now","people":1,"stage":"Email sent","evidence":"SAP test automation","why":"Team lead for SAP test automation. No deployed agent. The SAP-only pattern."},{"company":"Epson Europe","bucket":"not-now","people":1,"stage":"Email sent","evidence":"SAP functional lead","why":"SAP Functional Lead. No agent product at Epson Europe."},{"company":"Olam Agri","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"SAP Joule rollout","why":"RISE with SAP and Joule on AWS. Agent signal is the SAP module, not a program they are building."},{"company":"City Developments","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"SAP and Microsoft stack","why":"QA lead. AI on SAP S/4HANA and Microsoft 365. No named agent."},{"company":"The Future Group","bucket":"not-now","people":1,"stage":"Interested","evidence":"SAP test partner","why":"SAP test manager at a Dutch testing network. No agent product, and no email has gone out."},{"company":"cbs","bucket":"not-now","people":2,"stage":"Follow-up sent","evidence":"SAP consultancy","why":"SAP implementation partner. No deployed agent. Two signups."},{"company":"Dolpheen","bucket":"not-now","people":2,"stage":"Follow-up sent","evidence":"SAP test partner","why":"Tricentis partner. Business is SAP S/4HANA test automation and RPA, not agents."},{"company":"Thought Frameworks","bucket":"not-now","people":1,"stage":"Email sent","evidence":"Tosca partner","why":"Tricentis partner. Public line is AI quality engineering, no deployed agent."},{"company":"Sogeti","bucket":"not-now","people":3,"stage":"Follow-up sent","evidence":"GenAI for testing","why":"Three signups, one titled SAP Business Assurance. Public offer is GenAI for test-case generation, not client agents. Two of the three were never followed up individually."},{"company":"QualityAI","bucket":"not-now","people":1,"stage":"Email sent","evidence":"Testing firm","why":"Partner. Own tool is risk-based test prioritization, not an agent."},{"company":"M2Q","bucket":"not-now","people":1,"stage":"Email sent","evidence":"Testing firm","why":"CEO of a testing firm. No deployed agent."},{"company":"Itecor","bucket":"not-now","people":2,"stage":"Follow-up sent","evidence":"Testing consultancy","why":"QA consultancy. No deployed agent. Second signup still Interested."},{"company":"Turing Consulting","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"QE partner","why":"Australian QE partner. No deployed agent."},{"company":"Testing IT","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"QE services","why":"Mexico QA training and testing firm. No deployed agent."},{"company":"Brillar","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"Test-automation partner","why":"Tricentis partner in Singapore. Test automation, no agent."},{"company":"xAmplify","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"Test-automation partner","why":"Tricentis partner. No deployed agent."},{"company":"TestCrew","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"QE services","why":"Quality-engineering vendor. No deployed agent."},{"company":"Bayone","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"QA vendor","why":"QA vendor. No agent product."},{"company":"Mattoni 1873","bucket":"not-now","people":1,"stage":"Email sent","evidence":"No agents","why":"Drinks manufacturer. Only public AI is a marketing campaign."},{"company":"Barratt Redrow","bucket":"not-now","people":1,"stage":"Email sent","evidence":"No agents","why":"UK housebuilder. Test automation engineer. No agent product."},{"company":"Heidelberg Materials","bucket":"not-now","people":1,"stage":"Email sent","evidence":"Industrial ML, not agents","why":"Head of applications. Public AI is kiln optimization, not generative agents."},{"company":"Benefact Group","bucket":"not-now","people":1,"stage":"Email sent","evidence":"No agents","why":"Insurer. Group technology director. No deployed agent found."},{"company":"Vestas","bucket":"not-now","people":1,"stage":"Email sent","evidence":"Industrial ML, not agents","why":"Enterprise test manager. Public AI is a wake-steering proof of concept."},{"company":"Teck Resources","bucket":"not-now","people":1,"stage":"Email sent","evidence":"Predictive maintenance","why":"Miner. Documented digital work is automation and predictive maintenance."},{"company":"CPKC","bucket":"not-now","people":1,"stage":"Email sent","evidence":"Machine vision","why":"Railway. QA manager. Public AI is railcar inspection, not agents."},{"company":"Ontario Power Generation","bucket":"not-now","people":1,"stage":"Email sent","evidence":"No agents","why":"Solution architect. A 2022 Azure partnership. No deployed agent."},{"company":"DJSIR (Victoria)","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"No agents","why":"Salesforce QA lead in a government department. AI roles advertised, no agent product."},{"company":"Skygen USA","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"No agents","why":"Health-plan automation manager. No deployed agent found."},{"company":"Hugo Boss","bucket":"not-now","people":3,"stage":"Follow-up sent","evidence":"Image generation, not agents","why":"Three signups. Public AI is product imagery and video. Multi-person signup is not an agent program."},{"company":"Singapore Pools","bucket":"not-now","people":2,"stage":"Follow-up sent","evidence":"No agents","why":"Two quality engineers. No deployed agent found."},{"company":"Seatrium","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"AI R&D, not agents","why":"Shipyard. AI and digital-twin research with A*STAR. No agent product."},{"company":"SP Digital","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"AI products, not agents","why":"Builds AI and IoT tools for grid faults and solar. Not an agent program."},{"company":"Singapore Institute of Technology","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"Education","why":"University. Co-runs a digital lab with Seatrium. No deployed agent."},{"company":"University of Leeds","bucket":"not-now","people":1,"stage":"Email sent","evidence":"Copilot only","why":"QA platform owner. Approved GenAI tool is Microsoft Copilot. No agent deployment."},{"company":"Harrods","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"Retail ML, not agents","why":"Senior test manager. AI is inventory replenishment and ad analytics."},{"company":"Diriyah Gate","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"No agents","why":"Saudi development company. No deployed agent found."},{"company":"Acadia Healthcare","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"No agents","why":"Behavioral health. Regulated, but no deployed agent found. Industry is not evidence."},{"company":"Hilti Asia IT","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"No public agents","why":"No public information on an agent program."},{"company":"Panasonic Avionics","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"No public agents","why":"No public information on an agent program."},{"company":"Southern Glazer's","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"No public agents","why":"Distributor. No public agent program."},{"company":"Chevron Phillips Chemical","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"Data platform, not agents","why":"Databricks for manufacturing data. Not an agent deployment."},{"company":"Cummins","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"Predictive ML","why":"Failure-prediction and knowledge-search partnerships. Not a named agent program."},{"company":"Sub-Zero","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"No public agents","why":"No public information on an agent program."},{"company":"Kiewit","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"Deterministic AI tools","why":"In-house design and estimating AI (KADE, ADAPT). Not an LLM agent program."},{"company":"J. R. Simplot","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"Governance role, no agents","why":"Has an AI governance analyst role and SmartFarm. No deployed agent found."},{"company":"Crown Equipment","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"Autonomous trucks","why":"Autonomous lift trucks and fleet analytics. Different AI than an agent you can score."},{"company":"Amazon Kuiper","bucket":"not-now","people":1,"stage":"Follow-up sent","evidence":"Job posting only","why":"Manufacturing test engineer. Agent mention is a job posting, not a deployment."},{"company":"TotalEnergies","bucket":"unconfirmed","people":1,"stage":"Email sent","evidence":"Assistant, rollout unknown","why":"Joint lab with Mistral. An assistant for about 1,000 researchers. No public rollout status."},{"company":"Siemens Energy","bucket":"unconfirmed","people":1,"stage":"Email sent","evidence":"Hiring an agent factory","why":"Form said Siemens Financial Services. Email is siemens-energy.com. Agent Factory shows up in job posts on Copilot Studio and Foundry, not a case study."},{"company":"Ally Financial","bucket":"unconfirmed","people":1,"stage":"Follow-up sent","evidence":"Exploring agents","why":"Ally.ai is live for 10,000 employees. Autonomous agents on Bedrock are described as exploration, not production."},{"company":"PVH","bucket":"unconfirmed","people":2,"stage":"Follow-up sent","evidence":"ChatGPT Enterprise","why":"Two people. OpenAI partnership for design, planning, and commerce apps. Not a named agent fleet."},{"company":"Sunbelt Rentals","bucket":"unconfirmed","people":1,"stage":"Follow-up sent","evidence":"Agentforce announced","why":"Trade press says a Salesforce Agentforce partnership. Not confirmed live."},{"company":"Boeing","bucket":"unconfirmed","people":1,"stage":"Follow-up sent","evidence":"Agentic on the roadmap","why":"Conversational AI platform exists. Agentic AI is named as a next focus, not a current fleet."},{"company":"The Hartford","bucket":"unconfirmed","people":1,"stage":"Follow-up sent","evidence":"Production ML, intake bot unclear","why":"Hundreds of models in production and a conversational quoting flow. Same person also submitted as Capgemini, so the company match is shaky."},{"company":"Dominion Energy","bucket":"unconfirmed","people":1,"stage":"Follow-up sent","evidence":"Contact-center analytics","why":"GenAI contact analytics. Not clearly an agent that takes actions."},{"company":"HDB (Singapore)","bucket":"unconfirmed","people":1,"stage":"Follow-up sent","evidence":"Thin sourcing","why":"Principal SQE. Portal is reported to use third-party AI assistants. No named in-house agent."},{"company":"Regeneron","bucket":"unconfirmed","people":1,"stage":"Follow-up sent","evidence":"No public agent","why":"Regulated pharma logo. No deployed agent found. Do not treat the industry as fit."},{"company":"Artizent","bucket":"unconfirmed","people":1,"stage":"Follow-up sent","evidence":"Positioning only","why":"Says it builds production-grade AI for enterprises. No named agent."},{"company":"Tachyon","bucket":"unconfirmed","people":1,"stage":"Follow-up sent","evidence":"Service-line listing","why":"SI with a generic generative-AI service line. No named agent delivery."},{"company":"SAP North America","bucket":"vendor","people":1,"stage":"Email sent","evidence":"Builds Joule","why":"VP at SAP. This is SAP evaluating a tool next to its own agents, not a customer buy."},{"company":"SAP Labs India","bucket":"vendor","people":1,"stage":"Follow-up sent","evidence":"Builds Joule","why":"SAP R&D. Internal QA of agents in SAP products before they ship."},{"company":"Ariba","bucket":"vendor","people":1,"stage":"Follow-up sent","evidence":"SAP employee","why":"Akihiko Yamano (Lead Architect) is @sap.com. Joule Bid Analysis Agent is SAP's own product. Sina Döbbelin manages partnerships and is off the list."},{"company":"Oracle","bucket":"vendor","people":1,"stage":"Interested","evidence":"Sells Agent Studio","why":"Sales thread from William Berry after AI World. Fusion ships AI Agent Studio with its own tracing. No reply. Left off the generic mail merge on purpose."},{"company":"Pegasystems","bucket":"vendor","people":1,"stage":"Follow-up sent","evidence":"Sells agent orchestration","why":"Ships Pega Agentic Process Fabric and pre-built agents. Overlaps AgentScore. Landscape research is as likely as a buy."},{"company":"Sky","bucket":"closed","people":1,"stage":"Do not email","evidence":"Opted out","why":"Has the Kyla virtual agent, so this was a real ICP-shaped account. Mario replied to the welcome that he is not interested."},{"company":"Ferrara Candy","bucket":"closed","people":1,"stage":"Not a fit","evidence":"Wrong product","why":"Sudha signed up by accident for a different product. Removed from the counts."},{"company":"QACooper","bucket":"junk","people":1,"stage":"Replied","evidence":"Unverifiable","why":"No public company. Reply to the welcome was the single word Thanks. Counted as Replied, which inflates that stage."},{"company":"AI-Celerates Business","bucket":"junk","people":1,"stage":"Email sent","evidence":"Unverifiable","why":"Founder, evaluating Tricentis. No public information on the firm at all."},{"company":"Accenture CIO HR (Stanza duplicate)","bucket":"junk","people":1,"stage":"Follow-up sent","evidence":"Bad company field","why":"Greg Wanroy used greg@stanza.ai. The Accenture company field is a mis-pick. Same firm as Stanza, counted twice in the tracker."}],"quality":[{"kind":"no-company","who":"Agnes Goh","when":"10/21","detail":"Company field was \"-\". Tracker filed her as AI-Celerates Business from the email domain."},{"kind":"no-company","who":"Sathish kumar Backiam","when":"8/20","detail":"Company field was \"-\". The same person also submitted as Capgemini. A separate row guessed The Hartford from thehartford.com."},{"kind":"no-company","who":"About 10 more, company \"Company Not Found\"","when":"—","detail":"The tracker names the ones it resolved from the email domain and kept as real companies: Sun Life (Kishore Kumar), Artizent (Alan Mayfus), Olam Agri (Vanitha Velusamy), Singapore Pools (Nai Hau Lui), Accenture (Priya Saidavaram), and a second Accenture submit from Praveer Bakshi with the company blank. The rest of that set of about 10 were not written up by name."},{"kind":"internal","who":"Tricentis GmbH","when":"9/25 and 10/1","detail":"Ashutosh Kotkar (9/25) and Srinivasa Rao K (10/1), both Tricentis GmbH (AT) - HQ, @tricentis.com. Excluded from the company counts."},{"kind":"internal","who":"Tricentis UK","when":"—","detail":"Internal submission. Individual names are not in the tracker."},{"kind":"internal","who":"Tricentis US","when":"—","detail":"Internal submission. Individual names are not in the tracker."},{"kind":"internal","who":"TRICENTIS USA","when":"—","detail":"Internal submission. Individual names are not in the tracker."},{"kind":"internal","who":"Partner Account - Partner Community","when":"—","detail":"Test or partner-portal account. Not a customer, and not in the company list."},{"kind":"duplicate","who":"Rohan Patil, BearingPoint","when":"9/14, 5 times","detail":"Same person, five submissions that day. Tracker keeps one company row. BearingPoint is invited to beta."},{"kind":"duplicate","who":"Rohan Bansod, New Vision","when":"3 times","detail":"Original signup 8/20, plus two more on 10/15 that the tracker did not count separately. New Vision is invited to beta."},{"kind":"duplicate","who":"PVH","when":"3 submissions","detail":"Beena P K submitted twice on 8/28, and Aimee Martin once. Three messages, two people. Still in Potential, not now."},{"kind":"duplicate","who":"Hugo Boss","when":"Twice","detail":"A repeat on top of the company. The tracker also has three different people: Marco Esguerra, Julian Raach, and Yash Jawale."},{"kind":"duplicate","who":"Merck","when":"Twice","detail":"A repeat on top of the company. The tracker lists two people, Ramesh Magdum and Sateesh Rajegowda."},{"kind":"duplicate","who":"Love's","when":"Twice","detail":"A repeat on top of the company. The tracker lists Jag Mallampati and Thomas Cody, who were both on the demo."},{"kind":"duplicate","who":"Capgemini","when":"Twice","detail":"A repeat on top of the company. The tracker has four people, stacked on one row rather than counted as new companies."}],"buckets":[{"id":"motivated","label":"ICP and motivated"},{"id":"silent-customer","label":"ICP, not motivated (end customer)"},{"id":"silent-partner","label":"ICP, not motivated (partner)"},{"id":"early","label":"Motivated, not ICP yet"},{"id":"not-now","label":"Potential, not now"},{"id":"unconfirmed","label":"AI yes, agent program unconfirmed"},{"id":"vendor","label":"Platform vendor"},{"id":"closed","label":"Closed"},{"id":"junk","label":"Junk or bad row"}],"label":{"motivated":"ICP and motivated","silent-customer":"ICP, not motivated","silent-partner":"ICP partner, not motivated","early":"Motivated, not ICP yet","not-now":"Potential, not now","unconfirmed":"Agent program unconfirmed","vendor":"Platform vendor","closed":"Closed","junk":"Junk or bad row"},"tone":{"motivated":"success","silent-customer":"warning","silent-partner":"info","early":"info","not-now":"neutral","unconfirmed":"neutral","vendor":"neutral","closed":"danger","junk":"danger"},"chase":["Cox Automotive","Home Depot","Merck","HP","Cargill","McKesson","Mouser Electronics","Bloomberg","Singapore Airlines","Charter","STC","AIS (TH)"],"leaks":[["Silent fleet accounts get the same email as everyone else","12","Name the agent in the note. Cox, Home Depot, Merck, HP, Cargill, McKesson, and Mouser are the sharpest."],["ICP accounts never mailed","1","AIS. Four QA signups, voicebots already live, status still Interested."],["Partner signups with no client attached","10 + most of the 47","Different note. Ask which client and which stack. Capgemini has four people, including a CTO, and no reply."],["Invited, never signed in","8","Activation, not another blast. Tritusa is using AgentScore as of 4 Nov. The other eight have not signed in."],["Engaged, blocked by the product","6","Meta and Accenture need on-prem. Aptiv has agents with no trace export. Eaton needs the CI/CD gate and a data-boundary answer. Love's is on-prem and is not ICP yet. Workday still does not believe this is a testing tool."],["Replied, not on a calendar","4","Telekom asked for access and cc'd three people. Freddie Mac named the pain. Stanza introduced a platform lead. Tech Collective asked for a team intro."],["Reply stage counts a non-reply","1","QACooper's reply was Thanks. Drop them from the replied count."],["Same human on two companies","1","Sathish kumar Backiam is on Capgemini and on the unresolved Hartford row."]],"qualityKinds":[{"id":"no-company","label":"No usable company","countLabel":"2 + ~10"},{"id":"internal","label":"Internal or test","countLabel":"5"},{"id":"duplicate","label":"Duplicate submission","countLabel":"7"}],"qualityLabel":{"no-company":"No usable company","internal":"Internal or test","duplicate":"Duplicate submission"},"qualityTone":{"no-company":"warning","internal":"info","duplicate":"neutral"}}</script>
+<script>
+const data = JSON.parse(document.getElementById("payload").textContent);
+const counts = Object.fromEntries(data.buckets.map((b) => [b.id, 0]));
+for (const account of data.accounts) counts[account.bucket] += 1;
+const maxCount = Math.max(...Object.values(counts));
+
+let fit = "all";
+let quality = "all";
+let query = "";
+
+function esc(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+function dot(tone) {
+  return '<span class="dot ' + tone + '"></span>';
+}
+function table(headers, rows, aligns) {
+  const head = "<tr>" + headers.map((header, i) => '<th class="' + (aligns[i] || "") + '">' + esc(header) + "</th>").join("") + "</tr>";
+  const body = rows.map((row, index) => {
+    const stripe = index % 2 === 1 ? "stripe" : "";
+    const cells = row.cells.map((cell, i) => '<td class="' + (aligns[i] || "") + '">' + cell + "</td>").join("");
+    return '<tr class="' + stripe + '">' + cells + "</tr>";
+  }).join("");
+  return "<table><thead>" + head + "</thead><tbody>" + body + "</tbody></table>";
+}
+
+document.getElementById("bars").innerHTML = data.buckets.map((bucket) => {
+  const n = counts[bucket.id];
+  const width = Math.max(2, Math.round((n / maxCount) * 100));
+  return '<div class="bar-row"><div class="bar-label">' + esc(bucket.label) + '</div><div class="bar-track"><div class="bar-fill" style="width:' + width + '%"></div></div><div class="bar-n">' + n + "</div></div>";
+}).join("");
+
+const byName = Object.fromEntries(data.accounts.map((account) => [account.company, account]));
+document.getElementById("chase").innerHTML = table(
+  ["Company", "People", "Stage", "Why they are on this list"],
+  data.chase.map((name) => {
+    const account = byName[name];
+    return { cells: [dot("warning") + esc(account.company), esc(account.people), esc(account.stage), esc(account.why)] };
+  }),
+  ["", "num", "", ""]
+);
+
+document.getElementById("leaks").innerHTML = table(
+  ["Leak", "Companies", "What to change"],
+  data.leaks.map((row) => ({ cells: row.map(esc) })),
+  ["", "num", ""]
+);
+
+function renderQualityPills() {
+  const all = '<button class="pill' + (quality === "all" ? " active" : "") + '" data-quality="all">All low-quality</button>';
+  const rest = data.qualityKinds.map((kind) =>
+    '<button class="pill' + (quality === kind.id ? " active" : "") + '" data-quality="' + kind.id + '">' + esc(kind.label) + " (" + esc(kind.countLabel) + ")</button>"
+  ).join("");
+  document.getElementById("quality-pills").innerHTML = all + rest;
+}
+function renderFitPills() {
+  const all = '<button class="pill' + (fit === "all" ? " active" : "") + '" data-fit="all">All (' + data.accounts.length + ")</button>";
+  const rest = data.buckets.map((bucket) =>
+    '<button class="pill' + (fit === bucket.id ? " active" : "") + '" data-fit="' + bucket.id + '">' + esc(bucket.label) + " (" + counts[bucket.id] + ")</button>"
+  ).join("");
+  document.getElementById("fit-pills").innerHTML = all + rest;
+}
+function renderQuality() {
+  const rows = data.quality.filter((row) => quality === "all" || row.kind === quality);
+  document.getElementById("quality-count").textContent = "Showing " + rows.length + " of " + data.quality.length;
+  document.getElementById("quality").innerHTML = table(
+    ["Issue", "Who", "When", "What happened to it"],
+    rows.map((row) => ({
+      cells: [dot(data.qualityTone[row.kind]) + esc(data.qualityLabel[row.kind]), esc(row.who), esc(row.when), esc(row.detail)],
+    })),
+    ["fit", "", "", ""]
+  );
+}
+function renderCompanies() {
+  const q = query.trim().toLowerCase();
+  const rows = data.accounts.filter((account) => {
+    if (fit !== "all" && account.bucket !== fit) return false;
+    if (!q) return true;
+    const hay = (account.company + " " + account.stage + " " + account.evidence + " " + account.why + " " + data.label[account.bucket]).toLowerCase();
+    return hay.includes(q);
+  });
+  document.getElementById("company-count").textContent = "Showing " + rows.length + " of " + data.accounts.length;
+  document.getElementById("companies").innerHTML = table(
+    ["Company", "Fit", "People", "Stage", "Evidence", "Why"],
+    rows.map((account) => ({
+      cells: [
+        dot(data.tone[account.bucket]) + esc(account.company),
+        esc(data.label[account.bucket]),
+        esc(account.people),
+        esc(account.stage),
+        esc(account.evidence),
+        esc(account.why),
+      ],
+    })),
+    ["", "fit", "num", "", "", ""]
+  );
+}
+function render() {
+  renderQualityPills();
+  renderFitPills();
+  renderQuality();
+  renderCompanies();
+}
+document.getElementById("quality-pills").addEventListener("click", (event) => {
+  const button = event.target.closest("button");
+  if (!button) return;
+  quality = button.dataset.quality;
+  render();
+});
+document.getElementById("fit-pills").addEventListener("click", (event) => {
+  const button = event.target.closest("button");
+  if (!button) return;
+  fit = button.dataset.fit;
+  render();
+});
+document.getElementById("search").addEventListener("input", (event) => {
+  query = event.target.value;
+  renderCompanies();
+});
+render();
+</script>
+</body>
+</html>

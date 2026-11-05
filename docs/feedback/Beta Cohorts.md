@@ -4,13 +4,13 @@ Tracks each AgentScore beta cohort: who was invited, when, and how long it took 
 
 No contact info is kept here (names and companies only). Missing dates are marked "not recorded" rather than estimated.
 
-Last updated: 2026-11-02
+Last updated: 2026-11-04
 
 ## Summary
 
 | Cohort | Invite sent | Users invited | Companies | Companies signed in | Median days signup to invite (per company) | Median days invite to first sign-in |
 |---|---|---|---|---|---|---|
-| 1 | 2026-10-12 | 9 | 6 | 0 of 6 | 51 (range 19-61) | n/a (no sign-ins yet) |
+| 1 | 2026-10-12 | 9 | 6 | 1 of 6 | 51 (range 19-61) | 23 (1 company) |
 | 2 | 2026-11-02 | 3 | 3 | 0 of 3 | 57.5 (range 49-66) | n/a (no sign-ins yet) |
 
 ## Cohort 1 - invited 2026-10-12
@@ -21,7 +21,7 @@ Last updated: 2026-11-02
 |---|---|---|---|---|---|---|---|
 | Wolters Kluwer United States Inc. | Chris Allanson | 2026-08-20 | not recorded | 2026-10-12 | 53 | not yet | - |
 | Merito Solutions | Chris Carpenter, Gerard Trimberger | 2026-08-20 | 2026-10-06 | 2026-10-12 | 53 | not yet | - |
-| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj | 2026-08-24 | 2026-09-11 | 2026-10-12 | 49 | not yet | - |
+| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj | 2026-08-24 | 2026-09-11 | 2026-10-12 | 49 | 2026-11-04 | 23 |
 | L'OREAL | Khadim KASHANI | 2026-09-17 | 2026-09-24 | 2026-10-12 | 25 | not yet | - |
 | Aptiv Global Operations Limited | Meenakshi Sundaram Chockalingam | 2026-09-23 | not recorded | 2026-10-12 | 19 | not yet | - |
 | New Vision Software Inc. | Rohan Bansod | 2026-08-20 | 2026-10-08 | 2026-10-20 | 61 | not yet | - |
@@ -31,6 +31,7 @@ Last updated: 2026-11-02
 - Two further Merito Solutions users (Louis Tadman, Andrew Carpenter) are Active Beta in the contacts log but have no invite date recorded, so they are not counted in a cohort yet.
 - Aptiv, Wolters Kluwer and L'Oreal were in the first welcome-email send (`beta-welcome-mail-merge.csv`); Tritusa and Merito invite dates come from the contacts log.
 - New Vision (Rohan Bansod) was invited on 2026-10-20, after the 2026-10-12 send, and is counted in this cohort. His invite date in the contacts log is unchanged.
+- Tritusa's first sign-in is the date use was reported (2026-11-04), not a product login timestamp. No individual was named. Support mail on 2026-10-22 already showed them in the product, so 23 days is an upper bound. The median is that one company.
 
 ## Cohort 2 - invited 2026-11-02
 

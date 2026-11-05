@@ -7,12 +7,14 @@ failure is logged and the hook still exits 0.
 """
 
 import json
+import os
 import re
 import subprocess
 import sys
 from pathlib import Path
 
 AGENT_NAME = "agentscore-docs-sync-agent"
+SERVICE_NAME = "AgentScore docs sync"
 REPO = Path(__file__).resolve().parents[2]
 STATE_FILE = REPO / "test-agent" / ".export-state.json"
 VENV_PYTHON = REPO / "test-agent" / "venv" / "bin" / "python"
@@ -108,6 +110,8 @@ def main() -> int:
         return 0
 
     model = payload.get("subagent_model") or payload.get("model") or "cursor"
+    # .env may name another agent. Override it so this run lands on AgentScore docs sync.
+    env = {**os.environ, "OTEL_SERVICE_NAME": SERVICE_NAME}
     try:
         result = subprocess.run(
             [
@@ -116,10 +120,11 @@ def main() -> int:
                 "--session",
                 str(transcript),
                 "--agent-name",
-                AGENT_NAME,
+                SERVICE_NAME,
                 "--model",
                 model,
             ],
+            env=env,
             capture_output=True,
             text=True,
             timeout=55,

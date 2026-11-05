@@ -75,8 +75,9 @@ export default function DimensionsAndProfiles() {
         <strong>re-evaluate fit</strong> to have Agent Score reconsider its pick against the
         agent's latest evidence. And if no built-in profile measures what matters for this agent,{" "}
         <strong>Create an eval for this agent</strong> and{" "}
-        <strong>Create a profile for this agent</strong> at the top of the tab start one of{" "}
-        <a href="#/custom-evals">your own</a>.
+        <strong>Create a profile for this agent</strong> at the top of the tab start one of your
+        own - see <a href="#/custom-evals">building your own evals</a> and{" "}
+        <a href="#/custom-profiles">building your own profiles</a>.
       </p>
     </>
   );

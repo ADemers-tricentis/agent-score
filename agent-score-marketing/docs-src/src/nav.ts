@@ -58,6 +58,11 @@ export const nav: NavSection[] = [
         blurb: "Write a check in plain language, preview it, and publish it.",
       },
       {
+        slug: "custom-profiles",
+        title: "Building Your Own Profiles",
+        blurb: "Pick the checks, weigh them, and set where Ship ends and Block begins.",
+      },
+      {
         slug: "dimensions-and-profiles",
         title: "Dimensions & Profiles",
         blurb: "How individual evals roll up into a single score.",

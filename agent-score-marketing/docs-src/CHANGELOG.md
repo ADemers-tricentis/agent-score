@@ -3,6 +3,21 @@
 All notable changes to the AgentScore docs site are recorded here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.43.0] - 2026-11-02
+
+### Added
+- Building Your Own Profiles: a section-by-section guide to the New profile
+  form (General, Checks, and Advanced settings with check settings, dimension
+  weights and verdict bands), plus how to change a published profile.
+- Building Your Own Evals: how to change an eval after it's published
+  (General, Latest version, Versions, Profiles using this eval, Danger zone).
+
+### Changed
+- Building Your Own Evals: the New eval form is explained section by section
+  with its exact labels, including the slug rules, the optional description,
+  the 0.7 starting threshold, the four input-need boxes and the compiled
+  rubric's 2,000-character limit. Adds a screenshot of the whole form.
+
 ## [0.42.1] - 2026-10-29
 
 ### Fixed

@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Agent Score — first session mock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #1f2328;
+    --muted: #667085;
+    --faint: #98a2b3;
+    --line: #e6e8ee;
+    --page: #f6f7f9;
+    --white: #fff;
+    --blue: #1a73e8;
+    --blue-dark: #1558b0;
+    --blue-soft: #e8f0fe;
+    --green: #188038;
+    --green-soft: #e6f4ea;
+    --amber: #b06000;
+    --amber-soft: #fef7e0;
+    --orange: #c26401;
+    --orange-soft: #feefe3;
+    --red: #c5221f;
+    --red-soft: #fce8e6;
+    --shadow: 0 8px 28px rgba(32, 33, 36, 0.16);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: Inter, "Segoe UI", system-ui, sans-serif;
+    color: var(--ink);
+    background: #111418;
+    display: flex;
+    flex-direction: column;
+  }
+  button, input { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+
+  .mockbar {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #111418;
+    color: #c9cdd3;
+    font-size: 12px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  .mockbar span, .mockbar strong { white-space: nowrap; flex-shrink: 0; }
+  .mockbar strong { color: #fff; font-weight: 600; }
+  .mockbar .spacer { flex: 1; }
+  .mockbar button {
+    background: transparent;
+    border: 1px solid #3a4048;
+    color: #e8eaed;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .mockbar button[aria-pressed="true"] {
+    background: #fff;
+    color: #111418;
+    border-color: #fff;
+  }
+  #waitbar { display: flex; gap: 8px; margin-left: 8px; }
+
+  .app {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    color: var(--ink);
+  }
+  header.appbar {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px 0 12px;
+    border-bottom: 1px solid var(--line);
+    background: var(--white);
+    flex-shrink: 0;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 650; font-size: 18px; letter-spacing: -0.02em; }
+  .logo {
+    width: 28px; height: 28px; border-radius: 6px; background: var(--blue);
+    display: grid; place-items: center;
+  }
+  .account { display: flex; align-items: center; gap: 12px; }
+  .credits {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #3c4043; color: #fff;
+    display: grid; place-items: center;
+    font-size: 12px; font-weight: 600;
+  }
+  .shell { flex: 1; display: flex; min-height: 0; }
+  .rail {
+    width: 64px;
+    border-right: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 0;
+    background: var(--white);
+    flex-shrink: 0;
+  }
+  .rail button {
+    width: 40px; height: 40px; border: 0; background: transparent; border-radius: 12px;
+    color: #5f6368; display: grid; place-items: center;
+  }
+  .rail button[aria-current="page"] { background: var(--blue-soft); color: var(--blue); }
+  main {
+    flex: 1;
+    min-width: 0;
+    overflow: auto;
+    background: var(--page);
+    padding: 28px 32px 48px;
+  }
+  .pagehead { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+  h1 { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.03em; }
+  .sub { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+  .crumb { color: var(--muted); font-size: 13px; margin-bottom: 6px; }
+  .crumb button { background: none; border: 0; padding: 0; color: var(--blue); }
+
+  .btn {
+    border: 0; border-radius: 8px; padding: 8px 14px; font-weight: 550; font-size: 14px;
+  }
+  .btn.primary { background: var(--blue); color: #fff; }
+  .btn.primary:hover { background: var(--blue-dark); }
+  .btn.quiet { background: #eef0f3; color: var(--ink); }
+  .btn.ghost { background: var(--white); border: 1px solid var(--line); color: var(--ink); }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px 22px;
+  }
+  .kicker {
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--faint); font-weight: 600; margin: 0 0 6px;
+  }
+  .urlrow { display: flex; gap: 10px; align-items: center; }
+  .url {
+    flex: 1; min-width: 0;
+    background: #1c1f26; color: #fff;
+    border-radius: 8px; padding: 10px 12px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .help { color: var(--muted); font-size: 13px; margin: 8px 0 0; }
+  .tabs { display: flex; gap: 22px; margin: 4px 0 16px; border-bottom: 1px solid var(--line); }
+  .pastelead { margin: 0 0 18px; }
+  .pasterow { display: flex; gap: 12px; align-items: center; }
+  .pastebox {
+    flex: 1; min-width: 0;
+    background: #f6f7f9; border-radius: 8px; padding: 14px 16px;
+    font-size: 14px; line-height: 1.55;
+  }
+  .pastebox code {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 12.5px; word-break: break-all;
+  }
+  .copyside { min-width: 88px; align-self: flex-start; }
+  .steps { display: flex; gap: 6px; margin-bottom: 16px; }
+  .steps i { width: 28px; height: 3px; border-radius: 99px; background: #e6e8ee; display: block; }
+  .steps i.on { background: var(--blue); }
+  .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .choice {
+    text-align: left; background: var(--white); border: 1px solid var(--line);
+    border-radius: 10px; padding: 12px 14px; font-weight: 550;
+  }
+  .choice[aria-pressed="true"] { border-color: var(--blue); background: var(--blue-soft); color: var(--blue-dark); }
+  .namefield {
+    width: 100%; height: 40px; border: 1px solid var(--line); border-radius: 8px; padding: 0 12px; background: var(--white);
+  }
+  .modal h2 { font-size: 18px; margin: 0 0 6px; }
+  .modal .foot { display: flex; justify-content: space-between; gap: 8px; margin-top: 18px; }
+  .tabs button {
+    background: none; border: 0; padding: 8px 0 10px; color: var(--muted); font-size: 14px;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+  }
+  .tabs button[aria-pressed="true"] { color: var(--blue); border-bottom-color: var(--blue); font-weight: 600; }
+  .sentence {
+    background: #f3f4f6; border-radius: 8px; padding: 10px 12px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px; line-height: 1.45;
+  }
+  .clientline { display: flex; align-items: center; gap: 12px; margin: 4px 0 18px; font-size: 14px; }
+
+  table { width: 100%; border-collapse: collapse; background: var(--white); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  th { text-align: left; font-size: 12px; font-weight: 500; color: var(--muted); padding: 12px 16px; border-bottom: 1px solid var(--line); background: #fafbfc; }
+  td { padding: 14px 16px; border-bottom: 1px solid var(--line); vertical-align: top; font-size: 14px; }
+  tr.clickable { cursor: pointer; }
+  tr.clickable:hover td { background: #f8fafc; }
+  .name { color: var(--blue); font-weight: 550; background: none; border: 0; padding: 0; }
+  .meta { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+  .stage { color: var(--ink); line-height: 1.4; max-width: 460px; }
+
+  .pill {
+    display: inline-flex; align-items: center; height: 22px; padding: 0 8px;
+    border-radius: 999px; font-size: 12px; font-weight: 550; white-space: nowrap;
+  }
+  .pill.green { background: var(--green-soft); color: var(--green); }
+  .pill.amber { background: var(--amber-soft); color: var(--amber); }
+  .pill.orange { background: var(--orange-soft); color: var(--orange); }
+  .pill.gray { background: #f1f3f4; color: #5f6368; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: inline-block; }
+
+  .agenthead { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+  .titleline { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .actions { display: flex; gap: 8px; align-items: center; }
+  .tabrow { display: flex; gap: 20px; margin: 16px 0 18px; border-bottom: 1px solid var(--line); }
+  .tabrow span, .tabrow button {
+    background: none; border: 0; padding: 8px 0 10px; color: var(--muted); font-size: 14px;
+    display: inline-flex; align-items: center; gap: 6px;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+  }
+  .tabrow .on { color: var(--blue); border-bottom-color: var(--blue); font-weight: 600; }
+
+  .scorecard { display: grid; grid-template-columns: 160px 1fr; gap: 28px; align-items: center; }
+  .ringwrap { position: relative; width: 132px; height: 132px; }
+  .ringwrap svg { transform: rotate(-90deg); }
+  .ringnum {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; line-height: 1;
+  }
+  .ringnum b { font-size: 32px; font-weight: 600; letter-spacing: -0.04em; }
+  .ringnum span { margin-top: 4px; color: var(--muted); font-size: 13px; }
+  .bands { color: var(--muted); font-size: 13px; line-height: 1.5; margin: 10px 0 0; }
+  .blocklabel { font-size: 12px; color: var(--faint); text-transform: uppercase; letter-spacing: 0.04em; margin: 16px 0 4px; }
+  .rowbtn {
+    width: 100%; text-align: left; background: var(--white);
+    border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
+    display: flex; align-items: center; gap: 12px; margin-top: 8px;
+  }
+  .rowbtn:hover { background: #f8fafc; }
+  .bar { flex: 1; height: 6px; background: #e8eaed; border-radius: 99px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--blue); border-radius: 99px; }
+  .rowbtn b { font-weight: 600; min-width: 28px; text-align: right; }
+  h2 { margin: 0 0 4px; font-size: 16px; font-weight: 600; }
+  .back { background: none; border: 0; padding: 0; color: var(--ink); font-weight: 600; font-size: 16px; display: inline-flex; align-items: center; gap: 6px; }
+  .field { margin-top: 14px; }
+  .field .k { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+
+  .modalback {
+    position: fixed; inset: 44px 0 0 0; background: rgba(32, 33, 36, 0.32);
+    display: grid; place-items: center; z-index: 5;
+  }
+  .modal {
+    width: 440px; background: var(--white); border-radius: 12px;
+    box-shadow: var(--shadow); padding: 24px;
+  }
+  .modal h2 { font-size: 18px; margin-bottom: 16px; }
+  .toolbar { display: flex; gap: 8px; margin-bottom: 12px; }
+  .search {
+    height: 36px; border: 1px solid var(--line); border-radius: 8px;
+    padding: 0 12px; background: var(--white); width: 280px; color: var(--muted);
+  }
+</style>
+</head>
+<body>
+  <div class="mockbar">
+    <strong>Mock</strong>
+    <span>Preview controls. Not in the product.</span>
+    <span class="spacer"></span>
+    <button type="button" data-go="home">Home</button>
+    <button type="button" data-open-guide>Connect</button>
+    <button type="button" data-go="waiting">Waiting</button>
+    <button type="button" data-go="agents">My Agents</button>
+    <button type="button" data-go="score">Score</button>
+    <span id="waitbar"></span>
+  </div>
+  <div class="app">
+    <header class="appbar">
+      <div class="brand">
+        <span class="logo" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3.2 3.2 8 8 3.2 12.8" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12.8 3.2 8 8l4.8 4.8" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        Agent Score
+      </div>
+      <div class="account">
+        <span class="credits">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          AI credits: 1,000.000 / 1,000.000
+        </span>
+        <span class="avatar">AD</span>
+      </div>
+    </header>
+    <div class="shell">
+      <nav class="rail" aria-label="Agent Score">
+        <button type="button" data-go="home" title="Home" aria-label="Home"></button>
+        <button type="button" data-go="agents" title="My Agents" aria-label="My Agents"></button>
+        <button type="button" title="Evals" aria-label="Evals" disabled></button>
+        <button type="button" title="Usage" aria-label="Usage" disabled></button>
+        <button type="button" data-open-guide title="Integrations" aria-label="Integrations"></button>
+        <button type="button" title="Settings" aria-label="Settings" disabled></button>
+        <button type="button" title="Docs" aria-label="Docs" disabled></button>
+      </nav>
+      <main id="main"></main>
+    </div>
+  </div>
+  <div id="modal"></div>
+<script>
+const ADDRESS = "https://api-eu-west-2.stg.ai.tricentis.com/agent-score/customer/v1/mcp?tenant_name=tais&product_name=tosca-cloud";
+const CLIENTS = [
+  ["cursor", "Cursor"],
+  ["claude", "Claude Code"],
+  ["codex", "Codex"],
+  ["apps", "Claude apps"],
+];
+
+const ICONS = {
+  home: '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2 3 11h2v8h6v-5h2v5h6v-8h2L12 3.2Z"/></svg>',
+  agents: '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20 9V7a2 2 0 0 0-2-2h-3a3 3 0 0 0-6 0H6a2 2 0 0 0-2 2v2a3 3 0 0 0 0 6v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4a3 3 0 0 0 0-6zM9 11.5A1.5 1.5 0 1 1 10.5 10 1.5 1.5 0 0 1 9 11.5zm6 0A1.5 1.5 0 1 1 16.5 10 1.5 1.5 0 0 1 15 11.5zM8 16h8v2H8z"/></svg>',
+  evals: '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-9.3 13.3-3.5-3.5 1.4-1.4 2.1 2.1 4.2-4.2 1.4 1.4-5.6 5.6z"/></svg>',
+  usage: '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M4 19h16v2H4v-2Zm1-3h3V8H5v8Zm5 0h3V4h-3v12Zm5 0h3v-6h-3v6Z"/></svg>',
+  integrations: '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a3 3 0 0 1 1 5.83V9h3.17A3 3 0 1 1 17 12h-1.17A3 3 0 0 1 12 15.17V17a3 3 0 1 1-2 0v-1.83A3 3 0 0 1 6.17 12H5a3 3 0 1 1 .83-2H9V7.83A3 3 0 0 1 12 2Z"/></svg>',
+  settings: '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 13a7.8 7.8 0 0 0 .1-2l2-1.2-2-3.4-2.3.6a7.7 7.7 0 0 0-1.7-1L15 3h-4l-.5 2.9a7.7 7.7 0 0 0-1.7 1L6.5 6.4l-2 3.4L6.5 11a7.8 7.8 0 0 0 0 2l-2 1.2 2 3.4 2.3-.6a7.7 7.7 0 0 0 1.7 1L11 21h4l.5-2.9a7.7 7.7 0 0 0 1.7-1l2.3.6 2-3.4-2.1-1.3ZM13 15.5A3.5 3.5 0 1 1 13 8a3.5 3.5 0 0 1 0 7.5Z"/></svg>',
+  docs: '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM6 4h5v8L8.5 10.5 6 12V4z"/></svg>',
+};
+
+const state = {
+  screen: "home",
+  client: "cursor",
+  agentName: "checkout-agent",
+  guide: null,
+  copied: false,
+  wait: "none",
+  run: null,
+};
+
+function agentName() {
+  return (state.agentName || "checkout-agent").trim();
+}
+function clientLabel() {
+  return CLIENTS.find(([id]) => id === state.client)?.[1] || "Cursor";
+}
+function setupText() {
+  return `Set this agent up to send what it does to Agent Score. Name it ${agentName()}.`;
+}
+function confirmText() {
+  return `Check my agent connection for ${agentName()}.`;
+}
+
+const waits = {
+  none: { chip: "gray", chipText: "Setting up", score: "—", sentence: "Nothing has arrived yet. Use it the way you already do." },
+  partial: { chip: "gray", chipText: "12 of about 20", score: "—", sentence: "12 of about 20 real runs. Keep using it the way you already do. A made-up test does not count. You can close this." },
+  writing: { chip: "amber", chipText: "Writing the score", score: "—", sentence: "Enough real runs are in. Agent Score is writing what this agent is for, then the score. You can close this." },
+  unscored: { chip: "orange", chipText: "Needs attention", score: "—", sentence: "Something arrived, and none of it can be scored. A test ping does not count. Use it on a real request." },
+  ready: { chip: "green", chipText: "Ship with note", score: "82", sentence: "82 · Ship with note" },
+};
+
+const runs = {
+  "Got the order right": {
+    score: "91",
+    asked: "Where is order 1042?",
+    did: "Looked the order up and reported the shipping status.",
+    answered: "Order 1042 shipped yesterday. It arrives Thursday.",
+    why: "This run is the 91 on Got the order right.",
+  },
+  "Used the tools it needed": {
+    score: "74",
+    asked: "Cancel the replacement if the original arrives.",
+    did: "Looked the order up and checked shipping. It did not cancel the replacement.",
+    answered: "The original is out for delivery.",
+    why: "This run is the 74 on Used the tools it needed. It stopped before the cancel.",
+  },
+  "Stayed inside the refund rule": {
+    score: "68",
+    asked: "The lamp arrived cracked. Can you refund order 1042?",
+    did: "Looked up order 1042. The order is outside the refund window. Told the customer the refund was issued anyway.",
+    answered: "I've refunded order 1042. You'll see it in 3 days.",
+    why: "This run is the 68 on Stayed inside the refund rule. The agent promised a refund the order did not qualify for.",
+  },
+};
+
+const rail = document.querySelectorAll(".rail button");
+["home", "agents", "evals", "usage", "integrations", "settings", "docs"].forEach((name, i) => {
+  rail[i].innerHTML = ICONS[name];
+});
+
+function go(screen) {
+  state.screen = screen;
+  state.run = null;
+  state.guide = null;
+  if (screen === "score") state.wait = "ready";
+  render();
+}
+
+document.querySelectorAll(".mockbar [data-go], .rail [data-go]").forEach((el) => {
+  el.addEventListener("click", () => go(el.getAttribute("data-go")));
+});
+
+document.body.addEventListener("click", (e) => {
+  if (e.target.closest("[data-open-guide]")) {
+    state.guide = "client";
+    state.copied = false;
+    render();
+  }
+});
+
+function advanceGuide() {
+  if (state.guide === "client") state.guide = "name";
+  else if (state.guide === "name") {
+    const input = document.querySelector("#agent-name");
+    if (input && input.value.trim()) state.agentName = input.value.trim();
+    state.guide = "paste";
+  }
+  render();
+}
+
+function render() {
+  const current = state.screen === "score" || state.screen === "run" ? "agents" : state.screen;
+  document.querySelectorAll(".mockbar [data-go], .rail [data-go]").forEach((el) => {
+    const on = el.getAttribute("data-go") === (state.screen === "run" ? "score" : state.screen);
+    if (el.closest(".mockbar")) el.setAttribute("aria-pressed", on ? "true" : "false");
+    if (el.closest(".rail")) {
+      if (el.getAttribute("data-go") === current) el.setAttribute("aria-current", "page");
+      else el.removeAttribute("aria-current");
+    }
+  });
+  const main = document.getElementById("main");
+  main.innerHTML = screens[state.screen]();
+  bind(main);
+  const waitbar = document.getElementById("waitbar");
+  const showWait = state.screen === "waiting" || state.screen === "agents" || state.screen === "score";
+  waitbar.innerHTML = showWait ? [
+    ["none", "Nothing yet"],
+    ["partial", "12 of about 20"],
+    ["writing", "Writing the score"],
+    ["unscored", "Can't be scored"],
+    ["ready", "Verdict ready"],
+  ].map(([id, label]) => `<button type="button" data-wait="${id}" aria-pressed="${state.wait === id}">${label}</button>`).join("") : "";
+  waitbar.querySelectorAll("[data-wait]").forEach((el) => {
+    el.addEventListener("click", () => {
+      state.wait = el.getAttribute("data-wait");
+      if (state.screen === "run") state.screen = "score";
+      render();
+    });
+  });
+  document.getElementById("modal").innerHTML = state.guide ? guideModal() : "";
+  document.querySelectorAll("[data-pick]").forEach((el) => {
+    el.addEventListener("click", () => { state.client = el.getAttribute("data-pick"); render(); });
+  });
+  const next = document.querySelector("[data-guide-next]");
+  if (next) next.addEventListener("click", () => advanceGuide());
+  const back = document.querySelector("[data-guide-back]");
+  if (back) back.addEventListener("click", () => {
+    state.guide = state.guide === "paste" ? "name" : "client";
+    render();
+  });
+  const close = document.querySelector("[data-guide-close]");
+  if (close) close.addEventListener("click", () => { state.guide = null; render(); });
+  const pasted = document.querySelector("[data-pasted]");
+  if (pasted) pasted.addEventListener("click", () => {
+    state.guide = null;
+    state.screen = "waiting";
+    state.wait = "none";
+    render();
+  });
+  const modalCopy = document.querySelector("#modal [data-copy]");
+  if (modalCopy) modalCopy.addEventListener("click", () => { state.copied = true; render(); });
+}
+
+function bind(root) {
+  root.querySelectorAll("[data-go]").forEach((el) => {
+    el.addEventListener("click", () => go(el.getAttribute("data-go")));
+  });
+  root.querySelectorAll("[data-client]").forEach((el) => {
+    el.addEventListener("click", () => { state.client = el.getAttribute("data-client"); render(); });
+  });
+  root.querySelectorAll("[data-wait]").forEach((el) => {
+    el.addEventListener("click", () => { state.wait = el.getAttribute("data-wait"); render(); });
+  });
+  const copy = root.querySelector("[data-copy]");
+  if (copy) copy.addEventListener("click", () => { state.copied = true; render(); });
+  const add = root.querySelector("[data-add]");
+  if (add) add.addEventListener("click", () => { state.allow = true; render(); });
+  root.querySelectorAll("[data-run]").forEach((el) => {
+    el.addEventListener("click", () => { state.screen = "run"; state.run = el.getAttribute("data-run"); render(); });
+  });
+  const openAgent = root.querySelector("[data-open-agent]");
+  if (openAgent) openAgent.addEventListener("click", () => { state.screen = "score"; render(); });
+}
+
+const screens = {
+  home() {
+    return `
+      <div class="pagehead">
+        <div>
+          <h1>Home</h1>
+        </div>
+      </div>
+      <div class="card" style="max-width:640px">
+        <p style="margin:0 0 16px;font-size:16px">Connect the coding agent you already use.</p>
+        <button class="btn primary" data-open-guide>Connect</button>
+      </div>`;
+  },
+  integrations() {
+    const who = { cursor: "Cursor", claude: "Claude Code", codex: "Codex", apps: "the Claude apps" }[state.client];
+    const tab = (id, label) => `<button type="button" data-client="${id}" aria-pressed="${state.client === id}">${label}</button>`;
+    return `
+      <div class="pagehead"><div><h1>Integrations</h1></div></div>
+      <div class="card">
+        <h2 style="font-size:20px;margin-bottom:14px">Connect a coding agent</h2>
+        <div class="tabs">
+          ${tab("cursor", "Cursor")}
+          ${tab("claude", "Claude Code")}
+          ${tab("codex", "Codex")}
+          ${tab("apps", "Claude apps")}
+        </div>
+        <div class="pastelead">
+          <p style="margin:0 0 10px">Paste this into ${who}.</p>
+          <div class="pasterow">
+            <div class="pastebox">
+              <div>${setupText()}</div>
+              <div style="margin-top:10px">Use this address whole. If the part after the question mark is missing, sign-in will not work.</div>
+              <code>${ADDRESS}</code>
+            </div>
+            <button class="btn quiet copyside" data-copy>${state.copied ? "Copied" : "Copy"}</button>
+          </div>
+        </div>
+        <p class="help" style="margin-top:0">When the browser opens, click Allow. Then use the agent once, on a real request, and paste this.</p>
+        <div class="sentence" style="margin-top:10px">${confirmText()}</div>
+      </div>`;
+  },
+  waiting() {
+    const name = agentName();
+    let title = "Waiting for traces";
+    let body = `Nothing from ${name} yet. Use it the way you already do. A score needs about 20 traces. A test does not count. You can leave this page open.`;
+    let action = "";
+    if (state.wait === "partial") {
+      body = `12 of about 20 traces from ${name}. Keep using it the way you already do. A test does not count. You can leave this page open.`;
+    } else if (state.wait === "writing") {
+      body = `Enough traces are in from ${name}. Agent Score is writing what this agent is for, then the score. You can leave this page open.`;
+    } else if (state.wait === "unscored") {
+      body = `Something arrived from ${name}, and none of it can be scored. A test does not count. Use it on a real request.`;
+    } else if (state.wait === "ready") {
+      title = "The score is ready";
+      body = `${name} scored 82. Ship with note.`;
+      action = `<div style="margin-top:16px"><button class="btn primary" data-go="score">Read the score</button></div>`;
+    }
+    const follow = state.wait === "none" || state.wait === "partial"
+      ? `<p class="help">After it has run once for real, paste this into ${clientLabel()}.</p><div class="sentence" style="margin-top:8px">${confirmText()}</div>`
+      : "";
+    return `
+      <div class="pagehead">
+        <div>
+          <h1>${title}</h1>
+          <p class="sub">${name}</p>
+        </div>
+      </div>
+      <div class="card" style="max-width:680px">
+        <p style="margin:0;font-size:16px;line-height:1.5">${body}</p>
+        ${action}
+        ${follow}
+      </div>`;
+  },
+  agents() {
+    const w = waits[state.wait];
+    return `
+      <div class="pagehead">
+        <div>
+          <h1>My Agents</h1>
+          <p class="sub">All of your agents, in one place.</p>
+        </div>
+      </div>
+      <div class="search" aria-hidden="true">Filter agents by name…</div>
+      <div style="height:12px"></div>
+      <table>
+        <thead><tr><th>Agent</th><th>Tenant</th><th>Last active</th><th>Stage</th><th>Score</th></tr></thead>
+        <tbody>
+          <tr class="clickable">
+            <td><button class="name" data-open-agent>${agentName()}</button><span class="meta">external</span></td>
+            <td>tais</td>
+            <td>Just now</td>
+            <td class="stage">${state.wait === "ready" ? "Scored" : w.sentence}</td>
+            <td>${state.wait === "ready" ? `<b>82</b> <span class="pill green">Ship with note</span>` : "—"}</td>
+          </tr>
+        </tbody>
+      </table>`;
+  },
+  score() {
+    const w = waits[state.wait];
+    if (state.wait !== "ready") {
+      return agentChrome(`
+        <div class="card">
+          <span class="pill ${w.chip}">${w.chipText}</span>
+          <p style="margin:14px 0 0;font-size:16px;max-width:640px">${w.sentence}</p>
+        </div>`);
+    }
+    const parts = [
+      ["Got the order right", 91],
+      ["Used the tools it needed", 74],
+      ["Stayed inside the refund rule", 68],
+    ].map(([name, n]) => `
+      <button class="rowbtn" data-run="${name}">
+        <span style="min-width:220px">${name}</span>
+        <span class="bar"><i style="width:${n}%"></i></span>
+        <b>${n}</b>
+      </button>`).join("");
+    return agentChrome(`
+      <div class="card">
+        <div class="scorecard">
+          <div class="ringwrap">
+            <svg width="132" height="132" viewBox="0 0 132 132" aria-hidden="true">
+              <circle cx="66" cy="66" r="52" fill="none" stroke="#e6e8ee" stroke-width="10"/>
+              <circle cx="66" cy="66" r="52" fill="none" stroke="#188038" stroke-width="10" stroke-linecap="round"
+                stroke-dasharray="${(326.7 * 0.82).toFixed(1)} 326.7"/>
+            </svg>
+            <div class="ringnum"><b>82</b><span>/ 100</span></div>
+          </div>
+          <div>
+            <span class="pill green">Ship with note</span>
+            <p class="bands">Ship is 85 to 100. Ship with note is 70 to 84. Needs work is 55 to 69. Don't ship recommended is 40 to 54. Don't ship is 0 to 39.</p>
+            <div class="blocklabel">What this agent is for</div>
+            <div>Answers a customer about an order, looks the order up, and uses the payment and shipping tools to say what happens next.</div>
+            <p class="help">Agent Score wrote this from the agent's real runs.</p>
+            <div class="blocklabel">Scored as</div>
+            <div style="font-weight:600">Tool Caller</div>
+            <p class="help">Agent Score chose this from what the agent did.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <h2>Where the score comes from</h2>
+        <p class="help" style="margin-top:0">Open a number to see the run that produced it.</p>
+        ${parts}
+      </div>`);
+  },
+  run() {
+    const run = runs[state.run] || runs["Stayed inside the refund rule"];
+    return agentChrome(`
+      <button class="back" data-go="score">← ${state.run}</button>
+      <span class="meta" style="margin:6px 0 16px">This number is ${run.score}</span>
+      <div class="card" style="max-width:720px">
+        <div class="field"><div class="k">Asked</div><div>${run.asked}</div></div>
+        <div class="field"><div class="k">Did</div><div>${run.did}</div></div>
+        <div class="field"><div class="k">Answered</div><div>${run.answered}</div></div>
+        <p class="help">${run.why}</p>
+      </div>`);
+  },
+};
+
+function agentChrome(body) {
+  const scored = state.wait === "ready" || state.screen === "run";
+  const chip = scored
+    ? `<span class="pill green">Scored</span>`
+    : `<span class="pill ${waits[state.wait].chip}">${waits[state.wait].chipText}</span>`;
+  return `
+    <div class="crumb"><button type="button" data-go="agents">My Agents</button> / ${agentName()}</div>
+    <div class="agenthead">
+      <div>
+        <div class="titleline"><h1 style="font-size:26px">${agentName()}</h1><span class="dot"></span><span style="color:var(--muted);font-size:13px">Active</span>${chip}</div>
+        <div class="sub">tais · external</div>
+      </div>
+      <div class="actions">
+        <button class="btn quiet" type="button">Ask the assistant</button>
+        ${scored ? `<button class="btn primary" type="button">Score now</button>` : ""}
+      </div>
+    </div>
+    <div class="tabrow">
+      <button class="on" type="button">Score</button>
+      <span>Improve</span><span>Agent Card</span><span>Traces</span><span>Profile</span><span>Labeling</span><span>Settings</span>
+    </div>
+    ${body}`;
+}
+
+function guideModal() {
+  const step = state.guide;
+  const progress = `<div class="steps" aria-hidden="true">${["client", "name", "paste"].map((id, i) => {
+    const order = { client: 0, name: 1, paste: 2 };
+    return `<i class="${i <= order[step] ? "on" : ""}"></i>`;
+  }).join("")}</div>`;
+  let body = "";
+  if (step === "client") {
+    body = `
+      <h2>Which coding agent are you using?</h2>
+      <p class="help" style="margin-top:0">This is the one that has the project open.</p>
+      <div class="choices" style="margin-top:14px">
+        ${CLIENTS.map(([id, label]) => `<button type="button" class="choice" data-pick="${id}" aria-pressed="${state.client === id}">${label}</button>`).join("")}
+      </div>
+      <div class="foot"><button class="btn ghost" data-guide-close>Cancel</button><button class="btn primary" data-guide-next>Continue</button></div>`;
+  } else if (step === "name") {
+    body = `
+      <h2>What do you want to name this agent?</h2>
+      <p class="help" style="margin-top:0">Use the name of the agent you already run. This is the name on the score.</p>
+      <input id="agent-name" class="namefield" style="margin-top:14px" value="${agentName()}" />
+      <div class="foot"><button class="btn ghost" data-guide-back>Back</button><button class="btn primary" data-guide-next>Continue</button></div>`;
+  } else {
+    body = `
+      <h2>Paste this into ${clientLabel()}.</h2>
+      <div class="pasterow" style="margin-top:14px">
+        <div class="pastebox">
+          <div>${setupText()}</div>
+          <div style="margin-top:10px">Use this address whole. If the part after the question mark is missing, sign-in will not work.</div>
+          <code>${ADDRESS}</code>
+        </div>
+        <button class="btn quiet copyside" data-copy>${state.copied ? "Copied" : "Copy"}</button>
+      </div>
+      <p class="help">When the browser opens, click Allow. After the agent has run once for real, paste this.</p>
+      <div class="sentence">${confirmText()}</div>
+      <div class="foot"><button class="btn ghost" data-guide-back>Back</button><button class="btn primary" data-pasted>I've pasted it</button></div>`;
+  }
+  return `
+    <div class="modalback">
+      <div class="modal" role="dialog" aria-label="Connect a coding agent" style="width:560px">
+        ${progress}
+        ${body}
+      </div>
+    </div>`;
+}
+
+render();
+</script>
+</body>
+</html>

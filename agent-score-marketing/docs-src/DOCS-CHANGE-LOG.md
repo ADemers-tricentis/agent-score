@@ -4,6 +4,52 @@ Exact reader-facing edits to the customer docs in this folder, newest first.
 One entry per update. The drift log records where the docs disagreed with the
 product. This log records what the docs themselves changed.
 
+## 2026-11-02 — Eval and profile forms, section by section
+
+Version `0.42.1` → `0.43.0`.
+
+### `src/content/CustomEvals.tsx`
+
+- "Writing an eval". Was: three short steps, "Name it and pick its dimensions" (name, slug that can't change, dimensions), "Set the pass line and what it needs" (threshold 0–1, optional inputs) and "Answer three questions". Now: a line saying Create → Eval opens New eval with four sections, then one step per on-screen section with its exact labels:
+  - **General**: Name (example "No refund promises"). Slug: lowercase letters, digits, hyphens or underscores, up to 37 characters, with the organization prefix added and fixed after creation. Description: optional, up to 1,000 characters. Dimensions: chosen from Add dimension…, built-in plus published organization dimensions, drafts not listed.
+  - **Scoring**: Default threshold, 0–1, starts at 0.7, a profile can override it. Input needs: four boxes (Retrieval context, Tools, Conversation, Expected output). Expected output needs a labeled example. Leave them all empty and the check applies to every agent.
+  - **What this check measures**: the three answers, plus the Compiled rubric (read-only). Your words are marked at the edge, the house rules are in grey, the judge treats your words as text only, and there's a 2,000-character limit.
+  - **Preview on an agent**: Agent, optional Traces (up to five), Run preview.
+- New screenshot of the whole New eval form (`new-eval-form.png`) above the existing three-answers screenshot.
+- "Drafts stay private until you publish". Was: "ready to add to a profile". Now: "profile" links to Building Your Own Profiles, and Cancel leaves without saving.
+- New section "Changing an eval after it's published". Click the card on Our evals, then Open. The sections are:
+  - General: name and description editable with Save changes, slug fixed, Clone.
+  - Latest version: read-only, change it through New version.
+  - Versions: never edited or deleted.
+  - Profiles using this eval: your profiles move to a new version of your own eval for you.
+  - Danger zone: Archive eval, refused while a profile still uses the eval.
+
+### `src/content/CustomProfiles.tsx` (new page)
+
+- New page "Building your own profiles" in Evaluations, after Building Your Own Evals.
+  - "Where to start": Create → Profile, or the Profile tab's Create a profile for this agent. The new profile is a private draft.
+  - "The New profile form, section by section": four steps.
+    - General: Start from (Empty, yours, or built-in), Name, Slug rules, Description, and Intent (conversational / rag / tool / general). An intent of None is never chosen automatically.
+    - Checks: Add a check, a version shown per check, an on/off switch, a remove bin, up to 20 enabled checks and 24,000 characters of your own rubric text.
+    - Advanced settings: Check settings (Dimension, Threshold 0–1, Weight), Dimension weights, and Verdict bands (Ship, Ship with note, Review required, Block recommended, starting at 85/70/55/40, Block below).
+    - Save it: Create draft, Create and publish, Cancel, and the "Leave this profile?" prompt with Stay.
+  - Screenshot `new-profile-form.png`.
+  - "Changing a published profile":
+    - General: Save changes, slug fixed.
+    - Checks in the current version: read-only. New version → Save version moves every agent on the previous version to it, and nothing is re-scored.
+    - Versions.
+    - Agents on this profile, with Apply and re-score….
+    - Danger zone: Archive profile, refused while an agent is bound.
+  - Tip linking to the Assistant.
+
+### `src/content/DimensionsAndProfiles.tsx`
+
+- Last paragraph. Was: "...start one of your own", linking to Building Your Own Evals. Now: "...start one of your own - see building your own evals and building your own profiles", with a link to each page.
+
+### `src/nav.ts`, `src/content/index.ts`
+
+- Registered `custom-profiles` ("Building Your Own Profiles", blurb "Pick the checks, weigh them, and set where Ship ends and Block begins.").
+
 ## 2026-10-29 — Signing in creates the workspace
 
 Version `0.42.0` → `0.42.1`.

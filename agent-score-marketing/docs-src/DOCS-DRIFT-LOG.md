@@ -12,6 +12,110 @@ Each audit appends a dated section. Newest first.
 
 ---
 
+## 2026-11-02 - docs-sync agent run
+
+- **Site audited:** https://agent-score.ai.tricentis.com (production, as the user asked, not the staging URL in `.env`). Fresh Playwright browser on port 9222 (profile `/tmp/docsync-1102/pw-profile`). It landed on Okta sign-in, the run stopped, the user signed in in that window, and the walk resumed. No credentials were typed by the agent.
+- **Focus (user request):** the create-eval screen and the profile create/edit screens, section by section.
+- **GitHub scan:** 60 PRs merged since 2026-10-29T15:48:21Z. 8 kept as customer-facing (#915, #931, #933, #934, #938, #939, #940, #941).
+- **Result:** 6 discrepancies (4 docs-should-update, of which 3 fixed and 1 deferred as outside the focus; 2 product-should-catch-up, both confirmed again; 4 pending-verification items).
+
+### Doc edits made
+
+- Page: custom-evals / `CustomEvals.tsx` ("Writing an eval")
+  Claim in docs: Three short steps (name, slug and dimensions; threshold and inputs; three answers).
+  Reality in prod: New eval has four labeled sections.
+  - General: Name; Slug ("Lowercase letters, digits, hyphen or underscore, at most 37 characters. Your organization's prefix is added for you. Fixed after creation."); Description (0 / 1,000); Dimensions ("Add dimension…", "Built-in and your organization's published dimensions. Drafts are not listed.").
+  - Scoring: Default threshold, pre-filled 0.7, "Pass line between 0 and 1; a profile can override it for a check". Input needs: checkboxes for Retrieval context, Tools, Conversation, and "Expected output (a labelled example must exist for the trace)".
+  - What this check measures: three answers, plus "Compiled rubric (read-only)" with a "367 / 2,000 compiled characters" counter and the "Marked lines are your words..." legend.
+  - Preview on an agent.
+  - Buttons: Cancel / Save draft / Save and publish.
+  The docs left out Description, the slug rules, the 0.7 default, the four boxes by name, and the rubric limit and legend.
+  Direction: docs-should-update
+  Fix: Rewrote the steps one per on-screen section with exact labels. Added `new-eval-form.png` (the whole form). The preview and draft sections were kept; Cancel and a link to the new profiles page were added.
+  Severity: medium
+
+- Page: custom-evals / `CustomEvals.tsx` (new section "Changing an eval after it's published")
+  Claim in docs: Nothing on what happens after publishing.
+  Reality in prod: Our evals cards expand to show Description / Check / Full score / Zero score / Dimensions / Input needs / Version, with Open / New version / Clone. The eval page has these sections:
+  - General: Name and Description editable, Slug "set at creation", Clone, Save changes.
+  - "Latest version (v1)": "Read-only. Changing how the eval scores means saving a new version."
+  - New version.
+  - Versions: "Immutable and append-only."
+  - "Profiles using this eval": "saving a new version of your own eval moves them for you, while a new version of a built-in eval waits for 'Use newest versions' on the profile".
+  - Danger zone, Archive eval: "Refused while a profile still uses the eval."
+  Direction: docs-should-update (missing section)
+  Fix: Added the section and walked these sections in plain language.
+  Severity: medium
+
+- Page: new custom-profiles / `CustomProfiles.tsx` (plus a link from `DimensionsAndProfiles.tsx`)
+  Claim in docs: No page explained the profile form. DimensionsAndProfiles describes the Profile tab only. CustomEvals mentions profiles only as something drafts can be.
+  Reality in prod: New profile ("Bundle checks, pin an exact version of each, and set thresholds and weights...") has three sections.
+  - General: Start from (Empty / yours / 8 built-ins including Default); Name; Slug; Description; Intent (None, conversational, rag, tool, general; "A profile without an intent is never chosen automatically.").
+  - Checks: Add a check lists 8 org evals ("yours") and 41 built-ins. Each check shows "· version N" with an Enable switch and a Remove button, and a counter reads "N / 20 enabled checks · N / 24,000 characters of your own rubric text".
+  - Advanced settings, collapsed by default (#933/#934):
+    - Check settings: Dimension, Threshold (0–1) and Weight per check.
+    - Dimension weights.
+    - Verdict bands: Ship 85, Ship with note 70, Review required 55, Block recommended 40.
+  - Buttons: Cancel / Create draft / Create and publish. Cancel on a dirty form shows "Leave this profile? Your unsaved changes will be lost. Stay / Leave".
+  The published profile page has these sections:
+  - General: Save changes, slug fixed.
+  - "Checks in v1": read-only.
+  - New version: "On save, every agent on the previous version moves to the new one; nothing is re-scored.", with Save version.
+  - Versions.
+  - "Agents on this profile", with Apply and re-score….
+  - Danger zone, Archive profile: "Refused while an agent is still bound to the profile."
+  Direction: docs-should-update (missing page)
+  Fix: Added the "Building Your Own Profiles" page in Evaluations after Building Your Own Evals, registered in `nav.ts` and `content/index.ts`, with screenshot `new-profile-form.png` (started from Task Agent, Advanced settings open). DimensionsAndProfiles now links to it.
+  Severity: medium
+  PR: https://github.com/Tricentis-AI/agent-score/pull/933, https://github.com/Tricentis-AI/agent-score/pull/934
+
+### Product gaps (logged only)
+
+- Page: scorecard and dimensions-and-profiles (verdict labels). Confirmed again, and it now also shows on the authoring form. The profile form's Verdict bands and the Profile tab's "The bar" use Ship / Ship with note / Review required / Block recommended / Block. Scorecard docs, the Score tab and the activity feed ("Run completed — composite 60.2, Needs work.") use Needs work / Don't ship (recommended). The new profiles page uses the form's own labels, because that is what the reader sees on that screen.
+  Direction: product-should-catch-up. Fix: log only - product gap. Severity: medium.
+- Page: connect-with-mcp (step 3). Confirmed again on production. The Claude Code tab ends on "3 Check it works", then "Next, ask it to 'create an Agent Score ingest key for this project and write the exporter settings to .env'". It still doesn't mention naming the agent.
+  Direction: product-should-catch-up. Fix: log only - product gap. Severity: medium.
+
+### Pending verification
+
+- PR #933 / #934: "Guard ... template replacement" (a prompt before Start from replaces your edits) and the "reload latest versus keep edits" conflict choices. I didn't trigger either one. Both were left out of the new page on purpose. Re-check next run. https://github.com/Tricentis-AI/agent-score/pull/933
+- PR #939 (readable run evaluation heading): no run detail was opened. https://github.com/Tricentis-AI/agent-score/pull/939
+- PR #940 (coding-agent consent redesign): not exercised; it needs a fresh MCP sign-in. https://github.com/Tricentis-AI/agent-score/pull/940
+- PR #915 (developer MCP tool-group switches): the Manage permissions button is on Integrations but wasn't opened. https://github.com/Tricentis-AI/agent-score/pull/915
+- Confirmed, no doc impact: #938. Custom eval names on the Profile tab show without the tenant prefix and with a "Yours" tag. #941 resolves the older #836 item: the My Agents tenant filter now lists "tais" once.
+- Still carried over: the sign-in terms gate (#762 / #763) and credit gating (#877).
+
+### Held for review
+
+None. No PR body or product page read as instructions to the auditor. The Integrations card's paste-in commands for Claude Code are product copy, and were recorded, not followed.
+
+### Judgment calls
+
+- **Deferred docs-should-update (outside this run's focus).**
+  - Page: connect-with-mcp, connect-your-agent and quick-start (Integrations layout)
+    Claim in docs: Keys are created and rotated "on Integrations". The page is described as one card.
+    Reality in prod: Integrations now has tabs "Coding assistants" and "Trace ingestion" plus a "Manage permissions" button ("Use Manage permissions to control what connected clients can do."). It also shows "Signed in to tais in Europe (Paris) (eu-west-3). The client acts as you in this tenant only."
+    Direction: docs-should-update
+    Fix: deferred. The user scoped this run's edits to eval and profile creation. Fix next run.
+    Severity: low
+    PR: https://github.com/Tricentis-AI/agent-score/pull/931, https://github.com/Tricentis-AI/agent-score/pull/915
+- **New page rather than extending Dimensions & Profiles.** That page explains concepts and the Profile tab. A form walkthrough there would have doubled its length, so the form got its own page, which mirrors Building Your Own Evals. It is a minor bump because of the Added item.
+- **Intent proposed for Task Agent looks wrong (product, not docs).** Choosing Start from "Task Agent (built-in)" fills Intent with "rag", while the custom Tricentis ATA profile shows "intent: tool". The docs say only that Intent is "filled in from the profile you started from", which stays true either way. Worth a product check.
+- **"Why this profile" vs the bound profile.** On testcase.generate, the Profile tab shows Tricentis ATA v1 (Pinned), while "Why this profile" and Fit history explain a Task Agent pick. That reads correctly as the fit's opinion against a manual pin. No doc change.
+- **Built-in eval updates.** The eval page says a new built-in version "waits for 'Use newest versions' on the profile". I didn't see that button on any profile page (probably because no update was pending), so the docs mention only the own-eval case.
+- **Agent file's product note is stale.** My Agents is now a table (`data-testid="agent-row-<id>"` and `agent-link-<id>`), not cards (`agent-card-<id>`). Not doc-facing; worth updating the agent definition.
+- **Production, not staging.** `.env` still points at staging. Production was audited because the user asked for it.
+
+### File changes
+- Pages: `src/content/CustomEvals.tsx` (edited), `src/content/CustomProfiles.tsx` (added), `src/content/DimensionsAndProfiles.tsx` (one link sentence), `src/nav.ts` and `src/content/index.ts` (registration)
+- Assets: added `src/assets/new-eval-form.png` and `src/assets/new-profile-form.png`. None replaced; `custom-eval-three-answers.png` still matches.
+- `CHANGELOG.md`: `## [0.43.0] - 2026-11-02` (Added, Changed)
+- `DOCS-CHANGE-LOG.md`: "2026-11-02 — Eval and profile forms, section by section"
+- `package.json` version: 0.42.1 -> 0.43.0 (minor; the entry has Added items, including a new page)
+- `docs/index.html`: rebuilt (`pnpm run build` passed; both pages render with no page errors)
+- `.last-github-sync`: 2026-10-29T15:48:21Z -> 2026-11-02T11:01:58Z (#952)
+- Not committed, not pushed.
+
 ## 2026-10-29 - docs-sync agent run (5th pass, 17:00Z)
 
 - **Site audited:** https://agent-score.stg.ai.tricentis.com (staging, per `AGENT_SCORE_SITE_URL` in `.env`; signed-in Playwright session on port 9222 reused).

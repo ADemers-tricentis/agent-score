@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 145 form submissions found (as of 2026-10-29), sorted newest first. Excluded as internal `@tricentis.com` submitters: Ashutosh Kotkar (2026-09-25) and Srinivasa Rao K (2026-10-01), both under Tricentis GmbH (AT) - HQ. Fun Tat Chen (2026-10-02) is a second submitter at Singapore Pools and is stacked on that entry rather than counted as a new company. Ajay Kharb and Praveer Bakshi (2026-10-19/20, Accenture), Konrad Greszata (2026-10-13, Capgemini) and Jeroen Kuijper (2026-10-21, Sogeti Netherlands) are likewise stacked on existing company entries. Antonio Sglavo (2026-10-22, Accenture SpA), Julian Raach and Yash Jawale (2026-10-22, Hugo Boss), Edmundo Barahona (2026-10-22, Sogeti Deutschland), Mathieu Philippe (2026-10-22, Itecor FR) and Simon Kreitmayer (2026-10-22, SKYPhoenix IT GmbH, which appears to be the renamed Dolpheen IT Solutions) are also stacked on existing entries. Repeats not tracked separately: Rohan Bansod (New Vision Software, two submissions 2026-10-15) and Praveer Bakshi (a second 2026-10-19 submission with the company field blank).
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 150 form submissions found (as of 2026-11-05), sorted newest first. Excluded as internal `@tricentis.com` submitters: Ashutosh Kotkar (2026-09-25) and Srinivasa Rao K (2026-10-01), both under Tricentis GmbH (AT) - HQ. Fun Tat Chen (2026-10-02) is a second submitter at Singapore Pools and is stacked on that entry rather than counted as a new company. Ajay Kharb and Praveer Bakshi (2026-10-19/20, Accenture), Konrad Greszata (2026-10-13, Capgemini) and Jeroen Kuijper (2026-10-21, Sogeti Netherlands) are likewise stacked on existing company entries. Antonio Sglavo (2026-10-22, Accenture SpA), Julian Raach and Yash Jawale (2026-10-22, Hugo Boss), Edmundo Barahona (2026-10-22, Sogeti Deutschland), Mathieu Philippe (2026-10-22, Itecor FR) and Simon Kreitmayer (2026-10-22, SKYPhoenix IT GmbH, which appears to be the renamed Dolpheen IT Solutions) are also stacked on existing entries. ketmanee Ruksa, Poonsiri Chingburanakij and Sirichai Wantong (2026-10-30, AIS (TH)) and Juralak Panpreeda (2026-10-30, AIS/Mimo Tech) are stacked on one new AIS (TH) entry, since all four use the same AIS email domain. Repeats not tracked separately: Rohan Bansod (New Vision Software, two submissions 2026-10-15) and Praveer Bakshi (a second 2026-10-19 submission with the company field blank). Sina Döbbelin (2026-09-17, Ariba, Inc., BTM Partner Management) is excluded from outreach: she manages business partnerships and is not a product user. Akihiko Yamano stays on the Ariba row.
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -28,42 +28,45 @@ What accounts we have talked to say they build or run agents on. Counts are comp
 
 ## Pipeline Tracker
 
-Source breakdown: 107 via the Labs form, 3 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E), 1 via David (VP of AI/ML) (Eaton) = 111 total. Ferrara Candy Company is listed below but not counted: Sudha Damacherla signed up by accident for a different product (2026-10-20). Sky Plc (Mario D'Amico) is not counted: on 2026-11-02 he replied to the beta welcome that he is not interested and does not want further emails.
+Source breakdown: 109 via the Labs form, 4 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E, Oracle), 1 via David (VP of AI/ML) (Eaton) = 114 total. Ferrara Candy Company is listed below but not counted: Sudha Damacherla signed up by accident for a different product (2026-10-20). Sky Plc (Mario D'Amico) is not counted: on 2026-11-02 he replied to the beta welcome that he is not interested and does not want further emails.
 
 Both tables use the same stages. Cumulative counts every company at that stage or a later one, so each cumulative cell equals its current cell plus every current cell below it. Current counts companies whose Status is that stage today. Ferrara Candy is in neither. Counts are manual: when a status changes, subtract 1 from the old Current row, add 1 to the new Current row, and add 1 to each Cumulative row the company has newly reached.
 
-Invited to beta means the invite went out. Actively using means Beta Cohorts has a first sign-in. As of 2026-11-02 the nine invites have no sign-in, so Actively using is 0. The nine are Aptiv, Tritusa Consulting, New Vision Software, Wolters Kluwer, Merito Solutions, L'OREAL, Eaton, BearingPoint, and Workday.
+Invited to beta means the invite went out. Actively using means Beta Cohorts has a first sign-in. As of 2026-11-04 Tritusa Consulting is recorded as using AgentScore, so Actively using is 1. The other eight invites have no sign-in: Aptiv, New Vision Software, Wolters Kluwer, Merito Solutions, L'OREAL, Eaton, BearingPoint, and Workday.
 
 ### Cumulative
 
 | Stage | Companies |
 |---|---|
-| Interested | 111 |
+| Interested | 114 |
 | Email sent | 110 |
-| Follow-up sent | 52 |
+| Follow-up sent | 85 |
 | Replied | 18 |
 | Demo scheduled | 13 |
 | Pending beta | 10 |
 | Invited to beta | 9 |
-| Actively using | 0 |
+| Actively using | 1 |
 
 ### Current stage
 
 | Stage | Companies |
 |---|---|
-| Interested | 1 |
-| Email sent | 58 |
-| Follow-up sent | 34 |
+| Interested | 4 |
+| Email sent | 25 |
+| Follow-up sent | 67 |
 | Replied | 5 |
 | Demo scheduled | 3 |
 | Pending beta | 1 |
-| Invited to beta | 9 |
-| Actively using | 0 |
+| Invited to beta | 8 |
+| Actively using | 1 |
 
 ## Details
 
 | Company | Contact | Status |
 |---|---|---|
+| Qnovate | Utkarsh Verma | Interested |
+| Oracle | Sajid Saleem (via Sales: William Berry) | Interested |
+| AIS (TH) | Sirichai Wantong, Poonsiri Chingburanakij, Juralak Panpreeda, ketmanee Ruksa | Interested |
 | The Future Group (NL) - HQ | Jean Delissen | Interested |
 | Sun Life (form blank, domain-resolved) | Kishore Kumar | Email sent — 2026-10-28 |
 | Thought Frameworks | Roopa S | Email sent — 2026-10-28 |
@@ -92,27 +95,27 @@ Invited to beta means the invite went out. Actively using means Beta Cohorts has
 | Ontario Power Generation Inc. | Ajay Nandepu | Email sent — 2026-10-22 |
 | Bayer AG (DE) - HQ | Gunnar Moog | Email sent — 2026-10-22 |
 | Siemens Financial Services GmbH (DE) (email domain suggests Siemens Energy) | Palash Gupta | Email sent — 2026-10-22 |
-| PG&E (Pacific Gas and Electric) | — (via Sales: Greg Campbell) | Demo Scheduled — 2026-10-27 |
-| Itecor (CH)-HQ | Alexandre Thibaud, Mathieu Philippe | Email sent — 2026-10-12 |
+| PG&E (Pacific Gas and Electric) | — (via Sales: Greg Campbell) | Demo Scheduled — demo held 2026-10-27, no follow-up |
+| Itecor (CH)-HQ | Alexandre Thibaud, Mathieu Philippe | Follow-up sent — 2026-11-02 |
 | Ferrara Candy Company | Sudha Damacherla | Not a fit — accidental signup |
-| Department of Jobs, Skills, Industry and Regions (DJSIR) (AU) | Subhasis Dhar | Email sent — 2026-10-12 |
-| Turing Consulting Pty. Ltd. (AU) | Archana Madhusudhan | Email sent — 2026-10-12 |
-| Bloomberg Finance L.P. | Joe Zacchio | Email sent — 2026-10-12 |
-| Sogeti (FR) | Gavaskar Selvarajan, Jeroen Kuijper, Edmundo Barahona | Email sent — 2026-10-05 |
-| Singapore Airlines (SG) | Srinivasan Santhanam | Email sent — 2026-10-05 |
-| Tata Consultancy Services Ltd (IN) | Joji Joseph | Email sent — 2026-10-05 |
-| Skygen USA | Joko Supriyanto | Email sent — 2026-10-05 |
-| Hugo Boss AG (DE) | Marco Esguerra, Julian Raach, Yash Jawale | Email sent — 2026-10-05 |
+| Department of Jobs, Skills, Industry and Regions (DJSIR) (AU) | Subhasis Dhar | Follow-up sent — 2026-11-02 |
+| Turing Consulting Pty. Ltd. (AU) | Archana Madhusudhan | Follow-up sent — 2026-11-02 |
+| Bloomberg Finance L.P. | Joe Zacchio | Follow-up sent — 2026-11-02 |
+| Sogeti (FR) | Gavaskar Selvarajan, Jeroen Kuijper, Edmundo Barahona | Follow-up sent — 2026-11-02 |
+| Singapore Airlines (SG) | Srinivasan Santhanam | Follow-up sent — 2026-11-02 |
+| Tata Consultancy Services Ltd (IN) | Joji Joseph | Follow-up sent — 2026-11-02 |
+| Skygen USA | Joko Supriyanto | Follow-up sent — 2026-11-02 |
+| Hugo Boss AG (DE) | Marco Esguerra, Julian Raach, Yash Jawale | Follow-up sent — 2026-11-02 |
 | Aptiv Global Operations Limited | Meenakshi Sundaram Chockalingam | Invited to beta |
-| LGT Financial Services Ltd. (LI) | David Klien | Email sent — 2026-09-23 |
+| LGT Financial Services Ltd. (LI) | David Klien | Follow-up sent — 2026-11-02 |
 | Eaton | Amit Ghag | Invited to beta |
-| Meta Platforms, Inc. | Sri Pulleti | Demo Scheduled — POC scoping |
+| Meta Platforms, Inc. | Sri Pulleti | Demo Scheduled — demo held, no follow-up |
 | Freddie Mac | Kaleb Jackson | Replied |
 | Workday, Inc. | Vijay Mummaneni | Invited to beta |
 | PVH Corp | Beena P K, Aimee Martin | Follow-up sent — 2026-09-24 |
 | Charter Communications Operating, LLC | Sarvesh Peddi | Follow-up sent — 2026-09-24 |
 | Artizent (form blank, domain-resolved) | Alan Mayfus | Follow-up sent — 2026-09-24 |
-| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj | Invited to beta |
+| Tritusa Consulting (AU) | Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj | Actively using |
 | SAP Labs India (IN) | SaiDeepak Ayyagari | Follow-up sent — 2026-09-24 |
 | Regeneron Pharmaceuticals Inc. | Murali Sundaram | Follow-up sent — 2026-09-24 |
 | Acadia Healthcare | Pratiksha Arora | Follow-up sent — 2026-09-24 |
@@ -124,7 +127,7 @@ Invited to beta means the invite went out. Actively using means Beta Cohorts has
 | Southern Glazer's Wine and Spirits, LLC | Jay Gajulapalli | Follow-up sent — 2026-09-24 |
 | Chevron Phillips Chemical (US) | Ramesh Jeyagopalan | Follow-up sent — 2026-09-24 |
 | Dominion Energy, Inc. | Anand Shekaraiah | Follow-up sent — 2026-09-24 |
-| Love's Travel Stops | Jag Mallampati, Thomas Cody | Demo Scheduled — 2026-10-02 |
+| Love's Travel Stops | Jag Mallampati, Thomas Cody | Demo Scheduled — demo held 2026-10-02, no follow-up |
 | Capgemini | Mathankumar Kanagaraj, ARUN PRAKASH Shivakumar, Sathish kumar Backiam, Konrad Greszata | Follow-up sent — 2026-09-24 |
 | Cummins Inc. | Lakshmi Sree Thirukonda | Follow-up sent — 2026-09-24 |
 | Home Depot Store Support, Inc. | Joe Pope | Follow-up sent — 2026-09-24 |
@@ -149,35 +152,101 @@ Invited to beta means the invite went out. Actively using means Beta Cohorts has
 | Mouser Electronics | Mohammad Mahboob | Follow-up sent — 2026-09-24 |
 | Cox Automotive | Balaji Gandsi Krishna Prakash | Follow-up sent — 2026-09-24 |
 | Bayone Solutions | Mathi Natarajan | Follow-up sent — 2026-09-24 |
-| Saudi Telecom Company STC (SA) - HQ | Farhan Shaikh | Email sent — 2026-09-09 |
-| Diriyah Gate Company Limited - DGCL (SA) | Ali Alshehri | Email sent — 2026-09-09 |
-| TestCrew | Ramesh Panthangi | Email sent — 2026-09-09 |
-| Dolpheen IT Solutions | Jia Jun Zhan, Simon Kreitmayer | Email sent — 2026-09-09 |
-| Cengage Learning, Inc. | Ajan Nattamai | Email sent — 2026-09-09 |
-| Pegasystems Inc. | Kiran kadarla | Email sent — 2026-09-09 |
-| cbs Corporate Business Solutions (DE/MY) | Ashish Chavan, Arumugam Lekshmanan | Email sent — 2026-09-17 |
-| Ariba, Inc. | Akihiko Yamano, Sina Döbbelin | Email sent — 2026-09-17 |
-| Seatrium (SG) | Florance Yong | Email sent — 2026-09-17 |
-| Singapore Power Digital Private Limited | Ritu Agrawal | Email sent — 2026-09-17 |
-| ABeam Consulting (Malaysia) Sdn. Bhd. | Sharifah Nadiah Alhabshi | Email sent — 2026-09-17 |
-| Singapore Institute of Technology (SG) | Dennis Fung | Email sent — 2026-09-17 |
-| Olam Agri (form blank, domain-resolved) | Vanitha Velusamy | Email sent — 2026-09-17 |
-| Tata Consultancy Services Asia Pacific Pte. Ltd. (SG) | Balaji Sampathkumar | Email sent — 2026-09-17 |
+| Saudi Telecom Company STC (SA) - HQ | Farhan Shaikh | Follow-up sent — 2026-11-02 |
+| Diriyah Gate Company Limited - DGCL (SA) | Ali Alshehri | Follow-up sent — 2026-11-02 |
+| TestCrew | Ramesh Panthangi | Follow-up sent — 2026-11-02 |
+| Dolpheen IT Solutions | Jia Jun Zhan, Simon Kreitmayer | Follow-up sent — 2026-11-02 |
+| Cengage Learning, Inc. | Ajan Nattamai | Follow-up sent — 2026-11-02 |
+| Pegasystems Inc. | Kiran kadarla | Follow-up sent — 2026-11-02 |
+| cbs Corporate Business Solutions (DE/MY) | Ashish Chavan, Arumugam Lekshmanan | Follow-up sent — 2026-11-02 |
+| Ariba, Inc. | Akihiko Yamano | Follow-up sent — 2026-11-02 |
+| Seatrium (SG) | Florance Yong | Follow-up sent — 2026-11-02 |
+| Singapore Power Digital Private Limited | Ritu Agrawal | Follow-up sent — 2026-11-02 |
+| ABeam Consulting (Malaysia) Sdn. Bhd. | Sharifah Nadiah Alhabshi | Follow-up sent — 2026-11-02 |
+| Singapore Institute of Technology (SG) | Dennis Fung | Follow-up sent — 2026-11-02 |
+| Olam Agri (form blank, domain-resolved) | Vanitha Velusamy | Follow-up sent — 2026-11-02 |
+| Tata Consultancy Services Asia Pacific Pte. Ltd. (SG) | Balaji Sampathkumar | Follow-up sent — 2026-11-02 |
 | SAP North America | Thomas Zimmermann | Email sent — 2026-09-17 |
-| Defence Science and Technology Agency (SG) | cydnie na | Email sent — 2026-09-17 |
-| Housing Development Board (SG) | Swee Chyuan Koh | Email sent — 2026-09-17 |
+| Defence Science and Technology Agency (SG) | cydnie na | Follow-up sent — 2026-11-02 |
+| Housing Development Board (SG) | Swee Chyuan Koh | Follow-up sent — 2026-11-02 |
 | L'OREAL | Khadim KASHANI | Invited to beta |
-| City Dev (SG) | Davin Ng | Email sent — 2026-09-17 |
-| Testing IT Consulting S.A. de C.V. | Hector Santa Maria | Email sent — 2026-09-17 |
-| Brillar Pte Ltd (SG) | Zuzan Win | Email sent — 2026-09-17 |
-| Harrods Ltd (UK) | Shanita Helyar | Email sent — 2026-09-17 |
-| Ally Financial Inc. | Jana Kethamreddy | Email sent — 2026-09-17 |
+| City Dev (SG) | Davin Ng | Follow-up sent — 2026-11-02 |
+| Testing IT Consulting S.A. de C.V. | Hector Santa Maria | Follow-up sent — 2026-11-02 |
+| Brillar Pte Ltd (SG) | Zuzan Win | Follow-up sent — 2026-11-02 |
+| Harrods Ltd (UK) | Shanita Helyar | Follow-up sent — 2026-11-02 |
+| Ally Financial Inc. | Jana Kethamreddy | Follow-up sent — 2026-11-02 |
 | BearingPoint GmbH (DE) - HQ | Rohan Patil | Invited to beta |
-| xAmplify (AU) | Prakash Panchal | Email sent — 2026-09-17 |
+| xAmplify (AU) | Prakash Panchal | Follow-up sent — 2026-11-02 |
 | Accenture (multiple entities) | Jigish Belani, Mohammed Arslan Mir, Vijetha Nayak, Priya Saidavaram, Ankur Mittal, Ajay Kharb, Praveer Bakshi, Antonio Sglavo | Pending Beta |
-| Singapore Pools (form blank, domain-resolved) | Nai Hau Lui, Fun Tat Chen | Email sent — 2026-09-23 |
+| Singapore Pools (form blank, domain-resolved) | Nai Hau Lui, Fun Tat Chen | Follow-up sent — 2026-11-02 |
 
 *(Status values: Interested → Email sent → Follow-up sent → Replied → Demo scheduled → Pending beta → Invited to beta → Actively using. Not a fit and Do not email are terminal. Not a fit is an accidental or wrong-product signup. Do not email is an opt-out: remove the company from both count tables and send nothing further.)*
+
+---
+
+### Qnovate
+Date: 2026-11-04 06:52  
+Name: Utkarsh Verma  
+Title: TOSCA AUTOMATION ENGINEER  
+Relationship: Partner  
+
+Email sent: -  
+Beta scheduled: -  
+
+what they do: no public information found on a company named Qnovate. Searches returned no company page or directory listing under that name, and the company's own site did not resolve, so what it does is not confirmed here.
+
+likely use case: given a Tosca automation engineer with a Partner relationship, most plausibly someone at a Tosca-focused services or consulting firm evaluating AgentScore for client engagements - an inference from the title and relationship only, not a confirmed need.
+
+known agent tooling: no public information found tying Qnovate to a deployed agent product.
+
+---
+
+### Oracle
+Date: 2026-11-02 18:24 (Sales conversation - no Labs form submission)  
+Name: Sajid Saleem (via Sales: William Berry)  
+
+Email sent: -  
+Beta scheduled: -  
+
+what they do: US enterprise software and cloud company; its Fusion Cloud Applications suite (ERP, HCM, SCM, CX) ships on a quarterly update cadence, and Oracle has been adding embedded AI agents to it ([Oracle](https://www.oracle.com/news/announcement/oracle-introduces-ai-agent-studio-2025-03-20/)).
+
+source (from Sales, 2026-11-02): William Berry (Tricentis, Senior Director, Business Engagement) followed up with Sajid after he visited the Tricentis booth at AI World, to continue a conversation about agent testing and how Tricentis supports Oracle Fusion's release cadence, and copied Andrew to offer an AgentScore overview. Sajid's title and team are not stated. No reply from Oracle yet.
+
+likely use case: given the Sales framing around Oracle Fusion's release cadence and Oracle shipping its own Fusion agents, most plausibly testing the quality of Fusion AI agents across quarterly releases and model upgrades - an inference, not a confirmed need.
+
+known agent tooling: AI Agent Studio for Fusion Applications, generally available from Release 25C, for building and managing agents in Fusion ERP, HCM, SCM and CX ([Oracle](https://www.oracle.com/news/announcement/oracle-introduces-ai-agent-studio-2025-03-20/)); an October 2025 expansion added an agent marketplace, a choice of third-party LLMs, MCP support, agent tracing and a monitoring dashboard ([Oracle](https://www.oracle.com/news/announcement/ai-world-oracle-expands-ai-agent-studio-for-fusion-applications-with-new-marketplace-llms-and-vast-partner-network-2025-10-15/)); a March 2026 update added an agentic applications builder and an ROI dashboard ([Oracle](https://www.oracle.com/es/news/announcement/oracle-expands-ai-agent-studio-for-fusion-applications-with-agentic-applications-builder-2026-03-24/)).
+
+---
+
+### AIS (TH)
+Date: 2026-10-30 10:12  
+Name: Sirichai Wantong  
+Title: Automation test engineer  
+Relationship: Customer  
+
+Date: 2026-10-30 08:34  
+Name: Poonsiri Chingburanakij  
+Title: IT Specialyst  
+Relationship: Customer  
+
+Date: 2026-10-30 08:34  
+Name: Juralak Panpreeda (form company: AIS/Mimo Tech)  
+Title: QA  
+Relationship: Customer  
+
+Date: 2026-10-30 08:34  
+Name: ketmanee Ruksa  
+Title: QA  
+Relationship: Customer  
+
+Email sent: -  
+Beta scheduled: -  
+
+what they do: Advanced Info Service (AIS), a Thai mobile, fixed broadband and enterprise digital services operator, which has framed its strategy around AI and a "Cognitive Tech-Co" vision ([Nation Thailand](https://www.nationthailand.com/business/corporate/40056200)). MIMO Tech is listed among AIS group companies in an AIS annual report ([AIS IR](https://investor.ais.co.th/misc/ar/20200228-advanc-ar2019-05-en.pdf)).
+
+likely use case: given four QA and test-automation people from the same company signing up within two hours as Customers, most plausibly a QA team evaluating how to test AIS's customer-facing voicebots and agent offerings - an inference, not a confirmed need.
+
+known agent tooling: AISpace, a consumer AI ecosystem that includes AI voicebots for customer conversations ([The Reporter Asia](https://thereporter.asia/eng/?p=4254)); with Microsoft Thailand, an "AI Ready for SMEs" program offering ready-to-use Copilot agent templates, starting with a business assistant ([Nation Thailand](https://www.nationthailand.com/business/tech/40067048)). Figures and capabilities are company-reported.
 
 ---
 
@@ -685,6 +754,7 @@ Name: — (contact not captured; came in via Sales rep Greg Campbell)
 
 Email sent: —  
 Beta scheduled: 2026-10-27 (demo)  
+Follow-up: none after the demo (stated 2026-11-04).
 
 what they do: Northern and central California's largest investor-owned electric and natural gas utility.
 
@@ -709,6 +779,7 @@ Title: QA Expert
 Relationship: Partner  
 
 Email sent: —  
+Follow-up sent: 2026-11-02 (Alexandre Thibaud)  
 Beta scheduled: —  
 
 what they do: Swiss IT boutique consultancy (HQ Switzerland, about 240 staff across 8 offices including Vevey, Geneva and Zurich) focused on governance, digital solution implementation and quality assurance ([Hirebase profile](https://www.hirebase.org/company/itecor)).
@@ -745,6 +816,7 @@ Title: Salesforce QA Lead
 Relationship: Evaluating Tricentis  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Victorian State Government department covering jobs, skills, industry and regional development (submitter email domain `ecodev.vic.gov.au`).
@@ -762,6 +834,7 @@ Title: QE
 Relationship: Partner  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Australian consultancy (domain `turingconsulting.com.au`); services could not be confirmed from public sources.
@@ -779,6 +852,7 @@ Title: QA Testing Mgr
 Relationship: Customer  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Financial data, analytics and news company behind the Bloomberg Terminal.
@@ -808,6 +882,7 @@ Title: Solution architect
 Relationship: Partner  
 
 Email sent: —  
+Follow-up sent: 2026-11-02 (Gavaskar Selvarajan)  
 Beta scheduled: —  
 
 what they do: Capgemini's technology and quality-engineering services arm.
@@ -825,6 +900,7 @@ Title: Senior Principal Technologist
 Relationship: Customer  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Singapore's flag-carrier airline.
@@ -842,6 +918,7 @@ Title: PM
 Relationship: Partner  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: global IT services and consulting group; separate entity from the Tata Consultancy Services Asia Pacific Pte. Ltd. (SG) entry below.
@@ -859,6 +936,7 @@ Title: Software automation manager
 Relationship: Evaluating Tricentis  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Menomonee Falls, WI dental and vision benefits technology company (founded 1993, ~470 employees) offering SaaS automation and tech-enabled services to health-insurer payers ([Built In Colorado](https://www.builtincolorado.com/company/skygen-usa)).
@@ -886,6 +964,7 @@ Title: Senior IT Consultant
 Relationship: Customer  
 
 Email sent: —  
+Follow-up sent: 2026-11-02 (Marco Esguerra)  
 Beta scheduled: —  
 
 what they do: German premium fashion group (BOSS and HUGO brands) with a large global e-commerce and retail footprint.
@@ -928,6 +1007,7 @@ Title: Application Owner
 Relationship: Customer  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Liechtenstein/Switzerland-based international private banking and asset-management group.
@@ -1027,6 +1107,7 @@ Title: Lead, Quality Engineering
 Relationship: Customer  
 
 Email sent: —  
+Follow-up sent: 2026-11-02 (Nai Hau Lui)  
 Beta scheduled: —  
 
 what they do: Singapore's sole legal lottery/betting operator (Toto, 4D, horse racing and sports betting), incorporated 1968, wholly owned since 2004 by Tote Board, a statutory board under the Ministry of Finance; run not-for-profit, with surplus channeled to community/charity causes ([Wikipedia](https://en.wikipedia.org/wiki/Singapore_Pools); [Tote Board](https://www.toteboard.gov.sg/about-us/our-subsidiaries/)).
@@ -1049,6 +1130,7 @@ Title: Test Manager
 Relationship: Partner  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: German SAP consultancy founded by former SAP consultants in 1995, now part of the Materna Group — 1,700+ employees across 40+ locations including a Malaysia office and the US ([cbs-consulting.com](https://www.cbs-consulting.com/en/about-cbs/company/)).
@@ -1071,11 +1153,13 @@ Title: BTM Partner Management
 Relationship: Partner  
 
 Email sent: —  
+Follow-up sent: 2026-11-02 (Akihiko Yamano and Sina Döbbelin)  
 Beta scheduled: —  
+Do not email: Sina Döbbelin, 2026-11-04. She helps manage business partnerships (BTM Partner Management) and is not a product user. Removed from the mailing list. Akihiko Yamano stays.
 
 what they do: SAP Ariba, SAP's cloud-based procurement and supply-chain collaboration platform.
 
-likely use case: both submitters are `@sap.com` addresses, so this most plausibly reflects an internal SAP evaluation of Agent Score against SAP's own emerging Ariba agentic-procurement features, rather than an external customer need.
+likely use case: Akihiko Yamano (Lead Architect, `@sap.com`) most plausibly reflects an internal SAP evaluation of Agent Score against SAP's own emerging Ariba agentic-procurement features. Sina Döbbelin (BTM Partner Management) is off the mailing list: she helps manage business partnerships and is not a product user.
 
 known agent tooling: next-gen SAP Ariba embeds a Joule Bid Analysis Agent and AI-assisted contract support directly into procurement workflows ([SAP News](https://news.sap.com/2026/03/next-gen-sap-ariba-foundation-for-intelligent-procurement/)).
 
@@ -1088,6 +1172,7 @@ Title: IT QA Manager
 Relationship: Customer  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Singapore-headquartered offshore/marine and shipbuilding group formed from the 2023 Sembcorp Marine–Keppel O&M merger.
@@ -1105,6 +1190,7 @@ Title: Test manager
 Relationship: Customer  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: SP Digital, the digital-solutions subsidiary of Singapore Power (SP) Group, Singapore's national electricity and gas transmission utility.
@@ -1122,6 +1208,7 @@ Title: Manager
 Relationship: Partner  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Japanese-origin SAP consultancy with 180+ consultants in Malaysia (Petaling Jaya and Penang), one of the largest SAP partners in the country.
@@ -1139,6 +1226,7 @@ Title: Senior IT Consultant
 Relationship: Evaluating Tricentis  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Singapore's university of applied learning, focused on industry-integrated degree programs.
@@ -1156,6 +1244,7 @@ Title: IT Project Manager
 Relationship: Customer  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Singapore-headquartered agri-business (food, feed, and fiber) spun off from Olam International in 2020.
@@ -1173,6 +1262,7 @@ Title: Associate Consultant
 Relationship: Partner  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Indian IT-services and consulting major, one of the world's largest technology services firms.
@@ -1207,6 +1297,7 @@ Title: Developer
 Relationship: Partner  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: statutory board under Singapore's Ministry of Defence responsible for defense technology acquisition and systems development for MINDEF and the SAF.
@@ -1224,6 +1315,7 @@ Title: Principal Software Quality Engineer
 Relationship: Customer  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Singapore's public-housing statutory board under the Ministry of National Development.
@@ -1266,6 +1358,7 @@ Title: QA Lead
 Relationship: Customer  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: City Developments Limited (CDL), a major Singapore-listed real-estate group operating in 29 countries.
@@ -1283,6 +1376,7 @@ Title: CEO
 Relationship: Partner  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Mexico City-based software-testing/QA consultancy (founded 2008, 51–200 employees) offering testing consulting, ISTQB certification training, and agile/DevOps testing frameworks ([testingit.com.mx](https://www.testingit.com.mx/en/home)).
@@ -1300,6 +1394,7 @@ Title: Test Automation Engineer
 Relationship: Partner  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Singapore-based digital-transformation solution provider and Tricentis partner (named SEA Tricentis Partner of the Year), focused on test automation, cloud, cybersecurity, and analytics/ML for financial-services, banking, and telco clients ([Tricentis](https://www.tricentis.com/partners/brillar)).
@@ -1317,6 +1412,7 @@ Title: Senior Test Manager
 Relationship: Customer  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: iconic London luxury department store.
@@ -1334,6 +1430,7 @@ Title: Principal Cloud Engg
 Relationship: Other  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: US digital-only bank and financial-services company (auto finance, banking, mortgage).
@@ -1375,6 +1472,7 @@ Title: Test Automation Architect
 Relationship: Partner  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Canberra-based, 100%-Australian-owned test automation, DevOps, and AI integrator (156 employees), already a Tricentis partner ([Tricentis](https://www.tricentis.com/partners/xamplify)).
@@ -1391,6 +1489,7 @@ Name: Sri Pulleti
 
 Email sent: —  
 Beta scheduled: —  
+Follow-up: none after the demo (stated 2026-11-04).
 
 what they do: Global social-media/technology conglomerate (Facebook, Instagram, WhatsApp, Messenger, Reality Labs) with a large open-model AI research arm (the Llama model family).
 
@@ -1411,6 +1510,7 @@ Date: 2026-09-09 09:51
 Name: Farhan Shaikh  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Saudi Arabia's largest telecom operator and self-described "digital enabler" — a strategic LEAP partner building AI-ready data-center capacity (via its center3 subsidiary) and Kingdom-wide AI infrastructure alongside HUMAIN.
@@ -1426,6 +1526,7 @@ Date: 2026-09-09 09:52
 Name: Ali Alshehri  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Operating company for Diriyah, the Saudi giga-project redeveloping the historic birthplace of the first Saudi state (northwest of Riyadh) into a heritage/culture/tourism destination — 38+ hotels, 20 cultural landmarks, 100+ restaurants planned — under the Diriyah Gate Development Authority ([dgda.gov.sa](https://www.dgda.gov.sa/en)).
@@ -1441,6 +1542,7 @@ Date: 2026-09-09 09:53
 Name: Ramesh Panthangi  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Riyadh-headquartered global software-testing/QA firm (founded 2018; 700+ experts across KSA, UAE, Jordan, Egypt, India, and Europe) serving banking, government, telecom, aviation, retail, and sports-tech clients; first MENA testing company to reach TMMi Level 5, named a top-10 QA company on the 2024 Software Testing Leaders list ([clutch.co/profile/testcrew](https://clutch.co/profile/testcrew)).
@@ -1462,6 +1564,7 @@ Date: 2026-09-09 14:41
 Name: Jia Jun Zhan  
 
 Email sent: —  
+Follow-up sent: 2026-11-02 (Jia Jun Zhan)  
 Beta scheduled: —  
 
 what they do: Vienna, Austria-based test-automation/RPA consultancy focused on SAP S/4HANA migration testing (founded by Yunus Saylan and Simon Kreitmayer). Already a Tricentis partner ([tricentis.com/partners/dolpheen-it-solutions-gmbh](https://www.tricentis.com/partners/dolpheen-it-solutions-gmbh)).
@@ -1477,6 +1580,7 @@ Date: 2026-09-03 15:20
 Name: Ajan Nattamai  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Education-content/EdTech publisher spanning higher ed, workforce training, and K-12; part of Cengage Group.
@@ -1492,6 +1596,7 @@ Date: 2026-09-02 14:51
 Name: Kiran kadarla  
 
 Email sent: —  
+Follow-up sent: 2026-11-02  
 Beta scheduled: —  
 
 what they do: Enterprise low-code/BPM software vendor; recently launched "Pega Agentic Process Fabric" with MCP-powered agent orchestration for mission-critical business processes.
@@ -1604,6 +1709,7 @@ Email sent: —
 Beta scheduled: 2026-09-11  
 Beta invite sent: 2026-10-12  
 Beta check-in sent: 2026-11-02 (Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj)  
+Actively using: 2026-11-04 (reported; no product sign-in timestamp)  
 
 what they do: Sydney-headquartered SAP Technical Services & software-testing consultancy (~51 employees, ~$6M revenue, founded 2011) with presence in Melbourne, Canberra, Brisbane — 150+ projects delivered to 100+ Australian customers, specializing in SAP-focused quality engineering, automation, and performance testing ([tritusa.com.au/about-us](https://tritusa.com.au/about-us/)).
 
@@ -1808,7 +1914,7 @@ what they do: ~670 travel-stop/convenience locations across 42 states, plus Spee
 
 confirmed use case (from 2026-10-02 demo): not an agent-evaluation pull yet. Thomas Cody (implemented Tosca at Love's, ~7+ years with the tool) and Jag Mallampati (senior automation engineer) run on-prem Tosca, evaluated Tosca Cloud earlier this year and preferred on-prem, and are testing the Tosca on-prem MCP with Claude on a test box. When asked, they evaluate no AI agents beyond that MCP work as part of an upgrade evaluation. Interest was genuine ("it is interesting, though") but the blocker was stated plainly: AgentScore is cloud only and Love's is on-prem, so "we probably can't do much with it currently." They would try an on-prem version, or re-evaluate if the cloud product improves; Andrew floated a customer-run container (customer configures the judge LLM) as a possible beta path and Thomas said it might be an option. Jag also asked when the Tosca AI chat reaches on-prem (Andrew did not know). Debrief: [Love's Feedback Session](feedback-sessions/Love%27s%20Feedback%20Session.md).
 
-waiting on: Andrew's follow-up with what an on-prem/container deployment would look like; Love's then decides whether to proceed or wait for a more robust on-prem strategy. No beta date set.
+waiting on: follow-up was not sent after the 2026-10-02 demo (stated 2026-11-04). No beta date set.
 
 likely use case: agentic automation in dispatch/back-office workflows and customer-service voice/chat agents.
 

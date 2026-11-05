@@ -19,7 +19,7 @@ from opentelemetry import trace as trace_api
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.sdk.trace.export import SimpleSpanProcessor, SpanExportResult
 from opentelemetry.trace import set_span_in_context
 
 ENV_FILE = Path(__file__).resolve().parent / ".env"
@@ -166,7 +166,7 @@ def export_rows(rows: list[dict], tracer, agent_name: str, model: str, session_i
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--session", type=Path, required=True)
-    parser.add_argument("--agent-name", default="agentscore-docs-sync-agent")
+    parser.add_argument("--agent-name", default="AgentScore docs sync")
     parser.add_argument("--model", default="cursor")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
@@ -196,9 +196,28 @@ def main() -> int:
         destination = "Agent Score"
 
     provider = TracerProvider(resource=Resource.create({SERVICE_NAME: service_name}))
-    provider.add_span_processor(
-        BatchSpanProcessor(exporter, max_export_batch_size=8, schedule_delay_millis=500)
-    )
+    # One span per request. A batch is rejected whole when any span trips the
+    # ingest gateway, which drops the spans around it.
+    accepted = 0
+    rejected = 0
+
+    class _CountingExporter:
+        def export(self, spans):
+            nonlocal accepted, rejected
+            result = exporter.export(spans)
+            if result is SpanExportResult.SUCCESS:
+                accepted += len(spans)
+            else:
+                rejected += len(spans)
+            return result
+
+        def shutdown(self):
+            exporter.shutdown()
+
+        def force_flush(self, timeout_millis=30000):
+            return exporter.force_flush(timeout_millis)
+
+    provider.add_span_processor(SimpleSpanProcessor(_CountingExporter()))
     trace_api.set_tracer_provider(provider)
     tracer = trace_api.get_tracer(service_name)
 
@@ -234,7 +253,12 @@ def main() -> int:
     if not flushed:
         print(f"Export of {args.session.name} did not flush.", file=sys.stderr)
         return 1
-    print(f"{args.session.name}: {turns} LLM turns, {tools} tool calls sent to {destination}.")
+    note = f"{args.session.name}: {turns} LLM turns, {tools} tool calls sent to {destination}."
+    if rejected:
+        note += f" {rejected} spans were rejected by the ingest gateway."
+    print(note)
+    if accepted == 0 and rejected:
+        return 1
     return 0
 
 
