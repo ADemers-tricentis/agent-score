@@ -1,6 +1,6 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. 150 form submissions found (as of 2026-11-05), sorted newest first. Excluded as internal `@tricentis.com` submitters: Ashutosh Kotkar (2026-09-25) and Srinivasa Rao K (2026-10-01), both under Tricentis GmbH (AT) - HQ. Fun Tat Chen (2026-10-02) is a second submitter at Singapore Pools and is stacked on that entry rather than counted as a new company. Ajay Kharb and Praveer Bakshi (2026-10-19/20, Accenture), Konrad Greszata (2026-10-13, Capgemini) and Jeroen Kuijper (2026-10-21, Sogeti Netherlands) are likewise stacked on existing company entries. Antonio Sglavo (2026-10-22, Accenture SpA), Julian Raach and Yash Jawale (2026-10-22, Hugo Boss), Edmundo Barahona (2026-10-22, Sogeti Deutschland), Mathieu Philippe (2026-10-22, Itecor FR) and Simon Kreitmayer (2026-10-22, SKYPhoenix IT GmbH, which appears to be the renamed Dolpheen IT Solutions) are also stacked on existing entries. ketmanee Ruksa, Poonsiri Chingburanakij and Sirichai Wantong (2026-10-30, AIS (TH)) and Juralak Panpreeda (2026-10-30, AIS/Mimo Tech) are stacked on one new AIS (TH) entry, since all four use the same AIS email domain. Repeats not tracked separately: Rohan Bansod (New Vision Software, two submissions 2026-10-15) and Praveer Bakshi (a second 2026-10-19 submission with the company field blank). Sina Döbbelin (2026-09-17, Ariba, Inc., BTM Partner Management) is excluded from outreach: she manages business partnerships and is not a product user. Akihiko Yamano stays on the Ariba row.
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. Reconciled to the inbox on 2026-11-10: 167 notifications from 2026-08-19 through 2026-11-10, of which 164 arrived on or before 2026-11-05. The earlier "150 as of 2026-11-05" cannot be reproduced. Removing 12 internal `@tricentis.com` submissions, 11 same-person repeats, and Ferrara Candy leaves 143 external non-duplicate submissions. Stacking extra contacts at companies already counted leaves 113 companies, including Neotys. Setting aside Neotys, Astemo (arrived 2026-11-06, not added here), and Sky Plc leaves 110 tracked form companies. That 110 includes AutoZone Parts, Inc., which the earlier tracker had missed. Sorted newest first. Excluded as internal `@tricentis.com` submitters (12 submissions): Brad Purcell (2026-08-21 and 2026-09-07, company blank), Michal Hrncirik (2026-08-21, company blank; 2026-09-10, form said Tecra Systems, Inc.), Caitlin Bowers (2026-08-25, Tricentis (US)), Maria Argulla (2026-08-25, Partner Account), Neil Williams (2026-09-08, two submissions, Tricentis (UK)), Kevin Demancsik (2026-09-10, TRICENTIS USA), Karthick S (2026-09-11, Tricentis), Ashutosh Kotkar (2026-09-25, Tricentis GmbH (AT) - HQ), and Srinivasa Rao K (2026-10-01, Tricentis GmbH (AT) - HQ). Excluded as a Tricentis subsidiary, not an `@tricentis.com` address: VIJESH Vijayan (2026-08-27), Neotys (FR) - HQ, neotys.com. Fun Tat Chen (2026-10-02) is a second submitter at Singapore Pools and is stacked on that entry rather than counted as a new company. Ajay Kharb and Praveer Bakshi (2026-10-19/20, Accenture), Konrad Greszata (2026-10-13, Capgemini) and Jeroen Kuijper (2026-10-21, Sogeti Netherlands) are likewise stacked on existing company entries. Antonio Sglavo (2026-10-22, Accenture SpA), Julian Raach and Yash Jawale (2026-10-22, Hugo Boss), Edmundo Barahona (2026-10-22, Sogeti Deutschland), Mathieu Philippe (2026-10-22, Itecor FR) and Simon Kreitmayer (2026-10-22, SKYPhoenix IT GmbH, which appears to be the renamed Dolpheen IT Solutions) are also stacked on existing entries. ketmanee Ruksa, Poonsiri Chingburanakij and Sirichai Wantong (2026-10-30, AIS (TH)) and Juralak Panpreeda (2026-10-30, AIS/Mimo Tech) are stacked on one new AIS (TH) entry, since all four use the same AIS email domain. Repeats not tracked separately: Rohan Bansod (New Vision Software, two submissions 2026-10-15), Praveer Bakshi (a second 2026-10-19 submission with the company field blank, and another on 2026-11-09, not added here), Rohan Patil (BearingPoint, four extra submissions on one day), Beena P K (PVH, one extra), Cathy Soller (McKesson, one extra), and Jigish Belani (Accenture, one extra). Not added in this reconciliation, so the next sync should expect them: Astemo, Ltd (raghavendar Reddy, 2026-11-06, new company) and Łukasz Młynarczyk (Capgemini, 2026-11-10, stack on the existing Capgemini row). Sina Döbbelin (2026-09-17, Ariba, Inc., BTM Partner Management) is excluded from outreach: she manages business partnerships and is not a product user. Akihiko Yamano stays on the Ariba row.
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
 
@@ -28,7 +28,7 @@ What accounts we have talked to say they build or run agents on. Counts are comp
 
 ## Pipeline Tracker
 
-Source breakdown: 109 via the Labs form, 4 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E, Oracle), 1 via David (VP of AI/ML) (Eaton) = 114 total. Ferrara Candy Company is listed below but not counted: Sudha Damacherla signed up by accident for a different product (2026-10-20). Sky Plc (Mario D'Amico) is not counted: on 2026-11-02 he replied to the beta welcome that he is not interested and does not want further emails.
+Source breakdown: 110 via the Labs form (the previous 109, plus AutoZone Parts, Inc., missed since 2026-09-02), 4 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E, Oracle), 1 via David (VP of AI/ML) (Eaton) = 115 total. Of those 115, 113 were emailed: Oracle and AutoZone were not. Ferrara Candy Company is listed below but not counted. The inbox notification is 2026-10-08, an intro went out 2026-10-12 and a meeting was booked that day, and the Not a fit note is 2026-10-20. Sudha Damacherla signed up by accident for a different product. Sky Plc (Mario D'Amico) is not counted: on 2026-11-02 he replied to the beta welcome that he is not interested and does not want further emails.
 
 Both tables use the same stages. Cumulative counts every company at that stage or a later one, so each cumulative cell equals its current cell plus every current cell below it. Current counts companies whose Status is that stage today. Ferrara Candy is in neither. Counts are manual: when a status changes, subtract 1 from the old Current row, add 1 to the new Current row, and add 1 to each Cumulative row the company has newly reached.
 
@@ -38,10 +38,10 @@ Invited to beta means the invite went out. Actively using means Beta Cohorts has
 
 | Stage | Companies |
 |---|---|
-| Interested | 114 |
+| Interested | 115 |
 | Email sent | 113 |
 | Follow-up sent | 85 |
-| Replied | 18 |
+| Replied | 19 |
 | Demo scheduled | 13 |
 | Pending beta | 10 |
 | Invited to beta | 9 |
@@ -51,10 +51,10 @@ Invited to beta means the invite went out. Actively using means Beta Cohorts has
 
 | Stage | Companies |
 |---|---|
-| Interested | 1 |
+| Interested | 2 |
 | Email sent | 28 |
-| Follow-up sent | 67 |
-| Replied | 5 |
+| Follow-up sent | 66 |
+| Replied | 6 |
 | Demo scheduled | 3 |
 | Pending beta | 1 |
 | Invited to beta | 8 |
@@ -102,7 +102,7 @@ Invited to beta means the invite went out. Actively using means Beta Cohorts has
 | Turing Consulting Pty. Ltd. (AU)                                            | Archana Madhusudhan                                                                                                           | Follow-up sent — 2026-11-02                         |
 | Bloomberg Finance L.P.                                                      | Joe Zacchio                                                                                                                   | Follow-up sent — 2026-11-02                         |
 | Sogeti (FR)                                                                 | Gavaskar Selvarajan, Jeroen Kuijper, Edmundo Barahona                                                                         | Follow-up sent — 2026-11-02                         |
-| Singapore Airlines (SG)                                                     | Srinivasan Santhanam                                                                                                          | Follow-up sent — 2026-11-02                         |
+| Singapore Airlines (SG)                                                     | Srinivasan Santhanam                                                                                                          | Replied — 2026-10-06, from Sent Items               |
 | Tata Consultancy Services Ltd (IN)                                          | Joji Joseph                                                                                                                   | Follow-up sent — 2026-11-02                         |
 | Skygen USA                                                                  | Joko Supriyanto                                                                                                               | Follow-up sent — 2026-11-02                         |
 | Hugo Boss AG (DE)                                                           | Marco Esguerra, Julian Raach, Yash Jawale                                                                                     | Follow-up sent — 2026-11-02                         |
@@ -158,6 +158,7 @@ Invited to beta means the invite went out. Actively using means Beta Cohorts has
 | Dolpheen IT Solutions                                                       | Jia Jun Zhan, Simon Kreitmayer                                                                                                | Follow-up sent — 2026-11-02                         |
 | Cengage Learning, Inc.                                                      | Ajan Nattamai                                                                                                                 | Follow-up sent — 2026-11-02                         |
 | Pegasystems Inc.                                                            | Kiran kadarla                                                                                                                 | Follow-up sent — 2026-11-02                         |
+| AutoZone Parts, Inc.                                                        | Vaibhav Tandale                                                                                                               | Interested — missed since 2026-09-02, never emailed |
 | cbs Corporate Business Solutions (DE/MY)                                    | Ashish Chavan, Arumugam Lekshmanan                                                                                            | Follow-up sent — 2026-11-02                         |
 | Ariba, Inc.                                                                 | Akihiko Yamano                                                                                                                | Follow-up sent — 2026-11-02                         |
 | Seatrium (SG)                                                               | Florance Yong                                                                                                                 | Follow-up sent — 2026-11-02                         |
@@ -846,7 +847,7 @@ Relationship: Customer
 Email sent: 2026-10-12  
 Beta scheduled: —  
 
-Not a fit (2026-10-20): Sudha signed up by accident. She was interested in a different product.
+Not a fit (2026-10-20): Sudha signed up by accident. She was interested in a different product. The inbox notification is 2026-10-08, not 2026-10-20. Sent Items shows the intro and a 30-minute booking confirmation on 2026-10-12, so she was emailed and booked time before the Not a fit note.
 
 what they do: US confectionery manufacturer (Brach's, Nerds, Laffy Taffy). Completed a 25-module single-cutover SAP S/4HANA (RISE with SAP) program ([SAP Innovation Awards 2026](https://www.sap.com/documents/2026/03/6eaef23c-437f-0010-bca6-c68f7e60039b.html)).
 
@@ -951,9 +952,10 @@ Name: Srinivasan Santhanam
 Title: Senior Principal Technologist  
 Relationship: Customer  
 
-Email sent: —  
+Email sent: 2026-10-05  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
+Replied: 2026-10-06. Andrew's Sent Items has his reply, apologizing for a mix-up and handing the thread to a PM. The inbound message was not returned by the inbox search, so this status rests on that sent reply. The 2026-11-02 follow-up went out after the reply.
 
 what they do: Singapore's flag-carrier airline.
 
@@ -1690,6 +1692,25 @@ what they do: Enterprise low-code/BPM software vendor; recently launched "Pega A
 likely use case: as a vendor building agent-orchestration tooling for enterprise clients, plausibly evaluating Agent Score to validate its own pre-built agents or as landscape research into third-party agent-testing tools — notable overlap with Agent Score's own positioning, similar profile to the Workday entry above.
 
 known agent tooling: launched Pega Agentic Process Fabric with MCP support (letting Claude, Gemini, and OpenAI agents execute Pega workflows), a "Predictable AI" architecture, and new pre-built agents (an assignment agent and a document-processing agent), shipping in Pega Infinity 26 ([SiliconANGLE](https://siliconangle.com/2026/06/08/pega-expands-ai-platform-agent-orchestration-development-tools-new-pricing-model/), [Constellation Research](https://www.constellationr.com/insights/news/pegasystems-launches-pega-agentic-process-fabric-rides-ai-momentum)).
+
+---
+
+### AutoZone Parts, Inc.
+
+Date: 2026-09-02  
+Name: Vaibhav Tandale  
+Contact: company domain autozone.com. The address is not in the contacts log, and this reconciliation did not copy it from the inbox.  
+
+Email sent: —  
+Beta scheduled: —  
+
+Missed by every sync since the signup. Not in the tracker, the audit log, the contacts log, or Sent Items until this reconciliation. Status is Interested. No email has been sent.
+
+what they do: US auto-parts retailer. Not researched further in this pass.
+
+likely use case: not researched in this pass.
+
+known agent tooling: not researched in this pass.
 
 ---
 

@@ -4,6 +4,58 @@ Every run of the external-interest-sync agent, newest first. Each entry lists
 what changed in the tracker and CSVs and why. Contact emails are deliberately
 left out; they live in the contacts CSV.
 
+## 2026-11-10T19:00:00Z
+
+- **Cutoff:** none. This was a reconciliation against `docs/feedback/Lost Lead Analysis 2026-11-10.md`, not a new inbox sync. The run marker was not moved.
+- **Emails found:** 0 fetched. Counts come from that analysis: 167 Labs notifications through 2026-11-10, 164 on or before 2026-11-05.
+
+### Added
+| Company | Submitter(s) | Submitted | Why added | Sources used |
+|---|---|---|---|---|
+| AutoZone Parts, Inc. | Vaibhav Tandale | 2026-09-02 | Real company-domain signup, absent from the tracker, audit log, contacts log, and Sent Items. Status Interested. No email on file here, so no contacts-log row. | Lost Lead Analysis, 2026-11-10 |
+
+### Excluded
+| Submitter | Submitted | Rule | Detail |
+|---|---|---|---|
+| Brad Purcell | 2026-08-21 and 2026-09-07 | @tricentis.com | Two submissions, company blank. Named in the intro. Not previously excluded. |
+| Michal Hrncirik | 2026-08-21 and 2026-09-10 | @tricentis.com | Second form said Tecra Systems, Inc. Still an internal address. |
+| Caitlin Bowers | 2026-08-25 | @tricentis.com | Tricentis (US). |
+| Maria Argulla | 2026-08-25 | @tricentis.com | Partner Account. |
+| Neil Williams | 2026-09-08 | @tricentis.com | Two submissions, Tricentis (UK). |
+| Kevin Demancsik | 2026-09-10 | @tricentis.com | TRICENTIS USA. |
+| Karthick S | 2026-09-11 | @tricentis.com | Tricentis. |
+| VIJESH Vijayan | 2026-08-27 | Tricentis subsidiary | Neotys (FR) - HQ, neotys.com. Not an @tricentis.com address. Excluded, not added as a company. |
+
+Ashutosh Kotkar and Srinivasa Rao K were already excluded.
+
+### Held for review
+| Submitter | Submitted | Why |
+|---|---|---|
+| raghavendar Reddy, Astemo, Ltd | 2026-11-06 | New company after the last sync. Not added. |
+| Łukasz Młynarczyk, Capgemini | 2026-11-10 | Stack onto the existing Capgemini row. Not added. |
+| Praveer Bakshi, Accenture | 2026-11-09 | Repeat. Noted, not added. |
+| Greg Wanroy | 2026-08-20 | Already an unresolved row: company entered as Accenture CIO HR Organization, domain stanza.ai. Left as is. |
+| Sathish kumar Backiam | 2026-08-20 | Already in the tracker twice: company field "-" with a thehartford.com domain, and a Capgemini submission. Left as is. |
+
+### Outreach recorded from Sent Items
+| Company | Contact(s) | Sent | Status change | Detail |
+|---|---|---|---|---|
+| Singapore Airlines (SG) | Srinivasan Santhanam | 2026-10-05 intro, already in the contacts log | Follow-up sent -> Replied | Andrew's sent reply of 2026-10-06 apologizes for a mix-up and hands the thread to a PM. The inbound message was not found. Contacts log status set to Replied. |
+
+### Replies
+None read from the inbox in this run. Singapore Airlines is the only status change, and it uses Sent Items evidence from the lost-lead analysis.
+
+### Judgment calls
+- AutoZone is counted. Tracked form companies go from 109 to 110. Interested goes from 114 to 115. Email sent stays 113, because Oracle and AutoZone were not emailed. Current Interested goes from 1 to 2.
+- Singapore Airlines moves from Follow-up sent to Replied. Current Follow-up sent 67 to 66. Current Replied 5 to 6. Cumulative Replied 18 to 19. Cumulative Follow-up sent stays 85.
+- Neotys is excluded rather than added. The analysis left it Unsure. The sync rule for a Tricentis-owned-brand domain is to exclude it with a note.
+- The 150-submission figure is retired. The inbox has 167 notifications. 12 internal, 11 same-person repeats, and Ferrara bring that to 143 external non-duplicate submissions, then stacking and the exclusions above bring it to 110 tracked form companies.
+- Ferrara's notification date in the company section was already 2026-10-08. The pipeline note said 2026-10-20. The note now uses 2026-10-08, records the 2026-10-12 intro and booking, and keeps the Not a fit date as 2026-10-20.
+- No mail-merge file was written. Nothing new is ready to email.
+
+### Count check
+Current stages sum to 115: Interested 2, Email sent 28, Follow-up sent 66, Replied 6, Demo scheduled 3, Pending beta 1, Invited to beta 8, Actively using 1. Cumulative Interested 115, Email sent 113, Follow-up sent 85, Replied 19, Demo scheduled 13, Pending beta 10, Invited to beta 9, Actively using 1.
+
 ## 2026-11-05T19:20:00Z
 
 - **Cutoff:** 2026-11-04T06:53:03.000Z -> **new marker:** 2026-11-04T06:53:03.000Z (unchanged, nothing new)

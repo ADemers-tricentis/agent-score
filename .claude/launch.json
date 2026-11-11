@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "first-session-mock",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "docs/planning/features/Auto-Setup and Self-Improvment Loop"],
+      "port": 8765
+    }
+  ]
+}
