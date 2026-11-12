@@ -8,29 +8,11 @@
 
 <p>Hi {{First Name}},</p>
 
-<p>The wait is over. You've seen AgentScore in a demo, and it's finally ready for you to test on your own agents. Welcome to the beta - {{Company}} is one of the first teams getting hands-on access, and we're excited to see what you do with it.</p>
+<p>Thanks for signing up to try AgentScore. The beta is now open, and you can start testing it on your own agents today. {{Company}} is one of the first teams getting hands-on access, and we're excited to see what you do with it.</p>
 
 <p>Point AgentScore at an agent running on real traffic and you get a 0-100 score, a ship / review / don't-ship recommendation, and the evidence behind every number. Your feedback during the beta directly shapes what we build next, so tell us what works, what doesn't, and what's missing.</p>
 
 <p>You can access AgentScore here: <a href="https://agent-score.ai.tricentis.com/">https://agent-score.ai.tricentis.com/</a></p>
-
-<p><b>Here's how to get up and running:</b></p>
-
-<ol>
-<li><b>Sign in to Tosca Cloud.</b> Agent Score requires a Tosca Cloud login. If you do not have one yet, <a href="https://www.tricentis.com/software-testing-tool-trial-demo">sign up for a Tosca Cloud trial</a> first, then sign in with that account.</li>
-<li><b>Sign in, and your workspace is ready.</b> Signing in with your Tosca Cloud account creates your workspace (a tenant). No one on the Agent Score team has to set it up. Everyone signing in from that Tosca Cloud tenant shares it. If your agent runs in AI Workspace, no ingest key is needed, so skip to step 4.</li>
-<li><b>Connect your coding agent, then start traces.</b> In the sidebar, open <b>Integrations</b>. Copy the server URL from <b>Connect a coding agent (MCP)</b> and paste it whole. The part after the <code>?</code> names your tenant. Add it in Claude Code, Cursor, Codex, or the Claude apps, and sign in through the browser with your Tosca Cloud account. There is no API key to paste. Then open the project for the agent you want scored and ask:
-<pre style="font-family:Consolas, Menlo, monospace; font-size:13px; background:#f4f4f4; padding:10px; white-space:pre-wrap;">Set this agent up to send its traces to Agent Score. Name it checkout-agent.</pre>
-<code>checkout-agent</code> is an example. Use the name you want that agent to keep. Your coding agent creates an ingest key, writes it to an environment file that version control ignores, and sets <code>OTEL_SERVICE_NAME</code> to that name. Restart the agent and run it once. Then ask:
-<pre style="font-family:Consolas, Menlo, monospace; font-size:13px; background:#f4f4f4; padding:10px; white-space:pre-wrap;">Use agent-score to check my agent connection.</pre>
-The answer says whether traces for that name arrived in the last hour.</li>
-<li><b>Run your agent.</b> Interact with your agent as you normally would. It appears on the Agents page on its own, first as <b>Setting up</b>, then <b>Learning your agent</b> with a live count of traces received. No per-agent form to fill out.</li>
-<li><b>Read your scorecard.</b> After <b>20 traces</b>, scoring starts automatically. Open the agent to see a 0-100 score and a ship / review / don't-ship recommendation, with the evidence behind every number.</li>
-</ol>
-
-<p><b>Wiring the exporter yourself.</b> If you would rather not use a coding agent, <b>+ Connect Agent</b> on the Agents page gives you the exporter config with your real key filled in. Use the <code>_TRACES_</code> variables, not the generic <code>OTEL_EXPORTER_OTLP_ENDPOINT</code>. The endpoint already ends in <code>/v1/traces</code>, and the generic form would append it a second time.</p>
-
-<p><b>Send real traffic.</b> Scoring is only as honest as the traces behind it. Send real or realistic traffic, including the ordinary failures, not a hand-picked set of best outputs.</p>
 
 <p>AgentScore is fully cloud-hosted, so there's nothing to install. If you'd like help with setup, or just want a walkthrough, <a href="https://scheduler.zoom.us/andrew-demers/agentscore-overview">pick a time here</a> and we'll go through it together.</p>
 
