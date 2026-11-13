@@ -4,6 +4,7 @@
   "description": "Local lead funnel for AgentScore external interest (replaces External Interest.md as the source of truth)",
   "scripts": {
     "start": "tsx src/server.tsx",
+    "dev": "tsx watch src/server.tsx",
     "db:import": "tsx src/import/index.ts",
     "funnel": "tsx src/cli.ts",
     "typecheck": "tsc --noEmit"

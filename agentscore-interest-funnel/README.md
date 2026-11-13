@@ -13,6 +13,7 @@ Requires Node 24 and pnpm.
 ```sh
 pnpm install
 pnpm start          # http://localhost:4310
+pnpm dev            # same, but restarts when source files change
 ```
 
 Pages: Funnel (current and cumulative counts, click a number to drill down), Leads (filters for stage, fit, owner, relationship, signup date, "no reply in N days"; CSV download), company detail (all actions and history), Fit, Growth per week, Usage by cohort, Submissions (excluded, repeat, held), Activity (runs and change log), Exports (mail merge, snapshot, backup), Notes (page text carried over from the old docs).
