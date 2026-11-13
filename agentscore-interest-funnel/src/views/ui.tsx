@@ -351,6 +351,59 @@ export function lineChart(points: { x: string; y: number }[], opts: { width?: nu
     ${grid}<path d="${area}" fill="#5e6ad2" fill-opacity="0.12"/><path d="${line}" fill="none" stroke="#5e6ad2" stroke-width="2" stroke-linejoin="round"/>${dots}${ticks}</svg>`;
 }
 
+/** Cumulative line + area on the left axis, a dashed step line on the right axis. */
+export function growthChart(
+  points: { x: string; a: number; b: number }[],
+  opts: { width?: number; height?: number; labelA: string; labelB: string },
+) {
+  const w = opts.width ?? 1200;
+  const h = opts.height ?? 340;
+  const padL = 44;
+  const padR = 44;
+  const padT = 16;
+  const padB = 32;
+  if (!points.length) return "";
+  // Round up to a multiple of 4 (small) or 20 (large) so the four grid steps are whole numbers.
+  const nice = (m: number) => (m <= 40 ? Math.max(4, Math.ceil(m / 4) * 4) : Math.ceil(m / 20) * 20);
+  const maxA = nice(Math.max(1, ...points.map((p) => p.a)));
+  const maxB = nice(Math.max(1, ...points.map((p) => p.b)));
+  const step = points.length > 1 ? (w - padL - padR) / (points.length - 1) : 0;
+  const ya = (v: number) => h - padB - (v / maxA) * (h - padT - padB);
+  const yb = (v: number) => h - padB - (v / maxB) * (h - padT - padB);
+  const X = (i: number) => padL + i * step;
+  const line = points.map((p, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${ya(p.a).toFixed(1)}`).join(" ");
+  const area = `${line} L${X(points.length - 1).toFixed(1)},${h - padB} L${padL},${h - padB} Z`;
+  const stepLine = points
+    .map((p, i) => (i ? `L${X(i).toFixed(1)},${yb(points[i - 1].b).toFixed(1)} L${X(i).toFixed(1)},${yb(p.b).toFixed(1)}` : `M${X(i).toFixed(1)},${yb(p.b).toFixed(1)}`))
+    .join(" ");
+  const grid = [0, 0.25, 0.5, 0.75, 1]
+    .map((f) => {
+      const va = Math.round(maxA * f);
+      const vb = Math.round(maxB * f);
+      return `<line x1="${padL}" y1="${ya(va)}" x2="${w - padR}" y2="${ya(va)}" stroke="#23252a"/>
+        <text x="${padL - 10}" y="${ya(va) + 4}" font-size="11" fill="#8a8f98" text-anchor="end">${va}</text>
+        <text x="${w - padR + 10}" y="${ya(va) + 4}" font-size="11" fill="#62666d">${vb}</text>`;
+    })
+    .join("");
+  const ticks = points
+    .map((p, i) =>
+      i % Math.ceil(points.length / 10) === 0 || i === points.length - 1
+        ? `<text x="${X(i)}" y="${h - 10}" font-size="11" fill="#8a8f98" text-anchor="middle">${p.x.slice(5)}</text>`
+        : "",
+    )
+    .join("");
+  const dots = points
+    .map((p, i) => `<circle cx="${X(i)}" cy="${ya(p.a)}" r="3" fill="#0f1011" stroke="#828fff" stroke-width="1.5"><title>${p.x}: ${p.a} companies, ${p.b} actively using</title></circle>`)
+    .join("");
+  const lx = padL + 16;
+  const legend = `<g font-size="11" fill="#d0d6e0">
+      <line x1="${lx}" y1="22" x2="${lx + 18}" y2="22" stroke="#5e6ad2" stroke-width="2"/><text x="${lx + 24}" y="26">${opts.labelA}</text>
+      <line x1="${lx}" y1="40" x2="${lx + 18}" y2="40" stroke="#27a644" stroke-width="1.5" stroke-dasharray="4 3"/><text x="${lx + 24}" y="44">${opts.labelB} (right axis)</text></g>`;
+  return `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Lead growth over time" font-family="Inter, -apple-system, system-ui, sans-serif">
+    ${grid}<path d="${area}" fill="#5e6ad2" fill-opacity="0.12"/><path d="${line}" fill="none" stroke="#5e6ad2" stroke-width="2" stroke-linejoin="round"/>
+    <path d="${stepLine}" fill="none" stroke="#27a644" stroke-width="1.5" stroke-dasharray="4 3"/>${dots}${ticks}${legend}</svg>`;
+}
+
 /** A horizontal bar: `current` drawn solid over a lighter `cumulative` (or just `n`). */
 export const Bar: FC<{ n: number; max: number; cumulative?: number }> = (p) => {
   const pct = (v: number) => (p.max ? `${Math.max(v ? 1.5 : 0, (v / p.max) * 100).toFixed(1)}%` : "0%");

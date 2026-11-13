@@ -1,9 +1,10 @@
+import { raw } from "hono/html";
 import { mentions } from "../auditlog.ts";
 import { all, one, type DB } from "../db.ts";
 import { companiesAtStage, funnelCounts } from "../queries.ts";
-import { leads, noReplyDays, ownerText, timeline, type Lead } from "../read.ts";
+import { growth, leads, noReplyDays, ownerText, timeline, type Lead } from "../read.ts";
 import { stageLabel } from "../stages.ts";
-import { Bar, CompanyLink, Md, Stage, StageSelect, Stat, Status, Table } from "./ui.tsx";
+import { Bar, CompanyLink, growthChart, Md, Stage, StageSelect, Stat, Status, Table } from "./ui.tsx";
 
 export const today = () => new Date().toISOString().slice(0, 10);
 
@@ -11,6 +12,12 @@ export function FunnelPage({ db }: { db: DB }) {
   const counts = funnelCounts(db);
   const max = Math.max(1, ...counts.stages.map((s) => s.cumulative));
   const cum = (id: string) => counts.stages.find((s) => s.id === id)!;
+  const g = growth(db, today());
+  let active = 0;
+  const series = g.weeks.map((w) => {
+    active += w.moves.actively_using ?? 0;
+    return { x: w.week, a: w.cumulative, b: active };
+  });
   return (
     <div>
       <div class="stats">
@@ -60,6 +67,16 @@ export function FunnelPage({ db }: { db: DB }) {
             </tr>
           ))}
         </Table>
+      </div>
+      <div class="panel">
+        <div class="section-head">
+          <span class="eyebrow">Lead growth over time</span>
+          <span class="small muted">
+            Weekly, from each company's first Interested date.{" "}
+            {g.undatedCompanies > 0 && `${g.undatedCompanies} without a signup date ${g.undatedCompanies === 1 ? "is" : "are"} not charted.`}
+          </span>
+        </div>
+        {raw(growthChart(series, { labelA: "Cumulative companies", labelB: "Actively using" }))}
       </div>
     </div>
   );
