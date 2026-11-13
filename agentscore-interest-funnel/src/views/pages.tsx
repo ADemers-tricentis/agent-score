@@ -9,12 +9,6 @@ export const today = () => new Date().toISOString().slice(0, 10);
 
 export function FunnelPage({ db }: { db: DB }) {
   const counts = funnelCounts(db);
-  const exits = all<{ company_id: number; name: string; stage: string; occurred_on: string | null; note: string | null }>(
-    db,
-    `SELECT c.id AS company_id, c.name, se.stage, se.occurred_on, se.note FROM company c
-     JOIN stage_event se ON se.id = (SELECT max(id) FROM stage_event WHERE company_id = c.id)
-     WHERE se.stage IN ('not_a_fit', 'do_not_email') AND c.merged_into_id IS NULL`,
-  );
   const max = Math.max(1, ...counts.stages.map((s) => s.cumulative));
   const cum = (id: string) => counts.stages.find((s) => s.id === id)!;
   return (
@@ -67,30 +61,44 @@ export function FunnelPage({ db }: { db: DB }) {
           ))}
         </Table>
       </div>
+    </div>
+  );
+}
+
+export function OutsideFunnel({ db }: { db: DB }) {
+  const counts = funnelCounts(db);
+  const exits = all<{ company_id: number; name: string; stage: string; occurred_on: string | null; note: string | null }>(
+    db,
+    `SELECT c.id AS company_id, c.name, se.stage, se.occurred_on, se.note FROM company c
+     JOIN stage_event se ON se.id = (SELECT max(id) FROM stage_event WHERE company_id = c.id)
+     WHERE se.stage IN ('not_a_fit', 'do_not_email') AND c.merged_into_id IS NULL`,
+  );
+  return (
+    <div id="outside">
       <h2>Outside the funnel</h2>
-      <p class="small">
-        {counts.exited.not_a_fit} not a fit and {counts.exited.do_not_email} do not email. They keep their history but are not counted above.
-      </p>
-      <Table>
-        <tr>
-          <th>Company</th>
-          <th>State</th>
-          <th>Since</th>
-          <th>Reason</th>
-        </tr>
-        {exits.map((e) => (
+        <p class="small">
+          {counts.exited.not_a_fit} not a fit and {counts.exited.do_not_email} do not email. They keep their history but are not counted above.
+        </p>
+        <Table>
           <tr>
-            <td>
-              <CompanyLink id={e.company_id} name={e.name} />
-            </td>
-            <td>
-              <Stage stage={e.stage} />
-            </td>
-            <td class="date">{e.occurred_on ?? ""}</td>
-            <td>{e.note ?? ""}</td>
+            <th>Company</th>
+            <th>State</th>
+            <th>Since</th>
+            <th>Reason</th>
           </tr>
-        ))}
-      </Table>
+          {exits.map((e) => (
+            <tr>
+              <td>
+                <CompanyLink id={e.company_id} name={e.name} />
+              </td>
+              <td>
+                <Stage stage={e.stage} />
+              </td>
+              <td class="date">{e.occurred_on ?? ""}</td>
+              <td>{e.note ?? ""}</td>
+            </tr>
+          ))}
+        </Table>
     </div>
   );
 }
@@ -249,6 +257,7 @@ export function LeadsPage({ db, f }: { db: DB; f: LeadFilters }) {
         </a>
       </div>
       <LeadTable rows={rows} showNoReply={!!f.noreply} />
+      <OutsideFunnel db={db} />
     </div>
   );
 }
