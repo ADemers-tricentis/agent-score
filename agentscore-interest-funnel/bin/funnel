@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Run the interest-funnel CLI from anywhere. Env vars (FUNNEL_DB etc.) pass through.
+# `funnel --dryrun <command>` points every path at the copies made by `funnel dryrun prepare`.
+set -euo pipefail
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+if [[ "${1:-}" == "--dryrun" ]]; then
+  shift
+  D="$DIR/data/dryrun"
+  if [[ ! -f "$D/funnel.db" ]]; then
+    echo '{"error":"No dry-run copy. Run: funnel dryrun prepare","code":"no_dryrun"}' >&2
+    exit 1
+  fi
+  export FUNNEL_DB="$D/funnel.db"
+  export FUNNEL_AUDIT_LOG="$D/External Interest Audit Log.md"
+  export FUNNEL_MAIL_MERGE="$D/external-interest-mail-merge.csv"
+  export FUNNEL_SNAPSHOT="$D/External Interest (generated).md"
+fi
+cd "$DIR"
+exec node --import tsx --no-warnings src/cli.ts "$@"

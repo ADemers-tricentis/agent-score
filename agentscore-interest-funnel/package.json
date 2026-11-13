@@ -1,0 +1,31 @@
+{
+  "name": "agentscore-interest-funnel",
+  "version": "1.0.0",
+  "description": "Local lead funnel for AgentScore external interest (replaces External Interest.md as the source of truth)",
+  "scripts": {
+    "start": "tsx src/server.tsx",
+    "db:import": "tsx src/import/index.ts",
+    "funnel": "tsx src/cli.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.7.0",
+      "onFail": "download"
+    }
+  },
+  "type": "module",
+  "dependencies": {
+    "@hono/node-server": "^2.1.8",
+    "better-sqlite3": "^13.1.1",
+    "hono": "^4.13.18"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  },
+  "private": true
+}

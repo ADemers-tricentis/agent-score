@@ -1,0 +1,30 @@
+{
+  "_about": "Submissions the tracker's intro paragraph names but never gave a company section. Transcribed from the intro of External Interest.md; the import checks that every name here appears in that paragraph. Repeats that already show up twice inside a company section (Beena P K at PVH) are detected from the section and are not listed here.",
+  "excluded": [
+    { "name": "Brad Purcell", "date": "2026-08-21", "form_company": null, "rule": "internal", "reason": "@tricentis.com submitter, company blank" },
+    { "name": "Brad Purcell", "date": "2026-09-07", "form_company": null, "rule": "internal", "reason": "@tricentis.com submitter, company blank" },
+    { "name": "Michal Hrncirik", "date": "2026-08-21", "form_company": null, "rule": "internal", "reason": "@tricentis.com submitter, company blank" },
+    { "name": "Michal Hrncirik", "date": "2026-09-10", "form_company": "Tecra Systems, Inc.", "rule": "internal", "reason": "@tricentis.com submitter" },
+    { "name": "Caitlin Bowers", "date": "2026-08-25", "form_company": "Tricentis (US)", "rule": "internal", "reason": "@tricentis.com submitter" },
+    { "name": "Maria Argulla", "date": "2026-08-25", "form_company": "Partner Account", "rule": "internal", "reason": "@tricentis.com submitter" },
+    { "name": "Neil Williams", "date": "2026-09-08", "form_company": "Tricentis (UK)", "rule": "internal", "reason": "@tricentis.com submitter (first of two that day)" },
+    { "name": "Neil Williams", "date": "2026-09-08", "form_company": "Tricentis (UK)", "rule": "internal", "reason": "@tricentis.com submitter (second of two that day)" },
+    { "name": "Kevin Demancsik", "date": "2026-09-10", "form_company": "TRICENTIS USA", "rule": "internal", "reason": "@tricentis.com submitter" },
+    { "name": "Karthick S", "date": "2026-09-11", "form_company": "Tricentis", "rule": "internal", "reason": "@tricentis.com submitter" },
+    { "name": "Ashutosh Kotkar", "date": "2026-09-25", "form_company": "Tricentis GmbH (AT) - HQ", "rule": "internal", "reason": "@tricentis.com submitter" },
+    { "name": "Srinivasa Rao K", "date": "2026-10-01", "form_company": "Tricentis GmbH (AT) - HQ", "rule": "internal", "reason": "@tricentis.com submitter" },
+    { "name": "VIJESH Vijayan", "date": "2026-08-27", "form_company": "Neotys (FR) - HQ", "rule": "owned_brand", "reason": "Tricentis subsidiary (neotys.com), not an @tricentis.com address" }
+  ],
+  "repeats": [
+    { "name": "Rohan Bansod", "company": "New Vision Software Inc.", "date": "2026-10-15", "form_company": null, "reason": "repeat submission (first of two on 2026-10-15)" },
+    { "name": "Rohan Bansod", "company": "New Vision Software Inc.", "date": "2026-10-15", "form_company": null, "reason": "repeat submission (second of two on 2026-10-15)" },
+    { "name": "Praveer Bakshi", "company": "Accenture (multiple entities)", "date": "2026-10-19", "form_company": null, "reason": "repeat submission with the company field blank" },
+    { "name": "Praveer Bakshi", "company": "Accenture (multiple entities)", "date": "2026-11-09", "form_company": "Accenture LLP", "reason": "repeat submission, confirmed by the 2026-11-11 sync" },
+    { "name": "Rohan Patil", "company": "BearingPoint GmbH (DE) - HQ", "date": null, "form_company": null, "reason": "one of four extra submissions on one day (date not recorded)" },
+    { "name": "Rohan Patil", "company": "BearingPoint GmbH (DE) - HQ", "date": null, "form_company": null, "reason": "one of four extra submissions on one day (date not recorded)" },
+    { "name": "Rohan Patil", "company": "BearingPoint GmbH (DE) - HQ", "date": null, "form_company": null, "reason": "one of four extra submissions on one day (date not recorded)" },
+    { "name": "Rohan Patil", "company": "BearingPoint GmbH (DE) - HQ", "date": null, "form_company": null, "reason": "one of four extra submissions on one day (date not recorded)" },
+    { "name": "Cathy Soller", "company": "McKesson Corporation", "date": null, "form_company": null, "reason": "one extra submission (date not recorded)" },
+    { "name": "Jigish Belani", "company": "Accenture (multiple entities)", "date": "2026-09-09", "form_company": "Accenture LLP", "reason": "repeat submission" }
+  ]
+}

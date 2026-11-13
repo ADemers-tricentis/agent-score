@@ -1,0 +1,62 @@
+{
+  "_about": "Hand-checked name mappings for the import. 'rename' turns a tracker section heading into the app's company name. 'aliases' maps other spellings used in the Details table, the contacts CSV and the fit HTML to that name. Names that match exactly, or by a unique prefix, need no entry; the reconciliation report lists the prefix matches.",
+  "rename": {
+    "- (form blank; email domain suggests Sun Life)": "Sun Life",
+    "— (form blank; email domain suggests Singapore Pools)": "Singapore Pools",
+    "Olam Agri (form blank; email domain suggests Olam Agri)": "Olam Agri",
+    "— (form blank; email domain suggests Artizent)": "Artizent",
+    "— (form blank; email domain suggests The Hartford)": "The Hartford (unresolved)",
+    "Siemens Financial Services GmbH (DE) (email domain suggests Siemens Energy)": "Siemens Financial Services GmbH (DE)"
+  },
+  "extra_sf_accounts": [
+    {
+      "company": "cbs Corporate Business Solutions (DE/MY)",
+      "owner": "Ivana Seitz",
+      "account": "cbs consulting (DE)",
+      "type": "Prospective Partner",
+      "person": "Ashish Chavan",
+      "label": "DE",
+      "note": "Only named in the section's prose. Ashish Chavan's own contact is linked to CBS Corporation (owner Stephen Dale), which looks like a different company; the Details table lists Ivana Seitz (DE) as the owner."
+    }
+  ],
+  "aliases": {
+    "Sun Life": ["Sun Life (form blank, domain-resolved)"],
+    "Artizent": ["Artizent (form blank, domain-resolved)"],
+    "Olam Agri": ["Olam Agri (form blank, domain-resolved)"],
+    "Singapore Pools": ["Singapore Pools (form blank, domain-resolved)"],
+    "The Hartford (unresolved)": ["— (The Hartford, unresolved)", "The Hartford (unresolved company match)"],
+    "Accenture CIO HR Organization": [
+      "Accenture CIO HR Organization (unresolved, may be Stanza)",
+      "Accenture CIO HR (Stanza duplicate)"
+    ],
+    "Accenture (multiple entities)": ["Accenture"],
+    "Siemens Financial Services GmbH (DE)": [
+      "Siemens Financial Services GmbH (DE) (email domain suggests Siemens Energy)",
+      "Siemens Energy"
+    ],
+    "Saudi Telecom Company STC (SA) - HQ": ["STC"],
+    "Defence Science and Technology Agency (SG)": ["DSTA (Singapore)"],
+    "Deloitte LLP (UK)": ["Deloitte UK"],
+    "ABeam Consulting (Malaysia) Sdn. Bhd.": ["ABeam Malaysia"],
+    "Tata Consultancy Services Ltd (IN)": ["TCS India"],
+    "Tata Consultancy Services Asia Pacific Pte. Ltd. (SG)": ["TCS Singapore"],
+    "City Dev (SG)": ["City Developments"],
+    "Department of Jobs, Skills, Industry and Regions (DJSIR) (AU)": ["DJSIR (Victoria)"],
+    "Singapore Power Digital Private Limited": ["SP Digital"],
+    "The Boeing Company": ["Boeing"],
+    "Housing Development Board (SG)": ["HDB (Singapore)"],
+    "Sky Plc (UK) - HQ": ["Sky"],
+    "Xebia - Partner": ["Xebia"],
+    "Wolters Kluwer United States Inc.": ["Wolters Kluwer", "Wolters Kluwer (FAB)"],
+    "L'OREAL": ["L'Oreal"],
+    "Meta Platforms, Inc.": ["Meta"],
+    "BearingPoint GmbH (DE) - HQ": ["BearingPoint", "BearingPoint (GenAIQ)"],
+    "Tritusa Consulting (AU)": ["Tritusa"],
+    "Merito Solutions": ["Merito"],
+    "Love's Travel Stops": ["Love's", "Love's (candidate)"],
+    "New Vision Software Inc.": ["New Vision"],
+    "Workday, Inc.": ["Workday"],
+    "Aptiv Global Operations Limited": ["Aptiv"],
+    "Eaton": ["Eaton"]
+  }
+}
