@@ -1,11 +1,9 @@
-import { raw } from "hono/html";
 import { mentions } from "../auditlog.ts";
 import { all, one, type DB } from "../db.ts";
 import { companiesAtStage, funnelCounts } from "../queries.ts";
 import { leads, noReplyDays, ownerText, timeline, type Lead } from "../read.ts";
-import { statusText } from "../snapshot.ts";
 import { stageLabel } from "../stages.ts";
-import { CompanyLink, Md, StageSelect } from "./ui.tsx";
+import { Bar, CompanyLink, Md, Stage, StageSelect, Stat, Status, Table } from "./ui.tsx";
 
 export const today = () => new Date().toISOString().slice(0, 10);
 
@@ -17,34 +15,63 @@ export function FunnelPage({ db }: { db: DB }) {
      JOIN stage_event se ON se.id = (SELECT max(id) FROM stage_event WHERE company_id = c.id)
      WHERE se.stage IN ('not_a_fit', 'do_not_email') AND c.merged_into_id IS NULL`,
   );
-  const max = Math.max(...counts.stages.map((s) => s.cumulative));
+  const max = Math.max(1, ...counts.stages.map((s) => s.cumulative));
+  const cum = (id: string) => counts.stages.find((s) => s.id === id)!;
   return (
     <div>
-      <p>
-        {counts.total} companies in the funnel. Current counts companies whose latest stage is that stage; cumulative counts companies at that stage or a later one.
-      </p>
-      <table>
-        <tr>
-          <th>Stage</th>
-          <th class="num">Current</th>
-          <th class="num">Cumulative</th>
-          <th></th>
-        </tr>
-        {counts.stages.map((s) => (
+      <div class="stats">
+        <Stat value={counts.total} label="Companies in the funnel" href="/leads" />
+        <Stat value={cum("email_sent").cumulative} label="Emailed" href="/stage/email_sent?mode=cumulative" />
+        <Stat value={cum("replied").cumulative} label="Replied or further" href="/stage/replied?mode=cumulative" />
+        <Stat value={cum("invited_to_beta").cumulative} label="Invited to beta" href="/stage/invited_to_beta?mode=cumulative" />
+        <Stat value={cum("actively_using").current} label="Actively using" href="/stage/actively_using?mode=current" />
+      </div>
+      <div class="panel">
+        <div class="section-head">
+          <p class="small">Current counts companies whose latest stage is that stage. Cumulative counts companies at that stage or a later one. Click a number to see the companies.</p>
+          <div class="legend">
+            <span>
+              <i style="background:#5e6ad2" />
+              Current
+            </span>
+            <span>
+              <i style="background:rgba(94,106,210,.35)" />
+              Cumulative
+            </span>
+          </div>
+        </div>
+        <Table class="funnel">
           <tr>
-            <td>{s.label}</td>
-            <td class="num">
-              <a href={`/stage/${s.id}?mode=current`}>{s.current}</a>
-            </td>
-            <td class="num">
-              <a href={`/stage/${s.id}?mode=cumulative`}>{s.cumulative}</a>
-            </td>
-            <td>{raw(`<svg width="300" height="12"><rect width="${Math.max(2, Math.round((s.cumulative / max) * 300))}" height="12" fill="#2a6ebb"/></svg>`)}</td>
+            <th>Stage</th>
+            <th class="num">Current</th>
+            <th class="num">Cumulative</th>
+            <th class="num">Share</th>
+            <th></th>
           </tr>
-        ))}
-      </table>
+          {counts.stages.map((s) => (
+            <tr>
+              <td>
+                <Stage stage={s.id} />
+              </td>
+              <td class="num">
+                <a href={`/stage/${s.id}?mode=current`}>{s.current}</a>
+              </td>
+              <td class="num">
+                <a href={`/stage/${s.id}?mode=cumulative`}>{s.cumulative}</a>
+              </td>
+              <td class="num muted">{counts.total ? `${Math.round((s.cumulative / counts.total) * 100)}%` : ""}</td>
+              <td class="bar-cell">
+                <Bar n={s.current} cumulative={s.cumulative} max={max} />
+              </td>
+            </tr>
+          ))}
+        </Table>
+      </div>
       <h2>Outside the funnel</h2>
-      <table>
+      <p class="small">
+        {counts.exited.not_a_fit} not a fit and {counts.exited.do_not_email} do not email. They keep their history but are not counted above.
+      </p>
+      <Table>
         <tr>
           <th>Company</th>
           <th>State</th>
@@ -56,12 +83,14 @@ export function FunnelPage({ db }: { db: DB }) {
             <td>
               <CompanyLink id={e.company_id} name={e.name} />
             </td>
-            <td>{stageLabel(e.stage)}</td>
-            <td>{e.occurred_on ?? ""}</td>
+            <td>
+              <Stage stage={e.stage} />
+            </td>
+            <td class="date">{e.occurred_on ?? ""}</td>
             <td>{e.note ?? ""}</td>
           </tr>
         ))}
-      </table>
+      </Table>
     </div>
   );
 }
@@ -71,10 +100,19 @@ export function StagePage({ db, stage, mode }: { db: DB; stage: string; mode: "c
   const byId = new Map(leads(db).map((l) => [l.id, l]));
   return (
     <div>
-      <p>
-        {rows.length} companies {mode === "current" ? "currently at" : "at or past"} {stageLabel(stage)}.{" "}
-        <a href={`/stage/${stage}?mode=${mode === "current" ? "cumulative" : "current"}`}>Show {mode === "current" ? "cumulative" : "current"}</a>
-      </p>
+      <div class="section-head">
+        <p>
+          {rows.length} companies {mode === "current" ? "currently at" : "at or past"} {stageLabel(stage)}.
+        </p>
+        <div class="tabs">
+          <a class={`pill ${mode === "current" ? "on" : ""}`} href={`/stage/${stage}?mode=current`}>
+            Current
+          </a>
+          <a class={`pill ${mode === "cumulative" ? "on" : ""}`} href={`/stage/${stage}?mode=cumulative`}>
+            Cumulative
+          </a>
+        </div>
+      </div>
       <LeadTable rows={rows.map((r) => byId.get(r.company_id)!).filter(Boolean)} />
     </div>
   );
@@ -83,7 +121,7 @@ export function StagePage({ db, stage, mode }: { db: DB; stage: string; mode: "c
 export function LeadTable({ rows, showNoReply }: { rows: Lead[]; showNoReply?: boolean }) {
   const t = today();
   return (
-    <table>
+    <Table>
       <tr>
         <th>Company</th>
         <th>Status</th>
@@ -101,17 +139,19 @@ export function LeadTable({ rows, showNoReply }: { rows: Lead[]; showNoReply?: b
             <CompanyLink id={l.id} name={l.name} />
             {l.excluded_reason && <span class="muted small"> (excluded)</span>}
           </td>
-          <td>{statusText(l)}</td>
+          <td>
+            <Status lead={l} />
+          </td>
           <td>{l.bucket ?? <span class="muted">none</span>}</td>
           <td>{ownerText(l)}</td>
           <td>{l.rels ?? ""}</td>
-          <td>{l.signup ?? (l.source !== "form" ? <span class="muted">{l.source}</span> : "")}</td>
+          <td class="date">{l.signup ?? (l.source !== "form" ? <span class="muted">{l.source}</span> : "")}</td>
           <td class="num">{l.people}</td>
-          <td>{l.last_out ?? ""}</td>
+          <td class="date">{l.last_out ?? ""}</td>
           {showNoReply && <td class="num">{noReplyDays(l, t) ?? ""}</td>}
         </tr>
       ))}
-    </table>
+    </Table>
   );
 }
 
@@ -146,10 +186,8 @@ export function LeadsPage({ db, f }: { db: DB; f: LeadFilters }) {
   const csvHref = `/leads.csv?${new URLSearchParams(Object.entries(f).filter(([, v]) => v) as [string, string][]).toString()}`;
   return (
     <div>
-      <form method="get">
-        <fieldset>
-          <legend>Filter</legend>
-          <label>
+      <form method="get" class="card filters">
+        <label>
             Search <input name="q" value={f.q ?? ""} />
           </label>
           <label>
@@ -199,12 +237,17 @@ export function LeadsPage({ db, f }: { db: DB; f: LeadFilters }) {
           <label>
             <input type="checkbox" name="include" value="1" checked={f.include === "1"} /> include excluded
           </label>
-          <button>Apply</button> <a href="/leads">Reset</a>
-        </fieldset>
+          <button class="primary">Apply</button>
+          <a href="/leads" class="button ghost">
+            Reset
+          </a>
       </form>
-      <p>
-        {rows.length} companies. <a href={csvHref}>Download as CSV</a>
-      </p>
+      <div class="section-head">
+        <p>{rows.length} companies</p>
+        <a href={csvHref} class="button">
+          Download as CSV
+        </a>
+      </div>
       <LeadTable rows={rows} showNoReply={!!f.noreply} />
     </div>
   );
@@ -295,53 +338,61 @@ export function CompanyPage({ db, id }: { db: DB; id: number }) {
         </p>
       )}
       {c.excluded_reason && <p class="flash err">Excluded: {c.excluded_reason}</p>}
-      <table>
-        <tr>
-          <th>Status</th>
-          <td>{lead ? statusText(lead) : ""}</td>
-        </tr>
-        <tr>
-          <th>Source</th>
-          <td>
+      <div class="panel meta">
+        <div>
+          <div class="meta-k">Status</div>
+          <div class="meta-v">{lead ? <Status lead={lead} /> : ""}</div>
+        </div>
+        <div>
+          <div class="meta-k">Source</div>
+          <div class="meta-v">
             {c.source}
             {c.source_detail ? ` (${c.source_detail})` : ""}
-          </td>
-        </tr>
-        <tr>
-          <th>Fit</th>
-          <td>
+          </div>
+        </div>
+        <div>
+          <div class="meta-k">Chase first</div>
+          <div class="meta-v">{c.chase_rank ? `#${c.chase_rank}` : <span class="muted">no</span>}</div>
+        </div>
+        <div>
+          <div class="meta-k">People</div>
+          <div class="meta-v">{contacts.length}</div>
+        </div>
+        <div class="wide">
+          <div class="meta-k">Account owner (Salesforce)</div>
+          <div class="meta-v">
+            {lead ? ownerText(lead) : ""}
+            {c.sf_owner_raw && <div class="muted small">{c.sf_owner_raw}</div>}
+          </div>
+        </div>
+        <div class="wide">
+          <div class="meta-k">Fit</div>
+          <div class="meta-v">
             {fit ? (
               <span>
-                <strong>{fit.label}</strong>. {fit.evidence}. {fit.why} <span class="muted small">({fit.assessed_on}, {fit.actor})</span>
+                <span class="badge">{fit.label}</span> {fit.evidence}. {fit.why} <span class="muted small">({fit.assessed_on}, {fit.actor})</span>
               </span>
             ) : (
               <span class="muted">no bucket</span>
             )}
-            {c.chase_rank && <span> · Chase-first #{c.chase_rank}</span>}
-          </td>
-        </tr>
-        <tr>
-          <th>Account owner (Salesforce)</th>
-          <td>
-            {lead ? ownerText(lead) : ""}
-            {c.sf_owner_raw && <div class="muted small">{c.sf_owner_raw}</div>}
-          </td>
-        </tr>
+          </div>
+        </div>
         {aliases.some((a) => a.alias !== c.name) && (
-          <tr>
-            <th>Also known as</th>
-            <td class="small">{aliases.map((a) => a.alias).filter((a) => a !== c.name).join(" · ")}</td>
-          </tr>
+          <div class="full">
+            <div class="meta-k">Also known as</div>
+            <div class="meta-v small">{aliases.map((a) => a.alias).filter((a) => a !== c.name).join(" · ")}</div>
+          </div>
         )}
-      </table>
+      </div>
 
+      <h2>Actions</h2>
       <div class="grid">
         <div>
           <fieldset>
             <legend>Change stage</legend>
             <form method="post" action={post("stage")}>
               <StageSelect value={lead?.stage} /> <input type="date" name="date" value={t} /> <input name="note" placeholder="note" />{" "}
-              <input name="reason" placeholder="reason (needed to move backwards or exit)" size={36} /> <button>Save</button>
+              <input name="reason" placeholder="reason (needed to move backwards or exit)" size={36} /> <button class="primary">Save</button>
             </form>
           </fieldset>
           <fieldset>
@@ -358,7 +409,7 @@ export function CompanyPage({ db, id }: { db: DB; id: number }) {
                   <option value={p.person_id}>{p.name}</option>
                 ))}
               </select>{" "}
-              <input type="date" name="date" value={t} /> <input name="note" placeholder="note" /> <button>Add</button>
+              <input type="date" name="date" value={t} /> <input name="note" placeholder="note" /> <button class="primary">Add</button>
               <div class="small muted">Touchpoints move the company forward (never back): intro email to Email sent, reply to Replied, and so on.</div>
             </form>
           </fieldset>
@@ -422,7 +473,7 @@ export function CompanyPage({ db, id }: { db: DB; id: number }) {
             <details>
               <summary>Edit accounts (JSON)</summary>
               <form method="post" action={post("salesforce")}>
-                <textarea name="json" style="min-height:160px;font-family:monospace">
+                <textarea name="json" class="code">
                   {accountJson}
                 </textarea>
                 <div class="small muted">status: matched | no_account | unassigned | not_looked_up. person: a contact's email or name.</div>
@@ -434,7 +485,7 @@ export function CompanyPage({ db, id }: { db: DB; id: number }) {
       </div>
 
       <h2>Submitters and contacts</h2>
-      <table>
+      <Table>
         <tr>
           <th>Name</th>
           <th>Email</th>
@@ -457,8 +508,8 @@ export function CompanyPage({ db, id }: { db: DB; id: number }) {
             </td>
             <td>{p.role}</td>
             <td>
-              {stageLabel(p.status)}
-              {p.status_note && <span class="muted small"> ({p.status_note})</span>}
+              <Stage stage={p.status} />
+              {p.status_note && <div class="muted small">{p.status_note}</div>}
             </td>
             <td class="small">
               {p.dne ? (
@@ -482,9 +533,9 @@ export function CompanyPage({ db, id }: { db: DB; id: number }) {
             </td>
           </tr>
         ))}
-      </table>
+      </Table>
       <h3>Submissions</h3>
-      <table>
+      <Table>
         <tr>
           <th>Submitted</th>
           <th>Name</th>
@@ -496,7 +547,7 @@ export function CompanyPage({ db, id }: { db: DB; id: number }) {
         </tr>
         {subs.map((s) => (
           <tr>
-            <td>{s.submitted_at ?? "not recorded"}</td>
+            <td class="date">{s.submitted_at ?? "not recorded"}</td>
             <td>{s.person_name}</td>
             <td>{s.title ?? ""}</td>
             <td>{s.relationship ?? ""}</td>
@@ -523,10 +574,10 @@ export function CompanyPage({ db, id }: { db: DB; id: number }) {
             </td>
           </tr>
         ))}
-      </table>
+      </Table>
 
       <h2>Timeline</h2>
-      <table>
+      <Table>
         <tr>
           <th>Date</th>
           <th>What</th>
@@ -536,14 +587,14 @@ export function CompanyPage({ db, id }: { db: DB; id: number }) {
         </tr>
         {timeline(db, id).map((e) => (
           <tr>
-            <td>{e.date ?? <span class="muted">undated</span>}</td>
+            <td class="date">{e.date ?? <span class="muted">undated</span>}</td>
             <td>{e.label}</td>
             <td>{e.who ?? ""}</td>
             <td class="small">{e.detail ?? ""}</td>
             <td class="small muted">{e.actor}</td>
           </tr>
         ))}
-      </table>
+      </Table>
 
       <h2>Research</h2>
       {research.map((r) => (
@@ -594,7 +645,7 @@ export function CompanyPage({ db, id }: { db: DB; id: number }) {
       <div class="grid">
         <div>
           <h2>Salesforce accounts</h2>
-          <table>
+          <Table>
             <tr>
               <th>Owner</th>
               <th>Account</th>
@@ -617,7 +668,7 @@ export function CompanyPage({ db, id }: { db: DB; id: number }) {
                 </td>
               </tr>
             ))}
-          </table>
+          </Table>
           <p class="small muted">Lookup status: {c.sf_lookup_status}</p>
         </div>
         <div>
@@ -643,38 +694,50 @@ export function CompanyPage({ db, id }: { db: DB; id: number }) {
 
       <h2>Audit log entries that mention it</h2>
       {audit.length === 0 && <p class="muted">None.</p>}
-      {audit.map((m) => (
-        <details>
-          <summary>
-            {m.entry} ({m.lines.length} line{m.lines.length === 1 ? "" : "s"})
-          </summary>
-          <pre>{m.lines.join("\n")}</pre>
-        </details>
-      ))}
+      {audit.length > 0 && (
+        <div class="card">
+          {audit.map((m) => (
+            <details class="row">
+              <summary>
+                {m.entry} <span class="muted small">({m.lines.length} line{m.lines.length === 1 ? "" : "s"})</span>
+              </summary>
+              <pre>{m.lines.join("\n")}</pre>
+            </details>
+          ))}
+        </div>
+      )}
 
       <h2>Changes made in the app</h2>
       {changes.length === 0 && <p class="muted">None since the import.</p>}
-      <table>
-        {changes.map((ch) => (
+      {changes.length > 0 && (
+        <Table>
           <tr>
-            <td class="small">{ch.at}</td>
-            <td class="small">
-              {ch.actor}
-              {ch.run_id ? ` (run ${ch.run_id})` : ""}
-            </td>
-            <td class="small">
-              {ch.entity} {ch.action}
-            </td>
-            <td class="small">
-              {ch.before_json ?? ""} → {ch.after_json ?? ""}
-              {ch.reason && <div>reason: {ch.reason}</div>}
-            </td>
+            <th>When</th>
+            <th>Actor</th>
+            <th>Change</th>
+            <th>Before → after</th>
           </tr>
-        ))}
-      </table>
+          {changes.map((ch) => (
+            <tr>
+              <td class="small date">{ch.at}</td>
+              <td class="small">
+                {ch.actor}
+                {ch.run_id ? ` (run ${ch.run_id})` : ""}
+              </td>
+              <td class="small">
+                {ch.entity} {ch.action}
+              </td>
+              <td class="json">
+                {ch.before_json ?? ""} → {ch.after_json ?? ""}
+                {ch.reason && <div>reason: {ch.reason}</div>}
+              </td>
+            </tr>
+          ))}
+        </Table>
+      )}
 
       {c.import_raw_md && (
-        <details>
+        <details style="margin-top:32px">
           <summary>Original section from External Interest.md</summary>
           <pre>{c.import_raw_md}</pre>
         </details>

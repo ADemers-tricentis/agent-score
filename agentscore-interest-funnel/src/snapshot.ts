@@ -13,9 +13,14 @@ const note = (db: DB, key: string) => one<{ body_md: string }>(db, "SELECT body_
 /** Notes the service layer writes on automatic moves; they explain the timeline, not the status. */
 const AUTO_NOTE = /^(from [a-z_]+|first sign-in|merged from .+)$/;
 
+/** The date and note that follow the stage label in a status. */
+export function statusDetail(l: Pick<Lead, "stage_on" | "stage_note">): string {
+  return [l.stage_on, l.stage_note && !AUTO_NOTE.test(l.stage_note) ? l.stage_note : null].filter(Boolean).join(", ");
+}
+
 export function statusText(l: Pick<Lead, "stage" | "stage_on" | "stage_note">): string {
   const label = stageLabel(l.stage);
-  const bits = [l.stage_on, l.stage_note && !AUTO_NOTE.test(l.stage_note) ? l.stage_note : null].filter(Boolean).join(", ");
+  const bits = statusDetail(l);
   return bits ? `${label} — ${bits}` : label;
 }
 

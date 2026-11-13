@@ -1,8 +1,6 @@
-import { raw } from "hono/html";
 import { all, one, type DB } from "../db.ts";
 import { leads, ownerText, type Lead } from "../read.ts";
-import { stageLabel } from "../stages.ts";
-import { bar, CompanyLink } from "./ui.tsx";
+import { Bar, CompanyLink, Stage, Stat, Table } from "./ui.tsx";
 
 const ICP = ["motivated", "silent-customer", "silent-partner"];
 const note = (db: DB, key: string) => one<{ body_md: string }>(db, "SELECT body_md FROM app_note WHERE key = ?", key)?.body_md ?? "";
@@ -75,32 +73,32 @@ export function FitPage({ db, f }: { db: DB; f: { fit?: string; q?: string; qual
       <p>{note(db, "fit.agentscore_interest_sorted_by_fit")}</p>
       <p class="small muted">{note(db, "fit.agentscore_interest_sorted_by_fit.2")}</p>
       <p class="small muted">Counts on this page are computed from the current data: {ls.length} active companies.</p>
-      <table>
-        <tr>
-          <th class="num">{count(["motivated"])}</th>
-          <th class="num">{count(["silent-customer", "silent-partner"])}</th>
-          <th class="num">{count(["not-now"])}</th>
-          <th class="num">
-            {invitedSignedIn} / {invited.length}
-          </th>
-        </tr>
-        <tr>
-          <td>ICP and motivated</td>
-          <td>ICP, no real reply</td>
-          <td>Not building agents yet</td>
-          <td>Beta invites with a sign-in</td>
-        </tr>
-      </table>
+      <div class="stats">
+        <Stat value={count(["motivated"])} label="ICP and motivated" href={qs({ fit: "motivated" }) + "#every"} />
+        <Stat value={count(["silent-customer", "silent-partner"])} label="ICP, no real reply" />
+        <Stat value={count(["not-now"])} label="Not building agents yet" href={qs({ fit: "not-now" }) + "#every"} />
+        <Stat
+          value={
+            <span>
+              {invitedSignedIn}
+              <span class="muted"> / {invited.length}</span>
+            </span>
+          }
+          label="Beta invites with a sign-in"
+        />
+      </div>
 
       <h3>Companies in each fit bucket</h3>
-      <table>
+      <Table>
         {bucketCounts.map((b) => (
           <tr>
             <td>
-              <a href={qs({ fit: b.id })}>{b.label}</a>
+              <a href={qs({ fit: b.id }) + "#every"}>{b.label}</a>
             </td>
             <td class="num">{b.n}</td>
-            <td>{raw(bar(b.n, maxN))}</td>
+            <td class="bar-cell">
+              <Bar n={b.n} max={maxN} />
+            </td>
           </tr>
         ))}
         {unbucketed.length > 0 && (
@@ -112,7 +110,7 @@ export function FitPage({ db, f }: { db: DB; f: { fit?: string; q?: string; qual
             <td class="small">{unbucketed.map((l) => l.name).join(", ")}</td>
           </tr>
         )}
-      </table>
+      </Table>
       <p class="small muted">{note(db, "fit.companies_in_each_fit_bucket")}</p>
       <h3>Where the funnel is actually leaking</h3>
       <p>{note(db, "fit.where_the_funnel_is_actually_leaking")}</p>
@@ -122,7 +120,7 @@ export function FitPage({ db, f }: { db: DB; f: { fit?: string; q?: string; qual
 
       <h2>Chase these first</h2>
       <p>{note(db, "fit.chase_these_first")}</p>
-      <table>
+      <Table>
         <tr>
           <th>#</th>
           <th>Company</th>
@@ -137,17 +135,19 @@ export function FitPage({ db, f }: { db: DB; f: { fit?: string; q?: string; qual
             <td>
               <CompanyLink id={l.id} name={l.name} />
             </td>
-            <td>{stageLabel(l.stage)}</td>
+            <td>
+              <Stage stage={l.stage} />
+            </td>
             <td>{fitRow.get(l.id)?.evidence ?? ""}</td>
             <td class="small">{fitRow.get(l.id)?.why ?? ""}</td>
             <td>{ownerText(l)}</td>
           </tr>
         ))}
-      </table>
+      </Table>
 
       <h2>Accounts by owner</h2>
       <p>{note(db, "fit.accounts_by_owner")}</p>
-      <table>
+      <Table>
         <tr>
           <th>Owner</th>
           <th>Account</th>
@@ -171,7 +171,9 @@ export function FitPage({ db, f }: { db: DB; f: { fit?: string; q?: string; qual
                 <CompanyLink id={r.company_id} name={r.company} />
               </td>
               <td>{byId.get(r.company_id)?.bucket ?? ""}</td>
-              <td>{stageLabel(byId.get(r.company_id)?.stage ?? "")}</td>
+              <td>
+                <Stage stage={byId.get(r.company_id)?.stage ?? ""} />
+              </td>
             </tr>
           )),
         )}
@@ -187,13 +189,15 @@ export function FitPage({ db, f }: { db: DB; f: { fit?: string; q?: string; qual
               <CompanyLink id={l.id} name={l.name} />
             </td>
             <td>{l.bucket}</td>
-            <td>{stageLabel(l.stage)}</td>
+            <td>
+              <Stage stage={l.stage} />
+            </td>
           </tr>
         ))}
-      </table>
+      </Table>
 
       <h2>What would move the funnel</h2>
-      <table>
+      <Table>
         <tr>
           <th>Insight</th>
           <th class="num">Count (as written)</th>
@@ -221,7 +225,7 @@ export function FitPage({ db, f }: { db: DB; f: { fit?: string; q?: string; qual
             </tr>
           );
         })}
-      </table>
+      </Table>
       <p class="small muted">"Count now" is computed only where the insight has a clear rule. The others are editorial and keep the count as written.</p>
 
       <h2>Signup quality</h2>
@@ -229,17 +233,17 @@ export function FitPage({ db, f }: { db: DB; f: { fit?: string; q?: string; qual
       <p class="small muted">
         In the data: {excludedSubs} excluded submissions and {repeatSubs} repeat submissions. <a href="/submissions">See all</a>.
       </p>
-      <p>
-        <a class={`pill ${!f.quality ? "on" : ""}`} href={qs({ quality: undefined })}>
-          All ({issues.length})
+      <div class="tabs" id="quality">
+        <a class={`pill ${!f.quality ? "on" : ""}`} href={qs({ quality: undefined }) + "#quality"}>
+          All <span class="count">{issues.length}</span>
         </a>
         {issueKinds.map((k) => (
-          <a class={`pill ${f.quality === k.id ? "on" : ""}`} href={qs({ quality: k.id })}>
-            {k.label} ({issues.filter((i) => i.kind === k.id).length})
+          <a class={`pill ${f.quality === k.id ? "on" : ""}`} href={qs({ quality: k.id }) + "#quality"}>
+            {k.label} <span class="count">{issues.filter((i) => i.kind === k.id).length}</span>
           </a>
         ))}
-      </p>
-      <table>
+      </div>
+      <Table>
         <tr>
           <th>Kind</th>
           <th>Who</th>
@@ -256,27 +260,27 @@ export function FitPage({ db, f }: { db: DB; f: { fit?: string; q?: string; qual
               <td class="small">{i.detail ?? ""}</td>
             </tr>
           ))}
-      </table>
+      </Table>
 
       <h2 id="every">Every company</h2>
-      <p>
+      <div class="tabs">
         <a class={`pill ${!f.fit ? "on" : ""}`} href={qs({ fit: undefined }) + "#every"}>
-          All ({ls.length})
+          All <span class="count">{ls.length}</span>
         </a>
         {bucketCounts.map((b) => (
           <a class={`pill ${f.fit === b.id ? "on" : ""}`} href={qs({ fit: b.id }) + "#every"}>
-            {b.short_label} ({b.n})
+            {b.short_label} <span class="count">{b.n}</span>
           </a>
         ))}
         <a class={`pill ${f.fit === "none" ? "on" : ""}`} href={qs({ fit: "none" }) + "#every"}>
-          No bucket ({unbucketed.length})
+          No bucket <span class="count">{unbucketed.length}</span>
         </a>
-      </p>
-      <form method="get" action="/fit#every">
+      </div>
+      <form method="get" action="/fit#every" class="row">
         {f.fit && <input type="hidden" name="fit" value={f.fit} />}
-        <input name="q" value={f.q ?? ""} placeholder="Search company or person" /> <button>Search</button>
+        <input type="search" name="q" value={f.q ?? ""} placeholder="Search company or person" size={32} /> <button>Search</button>
       </form>
-      <table>
+      <Table>
         <tr>
           <th>Company</th>
           <th>Bucket</th>
@@ -293,13 +297,15 @@ export function FitPage({ db, f }: { db: DB; f: { fit?: string; q?: string; qual
             </td>
             <td>{l.bucket ?? ""}</td>
             <td class="num">{l.people}</td>
-            <td>{stageLabel(l.stage)}</td>
+            <td>
+              <Stage stage={l.stage} />
+            </td>
             <td>{fitRow.get(l.id)?.evidence ?? ""}</td>
             <td class="small">{fitRow.get(l.id)?.why ?? ""}</td>
             <td>{l.bucket_id && ICP.includes(l.bucket_id) ? ownerText(l) : ""}</td>
           </tr>
         ))}
-      </table>
+      </Table>
     </div>
   );
 }

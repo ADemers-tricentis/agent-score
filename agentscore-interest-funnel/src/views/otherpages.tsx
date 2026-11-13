@@ -4,7 +4,7 @@ import { all, one, type DB } from "../db.ts";
 import { mailMergeRows } from "../exports.ts";
 import { cohorts, growth } from "../read.ts";
 import { FUNNEL_STAGES } from "../stages.ts";
-import { CompanyLink, lineChart } from "./ui.tsx";
+import { CompanyLink, lineChart, Table } from "./ui.tsx";
 import { today } from "./pages.tsx";
 
 export function GrowthPage({ db }: { db: DB }) {
@@ -13,11 +13,16 @@ export function GrowthPage({ db }: { db: DB }) {
   return (
     <div>
       <p>New companies per week (Monday start), counted from each company's first Interested date, and the stage moves recorded that week.</p>
-      {raw(lineChart(g.weeks.map((w) => ({ x: w.week, y: w.cumulative })), { label: "Cumulative companies" }))}
-      <p class="small muted">
-        Cumulative companies. {g.undatedCompanies} companies have no signup date and are not in the chart. {g.undatedMoves} stage moves have no date.
-      </p>
-      <table>
+      <div class="panel">
+        <div class="section-head">
+          <h3 style="margin:0 0 12px">Cumulative companies</h3>
+          <span class="small muted">
+            {g.undatedCompanies} companies have no signup date and are not in the chart. {g.undatedMoves} stage moves have no date.
+          </span>
+        </div>
+        {raw(lineChart(g.weeks.map((w) => ({ x: w.week, y: w.cumulative })), { label: "Cumulative companies" }))}
+      </div>
+      <Table>
         <tr>
           <th>Week of</th>
           <th class="num">New companies</th>
@@ -28,7 +33,7 @@ export function GrowthPage({ db }: { db: DB }) {
         </tr>
         {[...g.weeks].reverse().map((w) => (
           <tr>
-            <td>{w.week}</td>
+            <td class="date">{w.week}</td>
             <td class="num">{w.newCompanies || ""}</td>
             <td class="num">{w.cumulative}</td>
             {moveStages.map((s) => (
@@ -36,7 +41,7 @@ export function GrowthPage({ db }: { db: DB }) {
             ))}
           </tr>
         ))}
-      </table>
+      </Table>
     </div>
   );
 }
@@ -56,7 +61,7 @@ export function UsagePage({ db }: { db: DB }) {
   return (
     <div>
       {intro && <p>{intro}</p>}
-      <table>
+      <Table>
         <tr>
           <th>Cohort</th>
           <th>Invite sent</th>
@@ -72,7 +77,7 @@ export function UsagePage({ db }: { db: DB }) {
             <td>
               <a href={`#cohort-${c.number}`}>Cohort {c.number}</a>
             </td>
-            <td>{c.invite_sent_on ?? ""}</td>
+            <td class="date">{c.invite_sent_on ?? ""}</td>
             <td class="num">{c.users}</td>
             <td class="num">{c.rows.length}</td>
             <td class="num">{c.signedIn}</td>
@@ -81,12 +86,12 @@ export function UsagePage({ db }: { db: DB }) {
             <td class="num">{c.medianInviteToSignin ?? ""}</td>
           </tr>
         ))}
-      </table>
+      </Table>
       {cs.map((c) => (
         <div id={`cohort-${c.number}`}>
           <h2>Cohort {c.number}</h2>
           {c.how_chosen && <p>{c.how_chosen}</p>}
-          <table>
+          <Table>
             <tr>
               <th>Company</th>
               <th>Users</th>
@@ -103,9 +108,9 @@ export function UsagePage({ db }: { db: DB }) {
                   <CompanyLink id={r.company_id} name={r.company} />
                 </td>
                 <td>{r.users.join(", ")}</td>
-                <td>{r.signup ?? ""}</td>
-                <td>{r.scheduled ?? ""}</td>
-                <td>{r.invite ?? ""}</td>
+                <td class="date">{r.signup ?? ""}</td>
+                <td class="date">{r.scheduled ?? ""}</td>
+                <td class="date">{r.invite ?? ""}</td>
                 <td class="num">{r.daysSignupToInvite ?? ""}</td>
                 <td>
                   {r.firstSignin ?? ""}
@@ -114,12 +119,12 @@ export function UsagePage({ db }: { db: DB }) {
                 <td class="num">{r.daysInviteToSignin ?? ""}</td>
               </tr>
             ))}
-          </table>
+          </Table>
           {c.notes_md && <pre>{c.notes_md}</pre>}
         </div>
       ))}
       <h2>Actively using</h2>
-      <table>
+      <Table>
         <tr>
           <th>Company</th>
           <th>First sign-in</th>
@@ -135,7 +140,7 @@ export function UsagePage({ db }: { db: DB }) {
             </td>
           </tr>
         ))}
-      </table>
+      </Table>
       <p class="small muted">Record a sign-in from the company page. Reported use means someone told us they use it; product login means we saw the sign-in.</p>
       {how && (
         <details>
@@ -164,17 +169,17 @@ export function SubmissionsPage({ db, disposition }: { db: DB; disposition?: str
         Every form submission is kept. Counted submissions created a company; stacked ones added a person to a company already tracked. This page shows the rest by default:
         excluded, repeat and held submissions, each with its reason.
       </p>
-      <p>
+      <div class="tabs">
         <a class={`pill ${!disposition ? "on" : ""}`} href="/submissions">
           Not counted
         </a>
         {counts.map((c) => (
           <a class={`pill ${disposition === c.disposition ? "on" : ""}`} href={`/submissions?d=${c.disposition}`}>
-            {c.disposition} ({c.n})
+            {c.disposition} <span class="count">{c.n}</span>
           </a>
         ))}
-      </p>
-      <table>
+      </div>
+      <Table>
         <tr>
           <th>Submitted</th>
           <th>Name</th>
@@ -185,7 +190,7 @@ export function SubmissionsPage({ db, disposition }: { db: DB; disposition?: str
         </tr>
         {rows.map((r) => (
           <tr>
-            <td>{r.submitted_at ?? <span class="muted">not recorded</span>}</td>
+            <td class="date">{r.submitted_at ?? <span class="muted">not recorded</span>}</td>
             <td>{r.person_name}</td>
             <td>{r.company_id ? <CompanyLink id={r.company_id} name={r.company!} /> : ""}</td>
             <td>{r.form_company_field ?? ""}</td>
@@ -196,7 +201,7 @@ export function SubmissionsPage({ db, disposition }: { db: DB; disposition?: str
             <td class="small">{r.reason ?? ""}</td>
           </tr>
         ))}
-      </table>
+      </Table>
     </div>
   );
 }
@@ -218,7 +223,7 @@ export function ActivityPage({ db, f }: { db: DB; f: { actor?: string; run?: str
   return (
     <div>
       <h2>Runs</h2>
-      <table>
+      <Table>
         <tr>
           <th>Run</th>
           <th>Kind</th>
@@ -239,8 +244,8 @@ export function ActivityPage({ db, f }: { db: DB; f: { actor?: string; run?: str
               {r.dry_run ? " (dry run)" : ""}
             </td>
             <td>{r.actor}</td>
-            <td class="small">{r.started_at}</td>
-            <td class="small">{r.finished_at ?? ""}</td>
+            <td class="small date">{r.started_at}</td>
+            <td class="small date">{r.finished_at ?? ""}</td>
             <td>{r.status}</td>
             <td class="num">{r.n}</td>
             <td class="small">
@@ -253,9 +258,9 @@ export function ActivityPage({ db, f }: { db: DB; f: { actor?: string; run?: str
             </td>
           </tr>
         ))}
-      </table>
+      </Table>
       <h2>Changes {f.run ? `in run ${f.run}` : f.actor ? `by ${f.actor}` : ""}</h2>
-      <p>
+      <div class="tabs">
         <a class={`pill ${!f.actor && !f.run ? "on" : ""}`} href="/activity">
           All
         </a>
@@ -264,9 +269,11 @@ export function ActivityPage({ db, f }: { db: DB; f: { actor?: string; run?: str
             {a}
           </a>
         ))}
-        <span class="small muted"> The import wrote {importCount} rows; they are not listed.</span>
-      </p>
-      <table>
+        <span class="small muted" style="margin-left:8px">
+          The import wrote {importCount} rows; they are not listed.
+        </span>
+      </div>
+      <Table>
         <tr>
           <th>When</th>
           <th>Actor</th>
@@ -276,7 +283,7 @@ export function ActivityPage({ db, f }: { db: DB; f: { actor?: string; run?: str
         </tr>
         {changes.map((c) => (
           <tr>
-            <td class="small">{c.at}</td>
+            <td class="small date">{c.at}</td>
             <td class="small">
               {c.actor}
               {c.run_id ? ` (run ${c.run_id})` : ""}
@@ -285,13 +292,13 @@ export function ActivityPage({ db, f }: { db: DB; f: { actor?: string; run?: str
             <td>
               {c.entity} {c.action}
             </td>
-            <td class="small">
+            <td class="json">
               {c.before_json ?? ""} → {c.after_json ?? ""}
               {c.reason && <div>reason: {c.reason}</div>}
             </td>
           </tr>
         ))}
-      </table>
+      </Table>
     </div>
   );
 }
@@ -305,7 +312,7 @@ export function ExportsPage({ db }: { db: DB }) {
         Same format as <code>external-interest-contacts.csv</code>: Company, Name, Email, Status, every field quoted. This list is every company still at Interested whose primary
         contact has an email and is not marked do not email.
       </p>
-      <table>
+      <Table>
         <tr>
           <th>Company</th>
           <th>Name</th>
@@ -320,33 +327,49 @@ export function ExportsPage({ db }: { db: DB }) {
             <td>{r.status}</td>
           </tr>
         ))}
-      </table>
+      </Table>
       {mm.skipped.length > 0 && <p class="small muted">Skipped: {mm.skipped.join("; ")}</p>}
-      <p>
-        <a href="/exports/mail-merge.csv">Download CSV</a>{" "}
+      <div class="actions">
+        <a href="/exports/mail-merge.csv" class="button primary">
+          Download CSV
+        </a>
         <form method="post" action="/exports/mail-merge" class="inline">
-          <button>Write to {MAIL_MERGE_PATH}</button>
+          <button>Write to mail-merge file</button>
         </form>
-      </p>
+        <span class="small muted">
+          <code>{MAIL_MERGE_PATH}</code>
+        </span>
+      </div>
       {mm.rows.length > 0 && (
-        <form method="post" action="/exports/mark-emailed">
-          After sending: record the intro email to these {mm.rows.length} contacts on <input type="date" name="date" value={today()} /> <button>Mark as emailed</button>
+        <form method="post" action="/exports/mark-emailed" class="card row">
+          <span class="muted">After sending, record the intro email to these {mm.rows.length} contacts on</span>
+          <input type="date" name="date" value={today()} /> <button>Mark as emailed</button>
         </form>
       )}
-      <h2>Snapshot</h2>
-      <p>
-        The read-only markdown snapshot for skills that read the tracker is rewritten after every change. Path: <code>{SNAPSHOT_PATH}</code>
-      </p>
-      <form method="post" action="/exports/snapshot">
-        <button>Regenerate now</button>
-      </form>
-      <h2>Backup</h2>
-      <p>
-        Database: <code>{DB_PATH}</code>. Backups go to <code>backups/</code> in the app folder.
-      </p>
-      <form method="post" action="/exports/backup">
-        <button>Back up now</button>
-      </form>
+      <div class="grid">
+        <div class="card">
+          <h3 style="margin-top:0">Snapshot</h3>
+          <p class="small">The read-only markdown snapshot for skills that read the tracker is rewritten after every change.</p>
+          <p class="small">
+            <code>{SNAPSHOT_PATH}</code>
+          </p>
+          <form method="post" action="/exports/snapshot">
+            <button>Regenerate now</button>
+          </form>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">Backup</h3>
+          <p class="small">
+            Backups go to <code>backups/</code> in the app folder. Database:
+          </p>
+          <p class="small">
+            <code>{DB_PATH}</code>
+          </p>
+          <form method="post" action="/exports/backup">
+            <button>Back up now</button>
+          </form>
+        </div>
+      </div>
       <h2>Paths</h2>
       <p class="small">
         Audit log: <code>{AUDIT_LOG_PATH}</code>
@@ -370,7 +393,7 @@ export function NotesPage({ db }: { db: DB }) {
             <textarea name="body" style="min-height:90px">
               {n.body_md}
             </textarea>
-            <button>Save</button>
+            <button class="primary">Save</button>
           </form>
         </fieldset>
       ))}
