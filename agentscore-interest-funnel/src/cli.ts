@@ -53,7 +53,7 @@ Writes (all need --run when --actor sync-agent)
   research add --company <id> --field <what_they_do|likely_use_case|known_agent_tooling|...>
                --body <text|@file> [--source <url> ...] [--label <raw label>]
   salesforce set --company <id> --json <file|->       {"status": "...", "accounts": [...], "note": "..."}
-  touchpoint add --company <id> [--person <email|id>] --kind <intro_email|follow_up|reply_received|our_reply|
+  touchpoint add --company <id> [--person <email|id>] --kind <intro_email|follow_up|reply_received|our_reply|account_owner_reached_out|
                demo_scheduled|beta_invite|beta_checkin|opt_out|other> [--date YYYY-MM-DD] --source <inbox|sent_items|manual> [--note <t>]
   stage set --company <id> --stage <id> [--date] [--note] [--reason]
   signin add --company <id> [--person <email|id>] --date YYYY-MM-DD [--kind product_login|reported_use] [--note]

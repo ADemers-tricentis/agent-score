@@ -408,7 +408,7 @@ export function CompanyPage({ db, id }: { db: DB; id: number }) {
             <legend>Record a touchpoint</legend>
             <form method="post" action={post("touchpoint")}>
               <select name="kind">
-                {["intro_email", "follow_up", "reply_received", "our_reply", "demo_scheduled", "beta_invite", "beta_checkin", "opt_out", "other"].map((k) => (
+                {["intro_email", "follow_up", "reply_received", "our_reply", "account_owner_reached_out", "demo_scheduled", "beta_invite", "beta_checkin", "opt_out", "other"].map((k) => (
                   <option value={k}>{k.replace(/_/g, " ")}</option>
                 ))}
               </select>{" "}
