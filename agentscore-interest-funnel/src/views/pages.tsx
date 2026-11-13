@@ -1,75 +1,29 @@
+import { raw } from "hono/html";
 import { mentions } from "../auditlog.ts";
 import { all, one, type DB } from "../db.ts";
-import { companiesAtStage, funnelCounts } from "../queries.ts";
-import { leads, noReplyDays, ownerText, timeline, type Lead } from "../read.ts";
+import { companiesAtStage, currentStages, funnelCounts } from "../queries.ts";
+import { growth, leads, noReplyDays, ownerText, timeline, type Lead } from "../read.ts";
 import { stageLabel } from "../stages.ts";
-import { Bar, CompanyLink, Md, Stage, StageSelect, Stat, Status, Table } from "./ui.tsx";
+import { Bar, CompanyLink, lineChart, Md, Stage, StageSelect, Stat, Status, Table } from "./ui.tsx";
 
 export const today = () => new Date().toISOString().slice(0, 10);
 
-export function FunnelPage({ db }: { db: DB }) {
-  const counts = funnelCounts(db);
+const CHIP_LIMIT = 10;
+
+export function OutsideFunnel({ db }: { db: DB }) {
   const exits = all<{ company_id: number; name: string; stage: string; occurred_on: string | null; note: string | null }>(
     db,
     `SELECT c.id AS company_id, c.name, se.stage, se.occurred_on, se.note FROM company c
      JOIN stage_event se ON se.id = (SELECT max(id) FROM stage_event WHERE company_id = c.id)
-     WHERE se.stage IN ('not_a_fit', 'do_not_email') AND c.merged_into_id IS NULL`,
+     WHERE se.stage IN ('not_a_fit', 'do_not_email') AND c.merged_into_id IS NULL
+     ORDER BY se.occurred_on DESC`,
   );
-  const max = Math.max(1, ...counts.stages.map((s) => s.cumulative));
-  const cum = (id: string) => counts.stages.find((s) => s.id === id)!;
   return (
-    <div>
-      <div class="stats">
-        <Stat value={counts.total} label="Companies in the funnel" href="/leads" />
-        <Stat value={cum("email_sent").cumulative} label="Emailed" href="/stage/email_sent?mode=cumulative" />
-        <Stat value={cum("replied").cumulative} label="Replied or further" href="/stage/replied?mode=cumulative" />
-        <Stat value={cum("invited_to_beta").cumulative} label="Invited to beta" href="/stage/invited_to_beta?mode=cumulative" />
-        <Stat value={cum("actively_using").current} label="Actively using" href="/stage/actively_using?mode=current" />
-      </div>
-      <div class="panel">
-        <div class="section-head">
-          <p class="small">Current counts companies whose latest stage is that stage. Cumulative counts companies at that stage or a later one. Click a number to see the companies.</p>
-          <div class="legend">
-            <span>
-              <i style="background:#5e6ad2" />
-              Current
-            </span>
-            <span>
-              <i style="background:rgba(94,106,210,.35)" />
-              Cumulative
-            </span>
-          </div>
-        </div>
-        <Table class="funnel">
-          <tr>
-            <th>Stage</th>
-            <th class="num">Current</th>
-            <th class="num">Cumulative</th>
-            <th class="num">Share</th>
-            <th></th>
-          </tr>
-          {counts.stages.map((s) => (
-            <tr>
-              <td>
-                <Stage stage={s.id} />
-              </td>
-              <td class="num">
-                <a href={`/stage/${s.id}?mode=current`}>{s.current}</a>
-              </td>
-              <td class="num">
-                <a href={`/stage/${s.id}?mode=cumulative`}>{s.cumulative}</a>
-              </td>
-              <td class="num muted">{counts.total ? `${Math.round((s.cumulative / counts.total) * 100)}%` : ""}</td>
-              <td class="bar-cell">
-                <Bar n={s.current} cumulative={s.cumulative} max={max} />
-              </td>
-            </tr>
-          ))}
-        </Table>
-      </div>
+    <div id="outside">
       <h2>Outside the funnel</h2>
       <p class="small">
-        {counts.exited.not_a_fit} not a fit and {counts.exited.do_not_email} do not email. They keep their history but are not counted above.
+        {exits.filter((e) => e.stage === "not_a_fit").length} not a fit and {exits.filter((e) => e.stage === "do_not_email").length} do not
+        email. They keep their history but are not counted in the funnel.
       </p>
       <Table>
         <tr>
@@ -91,6 +45,135 @@ export function FunnelPage({ db }: { db: DB }) {
           </tr>
         ))}
       </Table>
+    </div>
+  );
+}
+
+export function FunnelPage({ db }: { db: DB }) {
+  const counts = funnelCounts(db);
+  const g = growth(db, today());
+  const rows = currentStages(db);
+  const cum = (id: string) => counts.stages.find((s) => s.id === id)!;
+  const outside = counts.exited.not_a_fit + counts.exited.do_not_email;
+  const everTracked = counts.total + outside;
+  const pct = (n: number) => (everTracked ? Math.round((n / everTracked) * 100) : 0);
+  return (
+    <div>
+      <div class="dash">
+        <div class="dash-left">
+        <div class="panel">
+          <div class="section-head">
+            <span class="eyebrow">Lead growth over time</span>
+            <span class="small muted">
+              {g.undatedCompanies} {g.undatedCompanies === 1 ? "company has" : "companies have"} no signup date and {g.undatedCompanies === 1 ? "is" : "are"} not charted
+            </span>
+          </div>
+          <div class="kpis">
+            <div>
+              <b>{counts.total}</b>
+              <span>In the funnel</span>
+            </div>
+            <div>
+              <b>{cum("replied").cumulative}</b>
+              <span>Replied or further</span>
+            </div>
+            <div>
+              <b>{cum("invited_to_beta").cumulative}</b>
+              <span>Invited to beta</span>
+            </div>
+            <div>
+              <b>{cum("actively_using").current}</b>
+              <span>Actively using</span>
+            </div>
+          </div>
+          {raw(lineChart(g.weeks.map((w) => ({ x: w.week, y: w.cumulative })), { label: "Cumulative companies", height: 340 }))}
+        </div>
+        <div class="panel">
+          <div class="section-head">
+            <p class="small">Current counts companies whose latest stage is that stage. Cumulative counts companies at that stage or a later one. Click a number to see the companies.</p>
+            <div class="legend">
+              <span>
+                <i style="background:#5e6ad2" />
+                Current
+              </span>
+              <span>
+                <i style="background:rgba(94,106,210,.35)" />
+                Cumulative
+              </span>
+            </div>
+          </div>
+          <Table class="funnel">
+            <tr>
+              <th>Stage</th>
+              <th class="num">Current</th>
+              <th class="num">Cumulative</th>
+              <th class="num">Share</th>
+              <th></th>
+            </tr>
+            {counts.stages.map((s) => (
+              <tr>
+                <td>
+                  <Stage stage={s.id} />
+                </td>
+                <td class="num">
+                  <a href={`/stage/${s.id}?mode=current`}>{s.current}</a>
+                </td>
+                <td class="num">
+                  <a href={`/stage/${s.id}?mode=cumulative`}>{s.cumulative}</a>
+                </td>
+                <td class="num muted">{counts.total ? `${Math.round((s.cumulative / counts.total) * 100)}%` : ""}</td>
+                <td class="bar-cell">
+                  <Bar n={s.current} cumulative={s.cumulative} max={Math.max(1, ...counts.stages.map((x) => x.cumulative))} />
+                </td>
+              </tr>
+            ))}
+          </Table>
+        </div>
+        </div>
+        <div class="panel">
+          <div class="section-head">
+            <span class="eyebrow">Pipeline funnel</span>
+            <span class="small muted">{today()}</span>
+          </div>
+          <div class="pf">
+            <a class="pf-total" href="/leads">
+              <span>Total tracked</span>
+              <b>{everTracked}</b>
+            </a>
+            <div class="pf-split">
+              <a class="in" href="/leads">
+                {counts.total} in pipeline <i>{pct(counts.total)}%</i>
+              </a>
+              <a class="out" href="/leads#outside">
+                {outside} outside <i>{pct(outside)}%</i>
+              </a>
+            </div>
+            {counts.stages.map((s) => {
+              const at = rows.filter((r) => r.stage === s.id);
+              return (
+                <div class="pf-step">
+                  <a class={`pf-box s-${s.id}`} href={`/stage/${s.id}?mode=current`}>
+                    <span>{s.label}</span>
+                    <b>{s.current}</b>
+                  </a>
+                  <div class="chips">
+                    {at.slice(0, CHIP_LIMIT).map((r) => (
+                      <a class="chip" href={`/company/${r.company_id}`}>
+                        {r.name}
+                      </a>
+                    ))}
+                    {at.length > CHIP_LIMIT && (
+                      <a class="chip more" href={`/stage/${s.id}?mode=current`}>
+                        +{at.length - CHIP_LIMIT} more
+                      </a>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -249,6 +332,7 @@ export function LeadsPage({ db, f }: { db: DB; f: LeadFilters }) {
         </a>
       </div>
       <LeadTable rows={rows} showNoReply={!!f.noreply} />
+      <OutsideFunnel db={db} />
     </div>
   );
 }
