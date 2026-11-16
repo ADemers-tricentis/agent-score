@@ -67,7 +67,8 @@ export default function ScoringEngine() {
         agent Settings tab as Model connection, the <strong>Cost</strong> section takes an input
         and an output rate (dollars per 1M tokens). Changing a rate restates every run already in
         the window, so the usage cost you see always reflects your current rate, not whatever rate
-        was in effect when a given trace arrived.
+        was in effect when a given trace arrived. For an agent that runs as a Tricentis service,
+        Tricentis pays for its usage, and the Cost section says there are no rates to configure.
       </p>
       <Screenshot
         src={agentCostRateSettings}

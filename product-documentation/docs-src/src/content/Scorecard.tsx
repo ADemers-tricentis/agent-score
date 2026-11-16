@@ -66,6 +66,21 @@ export default function Scorecard() {
         composite score itself does.
       </p>
 
+      <h2>When the score is provisional</h2>
+      <p>
+        Sometimes too few of the profile's evaluations can produce a score on an agent's traces.
+        The run then counts as <strong>provisional</strong>. The Score tab shows a grey dial with
+        a question mark instead of the number, and says "too few of the profile's evaluations
+        produced a score". The band the composite falls in is still shown beside it. On{" "}
+        <strong>My Agents</strong> and in the activity feed, the run reads{" "}
+        <strong>Provisional</strong> next to its composite.
+      </p>
+      <p>
+        Below the dial, a dimension whose evaluations couldn't run on this agent is listed as{" "}
+        <strong>excluded</strong>. It still carries weight in the profile, but the composite is
+        the weighted mean of only the dimensions that did score.
+      </p>
+
       <h2>Every number is evidence-backed</h2>
       <p>
         The dimension breakdown isn't a black box - each bar traces back to the evals that fed it,

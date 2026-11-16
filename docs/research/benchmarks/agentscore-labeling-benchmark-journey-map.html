@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgentScore journey map · From labeling runs to a benchmark test set</title>
+<style>
+:root{
+  --blue:#2f6fb6;--blue-d:#24599a;--ink:#1f2937;--muted:#6b7280;--faint:#9ca3af;
+  --line:#e5e7eb;--line2:#f1f2f4;--bg:#f4f5f7;
+  --new:#7c3aed;--new-bg:#efe7fe;
+  --good:#166534;--good-bg:#e3f4e9;--warn:#b45309;--warn-bg:#fdf1dc;
+  --bad:#b91c1c;--bad-bg:#fde8e8;--ex:#c2410c;--ex-bg:#fdebe3;
+  --calc:#1e40af;--calc-bg:#e8eefb;--note:#fff8db;--note-line:#f0d77a;
+  --col:260px;--lab:190px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;word-break:break-all}
+header.top{background:#fff;border-bottom:1px solid var(--line);padding:20px 28px}
+header.top h1{font-size:20px;margin:0 0 4px}
+header.top .lede{color:#374151;margin:0;max-width:980px}
+.wrap{padding:20px 28px 48px}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:18px}
+@media (max-width:1200px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card h3{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.card p,.card ul{margin:0;font-size:13px}
+.card ul{padding-left:18px}
+.card li{margin-bottom:3px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:12.5px;color:#374151;margin:0 0 12px}
+.tag{display:inline-block;font-size:11px;padding:1px 8px;border-radius:10px;font-weight:500;white-space:nowrap;vertical-align:1px}
+.tag.today{background:var(--good-bg);color:var(--good)}
+.tag.new{background:var(--new-bg);color:var(--new)}
+.tag.mixed{background:var(--calc-bg);color:var(--calc)}
+.tag.ex{background:var(--ex-bg);color:var(--ex)}
+.tag.calc{background:#eef0f3;color:#374151;border:1px solid #d6dae0}
+.tag.asm{background:var(--note);color:#6b5400;border:1px solid var(--note-line)}
+.gap{display:inline-block;font-size:11px;padding:1px 7px;border-radius:5px;background:var(--new-bg);color:var(--new);font-weight:500;margin-top:3px}
+.gap.off{background:#fff;color:var(--muted);border:1px dashed #c4c8cf}
+
+/* ---------- swimlane ---------- */
+.scroller{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+table.lane{border-collapse:separate;border-spacing:0;table-layout:fixed;width:calc(var(--lab) + 8 * var(--col))}
+table.lane col.l{width:var(--lab)}
+table.lane col.s{width:var(--col)}
+table.lane th,table.lane td{border-bottom:1px solid var(--line);border-right:1px solid var(--line2);vertical-align:top;padding:10px 12px;font-size:12.8px;text-align:left}
+table.lane th.rl{position:sticky;left:0;z-index:2;background:#fafbfc;font-weight:600;font-size:12px;color:#374151;border-right:1px solid var(--line)}
+table.lane th.rl small{display:block;font-weight:400;color:var(--muted);margin-top:2px}
+table.lane ul{margin:0;padding-left:16px}
+table.lane li{margin-bottom:4px}
+tr.curve td{padding:0;border-bottom:1px solid var(--line)}
+tr.curve th.rl{padding:0}
+tr.stage td{background:#f8fafc}
+.sn{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font-size:11.5px;font-weight:600;margin-right:6px;vertical-align:1px}
+.stname{font-size:14px;font-weight:600}
+.stmeta{color:var(--muted);font-size:11.5px;margin-top:3px}
+tr.think td{font-style:italic;color:#374151}
+.emo{display:flex;gap:8px;align-items:flex-start}
+.emo b{display:inline-grid;place-items:center;min-width:26px;height:26px;border-radius:50%;font-style:normal;font-size:12.5px;color:#fff}
+.e1{background:#b91c1c}.e2{background:#dc6b2f}.e3{background:#9ca3af}.e4{background:#3f8f5b}.e5{background:#166534}
+tr.pain-today td{background:#fffafa}
+tr.pain-still td{background:#fffcf5}
+tr.pm td{background:var(--note);color:#4a3b00;font-size:12px}
+tr.pm th.rl{background:#fdf4cf}
+.low{outline:2px solid var(--bad);outline-offset:-2px}
+
+/* ---------- below the grid ---------- */
+h2{font-size:17px;margin:28px 0 10px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 20px}
+.lows{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:1000px){.lows{grid-template-columns:1fr}}
+.lowc{background:#fff;border:1px solid var(--line);border-left:4px solid var(--bad);border-radius:8px;padding:12px 14px;font-size:13px}
+.lowc h4{margin:0 0 4px;font-size:14px}
+table.rank{border-collapse:collapse;width:100%;font-size:13px}
+table.rank th,table.rank td{border-bottom:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
+table.rank th{font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600}
+table.rank td.n{font-weight:700;font-size:16px;color:var(--blue-d);width:36px}
+ol.oq{margin:0;padding-left:22px;font-size:13px}
+ol.oq li{margin-bottom:8px}
+.foot{color:var(--muted);font-size:12px;margin-top:22px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1>From labeling runs to a benchmark test set: the domain expert's journey</h1>
+  <p class="lede">An SAP business user decides they want a release gate for <span class="mono" style="word-break:normal">testcase.generate</span> (tenant <span class="mono" style="word-break:normal">tais</span>) and follows it through to reading the first 20-test pilot run. The map follows one real run, the blocked customer in VA01, as it becomes test <span class="mono" style="word-break:normal">tcg-va01-blocked-customer-001</span>. Stages group the 14 workflow steps in <span class="mono" style="word-break:normal">agentscore-benchmark-workflow.md</span>. Screens and wording come from <span class="mono" style="word-break:normal">agentscore-benchmark-screens-va01.md</span>.</p>
+</header>
+
+<div class="wrap">
+
+<div class="cards">
+  <div class="card">
+    <h3>Primary persona</h3>
+    <p><b>SAP domain expert</b>, semi- or non-technical. Has 8 hours in week 1, then 2 hours a week. Talks about runs, tests, the test set, the practice set and the exam set, never traces, tasks or splits.</p>
+  </div>
+  <div class="card">
+    <h3>Secondary persona</h3>
+    <p><b>Engineer</b> who owns the SAP test system, the test runner and the automated graders. Shown only where the expert hands work to them or waits on them.</p>
+  </div>
+  <div class="card">
+    <h3>Worked example</h3>
+    <p>Run <span class="mono">5cb1fcc44fa472fa7b10beb95fe03387</span>. SAP warned that the customer had an Overall order block. The agent re-entered Ship-To about 12 times, asked for help, got no answer in 600 seconds, and the run stopped. It scored task success 50 and followed instructions 60. It becomes a practice-set test.</p>
+  </div>
+  <div class="card">
+    <h3>Three things this map surfaces</h3>
+    <ul>
+      <li><b>Week 1 doesn't fit in 8 hours.</b> The spec and 45 labels alone take about 6.7 hours <span class="tag calc">calculated</span>, before picking runs, approving 20 tests and reading grader disagreements.</li>
+      <li><b>The pilot can't gate a release.</b> The doc says it takes 50 exam tests to spot a 12-point drop. The pilot has 20 tests in total.</li>
+      <li><b>The $45 limit covers agent runs only.</b> Grading could add up to $135 <span class="tag calc">calculated</span>.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="legend">
+  <span><span class="tag today">exists today</span> in AgentScore now</span>
+  <span><span class="tag new">new</span> proposed in the screens mock</span>
+  <span><span class="tag mixed">today + new</span> existing page with new parts</span>
+  <span><span class="tag ex">example</span> illustrative, not real data</span>
+  <span><span class="tag calc">calculated</span> arithmetic on numbers in the sources</span>
+  <span><span class="tag asm">assumption</span> not stated in the sources</span>
+  <span><span class="gap">Build gap</span> item from "What AgentScore would need to build"</span>
+  <span><span class="gap off">Not on build list</span> proposed addition</span>
+</div>
+
+<div class="scroller">
+<table class="lane">
+<colgroup><col class="l"><col class="s"><col class="s"><col class="s"><col class="s"><col class="s"><col class="s"><col class="s"><col class="s"></colgroup>
+
+<!-- ======== emotion curve ======== -->
+<tr class="curve">
+  <th class="rl">
+    <svg width="190" height="170" viewBox="0 0 190 170" aria-hidden="true">
+      <text x="12" y="16" font-size="11" font-weight="600" fill="#374151">Emotion</text>
+      <text x="12" y="29" font-size="10" fill="#6b7280">proposed flow</text>
+      <g font-size="10.5" fill="#6b7280" text-anchor="end">
+        <text x="180" y="24">5 Delighted</text>
+        <text x="180" y="54">4 Positive</text>
+        <text x="180" y="84">3 Neutral</text>
+        <text x="180" y="114">2 Frustrated</text>
+        <text x="180" y="144">1 Very frustrated</text>
+      </g>
+    </svg>
+  </th>
+  <td colspan="8">
+    <svg width="2080" height="170" viewBox="0 0 2080 170" role="img" aria-label="Emotion curve across the eight stages: 4, 4, 3, 3, 2, 4, 2, 2">
+      <g stroke="#eef0f3" stroke-width="1">
+        <line x1="0" y1="20" x2="2080" y2="20"/><line x1="0" y1="50" x2="2080" y2="50"/>
+        <line x1="0" y1="80" x2="2080" y2="80" stroke="#e1e4e8" stroke-dasharray="4 4"/>
+        <line x1="0" y1="110" x2="2080" y2="110"/><line x1="0" y1="140" x2="2080" y2="140"/>
+      </g>
+      <path d="M130,50 C260,50 260,50 390,50 C520,50 520,80 650,80 C780,80 780,80 910,80 C1040,80 1040,110 1170,110 C1300,110 1300,50 1430,50 C1560,50 1560,110 1690,110 C1820,110 1820,110 1950,110 L1950,150 L130,150 Z" fill="rgba(47,111,182,.07)"/>
+      <path d="M130,50 C260,50 260,50 390,50 C520,50 520,80 650,80 C780,80 780,80 910,80 C1040,80 1040,110 1170,110 C1300,110 1300,50 1430,50 C1560,50 1560,110 1690,110 C1820,110 1820,110 1950,110" fill="none" stroke="#2f6fb6" stroke-width="2.5"/>
+      <g font-size="12" font-weight="600" text-anchor="middle" fill="#fff">
+        <circle cx="130" cy="50" r="13" fill="#3f8f5b"/><text x="130" y="54">4</text>
+        <circle cx="390" cy="50" r="13" fill="#3f8f5b"/><text x="390" y="54">4</text>
+        <circle cx="650" cy="80" r="13" fill="#9ca3af"/><text x="650" y="84">3</text>
+        <circle cx="910" cy="80" r="13" fill="#9ca3af"/><text x="910" y="84">3</text>
+        <circle cx="1170" cy="110" r="18" fill="none" stroke="#b91c1c" stroke-width="2"/>
+        <circle cx="1170" cy="110" r="13" fill="#dc6b2f"/><text x="1170" y="114">2</text>
+        <circle cx="1430" cy="50" r="13" fill="#3f8f5b"/><text x="1430" y="54">4</text>
+        <circle cx="1690" cy="110" r="18" fill="none" stroke="#b91c1c" stroke-width="2"/>
+        <circle cx="1690" cy="110" r="13" fill="#dc6b2f"/><text x="1690" y="114">2</text>
+        <circle cx="1950" cy="110" r="18" fill="none" stroke="#b91c1c" stroke-width="2"/>
+        <circle cx="1950" cy="110" r="13" fill="#dc6b2f"/><text x="1950" y="114">2</text>
+      </g>
+      <g font-size="11" font-weight="600" fill="#b91c1c" text-anchor="middle">
+        <text x="1690" y="146">Low point 1</text>
+        <text x="1950" y="146">Low point 2</text>
+        <text x="1170" y="146">Low point 3</text>
+      </g>
+      <g font-size="10.5" fill="#6b7280" text-anchor="middle">
+        <text x="130" y="30">Hopeful</text><text x="390" y="30">Recognized</text>
+        <text x="650" y="60">Tedious</text><text x="910" y="60">Capable, busy</text>
+        <text x="1430" y="30">Progress</text>
+      </g>
+    </svg>
+  </td>
+</tr>
+
+<!-- ======== stage headers ======== -->
+<tr class="stage">
+  <th class="rl">Stage<small>Workflow steps · pilot day</small></th>
+  <td><span class="sn">1</span><span class="stname">Decide and set up</span><div class="stmeta">Steps 0–3 · Day 1 · Screen 1</div></td>
+  <td><span class="sn">2</span><span class="stname">Choose tasks</span><div class="stmeta">Steps 2, 4, 11 · Day 1 · Screen 2</div></td>
+  <td><span class="sn">3</span><span class="stname">Pick runs</span><div class="stmeta">Step 4 · Day 1 · Screen 3</div></td>
+  <td><span class="sn">4</span><span class="stname">Label what happened</span><div class="stmeta">Steps 5, 6 · Days 2 and 4 · Screen 4</div></td>
+  <td><span class="sn">5</span><span class="stname">Label what it should have done</span><div class="stmeta">Step 6 · Days 2 and 4 · Screen 5</div></td>
+  <td><span class="sn">6</span><span class="stname">Review the test</span><div class="stmeta">Steps 8, 12 · Day 3 · Screen 6</div></td>
+  <td><span class="sn">7</span><span class="stname">Wait on the engineer</span><div class="stmeta">Steps 7, 9, 10, 12 · Days 2–5 · Screen 7</div></td>
+  <td><span class="sn">8</span><span class="stname">Run and read results</span><div class="stmeta">Steps 12, 13 · Day 5 · not in the mock</div></td>
+</tr>
+
+<!-- ======== goal ======== -->
+<tr>
+  <th class="rl">Goal</th>
+  <td>Get a fixed set of tests to run before every release, without having to become an engineer.</td>
+  <td>Make sure the tests cover the jobs the agent really does, in proportion to how often it does them.</td>
+  <td>Pick real runs worth turning into tests: some that went fine, some that went wrong, some unusual.</td>
+  <td>Say whether the agent did the right thing, and whose fault each problem was.</td>
+  <td>Write down what only they know: what "done right" looks like, so a test can check it.</td>
+  <td>Check that each test says what they meant before it goes into the set.</td>
+  <td>Get the tests ready to run, and help when the engineer asks.</td>
+  <td>See whether the agent passes, and decide what happens next.</td>
+</tr>
+
+<!-- ======== actions ======== -->
+<tr>
+  <th class="rl">What they do</th>
+  <td><ul>
+    <li>Opens the agent and starts a test set.</li>
+    <li>Answers four questions. Purpose: check each release. Tests: 20. Runs per test: 3. Spending limit: $45 for one full run.</li>
+    <li>Chooses where tests come from: the agent's own runs, published tests from the industry, and generated variations.</li>
+  </ul></td>
+  <td><ul>
+    <li>Checks the list of jobs AgentScore found in the agent's runs. Example: creating a sales order in VA01 is 41% of runs <span class="tag ex">example</span>.</li>
+    <li>Adds a job the list missed, if there is one.</li>
+    <li>Accepts how many tests each job gets and where they'll come from.</li>
+    <li>Where a job has too few real runs, asks for generated drafts and reviews each one.</li>
+  </ul></td>
+  <td><ul>
+    <li>Works through suggested runs, filtered into went fine, went wrong and unusual. AgentScore aims for 60 candidates for the 20 tests.</li>
+    <li>Opens a group of near-identical runs and confirms they're the same situation. Splits out the one that saved the order.</li>
+    <li>Skips or keeps runs marked "likely a system problem."</li>
+    <li>Adds the blocked-customer run (5 similar runs grouped) to labeling.</li>
+  </ul></td>
+  <td><ul>
+    <li>Reads a plain, step-by-step summary of the run: opened the sales order screen, SAP warned of an Overall order block, the agent re-entered Ship-To about 12 times, asked for help, nobody answered for 600 seconds, and the run stopped.</li>
+    <li>Answers "Did the agent do the right thing?" with No.</li>
+    <li>Confirms AgentScore's guess for each problem: the retries were the agent's mistake, and the missing answer was a system problem.</li>
+  </ul></td>
+  <td><ul>
+    <li>Answers four questions. <b>True in SAP afterwards:</b> no order saved, and the customer is still blocked. <b>Should:</b> notice the block, ask once naming it, stop when told, and report it. <b>Never:</b> unblock the customer, keep changing things after "stop," or try Ship-To more than twice. <b>If asked:</b> "That customer is blocked on purpose. Do not change master data. Stop and tell me what you found."</li>
+    <li>Adds a second answer, "Use customer [another, unblocked test customer] instead," which makes a second test.</li>
+  </ul></td>
+  <td><ul>
+    <li>Reads the plain summary: what the agent is asked, what AgentScore answers if it asks for help, the pass list, and when a run doesn't count.</li>
+    <li>Sees the test is locked to the practice set, because the team already used this run in the testcase-generate workbook (scenario P02).</li>
+    <li>Approves the test. Repeats this for all 20 pilot tests.</li>
+  </ul></td>
+  <td><ul>
+    <li>Watches the test set fill up: 1 of 20 tests ready, 10 in progress <span class="tag ex">example</span>.</li>
+    <li>Keeps labeling while they wait.</li>
+    <li>When asked, reads the runs where the automated grader disagreed with their labels.</li>
+    <li>Settles tests flagged as "could be read two ways."</li>
+  </ul></td>
+  <td><ul>
+    <li>Run test set starts 20 tests × 3 runs each, about $45 of agent runs.</li>
+    <li>Reads two numbers: how often a test passes on a single try, and how many tests pass all 3 tries.</li>
+    <li>Checks how many runs didn't count because SAP or the connection was down.</li>
+    <li>Reads 10 runs, half passes and half fails, to catch checks that pass the wrong behavior <span class="tag asm">assumption: first done at the pilot</span>.</li>
+    <li>With the engineer, decides whether to grow to 80 tests or fix the test system first.</li>
+  </ul></td>
+</tr>
+
+<!-- ======== touchpoint ======== -->
+<tr>
+  <th class="rl">Touchpoint<small>AgentScore screen or tab</small></th>
+  <td><span class="tag new">new</span><br>Test sets tab on the agent: Start a test set.</td>
+  <td><span class="tag new">new</span><br>The test set's plan: Tasks this agent does.</td>
+  <td><span class="tag new">new</span><br>The test set's suggestions, with the "Are these the same situation?" group view.</td>
+  <td><span class="tag mixed">today + new</span><br>Labeling tab (exists today). The test-set filter, queue strip and "whose fault" question are new.</td>
+  <td><span class="tag mixed">today + new</span><br>Labeling tab (exists today). Four questions replace today's Expected outcome box.</td>
+  <td><span class="tag new">new</span><br>The test's page in the test set: Waiting for your approval.</td>
+  <td><span class="tag new">new</span><br>Test set overview, with the "Waiting on engineer" filter. Run test set stays off until 20 tests are ready.</td>
+  <td><span class="tag new">new</span> Run test set, plus a results view for one run of the test set (not in the mock).<br><span class="tag today">exists today</span> Scorecard.</td>
+</tr>
+
+<!-- ======== thinking ======== -->
+<tr class="think">
+  <th class="rl" style="font-style:normal">What they're thinking</th>
+  <td>"I just want to know a new release won't break sales orders before it goes out."</td>
+  <td>"That's the work: mostly sales orders. Nobody publishes tests for SAP sales orders, so ours come from our own runs."</td>
+  <td>"Four of these are the same order with a different PO number. But run 5 actually saved, so that one's different."</td>
+  <td>"It saw the block and typed the ship-to twelve times. That's the agent. Nobody answering isn't."</td>
+  <td>"Finally there's room to say the block is on purpose. But 45 of these this week?"</td>
+  <td>"That's what I said, in a list I can check. Good that 'SAP was down' doesn't count against it."</td>
+  <td>"I've done my part. What does 'waiting on engineer: test data' mean, and when can I press Run?"</td>
+  <td>"It passed most tests once, but not all three times. Is that good enough to release?"</td>
+</tr>
+
+<!-- ======== emotion ======== -->
+<tr>
+  <th class="rl">Emotion<small>1 to 5, proposed flow</small></th>
+  <td><div class="emo"><b class="e4">4</b><span>Four plain questions and a cost hint ($0.72 for a typical run) make it feel doable.</span></div></td>
+  <td><div class="emo"><b class="e4">4</b><span>They recognize their own work in the list.</span></div></td>
+  <td><div class="emo"><b class="e3">3</b><span>Grouping helps, but checking groups and sorting real mistakes from SAP outages is slow.</span></div></td>
+  <td><div class="emo"><b class="e3">3</b><span>The judgment is easy for them; the number of runs to get through isn't.</span></div></td>
+  <td class="low"><div class="emo"><b class="e2">2</b><span>The questions fit what they know, but 45 labels take about 6 of their 8 hours this week.</span></div></td>
+  <td><div class="emo"><b class="e4">4</b><span>Seeing their own words turned into a pass list feels like progress.</span></div></td>
+  <td class="low"><div class="emo"><b class="e2">2</b><span>They can't move forward, and nothing tells them when the tests will be ready.</span></div></td>
+  <td class="low"><div class="emo"><b class="e2">2</b><span>Results arrive in unfamiliar terms, and 20 tests are too few to decide a release.</span></div></td>
+</tr>
+
+<!-- ======== pain today ======== -->
+<tr class="pain-today">
+  <th class="rl">Pain points: today</th>
+  <td><ul>
+    <li>AgentScore has no test set, so there's nowhere to start. The plan lives in a document and the tests in a file in the engineer's code.</li>
+    <li>The expert can't begin without the engineer.</li>
+  </ul></td>
+  <td><ul>
+    <li>No list of jobs. Runs aren't grouped by request anywhere, so the expert can't see how much of the agent's work each job is.</li>
+    <li>They only learn from the engineer that no public test set covers SAP sales orders.</li>
+  </ul></td>
+  <td><ul>
+    <li>Half of the worst-scoring runs (4 of the 8 lowest) were outages, SAP errors or a dropped test connection, and they look like agent failures.</li>
+    <li>Runs aren't grouped, so the same situation shows up 5 times.</li>
+    <li>One run waiting for review has a password in plain text in its instructions.</li>
+    <li>There are 0 labeled runs to start from.</li>
+  </ul></td>
+  <td><ul>
+    <li>The Labeling tab only offers correct or incorrect. There's no way to say a problem was SAP's fault rather than the agent's.</li>
+    <li>The help question timed out after 600 seconds and counted against the agent.</li>
+    <li>Runs are long: this one had 59 steps, 14 of them wasted.</li>
+  </ul></td>
+  <td><ul>
+    <li>One Expected outcome box with a 200-character limit. The full answer doesn't fit, so only a summary goes into AgentScore and the rest lives in a file outside it.</li>
+    <li>Nothing the expert writes reaches the automated grader as pass criteria.</li>
+  </ul></td>
+  <td><ul>
+    <li>No test page. The test is a file in the engineer's code, and the expert can't read or approve it in AgentScore.</li>
+  </ul></td>
+  <td><ul>
+    <li>No shared view of what's ready; the status lives with the engineer.</li>
+    <li>A run that asks for help waits 600 seconds and stops, because nothing answers.</li>
+    <li>Real names and passwords have to come out of the SAP copy before anything can run.</li>
+  </ul></td>
+  <td><ul>
+    <li>AgentScore can't score only the runs from one test-set run, so results mix with day-to-day traffic.</li>
+    <li>The SAP checks run outside AgentScore and come back separately.</li>
+    <li>Outages look like agent failures.</li>
+  </ul></td>
+</tr>
+
+<!-- ======== pain still present ======== -->
+<tr class="pain-still">
+  <th class="rl">Pain points: still present in the proposed flow</th>
+  <td><ul>
+    <li>The limit covers agent runs only. The cost of automated grading isn't measured yet. At the doc's upper guess it could add up to $135 to the pilot <span class="tag calc">calculated</span> <span class="tag asm">assumption: same 9 checks as the full set</span>.</li>
+    <li>The expert has to trust that AgentScore picked the right kind of setup for this agent, which they never see.</li>
+  </ul></td>
+  <td><ul>
+    <li>The grouping can miss or merge jobs, so the expert has to check it.</li>
+    <li>Published tests still need this company's test data and checks from the engineer.</li>
+    <li>Every generated draft is more review: 3 hours of expert time in the full version.</li>
+  </ul></td>
+  <td><ul>
+    <li>Some groups are still wrong (target: fewer than 1 in 10 need splitting), and the expert finds those by hand.</li>
+    <li>"Likely a system problem" is still a guess the expert has to accept or reject.</li>
+    <li>Hiding passwords depends on a scrubber that isn't on AgentScore's build list.</li>
+  </ul></td>
+  <td><ul>
+    <li>About 8 minutes a run, and the pilot needs 45 runs, at least 12 of them "went wrong."</li>
+    <li>They also have to confirm a sample of AgentScore's fault guesses (target: agree on 9 in 10).</li>
+  </ul></td>
+  <td><ul>
+    <li>Time: about 8 minutes a run, 6 hours for 45, against an 8-hour first week.</li>
+    <li>A consistency check: re-label 10 runs a week later and match at least 9.</li>
+    <li>Pressure to find enough runs that went wrong.</li>
+  </ul></td>
+  <td><ul>
+    <li>They approve the plain summary but can't check the SAP checks behind it, which stay folded away for the engineer.</li>
+    <li>The "could this be read two ways?" review comes later, so an approved test can come back.</li>
+    <li>"Works when done right" rests on the engineer's recorded correct run (3 of 3 on 12 Nov 2026).</li>
+  </ul></td>
+  <td><ul>
+    <li>The engineer's setup is still 16 hours for the full set, plus 8 hours of checks.</li>
+    <li>The "asks once and stops" grader can't decide pass or fail until it agrees with the expert's labels.</li>
+    <li>The sources describe no notice when the engineer finishes a to-do.</li>
+  </ul></td>
+  <td><ul>
+    <li>The pilot is a readiness check, not a release gate. The doc says spotting a 12-point drop takes 50 exam tests run 3 times each.</li>
+    <li>If more than 1 run in 10 fails for system reasons, the whole run is void and has to be redone.</li>
+    <li>There's no plain wording for the results yet.</li>
+  </ul></td>
+</tr>
+
+<!-- ======== handoffs ======== -->
+<tr>
+  <th class="rl">Handoffs and waits<small>to or from the engineer</small></th>
+  <td><b>To engineer:</b> confirm which tools can change data, and confirm the industry and which published test sets apply. Both happen on Day 1.<br><b>Waits on:</b> nothing blocking. Until the engineer confirms, the published-tests list is only AgentScore's guess.</td>
+  <td><b>To engineer:</b> confirm which published sets apply.<br><b>Waits on:</b> test data and checks for any published tests.</td>
+  <td><b>To engineer:</b> spot-check 20 groups. Start the SAP copy and the scrubber, including passwords in instructions (Day 2).<br><b>Waits on:</b> nothing blocking.</td>
+  <td><b>To engineer:</b> every "system problem" becomes a scripted answer, so the test run can finish.</td>
+  <td><b>To engineer:</b> the "If asked" answer goes into the scripted reply.<br><b>Waits on:</b> nothing. Labeling is the expert's own work.</td>
+  <td><b>To engineer, on approve:</b> set up the blocked test customer and test material in the SAP test system, and connect the checks that look inside SAP after each run. The engineer also records the correct run.</td>
+  <td><b>Waits on:</b> Day 2, the SAP copy and scrubber. Day 3, test data, reset and scripted answers for VA01, FI12 and the car insurance web app. Day 4, the SAP checks and the "asks once" grader. Day 5, proof that a correct run passes every test.<br><b>From engineer:</b> grader disagreements to read, and unclear tests to settle.</td>
+  <td><b>Engineer:</b> sets up and starts the run, and re-runs those that failed for system reasons, up to 2 times each.<br><b>Together:</b> decide whether to scale up or fix the test system.</td>
+</tr>
+
+<!-- ======== time ======== -->
+<tr>
+  <th class="rl">Time spent<small>from the workflow doc</small></th>
+  <td><b>Expert:</b> 1 h (step 3).<br><b>Engineer:</b> 3 h alongside (steps 1 and 2).</td>
+  <td><b>Shared:</b> part of step 4's 4 h, which the doc doesn't split.<br><b>Expert:</b> 3 h of draft review in the full version (step 11). It's not scheduled in the 5-day pilot.</td>
+  <td><b>Shared:</b> part of step 4's 4 h, which the doc doesn't split.</td>
+  <td><b>Shared:</b> triage takes 3 h in the full version (step 5).<br><b>Pilot:</b> fault checks happen inside labeling; 25 runs in 3 h on Day 2.</td>
+  <td><b>Expert:</b> 6 h for 45, about 8 min each (step 6).<br><b>Pilot:</b> 25 runs in 3 h on Day 2, and 20 more on Day 4, about 2.7 h <span class="tag calc">calculated</span>.</td>
+  <td><b>Shared:</b> part of step 8's 8 h for 80 tests, which the doc doesn't split.<br><b>Pilot:</b> approve 20 summaries on Day 3.</td>
+  <td><b>Engineer:</b> 16 h of setup and 8 h of checks (steps 7 and 9).<br><b>Expert:</b> a share of grader tuning (6 h) and validation (8 h), which the doc doesn't split.</td>
+  <td><b>Engineer:</b> 3 h of setup (step 13).<br><b>Expert:</b> reads 10 runs (step 12, hours not split).<br><b>Pilot:</b> Day 5.</td>
+</tr>
+
+<!-- ======== opportunities ======== -->
+<tr>
+  <th class="rl">Opportunities<small>linked to a build gap</small></th>
+  <td><ul>
+    <li>A Test sets tab that saves the four answers as a plan.<br><span class="gap">Build gap: dataset and task store</span></li>
+    <li>Published tests listed with whether they can be reused.<br><span class="gap">Build gap: published benchmark catalog</span></li>
+    <li>Show the expected grading cost next to the spending limit.<br><span class="gap off">Not on build list</span></li>
+  </ul></td>
+  <td><ul>
+    <li>A saved plan of jobs with target test counts.<br><span class="gap">Build gap: dataset and task store</span></li>
+    <li>Where each test comes from, including the license on published sets.<br><span class="gap">Build gap: published benchmark catalog</span></li>
+  </ul></td>
+  <td><ul>
+    <li>Keep suggestions, group decisions and skips with the test set.<br><span class="gap">Build gap: dataset and task store</span></li>
+    <li>Hide passwords and names in instructions before the expert sees a run.<br><span class="gap off">Not on build list</span></li>
+  </ul></td>
+  <td><ul>
+    <li>Save the "whose fault" answer with the label and carry it into the test.<br><span class="gap">Build gap: dataset and task store</span></li>
+    <li>Have AgentScore answer help questions during test runs, so a missing person doesn't stop the run.<br><span class="gap">Build gap: simulated-operator hook</span></li>
+  </ul></td>
+  <td><ul>
+    <li>Save the four answers in full, where the automated grader can read them.<br><span class="gap">Build gap: per-task criteria judges can see</span></li>
+    <li>The "If asked" answer becomes the scripted reply with no engineer copy step.<br><span class="gap">Build gap: simulated-operator hook</span></li>
+    <li>A second answer becomes a second test automatically.<br><span class="gap">Build gap: dataset and task store</span></li>
+  </ul></td>
+  <td><ul>
+    <li>A test page with approval and to-do status.<br><span class="gap">Build gap: dataset and task store</span></li>
+    <li>Results of the SAP checks shown in AgentScore next to each pass rule.<br><span class="gap">Build gap: harness results as eval scores</span></li>
+  </ul></td>
+  <td><ul>
+    <li>Each engineer to-do and its status, visible to the expert.<br><span class="gap">Build gap: dataset and task store</span></li>
+    <li>Built-in scripted answers, so the engineer has one less thing to wire up.<br><span class="gap">Build gap: simulated-operator hook</span></li>
+    <li>Tell the expert when to-dos finish.<br><span class="gap off">Not on build list</span></li>
+  </ul></td>
+  <td><ul>
+    <li>Run test set scores only that run's results.<br><span class="gap">Build gap: scoring scoped to one benchmark run</span></li>
+    <li>SAP check results next to AgentScore's own scores.<br><span class="gap">Build gap: harness results as eval scores</span></li>
+    <li>Results in plain words, with runs that didn't count set apart.<br><span class="gap off">Not on build list</span></li>
+  </ul></td>
+</tr>
+
+<!-- ======== PM note ======== -->
+<tr class="pm">
+  <th class="rl">For the PM and designer</th>
+  <td>This is the benchmark spec (step 3). The step 0 template, "task agent," is picked from the Agent Card <span class="mono">shape</span> and the profile intent, so the expert never sees it. Steps 1 and 2 run first: <span class="mono">get_agent</span>, <span class="mono">get_profile_fit</span> and <span class="mono">get_scorecard</span> feed the brief. The industry is enterprise GUI (SAP SD, Salesforce, web apps). OSWorld, WindowsAgentArena, WebArena, WorkArena and CRMArena match; SWE-bench and τ-bench are rejected. The default full size is 80 tasks (30 dev, 50 held-out); the pilot uses 20. Judge calls are assumed at up to $0.25 each.</td>
+  <td>Tasks are the request clusters from step 4, after IDs, dates and numbers are stripped. Tests per task follow production frequency, and the target mix is 50% normal, 30% known failures and 20% rare paths. Generate is step 11's gap fill: at most 25% of the set, never held-out, each with its own seed and a passing reference solution. A generated task is dropped if the agent passes it 3 of 3 with no effort, or if it's within cosine 0.90 of another task. All shares and counts on screen 2 are examples.</td>
+  <td>This is harvest and dedup (step 4). Low scorers come from <span class="mono">get_eval_interactions</span> on run <span class="mono">01M75YCA77EW1X8BSEFQ7QM35D</span>. Traces merge at cosine ≥ 0.90 with the same tool-sequence signature; the member with the most evidence is kept and the rest become variants. Quality bar: fewer than 10% of 20 spot-checked clusters are wrongly merged. <span class="tag asm">assumption</span> The doc's 5-trace cluster ("VA01 ZOR1, sales org SE21, ZSR2 condition = 10") never names trace <span class="mono">5cb1…7387</span>; the mock treats it as the kept member.</td>
+  <td>"Did it do the right thing" is today's Correct / Incorrect. "Whose fault" is step 5 triage: an LLM reads the judge's reason ("external termination" or HTTP 5xx means environment), and the expert confirms 20% with at least 90% agreement. Environment faults never count, and some become optional resilience tasks. Trajectory efficiency judged 14 of 59 calls redundant on this trace.</td>
+  <td>Today Save label calls <span class="mono">submit_label</span> with a 200-character expected outcome. In the proposed label, Q1 becomes state assertions, Q2 the rubric criteria the judge sees, Q3 the forbidden actions and process requirements, and Q4 the simulated operator. The second answer is the <span class="mono">{CUST_OK}</span> variant. Labels become golden examples and the calibration set. <span class="tag asm">assumption</span> The workflow doc marks the VA01 label content itself as "assumed."</td>
+  <td>This is the section 4 task JSON (steps 7, 8, 9 and 12) as a readable summary: test <span class="mono">tcg-va01-blocked-customer-001</span> v1.0.0, environment <span class="mono">sap-sandbox-s4-2026q4</span> and seed <span class="mono">seeds/va01_blocked_customer.py</span>. Assertions <span class="mono">no_order</span> and <span class="mono">block_intact</span>; forbidden <span class="mono">edit_master</span> (XD02, VD02, XD05, VD05) and <span class="mono">write_after_stop</span>. Rubric: <span class="mono">escalate-once</span> 100 and <span class="mono">prompt-compliance</span> 60. It's invalid if HTTP 5xx, the TBox tunnel is down or seed verify fails. The split is dev, because of workbook P02.</td>
+  <td>Step 7 covers snapshot, anonymize, seed, reset and the simulated operator. Seed and reset run 3 times and the state hashes must match. Step 9 builds the outcome-based graders; <span class="mono">escalate-once</span> is written with <span class="mono">save_catalog_eval</span> and tried with <span class="mono">preview_catalog_eval</span>. In step 10, each subjective eval needs Cohen's κ ≥ 0.7 against the 45 labels before it gates. After 2 rounds below that, it becomes deterministic or stays expert-graded on held-out only. Step 12 covers solvability (3 of 3), an ambiguity critic and held-out isolation.</td>
+  <td>pass@1 is the mean over trials, with a bootstrap 95% CI over tasks. pass^3 is the share of tasks that pass all 3 trials. Results include a per-category breakdown and a paired comparison against the baseline. Held-out runs get 5 trials when the result is within 5 points of the threshold. Invalid runs are re-run up to 2 times; above 10% invalid, the run is void. A reference-replay canary runs first. The baseline is scorecard run <span class="mono">01M75YCA77EW1X8BSEFQ7QM35D</span> (composite 85.7, ship; correctness 58%). Run test set would call <span class="mono">score_agent</span> scoped to one <span class="mono">benchmark.run_id</span>.</td>
+</tr>
+</table>
+</div>
+
+<h2>The three lowest points</h2>
+<p style="margin:-4px 0 10px;color:var(--muted);font-size:13px">All three score 2. They're ordered by how long each lasts and how little the expert can do about it.</p>
+<div class="lows">
+  <div class="lowc">
+    <h4>1. Wait on the engineer</h4>
+    The longest stretch (Days 2 to 5), and the expert has no control over it. The engineer's setup for a task agent is 16 hours for the full set plus 8 hours of checks. Run test set stays off until 20 tests are ready, and the sources describe no signal when a to-do is done. Today a run that asks for help simply stops after 600 seconds.
+  </div>
+  <div class="lowc">
+    <h4>2. Run and read results</h4>
+    The expert came for a release gate and leaves with a readiness check. Twenty tests are well short of the 50 exam tests the doc says are needed to spot a 12-point drop. The two numbers aren't in their words, and if more than 1 run in 10 fails for system reasons, the run is void.
+  </div>
+  <div class="lowc">
+    <h4>3. Label what it should have done</h4>
+    This is the best fit for what the expert knows, and the proposed four questions fix today's 200-character box. The squeeze is time. 45 labels at about 8 minutes is 6 hours, and with the 1-hour spec that leaves about 1 hour of the week for everything else <span class="tag calc">calculated</span>. There's also a quota of 12 "went wrong" labels and a re-label check.
+  </div>
+</div>
+
+<h2>Top 5 opportunities, ranked by impact on the expert</h2>
+<div class="panel">
+<table class="rank">
+  <tr><th>#</th><th>Opportunity</th><th>Build gap</th><th>Stage it fixes</th><th>Why it ranks here</th></tr>
+  <tr><td class="n">1</td><td>A test set inside AgentScore: plan, suggestions, tests, approvals and engineer to-dos in one place.</td><td><span class="gap">Dataset and task store</span></td><td><b>Decide and set up</b>, plus Choose tasks, Pick runs, Review the test and Wait on the engineer</td><td>Without it, the expert has no screen for 5 of the 8 stages and depends on the engineer's files throughout.</td></tr>
+  <tr><td class="n">2</td><td>The four-question label, saved in full and readable by the automated grader.</td><td><span class="gap">Per-task criteria judges can see</span></td><td><b>Label what it should have done</b></td><td>This is where the expert's unique knowledge enters. Today a 200-character box cuts it to a summary, and the rest never reaches the grader.</td></tr>
+  <tr><td class="n">3</td><td>AgentScore answers the agent's help questions with the expert's own reply.</td><td><span class="gap">Simulated-operator hook</span></td><td><b>Wait on the engineer</b>, plus Label what happened</td><td>Removes the 600-second timeout that stopped the VA01 run, and takes one wiring job off the engineer's list.</td></tr>
+  <tr><td class="n">4</td><td>Run test set scores only that run's results, so they don't mix with daily traffic.</td><td><span class="gap">Scoring scoped to one benchmark run</span></td><td><b>Run and read results</b></td><td>Without it, the button the expert has been waiting for has nothing clean to show.</td></tr>
+  <tr><td class="n">5</td><td>The SAP checks ("no order saved," "customer still blocked") show up as results in AgentScore.</td><td><span class="gap">Harness results as eval scores</span></td><td><b>Run and read results</b>, plus Review the test</td><td>The pass rules the expert approved are mostly SAP checks. Without this, those results live outside AgentScore and the expert can't see them.</td></tr>
+</table>
+<p style="font-size:12.5px;color:var(--muted);margin:10px 0 0">The published benchmark catalog ranks sixth for this expert, because no public set covers SAP sales orders. Four proposed additions are not on the build list, so they're left out of the ranking: scrubbing passwords in instructions, showing grading cost, notifying the expert when to-dos finish, and plain-language results that set aside runs that didn't count.</p>
+</div>
+
+<h2>Open questions and assumptions</h2>
+<div class="panel">
+<ol class="oq">
+  <li><b>How do the expert's 22 hours split across shared steps?</b> The doc gives the expert's total for the first version, but steps 4, 5, 8, 10 and 12 are shared without a split. This map shows those as "shared."</li>
+  <li><b>Does week 1 fit in 8 hours?</b> The spec (1 h), 25 labels on Day 2 (3 h) and 20 on Day 4 (about 2.7 h) add up to about 6.7 h <span class="tag calc">calculated</span>. That leaves about 1.3 h for picking runs, approving 20 summaries and reading grader disagreements. Do some labels move to week 2?</li>
+  <li><b>How long does the full version take at 2 hours a week?</b> 22 expert hours minus 8 in week 1 leaves 14, or about 7 more weeks before an 80-test set could act as a real gate <span class="tag calc">calculated</span> <span class="tag asm">assumption: expert time is spread evenly</span>.</li>
+  <li><b>Who presses Run test set?</b> The doc gives step 13 to the engineer, but screen 7 puts the button in the expert's view.</li>
+  <li><b>How are the results worded for the expert?</b> The mock stops at screen 7, and no source shows a results screen. <span class="tag asm">assumption</span> "Passes on a single try" and "passes all 3 tries" are this map's wording, not the sources'.</li>
+  <li><b>Does the pilot include generated tests?</b> Screen 2 shows 2 generated <span class="tag ex">example</span>, but step 11 isn't in the 5-day plan.</li>
+  <li><b>How do the 20 pilot tests split between practice and exam, and what can the pilot conclude?</b> <span class="tag asm">assumption</span> The pilot is read as a readiness check (scale up or fix the environment, as Day 5 says), not as a release decision.</li>
+  <li><b>Where does the expert see grader disagreements during tuning?</b> No screen covers step 10. <span class="tag asm">assumption</span> The Labeling tab.</li>
+  <li><b>Does the 10-run review happen at the pilot?</b> The doc says it happens each release. <span class="tag asm">assumption</span> The first review happens at the pilot read-out.</li>
+  <li><b>How does the expert learn that an engineer to-do is done?</b> The sources say nothing about notifications.</li>
+  <li><b>What happens to labels and approved tests if the engineer can't set up the test data</b>, for example for a published test or an outage-recovery test?</li>
+  <li><b>Should password scrubbing and outage handling be on the build list?</b> Today both sit in the engineer's runner (anonymize in step 7, <span class="mono">invalid_if</span> in step 13). The expert meets both problems inside AgentScore in stages 3, 4 and 8.</li>
+  <li><b>What does grading really cost?</b> It's unmeasured. The $135 pilot upper bound uses the doc's $0.25 per call and assumes the same 9 checks as the full set.</li>
+  <li><b>Are the VA01 label answers right?</b> The workflow doc marks them "assumed." A real SAP SD expert should confirm that the block is intentional test data and what the correct behavior is.</li>
+  <li><b>Is this run part of the 5-run group?</b> The doc's 5-trace cluster is "VA01 ZOR1, sales org SE21" and doesn't name trace <span class="mono">5cb1…7387</span>. The mock assumes it's the kept member.</li>
+  <li><b>Is there a source inconsistency in prompt compliance?</b> The workflow risk section says "prompt compliance at 51%," and the scorecard says 6 of 19 passed. They may be different measures (average score versus pass count). This map uses neither.</li>
+</ol>
+</div>
+
+<p class="foot">Sources: <span class="mono" style="word-break:normal">docs/research/benchmarks/agentscore-benchmark-workflow.md</span> and <span class="mono" style="word-break:normal">docs/research/benchmarks/agentscore-benchmark-screens-va01.md</span> (clickable mock: <span class="mono" style="word-break:normal">agentscore-benchmark-screens-va01.html</span>). The VA01 trace, IDs, scores, costs and hours are real. Anything tagged example, calculated or assumption is marked where it appears. Markdown version: <span class="mono" style="word-break:normal">agentscore-labeling-benchmark-journey-map.md</span>.</p>
+
+</div>
+</body>
+</html>

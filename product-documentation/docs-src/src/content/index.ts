@@ -2,6 +2,7 @@ import type { ComponentType } from "react";
 import Welcome from "./Welcome";
 import QuickStart from "./QuickStart";
 import ConnectWithMcp from "./ConnectWithMcp";
+import McpTools from "./McpTools";
 import ConnectYourAgent from "./ConnectYourAgent";
 import WorkspaceAssistant from "./WorkspaceAssistant";
 import EvalCatalog from "./EvalCatalog";
@@ -21,6 +22,7 @@ export const pages: Record<string, ComponentType> = {
   welcome: Welcome,
   "quick-start": QuickStart,
   "connect-with-mcp": ConnectWithMcp,
+  "mcp-tools": McpTools,
   "connect-your-agent": ConnectYourAgent,
   "workspace-assistant": WorkspaceAssistant,
   "eval-catalog": EvalCatalog,

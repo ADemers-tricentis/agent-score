@@ -1,5 +1,6 @@
 import { Callout, CodeBlock, Dek, Eyebrow, Screenshot, Step, StepList } from "../components/PageChrome";
-import mcpConnectCard from "../assets/mcp-connect-card.png";
+import integrationsCodingAssistants from "../assets/integrations-coding-assistants.png";
+import codingAgentPermissions from "../assets/coding-agent-permissions.png";
 
 export default function ConnectWithMcp() {
   return (
@@ -19,22 +20,25 @@ export default function ConnectWithMcp() {
 
       <h2>Open Integrations</h2>
       <p>
-        In the sidebar, open <strong>Integrations</strong>. The card at the top is{" "}
-        <strong>Connect a coding agent (MCP)</strong>. It shows the server URL for the tenant you
-        are signed in to, and a setup for <strong>Claude Code</strong>, <strong>Cursor</strong>,{" "}
-        <strong>Codex</strong>, the <strong>Claude apps</strong>, and any other MCP client that
-        can sign in through the browser.
+        In the sidebar, open <strong>Integrations</strong>. It has two tabs.{" "}
+        <strong>Coding assistants</strong> opens on the <strong>Connect a coding agent</strong>{" "}
+        card, with a setup for <strong>Claude Code</strong>, <strong>Cursor</strong>,{" "}
+        <strong>Codex</strong>, the <strong>Claude apps</strong>, and{" "}
+        <strong>Another client</strong> that can sign in through the browser. The card names the
+        tenant and region you are signed in to. <strong>Trace ingestion</strong> is where your
+        ingest keys live.
       </p>
       <Screenshot
-        src={mcpConnectCard}
-        alt="The Connect a coding agent card on Integrations, with the MCP server URL, tenant, region, Streamable HTTP transport, browser sign-in, and tabs for Claude Code, Cursor, Codex, Claude apps, and Another client"
-        caption="Integrations. Copy the server URL from here. Each tab fills in the setup for that client."
+        src={integrationsCodingAssistants}
+        alt="The Integrations page on the Coding assistants tab, with a Trace ingestion tab beside it, a Manage permissions button, and the Connect a coding agent card showing the signed-in tenant and region, tabs for Claude Code, Cursor, Codex, Claude apps and Another client, and step 1 with the claude mcp add command and the server URL filled in"
+        caption="Integrations, Coding assistants. Each client tab has the setup with your server URL already filled in."
       />
       <p>
-        Paste the URL whole. The part after the <code>?</code> names your tenant and product. A
-        client that drops it cannot sign in. There is no API key, token, header, or client ID to
-        add. The client registers itself, and you sign in with your Tosca Cloud account in the
-        browser.
+        Each client's tab already has your server URL in it. To see the URL on its own, open{" "}
+        <strong>Connection details</strong> at the bottom of the card. Paste the URL whole. The
+        part after the <code>?</code> names your tenant and product. A client that drops it cannot
+        sign in. There is no API key, token, header, or client ID to add. The client registers
+        itself, and you sign in with your Tosca Cloud account in the browser.
       </p>
       <p>
         Each tenant has its own URL. The client acts as you, in that tenant only. To connect
@@ -50,10 +54,13 @@ export default function ConnectWithMcp() {
         <Step title="Add the server">
           <ul>
             <li>
-              <strong>Claude Code.</strong> Choose who gets it, then run the command from the tab
-              in your project folder. Only you in this project is the default. For everyone
-              working in this project, the tab writes a <code>.mcp.json</code> you commit. Each
-              teammate approves the server once and signs in as themselves.
+              <strong>Claude Code.</strong> Run the command from the tab in your project folder.
+              By default it adds Agent Score for you, in this project only. To change who gets
+              it, open <strong>Other setup options</strong> and pick under <strong>Who should get
+              it?</strong>: only you in this project, everyone working in this project, or only
+              you in every project. For everyone in the project, the tab writes a{" "}
+              <code>.mcp.json</code> you commit. Each teammate approves the server once and signs
+              in as themselves.
             </li>
             <li>
               <strong>Cursor.</strong> Use Add to Cursor, or write the <code>.cursor/mcp.json</code>{" "}
@@ -122,8 +129,9 @@ export default function ConnectWithMcp() {
       <Callout kind="tip" title="The ingest key is shown once">
         <p>
           Have the agent write the key to an environment file that version control ignores. Keep
-          it out of source, chat, and logs. If that reply is lost, rotate the key on Integrations.
-          The old secret cannot be shown again.
+          it out of source, chat, and logs. If that reply is lost, rotate the key on{" "}
+          <strong>Integrations</strong> → <strong>Trace ingestion</strong>. The old secret cannot
+          be shown again.
         </p>
       </Callout>
 
@@ -145,13 +153,60 @@ export default function ConnectWithMcp() {
         <a href="#/scorecard">Reading Your Scorecard</a>,{" "}
         <a href="#/improve">Improve This Agent</a>, and{" "}
         <a href="#/custom-evals">Building Your Own Evals</a>. The coding agent does them in the
-        project, instead of you clicking through the app.
+        project, instead of you clicking through the app.{" "}
+        <a href="#/improve">Improve This Agent</a> walks through the loop from your coding agent,
+        from the weakest eval to comparing a change. Every prompt, guide and tool, with the switch
+        each one needs, is on <a href="#/mcp-tools">MCP Tools Reference</a>.
       </p>
       <Callout kind="warn" title="A change takes effect when you ask">
         <p>
           Your coding agent acts as you. Starting a scoring run, publishing an eval or a profile,
           revoking an ingest key, or deleting an agent happens immediately. Ask only for a change
           you want made.
+        </p>
+      </Callout>
+
+      <h2>Choose what your coding agent can do</h2>
+      <p>
+        On <strong>Integrations</strong>, click <strong>Manage permissions</strong>. The
+        switches under <strong>What your coding agents can do</strong> apply to every coding
+        agent you connect in that tenant. Each switch covers one group of jobs:
+      </p>
+      <ul>
+        <li>
+          <strong>Read</strong> - scores, runs, traces, agents, the overview, and the catalog.
+        </li>
+        <li>
+          <strong>Change</strong> - labels, revisions, and catalog drafts.
+        </li>
+        <li>
+          <strong>Spend credits</strong> - scoring, re-fitting a profile, previews, advice, and
+          settings or profile changes that start scoring.
+        </li>
+        <li>
+          <strong>Delete &amp; credentials</strong> - deleting or deactivating agents, creating
+          or revoking ingest keys, and publishing catalog items.
+        </li>
+        <li>
+          <strong>Prompts &amp; guides</strong> - the prompts and guides your coding agent can
+          read.
+        </li>
+      </ul>
+      <p>
+        <strong>Turn off write actions</strong> turns off Change, Spend credits, and Delete &amp;
+        credentials in one click. A switch saves when you flip it. Turning something off applies
+        at once. Turning something on shows up after you reconnect your coding agent.{" "}
+        <a href="#/mcp-tools">MCP Tools Reference</a> lists which switch each tool needs.
+      </p>
+      <Screenshot
+        src={codingAgentPermissions}
+        alt="The Coding assistant permissions page, with the management tenant, a Turn off write actions button, switches for Read, Change, Spend credits, Delete & credentials, and Prompts & guides, all on, and a Stop all my coding agents switch at the bottom"
+        caption="Manage permissions. Each switch turns one group of jobs on or off for every coding agent you connect."
+      />
+      <Callout kind="warn" title="If a sign-in may have leaked">
+        <p>
+          Turn on <strong>Stop all my coding agents</strong>. Every client you connected is
+          refused at once, and new sign-ins are refused, until you turn it off again.
         </p>
       </Callout>
 
@@ -178,6 +233,11 @@ export default function ConnectWithMcp() {
           Claude says it could not reach the MCP server. The Claude apps connect from Anthropic's
           network, not from your computer. Check that the URL was pasted whole. If it was, contact
           your Tricentis contact. The connection from Anthropic's network may be blocked.
+        </li>
+        <li>
+          Your coding agent can't see a tool. The group that holds it may be off, for you or for
+          your organization. Check <strong>Manage permissions</strong>. A group you turn on shows
+          up only after you reconnect your coding agent.
         </li>
         <li>
           Signing out of Agent Score does not disconnect a client. Each client keeps its own

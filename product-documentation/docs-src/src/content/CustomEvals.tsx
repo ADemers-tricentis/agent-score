@@ -22,8 +22,11 @@ export default function CustomEvals() {
       <ul>
         <li><strong>My drafts</strong> - evals and profiles you've started but not published yet</li>
         <li><strong>Our evals</strong> - your organization's published evals</li>
-        <li><strong>Built-in evals</strong>, <strong>Dimensions</strong>, <strong>Profiles</strong> - the <a href="#/eval-catalog">catalog</a> that ships with Agent Score</li>
+        <li><strong>Built-in evals</strong>, <strong>Dimensions</strong>, <strong>Profiles</strong> - the <a href="#/eval-catalog">catalog</a> that ships with Agent Score. The Profiles tab lists your organization's profiles beside the built-in ones.</li>
       </ul>
+      <p>
+        Our evals, Built-in evals, Dimensions, and Profiles list their items A to Z by name.
+      </p>
       <p>
         <strong>Create</strong> starts a new <strong>Eval</strong>, <strong>Dimension</strong>, or{" "}
         <strong>Profile</strong>. You can also start from an agent: its{" "}

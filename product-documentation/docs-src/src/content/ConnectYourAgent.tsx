@@ -30,9 +30,12 @@ export default function ConnectYourAgent() {
       <h2>Ingest keys are yours to manage</h2>
       <p>
         Traces authenticate with an <strong>ingest key</strong> (shown as <code>tk_...</code>), not
-        a generic API key. Each key belongs to exactly one tenant. From{" "}
-        <strong>Integrations</strong> in the sidebar, you can create a new key, rotate one, or
-        revoke it, independently of any other key on the tenant. The usual way to create one is
+        a generic API key. Each key belongs to exactly one tenant. Open{" "}
+        <strong>Integrations</strong> in the sidebar and choose the{" "}
+        <strong>Trace ingestion</strong> tab. It lists every key on the tenant, with when it was
+        created and last used. <strong>New key</strong> creates one, and each key's actions menu
+        has <strong>Rotate</strong> and <strong>Revoke</strong>, independently of any other key
+        on the tenant. The usual way to create one is
         to ask your coding agent, on <a href="#/connect-with-mcp">Connect with MCP</a>. The key
         then shows up in the same list.
       </p>
@@ -65,16 +68,18 @@ export default function ConnectYourAgent() {
       <Callout kind="tip" title="Or paste the config yourself">
         <p>
           From <strong>My Agents</strong>, <strong>Connect Agent</strong> opens a guided{" "}
-          <strong>Connect an agent</strong> flow: pick the tenant, it shows that tenant's key, and
-          it hands you the exact exporter configuration to paste in, with your real key already
-          filled in. Use this when you are wiring the exporter by hand. Otherwise ask your coding
-          agent to write it.
+          <strong>Connect an agent</strong> flow: pick the tenant, and it lists that tenant's
+          keys by name, showing only the last few characters of each. It then hands you the
+          exporter configuration to paste in, with that tenant's endpoint filled in and{" "}
+          <code>&lt;tk_your_key&gt;</code> where your key goes. A key's secret is shown only once,
+          when it's created, so paste in the one you saved. Use this when you are wiring the
+          exporter by hand. Otherwise ask your coding agent to write it.
         </p>
       </Callout>
       <Screenshot
         src={connectAgentWizard}
-        alt="The Connect an agent dialog, showing a tenant picker, that tenant's ingest key, the exact OTel exporter environment variables to paste in with a Copy button, and a note that scoring begins automatically after 20 traces"
-        caption="The Connect an agent wizard fills in the exporter variables for one tenant."
+        alt="The Connect an agent dialog, showing a tenant picker, that tenant's ingest keys by name with only their last characters, the OTel exporter environment variables with the tenant's endpoint and a tk_your_key placeholder and a Copy button, and a note that scoring begins automatically after 20 traces"
+        caption="The Connect an agent wizard fills in the exporter endpoint for one tenant. You add the key."
       />
 
       <h2>Works with your existing stack</h2>

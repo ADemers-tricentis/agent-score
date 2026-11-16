@@ -32,6 +32,11 @@ export const nav: NavSection[] = [
         blurb: "Let your coding agent set Agent Score up and work in it as you.",
       },
       {
+        slug: "mcp-tools",
+        title: "MCP Tools Reference",
+        blurb: "Every prompt, guide and tool your coding agent can use, and what each one needs.",
+      },
+      {
         slug: "connect-your-agent",
         title: "Connect Your Agent",
         blurb: "Get traces flowing in - no SDK required.",

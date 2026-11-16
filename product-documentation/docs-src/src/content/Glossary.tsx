@@ -11,11 +11,19 @@ const terms: { term: string; def: string }[] = [
   },
   {
     term: "MCP",
-    def: "The connection on Integrations that lets your coding agent act in Agent Score as you. You sign in through the browser. The client does not take an API key, token, or header.",
+    def: "The connection on Integrations that lets your coding agent act in Agent Score as you. You sign in through the browser. The client does not take an API key, token, or header. The server offers prompts, guides and tools, each under a switch in Manage permissions. MCP Tools Reference lists them all.",
+  },
+  {
+    term: "Revision",
+    def: "The point where a change to an agent begins. Traces from then on belong to the new revision, and earlier ones stay with the previous one. Scoring after a revision covers only its traces, and each run carries the revision's label, so you can compare the runs before and after a change.",
+  },
+  {
+    term: "Job",
+    def: "Work Agent Score does in the background: a scoring run, a profile re-fit, improvement advice, or an eval preview. When your coding agent starts one, it follows the job until it finishes.",
   },
   {
     term: "Tenant",
-    def: "Your isolated Agent Score workspace - every agent, trace, and API key you own lives under it. Provisioned by the Agent Score team when you're onboarded, not something you self-serve today.",
+    def: "Your isolated Agent Score workspace - every agent, trace, and ingest key you own lives under it. Signing in with your Tosca Cloud account creates it, and everyone who signs in from the same Tosca Cloud tenant shares it.",
   },
   {
     term: "Eval",

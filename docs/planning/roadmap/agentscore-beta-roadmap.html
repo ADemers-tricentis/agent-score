@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AgentScore Roadmap - Beta Onboarding and Self-Improvement</title>
+<title>AgentScore Roadmap - Beta Onboarding, Quality Gate and Self-Improvement</title>
 <style>
   :root {
     --bg: #f5f7fb;
@@ -150,8 +150,8 @@
 <header>
   <div class="wrap" style="padding-bottom:0">
     <h1>AgentScore Roadmap</h1>
-    <p>Beta onboarding and self-improvement</p>
-    <div class="meta">Last updated 11-04-2026 &middot; Horizons: Now / Next / Later</div>
+    <p>Beta onboarding, quality gate and self-improvement</p>
+    <div class="meta">Last updated 11-11-2026 &middot; Horizons: Now / Next / Later</div>
   </div>
 </header>
 
@@ -170,7 +170,7 @@
 
   <!-- ================= USER FLOW ================= -->
   <h2 class="section">Target user flow</h2>
-  <p class="sub">Steps 2 to 4 are Now. Step 1 (Trident sign-in) and steps 8 to 11 are Next, and steps 8 to 11 repeat until the score meets the ship bar. Steps 14 and 15 are Later. Internal coverage of Tricentis agents is Now and is not a numbered step. App usability, the JEV / decision model, and session grouping are Next and are not numbered steps. Steps 12 and 13, the previous self-improvement loop, are marked done and are not on this diagram.</p>
+  <p class="sub">Steps 2 to 5 are Now, including the quality gate (step 4). Step 1 (Trident sign-in), steps 6 to 9 and step 10 (CI go / no-go) are Next, and steps 6 to 9 repeat until the score meets the ship bar. Steps 11 and 12 are Later. Internal coverage of Tricentis agents is Now and is not a numbered step. App usability, the JEV / decision model, and session grouping are Next and are not numbered steps. The previous self-improvement loop is marked done and is not on this diagram. Steps 4 and 10 are new on 11-11.</p>
 
   <section class="card flow">
 
@@ -184,18 +184,19 @@
     <div class="down"><span class="stem" style="background:var(--next)"></span><span class="head" style="border-top-color:var(--next)"></span><span class="lbl" style="color:var(--next-ink)">Then the first session</span></div>
 
     <div class="phase now">
-      <div class="phase-head"><span class="tag">Now</span><span class="name">First session and workflows</span><span class="range">Steps 2 to 4</span></div>
+      <div class="phase-head"><span class="tag">Now</span><span class="name">First session, quality gate and workflows</span><span class="range">Steps 2 to 5</span></div>
       <div class="steps">
-        <div class="step"><span class="n">2</span>Every screen shows one next action</div>
-        <div class="step"><span class="n">3</span>User reads the first score</div>
-        <div class="step wide"><span class="n">4</span>A multi-agent flow is shown as one workflow</div>
+        <div class="step wide"><span class="n">2</span>First login goes to the MCP connection step. Every screen shows one next action</div>
+        <div class="step"><span class="n">3</span>User reads the first score and advice</div>
+        <div class="step wide"><span class="n">4</span>User sets gate conditions and reads open, closed or not enough data</div>
+        <div class="step wide"><span class="n">5</span>A multi-agent flow is shown as one workflow</div>
       </div>
       <p class="loopnote">Also Now, and not a numbered step: every internal Tricentis agent is scored. No AgentScore product work.</p>
     </div>
 
     <div class="down"><span class="stem"></span><span class="head"></span><span class="lbl">After the first score</span></div>
 
-    <div class="loopwrap"><svg viewBox="0 0 1360 460" role="img" aria-label="Stimulation testing loop, then gains and a report">
+    <div class="loopwrap"><svg viewBox="0 0 1360 580" role="img" aria-label="Stimulation testing loop, then a CI go / no-go, gains and a report">
 <defs>
 <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4c5fd5"/></marker>
 <marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#7b86a6"/></marker>
@@ -203,7 +204,7 @@
 </defs>
 <rect x="20" y="16" width="960" height="420" rx="26" fill="#eef0fd" stroke="#4c5fd5" stroke-width="2" stroke-dasharray="8 6"/>
 <text x="44" y="48" class="looplbl">THE LOOP</text>
-<text x="168" y="48" class="loopsub">repeat steps 8 to 11 until the score meets the ship bar</text>
+<text x="168" y="48" class="loopsub">repeat steps 6 to 9 until the score meets the ship bar</text>
 <g fill="none" stroke="#4c5fd5" stroke-width="4" marker-end="url(#ar)">
 <path d="M236,132 L270,132"/>
 <path d="M470,132 L504,132"/>
@@ -215,26 +216,30 @@
 <text x="540" y="268" text-anchor="middle" class="sm" fill="#4c5fd5" font-weight="700">REPEAT</text></g>
 <path d="M980,132 L1040,132" fill="none" stroke="#7b86a6" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#ag)"/>
 <g><rect x="36" y="88" width="200" height="88" rx="12" fill="#fff" stroke="#2f6fdd" stroke-width="2"/>
-<circle cx="62" cy="132" r="15" fill="#2f6fdd"/><text x="62" y="137" text-anchor="middle" class="num">8</text>
+<circle cx="62" cy="132" r="15" fill="#2f6fdd"/><text x="62" y="137" text-anchor="middle" class="num">6</text>
 <text x="86" y="122" class="ttl">Profile the agent</text><text x="86" y="140" class="sm">Type, success criteria,</text><text x="86" y="156" class="sm">failure modes</text></g>
 <g><rect x="270" y="88" width="200" height="88" rx="12" fill="#fff" stroke="#2f6fdd" stroke-width="2"/>
-<circle cx="296" cy="132" r="15" fill="#2f6fdd"/><text x="296" y="137" text-anchor="middle" class="num">9</text>
+<circle cx="296" cy="132" r="15" fill="#2f6fdd"/><text x="296" y="137" text-anchor="middle" class="num">7</text>
 <text x="320" y="122" class="ttl">Pick test categories</text><text x="320" y="140" class="sm">The stimulation tests</text><text x="320" y="156" class="sm">that fit this agent</text></g>
 <g><rect x="504" y="88" width="200" height="88" rx="12" fill="#fff" stroke="#2f6fdd" stroke-width="2"/>
-<circle cx="530" cy="132" r="15" fill="#2f6fdd"/><text x="530" y="137" text-anchor="middle" class="num">10</text>
-<text x="554" y="122" class="ttl">Run the tests</text><text x="554" y="140" class="sm">Automatic, generates</text><text x="554" y="156" class="sm">trace data</text></g>
+<circle cx="530" cy="132" r="15" fill="#2f6fdd"/><text x="530" y="137" text-anchor="middle" class="num">8</text>
+<text x="554" y="122" class="ttl">Run the tests</text><text x="554" y="140" class="sm">Coding agent runs them</text><text x="554" y="156" class="sm">and sends traces back</text></g>
 <g><rect x="738" y="88" width="200" height="88" rx="12" fill="#fff" stroke="#2f6fdd" stroke-width="2"/>
-<circle cx="764" cy="132" r="15" fill="#2f6fdd"/><text x="764" y="137" text-anchor="middle" class="num">11</text>
+<circle cx="764" cy="132" r="15" fill="#2f6fdd"/><text x="764" y="137" text-anchor="middle" class="num">9</text>
 <text x="788" y="122" class="ttl">Score the tests</text><text x="788" y="140" class="sm">Improvements are</text><text x="788" y="156" class="sm">generated</text></g>
 <g><rect x="1040" y="80" width="290" height="104" rx="12" fill="#fff" stroke="#7a5bd0" stroke-width="2"/>
-<circle cx="1066" cy="132" r="15" fill="#7a5bd0"/><text x="1066" y="137" text-anchor="middle" class="num">14</text>
+<circle cx="1066" cy="132" r="15" fill="#7a5bd0"/><text x="1066" y="137" text-anchor="middle" class="num">11</text>
 <text x="1090" y="118" class="ttl">See the gains</text><text x="1090" y="136" class="sm">Measurable improvements</text><text x="1090" y="152" class="sm">by category, with a</text><text x="1090" y="168" class="sm">cost function</text></g>
 <path d="M1185,184 L1185,268" fill="none" stroke="#7a5bd0" stroke-width="4" marker-end="url(#ap)"/>
 <g><rect x="1040" y="268" width="290" height="104" rx="12" fill="#fff" stroke="#7a5bd0" stroke-width="2"/>
-<circle cx="1066" cy="320" r="15" fill="#7a5bd0"/><text x="1066" y="325" text-anchor="middle" class="num">15</text>
+<circle cx="1066" cy="320" r="15" fill="#7a5bd0"/><text x="1066" y="325" text-anchor="middle" class="num">12</text>
 <text x="1090" y="306" class="ttl">Report generated</text><text x="1090" y="324" class="sm">For the organization and</text><text x="1090" y="340" class="sm">all of their agents</text></g>
+<path d="M838,436 L838,470" fill="none" stroke="#7b86a6" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#ag)"/>
+<g><rect x="698" y="470" width="280" height="92" rx="12" fill="#fff" stroke="#2f6fdd" stroke-width="2"/>
+<circle cx="724" cy="516" r="15" fill="#2f6fdd"/><text x="724" y="521" text-anchor="middle" class="num">10</text>
+<text x="748" y="502" class="ttl">CI go / no-go</text><text x="748" y="520" class="sm">CLI reports simulation</text><text x="748" y="536" class="sm">results only, MCP still works</text></g>
 </svg></div>
-    <div class="legend"><span><i style="background:#2f6fdd"></i>Next: Trident sign-in (1) and stimulation testing (8 to 11)</span><span><i style="background:#1f9d63"></i>Now: steps 2 to 4</span><span><i style="background:#7a5bd0"></i>Later: gains and reporting (14 and 15)</span><span><i style="background:#4c5fd5;height:4px"></i>Loop path</span></div>
+    <div class="legend"><span><i style="background:#2f6fdd"></i>Next: Trident sign-in (1), stimulation testing (6 to 9) and CI go / no-go (10)</span><span><i style="background:#1f9d63"></i>Now: steps 2 to 5, including the quality gate (4)</span><span><i style="background:#7a5bd0"></i>Later: gains and reporting (11 and 12)</span><span><i style="background:#4c5fd5;height:4px"></i>Loop path</span></div>
   </section>
 
   <!-- ================= BOARD ================= -->
@@ -245,28 +250,61 @@
 
     <!-- ============ NOW ============ -->
     <div class="col now">
-      <div class="col-head"><h2>Now</h2><p>3 themes &middot; 3 features</p></div>
+      <div class="col-head"><h2>Now</h2><p>4 themes &middot; 7 features</p></div>
 
       <div class="card theme">
         <h3>Improved onboarding</h3>
-        <p class="what">The first session, from sign-in to a first score, where every screen has one next action. Steps 2 and 3. The old Simplify onboarding feature list is marked done. This theme is the remaining bar.</p>
+        <p class="what">The first session, from sign-in to a first score, where every screen has one next action. Steps 2 and 3. First login with no data goes straight to the MCP connection step, a waiting screen holds until auth completes, and the user is guided to the first score and advice.</p>
         <details>
           <summary>Why it matters</summary>
-          <p>The persona can create agents and does not know how to configure traces. A screen with several ways forward loses them before the first score. Self-service onboarding is a High ask from Wolters Kluwer and L'Oreal. Labs graduation criterion 1 is real active use, which depends on people reaching a score quickly. Open gaps remain: Home does not open the connect card, the first score does not start on its own, and verdict names differ by screen.</p>
+          <p>The persona can create agents and does not know how to configure traces. A screen with several ways forward loses them before the first score. Self-service onboarding is a High ask from Wolters Kluwer and L'Oreal. Labs graduation criterion 1 is real active use, which depends on people reaching a score quickly. The 11-11 sync made the HTML mock the base for the engineer's spec. Still open: verdict names differ by screen.</p>
         </details>
         <div class="goal"><b>Goal:</b> a user always knows the single next action, and reaches one score and one verdict for an agent they already run.</div>
         <ul class="features">
           <li>
             <div class="t">Guided first session <span class="badge">Steps 2, 3</span></div>
-            <div class="d">Each screen offers one next action until the user reads a score and a verdict. No trace setup, profile picking, or eval writing on this path.</div>
-            <div class="jira"><span class="none">Not re-checked against Jira</span></div>
+            <div class="d">Connect on first login, a waiting screen until MCP auth completes, progress to about 20 traces, then the score, an Improve button and plain-language advice, in the web app and in the coding agent's thread. No trace setup, profile picking, or eval writing on this path.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-17229">AI-17229</a><a href="https://tricentis.atlassian.net/browse/AI-17230">AI-17230</a><a href="https://tricentis.atlassian.net/browse/AI-16010">AI-16010</a><a href="https://tricentis.atlassian.net/browse/AI-16011">AI-16011</a><span class="none">epic AI-15150</span><span class="gap">One verdict vocabulary: no Jira</span></div>
           </li>
         </ul>
       </div>
 
       <div class="card theme">
+        <h3>Quality gate</h3>
+        <p class="what">Each agent gets one gate (open, closed, or not enough data) from conditions the customer chooses over scored traces. Failing traces are flagged. Signal only: it never blocks a deploy and never changes the verdict. Step 4. New on 11-11.</p>
+        <details>
+          <summary>Why it matters</summary>
+          <p>The verdict is a weighted average, so one trace that leaks personal data barely moves it. Georgie Zaguirre asked for a security gate after ATA read 88% ready to ship while completing tasks correctly about 40% of the time (Internal Feedback Log, High). Tritusa asked for safety findings and company guardrails on 11-10 (compliance row, High, x2). The CI/CD gate row (High, Eaton and Accenture) is the strongest demand for a pass / fail. The brief is approved and coding starts after product review.</p>
+        </details>
+        <div class="goal"><b>Goal:</b> a user can say "this must never fail" about a check and get a clear open or closed answer that names the failing condition and links to the traces.</div>
+        <ul class="features">
+          <li>
+            <div class="t">Gate conditions and gate state <span class="badge">Step 4</span></div>
+            <div class="d">Share of flagged traces (with an "any single trace" preset), a floor on an eval, dimension or overall score, and a drop from the previous revision. Merges the internal security gate ask.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-17189">AI-17189</a><span class="gap">Brief only: no epic or build stories</span></div>
+          </li>
+          <li>
+            <div class="t">Flags, acknowledge and override</div>
+            <div class="d">A flagged trace shows the condition, score and judge's reason, and trace lists filter to flags. Acknowledge a false alarm, or override a closed gate, with a required reason.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-17189">AI-17189</a></div>
+          </li>
+          <li>
+            <div class="t">Tenant-level conditions and templates</div>
+            <div class="d">Mandatory tenant conditions from the back office. Shipped privacy, security and safety templates. Authoring in a form or through the chat assistant behind the approval card.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-17189">AI-17189</a></div>
+          </li>
+          <li>
+            <div class="t">Gate history and read surfaces</div>
+            <div class="d">Every change recorded with its evidence. Readable in the app, back office, customer app API, MCP and the AI Workspace internal API. Adds "start a revision" to the customer app.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-17189">AI-17189</a></div>
+          </li>
+        </ul>
+        <div class="risk"><b>Dispute risk:</b> v1 has no CI API and no native CI integration, so Eaton's and Accenture's "block the release in CI" is not met here. Georgie's "cannot be marked ready to ship" is not met either: the gate stays separate from the verdict, as the brief decides.</div>
+      </div>
+
+      <div class="card theme">
         <h3>Workflow management</h3>
-        <p class="what">A multi-agent flow is shown as one workflow. Step 4.</p>
+        <p class="what">A multi-agent flow is shown as one workflow. Step 5.</p>
         <details>
           <summary>Why it matters</summary>
           <p>Evaluating a group or hierarchy of agents is a High ask from Meta, Wolters Kluwer, Aptiv, Eaton, and Accenture. Aptiv asked to store and score a workflow as a whole. Accenture marked multi-agent workflow testing as priority 1. This theme is the showing and grouping.</p>
@@ -274,9 +312,9 @@
         <div class="goal"><b>Goal:</b> a user who runs several agents together sees that flow as one workflow.</div>
         <ul class="features">
           <li>
-            <div class="t">Workflow-level grouping <span class="badge">Step 4</span></div>
+            <div class="t">Workflow-level grouping <span class="badge">Step 5</span></div>
             <div class="d">Multi-agent flows are grouped and shown as one workflow.</div>
-            <div class="jira"><span class="none">Not re-checked against Jira</span></div>
+            <div class="jira"><span class="gap">No Jira found</span></div>
           </li>
         </ul>
         <div class="risk"><b>Dispute risk:</b> session grouping stays Next. It rolls one agent's traces into a task. Scoring or testing the workflow is a wider ask than showing the group.</div>
@@ -294,7 +332,7 @@
           <li>
             <div class="t">Score every internal Tricentis agent</div>
             <div class="d">Rollout and adoption. No AgentScore product work is expected. The guided first session is the connection path, and that is separate work.</div>
-            <div class="jira"><span class="none">No AgentScore product work expected</span></div>
+            <div class="jira"><a class="done" href="https://tricentis.atlassian.net/browse/AI-16547">AI-16547 done</a><a class="done" href="https://tricentis.atlassian.net/browse/AI-16564">AI-16564 done</a><a href="https://tricentis.atlassian.net/browse/AI-16563">AI-16563</a><span class="none">no epic; no product work expected</span></div>
           </li>
         </ul>
       </div>
@@ -302,39 +340,49 @@
 
     <!-- ============ NEXT ============ -->
     <div class="col next">
-      <div class="col-head"><h2>Next</h2><p>5 themes &middot; 9 features</p></div>
+      <div class="col-head"><h2>Next</h2><p>5 themes &middot; 12 features</p></div>
 
       <div class="card theme">
         <h3>Stimulation testing</h3>
-        <p class="what">AgentScore profiles an agent, runs targeted tests, and scores the results, so a user can test without waiting for organic traces. Steps 8 to 11. Moved from Now on 11-04.</p>
+        <p class="what">AgentScore profiles an agent, generates targeted tests from its traces and evals, has them run, and scores the results, so a user can test without waiting for organic traces. Steps 6 to 10. On 11-11 the sync decided the user's coding agent pulls the suite through the MCP and runs it, with a CLI as the optional happy path.</p>
         <details>
           <summary>Why it matters</summary>
-          <p>Scenario bank and simulation testing is the top High ask across Meta (x2), L'Oreal, Tritusa, Eaton, PG&amp;E, and Accenture, and the pivotal gap for the Meta POC. It is Next so the first session can reach a score on real use first.</p>
+          <p>Scenario bank and simulation testing is the top High ask across Meta (x2), L'Oreal, Tritusa, Eaton, PG&amp;E, and Accenture, and the pivotal gap for the Meta POC. On 11-10 Tritusa asked for safety findings: organic traces cannot show an agent will never leak PII, so it has to be prompted with test inputs. The differentiator is the knowledge base of failure modes by agent type, not the test mechanics.</p>
         </details>
-        <div class="goal"><b>Goal:</b> an agent is profiled, given the test categories that fit it, tested automatically, and scored, with improvements generated from the results.</div>
+        <div class="goal"><b>Goal:</b> an agent is profiled, given the test categories that fit it, tested by the user's coding agent, and scored, with improvements and a go / no-go a pipeline can read.</div>
         <ul class="features">
           <li>
-            <div class="t">Agent profiling prompt <span class="badge">Step 8</span></div>
+            <div class="t">Agent profiling prompt <span class="badge">Step 6</span></div>
             <div class="d">Agent reports its type, success criteria, and common failure modes.</div>
             <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15844">AI-15844</a></div>
           </li>
           <li>
-            <div class="t">Category-based test selection <span class="badge">Step 9</span></div>
+            <div class="t">Category-based test selection <span class="badge">Step 7</span></div>
             <div class="d">Compliance, security and PII, safety and harm, functional, usability, bias, robustness, multi-agent, MCP, cost and efficiency.</div>
             <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15851">AI-15851</a><a href="https://tricentis.atlassian.net/browse/AI-15852">AI-15852</a><a href="https://tricentis.atlassian.net/browse/AI-15853">AI-15853</a><a href="https://tricentis.atlassian.net/browse/AI-15854">AI-15854</a><a href="https://tricentis.atlassian.net/browse/AI-15855">AI-15855</a></div>
           </li>
           <li>
-            <div class="t">Automated stimulation test runs <span class="badge">Step 10</span></div>
-            <div class="d">Selected tests run automatically and generate trace data.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15845">AI-15845</a><a href="https://tricentis.atlassian.net/browse/AI-15846">AI-15846</a><a href="https://tricentis.atlassian.net/browse/AI-15847">AI-15847</a><a href="https://tricentis.atlassian.net/browse/AI-15848">AI-15848</a><a href="https://tricentis.atlassian.net/browse/AI-15849">AI-15849</a><a href="https://tricentis.atlassian.net/browse/AI-15850">AI-15850</a></div>
+            <div class="t">Test suite through the MCP, run by the coding agent <span class="badge">Step 8</span></div>
+            <div class="d">The user's coding agent pulls the suite, runs it, and sends traces back. Tests and results are stored per agent and linked, so they re-run like unit tests.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15845">AI-15845</a><a href="https://tricentis.atlassian.net/browse/AI-15846">AI-15846</a><a href="https://tricentis.atlassian.net/browse/AI-15847">AI-15847</a><a href="https://tricentis.atlassian.net/browse/AI-15848">AI-15848</a><a href="https://tricentis.atlassian.net/browse/AI-15849">AI-15849</a><span class="gap">Runner stories predate the coding-agent decision</span></div>
           </li>
           <li>
-            <div class="t">Stimulation scoring and improvements <span class="badge">Step 11</span></div>
+            <div class="t">Stimulation scoring and improvements <span class="badge">Step 9</span></div>
             <div class="d">Results are scored and improvements generated.</div>
             <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15856">AI-15856</a><a href="https://tricentis.atlassian.net/browse/AI-15857">AI-15857</a></div>
           </li>
+          <li>
+            <div class="t">Safety gate on simulation results <span class="badge">Steps 7, 9</span></div>
+            <div class="d">A simulation run carries its own pass / fail on the safety findings it produced. Separate from the quality gate, which reads scored production traces.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15853">AI-15853</a><a href="https://tricentis.atlassian.net/browse/AI-15856">AI-15856</a></div>
+          </li>
+          <li>
+            <div class="t">CI go / no-go through a CLI <span class="badge">Step 10</span></div>
+            <div class="d">A CLI that wraps the MCP runs the simulation tests and returns go / no-go from the simulation results only. The MCP-only route keeps working.</div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15850">AI-15850</a></div>
+          </li>
         </ul>
-        <div class="risk"><b>Dispute risk:</b> the High demand would support Now. It stays Next because the current bet is the guided first session and workflow grouping.</div>
+        <div class="risk"><b>Dispute risk:</b> the High demand would support Now. It stays Next because the current bet is the guided first session and the quality gate. The CLI reports simulation results only, not the quality gate state.</div>
       </div>
 
       <div class="card theme">
@@ -342,9 +390,9 @@
         <p class="what">Polish that makes AgentScore legible while a user waits and when they read results.</p>
         <details>
           <summary>Why it matters</summary>
-          <p>Long-running actions with no feedback, and technical dimension and eval names, make results hard to trust. These do not block the guided first session, so they stay Next.</p>
+          <p>Long-running actions with no feedback, and technical dimension and eval names, make results hard to trust. Plain-language explanations of failures are a High internal ask (Georgie Zaguirre, 11-04 session), and Tritusa found the advice on a 63.4 score hard to act on. These do not block the guided first session, so they stay Next.</p>
         </details>
-        <div class="goal"><b>Goal:</b> users always see progress, and understand every dimension and eval in plain language.</div>
+        <div class="goal"><b>Goal:</b> users always see progress, understand every dimension and eval in plain language, and can read in one line why a trace or eval failed.</div>
         <ul class="features">
           <li>
             <div class="t">Progress bars for all actions</div>
@@ -356,8 +404,13 @@
             <div class="d">Every dimension and eval gets a non-technical explanation.</div>
             <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15268">AI-15268</a><a class="done" href="https://tricentis.atlassian.net/browse/AI-11884">AI-11884 done</a></div>
           </li>
+          <li>
+            <div class="t">Plain-language failure summary</div>
+            <div class="d">A one-line reason per failed trace or eval in the UI: pass or fail, metric, score, judge type, reason. New on 11-11, from the Internal Feedback Log.</div>
+            <div class="jira"><span class="gap">No Jira found</span><span class="none">AI-15177 covers error messages only</span></div>
+          </li>
         </ul>
-        <div class="risk"><b>Dispute risk:</b> a waiting page and one verdict vocabulary are part of reaching the first score. If those are required for step 3, they belong on Now.</div>
+        <div class="risk"><b>Dispute risk:</b> the failure summary is rated High internally, and the guided first session now ends on "score and advice". If the advice must be readable for step 3, the summary belongs on Now.</div>
       </div>
 
       <div class="card theme">
@@ -372,7 +425,7 @@
           <li>
             <div class="t">Hybrid JEV and judge</div>
             <div class="d">Use JEV where it applies, and the current judge where it does not, to save scoring time and cost.</div>
-            <div class="jira"><span class="none">Not re-checked against Jira</span></div>
+            <div class="jira"><span class="gap">No Jira found</span></div>
           </li>
         </ul>
         <div class="risk"><b>Dispute risk:</b> what JEV expands to is unconfirmed. This card treats it as a cheaper decision model beside the current judge.</div>
@@ -390,7 +443,7 @@
           <li>
             <div class="t">Session grouping</div>
             <div class="d">Related traces are grouped into a task or conversation, and the score covers that whole session.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15832">AI-15832</a></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15832">AI-15832</a><a href="https://tricentis.atlassian.net/browse/AI-15867">AI-15867</a><a href="https://tricentis.atlassian.net/browse/AI-15868">AI-15868</a><a href="https://tricentis.atlassian.net/browse/AI-15869">AI-15869</a></div>
           </li>
         </ul>
       </div>
@@ -407,7 +460,7 @@
           <li>
             <div class="t">Trident sign-in <span class="badge">Step 1</span></div>
             <div class="d">Tricentis identity replaces Tosca Cloud sign-in. Tenant login-or-create from the old sign-in stays shipped.</div>
-            <div class="jira"><span class="none">Not re-checked against Jira</span></div>
+            <div class="jira"><span class="gap">No Jira found</span><a class="done" href="https://tricentis.atlassian.net/browse/AI-12369">AI-12369 done</a><span class="none">the Okta sign-in being replaced</span></div>
           </li>
         </ul>
         <div class="risk"><b>Dispute risk:</b> this swaps the identity provider. It does not reopen tenant provisioning, joining a tenant, or AI Workspace tenant reconciliation.</div>
@@ -441,7 +494,7 @@
         <p class="what">Show AgentScore results on agents inside AI Workspace. Score and ship decision come from <code>/v1/tenants/{slug}/agents/{name}/score</code>.</p>
         <details>
           <summary>Why it matters</summary>
-          <p>L'Oreal has AI Workspace and 1M+ agent credits but could not ingest without the Workspace admin team. AI Workspace is the easiest surface for reaching AgentScore. Optional for beta, and the AI Workspace UI owner is not yet engaged.</p>
+          <p>L'Oreal has AI Workspace and 1M+ agent credits but could not ingest without the Workspace admin team. AI Workspace is the easiest surface for reaching AgentScore. The quality gate (Now) adds gate state to the AI Workspace internal read API, which this theme could show next to the score. Optional for beta, and the AI Workspace UI owner is not yet engaged.</p>
         </details>
         <div class="goal"><b>Goal:</b> an AIWS agent's score and ship decision appear next to it, users are told when a rescore is worthwhile, and later see status and score movement.</div>
         <ul class="features">
@@ -471,7 +524,7 @@
 
       <div class="card theme">
         <h3>Quantitative cost function</h3>
-        <p class="what">Measurable improvements by category, each with a cost impact, backed by a quantitative model that puts a dollar or risk value on each. Step 14.</p>
+        <p class="what">Measurable improvements by category, each with a cost impact, backed by a quantitative model that puts a dollar or risk value on each. Step 11.</p>
         <details>
           <summary>Why it matters</summary>
           <p>Showing impact such as "saves $X in token spend" proves the value of each improvement. A quantitative model makes those numbers defensible for the person who makes the final ship call.</p>
@@ -479,21 +532,21 @@
         <div class="goal"><b>Goal:</b> every improvement carries a calculated cost or risk value the user can trust and compare.</div>
         <ul class="features">
           <li>
-            <div class="t">Measurable improvements by category <span class="badge">Step 14</span></div>
+            <div class="t">Measurable improvements by category <span class="badge">Step 11</span></div>
             <div class="d">Improvements by category with cost impact, e.g. "saves $X in token spend" or "avoided a GDPR violation."</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15833">AI-15833</a><span class="none">AI-11896 is billing, not this value</span></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15833">AI-15833</a><span class="gap">Epic has no stories</span><span class="none">AI-11896 is billing, not this value</span></div>
           </li>
           <li>
             <div class="t">Quantitative cost function for improvements</div>
             <div class="d">Each improvement is valued with a quantitative cost model, e.g. token spend saved or risk exposure avoided.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15833">AI-15833</a></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15833">AI-15833</a><span class="gap">Epic has no stories</span></div>
           </li>
         </ul>
       </div>
 
       <div class="card theme">
         <h3>Tenant-wide agent reporting</h3>
-        <p class="what">Generate a report for the organization covering all agents in a tenant. Step 15.</p>
+        <p class="what">Generate a report for the organization covering all agents in a tenant. Step 12.</p>
         <details>
           <summary>Why it matters</summary>
           <p>The person who decides what ships needs one view across every agent, not one report per agent.</p>
@@ -501,9 +554,9 @@
         <div class="goal"><b>Goal:</b> a user generates a single report for all agents in their tenant.</div>
         <ul class="features">
           <li>
-            <div class="t">Report generation for all agents in a tenant <span class="badge">Step 15</span></div>
+            <div class="t">Report generation for all agents in a tenant <span class="badge">Step 12</span></div>
             <div class="d">One report covering every agent in the tenant.</div>
-            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15834">AI-15834</a></div>
+            <div class="jira"><a href="https://tricentis.atlassian.net/browse/AI-15834">AI-15834</a><span class="gap">Epic has no stories</span></div>
           </li>
         </ul>
       </div>
@@ -512,7 +565,7 @@
   </section>
 
   <footer>
-    Last updated 11-04-2026. Orange tags mark Later items with no matching Jira issue.
+    Last updated 11-11-2026 from <a href="2026-11-11-agentscore-beta-roadmap.md">2026-11-11-agentscore-beta-roadmap.md</a>. Jira checked 11-11-2026: see <a href="../jira-alignment/2026-11-11-agentscore-beta-roadmap-jira.md">the Jira alignment</a>. Orange tags mark gaps: no matching Jira issue, or Jira that does not cover the feature. Green tags are Done.
   </footer>
 </div>
 

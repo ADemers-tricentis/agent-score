@@ -42,8 +42,12 @@ export default function CustomProfiles() {
           profile for an agent on its own; you'll have to pin it yourself.
         </Step>
         <Step title="Checks - which evals run">
-          <strong>Add a check</strong> lists every published eval: your organization's (marked
-          "yours") and the built-in ones. Each check you add shows the exact version it uses, a
+          <strong>Add a check</strong> lists every published eval, A to Z: your organization's
+          (marked "yours") and the built-in ones. Type in <strong>Search checks…</strong> to
+          narrow the list, sort it <strong>A to Z</strong> or by <strong>Date created</strong>,
+          and show <strong>All</strong>, <strong>Built-in</strong>, or <strong>Yours</strong>.
+          Your sort and filter stay as you set them while the form is open. Each check you add
+          shows the exact version it uses, a
           switch to turn it on or off, and a bin to remove it. A turned-off check stays in the
           profile but doesn't score. The counter shows how many checks are on (up to 20) and how
           much of your own rubric text the profile carries (up to 24,000 characters).

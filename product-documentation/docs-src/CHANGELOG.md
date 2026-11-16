@@ -3,6 +3,59 @@
 All notable changes to the AgentScore docs site are recorded here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.45.0] - 2026-11-13
+
+### Added
+- MCP Tools Reference: a new page listing every tool your coding agent can
+  use, grouped by job, with what each does, something to ask, what it needs,
+  which Manage permissions switch it needs, and whether it uses credits or
+  runs in the background. It also covers the eight prompts, the three
+  guides, background jobs, limits, the replies you may see when something
+  goes wrong, and what stays in the app.
+- Improve This Agent: a new section, "Improve from your coding agent", that
+  walks the loop step by step: find the weakest eval, read the interactions
+  and traces behind it, ask for advice, change the code, mark a revision,
+  score again and compare. Covers labeling, credits and permissions.
+- Glossary: Revision and Job.
+
+### Changed
+- Connect with MCP and Quick start now point to the improvement walkthrough
+  and the tools reference. The MCP glossary entry mentions prompts, guides
+  and tools.
+
+## [0.44.0] - 2026-11-12
+
+### Added
+- Connect with MCP: how to choose what your coding agents can do from Manage
+  permissions (Read, Change, Spend credits, Delete & credentials, Prompts &
+  guides), turn off every write action at once, and stop all your coding
+  agents if a sign-in may have leaked. Adds a screenshot of the page.
+- Connect with MCP: what to check when your coding agent can't see a tool.
+- Reading Your Scorecard: what a provisional score looks like, and what an
+  excluded dimension means for the composite.
+
+### Changed
+- Quick start and Connect with MCP: Integrations now has a Coding assistants
+  tab and a Trace ingestion tab. Each client's tab has your server URL
+  already filled in, and Connection details shows it on its own. New
+  screenshot of the Coding assistants tab.
+- Connect with MCP: Claude Code covers all three choices of who gets it,
+  under Other setup options.
+- Ingest keys are created, rotated and revoked on the Trace ingestion tab.
+- Building Your Own Profiles: Add a check can be searched, sorted A to Z or
+  by date created, and filtered to built-in or your own checks.
+- Building Your Own Evals: the Evals tabs list items A to Z, and the Profiles
+  tab shows your organization's profiles beside the built-in ones.
+- Scoring Engine Settings: an agent that runs as a Tricentis service has no
+  cost rates to set.
+
+### Fixed
+- Connect Your Agent: the Connect an agent wizard lists the tenant's keys by
+  their last characters and leaves a placeholder for the key. It does not
+  fill in your key. New screenshot of the wizard.
+- Glossary: signing in with your Tosca Cloud account creates your tenant. The
+  Agent Score team doesn't have to set it up.
+
 ## [0.43.0] - 2026-11-02
 
 ### Added

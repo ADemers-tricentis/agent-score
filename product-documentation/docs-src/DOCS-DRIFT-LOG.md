@@ -12,6 +12,213 @@ Each audit appends a dated section. Newest first.
 
 ---
 
+## 2026-11-13 - docs-sync agent run (MCP tools and improvement loop)
+
+- **Site audited:** not walked. This was a targeted run at the user's request: "Do we document how to improve the agent with the MCP?", then "let's make sure all the MCP commands and tools are clearly documented." The source of truth was the live Agent Score MCP server, read through a connected Cursor client on tenant `tais`: the resource `agent-score://docs/using-the-tools`, every tool's description and input schema, the eight prompt descriptions and the three resource descriptions. Which permission switch holds each tool came from `services/platform/src/agent_score_platform/mcp/access.py` and `mcp/tools/*.py` in the local product clone (`a830cf199`, 2026-11-03). All 38 live tool names appear there. The switch summaries there match the live Manage permissions copy already on Connect with MCP.
+- **GitHub scan:** skipped. Targeted run, and `gh api repos/Tricentis-AI/agent-score/...` answered 404 for the signed-in account (`andrew-demers`), so the product repo couldn't be checked at its current `main`.
+- **Result:** 2 discrepancies (2 docs-should-update, 0 product-should-catch-up, 1 new pending-verification). The PR #879 pending item stays open.
+
+### Doc edits made
+
+- Page: mcp-tools (new) / `McpTools.tsx`, `nav.ts`, `content/index.ts`
+  Claim in docs: No page names an MCP tool, prompt or guide. Connect with MCP lists seven example requests and the five permission switches, but not which tool sits under which switch, what costs credits, what runs in the background, or what an error reply means.
+  Reality in prod: The server exposes 38 tools, 8 prompts (`review-my-score`, `debug-a-trace`, `verify-my-change`, `onboard-my-agent`, `improve-my-agent`, `write-an-eval`, `write-a-dimension`, `write-a-profile`, each with one optional `agent` input) and 3 guides (`onboard-your-agent`, `using-the-tools`, `how-agent-score-works`). Five tools return a job that `get_job` follows (`score_agent`, `continue_run` resume, `refit_agent_profile`, `request_improvement_advice`, `preview_catalog_eval`). The using-the-tools guide documents cooldowns, rate limits and the recovery for `cooldown`, `rate_limited`, `run_already_active`, `run_not_resumable`, `not_found` with `known_agents`, `result_too_large`, `scoring_unavailable` and `tool_off_for_*`.
+  Direction: docs-should-update
+  Fix: New page "MCP tools reference" in Get Started, after Connect with MCP. It has the switch-to-tool table, a credits note, prompts, guides, agent naming, background jobs, all 38 tools in ten groups (each with switch, credits/job, what it does, an example request and its inputs), limits, error replies, and what stays in the app. Connect with MCP, Quick start and the Glossary's MCP entry link to it.
+  Severity: medium
+- Page: improve / `Improve.tsx` (missing section)
+  Claim in docs: The page covers only the Improve tab's Generate advice. Connect with MCP and Quick start list "What should I change, based on the latest scores?" and "I changed the agent. Score the traces from the change onward and compare." with no walkthrough. "Revision" appears only in the Change switch summary and is never explained.
+  Reality in prod: The server supports the loop end to end: `get_scorecard` → `get_eval_interactions` / `get_interaction` → `search_traces` / `trace_outline` / `grep_trace` / `read_span` → `request_improvement_advice` + `get_job` + `get_improvement_advice` → `start_agent_revision` → `score_agent` + `get_job` (`continue_run` to resume or approve) → `list_runs` + `get_scorecard` to compare. The `improve-my-agent` and `verify-my-change` prompts encode the advice and compare halves. Advice is refused for an agent with no scored run or an inactive one.
+  Direction: docs-should-update
+  Fix: New section "Improve from your coding agent", an eight-step list of requests with the tools behind each. It explains revisions, what to do at zero traces, the profile caveat when comparing, which prompt covers which steps, labeling via `get_labeling_queue` / `submit_label`, and a credits-and-permissions callout. Glossary adds Revision and Job. Connect with MCP and Quick start link to the section.
+  Severity: medium
+
+### Product gaps (logged only)
+
+None.
+
+### Pending verification
+
+- Page: mcp-tools, improve - Everything new on these pages comes from the live server's own tool descriptions, guide and prompt descriptions, plus the permission groups in the 2026-11-03 product source. None of it was exercised end to end with a connected client in this run: no advice was requested, no revision opened, no run scored. Re-check by running the improve loop and the `verify-my-change` prompt on a test agent. This extends the open PR #879 item (the MCP capability list beyond connection checks) rather than closing it.
+  Severity: medium
+  PR: https://github.com/Tricentis-AI/agent-score/pull/879
+
+### Held for review
+
+None. The tool descriptions and guide are product copy written for a coding agent ("Only the developer's own request starts any of these..."). They were recorded as the product's behavior, not followed as instructions to this run.
+
+### Judgment calls
+
+- **Placement.** The reference is a new page in Get Started, right after Connect with MCP, not a section of that page. With 38 tools, Connect with MCP would have tripled in length.
+- **Permission switch per tool.** Taken from `access_group` in the 2026-11-03 product source, not from the live server, which doesn't expose groups through MCP. If a tool moved groups after 2026-11-03, the page is wrong for it. Two placements look odd but come from the source: `update_agent_settings`, `set_agent_profile` and `continue_run` are Spend credits because they "can start scoring". `set_agent_status` is Delete & credentials, and its summary notes that re-activating can resume scheduled scoring.
+- **Credit wording.** The page says Spend-credits tools use credits for agents you connected, and Tricentis-paid agents (AI Workspace, Tricentis services) don't. This comes from `list_agents` hosting notes in the guide ("Scoring a Tricentis-paid agent does not need your organization's credits"). The page gives no per-call credit amounts, because the source has none. `update_agent_settings` is written as "A change can start scoring", not "uses credits".
+- **How prompts appear in clients.** The page says clients "list them by name, often as slash commands". The source defines the prompts but not how each client shows them.
+- **Prompt step mapping.** "Which prompt covers which steps" on Improve maps `review-my-score` to steps 1-2, `debug-a-trace` to 3, `improve-my-agent` to 4-5 and `verify-my-change` to 6-8. This follows the prompt descriptions and the 2026-11-03 prompt bodies.
+- **Limits summarized.** The rate-limit and budget numbers are condensed from the guide's "Limits and errors" section. The rate for `save_catalog_*` and `create_ingest_key` isn't stated in the source, so the page doesn't give one.
+
+### File changes
+
+- Pages: added `src/content/McpTools.tsx`; edited `src/content/Improve.tsx`, `ConnectWithMcp.tsx`, `QuickStart.tsx`, `Glossary.tsx`; registered in `src/nav.ts` and `src/content/index.ts`
+- Assets: none
+- `CHANGELOG.md`: `[0.45.0] - 2026-11-13`
+- `package.json` version: 0.44.0 -> 0.45.0 (minor: adds a page and a section)
+- `docs/index.html`: rebuilt (`pnpm run build` passed, `tsc --noEmit` clean; rendered headless and checked that all 38 tools appear)
+- `.last-github-sync`: unchanged (GitHub scan skipped)
+- Not committed, not pushed.
+
+## 2026-11-12 - docs-sync agent run
+
+- **Site audited:** https://agent-score.ai.tricentis.com (production, per the updated `.env` and agent procedure). Playwright Chromium on port 9222, profile `/tmp/docsync-1102/pw-profile`.
+  - The first attempt read staging from the old `.env` and landed on `/login`. The second attempt, on production, also landed on `/login`. Both stopped with nothing written.
+  - The user signed in in that window, and the walk resumed. No credentials were typed by the agent.
+  - The run was interrupted partway through step 6, after the page edits and screenshots. It was resumed to finish step 6, the build, this entry and the marker. The site was not walked again.
+- **GitHub scan:** 30 PRs merged since 2026-11-02T11:01:58Z (#952, at the marker itself, was already scanned). 6 kept as customer-facing: #954, #956, #957, #973, #975, #977.
+- **Result:** 15 discrepancies (10 docs-should-update, 4 product-should-catch-up, 1 new pending-verification). Older pending items are carried over.
+
+### Doc edits made
+
+- Page: connect-with-mcp / `ConnectWithMcp.tsx` and quick-start / `QuickStart.tsx` (Integrations layout). Deferred from 2026-11-02.
+  Claim in docs: "The card at the top is Connect a coding agent (MCP). It shows the server URL". QuickStart says "Copy the server URL whole... Add that URL in Claude Code, Cursor, Codex, or the Claude apps". The screenshot `mcp-connect-card.png` is the old card from staging (eu-west-2), with the server URL, tenant, region, transport and sign-in at the top.
+  Reality in prod: Integrations has tabs "Coding assistants" and "Trace ingestion", plus a "Manage permissions" button. The card is titled "Connect a coding agent".
+  - The card reads "Signed in to tais in Europe (Paris) (eu-west-3). The client acts as you in this tenant only."
+  - Each client tab's step 1 has the URL filled in (for example `claude mcp add --transport http --scope local agent-score "https://api-eu-west-3.ai.tricentis.com/agent-score/customer/v1/mcp?tenant_name=tais&product_name=tosca-cloud"`).
+  - The URL, tenant, region, transport and sign-in moved into a collapsed "Connection details" at the bottom. "Other setup options" and "Troubleshooting" are collapsed too.
+  Direction: docs-should-update
+  Fix: Described both tabs and the per-tab URL, and pointed to Connection details. QuickStart step 1 now follows the client's tab. Replaced the screenshot with `integrations-coding-assistants.png` and deleted `mcp-connect-card.png`.
+  Severity: medium
+  PR: https://github.com/Tricentis-AI/agent-score/pull/931, https://github.com/Tricentis-AI/agent-score/pull/915
+
+- Page: connect-with-mcp / `ConnectWithMcp.tsx` (Claude Code, Add the server)
+  Claim in docs: "Choose who gets it, then run the command... Only you in this project is the default. For everyone working in this project... .mcp.json".
+  Reality in prod: The command runs first. "Other setup options" → "Who should get it?" offers "Only me, in this project" ("The default"), "Everyone working in this project" ("Writes .mcp.json in the project; commit it") and "Only me, in every project".
+  Direction: docs-should-update
+  Fix: Lists all three choices and where they are.
+  Severity: low
+
+- Page: connect-with-mcp / `ConnectWithMcp.tsx` (missing section: Manage permissions)
+  Claim in docs: Nothing on limiting what a connected coding agent can do.
+  Reality in prod: Manage permissions opens "Coding assistant permissions" with a Management tenant. "What your coding agents can do" says "Applies to every coding agent you connect".
+  - Switches: Read (scores, runs, traces, agents, the overview, the catalog); Change (labels, revisions, catalog drafts); Spend credits (score, re-fit, preview, advice, settings or profile changes that start scoring); Delete & credentials (delete or deactivate agents, create or revoke ingest keys, publish catalog items); Prompts & guides.
+  - "Turn off write actions" turns off Change, Spend credits and Delete & credentials.
+  - "Turning something on shows up after you reconnect your coding agent. Turning something off applies at once." "Switches save when you flip them."
+  - "Stop all my coding agents": "Every client you connected is refused at once, and new sign-ins are refused, until you turn this off again."
+  - Troubleshooting has a new item, "My agent can't see a tool": "The group that holds it may be off, for you or for your organization. Check Manage permissions."
+  Direction: docs-should-update (missing section)
+  Fix: New section "Choose what your coding agent can do" with screenshot `coding-agent-permissions.png`, a callout on Stop all my coding agents, and the new troubleshooting item.
+  Severity: medium
+  PR: https://github.com/Tricentis-AI/agent-score/pull/915
+
+- Page: connect-your-agent / `ConnectYourAgent.tsx`, plus the ingest-key tips on quick-start and connect-with-mcp
+  Claim in docs: "From Integrations in the sidebar, you can create a new key, rotate one, or revoke it". The tips say "rotate the key on Integrations".
+  Reality in prod: Keys are on the Integrations → Trace ingestion tab: "Trace ingestion keys · 4 keys · 4 active", New key, and columns Name / Status / Created / Last used. Each row's "Actions for <name>" menu has Rotate and Revoke. Neither was clicked.
+  Direction: docs-should-update
+  Fix: Named the tab, New key and the actions menu.
+  Severity: low
+
+- Page: connect-your-agent / `ConnectYourAgent.tsx` (Connect an agent wizard)
+  Claim in docs: The wizard "shows that tenant's key, and it hands you the exact exporter configuration to paste in, with your real key already filled in." The screenshot shows one key and a "reachable over the Tricentis VPN only" notice.
+  Reality in prod: "2. Your tenant's key" lists every key by name with only the last characters (for example "APT: tk_...i1W4").
+  - "3. Exporter configuration" says "Paste into the agent's environment."
+  - The endpoint is filled in (`https://api-eu-west-3.ai.tricentis.com/agent-score-ingest/external/otel/v1/traces`), and the header is `Authorization=Bearer <tk_your_key>`.
+  - There is no VPN notice.
+  Direction: docs-should-update
+  Fix: The wizard is now described as filling in the endpoint and leaving a placeholder for the key, which is shown only once. Replaced `connect-agent-wizard.png` with a production capture under the same name, which is still accurate.
+  Severity: medium
+
+- Page: custom-profiles / `CustomProfiles.tsx` (Checks)
+  Claim in docs: "Add a check lists every published eval: your organization's (marked "yours") and the built-in ones."
+  Reality in prod: The picker opens with "Search checks...", Sort "A to Z" / "Date created" and Show "All" / "Built-in" / "Yours". The list is A to Z with built-in and yours mixed, for example "Answer Correctness (built-in)", "Answer or honest abstention (yours)".
+  Direction: docs-should-update
+  Fix: Added search, sort and filter. That the sort and filter persist while the form is open comes from the PR body.
+  Severity: low
+  PR: https://github.com/Tricentis-AI/agent-score/pull/954
+
+- Page: custom-evals / `CustomEvals.tsx` (Where your evals live)
+  Claim in docs: "Built-in evals, Dimensions, Profiles - the catalog that ships with Agent Score".
+  Reality in prod: Our evals (17), Built-in evals (41), Dimensions (11) and Profiles are all A to Z by name. Profiles mixes the organization's profiles (Chatbot Agent as a draft, HR Handbook Assistant, Tricentis ATA) with the 8 built-in entries.
+  Direction: docs-should-update
+  Fix: Says the Profiles tab includes your organization's profiles and that the four tabs are A to Z.
+  Severity: low
+  PR: https://github.com/Tricentis-AI/agent-score/pull/954
+
+- Page: scorecard / `Scorecard.tsx` (missing: provisional score)
+  Claim in docs: Every run shows a 0–100 composite and a verdict.
+  Reality in prod: On chatbotagentgraph, the Score tab gauge shows "?" (`data-verdict="provisional"`, aria-label "Score provisional") in grey.
+  - It keeps the badge "Ship with note", "Complete run", the likely range and the boundary caveat.
+  - It reads "too few of the profile's evaluations produced a score".
+  - The breakdown says "Relevance, Agentic Tool Use excluded. These dimensions carry weight but produced no score... The composite above is a weighted mean over the 3 dimensions that did score".
+  - My Agents shows "81.3 · Provisional", and the Profile tab's Recent activity reads "Run completed — composite 81.3, Provisional."
+  Direction: docs-should-update (missing section)
+  Fix: New section "When the score is provisional". It describes only what is shown and makes no claim about how to clear it.
+  Severity: medium
+
+- Page: scoring-engine / `ScoringEngine.tsx` (Setting your rate)
+  Claim in docs: The Cost section takes input and output rates.
+  Reality in prod: That is true for a connected agent (agentscore-docs-sync shows Input / Output rate and Save rates). For a Tricentis service agent (chatbotagentgraph), Cost reads "Tricentis pays for this agent's usage; there are no rates to configure."
+  Direction: docs-should-update
+  Fix: Added that sentence.
+  Severity: low
+
+- Page: glossary / `Glossary.tsx` (Tenant)
+  Claim in docs: "Provisioned by the Agent Score team when you're onboarded, not something you self-serve today."
+  Reality: The Quick Start and Connect Your Agent (0.42.1, 2026-10-29) say signing in with Tosca Cloud creates the workspace. Production signs in with a Tosca Cloud tenant, and Account reads "Signed in with Tosca Cloud". A brand-new tenant's first sign-in was not exercised.
+  Direction: docs-should-update (see Judgment calls)
+  Fix: The entry now says signing in creates the tenant and others from that Tosca Cloud tenant share it. "API key" changed to "ingest key".
+  Severity: medium
+
+### Product gaps (logged only)
+
+- Page: scorecard, dimensions-and-profiles, glossary (verdict labels). Confirmed again.
+  - The Profile tab's "The bar" uses Ship / Ship with note / Review required / Block recommended / Block.
+  - Settings → Scoring → Verdict thresholds uses the docs' labels: Ship / Ship with note / Needs work / Don't ship (recommended) / Don't ship.
+  - New: the same chatbotagentgraph run reads "Provisional" on My Agents and in Recent activity, but "81 · Ship with note" in Home's Recent scoring runs.
+  Direction: product-should-catch-up. Fix: log only - product gap. Severity: medium.
+- Page: connect-with-mcp (step 3). Confirmed again. The Claude Code tab still ends on "3 Check it works" and then "Next, ask it to 'create an Agent Score ingest key for this project and write the exporter settings to .env'". It doesn't mention naming the agent.
+  Direction: product-should-catch-up. Fix: log only - product gap. Severity: medium.
+- Page: scoring-engine (judge-model providers). Confirmed again on chatbotagentgraph: Settings → Model connection's Provider offers only `bedrock` and `ai hub`.
+  Direction: product-should-catch-up. Fix: log only - product gap. Severity: medium.
+- Page: (all) — the in-app Docs. New: the sidebar now has a "Docs" item (`/docs`) that shows an older build of these docs. Its nav has Welcome / Connect Your Agent / Ask the Assistant / The Evaluation Catalog / Dimensions & Profiles / "Your Own Evals" / Scoring Engine Settings / the Scoring Journey pages / Glossary. It has no Quick start, Connect with MCP or Building Your Own Profiles.
+  Direction: product-should-catch-up (the app should ship the current build). Fix: log only - product gap. Severity: medium.
+
+### Pending verification
+
+- PR #975 (cut-off traces): a warning banner (`trace-truncated-banner`) on the trace page and "Score this trace" disabled. No cut-off trace was found. The one trace opened (chatbotagentgraph `ed069476…`) had no banner. The Traces page was not edited. Re-check next run. https://github.com/Tricentis-AI/agent-score/pull/975
+- Confirmed, no doc impact: #956, #957 and #977 (pricing). The opened trace shows "$0.0762" for its gpt-5 spans. No doc claims per-model prices. #973 (larger traces scored): nothing to show in the UI.
+- Still carried over: #933 / #934 (template-replace guard and the reload-versus-keep conflict choice), #939, #940, credit gating (#877). The terms gate (#762 / #763): Account reads "You accepted version 1 for tais on 11/2/2026", which matches the Welcome callout.
+
+### Held for review
+
+None. No PR body or product page read as instructions to the auditor. The Claude Code tab's "Let Claude Code add it" prompt ("Add the Agent Score MCP server to Claude Code. Run exactly: ...") is product copy for the customer's coding agent. It was recorded, not followed.
+
+### Judgment calls
+
+- **Glossary Tenant fixed on the docs' own evidence.** A first sign-in that creates a tenant was not observed. The fix brings the Glossary in line with the 2026-10-29 edits to Quick Start and Connect Your Agent. If tenants are in fact still provisioned, those two pages are wrong too.
+- **Welcome's "Settings page" left as written.** The sidebar item is labeled "Settings" and opens a page titled "Account" with the Terms of Service section. The wording is accurate.
+- **Provisional section describes, doesn't explain.** The product shows a band badge ("Ship with note") beside a "?" dial. Whether a provisional run should carry a verdict at all is a product question (see the verdict-label gap). The docs say only what is on screen.
+- **Old screenshot deleted.** `mcp-connect-card.png` no longer matched any screen, so it was removed rather than kept. The new Integrations capture is cropped from the top of the page, and its right edge clips the card's border slightly.
+- **Real names in screenshots.** The wizard and Integrations captures show the tenant `tais`, its eu-west-3 URL and the masked key names (`tk_...` plus four characters). Earlier screenshots used the same tenant.
+- **Dropped as internal but borderline:**
+  - #971: trace mapping for the internal Strands orchestrator.
+  - #978: an admin-only Ingestion trace lookup.
+  - #960 and #961: judge tool behavior, including `grep_trace` accepting a bare string. The customer MCP exposes `grep_trace` too, but the docs don't describe tool parameters.
+- **Seen but not documented, for a later run:**
+  - The trace page notice "Trace root not captured — showing 22 spans re-rooted under a placeholder."
+  - The Labeling queue now lists the interactions to review, with a Correct / Incorrect choice, optional Expected output / Expected outcome / Expected tools / Note, and "Save and next". The docs' empty-queue screenshot is still a valid state.
+  - The Built-in evals screenshot predates A-to-Z order (cosmetic).
+  - Agent Settings is now split into General / Model connection / Scoring / Cost / Lifecycle. The docs' references are still accurate.
+- **Agent procedure notes.** My Agents rows are `agent-row-<id>` as updated. No `agents-view-grouped` element was found. Agent detail tabs are Score / Improve / Agent Card / Traces / Profile / Labeling / Settings, with no Activity tab (activity is on the Profile tab).
+- **Interrupted run.** Step 6 was resumed. The interruption had left `mcp-connect-card.png` undeleted and one Claude Code sentence awkward ("To choose someone else"). Both were fixed on resume.
+
+### File changes
+- Pages: `src/content/ConnectWithMcp.tsx`, `QuickStart.tsx`, `ConnectYourAgent.tsx`, `CustomProfiles.tsx`, `CustomEvals.tsx`, `Scorecard.tsx`, `ScoringEngine.tsx`, `Glossary.tsx` (all edited; no pages added or removed, `nav.ts` and `content/index.ts` unchanged)
+- Assets: added `src/assets/integrations-coding-assistants.png` and `src/assets/coding-agent-permissions.png`. Replaced `src/assets/connect-agent-wizard.png`. Deleted `src/assets/mcp-connect-card.png`.
+- `CHANGELOG.md`: `## [0.44.0] - 2026-11-12` (Added, Changed, Fixed)
+- `DOCS-CHANGE-LOG.md`: "2026-11-12 — Integrations tabs, coding agent permissions, provisional scores"
+- `package.json` version: 0.43.0 -> 0.44.0 (minor; the entry has Added items)
+- `docs/index.html`: rebuilt (`pnpm run build` passed). All eight edited pages render with their new text and images, with no page errors.
+- `.last-github-sync`: 2026-11-02T11:01:58Z -> 2026-11-12T09:46:01Z (#982)
+- Not committed, not pushed.
+
 ## 2026-11-02 - docs-sync agent run
 
 - **Site audited:** https://agent-score.ai.tricentis.com (production, as the user asked, not the staging URL in `.env`). Fresh Playwright browser on port 9222 (profile `/tmp/docsync-1102/pw-profile`). It landed on Okta sign-in, the run stopped, the user signed in in that window, and the walk resumed. No credentials were typed by the agent.

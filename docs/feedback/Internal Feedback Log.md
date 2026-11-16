@@ -6,7 +6,10 @@ Running log of feedback from Tricentis people using AgentScore. One entry per th
 
 | Priority | Ask | Raised by | Status |
 |---|---|---|---|
-| High | Plain-language explanations of traces, evals, and failures. | 2026-11-04 session, Georgie Zaguirre | Open. The 2026-11-04 notes call judge wording a prompt-level fix already in the backlog, and say to move it up. Georgie asked for a short failure summary in the UI and said the detail is already there if you look for it. || Medium | Benchmark a metric or rubric change on a fixed set of labeled traces (30 or more) with a known expected score per metric. | 2026-11-04 session | Open. Agreed as the method. The same set can cover several metrics. Leave out traces that lack the behavior being measured. || Medium | Plain-language labeling: show what the user asked, what the agent did, and the output, then ask whether it was correct and what should have happened. | 2026-11-04 session | Open. Andrew was to mock the flow. Multi-step cases such as recovery diversity are harder to label. |
+| High | Plain-language explanations of traces, evals, and failures. | 2026-11-04 session, Georgie Zaguirre | Open. The 2026-11-04 notes call judge wording a prompt-level fix already in the backlog, and say to move it up. |
+| High | Show a short, plain-language summary of failures and root-cause attribution in the UI. For each metric: pass or fail, score, judge type (LLM or deterministic), and a one-line reason that names what the agent did and did not do. | Georgie Zaguirre | Open. She says the data is already there if you look for it. She gave an old evalclaw per-metric report as the model; see the 2026-11-08 session. |
+| Medium | Benchmark a metric or rubric change on a fixed set of labeled traces (30 or more) with a known expected score per metric. | 2026-11-04 session | Open. Agreed as the method. The same set can cover several metrics. Leave out traces that lack the behavior being measured. |
+| Medium | Plain-language labeling: show what the user asked, what the agent did, and the output, then ask whether it was correct and what should have happened. | 2026-11-04 session | Open. Andrew was to mock the flow. Multi-step cases such as recovery diversity are harder to label. |
 | Low | Present a score for each grouping. Keep a single ready-to-ship metric only if the user can configure it. | Julian Ho | Open |
 | High | Security gate: below a set level, the agent cannot be marked ready to ship. Show "Needs Work" and the reason. Level not decided. | Georgie Zaguirre | Open |
 | Low | "Need attention" flags do not appear to affect the verdict (ATA has 4). That is confusing. | Georgie Zaguirre | Open |
@@ -28,7 +31,24 @@ Running log of feedback from Tricentis people using AgentScore. One entry per th
   - Tool success rate from code, not an LLM: failed calls / total calls from the trace.
   - external_termination on correctness, so a user cutting the session short is not a failure. Andrew asked whether this is presented to the user or only updates the score. Georgie: it does not need to be presented. It is an update so the LLM judge can detect abandoned sessions.
   - Classify security findings. Tag each one as prompt injection, PII, credential exposure, or path violation, with a severity.
-  - Summarize failure and root-cause attribution in the UI, in plain language. She says the data is already there if you look for it. She pasted an old evalclaw per-metric block as the shape: pass or fail, metric, score, judge type, and a one-line reason.
+  - Summarize failure and root-cause attribution in the UI, in plain language. She says the data is already there if you look for it. She pasted an old evalclaw per-metric block as the shape: pass or fail, metric, score, judge type, and a one-line reason. Extract:
+
+    ```
+    [FAIL] correctness.task_success  score=0.00  (LLM judge)
+           Agent opened URL successfully but failed to complete workflow - no cookies
+           banner found, no product search performed, no cart actions taken. Final
+           state shows incomplete task execution.
+
+    [FAIL] correctness.prompt_compliance  score=0.14  (LLM judge)
+           Agent followed step 1 (opening URL) but skipped steps 5-10 (search,
+           product selection, cart operations, checkout, close). Steps 2-4 were
+           attempted but conditions not met (no auth popup, no cookies…
+           [full evidence → report.json § metricScores]
+
+    [PASS] correctness.tool_success_rate  score=0.94  (deterministic)
+           2 of 35 tool calls failed: computer_control(span:aa01bf6a),
+           computer_control(span:a63ad014)
+    ```
   - For tosca-agent, the agent that does workspace changes in Tosca: should he create similar .md files, and will code changes be required the way he was told they were for the first set? Nobody answered.
 - **Quotes:** "ATA has an 88% ready-to-ship score, but I know that it only correctly completes a task 40% of the time." "the weighting is subjective to the domain... we can't predetermine what is ready-to-ship." "It doesnt need to be presented back to user. It'd be an update to ensure that LLM judge can detect abandoned sessions."
 

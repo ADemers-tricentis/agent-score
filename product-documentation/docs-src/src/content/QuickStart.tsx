@@ -19,13 +19,15 @@ export default function QuickStart() {
       <StepList>
         <Step title="Add Agent Score and sign in">
           <p>
-            In the sidebar, open <strong>Integrations</strong>. The card at the top is{" "}
-            <strong>Connect a coding agent (MCP)</strong>. Copy the server URL whole. The part
-            after the <code>?</code> names your tenant. A client that drops it cannot sign in.
+            In the sidebar, open <strong>Integrations</strong>. On the{" "}
+            <strong>Coding assistants</strong> tab, the <strong>Connect a coding agent</strong>{" "}
+            card has a tab for Claude Code, Cursor, Codex, the Claude apps, and another client,
+            with your server URL already filled in. Use the URL whole. The part after the{" "}
+            <code>?</code> names your tenant. A client that drops it cannot sign in.
           </p>
           <p>
-            Add that URL in Claude Code, Cursor, Codex, or the Claude apps, then sign in through
-            the browser with your Tosca Cloud account. There is no API key to paste.{" "}
+            Follow your client's tab to add Agent Score, then sign in through the browser with
+            your Tosca Cloud account. There is no API key to paste.{" "}
             <a href="#/connect-with-mcp">Connect with MCP</a> has the command or file for each
             client, and what to do if sign-in fails.
           </p>
@@ -57,8 +59,9 @@ export default function QuickStart() {
       <Callout kind="tip" title="The ingest key is shown once">
         <p>
           Have the agent write the key to an environment file that version control ignores. Keep
-          it out of source, chat, and logs. If that reply is lost, rotate the key on Integrations.
-          The old secret cannot be shown again.
+          it out of source, chat, and logs. If that reply is lost, rotate the key on{" "}
+          <strong>Integrations</strong> → <strong>Trace ingestion</strong>. The old secret cannot
+          be shown again.
         </p>
       </Callout>
 
@@ -73,7 +76,10 @@ export default function QuickStart() {
       </ul>
       <p>
         <a href="#/connect-your-agent">Connect Your Agent</a> is what happens once traces arrive.{" "}
-        <a href="#/scorecard">Reading Your Scorecard</a> is how to read the first score.
+        <a href="#/scorecard">Reading Your Scorecard</a> is how to read the first score.{" "}
+        <a href="#/improve">Improve This Agent</a> walks through improving the agent from your
+        coding agent, and <a href="#/mcp-tools">MCP Tools Reference</a> lists everything it can
+        do.
       </p>
       <Callout kind="warn" title="A change takes effect when you ask">
         <p>

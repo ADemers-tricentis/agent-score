@@ -4,6 +4,169 @@ Every run of the external-interest-sync agent, newest first. Each entry lists
 what changed in the tracker and CSVs and why. Contact emails are deliberately
 left out; they live in the contacts CSV.
 
+## 2026-11-16T20:30:00Z
+
+- **App run:** 5 (`funnel changes --run 5` lists every change; none besides the reply marker). Run 4 failed earlier because M365 tools were unavailable.
+- **Cutoff:** 2026-11-13T08:12:32.000Z -> **new marker:** unchanged (2026-11-13T08:12:32.000Z)
+- **Emails found:** 0 matching submissions (3 other messages in labs mailbox: the already-processed Mousham Jha submission at the exact cutoff time, and 2 "AI App Exploration" submissions, a different form product, from David Klien and Abinaya Sekar)
+
+### Added
+None
+
+### Excluded
+| Submitter | Submitted | Rule | Detail |
+|---|---|---|---|
+| David Klien | 2026-11-16 | Not processed (different form) | "AI App Exploration" form, not the Agent Testing form. `funnel match` would classify as repeat: already a contact at LGT Financial Services Ltd. (LI) |
+| Abinaya Sekar | 2026-11-13 | Not processed (different form) | "AI App Exploration" form; ITC Infotech India Limited is already tracked with other contacts (same handling as prior run) |
+
+### Held for review
+None
+
+### Replies
+- **Reply cutoff:** 2026-11-13T19:55:45.000Z -> **new reply marker:** 2026-11-16T16:21:32.000Z
+
+None. Only calendar-invite acceptances from Jurgen Meheus (M2Q) and Praveer Bakshi (Accenture), plus one from Gunther Himschoot, were seen.
+
+### Judgment calls
+- The subject filter requires exactly "...for AI Agent Testing and Evaluation"; the two new labs messages have the "AI App Exploration" subject, so they were not recorded. The user expected two demo sign-ups: David Klien booked an "AgentScore Evaluation" for 2026-11-19 and Praveer Bakshi (Accenture) booked an "AgentScore Overview" for 2026-11-17, both via booking pages.
+- Calendar acceptances treated as automatic responses, not replies; no status changes. Gunther Himschoot (m2q.be) is not a listed contact at tracked company M2Q.
+
+### File changes
+- App: 0 companies added, 0 stacked, 0 submissions recorded; Interested companies 4 -> 4; Companies replied 6 -> 6
+- `External Interest (generated).md`: unchanged
+- `external-interest-mail-merge.csv`: not touched (no new companies)
+- Run marker: unchanged
+- Reply marker: 2026-11-13T19:55:45.000Z -> 2026-11-16T16:21:32.000Z
+
+## 2026-11-13T20:00:00Z
+
+- **App run:** 3 (`funnel changes --run 3` lists every change). Run 2 from an earlier attempt is marked failed and was not reused.
+- **Cutoff:** 2026-11-10T06:13:42.000Z -> **new marker:** 2026-11-13T08:12:32.000Z
+- **Emails found:** 8 matching submissions (4 other messages ignored: 3 "AI App Exploration" submissions from Tim Drye, Philipp Hasel and Abinaya Sekar, which are a different form product, plus the already-processed Capgemini submission at the exact cutoff time)
+
+### Added
+| Company | Submitter(s) | Submitted | Why added | Sources used |
+|---|---|---|---|---|
+| ITC Infotech India Limited | padmaja kolli (Performance test Lead, Customer); stacked: Sandhya Rani Gurugubelli (Test Automation Engineer, Customer), Lokku Jaswanthi (Associate IT consultant, Evaluating Tricentis), Ronit Joardar (Test Manager, Customer), Madhavilatha K (Technical Lead, Other), Vempalli Fayaz (Performance test engineer, Other), Mousham jha (Performance Test Enineer, Customer) | 2026-11-12 to 2026-11-13 | New company (Labs signup); six further submitters stacked on it | [Google Cloud press release](https://www.googlecloudpresscorner.com/2026-07-23-ITC-Infotech-and-Google-Cloud-Join-Hands-to-Scale-Enterprise-Agentic-Transformation-and-AI-Innovation), [Yahoo Finance](https://finance.yahoo.com/sectors/technology/articles/itc-infotech-insuremo-partner-agentic-093241927.html) |
+| British American Tobacco Plc (UK) - HQ | Anuhya Giddaluru (Test Automation Engineer, Customer) | 2026-11-12 | New company (Labs signup) | [BAT press release](https://www.bat.com/media/press-releases/_2025/july/bat-and-accenture-announce-partnership-to-transform-global-operations-and-supply-network) |
+
+Owner-outreach additions (origin: the account owner reached out first, not a Labs signup): none this run. See Judgment calls for what the personal-inbox search covered.
+
+### Excluded
+None
+
+### Held for review
+None
+
+### Replies
+- **Reply cutoff:** 2026-11-11T21:29:27.000Z -> **new reply marker:** 2026-11-13T19:55:45.000Z
+
+None. Mail in the user's inbox since the cutoff came from Tricentis colleagues (sales intros for HP, Cengage, Capgemini, Bloomberg and McKesson contacts, a Spectrum/Charter intro, a Merck presales question, a meeting invite) and one external message from New Vision Software (Rohan Bansod), who says they are still evaluating AgentScore. New Vision is already Invited to beta, so there is no change. No contact at an Interested, Email sent or Follow-up sent company replied.
+
+### Judgment calls
+- ITC Infotech: four of seven forms had a blank company field and the others said "ITC LIMITED (IN)", "ITC Infotech (IN)" and "ITC Infotech India Limited". All seven use itcinfotech.com addresses, so they were grouped under one company named ITC Infotech India Limited. Salesforce maps them to three Accounts (ITC Infotech India Limited, Prospective Partner, owner Kok How Foo; ITC Infotech (IN), Churned Customer, and ITC LIMITED (IN), Customer, both owner Kankan Chakraborty). The user may want to confirm whether this should be one company or two. A note was added to the company. A burst of seven signups in about 28 hours from one test and performance team is unusual.
+- Mail-merge CSV contains one row per new company: ITC Infotech India Limited (padmaja kolli) and British American Tobacco (Anuhya Giddaluru). Only the primary submitter is emailed; the other six ITC submitters are not in the CSV.
+- Owner-outreach search (personal mailbox, Sent Items and Inbox, searched by keyword and recipient rather than reading all ~650 sent items): every prospect-facing company found was already in the app (Oracle, Accenture, Capgemini, Meta, Tritusa, Bloomberg, HP, Cengage, McKesson, Merck, Charter/Spectrum, New Vision, Telekom, Sky, The Tech Collective, Workday, BearingPoint, Eaton and all the Oct 22, Oct 28 and Nov 2 welcome and follow-up recipients). Oracle (stage Interested) came from a sales contact at the AI World booth, and is already tracked. Skipped as not a prospect: Brands2Life (a PR agency, "Connect on Innovation Labs", Aug 2026). Skipped as internal: Boris Perlin, Shahar Shiff and other Tricentis senders. The search is not exhaustive.
+- Sales-led intros dated 2026-11-13 (Priddy, Murphy, Jones, Nickerson, O'Reilly) refer to Labs form interest and concern companies already tracked, so they were not treated as owner outreach.
+
+### File changes
+- App: 2 companies added (ITC Infotech India Limited, British American Tobacco Plc (UK) - HQ), 6 submitters stacked on ITC Infotech, 0 recorded as repeat / excluded / held; Interested companies 2 -> 4 (cumulative 116 -> 118); Companies replied 6 -> 6 (no change)
+- `External Interest (generated).md`: regenerated by the app
+- `external-interest-mail-merge.csv`: overwritten with 2 rows (ITC Infotech India Limited, British American Tobacco Plc (UK) - HQ)
+- Run marker: 2026-11-10T06:13:42.000Z -> 2026-11-13T08:12:32.000Z
+- Reply marker: 2026-11-11T21:29:27.000Z -> 2026-11-13T19:55:45.000Z
+
+## 2026-11-12T00:30:00Z
+
+Sent-items reconciliation pass (run after the 2026-11-11T22:00:00Z sync). No new Labs submissions were fetched; the focus was the user's Sent Items from 2026-11-02 onward.
+
+- **Cutoff:** 2026-11-10T06:13:42.000Z -> **new marker:** 2026-11-10T06:13:42.000Z (unchanged; the submission fetch was not repeated, the earlier run today already advanced it)
+- **Emails found:** 0 new submissions checked in this pass
+
+### Added
+None
+
+### Excluded
+None
+
+### Held for review
+None
+
+### Replies
+- **Reply cutoff:** 2026-11-11T21:29:27.000Z -> **new reply marker:** 2026-11-11T21:29:27.000Z (unchanged)
+
+None. The only mail in the user's mailbox after the marker is three outgoing messages (below) and one internal Tricentis email (Shahar Shiff, "Agent Score questions", 2026-11-11, about Merck; not a counted contact, not applied). The Accenture and Merck threads are listed under Judgment calls.
+
+### Sent items reviewed
+Sent Items since 2026-11-02 contained these prospect-facing messages. Everything else was calendar traffic or internal threads.
+
+| Company | Contact | Sent | Message | Tracker action |
+|---|---|---|---|---|
+| Astemo, Ltd (JP) | raghavendar Reddy | 2026-11-11 (2026-11-12T00:03Z) | "Welcome to the AgentScore Beta" intro | Marked emailed: Pipeline row Interested -> Email sent - 2026-11-11, section Email sent date and outreach note, contacts row Interested -> Email sent (Email Sent Date 11/11/26) |
+| Accenture (multiple entities) | Praveer Bakshi | 2026-11-11 (2026-11-12T00:04Z) | "Welcome to the AgentScore Beta" intro | Contact-level only: contacts row Interested -> Email sent (11/11/26), outreach note in section. Company row stays Pending Beta (never moved backwards) |
+| Capgemini | Lukasz Mlynarczyk | 2026-11-11 (2026-11-12T00:05Z) | "Welcome to the AgentScore Beta" intro (was a draft when first read, in Sent Items minutes later) | Contact-level only: contacts row Interested -> Email sent (11/11/26), outreach note in section. Company row stays Follow-up sent |
+| Qnovate, AIS (TH), The Future Group (NL) | Utkarsh Verma; four AIS contacts; Jean Delissen | 2026-11-05 | Welcome emails | Already recorded (contacts log and sections). Only fix: The Future Group Pipeline row lacked the date, now "Email sent - 2026-11-05" |
+| Bloomberg, Turing Consulting, DJSIR, Itecor | one contact each | 2026-11-02 | "Following Up on AgentScore" | Already recorded as Follow-up sent 11/2/26 |
+| Tritusa | five contacts | 2026-11-04/05 | Replies and walkthrough invite | Already Actively using, no change |
+
+### Judgment calls
+- Dates use the user's local day: the messages were sent 2026-11-12T00:03-00:05Z, which is the evening of 2026-11-11 in US Eastern, the same day as the sync. Earlier rows (e.g. Qnovate 2026-11-05T19:02Z) are the same day in both zones.
+- Astemo is the only company-level move. Astemo's email is the beta-welcome intro, which this tracker treats as the Email sent stage, matching Qnovate, AIS and The Future Group.
+- Praveer Bakshi and Lukasz Mlynarczyk submitted via companies that already have Pipeline rows at later stages (Accenture Pending Beta, Capgemini Follow-up sent). Stage counts were not touched for them; only their per-contact Status cells and Email Sent Dates in the contacts log changed, which follows the existing pattern of contact-level statuses (for example Konrad Greszata, Interested, inside a Follow-up sent company). This is outside the agent's usual "only edit Status for replies" rule and was done on the user's explicit instruction for this run.
+- Accenture re-check (Alex Syed, accenture.com, 2026-11-06, "RE: Agent Score - Next Steps", asking for an update; sent to Andrew Demers and Greg Campbell): no reply from the user is in Sent Items after that message. Greg Campbell (Sales) replied to Alex on 2026-11-06 offering a call. The user's last sent messages in that thread family are 2026-10-14 (scheduling) and 2026-11-02/05 internal replies on the Meta/Accenture product commitments. Alex Syed is not in the contacts log, and Accenture is already Pending Beta, so no status change was made.
+- Merck: a 2026-11-11 internal email from Shahar Shiff mentions sharing or demoing Agent Score with Merck. It is internal, so nothing was changed. Merck stays Follow-up sent.
+- The Sent Items search did not list the Praveer and Lukasz messages on the first pass; they appeared on a later search of the same folder and in an all-folder sender search. Both were confirmed in Sent Items with recipients before being applied.
+
+### File changes
+- `External Interest.md`: 0 sections added, 0 submitter groups added, 0 Pipeline Tracker rows added; submission count 111/116 -> 111/116 (unchanged); as-of 2026-11-11 (unchanged); Astemo row Status Interested -> Email sent - 2026-11-11; The Future Group row Status "Email sent" -> "Email sent - 2026-11-05"; Astemo section Email sent - -> 2026-11-11 plus outreach and waiting-on lines; outreach notes added to Accenture (Praveer Bakshi) and Capgemini (Lukasz Mlynarczyk); Cumulative Email sent 113 -> 114; Current Interested 3 -> 2, Current Email sent 28 -> 29; "113 were emailed" -> "114 were emailed" (Oracle and AutoZone remain not emailed); Companies replied 19 -> 19; intro notes: none
+- `external-interest-mail-merge.csv`: overwritten with 0 rows (header only). Astemo, the only row, was removed because it has now been emailed.
+- `external-interest-contacts.csv`: 0 rows appended; 3 in-place edits: Astemo (Interested -> Email sent, Email Sent Date 11/11/26), Accenture/Praveer Bakshi (Interested -> Email sent, 11/11/26), Capgemini/Lukasz Mlynarczyk (Interested -> Email sent, 11/11/26); 0 Status cells set to Replied
+- `.last-processed`: unchanged (2026-11-10T06:13:42.000Z)
+- `.last-reply-check`: unchanged (2026-11-11T21:29:27.000Z)
+
+## 2026-11-11T22:00:00Z
+
+- **Cutoff:** 2026-11-04T06:53:03.000Z -> **new marker:** 2026-11-10T06:13:42.000Z
+- **Emails found:** 3 matching submissions (4 other messages ignored: the Qnovate notification at the cutoff instant, already processed on 2026-11-05, plus one Tricentis (US) "AI App Exploration" and one Verizon "Release Risk Intelligence" and one "AI App Exploration - Company Not Found" notification, which are different forms)
+
+### Added
+| Company | Submitter(s) | Submitted | Why added | Sources used |
+|---|---|---|---|---|
+| Astemo, Ltd (JP) | raghavendar Reddy (Program Manager, Customer) | 2026-11-06 | New company | [just-auto](https://www.just-auto.com/newsletters/astemo-hitachi-build-ai-platform-sdvs), [nippon.com](https://www.nippon.com/en/news/yjj2026052001022/), [Astemo release](https://www.astemo.com/en/assets/pdf/news/20260520-01.pdf), [Astemo SODA sheet](https://www.astemo.com/jp/assets/pdf/corporate/exhibitions/technology2026-yokohama/dr1.pdf) |
+| Capgemini | Łukasz Młynarczyk (Quality Manager, Partner) | 2026-11-10 | New submitter at existing company (form Company: Capgemini Global Parent); stacked in the existing section, no new Pipeline row | none needed, company already researched |
+
+### Excluded
+| Submitter | Submitted | Rule | Detail |
+|---|---|---|---|
+| Praveer Bakshi | 2026-11-09 | Repeat | already listed under Accenture (2026-10-19/20); form said Accenture LLP this time. Intro note updated. |
+
+### Held for review
+None
+
+### Replies
+- **Reply cutoff:** 2026-11-05T19:05:25.000Z -> **new reply marker:** 2026-11-11T21:29:27.000Z
+
+| Company | Contact | Replied | Status change | Detail |
+|---|---|---|---|---|
+| none | | | | |
+
+None. The user's mailbox search returned 14 messages after the cutoff and none came from a counted contact.
+
+### Judgment calls
+- Subjects carry a " - <Company>" suffix, so "exactly" the base subject was treated as a prefix match, as in earlier runs.
+- Astemo: Salesforce matched the submitter's Contact to the Account Astemo, Ltd (JP), owner Genta Akiyama. The nippon.com page returned 404 when fetched directly; its content was taken from search-result summaries. The "Honda-group suppliers" origin in the what-they-do line is from background knowledge, not a fetched source. Use case is an inference.
+- Łukasz Młynarczyk matched a Salesforce Contact on Capgemini Global Parent (Partner), owner Denis Rousson, already listed in the section.
+- Alex Syed (an accenture.com address, not in the contacts log) wrote on 2026-11-06 asking for an update on "Agent Score - Next Steps". Not a counted contact, so not applied as a reply; it looks like a live Accenture thread handled by Sales (Greg Campbell). Worth a manual look.
+- Praveer Bakshi's new submission is a repeat, so Accenture stays as is.
+- Reply marker advanced to the newest message the search returned, which was an internal Tricentis email.
+
+### File changes
+- `External Interest.md`: 1 section added (Astemo, Ltd (JP)), 1 submitter group added to an existing section (Capgemini: Łukasz Młynarczyk), 1 Pipeline Tracker row added; submission count: form companies 110 -> 111, total 115 -> 116; as-of 2026-11-10 -> 2026-11-11; Interested companies 115 -> 116 (current 2 -> 3); Companies replied 19 -> 19; intro notes appended: Astemo and Łukasz Młynarczyk moved from "not added" to added, Praveer Bakshi 2026-11-09 repeat confirmed
+- `external-interest-mail-merge.csv`: overwritten with 1 row (Astemo, Ltd (JP))
+- `external-interest-contacts.csv`: 2 rows appended (Astemo, Ltd (JP); Capgemini); 0 Status cells set to Replied
+- `.last-processed`: 2026-11-04T06:53:03.000Z -> 2026-11-10T06:13:42.000Z
+- `.last-reply-check`: 2026-11-05T19:05:25.000Z -> 2026-11-11T21:29:27.000Z
+
 ## 2026-11-10T19:00:00Z
 
 - **Cutoff:** none. This was a reconciliation against `docs/feedback/Lost Lead Analysis 2026-11-10.md`, not a new inbox sync. The run marker was not moved.

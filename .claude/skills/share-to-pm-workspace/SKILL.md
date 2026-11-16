@@ -41,7 +41,11 @@ the default docs are customer PII and must not enter git unreviewed.
   CUSTOMER/PRIVATE material on review.
 - **Default doc set** (what the team most often wants shared):
   - `docs/feedback/Customer Feedback Log.md`
-  - `docs/feedback/External Interest.md`
+  - `docs/feedback/External Interest (generated).md` - the read-only snapshot
+    the interest-funnel app rewrites after every change. If it is missing,
+    use `docs/feedback/External Interest.md` instead (the snapshot moves to
+    that name after cutover). Don't share the pre-app `External Interest.md`
+    while the generated file exists; it is frozen.
   - `docs/updates/AgentScore Updates.md`
 
 ## Data-handling note (read before copying)

@@ -43,8 +43,11 @@ Week window: the 7 days ending on the run date, inclusive. The run date is today
 
 ## Read these, and only these
 
-- `docs/feedback/Beta Cohorts.md`: external invites and first sign-ins. This is the only source for "actively using" externally. "First sign-in: not yet" means "no sign-in reported." Do not upgrade it to "confirmed they have not logged in" or "in progress."
-- `docs/feedback/External Interest.md`: only the stage definitions, the Cumulative table, the Current stage table, and the company rows whose Status is Pending beta, Invited to beta, Actively using, or Demo scheduled. Skip "likely use case," "known agent tooling," and the per-company research sections.
+- `docs/feedback/External Interest (generated).md`: a read-only snapshot that the interest-funnel app rewrites after every change. Its "Generated ... at <timestamp>" line is the as-of date for every number taken from it. Read only these parts:
+  - `## Beta Cohorts`: external invites and first sign-ins. This is the only source for "actively using" externally. A blank first sign-in means "no sign-in reported." Do not upgrade it to "confirmed they have not logged in" or "in progress."
+  - `## Pipeline Tracker`: the stage definitions, the Cumulative table, the Current stage table, and the Details rows whose Status is Pending beta, Invited to beta, Actively using, or Demo scheduled.
+  - Skip the per-company sections ("likely use case," "known agent tooling," research).
+  - If the generated file is missing, read the same parts of `docs/feedback/External Interest.md` (the snapshot moves to that name after cutover). If that file has no `## Beta Cohorts` section, it is the pre-app tracker: take cohorts from `docs/feedback/Beta Cohorts.md` and say so in the report.
 - `docs/feedback/Customer Feedback Log.md`: Recurring asks (open rows only) and Sessions entries dated inside the window. Use an older session only when an open High row cites it as the reason an account is blocked.
 - `docs/feedback/feedback-sessions/`: open a session note only when the log entry is too thin for a claim you are about to make. One claim, one read.
 - `docs/updates/`: every file dated inside the window (`docs/updates/YYYY-MM-DD Update.md` and `docs/updates/<Month> Updates/`). Pull attendees, decisions, named agents or accounts, and the action table with owners.
@@ -56,7 +59,7 @@ Do not read the External Interest audit log, mail-merge CSVs, competitive resear
 
 ## Definitions
 
-- External "using" = a row in `Beta Cohorts.md` with a first sign-in date, or a dated statement in a source that the account signed in. When the two disagree, the card says what was reported and the status line notes that the tracker needs the date. Invited, pending, replied, demo scheduled, and interested are earlier stages. Never call an invited company a user.
+- External "using" = a row in the snapshot's Beta Cohorts section with a first sign-in date, or a dated statement in a source that the account signed in. When the two disagree, the card says what was reported and the status line notes that the tracker needs the date. Invited, pending, replied, demo scheduled, and interested are earlier stages. Never call an invited company a user.
 - Internal "using" = a named Tricentis agent that a dated update says is sending traces and getting a score. A leadership request to score an agent is demand, not usage.
 - "Feedback from people using it" = statements from accounts that meet a "using" definition. Sales-call comments from accounts that have not signed in go into the top asks card only as counted asks, never as quotes on the left card.
 - "Stopping onboarding" = a source ties a named account, or the invited cohort as a whole, to a concrete wall: no sign-in after an invite, a requirement the account says gates a trial (on-prem, data handling), or a stall after sign-in (nothing run, unclear next step). An open feature request with no account blocked by it this week does not go on this slide.

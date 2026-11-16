@@ -1,8 +1,10 @@
 # External Interest — Tricentis Labs "AI Agent Testing and Evaluation" Submissions
 
-Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. Reconciled to the inbox on 2026-11-10: 167 notifications from 2026-08-19 through 2026-11-10, of which 164 arrived on or before 2026-11-05. The earlier "150 as of 2026-11-05" cannot be reproduced. Removing 12 internal `@tricentis.com` submissions, 11 same-person repeats, and Ferrara Candy leaves 143 external non-duplicate submissions. Stacking extra contacts at companies already counted leaves 113 companies, including Neotys. Setting aside Neotys, Astemo (arrived 2026-11-06, not added here), and Sky Plc leaves 110 tracked form companies. That 110 includes AutoZone Parts, Inc., which the earlier tracker had missed. Sorted newest first. Excluded as internal `@tricentis.com` submitters (12 submissions): Brad Purcell (2026-08-21 and 2026-09-07, company blank), Michal Hrncirik (2026-08-21, company blank; 2026-09-10, form said Tecra Systems, Inc.), Caitlin Bowers (2026-08-25, Tricentis (US)), Maria Argulla (2026-08-25, Partner Account), Neil Williams (2026-09-08, two submissions, Tricentis (UK)), Kevin Demancsik (2026-09-10, TRICENTIS USA), Karthick S (2026-09-11, Tricentis), Ashutosh Kotkar (2026-09-25, Tricentis GmbH (AT) - HQ), and Srinivasa Rao K (2026-10-01, Tricentis GmbH (AT) - HQ). Excluded as a Tricentis subsidiary, not an `@tricentis.com` address: VIJESH Vijayan (2026-08-27), Neotys (FR) - HQ, neotys.com. Fun Tat Chen (2026-10-02) is a second submitter at Singapore Pools and is stacked on that entry rather than counted as a new company. Ajay Kharb and Praveer Bakshi (2026-10-19/20, Accenture), Konrad Greszata (2026-10-13, Capgemini) and Jeroen Kuijper (2026-10-21, Sogeti Netherlands) are likewise stacked on existing company entries. Antonio Sglavo (2026-10-22, Accenture SpA), Julian Raach and Yash Jawale (2026-10-22, Hugo Boss), Edmundo Barahona (2026-10-22, Sogeti Deutschland), Mathieu Philippe (2026-10-22, Itecor FR) and Simon Kreitmayer (2026-10-22, SKYPhoenix IT GmbH, which appears to be the renamed Dolpheen IT Solutions) are also stacked on existing entries. ketmanee Ruksa, Poonsiri Chingburanakij and Sirichai Wantong (2026-10-30, AIS (TH)) and Juralak Panpreeda (2026-10-30, AIS/Mimo Tech) are stacked on one new AIS (TH) entry, since all four use the same AIS email domain. Repeats not tracked separately: Rohan Bansod (New Vision Software, two submissions 2026-10-15), Praveer Bakshi (a second 2026-10-19 submission with the company field blank, and another on 2026-11-09, not added here), Rohan Patil (BearingPoint, four extra submissions on one day), Beena P K (PVH, one extra), Cathy Soller (McKesson, one extra), and Jigish Belani (Accenture, one extra). Not added in this reconciliation, so the next sync should expect them: Astemo, Ltd (raghavendar Reddy, 2026-11-06, new company) and Łukasz Młynarczyk (Capgemini, 2026-11-10, stack on the existing Capgemini row). Sina Döbbelin (2026-09-17, Ariba, Inc., BTM Partner Management) is excluded from outreach: she manages business partnerships and is not a product user. Akihiko Yamano stays on the Ariba row.
+Source: `labs@tricentis.com` shared inbox, "New Tricentis Labs Submission for AI Agent Testing and Evaluation" notification emails. Reconciled to the inbox on 2026-11-10: 167 notifications from 2026-08-19 through 2026-11-10, of which 164 arrived on or before 2026-11-05. The earlier "150 as of 2026-11-05" cannot be reproduced. Removing 12 internal `@tricentis.com` submissions, 11 same-person repeats, and Ferrara Candy leaves 143 external non-duplicate submissions. Stacking extra contacts at companies already counted leaves 113 companies, including Neotys. Setting aside Neotys, Astemo (arrived 2026-11-06, added by the 2026-11-11 sync), and Sky Plc leaves 110 tracked form companies; adding Astemo makes 111 as of 2026-11-11. That count includes AutoZone Parts, Inc., which the earlier tracker had missed. Sorted newest first. Excluded as internal `@tricentis.com` submitters (12 submissions): Brad Purcell (2026-08-21 and 2026-09-07, company blank), Michal Hrncirik (2026-08-21, company blank; 2026-09-10, form said Tecra Systems, Inc.), Caitlin Bowers (2026-08-25, Tricentis (US)), Maria Argulla (2026-08-25, Partner Account), Neil Williams (2026-09-08, two submissions, Tricentis (UK)), Kevin Demancsik (2026-09-10, TRICENTIS USA), Karthick S (2026-09-11, Tricentis), Ashutosh Kotkar (2026-09-25, Tricentis GmbH (AT) - HQ), and Srinivasa Rao K (2026-10-01, Tricentis GmbH (AT) - HQ). Excluded as a Tricentis subsidiary, not an `@tricentis.com` address: VIJESH Vijayan (2026-08-27), Neotys (FR) - HQ, neotys.com. Fun Tat Chen (2026-10-02) is a second submitter at Singapore Pools and is stacked on that entry rather than counted as a new company. Ajay Kharb and Praveer Bakshi (2026-10-19/20, Accenture), Konrad Greszata (2026-10-13, Capgemini) and Jeroen Kuijper (2026-10-21, Sogeti Netherlands) are likewise stacked on existing company entries. Antonio Sglavo (2026-10-22, Accenture SpA), Julian Raach and Yash Jawale (2026-10-22, Hugo Boss), Edmundo Barahona (2026-10-22, Sogeti Deutschland), Mathieu Philippe (2026-10-22, Itecor FR) and Simon Kreitmayer (2026-10-22, SKYPhoenix IT GmbH, which appears to be the renamed Dolpheen IT Solutions) are also stacked on existing entries. ketmanee Ruksa, Poonsiri Chingburanakij and Sirichai Wantong (2026-10-30, AIS (TH)) and Juralak Panpreeda (2026-10-30, AIS/Mimo Tech) are stacked on one new AIS (TH) entry, since all four use the same AIS email domain. Repeats not tracked separately: Rohan Bansod (New Vision Software, two submissions 2026-10-15), Praveer Bakshi (a second 2026-10-19 submission with the company field blank, and another on 2026-11-09 as Accenture LLP, confirmed as a repeat by the 2026-11-11 sync), Rohan Patil (BearingPoint, four extra submissions on one day), Beena P K (PVH, one extra), Cathy Soller (McKesson, one extra), and Jigish Belani (Accenture, one extra). Added by the 2026-11-11 sync: Astemo, Ltd (JP) (raghavendar Reddy, 2026-11-06, new company) and Łukasz Młynarczyk (Capgemini Global Parent, 2026-11-10, stacked on the existing Capgemini entry). Sina Döbbelin (2026-09-17, Ariba, Inc., BTM Partner Management) is excluded from outreach: she manages business partnerships and is not a product user. Akihiko Yamano stays on the Ariba row.
 
 "likely use case" is an inference from public info, not a confirmed customer statement — a conversation-starter, not a qualified need. "known agent tooling" is what's publicly documented; "no public information found" means exactly that, not "they have none."
+
+"Account owner (Salesforce)" is the owner of the Salesforce Account (Tricentis org), pulled 2026-11-11. Each submitter's email was matched to a Salesforce Contact, and the owner is read from that Contact's Account. Where no Contact matched, the Account was matched by name or website, and the section says so. Companies whose submitters map to several Accounts list one owner per Account, and the section shows which submitter maps to which. AI-Celerates Business and Stanza have no Salesforce Account. Skygen USA is owned by the placeholder user "Tricentis Bulldog", so it is shown as Unassigned. Owners change in Salesforce, so re-check before handing off a lead.
 
 ---
 
@@ -28,7 +30,7 @@ What accounts we have talked to say they build or run agents on. Counts are comp
 
 ## Pipeline Tracker
 
-Source breakdown: 110 via the Labs form (the previous 109, plus AutoZone Parts, Inc., missed since 2026-09-02), 4 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E, Oracle), 1 via David (VP of AI/ML) (Eaton) = 115 total. Of those 115, 113 were emailed: Oracle and AutoZone were not. Ferrara Candy Company is listed below but not counted. The inbox notification is 2026-10-08, an intro went out 2026-10-12 and a meeting was booked that day, and the Not a fit note is 2026-10-20. Sudha Damacherla signed up by accident for a different product. Sky Plc (Mario D'Amico) is not counted: on 2026-11-02 he replied to the beta welcome that he is not interested and does not want further emails.
+Source breakdown: 111 via the Labs form (the previous 109, plus AutoZone Parts, Inc., missed since 2026-09-02, plus Astemo, Ltd (JP) on 2026-11-11), 4 via Sales (Freddie Mac, Meta Platforms, Inc., PG&E, Oracle), 1 via David (VP of AI/ML) (Eaton) = 116 total. Of those 116, 114 were emailed: Oracle and AutoZone were not (Astemo was emailed 2026-11-11). Ferrara Candy Company is listed below but not counted. The inbox notification is 2026-10-08, an intro went out 2026-10-12 and a meeting was booked that day, and the Not a fit note is 2026-10-20. Sudha Damacherla signed up by accident for a different product. Sky Plc (Mario D'Amico) is not counted: on 2026-11-02 he replied to the beta welcome that he is not interested and does not want further emails.
 
 Both tables use the same stages. Cumulative counts every company at that stage or a later one, so each cumulative cell equals its current cell plus every current cell below it. Current counts companies whose Status is that stage today. Ferrara Candy is in neither. Counts are manual: when a status changes, subtract 1 from the old Current row, add 1 to the new Current row, and add 1 to each Cumulative row the company has newly reached.
 
@@ -38,8 +40,8 @@ Invited to beta means the invite went out. Actively using means Beta Cohorts has
 
 | Stage | Companies |
 |---|---|
-| Interested | 115 |
-| Email sent | 113 |
+| Interested | 116 |
+| Email sent | 114 |
 | Follow-up sent | 85 |
 | Replied | 19 |
 | Demo scheduled | 13 |
@@ -52,7 +54,7 @@ Invited to beta means the invite went out. Actively using means Beta Cohorts has
 | Stage | Companies |
 |---|---|
 | Interested | 2 |
-| Email sent | 28 |
+| Email sent | 29 |
 | Follow-up sent | 66 |
 | Replied | 6 |
 | Demo scheduled | 3 |
@@ -62,126 +64,150 @@ Invited to beta means the invite went out. Actively using means Beta Cohorts has
 
 ## Details
 
-| Company                                                                     | Contact                                                                                                                       | Status                                              |
-| --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
-| Qnovate                                                                     | Utkarsh Verma                                                                                                                 | Email sent - 2026-11-05                             |
-| Oracle                                                                      | Sajid Saleem (via Sales: William Berry)                                                                                       | Interested                                          |
-| AIS (TH)                                                                    | Sirichai Wantong, Poonsiri Chingburanakij, Juralak Panpreeda, ketmanee Ruksa                                                  | Email sent - 2026-11-05                             |
-| The Future Group (NL) - HQ                                                  | Jean Delissen                                                                                                                 | Email sent                                          |
-| Sun Life (form blank, domain-resolved)                                      | Kishore Kumar                                                                                                                 | Email sent — 2026-10-28                             |
-| Thought Frameworks                                                          | Roopa S                                                                                                                       | Email sent — 2026-10-28                             |
-| NTT Data (UK)                                                               | Stinu Easo                                                                                                                    | Email sent — 2026-10-28                             |
-| Mattoni 1873 a.s.                                                           | Ondrej Kyzek                                                                                                                  | Email sent — 2026-10-28                             |
-| QACooper LLC                                                                | Michael W Cooper                                                                                                              | Replied                                             |
-| Telekom Deutschland GmbH                                                    | André Hoffmann                                                                                                                | Replied                                             |
-| Ashurst LLP (UK)                                                            | Ankush Shrivastava                                                                                                            | Email sent — 2026-10-22                             |
-| TotalEnergies (FR) - HQ                                                     | Olivier Soulard                                                                                                               | Email sent — 2026-10-22                             |
-| Barratt Redrow                                                              | Bhavinkumar Patel                                                                                                             | Email sent — 2026-10-22                             |
-| Epson Europe - UK                                                           | Simon Berryman                                                                                                                | Email sent — 2026-10-22                             |
-| Slaughter and May (UK)                                                      | Idowu Adeyemi                                                                                                                 | Email sent — 2026-10-22                             |
-| QualityAI                                                                   | Stuart Flynn                                                                                                                  | Email sent — 2026-10-22                             |
-| Heidelberg Materials AG (DE)                                                | Sara Bailey                                                                                                                   | Email sent — 2026-10-22                             |
-| Benefact Group (Ecclesiastical Insurance)                                   | Angela Wallace                                                                                                                | Email sent — 2026-10-22                             |
-| Vestas (DK) - HQ                                                            | Romy Mehta                                                                                                                    | Email sent — 2026-10-22                             |
-| Deloitte LLP (UK)                                                           | Chetana Bangaradka                                                                                                            | Email sent — 2026-10-22                             |
-| Jysk                                                                        | Ole Madsen                                                                                                                    | Email sent — 2026-10-22                             |
-| The Tech Collective                                                         | Nadia Grundholm                                                                                                               | Replied                                             |
-| University of Leeds                                                         | Andrew Peckett                                                                                                                | Email sent — 2026-10-22                             |
-| IBM India Private Limited                                                   | Vaibhav Sharma                                                                                                                | Email sent — 2026-10-22                             |
-| M2Q                                                                         | Jurgen Meheus                                                                                                                 | Email sent — 2026-10-22                             |
-| AI-Celerates Business                                                       | Agnes Goh                                                                                                                     | Email sent — 2026-10-22                             |
-| Teck Resources Limited                                                      | Snigdha Priyadarshini                                                                                                         | Email sent — 2026-10-22                             |
-| CPKC                                                                        | Nazlie Shahmir                                                                                                                | Email sent — 2026-10-22                             |
-| Ontario Power Generation Inc.                                               | Ajay Nandepu                                                                                                                  | Email sent — 2026-10-22                             |
-| Bayer AG (DE) - HQ                                                          | Gunnar Moog                                                                                                                   | Email sent — 2026-10-22                             |
-| Siemens Financial Services GmbH (DE) (email domain suggests Siemens Energy) | Palash Gupta                                                                                                                  | Email sent — 2026-10-22                             |
-| PG&E (Pacific Gas and Electric)                                             | — (via Sales: Greg Campbell)                                                                                                  | Demo Scheduled — demo held 2026-10-27, no follow-up |
-| Itecor (CH)-HQ                                                              | Alexandre Thibaud, Mathieu Philippe                                                                                           | Follow-up sent — 2026-11-02                         |
-| Ferrara Candy Company                                                       | Sudha Damacherla                                                                                                              | Not a fit — accidental signup                       |
-| Department of Jobs, Skills, Industry and Regions (DJSIR) (AU)               | Subhasis Dhar                                                                                                                 | Follow-up sent — 2026-11-02                         |
-| Turing Consulting Pty. Ltd. (AU)                                            | Archana Madhusudhan                                                                                                           | Follow-up sent — 2026-11-02                         |
-| Bloomberg Finance L.P.                                                      | Joe Zacchio                                                                                                                   | Follow-up sent — 2026-11-02                         |
-| Sogeti (FR)                                                                 | Gavaskar Selvarajan, Jeroen Kuijper, Edmundo Barahona                                                                         | Follow-up sent — 2026-11-02                         |
-| Singapore Airlines (SG)                                                     | Srinivasan Santhanam                                                                                                          | Replied — 2026-10-06, from Sent Items               |
-| Tata Consultancy Services Ltd (IN)                                          | Joji Joseph                                                                                                                   | Follow-up sent — 2026-11-02                         |
-| Skygen USA                                                                  | Joko Supriyanto                                                                                                               | Follow-up sent — 2026-11-02                         |
-| Hugo Boss AG (DE)                                                           | Marco Esguerra, Julian Raach, Yash Jawale                                                                                     | Follow-up sent — 2026-11-02                         |
-| Aptiv Global Operations Limited                                             | Meenakshi Sundaram Chockalingam                                                                                               | Invited to beta                                     |
-| LGT Financial Services Ltd. (LI)                                            | David Klien                                                                                                                   | Follow-up sent — 2026-11-02                         |
-| Eaton                                                                       | Amit Ghag                                                                                                                     | Invited to beta                                     |
-| Meta Platforms, Inc.                                                        | Sri Pulleti                                                                                                                   | Demo Scheduled — demo held, no follow-up            |
-| Freddie Mac                                                                 | Kaleb Jackson                                                                                                                 | Replied                                             |
-| Workday, Inc.                                                               | Vijay Mummaneni                                                                                                               | Invited to beta                                     |
-| PVH Corp                                                                    | Beena P K, Aimee Martin                                                                                                       | Follow-up sent — 2026-09-24                         |
-| Charter Communications Operating, LLC                                       | Sarvesh Peddi                                                                                                                 | Follow-up sent — 2026-09-24                         |
-| Artizent (form blank, domain-resolved)                                      | Alan Mayfus                                                                                                                   | Follow-up sent — 2026-09-24                         |
-| Tritusa Consulting (AU)                                                     | Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj                                                                      | Actively using                                      |
-| SAP Labs India (IN)                                                         | SaiDeepak Ayyagari                                                                                                            | Follow-up sent — 2026-09-24                         |
-| Regeneron Pharmaceuticals Inc.                                              | Murali Sundaram                                                                                                               | Follow-up sent — 2026-09-24                         |
-| Acadia Healthcare                                                           | Pratiksha Arora                                                                                                               | Follow-up sent — 2026-09-24                         |
-| New Vision Software Inc.                                                    | Rohan Bansod                                                                                                                  | Invited to beta                                     |
-| Hilti Asia IT Services (MY)                                                 | Ashwin Mor                                                                                                                    | Follow-up sent — 2026-09-24                         |
-| Panasonic Avionics (US)                                                     | Ronica Brisbon                                                                                                                | Follow-up sent — 2026-09-24                         |
-| The Boeing Company                                                          | Gurucharan Bijinepally                                                                                                        | Follow-up sent — 2026-09-24                         |
-| — (The Hartford, unresolved)                                                | Sathish kumar Backiam                                                                                                         | Follow-up sent — 2026-09-24                         |
-| Southern Glazer's Wine and Spirits, LLC                                     | Jay Gajulapalli                                                                                                               | Follow-up sent — 2026-09-24                         |
-| Chevron Phillips Chemical (US)                                              | Ramesh Jeyagopalan                                                                                                            | Follow-up sent — 2026-09-24                         |
-| Dominion Energy, Inc.                                                       | Anand Shekaraiah                                                                                                              | Follow-up sent — 2026-09-24                         |
-| Love's Travel Stops                                                         | Jag Mallampati, Thomas Cody                                                                                                   | Demo Scheduled — demo held 2026-10-02, no follow-up |
-| Capgemini                                                                   | Mathankumar Kanagaraj, ARUN PRAKASH Shivakumar, Sathish kumar Backiam, Konrad Greszata                                        | Follow-up sent — 2026-09-24                         |
-| Cummins Inc.                                                                | Lakshmi Sree Thirukonda                                                                                                       | Follow-up sent — 2026-09-24                         |
-| Home Depot Store Support, Inc.                                              | Joe Pope                                                                                                                      | Follow-up sent — 2026-09-24                         |
-| McKesson Corporation                                                        | Nitin Malik, Cathy Soller                                                                                                     | Follow-up sent — 2026-09-24                         |
-| Merck Co. Inc.                                                              | Ramesh Magdum, Sateesh Rajegowda                                                                                              | Follow-up sent — 2026-09-24                         |
-| Genpact (HQ)                                                                | Richard Hand                                                                                                                  | Follow-up sent — 2026-09-24                         |
-| HP Inc.                                                                     | Ejaz Siddiqui                                                                                                                 | Follow-up sent — 2026-09-24                         |
-| Sub-Zero Group Inc                                                          | Guy Hall                                                                                                                      | Follow-up sent — 2026-09-24                         |
-| Kiewit Corporation                                                          | Damilola Agboola                                                                                                              | Follow-up sent — 2026-09-24                         |
-| Tachyon Technologies                                                        | Subba Rao Gonugunta                                                                                                           | Follow-up sent — 2026-09-24                         |
-| Xebia - Partner                                                             | Anmol Jain                                                                                                                    | Follow-up sent — 2026-09-24                         |
-| Cargill Incorporated                                                        | Alfonso Garbanzo                                                                                                              | Follow-up sent — 2026-09-24                         |
-| Wolters Kluwer United States Inc.                                           | Chris Allanson                                                                                                                | Invited to beta                                     |
-| J. R. Simplot Company                                                       | Neeraja Kusuma                                                                                                                | Follow-up sent — 2026-09-24                         |
-| Crown Equipment Corporation                                                 | Vinay Patlolla                                                                                                                | Follow-up sent — 2026-09-24                         |
-| Stanza                                                                      | Anirban Toy Choudhury                                                                                                         | Replied                                             |
-| Sunbelt Rentals                                                             | Arya Shrey                                                                                                                    | Follow-up sent — 2026-09-24                         |
-| Merito Solutions                                                            | Chris Carpenter, Gerard Trimberger, Louis Tadman, Andrew Carpenter                                                            | Invited to beta                                     |
-| Amazon Kuiper Manufacturing Enterprises LLC                                 | Saranya Vaithiyanathan                                                                                                        | Follow-up sent — 2026-09-24                         |
-| Accenture CIO HR Organization (unresolved, may be Stanza)                   | Greg Wanroy                                                                                                                   | Follow-up sent — 2026-09-24                         |
-| Aspire Systems Digital Transformation Inc.                                  | Naveen Srinivasan                                                                                                             | Follow-up sent — 2026-09-24                         |
-| Mouser Electronics                                                          | Mohammad Mahboob                                                                                                              | Follow-up sent — 2026-09-24                         |
-| Cox Automotive                                                              | Balaji Gandsi Krishna Prakash                                                                                                 | Follow-up sent — 2026-09-24                         |
-| Bayone Solutions                                                            | Mathi Natarajan                                                                                                               | Follow-up sent — 2026-09-24                         |
-| Saudi Telecom Company STC (SA) - HQ                                         | Farhan Shaikh                                                                                                                 | Follow-up sent — 2026-11-02                         |
-| Diriyah Gate Company Limited - DGCL (SA)                                    | Ali Alshehri                                                                                                                  | Follow-up sent — 2026-11-02                         |
-| TestCrew                                                                    | Ramesh Panthangi                                                                                                              | Follow-up sent — 2026-11-02                         |
-| Dolpheen IT Solutions                                                       | Jia Jun Zhan, Simon Kreitmayer                                                                                                | Follow-up sent — 2026-11-02                         |
-| Cengage Learning, Inc.                                                      | Ajan Nattamai                                                                                                                 | Follow-up sent — 2026-11-02                         |
-| Pegasystems Inc.                                                            | Kiran kadarla                                                                                                                 | Follow-up sent — 2026-11-02                         |
-| AutoZone Parts, Inc.                                                        | Vaibhav Tandale                                                                                                               | Interested — missed since 2026-09-02, never emailed |
-| cbs Corporate Business Solutions (DE/MY)                                    | Ashish Chavan, Arumugam Lekshmanan                                                                                            | Follow-up sent — 2026-11-02                         |
-| Ariba, Inc.                                                                 | Akihiko Yamano                                                                                                                | Follow-up sent — 2026-11-02                         |
-| Seatrium (SG)                                                               | Florance Yong                                                                                                                 | Follow-up sent — 2026-11-02                         |
-| Singapore Power Digital Private Limited                                     | Ritu Agrawal                                                                                                                  | Follow-up sent — 2026-11-02                         |
-| ABeam Consulting (Malaysia) Sdn. Bhd.                                       | Sharifah Nadiah Alhabshi                                                                                                      | Follow-up sent — 2026-11-02                         |
-| Singapore Institute of Technology (SG)                                      | Dennis Fung                                                                                                                   | Follow-up sent — 2026-11-02                         |
-| Olam Agri (form blank, domain-resolved)                                     | Vanitha Velusamy                                                                                                              | Follow-up sent — 2026-11-02                         |
-| Tata Consultancy Services Asia Pacific Pte. Ltd. (SG)                       | Balaji Sampathkumar                                                                                                           | Follow-up sent — 2026-11-02                         |
-| SAP North America                                                           | Thomas Zimmermann                                                                                                             | Email sent — 2026-09-17                             |
-| Defence Science and Technology Agency (SG)                                  | cydnie na                                                                                                                     | Follow-up sent — 2026-11-02                         |
-| Housing Development Board (SG)                                              | Swee Chyuan Koh                                                                                                               | Follow-up sent — 2026-11-02                         |
-| L'OREAL                                                                     | Khadim KASHANI                                                                                                                | Invited to beta                                     |
-| City Dev (SG)                                                               | Davin Ng                                                                                                                      | Follow-up sent — 2026-11-02                         |
-| Testing IT Consulting S.A. de C.V.                                          | Hector Santa Maria                                                                                                            | Follow-up sent — 2026-11-02                         |
-| Brillar Pte Ltd (SG)                                                        | Zuzan Win                                                                                                                     | Follow-up sent — 2026-11-02                         |
-| Harrods Ltd (UK)                                                            | Shanita Helyar                                                                                                                | Follow-up sent — 2026-11-02                         |
-| Ally Financial Inc.                                                         | Jana Kethamreddy                                                                                                              | Follow-up sent — 2026-11-02                         |
-| BearingPoint GmbH (DE) - HQ                                                 | Rohan Patil                                                                                                                   | Invited to beta                                     |
-| xAmplify (AU)                                                               | Prakash Panchal                                                                                                               | Follow-up sent — 2026-11-02                         |
-| Accenture (multiple entities)                                               | Jigish Belani, Mohammed Arslan Mir, Vijetha Nayak, Priya Saidavaram, Ankur Mittal, Ajay Kharb, Praveer Bakshi, Antonio Sglavo | Pending Beta                                        |
-| Singapore Pools (form blank, domain-resolved)                               | Nai Hau Lui, Fun Tat Chen                                                                                                     | Follow-up sent — 2026-11-02                         |
+| Company                                                                     | Contact                                                                                                                       | Account owner (Salesforce)                                                                                | Status                                              |
+| --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| Astemo, Ltd (JP)                                                            | raghavendar Reddy                                                                                                             | Genta Akiyama                                                                                             | Email sent - 2026-11-11                            |
+| Qnovate                                                                     | Utkarsh Verma                                                                                                                 | Ross Pellizzari                                                                                           | Email sent - 2026-11-05                             |
+| Oracle                                                                      | Sajid Saleem (via Sales: William Berry)                                                                                       | Connor Belvin                                                                                             | Interested                                          |
+| AIS (TH)                                                                    | Sirichai Wantong, Poonsiri Chingburanakij, Juralak Panpreeda, ketmanee Ruksa                                                  | Hana Nguyen                                                                                               | Email sent - 2026-11-05                             |
+| The Future Group (NL) - HQ                                                  | Jean Delissen                                                                                                                 | Joost van Wendel de Joode                                                                                 | Email sent - 2026-11-05                            |
+| Sun Life (form blank, domain-resolved)                                      | Kishore Kumar                                                                                                                 | Melody Higgins                                                                                            | Email sent — 2026-10-28                             |
+| Thought Frameworks                                                          | Roopa S                                                                                                                       | Boris Perlin                                                                                              | Email sent — 2026-10-28                             |
+| NTT Data (UK)                                                               | Stinu Easo                                                                                                                    | Shailesh Pednekar                                                                                         | Email sent — 2026-10-28                             |
+| Mattoni 1873 a.s.                                                           | Ondrej Kyzek                                                                                                                  | Bernhard Kainrath                                                                                         | Email sent — 2026-10-28                             |
+| QACooper LLC                                                                | Michael W Cooper                                                                                                              | Isaac Keil                                                                                                | Replied                                             |
+| Telekom Deutschland GmbH                                                    | André Hoffmann                                                                                                                | Andrea Dreger                                                                                             | Replied                                             |
+| Ashurst LLP (UK)                                                            | Ankush Shrivastava                                                                                                            | Camila Bruning                                                                                            | Email sent — 2026-10-22                             |
+| TotalEnergies (FR) - HQ                                                     | Olivier Soulard                                                                                                               | Paul Wagner                                                                                               | Email sent — 2026-10-22                             |
+| Barratt Redrow                                                              | Bhavinkumar Patel                                                                                                             | Camila Bruning                                                                                            | Email sent — 2026-10-22                             |
+| Epson Europe - UK                                                           | Simon Berryman                                                                                                                | Jessica Farmer                                                                                            | Email sent — 2026-10-22                             |
+| Slaughter and May (UK)                                                      | Idowu Adeyemi                                                                                                                 | Camila Bruning                                                                                            | Email sent — 2026-10-22                             |
+| QualityAI                                                                   | Stuart Flynn                                                                                                                  | Mary Clements                                                                                             | Email sent — 2026-10-22                             |
+| Heidelberg Materials AG (DE)                                                | Sara Bailey                                                                                                                   | Volker Ahrens                                                                                             | Email sent — 2026-10-22                             |
+| Benefact Group (Ecclesiastical Insurance)                                   | Angela Wallace                                                                                                                | Joshua McLatchie                                                                                          | Email sent — 2026-10-22                             |
+| Vestas (DK) - HQ                                                            | Romy Mehta                                                                                                                    | Michael Franzén                                                                                           | Email sent — 2026-10-22                             |
+| Deloitte LLP (UK)                                                           | Chetana Bangaradka                                                                                                            | Shailesh Pednekar                                                                                         | Email sent — 2026-10-22                             |
+| Jysk                                                                        | Ole Madsen                                                                                                                    | Michael Franzén                                                                                           | Email sent — 2026-10-22                             |
+| The Tech Collective                                                         | Nadia Grundholm                                                                                                               | Stina Gustafsson                                                                                          | Replied                                             |
+| University of Leeds                                                         | Andrew Peckett                                                                                                                | Camila Bruning                                                                                            | Email sent — 2026-10-22                             |
+| IBM India Private Limited                                                   | Vaibhav Sharma                                                                                                                | Kok How Foo                                                                                               | Email sent — 2026-10-22                             |
+| M2Q                                                                         | Jurgen Meheus                                                                                                                 | Joost van Wendel de Joode                                                                                 | Email sent — 2026-10-22                             |
+| AI-Celerates Business                                                       | Agnes Goh                                                                                                                     | No account                                                                                                | Email sent — 2026-10-22                             |
+| Teck Resources Limited                                                      | Snigdha Priyadarshini                                                                                                         | Bradley Rooke                                                                                             | Email sent — 2026-10-22                             |
+| CPKC                                                                        | Nazlie Shahmir                                                                                                                | Bradley Rooke                                                                                             | Email sent — 2026-10-22                             |
+| Ontario Power Generation Inc.                                               | Ajay Nandepu                                                                                                                  | Martin Farrelly                                                                                           | Email sent — 2026-10-22                             |
+| Bayer AG (DE) - HQ                                                          | Gunnar Moog                                                                                                                   | Mike Schlabinger                                                                                          | Email sent — 2026-10-22                             |
+| Siemens Financial Services GmbH (DE) (email domain suggests Siemens Energy) | Palash Gupta                                                                                                                  | Hendrik Neumann                                                                                           | Email sent — 2026-10-22                             |
+| PG&E (Pacific Gas and Electric)                                             | — (via Sales: Greg Campbell)                                                                                                  | Greg Campbell                                                                                             | Demo Scheduled — demo held 2026-10-27, no follow-up |
+| Itecor (CH)-HQ                                                              | Alexandre Thibaud, Mathieu Philippe                                                                                           | Michael Weiss (CH), Denis Rousson (FR)                                                                    | Follow-up sent — 2026-11-02                         |
+| Ferrara Candy Company                                                       | Sudha Damacherla                                                                                                              | William Lewis                                                                                             | Not a fit — accidental signup                       |
+| Department of Jobs, Skills, Industry and Regions (DJSIR) (AU)               | Subhasis Dhar                                                                                                                 | Daniel Wimpress                                                                                           | Follow-up sent — 2026-11-02                         |
+| Turing Consulting Pty. Ltd. (AU)                                            | Archana Madhusudhan                                                                                                           | Ron Impey                                                                                                 | Follow-up sent — 2026-11-02                         |
+| Bloomberg Finance L.P.                                                      | Joe Zacchio                                                                                                                   | Charles Murphy                                                                                            | Follow-up sent — 2026-11-02                         |
+| Sogeti (FR)                                                                 | Gavaskar Selvarajan, Jeroen Kuijper, Edmundo Barahona                                                                         | Denis Rousson (FR), Joost van Wendel de Joode (NL), Ivana Seitz (DE)                                      | Follow-up sent — 2026-11-02                         |
+| Singapore Airlines (SG)                                                     | Srinivasan Santhanam                                                                                                          | Yihui Zhang                                                                                               | Replied — 2026-10-06, from Sent Items               |
+| Tata Consultancy Services Ltd (IN)                                          | Joji Joseph                                                                                                                   | Kok How Foo                                                                                               | Follow-up sent — 2026-11-02                         |
+| Skygen USA                                                                  | Joko Supriyanto                                                                                                               | Unassigned                                                                                                | Follow-up sent — 2026-11-02                         |
+| Hugo Boss AG (DE)                                                           | Marco Esguerra, Julian Raach, Yash Jawale                                                                                     | Volker Ahrens                                                                                             | Follow-up sent — 2026-11-02                         |
+| Aptiv Global Operations Limited                                             | Meenakshi Sundaram Chockalingam                                                                                               | Áine O’Neill                                                                                              | Invited to beta                                     |
+| LGT Financial Services Ltd. (LI)                                            | David Klien                                                                                                                   | Peter Pischel                                                                                             | Follow-up sent — 2026-11-02                         |
+| Eaton                                                                       | Amit Ghag                                                                                                                     | John McGowan                                                                                              | Invited to beta                                     |
+| Meta Platforms, Inc.                                                        | Sri Pulleti                                                                                                                   | Greg Campbell                                                                                             | Demo Scheduled — demo held, no follow-up            |
+| Freddie Mac                                                                 | Kaleb Jackson                                                                                                                 | Geoffrey Waletich                                                                                         | Replied                                             |
+| Workday, Inc.                                                               | Vijay Mummaneni                                                                                                               | Greg Campbell                                                                                             | Invited to beta                                     |
+| PVH Corp                                                                    | Beena P K, Aimee Martin                                                                                                       | Bart DiMinno                                                                                              | Follow-up sent — 2026-09-24                         |
+| Charter Communications Operating, LLC                                       | Sarvesh Peddi                                                                                                                 | Michael OReilly                                                                                           | Follow-up sent — 2026-09-24                         |
+| Artizent (form blank, domain-resolved)                                      | Alan Mayfus                                                                                                                   | Mary Clements                                                                                             | Follow-up sent — 2026-09-24                         |
+| Tritusa Consulting (AU)                                                     | Pankaj Kumar Sinha, Deephan Mohanraj, Jawahar Govindaraj                                                                      | Ron Impey                                                                                                 | Actively using                                      |
+| SAP Labs India (IN)                                                         | SaiDeepak Ayyagari                                                                                                            | Kankan Chakraborty                                                                                        | Follow-up sent — 2026-09-24                         |
+| Regeneron Pharmaceuticals Inc.                                              | Murali Sundaram                                                                                                               | James Northup                                                                                             | Follow-up sent — 2026-09-24                         |
+| Acadia Healthcare                                                           | Pratiksha Arora                                                                                                               | Amy Nickerson                                                                                             | Follow-up sent — 2026-09-24                         |
+| New Vision Software Inc.                                                    | Rohan Bansod                                                                                                                  | Michael Newman                                                                                            | Invited to beta                                     |
+| Hilti Asia IT Services (MY)                                                 | Ashwin Mor                                                                                                                    | Yihui Zhang                                                                                               | Follow-up sent — 2026-09-24                         |
+| Panasonic Avionics (US)                                                     | Ronica Brisbon                                                                                                                | Charles Murphy                                                                                            | Follow-up sent — 2026-09-24                         |
+| The Boeing Company                                                          | Gurucharan Bijinepally                                                                                                        | Mark Beauvais                                                                                             | Follow-up sent — 2026-09-24                         |
+| — (The Hartford, unresolved)                                                | Sathish kumar Backiam                                                                                                         | Stephen Dale                                                                                              | Follow-up sent — 2026-09-24                         |
+| Southern Glazer's Wine and Spirits, LLC                                     | Jay Gajulapalli                                                                                                               | Jason DeLuca                                                                                              | Follow-up sent — 2026-09-24                         |
+| Chevron Phillips Chemical (US)                                              | Ramesh Jeyagopalan                                                                                                            | Michael Priddy                                                                                            | Follow-up sent — 2026-09-24                         |
+| Dominion Energy, Inc.                                                       | Anand Shekaraiah                                                                                                              | James Wetzel                                                                                              | Follow-up sent — 2026-09-24                         |
+| Love's Travel Stops                                                         | Jag Mallampati, Thomas Cody                                                                                                   | Caitlin Bowers                                                                                            | Demo Scheduled — demo held 2026-10-02, no follow-up |
+| Capgemini                                                                   | Mathankumar Kanagaraj, ARUN PRAKASH Shivakumar, Sathish kumar Backiam, Konrad Greszata, Łukasz Młynarczyk                     | Holly Jones (US), Kok How Foo (IN), Denis Rousson (global)                                                | Follow-up sent — 2026-09-24                         |
+| Cummins Inc.                                                                | Lakshmi Sree Thirukonda                                                                                                       | William Lewis                                                                                             | Follow-up sent — 2026-09-24                         |
+| Home Depot Store Support, Inc.                                              | Joe Pope                                                                                                                      | Geoffrey Waletich                                                                                         | Follow-up sent — 2026-09-24                         |
+| McKesson Corporation                                                        | Nitin Malik, Cathy Soller                                                                                                     | Michael Priddy                                                                                            | Follow-up sent — 2026-09-24                         |
+| Merck Co. Inc.                                                              | Ramesh Magdum, Sateesh Rajegowda                                                                                              | James Northup                                                                                             | Follow-up sent — 2026-09-24                         |
+| Genpact (HQ)                                                                | Richard Hand                                                                                                                  | Connor Ireland                                                                                            | Follow-up sent — 2026-09-24                         |
+| HP Inc.                                                                     | Ejaz Siddiqui                                                                                                                 | Michael Priddy                                                                                            | Follow-up sent — 2026-09-24                         |
+| Sub-Zero Group Inc                                                          | Guy Hall                                                                                                                      | Michelle Lee                                                                                              | Follow-up sent — 2026-09-24                         |
+| Kiewit Corporation                                                          | Damilola Agboola                                                                                                              | Jason Scheidemantel                                                                                       | Follow-up sent — 2026-09-24                         |
+| Tachyon Technologies                                                        | Subba Rao Gonugunta                                                                                                           | Mary Clements                                                                                             | Follow-up sent — 2026-09-24                         |
+| Xebia - Partner                                                             | Anmol Jain                                                                                                                    | Bojana Stojanovich                                                                                        | Follow-up sent — 2026-09-24                         |
+| Cargill Incorporated                                                        | Alfonso Garbanzo                                                                                                              | Tony Ameri                                                                                                | Follow-up sent — 2026-09-24                         |
+| Wolters Kluwer United States Inc.                                           | Chris Allanson                                                                                                                | Tim Camper                                                                                                | Invited to beta                                     |
+| J. R. Simplot Company                                                       | Neeraja Kusuma                                                                                                                | Jeff Frankel                                                                                              | Follow-up sent — 2026-09-24                         |
+| Crown Equipment Corporation                                                 | Vinay Patlolla                                                                                                                | John McGowan                                                                                              | Follow-up sent — 2026-09-24                         |
+| Stanza                                                                      | Anirban Toy Choudhury                                                                                                         | No account                                                                                                | Replied                                             |
+| Sunbelt Rentals                                                             | Arya Shrey                                                                                                                    | Worth Gaylor                                                                                              | Follow-up sent — 2026-09-24                         |
+| Merito Solutions                                                            | Chris Carpenter, Gerard Trimberger, Louis Tadman, Andrew Carpenter                                                            | Holly Jones                                                                                               | Invited to beta                                     |
+| Amazon Kuiper Manufacturing Enterprises LLC                                 | Saranya Vaithiyanathan                                                                                                        | Ryan McCammond                                                                                            | Follow-up sent — 2026-09-24                         |
+| Accenture CIO HR Organization (unresolved, may be Stanza)                   | Greg Wanroy                                                                                                                   | Tony Ameri                                                                                                | Follow-up sent — 2026-09-24                         |
+| Aspire Systems Digital Transformation Inc.                                  | Naveen Srinivasan                                                                                                             | Boris Perlin                                                                                              | Follow-up sent — 2026-09-24                         |
+| Mouser Electronics                                                          | Mohammad Mahboob                                                                                                              | Caitlin Bowers                                                                                            | Follow-up sent — 2026-09-24                         |
+| Cox Automotive                                                              | Balaji Gandsi Krishna Prakash                                                                                                 | James Arnold                                                                                              | Follow-up sent — 2026-09-24                         |
+| Bayone Solutions                                                            | Mathi Natarajan                                                                                                               | Bojana Stojanovich                                                                                        | Follow-up sent — 2026-09-24                         |
+| Saudi Telecom Company STC (SA) - HQ                                         | Farhan Shaikh                                                                                                                 | Ahmad Al Sawafta                                                                                          | Follow-up sent — 2026-11-02                         |
+| Diriyah Gate Company Limited - DGCL (SA)                                    | Ali Alshehri                                                                                                                  | Maysara Orabi                                                                                             | Follow-up sent — 2026-11-02                         |
+| TestCrew                                                                    | Ramesh Panthangi                                                                                                              | Shadi Zaytoon                                                                                             | Follow-up sent — 2026-11-02                         |
+| Dolpheen IT Solutions                                                       | Jia Jun Zhan, Simon Kreitmayer                                                                                                | Michael Weiss                                                                                             | Follow-up sent — 2026-11-02                         |
+| Cengage Learning, Inc.                                                      | Ajan Nattamai                                                                                                                 | Amy Nickerson                                                                                             | Follow-up sent — 2026-11-02                         |
+| Pegasystems Inc.                                                            | Kiran kadarla                                                                                                                 | Stephen Dale                                                                                              | Follow-up sent — 2026-11-02                         |
+| AutoZone Parts, Inc.                                                        | Vaibhav Tandale                                                                                                               | Worth Gaylor                                                                                              | Interested — missed since 2026-09-02, never emailed |
+| cbs Corporate Business Solutions (DE/MY)                                    | Ashish Chavan, Arumugam Lekshmanan                                                                                            | Joseph Wong (MY), Ivana Seitz (DE)                                                                        | Follow-up sent — 2026-11-02                         |
+| Ariba, Inc.                                                                 | Akihiko Yamano                                                                                                                | Scott Marshall                                                                                            | Follow-up sent — 2026-11-02                         |
+| Seatrium (SG)                                                               | Florance Yong                                                                                                                 | Yihui Zhang                                                                                               | Follow-up sent — 2026-11-02                         |
+| Singapore Power Digital Private Limited                                     | Ritu Agrawal                                                                                                                  | Kim Tatt Lee                                                                                              | Follow-up sent — 2026-11-02                         |
+| ABeam Consulting (Malaysia) Sdn. Bhd.                                       | Sharifah Nadiah Alhabshi                                                                                                      | Joseph Wong                                                                                               | Follow-up sent — 2026-11-02                         |
+| Singapore Institute of Technology (SG)                                      | Dennis Fung                                                                                                                   | Kim Tatt Lee                                                                                              | Follow-up sent — 2026-11-02                         |
+| Olam Agri (form blank, domain-resolved)                                     | Vanitha Velusamy                                                                                                              | Yihui Zhang                                                                                               | Follow-up sent — 2026-11-02                         |
+| Tata Consultancy Services Asia Pacific Pte. Ltd. (SG)                       | Balaji Sampathkumar                                                                                                           | Joseph Wong                                                                                               | Follow-up sent — 2026-11-02                         |
+| SAP North America                                                           | Thomas Zimmermann                                                                                                             | Bradley Rooke                                                                                             | Email sent — 2026-09-17                             |
+| Defence Science and Technology Agency (SG)                                  | cydnie na                                                                                                                     | Kim Tatt Lee                                                                                              | Follow-up sent — 2026-11-02                         |
+| Housing Development Board (SG)                                              | Swee Chyuan Koh                                                                                                               | Kim Tatt Lee                                                                                              | Follow-up sent — 2026-11-02                         |
+| L'OREAL                                                                     | Khadim KASHANI                                                                                                                | Paul Wagner                                                                                               | Invited to beta                                     |
+| City Dev (SG)                                                               | Davin Ng                                                                                                                      | Yihui Zhang                                                                                               | Follow-up sent — 2026-11-02                         |
+| Testing IT Consulting S.A. de C.V.                                          | Hector Santa Maria                                                                                                            | Jaime Munoz                                                                                               | Follow-up sent — 2026-11-02                         |
+| Brillar Pte Ltd (SG)                                                        | Zuzan Win                                                                                                                     | Joseph Wong                                                                                               | Follow-up sent — 2026-11-02                         |
+| Harrods Ltd (UK)                                                            | Shanita Helyar                                                                                                                | Camila Bruning                                                                                            | Follow-up sent — 2026-11-02                         |
+| Ally Financial Inc.                                                         | Jana Kethamreddy                                                                                                              | Mark Beauvais                                                                                             | Follow-up sent — 2026-11-02                         |
+| BearingPoint GmbH (DE) - HQ                                                 | Rohan Patil                                                                                                                   | Ivana Seitz                                                                                               | Invited to beta                                     |
+| xAmplify (AU)                                                               | Prakash Panchal                                                                                                               | Ron Impey                                                                                                 | Follow-up sent — 2026-11-02                         |
+| Accenture (multiple entities)                                               | Jigish Belani, Mohammed Arslan Mir, Vijetha Nayak, Priya Saidavaram, Ankur Mittal, Ajay Kharb, Praveer Bakshi, Antonio Sglavo | Drew Stokola (US), Kok How Foo (IN), Stina Gustafsson (NO), Haley Cruse (Federal), Federica Fiorenza (IT) | Pending Beta                                        |
+| Singapore Pools (form blank, domain-resolved)                               | Nai Hau Lui, Fun Tat Chen                                                                                                     | Kim Tatt Lee                                                                                              | Follow-up sent — 2026-11-02                         |
 
 *(Status values: Interested → Email sent → Follow-up sent → Replied → Demo scheduled → Pending beta → Invited to beta → Actively using. Not a fit and Do not email are terminal. Not a fit is an accidental or wrong-product signup. Do not email is an opt-out: remove the company from both count tables and send nothing further.)*
+
+---
+
+### Astemo, Ltd (JP)
+
+Date: 2026-11-06 13:55  
+Name: raghavendar Reddy  
+Title: Program Manager  
+Relationship: Customer  
+
+Account owner (Salesforce): Genta Akiyama (account: Astemo, Ltd (JP), Customer)  
+Email sent: 2026-11-11  
+Beta scheduled: -  
+
+outreach: 2026-11-11 "Welcome to the AgentScore Beta" email sent to raghavendar Reddy: beta is open, cloud-hosted link to AgentScore, and a link to book a walkthrough.
+
+waiting on: a reply or self-service sign-up from raghavendar.
+
+what they do: Japanese automotive-components maker formed from Hitachi Automotive Systems and Honda-group suppliers; Honda has decided to acquire a further 21% of shares from Hitachi, which would make Astemo a consolidated Honda subsidiary ([just-auto](https://www.just-auto.com/newsletters/astemo-hitachi-build-ai-platform-sdvs)).
+
+likely use case: given a Program Manager at a company that is already a Tricentis customer (Salesforce Account type Customer), most plausibly evaluating AgentScore for the agents Astemo is building for automotive software development - an inference from title, relationship and the public announcements below, not a confirmed need.
+
+known agent tooling: on 2026-05-20 Astemo and Hitachi announced a joint AI development platform for driver-assistance AI, with a layer of AI agents that develop driver-assistance AI and ECU software, targeted for completion by the end of 2026 ([nippon.com](https://www.nippon.com/en/news/yjj2026052001022/), [Astemo release](https://www.astemo.com/en/assets/pdf/news/20260520-01.pdf)). An Astemo product sheet describes "Software Developer Agents (SODA)", an automotive software-development agent with an orchestrator ([Astemo PDF, Japanese](https://www.astemo.com/jp/assets/pdf/corporate/exhibitions/technology2026-yokohama/dr1.pdf)).
 
 ---
 
@@ -192,6 +218,7 @@ Name: Utkarsh Verma
 Title: TOSCA AUTOMATION ENGINEER  
 Relationship: Partner  
 
+Account owner (Salesforce): Ross Pellizzari (account: Qnovate, Partner)  
 Email sent: 2026-11-05  
 Beta scheduled: -  
 
@@ -212,6 +239,7 @@ known agent tooling: no public information found tying Qnovate to a deployed age
 Date: 2026-11-02 18:24 (Sales conversation - no Labs form submission)  
 Name: Sajid Saleem (via Sales: William Berry)  
 
+Account owner (Salesforce): Connor Belvin (account: Oracle Corporation, Prospect)  
 Email sent: -  
 Beta scheduled: -  
 
@@ -247,6 +275,7 @@ Name: ketmanee Ruksa
 Title: QA  
 Relationship: Customer  
 
+Account owner (Salesforce): Hana Nguyen (accounts: AIS (TH), Customer, for Sirichai, Poonsiri and ketmanee; AIS/Mimo Tech, Prospect, for Juralak)  
 Email sent: 2026-11-05  
 Beta scheduled: -  
 
@@ -269,6 +298,7 @@ Name: Jean Delissen
 Title: Test manager  
 Relationship: Partner  
 
+Account owner (Salesforce): Joost van Wendel de Joode (account: The Future Group (NL) - HQ, Prospective Partner)  
 Email sent: 2026-11-05  
 Beta scheduled: -  
 
@@ -291,6 +321,7 @@ Name: Kishore Kumar
 Title: Test Lead  
 Relationship: Other  
 
+Account owner (Salesforce): Melody Higgins (account: Sun Life Assurance Company of Canada, Customer)  
 Email sent: 2026-10-28  
 Beta scheduled: -  
 
@@ -309,6 +340,7 @@ Name: Roopa S
 Title: Automation Lead  
 Relationship: Partner  
 
+Account owner (Salesforce): Boris Perlin (account: Thought Frameworks, Partner)  
 Email sent: 2026-10-28  
 Beta scheduled: -  
 
@@ -327,6 +359,7 @@ Name: Stinu Easo
 Title: QA  
 Relationship: Partner  
 
+Account owner (Salesforce): Shailesh Pednekar (account: NTT Data (UK), Partner)  
 Email sent: 2026-10-28  
 Beta scheduled: -  
 
@@ -345,6 +378,7 @@ Name: Ondrej Kyzek
 Title: Business Solutions IT manager  
 Relationship: Customer  
 
+Account owner (Salesforce): Bernhard Kainrath (account: Mattoni 1873 a.s., Customer)  
 Email sent: 2026-10-28  
 Beta scheduled: -  
 
@@ -363,6 +397,7 @@ Name: Michael W Cooper
 Title: CEO  
 Relationship: Partner  
 
+Account owner (Salesforce): Isaac Keil (account: QA Cooper, Partner; matched on the qacooper.ai website, since Michael's own record is an unconverted lead)  
 Email sent: 2026-10-28  
 Replied: 2026-10-28  
 Beta scheduled: -  
@@ -382,6 +417,7 @@ Name: André Hoffmann
 Title: Senior Test Automation Architect  
 Relationship: Partner  
 
+Account owner (Salesforce): Andrea Dreger (account: Telekom Deutschland GmbH, Prospect)  
 Email sent: 2026-10-28  
 Replied: 2026-10-29  
 Our reply: 2026-10-29  
@@ -402,6 +438,7 @@ Name: Ankush Shrivastava
 Title: Automation Test Lead  
 Relationship: Customer  
 
+Account owner (Salesforce): Camila Bruning (account: Ashurst LLP (UK), Customer)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -420,6 +457,7 @@ Name: Mario D'Amico
 Title: Head of integration and test  
 Relationship: Evaluating Tricentis  
 
+Account owner (Salesforce): David Siva-Willoughby (account: Sky Plc (UK) - HQ, Churned Customer)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 Do not email: 2026-11-02. Replied to the beta welcome that he is not interested and does not want further emails. Removed from the tracker.
@@ -439,6 +477,7 @@ Name: Olivier Soulard
 Title: Program Test Lead  
 Relationship: Customer  
 
+Account owner (Salesforce): Paul Wagner (account: TotalEnergies (FR) - HQ, Customer)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -457,6 +496,7 @@ Name: Bhavinkumar Patel
 Title: Test Automation Engineer  
 Relationship: Customer  
 
+Account owner (Salesforce): Camila Bruning (account: Barratt Redrow, Prospect)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -475,6 +515,7 @@ Name: Simon Berryman
 Title: SAP Functional Lead  
 Relationship: Customer  
 
+Account owner (Salesforce): Jessica Farmer (account: Epson Europe - UK, Churned Customer)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -493,6 +534,7 @@ Name: Idowu Adeyemi
 Title: Quality Assurance Lead  
 Relationship: Customer  
 
+Account owner (Salesforce): Camila Bruning (account: Slaughter and May Ltd, Customer)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -511,6 +553,7 @@ Name: Stuart Flynn
 Title: Enterprise Delivery Head  
 Relationship: Partner  
 
+Account owner (Salesforce): Mary Clements (account: QualityAI, Partner)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -529,6 +572,7 @@ Name: Sara Bailey
 Title: Head of Applications management  
 Relationship: Customer  
 
+Account owner (Salesforce): Volker Ahrens (account: Heidelberg Materials AG (DE), Customer)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -547,6 +591,7 @@ Name: Angela Wallace
 Title: Group Technology development director  
 Relationship: Customer  
 
+Account owner (Salesforce): Joshua McLatchie (account: Benefact Group (Ecclesiastical Insurance), Prospect)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -565,6 +610,7 @@ Name: Romy Mehta
 Title: Enterprise Test Manager  
 Relationship: Customer  
 
+Account owner (Salesforce): Michael Franzén (account: Vestas (DK) - HQ, Customer)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -583,6 +629,7 @@ Name: Chetana Bangaradka
 Title: Senior Manager  
 Relationship: Partner  
 
+Account owner (Salesforce): Shailesh Pednekar (account: Deloitte LLP (UK), Prospective Partner)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -601,6 +648,7 @@ Name: Ole Madsen
 Title: Team Lead SAP Test Automation  
 Relationship: Customer  
 
+Account owner (Salesforce): Michael Franzén (account: Jysk, Customer)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -619,6 +667,7 @@ Name: Nadia Grundholm
 Title: Test Automation Specialist  
 Relationship: Partner  
 
+Account owner (Salesforce): Stina Gustafsson (account: The Tech Collective, Partner)  
 Email sent: 2026-10-22  
 Replied: 2026-10-28  
 Beta scheduled: —  
@@ -638,6 +687,7 @@ Name: Andrew Peckett
 Title: Platform and Service Owner (QA and Testing)  
 Relationship: Customer  
 
+Account owner (Salesforce): Camila Bruning (account: University of Leeds, Customer)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -656,6 +706,7 @@ Name: Vaibhav Sharma
 Title: Application Archietect  
 Relationship: Partner  
 
+Account owner (Salesforce): Kok How Foo (account: IBM India Private Limited, Partner)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -674,6 +725,7 @@ Name: Jurgen Meheus
 Title: Ceo  
 Relationship: Partner  
 
+Account owner (Salesforce): Joost van Wendel de Joode (account: M2Q, Partner)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -692,6 +744,7 @@ Name: Agnes Goh
 Title: Founder  
 Relationship: Evaluating Tricentis  
 
+Account owner (Salesforce): no Salesforce account. Agnes Goh is an unconverted lead owned by Jericson Gonzales  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -710,6 +763,7 @@ Name: Snigdha Priyadarshini
 Title: Business Stream Lead  
 Relationship: Other  
 
+Account owner (Salesforce): Bradley Rooke (account: Teck Resources Limited, Customer)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -728,6 +782,7 @@ Name: Nazlie Shahmir
 Title: QA manager  
 Relationship: Customer  
 
+Account owner (Salesforce): Bradley Rooke (account: Canadian Pacific Kansas Ciity Railway, Customer)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -746,6 +801,7 @@ Name: Ajay Nandepu
 Title: Sr Solution Architect  
 Relationship: Customer  
 
+Account owner (Salesforce): Martin Farrelly (account: Ontario Power Generation Inc., Customer)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -764,6 +820,7 @@ Name: Gunnar Moog
 Title: Product Manager  
 Relationship: Customer  
 
+Account owner (Salesforce): Mike Schlabinger (account: Bayer AG (DE) - HQ, Customer)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -782,6 +839,7 @@ Name: Palash Gupta
 Title: Test Engineer  
 Relationship: Other  
 
+Account owner (Salesforce): Hendrik Neumann (account: Siemens Financial Services GmbH (DE), Prospect)  
 Email sent: 2026-10-22  
 Beta scheduled: —  
 
@@ -798,6 +856,7 @@ known agent tooling: Siemens Energy India job postings describe an "Agent Factor
 Date: 2026-10-13 11:28 (Sales conversation — no Labs form submission)  
 Name: — (contact not captured; came in via Sales rep Greg Campbell)  
 
+Account owner (Salesforce): Greg Campbell (account: Pacific Gas & Electric Corporation, Customer; matched by name, no submitter contact)  
 Email sent: —  
 Beta scheduled: 2026-10-27 (demo)  
 Follow-up: none after the demo (stated 2026-11-04).
@@ -825,6 +884,7 @@ Name: Alexandre Thibaud
 Title: QA Expert  
 Relationship: Partner  
 
+Account owner (Salesforce): Michael Weiss (account: Itecor (CH)-HQ, Partner) for Alexandre Thibaud; Denis Rousson (account: Itecor (FR), Partner) for Mathieu Philippe  
 Email sent: —  
 Follow-up sent: 2026-11-02 (Alexandre Thibaud)  
 Beta scheduled: —  
@@ -844,6 +904,7 @@ Name: Sudha Damacherla
 Title: Sr. IT Product Manager  
 Relationship: Customer  
 
+Account owner (Salesforce): William Lewis (account: Ferrara Candy Company, Customer)  
 Email sent: 2026-10-12  
 Beta scheduled: —  
 
@@ -864,6 +925,7 @@ Name: Subhasis Dhar
 Title: Salesforce QA Lead  
 Relationship: Evaluating Tricentis  
 
+Account owner (Salesforce): Daniel Wimpress (account: Department of Jobs, Skills, Industry and Regions (DJSIR) (AU), Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -883,6 +945,7 @@ Name: Archana Madhusudhan
 Title: QE  
 Relationship: Partner  
 
+Account owner (Salesforce): Ron Impey (account: Turing Consulting Pty. Ltd. (AU), Partner)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -902,6 +965,7 @@ Name: Joe Zacchio
 Title: QA Testing Mgr  
 Relationship: Customer  
 
+Account owner (Salesforce): Charles Murphy (account: Bloomberg Finance L.P., Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -933,6 +997,7 @@ Name: Gavaskar Selvarajan
 Title: Solution architect  
 Relationship: Partner  
 
+Account owner (Salesforce): Denis Rousson (account: Sogeti (FR), Partner) for Gavaskar Selvarajan; Joost van Wendel de Joode (account: Sogeti Netherlands BV (NL), Partner) for Jeroen Kuijper; Ivana Seitz (account: Sogeti Deutschland GmbH (DE), Partner) for Edmundo Barahona  
 Email sent: —  
 Follow-up sent: 2026-11-02 (Gavaskar Selvarajan)  
 Beta scheduled: —  
@@ -952,6 +1017,7 @@ Name: Srinivasan Santhanam
 Title: Senior Principal Technologist  
 Relationship: Customer  
 
+Account owner (Salesforce): Yihui Zhang (account: Singapore Airlines (SG), Customer)  
 Email sent: 2026-10-05  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -972,6 +1038,7 @@ Name: Joji Joseph
 Title: PM  
 Relationship: Partner  
 
+Account owner (Salesforce): Kok How Foo (account: Tata Consultancy Services Ltd (IN), Partner)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -991,6 +1058,7 @@ Name: Joko Supriyanto
 Title: Software automation manager  
 Relationship: Evaluating Tricentis  
 
+Account owner (Salesforce): Tricentis Bulldog (account: Skygen USA, Prospect). Tricentis Bulldog is a placeholder "Dummy CRM User", so the account has no real owner  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1020,6 +1088,7 @@ Name: Marco Esguerra
 Title: Senior IT Consultant  
 Relationship: Customer  
 
+Account owner (Salesforce): Volker Ahrens (account: Hugo Boss AG (DE), Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02 (Marco Esguerra)  
 Beta scheduled: —  
@@ -1039,6 +1108,7 @@ Name: Meenakshi Sundaram Chockalingam
 Title: Test Automation Architect  
 Relationship: Customer  
 
+Account owner (Salesforce): Áine O’Neill (account: Aptiv Global Operations Limited, Customer)  
 Email sent: —  
 Beta scheduled: 2026-09-25  
 Beta invite sent: 2026-10-12  
@@ -1065,6 +1135,7 @@ Name: David Klien
 Title: Application Owner  
 Relationship: Customer  
 
+Account owner (Salesforce): Peter Pischel (account: LGT Financial Services Ltd. (LI), Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1081,6 +1152,7 @@ known agent tooling: launched "Lumen," an AI investment-research assistant helpi
 
 Date: (sourced via David, VP of AI/ML — not a Labs form submission)  
 Name: Amit Ghag  
+Account owner (Salesforce): John McGowan (account: Eaton Corporation, Customer)  
 Email sent: —  
 Beta scheduled: 2026-10-01  
 Beta invite sent: 2026-11-02  
@@ -1143,8 +1215,11 @@ Date: 2026-08-20 14:48
 Name: Jigish Belani  
 Submitted as: Accenture LLP (repeat submission 2026-09-09, not tracked separately)  
 
+Account owner (Salesforce): Drew Stokola (account: Accenture LLP, Partner) for Jigish Belani, Ajay Kharb and Praveer Bakshi; Kok How Foo (accounts: Accenture Solutions Pvt Ltd (IN) for Mohammed Arslan Mir, Accenture India (IN) for Ankur Mittal); Stina Gustafsson (account: Accenture AS, Partner) for Vijetha Nayak; Haley Cruse (account: Accenture Federal Services LLC, Partner) for Priya Saidavaram; Federica Fiorenza (account: Accenture SpA (IT), Partner) for Antonio Sglavo, whose contact also sits on Accenture Global Parent (Drew Stokola) and on client Davide Campari-Milano S.p.A. (Sara Capriolo). Drew Stokola also owns Accenture Global Parent  
 Email sent: —  
 Beta scheduled: —  
+
+outreach (Praveer Bakshi only): 2026-11-11 "Welcome to the AgentScore Beta" email sent to Praveer Bakshi (Accenture LLP): beta is open, cloud-hosted link to AgentScore, and a link to book a walkthrough. Company status stays Pending Beta; this is a contact-level intro, not a company status change.
 
 what they do: World's largest IT/management consultancy (~750,000+ employees).
 
@@ -1168,6 +1243,7 @@ Name: Nai Hau Lui
 Title: Lead, Quality Engineering  
 Relationship: Customer  
 
+Account owner (Salesforce): Kim Tatt Lee (account: Singapore Pools (SG), Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02 (Nai Hau Lui)  
 Beta scheduled: —  
@@ -1192,6 +1268,7 @@ Name: Arumugam Lekshmanan
 Title: Test Manager  
 Relationship: Partner  
 
+Account owner (Salesforce): Joseph Wong (account: CBS Corporate Business Solutions MY, Prospective Partner) for Arumugam Lekshmanan. Ashish Chavan's contact is linked to CBS Corporation (owner Stephen Dale), which looks like a different company; the German cbs consulting (DE) account, Prospective Partner, is owned by Ivana Seitz  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1216,6 +1293,7 @@ Name: Sina Döbbelin
 Title: BTM Partner Management  
 Relationship: Partner  
 
+Account owner (Salesforce): Scott Marshall (account: Ariba, Inc., Churned Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02 (Akihiko Yamano and Sina Döbbelin)  
 Beta scheduled: —  
@@ -1236,6 +1314,7 @@ Name: Florance Yong
 Title: IT QA Manager  
 Relationship: Customer  
 
+Account owner (Salesforce): Yihui Zhang (account: Seatrium (SG), Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1255,6 +1334,7 @@ Name: Ritu Agrawal
 Title: Test manager  
 Relationship: Customer  
 
+Account owner (Salesforce): Kim Tatt Lee (account: Singapore Power Digital Private Limited, Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1274,6 +1354,7 @@ Name: Sharifah Nadiah Alhabshi
 Title: Manager  
 Relationship: Partner  
 
+Account owner (Salesforce): Joseph Wong (account: ABeam Consulting (Malaysia) Sdn. Bhd., Partner)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1293,6 +1374,7 @@ Name: Dennis Fung
 Title: Senior IT Consultant  
 Relationship: Evaluating Tricentis  
 
+Account owner (Salesforce): Kim Tatt Lee (account: Singapore Institute of Technology (SG), Churned Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1312,6 +1394,7 @@ Name: Vanitha Velusamy
 Title: IT Project Manager  
 Relationship: Customer  
 
+Account owner (Salesforce): Yihui Zhang (account: Olam Global Agri Pte Ltd (SG), Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1331,6 +1414,7 @@ Name: Balaji Sampathkumar
 Title: Associate Consultant  
 Relationship: Partner  
 
+Account owner (Salesforce): Joseph Wong (account: Tata Consultancy Services Asia Pacific Pte. Ltd. (SG), Partner)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1350,6 +1434,7 @@ Name: Thomas Zimmermann
 Title: VP  
 Relationship: Partner  
 
+Account owner (Salesforce): Bradley Rooke (account: SAP North America, Churned Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -1368,6 +1453,7 @@ Name: cydnie na
 Title: Developer  
 Relationship: Partner  
 
+Account owner (Salesforce): Kim Tatt Lee (account: Defence Science and Technology Agency (SG), Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1387,6 +1473,7 @@ Name: Swee Chyuan Koh
 Title: Principal Software Quality Engineer  
 Relationship: Customer  
 
+Account owner (Salesforce): Kim Tatt Lee (account: Housing Development Board (SG), Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1406,6 +1493,7 @@ Name: Khadim KASHANI
 Title: SME Test Automation  
 Relationship: Customer  
 
+Account owner (Salesforce): Paul Wagner (account: L'OREAL, Customer)  
 Email sent: —  
 Beta scheduled: 2026-09-24  
 Beta invite sent: 2026-10-12  
@@ -1432,6 +1520,7 @@ Name: Davin Ng
 Title: QA Lead  
 Relationship: Customer  
 
+Account owner (Salesforce): Yihui Zhang (account: City Dev (SG), Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1451,6 +1540,7 @@ Name: Hector Santa Maria
 Title: CEO  
 Relationship: Partner  
 
+Account owner (Salesforce): Jaime Munoz (account: Testing IT Consulting S.A. de C.V., Partner)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1470,6 +1560,7 @@ Name: Zuzan Win
 Title: Test Automation Engineer  
 Relationship: Partner  
 
+Account owner (Salesforce): Joseph Wong (account: Brillar Pte Ltd (SG), Partner)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1489,6 +1580,7 @@ Name: Shanita Helyar
 Title: Senior Test Manager  
 Relationship: Customer  
 
+Account owner (Salesforce): Camila Bruning (account: Harrods Ltd (UK), Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1508,6 +1600,7 @@ Name: Jana Kethamreddy
 Title: Principal Cloud Engg  
 Relationship: Other  
 
+Account owner (Salesforce): Mark Beauvais (account: Ally Financial Inc., Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1527,6 +1620,7 @@ Name: Rohan Patil
 Title: Senior Technology Consultant  
 Relationship: Partner  
 
+Account owner (Salesforce): Ivana Seitz (account: BearingPoint GmbH (DE) - HQ - Partner Account, Partner)  
 Email sent: —  
 Beta scheduled: 2026-09-23  
 Beta invite sent: 2026-11-02  
@@ -1552,6 +1646,7 @@ Name: Prakash Panchal
 Title: Test Automation Architect  
 Relationship: Partner  
 
+Account owner (Salesforce): Ron Impey (account: xAmplify (AU), Partner)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1569,6 +1664,7 @@ known agent tooling: no public information found tying xAmplify to a deployed ag
 Date: 2026-09-10 (Sales conversation — no Labs form submission)  
 Name: Sri Pulleti  
 
+Account owner (Salesforce): Greg Campbell (account: Meta Platforms Inc., Customer)  
 Email sent: —  
 Beta scheduled: —  
 Follow-up: none after the demo (stated 2026-11-04).
@@ -1592,6 +1688,7 @@ agent stack (stated): custom in-house agents (autonomous supply chain program, f
 Date: 2026-09-09 09:51  
 Name: Farhan Shaikh  
 
+Account owner (Salesforce): Ahmad Al Sawafta (account: Saudi Telecom Company STC (SA) - HQ, Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1609,6 +1706,7 @@ known agent tooling: agentic AI reported live across customer-service automation
 Date: 2026-09-09 09:52  
 Name: Ali Alshehri  
 
+Account owner (Salesforce): Maysara Orabi (account: Diriyah Gate Company Limited - DGCL (SA), Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1626,6 +1724,7 @@ known agent tooling: no public information found tying Diriyah/DGCL to a deploye
 Date: 2026-09-09 09:53  
 Name: Ramesh Panthangi  
 
+Account owner (Salesforce): Shadi Zaytoon (account: TestCrew, Partner)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1649,6 +1748,7 @@ Submitted as: SKYPhoenix IT GmbH (North Data lists it as formerly Dolpheen IT So
 Date: 2026-09-09 14:41  
 Name: Jia Jun Zhan  
 
+Account owner (Salesforce): Michael Weiss (accounts: Dolpheen IT Solutions, Partner, for Jia Jun Zhan; SKYPhoenix IT GmbH, Partner, for Simon Kreitmayer)  
 Email sent: —  
 Follow-up sent: 2026-11-02 (Jia Jun Zhan)  
 Beta scheduled: —  
@@ -1666,6 +1766,7 @@ known agent tooling: no public information found tying Dolpheen to a deployed AI
 Date: 2026-09-03 15:20  
 Name: Ajan Nattamai  
 
+Account owner (Salesforce): Amy Nickerson (account: Cengage Learning, Inc., Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1683,6 +1784,7 @@ known agent tooling: shipped a GenAI-powered Student Assistant (beta) and an AI 
 Date: 2026-09-02 14:51  
 Name: Kiran kadarla  
 
+Account owner (Salesforce): Stephen Dale (account: PEGASYSTEMS INC, Customer)  
 Email sent: —  
 Follow-up sent: 2026-11-02  
 Beta scheduled: —  
@@ -1701,6 +1803,7 @@ Date: 2026-09-02
 Name: Vaibhav Tandale  
 Contact: company domain autozone.com. The address is not in the contacts log, and this reconciliation did not copy it from the inbox.  
 
+Account owner (Salesforce): Worth Gaylor (account: AutoZone Parts, Inc., Customer; matched by name)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -1719,6 +1822,7 @@ known agent tooling: not researched in this pass.
 Date: 2026-08-28 (Sales conversation — no Labs form submission)  
 Name: Kaleb Jackson  
 
+Account owner (Salesforce): Geoffrey Waletich (account: Freddie Mac, Prospect; matched by name, Kaleb has no email on file)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -1735,6 +1839,7 @@ known agent tooling: not stated in the transcript — Kaleb didn't name specific
 Date: 2026-08-28 18:28  
 Name: Vijay Mummaneni  
 
+Account owner (Salesforce): Greg Campbell (account: Workday, Inc., Customer)  
 Email sent: —  
 Beta scheduled: —  
 Beta invite sent: 2026-11-02  
@@ -1764,6 +1869,7 @@ Name: Beena P K
 Date: 2026-08-28 12:52  
 Name: Aimee Martin  
 
+Account owner (Salesforce): Bart DiMinno (account: PVH Corp, Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -1780,6 +1886,7 @@ known agent tooling: announced a company-wide collaboration with OpenAI (January
 Date: 2026-08-24 16:26  
 Name: Sarvesh Peddi  
 
+Account owner (Salesforce): Michael OReilly (account: Charter Communications Operating, LLC, Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -1796,6 +1903,7 @@ known agent tooling: AI-powered call-summarization and knowledge-search tools al
 Date: 2026-08-24 13:13  
 Name: Alan Mayfus  
 
+Account owner (Salesforce): Mary Clements (account: Artizent Inc., Partner)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -1818,6 +1926,7 @@ Name: Deephan Mohanraj
 Date: 2026-09-01 10:25  
 Name: Jawahar Govindaraj  
 
+Account owner (Salesforce): Ron Impey (account: Tritusa Consulting - Partner (AU), Partner)  
 Email sent: —  
 Beta scheduled: 2026-09-11  
 Beta invite sent: 2026-10-12  
@@ -1845,6 +1954,7 @@ agent stack (stated): Microsoft Copilot Studio agent (spec to test cases, pushed
 Date: 2026-08-22 08:25  
 Name: SaiDeepak Ayyagari  
 
+Account owner (Salesforce): Kankan Chakraborty (account: SAP Labs India (IN), Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -1861,6 +1971,7 @@ known agent tooling: SAP Business AI and the Joule generative-AI assistant embed
 Date: 2026-08-21 06:12  
 Name: Murali Sundaram  
 
+Account owner (Salesforce): James Northup (account: Regeneron Pharmaceuticals Inc., Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -1877,6 +1988,7 @@ known agent tooling: no public information found tying Regeneron specifically to
 Date: 2026-08-20 19:03  
 Name: Pratiksha Arora  
 
+Account owner (Salesforce): Amy Nickerson (account: Acadia Healthcare, Churned Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -1893,6 +2005,7 @@ known agent tooling: no public information found tying Acadia specifically to a 
 Date: 2026-08-20 16:12  
 Name: Rohan Bansod  
 
+Account owner (Salesforce): Michael Newman (account: New Vision Software Inc., Partner)  
 Email sent: —  
 Beta scheduled: 2026-10-08  
 Beta invite sent: 2026-10-20  
@@ -1917,6 +2030,7 @@ agent stack (stated): mostly open-source agents, mainly Playwright, driven by wh
 Date: 2026-08-20 15:00  
 Name: ASHWIN MOR  
 
+Account owner (Salesforce): Yihui Zhang (account: Hilti Asia IT Services (MY), Churned Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -1933,6 +2047,7 @@ known agent tooling: no public information found.
 Date: 2026-08-20 14:58  
 Name: Ronica Brisbon  
 
+Account owner (Salesforce): Charles Murphy (account: Panasonic Avionics (US), Prospect)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -1949,6 +2064,7 @@ known agent tooling: no public information found.
 Date: 2026-08-20 14:50  
 Name: Gurucharan Bijinepally  
 
+Account owner (Salesforce): Mark Beauvais (account: The Boeing Company, Customer; matched by name, since Gurucharan is an unconverted lead owned by Marie Elaine Regalario)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -1965,6 +2081,7 @@ known agent tooling: prototype onboard AI for spacecraft anomaly detection/self-
 Date: 2026-08-20 14:49  
 Name: Sathish kumar Backiam  
 
+Account owner (Salesforce): Stephen Dale (account: The Hartford, Churned Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -1981,6 +2098,7 @@ known agent tooling: "several hundred AI models in production" per CEO Chris Swi
 Date: 2026-08-20 14:49  
 Name: Jay Gajulapalli  
 
+Account owner (Salesforce): Jason DeLuca (account: Southern Glazer's Wine and Spirits, LLC, Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -1997,6 +2115,7 @@ known agent tooling: no public information found.
 Date: 2026-08-20 14:49  
 Name: Ramesh Jeyagopalan  
 
+Account owner (Salesforce): Michael Priddy (account: Chevron Phillips Chemical (US), Prospect)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2013,6 +2132,7 @@ known agent tooling: adopted Databricks Data Intelligence Platform for manufactu
 Date: 2026-08-20 14:49  
 Name: Anand Shekaraiah  
 
+Account owner (Salesforce): James Wetzel (account: Dominion Energy, Inc., Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2032,6 +2152,7 @@ Name: Jag Mallampati
 Date: 2026-08-20 14:48  
 Name: Thomas Cody  
 
+Account owner (Salesforce): Caitlin Bowers (account: Love's Travel Stops, Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2051,6 +2172,12 @@ agent stack (stated): no agent in production; closest candidate is a Tosca MCP p
 
 ### Capgemini
 
+Date: 2026-11-10 06:13  
+Name: Łukasz Młynarczyk  
+Title: Quality Manager  
+Relationship: Partner  
+Entity: Capgemini Global Parent  
+
 Date: 2026-10-13 08:47  
 Name: Konrad Greszata  
 Title: CTO  
@@ -2069,8 +2196,11 @@ Date: 2026-08-20 14:48
 Name: Sathish kumar Backiam  
 Entity: CAPGEMINI TECHNOLOGY SERVICES INDIA LIMITED *(this same person also submitted separately with the company field blank and a thehartford.com email — see the flagged Hartford entry above)*  
 
+Account owner (Salesforce): Holly Jones (account: Capgemini Technologies LLC, Partner) for Mathankumar Kanagaraj and ARUN PRAKASH Shivakumar; Kok How Foo (account: CAPGEMINI TECHNOLOGY SERVICES INDIA LIMITED, Partner) for Sathish kumar Backiam; Denis Rousson (account: Capgemini Global Parent, Partner) for Konrad Greszata and Łukasz Młynarczyk  
 Email sent: —  
 Beta scheduled: —  
+
+outreach (Łukasz Młynarczyk only): 2026-11-11 "Welcome to the AgentScore Beta" email sent to Łukasz Młynarczyk (Capgemini Global Parent): beta is open, cloud-hosted link to AgentScore, and a link to book a walkthrough. Company status stays Follow-up sent (earlier Capgemini submitters were followed up 2026-09-24); this is a contact-level intro.
 
 what they do: Global IT/management consulting and systems integrator (~340,000+ employees worldwide).
 
@@ -2085,6 +2215,7 @@ known agent tooling: this is a core service line, not just internal tooling — 
 Date: 2026-08-20 14:48  
 Name: Lakshmi Sree Thirukonda  
 
+Account owner (Salesforce): William Lewis (account: Cummins Inc., Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2101,6 +2232,7 @@ known agent tooling: Axion partnership for AI-driven failure prediction/warranty
 Date: 2026-08-20 14:48  
 Name: Joe Pope  
 
+Account owner (Salesforce): Geoffrey Waletich (account: Home Depot Store Support, Inc., Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2120,6 +2252,7 @@ Name: Nitin Malik
 Date: 2026-08-21 12:53  
 Name: Cathy Soller  
 
+Account owner (Salesforce): Michael Priddy (account: McKesson Corporation, Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2139,6 +2272,7 @@ Name: Ramesh Magdum
 Date: 2026-08-20 14:48  
 Name: Sateesh Rajegowda  
 
+Account owner (Salesforce): James Northup (account: Merck Co. Inc., Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2155,6 +2289,7 @@ known agent tooling: April 2026, signed a $1B multi-year deal with Google Cloud 
 Date: 2026-08-20 14:48  
 Name: Richard Hand  
 
+Account owner (Salesforce): Connor Ireland (account: Genpact (HQ), Churned Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2171,6 +2306,7 @@ known agent tooling: self-described applied-AI/process-intelligence positioning 
 Date: 2026-08-20 14:48  
 Name: Ejaz Siddiqui  
 
+Account owner (Salesforce): Michael Priddy (account: HP Inc., Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2187,6 +2323,7 @@ known agent tooling: June 2026, expanded a strategic partnership with OpenAI's F
 Date: 2026-08-20 14:48  
 Name: Guy Hall  
 
+Account owner (Salesforce): Michelle Lee (account: Sub-Zero Group Inc, Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2203,6 +2340,7 @@ known agent tooling: no public information found.
 Date: 2026-08-20 14:48  
 Name: Damilola Agboola  
 
+Account owner (Salesforce): Jason Scheidemantel (account: Kiewit Corporation, Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2219,6 +2357,7 @@ known agent tooling: KADE (Kiewit Algorithmic Design and Engineering), ADAPT in-
 Date: 2026-08-20 14:48  
 Name: Subba Rao Gonugunta  
 
+Account owner (Salesforce): Mary Clements (account: Tachyon Technologies, Partner)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2235,6 +2374,7 @@ known agent tooling: no public information found beyond a generic "AI & Generati
 Date: 2026-08-20 14:48  
 Name: Anmol Jain  
 
+Account owner (Salesforce): Bojana Stojanovich (account: Xebia - Partner, Prospective Partner)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2251,6 +2391,7 @@ known agent tooling: builds and sells its own agentic AI products — "Agentic A
 Date: 2026-08-20 14:48  
 Name: Alfonso Garbanzo  
 
+Account owner (Salesforce): Tony Ameri (account: Cargill Incorporated, Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2267,6 +2408,7 @@ known agent tooling: a Support AI Agent automates ~70% of order processing (~$15
 Date: 2026-08-20 14:48  
 Name: Chris Allanson  
 
+Account owner (Salesforce): Tim Camper (account: Wolters Kluwer United States Inc., Customer; Chris's contact also sits on Wolters Kluwer DXG U.S., Inc. and Wolters Kluwer R&D U.S LP, both also owned by Tim)  
 Email sent: —  
 Beta scheduled: —  
 Beta invite sent: 2026-10-12  
@@ -2291,6 +2433,7 @@ agent stack (stated): AI Workspace agents, agents on WK's internal FAB LLM platf
 Date: 2026-08-20 14:48  
 Name: Neeraja Kusuma  
 
+Account owner (Salesforce): Jeff Frankel (account: J. R. Simplot Company, Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2307,6 +2450,7 @@ known agent tooling: no public information found on specific deployed agents; co
 Date: 2026-08-20 14:48  
 Name: Vinay Patlolla  
 
+Account owner (Salesforce): John McGowan (account: Crown Equipment Corporation, Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2323,6 +2467,7 @@ known agent tooling: autonomous lift trucks with real-time navigation decisions;
 Date: 2026-08-20 14:48  
 Name: Anirban Toy Choudhury  
 
+Account owner (Salesforce): no Salesforce account. Anirban is an unconverted lead owned by the Marketo Sync integration user, so no person owns it  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2339,6 +2484,7 @@ known agent tooling: confirmed — their entire product is AI agents.
 Date: 2026-08-20 14:48  
 Name: Arya Shrey  
 
+Account owner (Salesforce): Worth Gaylor (account: Sunbelt Rentals, Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2361,6 +2507,7 @@ Name: Gerard Trimberger
 Demo contact: Louis Tadman (not a form submitter; added when the demo was scheduled)  
 Also on the demo: Andrew Carpenter (Director of Professional Services)  
 
+Account owner (Salesforce): Holly Jones (account: Merito Solutions, Partner)  
 Email sent: —  
 Beta scheduled: 2026-10-06 (demo)  
 Beta invite sent: 2026-10-12  
@@ -2385,6 +2532,7 @@ agent stack (stated): builds agentic solutions with Claude (Claude-certified arc
 Date: 2026-08-20 14:48  
 Name: Saranya Vaithiyanathan  
 
+Account owner (Salesforce): Ryan McCammond (account: Amazon Kuiper Manufacturing Enterprises LLC, Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2401,6 +2549,7 @@ known agent tooling (mixed evidence): confirmed use of AWS IoT SiteWise for CNC 
 Date: 2026-08-20 14:48  
 Name: Greg Wanroy  
 
+Account owner (Salesforce): Tony Ameri (account: Accenture CIO HR Organization, Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2417,6 +2566,7 @@ known agent tooling: the "Accenture CIO HR Organization" label looks like a form
 Date: 2026-08-20 14:48  
 Name: Naveen Srinivasan  
 
+Account owner (Salesforce): Boris Perlin (account: Aspire Systems Digital Transformation Inc., Partner)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2433,6 +2583,7 @@ known agent tooling: 2026 ISG Software Innovation Awards finalist for "AI-Powere
 Date: 2026-08-20 14:47  
 Name: Mohammad Mahboob  
 
+Account owner (Salesforce): Caitlin Bowers (account: Mouser Electronics, Prospect)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2449,6 +2600,7 @@ known agent tooling: 21 customer-service bots across 13 languages on LivePerson'
 Date: 2026-08-20 14:47  
 Name: Balaji Gandsi Krishna Prakash  
 
+Account owner (Salesforce): James Arnold (account: Cox Automotive, Customer)  
 Email sent: —  
 Beta scheduled: —  
 
@@ -2465,6 +2617,7 @@ known agent tooling: strongest public documentation on this list — built 5 age
 Date: 2026-08-19 19:18  
 Name: Mathi Natarajan  
 
+Account owner (Salesforce): Bojana Stojanovich (account: BayOne Solutions, Prospective Partner; matched by name, since Mathi is an unconverted Marketo lead)  
 Email sent: —  
 Beta scheduled: —  
 

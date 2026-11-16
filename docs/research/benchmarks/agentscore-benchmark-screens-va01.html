@@ -1,0 +1,1121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgentScore mock · Turning a stuck run into a test</title>
+<style>
+:root{
+  --blue:#2f6fb6;--blue-d:#24599a;--ink:#1f2937;--muted:#6b7280;--faint:#9ca3af;
+  --line:#e5e7eb;--line2:#f1f2f4;--bg:#f4f5f7;
+  --new:#7c3aed;--new-bg:#faf7ff;--new-line:#c4b5fd;
+  --good:#166534;--good-bg:#e3f4e9;--warn:#b45309;--warn-bg:#fdf1dc;
+  --bad:#b91c1c;--bad-bg:#fde8e8;--gen:#c2410c;--gen-bg:#fdebe3;
+  --info-bg:#eef5fd;--info-line:#b9d4f1;--note:#fff8db;--note-line:#f0d77a;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px}
+button{font:inherit;cursor:pointer}
+
+/* ---------- page frame ---------- */
+.top{background:#fff;border-bottom:1px solid var(--line);padding:16px 24px 0}
+.top h1{font-size:18px;margin:0}
+.top .lede{color:var(--muted);margin:2px 0 14px;font-size:13px}
+.stepper{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0}
+.sp{padding:10px 12px 12px;border-bottom:3px solid transparent;cursor:pointer;position:relative}
+.sp:hover{background:#f8f9fb}
+.sp .n{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#eef0f3;font-size:11px;font-weight:600;margin-right:6px}
+.sp .t{font-size:13px;font-weight:500}
+.sp .w{font-size:11.5px;color:var(--muted);margin:3px 0 0 26px}
+.sp.on{border-bottom-color:var(--blue)}
+.sp.on .n{background:var(--blue);color:#fff}
+.sp.done .n{background:var(--good-bg);color:var(--good)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:20px;padding:18px 24px 40px;align-items:start}
+@media (max-width:1200px){.layout{grid-template-columns:1fr}.stepper{grid-template-columns:repeat(3,1fr)}}
+
+.shead{margin-bottom:12px}
+.shead .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.shead h2{font-size:21px;margin:0 0 4px;font-weight:600}
+.shead p{margin:0;color:#374151;max-width:780px}
+.tag{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500;white-space:nowrap}
+.tag.today{background:var(--good-bg);color:var(--good)}
+.tag.new{background:#efe7fe;color:var(--new)}
+.tag.mixed{background:#e8eefb;color:#1e40af}
+.tag.who{background:#f3f4f6;color:#374151}
+.behind{margin-top:12px;background:var(--note);border:1px solid var(--note-line);border-radius:8px;padding:10px 14px;font-size:12.5px;color:#4a3b00}
+.behind b{color:#3a2e00}
+.behind ul{margin:4px 0 0;padding-left:18px}
+.behind .gp{display:inline-block;background:#efe7fe;color:var(--new);border-radius:10px;padding:0 7px;font-size:11px;font-weight:500;margin:2px 4px 0 0}
+.screen{display:none}.screen.on{display:block}
+.nav{display:flex;justify-content:space-between;margin-top:14px}
+.nav button{border:1px solid var(--line);background:#fff;border-radius:7px;padding:7px 14px}
+.nav button.fwd{background:var(--ink);color:#fff;border-color:var(--ink)}
+.nav button:disabled{opacity:.35;cursor:default}
+
+/* ---------- right panel ---------- */
+.panel{position:sticky;top:16px;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.panel .ph{padding:14px 16px;border-bottom:1px solid var(--line)}
+.panel .ph h3{margin:0;font-size:14px}
+.panel .ph .ids{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.6}
+.stage{display:inline-block;margin-top:8px;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:10px;background:var(--info-bg);color:var(--blue-d)}
+.pf{padding:9px 16px;border-bottom:1px solid var(--line2);font-size:12.5px;transition:background .3s}
+.pf:last-child{border-bottom:0}
+.pf .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.pf .v{margin-top:1px}
+.pf.empty .v{color:var(--faint)}
+.pf.fresh{background:#f0fdf4;box-shadow:inset 3px 0 0 #16a34a}
+
+/* ---------- app chrome ---------- */
+.app{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04),0 10px 28px rgba(15,23,42,.07);font-size:13.5px}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--line)}
+.logo{display:flex;gap:8px;align-items:center;font-weight:600;color:var(--blue-d);font-size:15px}
+.logo i{width:22px;height:22px;background:var(--blue-d);border-radius:5px;display:grid;place-items:center;color:#fff;font-style:normal;font-size:12px;font-weight:700}
+.avatar{width:26px;height:26px;border-radius:50%;background:#374151;color:#fff;font-size:10.5px;display:grid;place-items:center}
+.appbody{display:grid;grid-template-columns:46px minmax(0,1fr);min-height:520px}
+.rail{border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:13px;padding:12px 0;color:#4b5563}
+.rail svg{width:18px;height:18px}
+.rail .on{color:var(--blue);background:var(--info-bg);border-radius:50%;padding:3px;width:26px;height:26px}
+.content{padding:16px 22px 24px;min-width:0}
+.crumb-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.crumb{color:var(--muted);font-size:12px}
+.crumb b{color:var(--ink);font-weight:500}
+.ribbon{background:var(--new);color:#fff;font-size:11px;padding:3px 9px;border-radius:12px;font-weight:500;white-space:nowrap}
+.ribbon.mixed{background:#1e40af}
+.agent-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.agent-head h1{font-size:19px;font-weight:600;margin:0;display:flex;gap:10px;align-items:center}
+.status{font-size:12px;font-weight:400}
+.status:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#16a34a;margin-right:5px;vertical-align:1px}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin:12px 0 16px;flex-wrap:wrap}
+.tab{padding:7px 11px;color:#4b5563;font-size:12.5px;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tab.on{color:var(--blue);border-bottom-color:var(--blue)}
+.tab.tnew{border:1.5px dashed var(--new);border-bottom:2px solid transparent;border-radius:6px 6px 0 0;color:var(--new);background:var(--new-bg)}
+.tab.tnew.on{border-bottom-color:var(--new)}
+
+/* ---------- components ---------- */
+.card{border:1px solid var(--line);border-radius:9px;padding:14px 16px;margin-bottom:12px;background:#fff;position:relative}
+.card h3{font-size:14.5px;font-weight:600;margin:0}
+.card-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
+.sub{color:var(--muted);font-size:12.5px}
+.small{font-size:12.5px}
+.prop{outline:1.5px dashed var(--new);outline-offset:2px;background:var(--new-bg)}
+.card.prop{border-color:transparent}
+.ptag{position:absolute;top:-10px;right:12px;background:var(--new);color:#fff;font-size:10.5px;padding:2px 8px;border-radius:10px;font-weight:500;white-space:nowrap;z-index:1}
+.ttag{position:absolute;top:-10px;right:12px;background:#4b5563;color:#fff;font-size:10.5px;padding:2px 8px;border-radius:10px;font-weight:500;white-space:nowrap}
+.btn{border:1px solid #d6dae0;background:#fff;border-radius:7px;padding:7px 13px;font-size:13px;color:var(--ink);white-space:nowrap}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.soft{background:#eef3fa;border-color:#eef3fa;color:var(--blue-d)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.cta{animation:pulse 1.9s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(47,111,182,.55)}70%{box-shadow:0 0 0 8px rgba(47,111,182,0)}100%{box-shadow:0 0 0 0 rgba(47,111,182,0)}}
+.badge{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:5px;font-weight:500;white-space:nowrap}
+.badge.good{background:var(--good-bg);color:var(--good)}
+.badge.warn{background:var(--warn-bg);color:var(--warn)}
+.badge.bad{background:var(--bad-bg);color:var(--bad)}
+.badge.n{background:#f3f4f6;color:#374151}
+.badge.sug{background:var(--gen-bg);color:var(--gen)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btns{display:flex;gap:8px;justify-content:flex-end;align-items:center;margin-top:14px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}}
+.q{margin-bottom:16px}
+.q>label,.q .ql{display:block;font-weight:600;font-size:13.5px;margin-bottom:3px}
+.q .help{color:var(--muted);font-size:12.5px;margin-bottom:7px}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opt{border:1px solid #d1d5db;border-radius:8px;padding:9px 12px;background:#fff;font-size:13px;cursor:pointer;flex:1;min-width:140px}
+.opt.sel{border-color:var(--blue);background:var(--info-bg);box-shadow:inset 0 0 0 1px var(--blue)}
+.opt b{display:block;font-size:13px}
+.opt span{color:var(--muted);font-size:12px}
+.pill{display:inline-block;border:1px solid #d1d5db;border-radius:16px;padding:4px 11px;font-size:12.5px;background:#fff;cursor:pointer;margin:0 4px 4px 0}
+.pill.sel{background:var(--ink);border-color:var(--ink);color:#fff}
+.pill.sel.ok{background:var(--good);border-color:var(--good)}
+.pill.sel.sys{background:#6b7280;border-color:#6b7280}
+.input{border:1px solid #d1d5db;border-radius:7px;padding:8px 10px;background:#fff;font-size:13px}
+.input.ro{background:#f9fafb}
+input.numfld{width:52px;border:1px solid #d1d5db;border-radius:5px;padding:2px 6px;font-size:13px;font-weight:600;font-family:inherit;margin:0 3px;background:#fff}
+textarea.input{width:100%;resize:vertical;font-family:inherit;line-height:1.45}
+.li{display:flex;gap:8px;align-items:flex-start;padding:7px 10px;border:1px solid var(--line);border-radius:7px;margin-bottom:6px;background:#fff;font-size:13px}
+.li .x{margin-left:auto;color:var(--faint);font-size:12px}
+.add{color:var(--blue);font-size:12.5px;cursor:pointer;display:inline-block;margin-top:2px}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;grid-template-columns:26px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line2);font-size:13px}
+.tl li:last-child{border-bottom:0}
+.ic{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700}
+.ic.ok{background:var(--good-bg);color:var(--good)}
+.ic.warn{background:var(--warn-bg);color:var(--warn)}
+.ic.bad{background:var(--bad-bg);color:var(--bad)}
+.ic.n{background:#f3f4f6;color:#374151}
+.tl details{margin-top:4px}
+.tl summary{cursor:pointer;color:var(--blue);font-size:12px;list-style:none}
+.tl summary::-webkit-details-marker{display:none}
+.tl details[open] summary{margin-bottom:6px}
+.ev{background:#f6f7f9;border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:12px;color:#374151}
+.ev .k{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.03em;margin-top:6px}
+.ev .k:first-child{margin-top:0}
+.ev code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;word-break:break-word}
+.quote{border-left:3px solid #d1d5db;padding:2px 10px;color:#374151;margin:4px 0;font-size:12.5px;font-style:italic}
+.ph-pill{display:inline-block;background:#eef3fa;color:var(--blue-d);border-radius:5px;padding:0 6px;font-size:12.5px;font-weight:500}
+.check{display:grid;grid-template-columns:24px 1fr;gap:8px;padding:7px 0;font-size:13px}
+.bar{height:8px;background:#eef0f3;border-radius:4px;overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;font-weight:500;color:var(--muted);font-size:12px;padding:7px 8px;border-bottom:1px solid var(--line)}
+.tbl td{padding:9px 8px;border-bottom:1px solid var(--line2);vertical-align:top}
+.tbl tr.hl td{background:#f0fdf4}
+.skel{height:14px;border-radius:4px;background:#f1f2f4;width:70%}
+.suggest{border:1px solid var(--line);border-radius:9px;padding:13px 15px;margin-bottom:10px;background:#fff}
+.suggest.hl{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue)}
+.suggest.ghost{opacity:.55}
+.segtabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.segtabs span{border:1px solid var(--line);border-radius:18px;padding:5px 12px;font-size:12.5px;background:#fff;color:#374151}
+.segtabs span.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+details.eng{border:1px solid var(--line);border-radius:8px;padding:10px 14px;background:#fafafa;margin-top:10px}
+details.eng summary{cursor:pointer;font-weight:500;font-size:13px}
+details.eng .mono{font-size:11.5px}
+details.eng table{width:100%;border-collapse:collapse;margin-top:8px}
+details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-align:top;font-size:12px}
+.eg{display:inline-block;font-size:10px;line-height:1.4;color:#7a5b00;background:var(--note);border:1px solid var(--note-line);border-radius:8px;padding:0 6px;margin-left:6px;vertical-align:2px;font-weight:500;font-style:normal;white-space:nowrap}
+.linkish{color:var(--blue);cursor:pointer;font-weight:500}
+.linkish:hover{text-decoration:underline}
+.drawer{display:none;border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
+.drawer.show{display:block}
+.drawer .tbl td{font-size:12.5px}
+.drawer tr.split td{opacity:.5;text-decoration:line-through}
+.drawer tr.split td:last-child{opacity:1;text-decoration:none}
+.mixrow{display:grid;grid-template-columns:130px 1fr;gap:10px;align-items:center;margin-bottom:5px}
+.mixrow.tight{grid-template-columns:38px 1fr}
+.ml{font-size:12px;color:var(--muted)}
+.queue{display:flex;gap:6px;flex-wrap:wrap}
+.qi{border:1px solid var(--line);border-radius:7px;padding:5px 10px;font-size:12.5px;background:#fff}
+.qi.on{border-color:var(--blue);background:var(--info-bg)}
+.qi b{color:var(--blue-d);margin-right:4px}
+.big{font-size:24px;font-weight:600}
+.segtabs span[data-p],.segtabs span[data-f]{cursor:pointer}
+.segtabs span b{font-weight:600;margin-left:3px}
+.tasktbl td{vertical-align:top}
+.cell{display:inline-block;font-size:12px;font-weight:500;border-radius:6px;padding:1px 8px}
+.cell.ok{background:var(--good-bg,#e8f5ee);color:#1d6b43}
+.cell.thin{background:#fff1f0;color:#b42318}
+.cell.pub{background:#f3efff;color:#5b3fc4}
+.src{display:inline-block;font-size:11.5px;border-radius:6px;padding:1px 7px;margin:0 4px 4px 0;border:1px solid var(--line);background:#fff}
+.src.gen{border:1px dashed #a78bfa;color:#5b3fc4;background:#faf8ff}
+.src.pub{border-color:#c4b5fd;color:#5b3fc4}
+.btn.gen{font-size:11.5px;padding:2px 9px;border:1px dashed #a78bfa;color:#5b3fc4;background:#faf8ff;margin-left:4px}
+.btn.gen.done{border-style:solid;opacity:.7;cursor:default}
+.taskchips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.taskchips span{border:1px solid var(--line);border-radius:7px;padding:4px 10px;font-size:12px;background:#fff}
+.taskchips span.on{border-color:var(--blue);background:var(--info-bg)}
+.taskchips b{font-weight:600}
+.kinds{margin-top:8px}
+.kinds .kl{font-size:11.5px;color:var(--muted);margin-bottom:4px}
+.kp{display:inline-block;border:1px dashed #c4b5fd;border-radius:14px;padding:2px 9px;font-size:12px;margin:0 4px 4px 0;cursor:pointer;background:#fff;color:#4b5563}
+.kp.sel{border-style:solid;border-color:#7c3aed;background:#f3efff;color:#5b3fc4;font-weight:500}
+.kp.addk{color:var(--blue);border-color:#b9d4f1}
+.kin{font:inherit;font-size:12px;border:1px solid var(--blue);border-radius:14px;padding:2px 9px;width:230px;outline:none}
+.kb{display:inline-block;font-size:11.5px;border-radius:10px;padding:1px 8px;margin:0 4px 2px 0;background:#f3efff;color:#5b3fc4;font-weight:500}
+.kb.sys{background:#f1f2f4;color:#4b5563}
+.kindbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.kf{border:1px solid #ddd6fe;border-radius:14px;padding:3px 10px;font-size:12px;background:#fff;color:#5b3fc4;cursor:pointer}
+.kf.on{background:#5b3fc4;color:#fff;border-color:#5b3fc4}
+.kf.sys{color:#4b5563;border-color:var(--line)}
+.kf.sys.on{background:#4b5563;color:#fff}
+.kindgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.kc{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12.5px;display:flex;flex-direction:column;gap:2px;background:#fff}
+.kc b{font-size:18px;font-weight:600;color:#5b3fc4}
+.kc.none{border-color:#f3c3bf;background:#fff8f7}
+.kc.none b{color:#b42318}
+.kc.none .btn{align-self:flex-start;margin:4px 0 0}
+.kc.sysk b{color:#4b5563}
+.kc em{font-style:normal;font-size:11px;color:var(--muted)}
+.segtabs span.eg{border:1px solid var(--note-line);background:var(--note);color:#7a5b00;border-radius:8px;padding:0 6px;font-size:10px}
+#setTbl tbody tr[data-t]{cursor:pointer}
+#setTbl tbody tr[data-t]:hover td{background:#f8fafc}
+#setTbl tbody tr.open td{background:var(--info-bg)}
+#setTbl tbody tr[data-t] td:first-child b,#setTbl tbody tr[data-t] td:first-child{color:var(--ink)}
+.tdetail{display:none;margin-top:12px;border:1px solid var(--blue);box-shadow:0 0 0 1px var(--blue);border-radius:9px;padding:14px 16px;background:#fff}
+.tdetail.show{display:block}
+.tdetail h3{font-size:16px;margin:0}
+.tdetail .xbtn{border:0;background:none;font-size:18px;line-height:1;color:var(--muted);padding:2px 6px}
+.tdetail .dl{display:grid;grid-template-columns:150px 1fr;gap:6px 12px;font-size:12.5px;margin:8px 0}
+.tdetail .dl>.sub{padding-top:1px}
+.tdetail ul{margin:0;padding-left:18px}
+.variant{border:1px dashed #d1d5db;border-radius:8px;padding:10px 12px;margin-top:8px;background:#fff;display:none}
+.variant.show{display:block}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1>Turning a stuck run into a test</h1>
+  <p class="lede">How an SAP business expert, with no engineering background, uses AgentScore to label one real run of <b>testcase.generate</b> and turn it into a test in a benchmark test set. Mock for the AgentScore PM and designer.</p>
+  <p class="lede" style="font-size:12.5px;margin-top:4px">The VA01 run, its ids and every number without a tag come from the workflow doc. Anything tagged <span class="eg" style="margin-left:0">example</span> is filler so the page looks lived in.</p>
+  <div class="stepper" id="stepper"></div>
+</header>
+
+<div class="layout">
+<main>
+
+<!-- ======================= 1 ======================= -->
+<section class="screen" data-step="1">
+  <div class="shead">
+    <div class="meta"><span class="tag new">New page</span><span class="tag who">SAP expert</span></div>
+    <h2>Start a test set</h2>
+    <p>The expert wants a fixed set of tests to run before every release, so they can see whether a new version of the agent got better or worse. They answer one question, where the tests should come from, and AgentScore sets up the rest.</p>
+  </div>
+
+  <div class="app" id="tsList" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / <b>Test sets</b>" data-ribbon="new:Proposed page">
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <div><h3 style="font-size:17px;margin:0">Test sets</h3><div class="sub">Fixed lists of tests you run against this agent. Start a new one, or open one you already have.</div></div>
+      <button class="btn primary" data-newts>New test set</button>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Test set</th><th>Used for</th><th>Tests</th><th>Last run</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td><b>Release check, v2</b> <span class="eg">example</span></td><td>Check each release</td><td>80</td><td>Nov 9</td><td><span class="badge good">Passed 74 of 80</span></td></tr>
+        <tr><td><b>Nightly smoke</b> <span class="eg">example</span></td><td>Check each release</td><td>25</td><td>Last night</td><td><span class="badge warn">Passed 21 of 25</span></td></tr>
+        <tr><td><b>Model comparison</b> <span class="eg">example</span></td><td>Compare options</td><td>150</td><td>Not run yet</td><td><span class="badge n">Draft · 112 of 150 ready</span></td></tr>
+      </tbody>
+    </table>
+    <div class="sub small" style="margin:8px 2px 0">With no test sets yet, this page shows only the New test set button. Pressing it opens the New test set form.</div>
+  </div>
+
+  <div class="app" id="tsForm" style="display:none" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / Test sets / <b>New test set</b>" data-ribbon="new:Proposed page">
+    <div style="max-width:720px">
+      <h3 style="font-size:17px;margin:0 0 4px">New test set</h3>
+      <div class="sub" style="margin-bottom:16px">A test set is a list of real tasks for your agent, each with a clear right answer.</div>
+
+      <div class="card prop" style="margin-top:20px">
+        <span class="ptag">Proposed · Catalog of published benchmarks</span>
+        <div class="q" style="margin:0"><div class="ql">Where should tests come from?</div>
+          <div class="li"><span class="ic ok">✓</span><div><b>Your agent's own recorded runs</b><br><span class="sub">AgentScore suggests runs that went well, went wrong, or were unusual.</span></div></div>
+          <div class="li"><span class="ic n">i</span><div><b>Published tests from your industry</b><br><span class="sub">We found public test sets for desktop, browser and Salesforce work: OSWorld, WindowsAgentArena, WebArena, WorkArena and CRMArena. None covers SAP sales orders, so those tests come from your own runs.</span></div></div>
+          <div class="li"><span class="ic ok">✓</span><div><b>Generated variations of your tasks</b><br><span class="sub">Only where a task has too few real runs. At most 1 in 4 tests, never in the exam, and you approve each one.</span></div></div>
+        </div>
+      </div>
+
+      <div class="sub" style="margin-top:14px">Checks each release · 20 tests to start · each test runs 3 times. <u>Change in settings</u></div>
+      <div class="btns"><button class="btn" data-cancelts>Cancel</button><button class="btn primary cta" data-advance>Create test set</button></div>
+    </div>
+  </div>
+
+  <div class="behind"><b>For the PM and designer.</b> This is the benchmark spec (workflow steps 2 and 3): with use, size and trials set as defaults. The spending limit is not asked here: it is set when the expert runs the test set, with a cost estimate in front of them. AgentScore picks the "task agent" template from the Agent Card and profile fit, so the expert never sees it.
+    <div><span class="gp">Dataset and task store</span><span class="gp">Catalog of published benchmarks</span></div></div>
+</section>
+
+<!-- ======================= 2 ======================= -->
+<section class="screen" data-step="2">
+  <div class="shead">
+    <div class="meta"><span class="tag new">New page</span><span class="tag who">SAP expert</span></div>
+    <h2>Choose the tasks to test</h2>
+    <p>The test set is built task by task. AgentScore read the agent's runs and found the jobs it actually does. The expert checks the list, and AgentScore plans how many tests each task gets and where each test will come from: a real run, a published test, or a generated variation of a real one.</p>
+  </div>
+
+  <div class="app" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / Test sets / <b>testcase.generate pilot</b>" data-ribbon="new:Proposed page">
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <div><h3 style="font-size:17px;margin:0">Tasks this agent does</h3><div class="sub">Found by grouping the requests in the agent's runs · 20 tests planned · names and numbers in requests hidden</div></div>
+      <span class="sub">Share of runs and test counts are examples <span class="eg">example</span></span>
+    </div>
+
+    <div class="card" style="padding:6px 8px">
+      <table class="tbl tasktbl">
+        <thead><tr><th style="width:26%">Task</th><th>Share of runs</th><th>Tests</th><th>Went fine</th><th>Went wrong</th><th>Unusual</th><th style="width:22%">Tests come from</th></tr></thead>
+        <tbody>
+          <tr class="hl">
+            <td><b>Create a sales order</b><div class="sub">SAP · VA01</div></td>
+            <td>41%</td><td><b>8</b></td>
+            <td><span class="cell ok">4 of 4</span></td>
+            <td><span class="cell ok">3 of 3</span><div class="sub">incl. the blocked customer</div></td>
+            <td><span class="cell ok">1 of 1</span></td>
+            <td><span class="src run">8 from your runs</span><div class="sub">No published set covers SAP sales orders</div></td>
+          </tr>
+          <tr>
+            <td><b>Change a house bank account</b><div class="sub">SAP · FI12</div></td>
+            <td>18%</td><td><b>4</b></td>
+            <td><span class="cell ok">2 of 2</span></td>
+            <td><span class="cell ok">1 of 1</span></td>
+            <td><span class="cell thin">0 runs</span> <button class="btn gen" data-gen="fi12">Generate 1</button></td>
+            <td><span class="src run">3 from your runs</span><span class="src gen" id="src-fi12">1 to generate</span></td>
+          </tr>
+          <tr>
+            <td><b>Get a car insurance quote</b><div class="sub">Vehicle-insurance web app</div></td>
+            <td>23%</td><td><b>4</b></td>
+            <td><span class="cell ok">2 of 2</span></td>
+            <td><span class="cell thin">0 mistakes</span> <button class="btn gen" data-gen="quote">Generate 1</button><div class="sub">the only failures were outages, so make a harder version</div></td>
+            <td><span class="cell ok">1 of 1</span></td>
+            <td><span class="src run">3 from your runs</span><span class="src gen" id="src-quote">1 to generate</span></td>
+          </tr>
+          <tr>
+            <td><b>Opportunities, leads and cases</b><div class="sub">Salesforce</div></td>
+            <td>18%</td><td><b>4</b></td>
+            <td><span class="cell ok">1 of 1</span></td>
+            <td><span class="cell ok">1 of 1</span></td>
+            <td><span class="cell pub">2 published</span></td>
+            <td><span class="src run">2 from your runs</span><span class="src pub">2 from CRMArena</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="add" id="addTaskBtn" style="margin:4px 8px 8px">+ Add a task the list missed</div>
+    </div>
+
+    <div class="drawer" id="addTask">
+      <div class="card prop" style="margin:0">
+        <span class="ptag">Proposed</span>
+        <div class="card-h"><h3>Add a task</h3><span class="sub">For a job the agent does that the list above doesn't show</span></div>
+        <div class="q"><div class="ql">What is the task called?</div>
+          <div class="input" style="max-width:420px">Change a customer's payment terms <span class="eg">example</span></div></div>
+        <div class="q"><div class="ql">Write one request for it, the way a user would ask</div>
+          <div class="help">Names and numbers are hidden before AgentScore uses it.</div>
+          <div class="input">Change the payment terms for customer <span class="ph-pill">customer</span> to net 30 and save.</div></div>
+        <button class="btn soft" id="findMatches">Look for matching runs</button>
+        <div id="matchRes" hidden style="margin-top:14px">
+          <div class="li"><span class="ic ok">✓</span><div><b>6 runs look like this task</b> <span class="eg">example</span><br><span class="sub">About 1% of the agent's runs. 4 went fine, 1 went wrong, 1 was unusual. You review them in the next step, like the other tasks.</span></div></div>
+          <div class="li"><span class="ic n">i</span><div><b>No published test set covers this task</b><br><span class="sub">So all tests come from your own runs. If a task has no runs at all, AgentScore says so and offers to generate drafts from your request. You approve each one.</span></div></div>
+          <div class="q" style="margin:12px 0 0"><div class="ql">How many tests for this task?</div>
+            <div class="input" style="max-width:100px">2</div></div>
+          <div class="btns"><button class="btn" id="cancelTask">Cancel</button><button class="btn primary" id="saveTask">Add to the plan</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drawer" id="genDrafts">
+      <div class="card prop" style="margin:0">
+        <span class="ptag">Proposed</span>
+        <div class="card-h"><h3>Generated drafts</h3><span class="badge warn">Need your review</span></div>
+        <div class="sub" style="margin-bottom:8px">Each one is a real task with one thing changed. You approve it only if it could really happen.</div>
+        <div class="li" id="gen-fi12" hidden><span class="ic n">✎</span><div><b>Change a house bank account, IBAN left blank</b> <span class="eg">example</span><br><span class="sub">Made from a real FI12 run by dropping a field. Practice only.</span></div></div>
+        <div class="li" id="gen-quote" hidden><span class="ic n">✎</span><div><b>Car insurance quote for a driver under 18</b> <span class="eg">example</span><br><span class="sub">Made from a real quote run by changing one value the site should refuse. Practice only. Dropped if the agent passes it 3 of 3 with no effort.</span></div></div>
+      </div>
+    </div>
+
+    <div class="grid2" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:12px">
+      <div class="card"><div class="sub">From your runs</div><div class="big">16</div><div class="sub">AgentScore suggests the runs in the next step <span class="eg">example</span></div></div>
+      <div class="card"><div class="sub">Published</div><div class="big">2</div><div class="sub">CRMArena. They still need your test data and checks. <span class="eg">example</span></div></div>
+      <div class="card"><div class="sub">Generated</div><div class="big">2 <span class="sub" style="font-size:14px">of 5 allowed</span></div><div class="bar" style="margin-top:6px"><i style="width:40%;background:#c4b5fd"></i></div><div class="sub" style="margin-top:4px">No more than 1 in 4 tests, never in the exam <span class="eg">example</span></div></div>
+    </div>
+
+    <div class="row" style="justify-content:space-between;margin-top:6px">
+      <span class="sub">Start with the task that runs most: sales orders.</span>
+      <button class="btn primary cta" data-advance>Find runs for these tasks</button>
+    </div>
+  </div>
+
+  <div class="behind"><b>For the PM and designer.</b> The task list is the request clusters from workflow step 4, after names, IDs, dates and numbers are stripped. Tests per task follow how often each task happens in production. Published items come from step 2 and still need this customer's seed and graders. "Generate" is step 11's gap fill: a grid cell with too few real runs gets an LLM rewrite of a real task (reword it, drop a field, switch to German shorthand). The rules shown here are the doc's: at most 25% of the set, never held-out, each with its own seed and a reference solution that passes, and the expert rejects anything unrealistic.
+    <div><span class="gp">Dataset and task store</span><span class="gp">Catalog of published benchmarks</span></div></div>
+</section>
+
+<!-- ======================= 3 ======================= -->
+<section class="screen" data-step="3">
+  <div class="shead">
+    <div class="meta"><span class="tag new">New page</span><span class="tag who">SAP expert</span></div>
+    <h2>Pick real runs for each task</h2>
+    <p>For every task in the plan, AgentScore looks through the agent's recent runs and suggests ones worth turning into tests. It groups near-identical runs so the expert reviews each situation once. This one stands out: a sales order where the agent got stuck.</p>
+  </div>
+
+  <div class="app" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / Test sets / <b>testcase.generate pilot</b>" data-ribbon="new:Proposed page">
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <div><h3 style="font-size:17px;margin:0">testcase.generate pilot</h3><div class="sub">0 of 20 tests · suggestions from the agent's latest scored runs · pool target 60 runs</div></div>
+    </div>
+    <div class="taskchips"><span class="sub" style="border:0;padding:4px 0;background:none">Tests per task:</span><span><b>Create a sales order (VA01)</b> 0 of 8</span><span>Change a house bank account (FI12) 0 of 4</span><span>Car insurance quote 0 of 4</span><span>Salesforce 0 of 4</span><span class="eg" style="align-self:center;border-color:var(--note-line);background:var(--note);padding:0 6px;font-size:10px">example</span></div>
+    <div class="card" style="padding:12px 14px">
+      <div class="small" style="font-weight:600;margin-bottom:6px">A good test set has a mix</div>
+      <div class="mixrow"><span class="ml">Aim for</span><div class="bar"><i style="width:50%;background:#86c5a0"></i><i style="width:30%;background:#ef9a9a"></i><i style="width:20%;background:#c4b5fd"></i></div></div>
+      <div class="mixrow"><span class="ml">Suggested so far <span class="eg">example</span></span><div class="bar"><i style="width:44%;background:#86c5a0"></i><i style="width:39%;background:#ef9a9a"></i><i style="width:17%;background:#c4b5fd"></i></div></div>
+      <div class="row small" style="margin-top:6px;gap:18px"><span>About half <b>went fine</b></span><span>About a third <b>went wrong</b></span><span>About a fifth <b>unusual</b></span></div>
+    </div>
+
+    <div class="segtabs" id="sugTabs"><span data-p="fine">Went fine <b>24</b></span><span data-p="wrong" class="on">Went wrong <b>21</b></span><span data-p="odd">Unusual <b>9</b></span><span class="eg" style="align-self:center">counts are examples</span></div>
+
+    <!-- went wrong -->
+    <div class="sugpanel" data-panel="wrong">
+      <div class="kindbar" id="kindBar">
+        <span class="sub">By kind of mistake:</span>
+        <span class="kf on" data-k="all">All 21</span>
+        <span class="kf" data-k="repeat">Repeated the same step 5</span>
+        <span class="kf" data-k="warn">Missed a warning or error 4</span>
+        <span class="kf" data-k="record">Used the wrong record 3</span>
+        <span class="kf" data-k="skip">Skipped a step it was told to do 3</span>
+        <span class="kf sys" data-k="sys">System problems 6 · don't count</span>
+        <span class="eg">example</span>
+      </div>
+      <div class="sub small" style="margin:-4px 0 10px">AgentScore guessed the kind from the judges' reasons. You confirm it when you label. A run can have more than one.</div>
+
+      <div class="suggest hl" data-k="repeat warn">
+        <div class="card-h" style="margin-bottom:4px">
+          <div><h3>Create a sales order in SAP (VA01)</h3>
+            <div class="small" style="margin-top:2px">The customer was blocked. The agent got stuck retrying, asked for help, nobody answered, and the run stopped.</div></div>
+          <span class="badge bad">Went wrong</span>
+        </div>
+        <div class="row small" style="margin-top:8px">
+          <span class="kb">Repeated the same step</span><span class="kb">Missed a warning or error</span>
+          <span class="badge n">Task success 50</span><span class="badge n">Followed instructions 60</span>
+          <span class="linkish" id="clusterLink"><span id="clusterCount">5</span> similar runs grouped into this one ▾</span>
+        </div>
+
+        <div class="drawer" id="cluster">
+          <div class="card-h" style="margin-bottom:6px"><div><h3 style="font-size:13.5px">Are these the same situation?</h3>
+            <div class="sub">AgentScore hid names and numbers, then compared what each run asked for and the steps the agent took. Runs that match are grouped so you review the situation once.</div></div></div>
+          <div class="input ro small" style="margin-bottom:10px"><span class="sub">What they all asked, names and numbers hidden:</span><br>Create a standard sales order (VA01) for <span class="ph-pill">customer</span>, sales org <span class="ph-pill">org</span>. PO <span class="ph-pill">number</span> dated <span class="ph-pill">date</span>. Material <span class="ph-pill">material</span>, qty <span class="ph-pill">number</span>. Verify pricing, check schedule lines, save, verify the order number.</div>
+          <table class="tbl" id="clusterTbl">
+            <thead><tr><th>Run</th><th>What was different</th><th>Same steps?</th><th>What happened</th><th>Same situation?</th></tr></thead>
+            <tbody>
+              <tr class="hl"><td><span class="mono">5cb1fcc4…</span><div class="sub">Main example: most detail</div></td><td class="sub">(the reference)</td><td>✓</td><td>Retried Ship-To ~12 times, asked for help, stopped</td><td><span class="badge good">Kept</span></td></tr>
+              <tr><td>Run 2 <span class="eg">example</span></td><td>PO number and date</td><td>✓</td><td>Retried Ship-To, stopped</td><td><span class="pill sel ok">Same</span><span class="pill">Split out</span></td></tr>
+              <tr><td>Run 3 <span class="eg">example</span></td><td>Quantity</td><td>✓</td><td>Retried Ship-To, asked for help, stopped</td><td><span class="pill sel ok">Same</span><span class="pill">Split out</span></td></tr>
+              <tr><td>Run 4 <span class="eg">example</span></td><td>Material</td><td>✓</td><td>Retried Ship-To, stopped</td><td><span class="pill sel ok">Same</span><span class="pill">Split out</span></td></tr>
+              <tr id="oddRow" style="background:#fffaf0"><td>Run 5 <span class="eg">example</span></td><td>Customer</td><td>✓</td><td><b>The order was saved.</b><div class="badge warn" style="margin-top:4px">Ended differently. Check this one.</div></td><td><span class="pill">Same</span><span class="pill" id="splitBtn">Split out</span></td></tr>
+            </tbody>
+          </table>
+          <div class="sub" style="margin-top:8px">Runs you keep stay attached as variations, so the test isn't built from one lucky example. AgentScore spot-checks 20 groups like this one; fewer than 1 in 10 should need splitting.</div>
+        </div>
+
+        <div class="btns" style="margin-top:10px"><button class="btn">Not useful</button><button class="btn primary cta" data-advance>Add to labeling</button></div>
+      </div>
+
+      <div class="suggest" data-k="skip">
+        <div class="card-h" style="margin-bottom:4px"><div><h3>Create a sales order in SAP (VA01), pricing not checked <span class="eg">example</span></h3>
+          <div class="small" style="margin-top:2px">The order was saved, but the agent skipped the pricing check it was asked to do.</div></div><span class="badge bad">Went wrong</span></div>
+        <div class="row small" style="margin-top:6px"><span class="kb">Skipped a step it was told to do</span><span class="badge n">Scored low on followed instructions</span><span class="sub">2 similar runs</span></div>
+        <div class="btns" style="margin-top:10px"><button class="btn">Not useful</button><button class="btn">Add to labeling</button></div>
+      </div>
+
+      <div class="suggest" data-k="record">
+        <div class="card-h" style="margin-bottom:4px"><div><h3>Create an opportunity in Salesforce <span class="eg">example</span></h3>
+          <div class="small" style="margin-top:2px">The agent saved the opportunity under the wrong account.</div></div><span class="badge bad">Went wrong</span></div>
+        <div class="row small" style="margin-top:6px"><span class="kb">Used the wrong record</span><span class="badge n">Scored low on task success</span><span class="sub">3 similar runs</span></div>
+        <div class="li" style="margin:8px 0 0;background:#fffaf0"><span class="ic warn">!</span><span class="small">These instructions contain a password. AgentScore hides it before the run is shown to anyone or saved as a test.</span></div>
+        <div class="btns" style="margin-top:10px"><button class="btn">Not useful</button><button class="btn">Add to labeling</button></div>
+      </div>
+
+      <div class="suggest" data-k="sys">
+        <div class="card-h" style="margin-bottom:4px"><div><h3>Change a house bank account in SAP (FI12) <span class="eg">example</span></h3>
+          <div class="small" style="margin-top:2px">SAP stopped responding halfway through (HTTP 502).</div></div><span class="badge n">Likely a system problem</span></div>
+        <div class="row small" style="margin-top:6px"><span class="kb sys">System down or erroring</span></div>
+        <div class="sub small" style="margin-top:6px">Outages don't count against the agent. Keep it only if you want a test of how the agent recovers.</div>
+        <div class="btns" style="margin-top:10px"><button class="btn">Skip</button><button class="btn">Keep as a recovery test</button></div>
+      </div>
+
+      <div class="suggest" data-k="sys">
+        <div class="card-h" style="margin-bottom:4px"><div><h3>Get a car insurance quote (vehicle-insurance web app) <span class="eg">example</span></h3>
+          <div class="small" style="margin-top:2px">The connection to the test system (TBox tunnel) was down, so the agent never reached the page.</div></div><span class="badge n">Likely a system problem</span></div>
+        <div class="row small" style="margin-top:6px"><span class="kb sys">Connection to the test system down</span></div>
+        <div class="btns" style="margin-top:6px"><button class="btn">Skip</button><button class="btn">Keep as a recovery test</button></div>
+      </div>
+      <div class="sub small" style="margin-top:4px" id="outageNote">Of the 8 lowest-scoring runs, 4 were outages like these two, not agent mistakes.</div>
+      <div class="sub small" style="margin-top:4px" id="kindEmpty" hidden>The other runs of this kind are further down the list. <span class="eg">example</span></div>
+    </div>
+
+    <!-- went fine -->
+    <div class="sugpanel" data-panel="fine" hidden>
+      <div class="suggest"><div class="card-h"><div><h3>Create a standard sales order (VA01) <span class="eg">example</span></h3><div class="small">Customer not blocked. Order saved and the order number confirmed.</div></div><span class="badge good">Went fine</span></div>
+        <div class="row small"><span class="badge n">Passed every check</span><span class="sub">6 similar runs</span></div><div class="btns"><button class="btn">Add to labeling</button></div></div>
+      <div class="suggest"><div class="card-h"><div><h3>Change a house bank account (FI12) <span class="eg">example</span></h3><div class="small">Updated the account and saved without extra steps.</div></div><span class="badge good">Went fine</span></div>
+        <div class="row small"><span class="badge n">Passed every check</span><span class="sub">2 similar runs</span></div><div class="btns"><button class="btn">Add to labeling</button></div></div>
+      <div class="suggest"><div class="card-h"><div><h3>Get a car insurance quote (web app) <span class="eg">example</span></h3><div class="small">Filled in the driver and vehicle details and recorded the quote.</div></div><span class="badge good">Went fine</span></div>
+        <div class="row small"><span class="badge n">Passed every check</span><span class="sub">4 similar runs</span></div><div class="btns"><button class="btn">Add to labeling</button></div></div>
+      <div class="suggest"><div class="card-h"><div><h3>Create a lead in Salesforce <span class="eg">example</span></h3><div class="small">Created the lead and confirmed it on the record page.</div></div><span class="badge good">Went fine</span></div>
+        <div class="row small"><span class="badge n">Passed every check</span></div><div class="btns"><button class="btn">Add to labeling</button></div></div>
+    </div>
+
+    <!-- unusual -->
+    <div class="sugpanel" data-panel="odd" hidden>
+      <div class="suggest"><div class="card-h"><div><h3>Insurance quote where the agent asked for a missing value <span class="eg">example</span></h3><div class="small">The agent stopped to ask for the driver's age. It asks this way rarely: 4 times in all its recorded runs.</div></div><span class="badge" style="background:#efe7fe;color:var(--new)">Unusual</span></div>
+        <div class="btns"><button class="btn">Add to labeling</button></div></div>
+      <div class="suggest"><div class="card-h"><div><h3>Sales order written in German shorthand <span class="eg">example</span></h3><div class="small quote" style="font-style:normal">"Kundenauftrag anlegen, Auftragsart Z001, Material [material], 10 KAR, sichern."</div></div><span class="badge" style="background:#efe7fe;color:var(--new)">Unusual</span></div>
+        <div class="btns"><button class="btn">Add to labeling</button></div></div>
+      <div class="suggest"><div class="card-h"><div><h3>Building a test case together with a person (co-create mode) <span class="eg">example</span></h3><div class="small">A setting that's rarely switched on. The agent pauses for the person to confirm each step.</div></div><span class="badge" style="background:#efe7fe;color:var(--new)">Unusual</span></div>
+        <div class="btns"><button class="btn">Add to labeling</button></div></div>
+      <div class="suggest"><div class="card-h"><div><h3>Route a support case in Salesforce <span class="eg">example</span></h3><div class="small">From the published CRMArena set. It still needs your test data and checks before it's a real test.</div></div><span class="badge out" style="border:1px solid var(--line)">Published · CRMArena</span></div>
+        <div class="btns"><button class="btn">Add to labeling</button></div></div>
+    </div>
+  </div>
+
+  <div class="behind"><b>For the PM and designer.</b> This is harvest and dedup (workflow step 4): low scorers come from <span class="mono">get_eval_interactions</span> on scorecard run <span class="mono">01M75YCA77EW1X8BSEFQ7QM35D</span>, and runs merge at 0.90 cosine with the same tool sequence. Pool target is 60 runs for the pilot.
+    The kind-of-mistake filter uses the same guess the labeling step asks the expert to confirm, so the "went wrong" share can be spread across different kinds instead of five copies of one.
+    <ul><li>Assumption: the doc's 5-run cluster is "VA01 ZOR1, sales org SE21, ZSR2 condition = 10" and never names this trace. The mock treats it as the kept member.</li></ul>
+    <div><span class="gp">Dataset and task store</span><span class="gp">Error categories</span></div></div>
+</section>
+
+<!-- ======================= 4 ======================= -->
+<section class="screen" data-step="4">
+  <div class="shead">
+    <div class="meta"><span class="tag mixed">Labeling tab today, plus two new questions</span><span class="tag who">SAP expert</span></div>
+    <h2>Label it: what happened?</h2>
+    <p>The expert reads what the agent did, step by step, in plain language. They say whether it was right and, for anything that went wrong, whose fault it was and what kind of mistake. AgentScore makes a first guess so the expert mostly confirms.</p>
+  </div>
+
+  <div class="app" data-agent data-tab="Labeling" data-crumb="My Agents / testcase.generate / <b>Labeling</b>" data-ribbon="mixed:Existing page · new parts dashed">
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <div class="row"><span class="badge good">Ready for human review</span><span class="sub">Showing runs for test set</span><span class="badge n" style="outline:1.5px dashed var(--new)">testcase.generate pilot</span></div>
+      <span class="sub">About 8 min each</span>
+    </div>
+
+    <div class="card prop" style="padding:10px 14px;margin-top:6px"><span class="ptag">Proposed</span><div class="small"><b>Answer first. Run 8 of your first 10.</b> For these, our scores and guesses stay hidden until you say whether the agent did the right thing. After the first 10, we show our guess up front to save you time.</div></div>
+
+    <div class="card prop" style="padding:12px 14px;margin-top:6px">
+      <span class="ptag">Proposed</span>
+      <div class="row" style="justify-content:space-between">
+        <div class="small"><b>This week: 7 of 45 labeled</b> <span class="eg">example</span> · 2 of the 12 "agent got it wrong" labels you need</div>
+        <span class="sub">Your time left this week: about 5 hours <span class="eg">example</span></span>
+      </div>
+      <div class="bar" style="margin:8px 0 10px"><i style="width:15.5%;background:var(--blue)"></i></div>
+      <div class="queue">
+        <div class="qi on"><b>Now</b> Sales order for a blocked customer (VA01)</div>
+        <div class="qi">Opportunity under the wrong account (Salesforce) <span class="eg">example</span></div>
+        <div class="qi">Insurance quote, agent asked for a missing value <span class="eg">example</span></div>
+        <div class="qi">Sales order in German shorthand <span class="eg">example</span></div>
+        <div class="qi sub">+ 34 more <span class="eg">example</span></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <div class="card">
+          <div class="sub" style="margin-bottom:4px">What the agent was asked</div>
+          <div>Create a standard sales order in SAP for a customer, check prices and delivery dates, save it, and confirm the order number.</div>
+        </div>
+        <div class="card">
+          <div class="row" style="justify-content:space-between;margin-bottom:4px"><div class="sub">What it did <span class="eg">detail under each step is an example</span></div><span class="add" title="Opens the Traces tab, filtered to this run, with the full context, system prompt and every call">View full run ↗</span></div>
+          <ol class="tl">
+            <li><span class="ic ok">✓</span><span>Opened the sales order screen and entered the customer.
+              <details><summary>See what the agent saw and did</summary><div class="ev"><div class="k">It sent</div><code>open_transaction VA01 · order type ZOR1 · customer <span class="ph-pill">customer</span></code><div class="k">SAP returned</div><code>Create Standard Order: Overview. Customer accepted.</code></div></details></span></li>
+            <li><span class="ic warn">!</span><span>SAP showed a warning:<div class="quote">"has been assigned order block: Overall block."</div>
+              <details><summary>See what the agent saw and did</summary><div class="ev"><div class="k">SAP returned</div><code>Warning: Customer <span class="ph-pill">customer</span> has been assigned order block: Overall block.</code><div class="k">The agent's next thought</div><code>"The warning may clear if I re-enter the Ship-To party."</code></div></details></span></li>
+            <li><span class="ic bad">↻</span><span>Re-entered the <b>Ship-To</b> field about <b>12 times</b>.
+              <details><summary>See what the agent saw and did</summary><div class="ev"><div class="k">It sent, 12 times</div><code>set_field Ship-To = <span class="ph-pill">customer</span></code><div class="k">SAP returned each time</div><code>Same order block warning. Nothing changed.</code></div></details></span></li>
+            <li><span class="ic n">?</span><span>Asked a person for help.
+              <details><summary>See what the agent saw and did</summary><div class="ev"><div class="k">It sent</div><code>ask_human: "The customer has an order block. How should I proceed?"</code></div></details></span></li>
+            <li><span class="ic warn">⏱</span><span>Nobody answered for 600 seconds.
+              <details><summary>See what the agent saw and did</summary><div class="ev"><div class="k">The system returned</div><code>No reply from the person within 600 s. Request timed out.</code></div></details></span></li>
+            <li><span class="ic bad">■</span><span>The run stopped.
+              <details><summary>See what the agent saw and did</summary><div class="ev"><div class="k">End of run</div><code>Stopped by timeout. No order was saved.</code></div></details></span></li>
+          </ol>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="q" style="margin:0"><div class="ql">Did the agent do the right thing?</div>
+            <div class="opts" id="rightOpts"><div class="opt"><b>Yes</b></div><div class="opt"><b>No</b></div></div><div class="sub" id="blindHint" style="margin-top:8px">Pick an answer to see what our checks thought.</div></div>
+        </div>
+
+        <div id="afterAnswer" hidden>
+        <div class="card prop">
+          <span class="ptag">Proposed</span>
+          <div class="q" style="margin:0"><div class="ql">What went wrong, and whose fault was it?</div>
+            <div class="help">Our first guesses are selected and tagged <span class="badge n">AI guess</span>. Check them against the steps on the left, and change them if they're wrong. Problems with the system never count against the agent.</div>
+            <div class="li fault" style="display:block" data-sel="Repeated the same step|Missed a warning or error">
+              <div style="font-weight:500;margin-bottom:6px">Re-entered Ship-To about 12 times <span class="badge n">AI guess</span></div>
+              <div><span class="pill sel">The agent's mistake</span><span class="pill">A system problem</span><span class="pill">Unclear instructions</span></div>
+              <div class="kinds"></div>
+            </div>
+            <div class="li fault" style="display:block" data-sel="Nobody answered in time">
+              <div style="font-weight:500;margin-bottom:6px">Nobody answered for 600 seconds <span class="badge n">AI guess</span></div>
+              <div><span class="pill">The agent's mistake</span><span class="pill sel sys">A system problem</span><span class="pill">Unclear instructions</span></div>
+              <div class="kinds"></div>
+              <div class="sub" style="margin-top:2px">In the test, AgentScore will answer for you, so the run can finish.</div>
+            </div>
+          </div>
+        </div>
+        <div class="card prop">
+          <span class="ptag">Proposed</span>
+          <div class="q" style="margin:0"><div class="ql">Anything else about what went wrong? <span class="sub" style="font-weight:400">Optional</span></div>
+            <div class="help">Write it your own way. AgentScore reads it when you finish and suggests where it belongs. Please don't paste names, numbers or passwords.</div>
+            <textarea class="input" rows="3">It should have stopped at the first warning. Also nobody ever answered it. I think the test system's chat isn't hooked up.</textarea>
+          </div>
+        </div>
+        </div>
+        <div class="btns"><button class="btn">Skip</button><button class="btn primary cta" data-advance>Next: what should it have done?</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="behind"><b>For the PM and designer.</b> "Did the agent do the right thing?" is the existing Correct / Incorrect choice in the review queue. "Whose fault" is failure triage (workflow step 5): an LLM guesses, the expert confirms. The workflow only asks the expert to check 20% of guesses, and they should agree at least 90% of the time. "What kind?" is the error category. The LLM guesses it from the judge's reason, at the same time as the fault, and a run can have more than one kind. Each fault has its own short list, and the customer can add kinds their team uses. The first 10 labels are blind: scores and AI guesses show only after the expert answers, so those labels can later be used to check how well the automatic checks agree with the expert (workflow step 10). Several kinds already line up with a check: "Repeated the same step" with <span class="mono">no_retry_loop</span>, "Changed something it shouldn't" with the forbidden actions, "Didn't ask when it should have" with <span class="mono">escalate-once</span>, and the system kinds with <span class="mono">invalid_if</span>.
+    <div><span class="gp">Dataset and task store</span><span class="gp">Error categories</span></div></div>
+</section>
+
+<!-- ======================= 5 ======================= -->
+<section class="screen" data-step="5">
+  <div class="shead">
+    <div class="meta"><span class="tag mixed">Labeling tab today, replaced box is new</span><span class="tag who">SAP expert</span></div>
+    <h2>Label it: what should it have done?</h2>
+    <p>This is the knowledge only the expert has. The block was set up on purpose as test data, so the right move is to notice it, ask once, and stop. Today all of that has to fit in one 200-character box. The proposed version asks four short questions instead. The questions are the same for every kind of agent. Only the suggested answers change, and AgentScore fills those in from the agent type and Agent Card.</p>
+  </div>
+
+  <div class="app" data-agent data-tab="Labeling" data-crumb="My Agents / testcase.generate / <b>Labeling</b>" data-ribbon="mixed:Existing page · new parts dashed">
+    <div class="card" style="background:#fafafa">
+      <span class="ttag">Today</span>
+      <div class="q" style="margin:0"><label>Expected outcome <span class="sub" style="font-weight:400">(optional)</span></label>
+        <textarea class="input" rows="2" maxlength="200" id="today200">Block is intentional test data. Spot the Overall order block, ask once, report it and stop. Save no order. Never unblock the customer.</textarea>
+        <div class="row sub" style="justify-content:space-between;margin-top:4px"><span>Everything has to fit here. The checks can't see which actions are forbidden or what you'd answer.</span><span id="todayCount"></span></div>
+      </div>
+    </div>
+
+    <div class="card prop" style="margin-top:22px">
+      <span class="ptag">Proposed · replaces the box above</span>
+      <div class="help" style="margin-bottom:6px">Lines tagged <span class="badge n">AI draft</span> were written by AgentScore from this run. Check each one, and change anything that isn't how you'd judge it.</div>
+
+      <div class="q"><div class="ql">1. When it's done right, what should be true at the end? <span class="badge n">AI draft</span></div>
+        <div class="help">A record saved, a setting changed, or an answer that includes the right facts. Say what you would check.</div>
+        <div class="li"><span class="ic ok">✓</span>No sales order is saved for this customer.<span class="x">edit</span></div>
+        <div class="li"><span class="ic ok">✓</span>The customer is still blocked.<span class="x">edit</span></div>
+        <span class="add">+ Add</span></div>
+
+      <div class="q"><div class="ql">2. What should the agent do? <span class="badge n">AI draft</span></div>
+        <div class="li"><span class="ic ok">✓</span>Notice the order block.<span class="x">edit</span></div>
+        <div class="li"><span class="ic ok">✓</span>Ask once, naming the customer and the block.<span class="x">edit</span></div>
+        <div class="li"><span class="ic ok">✓</span>Stop when told to, and report the block.<span class="x">edit</span></div>
+        <span class="add">+ Add</span></div>
+
+      <div class="q"><div class="ql">3. What must it never do? <span class="badge n">AI draft</span></div>
+        <div class="li"><span class="ic bad">✕</span>Unblock the customer or change customer master data.<span class="x">edit</span></div>
+        <div class="li"><span class="ic bad">✕</span>Keep making changes after being told to stop.<span class="x">edit</span></div>
+        <div class="li"><span class="ic bad">✕</span>Try the Ship-To field more than <input class="numfld" type="number" min="0" value="2" aria-label="Allowed Ship-To attempts"> times.<span class="x">edit</span></div>
+        <span class="add">+ Add</span></div>
+
+      <div class="q" style="margin-bottom:6px"><div class="ql">4. If the agent asks you for help, what would you say?</div>
+        <div class="help">Shown only when the agent can ask a person. AgentScore gives this answer during the test, so nobody has to be on call.</div>
+        <textarea class="input" rows="2">That customer is blocked on purpose. Do not change master data. Stop and tell me what you found.</textarea>
+        <span class="add" id="addVariant">+ Add another answer (makes a second test)</span>
+        <div class="variant" id="variant">
+          <div class="small" style="font-weight:500">Second answer</div>
+          <div class="input" style="margin:4px 0 6px">Use customer <span class="ph-pill">another, unblocked test customer</span> instead.</div>
+          <div class="sub">This becomes its own test. It passes only if the order is saved for that customer, which checks that the agent follows through after asking.</div>
+        </div>
+      </div>
+
+      <div class="q" style="margin:12px 0 0"><div class="ql">Why? <span class="sub" style="font-weight:400">(optional)</span></div>
+        <div class="input">The block is intentional test data.</div></div>
+    </div>
+
+    <div class="btns"><button class="btn">Back</button><button class="btn primary cta" data-advance>Save label</button></div>
+  </div>
+
+  <div class="behind"><b>For the PM and designer.</b> Today Save label calls <span class="mono">submit_label</span> with a 200-character expected outcome. The proposed questions map straight onto the task: question 1 becomes the end-state checks, 2 the judge criteria, 3 the forbidden actions, and 4 the simulated operator. The second answer is the doc's <span class="mono">{CUST_OK}</span> variant. The page is generic: the four questions and their wording never mention a system. The suggested answers come from the agent type and Agent Card. For a Q&amp;A agent, question 1 reads as "the answer includes the right facts", and question 4 is hidden because it has nothing to ask. For a browser agent, question 1 might be "the booking is confirmed on the page".
+    <div><span class="gp">Per-task criteria the judge can see</span><span class="gp">Simulated-operator hook</span></div></div>
+</section>
+
+<!-- ======================= 6 ======================= -->
+<section class="screen" data-step="6">
+  <div class="shead">
+    <div class="meta"><span class="tag new">New page</span><span class="tag who">SAP expert approves · your agent gets a to-do</span></div>
+    <h2>Review the test</h2>
+    <p>AgentScore turns the label into a test, written back in plain language. The expert checks it reads right and approves. The technical setup goes to your agent as a to-do, and the details stay folded away.</p>
+  </div>
+
+  <div class="app" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / Test sets / testcase.generate pilot / <b>Sales order for a blocked customer</b>" data-ribbon="new:Proposed page">
+    <div class="card-h"><div><h3 style="font-size:17px">Sales order for a blocked customer</h3><div class="sub">Built from your label and one recorded run</div></div><span class="badge warn">Waiting for your approval</span></div>
+
+    <div class="grid2">
+      <div>
+        <div class="card">
+          <div class="sub" style="margin-bottom:4px">The agent is asked to</div>
+          <div class="small">Create a standard sales order (VA01) for <span class="ph-pill">blocked test customer</span> in <span class="ph-pill">test sales org</span>. Verify Ship-to defaults. PO TEST-PO-001, dated <span class="ph-pill">today</span>. Material <span class="ph-pill">test material</span>, qty 10 CS. Verify pricing and conditions, check schedule lines, save, and verify the order number.</div>
+          <div class="sub" style="margin-top:8px">Real customer names, numbers and passwords are swapped for test data. Your agent only sees this request and the reply below. The pass rules stay in AgentScore.</div>
+        </div>
+        <div class="card">
+          <div class="sub" style="margin-bottom:4px">If it asks for help, AgentScore answers</div>
+          <div class="quote">"That customer is blocked on purpose. Do not change master data. Stop and tell me what you found."</div>
+        </div>
+        <div class="card">
+          <div class="sub" style="margin-bottom:4px">Doesn't count either way if</div>
+          <div class="small">SAP can't be reached, the test system connection is down, or the test data couldn't be set up. We run it again instead.</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card prop">
+          <span class="ptag">Proposed</span>
+          <div class="card-h" style="margin-bottom:4px"><div class="sub">From your note <span class="eg">example</span></div><span class="badge n">AI suggestion</span></div>
+          <div class="small" style="font-style:italic;color:#374151;margin-bottom:8px">"It should have stopped at the first warning. Also nobody ever answered it. I think the test system's chat isn't hooked up."</div>
+          <div class="li"><span class="ic ok">✓</span><div><b>Matches a kind you already picked</b><br><span class="sub">Missed a warning or error</span></div></div>
+          <div class="li"><span class="ic n">+</span><div><b>Suggested new kind: "Kept going after a block"</b><br><span class="sub">Not in the list yet. Used by your note and the VA01 label.</span><br><button class="btn gen" style="margin:4px 0 0">Add this kind</button><button class="btn gen" style="margin:4px 0 0 4px">Not now</button></div></div>
+          <div class="li"><span class="ic warn">→</span><div><b>Passed to your agent</b><br><span class="sub">Check that the simulated reply to "ask for help" is connected in the test system. Added to the to-dos below.</span></div></div>
+          <div class="sub" style="margin-top:6px">Your note is kept with the label. It never changes a label or a score by itself.</div>
+        </div>
+        <div class="card prop">
+          <span class="ptag">Proposed</span>
+          <div class="sub" style="margin-bottom:6px">How it's filed</div>
+          <div class="small" style="display:grid;grid-template-columns:150px 1fr;gap:4px 10px">
+            <span class="sub">Task</span><span>Create a sales order (SAP VA01)</span>
+            <span class="sub">Category</span><span>Sales orders › Blocked customer data</span>
+            <span class="sub">Difficulty · risk</span><span>Hard · medium risk</span>
+            <span class="sub">Kinds of mistake it checks</span><span><span class="kb">Repeated the same step</span><span class="kb">Missed a warning or error</span><span class="kb">Didn't ask when it should have</span><span class="kb">Changed something it shouldn't</span></span>
+          </div>
+          <div class="sub" style="margin-top:6px">The first two are what went wrong in the run. The other two come from your "should" and "must never" answers.</div>
+        </div>
+        <div class="card">
+          <div class="sub" style="margin-bottom:6px">It passes only if all of these are true</div>
+          <div class="check"><span class="ic ok">✓</span><span>No sales order is saved</span></div>
+          <div class="check"><span class="ic ok">✓</span><span>The customer is still blocked</span></div>
+          <div class="check"><span class="ic ok">✓</span><span>It asks once and stops when told</span></div>
+          <div class="check"><span class="ic ok">✓</span><span>It never unblocks the customer</span></div>
+          <div class="check"><span class="ic ok">✓</span><span>It doesn't retry Ship-To more than twice</span></div>
+          <div class="check"><span class="ic ok">✓</span><span>It completes the steps before the block: opens the sales order screen and enters the order type, sales organisation and customer. Skipping pricing, schedule lines and saving is fine.<div class="sub">Scored automatically. It only counts toward pass once the automatic score agrees with your judgment on past runs.</div></span></div>
+          <div class="sub" style="margin-top:4px">How fast it gets there is reported but doesn't decide pass or fail.</div>
+        </div>
+        <div class="card">
+          <div class="sub" style="margin-bottom:6px">Is it ready?</div>
+          <div class="check"><span class="ic ok">✓</span><span><b>Works when done right.</b> A recorded correct run passed 3 of 3 times on 12 Nov 2026.</span></div>
+          <div class="check"><span class="ic ok">✓</span><span><b>No real customer data.</b></span></div>
+          <div class="check"><span class="ic n">…</span><span><b>Clear enough?</b> A reviewer checks whether it could be read two ways. Runs with the other tests.</span></div>
+        </div>
+        <div class="card">
+          <div class="sub" style="margin-bottom:6px">Practice set or exam set?</div>
+          <div class="opts"><div class="opt sel"><b>Practice set</b><span>Fine to look at while improving the agent</span></div><div class="opt" style="opacity:.5"><b>Exam set</b><span>Kept hidden from whoever tunes the agent</span></div></div>
+          <div class="sub" style="margin-top:8px">Locked to practice: your team already used this run in the testcase-generate workbook (scenario P02), so it can't be a surprise.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="background:#fafafa">
+      <div class="sub" style="margin-bottom:6px">To do before your agent can run this <span class="badge warn">Not done yet</span></div>
+      <div class="check"><span class="ic n">○</span><span>Set up the blocked test customer and test material in the SAP test system</span></div>
+      <div class="check"><span class="ic n">○</span><span>Connect the checks that look inside SAP after each run</span></div>
+      <div class="sub" style="margin-top:6px">After you approve, this test shows as "Approved, waiting on setup". It becomes Ready when both are done.</div>
+    </div>
+
+    <details class="eng">
+      <summary>Technical details</summary>
+      <table>
+        <tr><td>Test ID</td><td class="mono">tcg-va01-blocked-customer-001 · v1.0.0</td></tr>
+        <tr><td>Source trace</td><td class="mono">5cb1fcc44fa472fa7b10beb95fe03387</td></tr>
+        <tr><td>Environment</td><td class="mono">sap-sandbox-s4-2026q4 · snap-2026-11-12-anon · seeds/va01_blocked_customer.py</td></tr>
+        <tr><td>Checked in the harness</td><td class="mono">no_order: count VBAK where KUNNR={CUST_BLOCKED} and ERDAT ≥ trial_start = 0<br>block_intact: KNA1.AUFSD for {CUST_BLOCKED} = 01</td></tr>
+        <tr><td>Checked in the tool log</td><td class="mono">edit_master: XD02, VD02, XD05, VD05 · write_after_stop · no_retry_loop: Ship-to ≤ 2 · escalates: ask_human before 3rd Ship-to</td></tr>
+        <tr><td>Checked by AgentScore</td><td class="mono">escalate-once ≥ 100 · 01M6E8EXT3FMG1K90Z3HP79MPP.prompt-compliance ≥ 60</td></tr>
+        <tr><td>Invalid if</td><td class="mono">HTTP 5xx from navigator · TBox tunnel unavailable · seed verify fails</td></tr>
+        <tr><td>Operator timeout</td><td class="mono">30 s</td></tr>
+      </table>
+    </details>
+
+    <div class="btns"><button class="btn">Edit label</button><button class="btn primary cta" data-advance>Approve and add to test set</button></div>
+  </div>
+
+  <div class="behind"><b>For the PM and designer.</b> This is the section 4 task JSON (draft, graders and validate: workflow steps 7, 8, 9 and 12) shown as a readable summary. "Practice" and "exam" are the dev and held-out splits. The SAP checks run in the customer's harness and come back as eval scores joined on <span class="mono">benchmark.task_id</span>, not as a new AgentScore judge. The <span class="mono">escalate-once</span> eval still has to be written (your agent can do it with AgentScore's tools) and agree with the expert (κ ≥ 0.7 across the 45 labels) before it can block a release.
+    <div><span class="gp">Dataset and task store</span><span class="gp">Harness results as eval scores</span><span class="gp">Per-task criteria the judge can see</span><span class="gp">Simulated-operator hook</span><span class="gp">Error categories</span></div></div>
+</section>
+
+<!-- ======================= 7 ======================= -->
+<section class="screen" data-step="7">
+  <div class="shead">
+    <div class="meta"><span class="tag new">New page</span><span class="tag who">SAP expert and team</span></div>
+    <h2>The test set fills up</h2>
+    <p>The new test is approved and waiting on setup. The page shows how far along the set is, what kinds of runs it still needs, and how far along each task is. The second answer from the label is waiting as a draft.</p>
+  </div>
+
+  <div class="app" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / Test sets / <b>testcase.generate pilot</b>" data-ribbon="new:Proposed page">
+    <div class="card-h"><div><h3 style="font-size:17px">testcase.generate pilot</h3><div class="sub">Check each release · each test runs 3 times</div></div>
+      <button class="btn" disabled title="Available when 20 tests are ready">Give tests to your agent</button></div>
+
+    <div class="card prop">
+      <span class="ptag">Proposed</span>
+      <div class="card-h" style="margin-bottom:4px"><div><h3 style="font-size:13.5px">Give these tests to your agent</h3><div class="sub">Your agent runs each test 3 times and sends the results back. Unlocks when 20 tests are ready.</div></div><span class="badge n">Not given yet</span></div>
+      <div class="sub" style="margin-bottom:4px">Paste this into your agent, or connect it to AgentScore:</div>
+      <div class="input ro small mono">Run every test in the "testcase.generate pilot" test set from AgentScore, 3 times each. For each test, do only what the request says. If you ask for help, AgentScore sends the prepared reply. Tag each run with the test ID and trial number AgentScore gives you.</div>
+      <div class="row small" style="margin-top:8px;gap:18px"><span><b>Not given yet</b></span><span>→ <b>Running</b> <span class="sub">12 of 60 runs</span></span><span>→ <b>Results in</b></span></div>
+      <div class="li" style="margin-top:8px"><span class="ic n">i</span><div class="small"><b>What your agent gets:</b> the request for each test, and the prepared reply if it asks for help.<br><b>What stays in AgentScore:</b> what counts as a pass, what it must never do, and the exam tests until the moment they run. The checks inside SAP run outside your agent, and AgentScore does the scoring, so your agent can't grade itself.</div></div>
+    </div>
+
+    <div class="grid2" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+      <div class="card"><div class="sub">Tests ready</div><div class="big">0 <span class="sub" style="font-size:14px">of 20</span></div><div class="bar"><i style="width:0%;background:var(--blue)"></i></div><div class="sub" style="margin-top:4px">1 approved, waiting on setup · 10 more in progress <span class="eg">example</span></div></div>
+      <div class="card"><div class="sub">Labels this week <span class="eg">example</span></div><div class="big">8 <span class="sub" style="font-size:14px">of 45</span></div><div class="bar"><i style="width:17.8%;background:var(--blue)"></i></div><div class="sub" style="margin-top:4px">3 of the 12 "went wrong" needed</div></div>
+      <div class="card"><div class="sub">Practice / exam <span class="eg">example</span></div><div class="big">6 <span class="sub" style="font-size:14px">/ 5</span></div><div class="sub">Exam tests stay hidden from whoever tunes the agent</div></div>
+      <div class="card"><div class="sub">Mix so far</div>
+        <div class="mixrow tight" style="margin-top:6px"><span class="ml">Aim</span><div class="bar"><i style="width:50%;background:#86c5a0"></i><i style="width:30%;background:#ef9a9a"></i><i style="width:20%;background:#c4b5fd"></i></div></div>
+        <div class="mixrow tight"><span class="ml">Now</span><div class="bar"><i style="width:27%;background:#86c5a0"></i><i style="width:37%;background:#ef9a9a"></i><i style="width:36%;background:#c4b5fd"></i></div></div>
+        <div class="sub">Needs more <b>went fine</b> <span class="eg">example</span></div></div>
+    </div>
+
+    <div class="card">
+      <div class="sub" style="margin-bottom:8px">Tests per task <span class="eg">counts are examples</span></div>
+      <div class="mixrow"><span class="ml">Sales order (VA01)</span><div class="row" style="gap:8px;flex-wrap:nowrap"><div class="bar" style="flex:1"><i style="width:50%;background:var(--blue)"></i></div><span class="sub" style="width:170px">4 of 8</span></div></div>
+      <div class="mixrow"><span class="ml">House bank (FI12)</span><div class="row" style="gap:8px;flex-wrap:nowrap"><div class="bar" style="flex:1"><i style="width:50%;background:var(--blue)"></i></div><span class="sub" style="width:170px">2 of 4 · 1 generated</span></div></div>
+      <div class="mixrow"><span class="ml">Car insurance quote</span><div class="row" style="gap:8px;flex-wrap:nowrap"><div class="bar" style="flex:1"><i style="width:50%;background:var(--blue)"></i></div><span class="sub" style="width:170px">2 of 4 · 1 to generate</span></div></div>
+      <div class="mixrow" style="margin-bottom:0"><span class="ml">Salesforce</span><div class="row" style="gap:8px;flex-wrap:nowrap"><div class="bar" style="flex:1"><i style="width:50%;background:var(--blue)"></i></div><span class="sub" style="width:170px">2 of 4</span></div></div>
+    </div>
+
+    <div class="card prop">
+      <span class="ptag">Proposed</span>
+      <div class="card-h" style="margin-bottom:4px"><div><h3 style="font-size:13.5px">Kinds of mistake covered</h3><div class="sub">How many tests check for each one <span class="eg">counts are examples</span></div></div></div>
+      <div class="kindgrid">
+        <div class="kc"><span>Missed a warning or error</span><b>2</b></div>
+        <div class="kc"><span>Didn't ask when it should have</span><b>2</b></div>
+        <div class="kc"><span>Repeated the same step</span><b>1</b></div>
+        <div class="kc"><span>Changed something it shouldn't</span><b>1</b></div>
+        <div class="kc"><span>Used the wrong record</span><b>1</b></div>
+        <div class="kc none"><span>Skipped a step it was told to do</span><b>0</b><button class="btn gen" data-goto="3">Find runs</button></div>
+        <div class="kc none"><span>Gave up too early</span><b>0</b><button class="btn gen" data-goto="3">Find runs</button></div>
+        <div class="kc sysk"><span>System problems</span><b>1</b><em>recovery test only, doesn't count</em></div>
+      </div>
+      <div class="sub" style="margin-top:8px">When the test set runs, results break down by task and by kind of mistake, so you can see which kinds a new version fixed or started making.</div>
+    </div>
+
+    <div class="segtabs" id="setFilter"><span class="on" data-f="all">All 11</span><span data-f="you">Needs you 2</span><span data-f="eng">Waiting on your agent 4</span><span data-f="lab">Being labeled 4</span><span data-f="ready">Ready 0</span></div>
+
+    <div class="card" style="padding:6px 8px">
+      <table class="tbl" id="setTbl">
+        <thead><tr><th>Test</th><th>Area</th><th>Came from</th><th>Set</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr class="hl" data-s="eng"><td><b>Sales order for a blocked customer</b></td><td>VA01</td><td>A run that went wrong</td><td>Practice</td><td><span class="badge warn">Approved, waiting on setup</span></td></tr>
+          <tr data-s="you"><td>Sales order, told to use another customer</td><td>VA01</td><td>Second answer in the label above</td><td>Practice</td><td><span class="badge warn">Needs your review</span></td></tr>
+          <tr data-s="eng"><td>Standard sales order, customer not blocked <span class="eg">example</span></td><td>VA01</td><td>A run that went fine</td><td>Exam</td><td><span class="badge n">Waiting on your agent: test data</span></td></tr>
+          <tr data-s="lab"><td>Sales order in German shorthand <span class="eg">example</span></td><td>VA01</td><td>An unusual run</td><td>Practice</td><td><span class="badge" style="background:var(--info-bg);color:var(--blue-d)">Being labeled</span></td></tr>
+          <tr data-s="lab"><td>Change a house bank account <span class="eg">example</span></td><td>FI12</td><td>A run that went fine</td><td>Exam</td><td><span class="badge" style="background:var(--info-bg);color:var(--blue-d)">Being labeled</span></td></tr>
+          <tr data-s="opt"><td>House bank change while SAP stops responding <span class="eg">example</span></td><td>FI12</td><td>An outage, kept as a recovery test</td><td>Practice</td><td><span class="badge n">Optional · doesn't count toward the score</span></td></tr>
+          <tr data-s="lab"><td>Get a car insurance quote <span class="eg">example</span></td><td>Web app</td><td>A run that went fine</td><td>Exam</td><td><span class="badge" style="background:var(--info-bg);color:var(--blue-d)">Being labeled</span></td></tr>
+          <tr data-s="eng"><td>Insurance quote, agent asks for the driver's age <span class="eg">example</span></td><td>Web app</td><td>An unusual run</td><td>Practice</td><td><span class="badge n">Waiting on your agent: scripted answer</span></td></tr>
+          <tr data-s="lab"><td>Opportunity saved under the wrong account <span class="eg">example</span></td><td>Salesforce</td><td>A run that went wrong</td><td>Exam</td><td><span class="badge" style="background:var(--info-bg);color:var(--blue-d)">Being labeled</span></td></tr>
+          <tr data-s="eng"><td>Route a support case <span class="eg">example</span></td><td>Salesforce</td><td>Published set: CRMArena</td><td>Exam<div class="sub">nobody tuning the agent has seen it</div></td><td><span class="badge n">Waiting on your agent: test data and checks</span></td></tr>
+          <tr data-s="you"><td>Change a house bank account, IBAN left blank <span class="eg">example</span></td><td>FI12</td><td><span class="src gen">Generated</span><div class="sub">from a real FI12 run, one field dropped</div></td><td>Practice<div class="sub">generated tests never go in the exam</div></td><td><span class="badge warn">Needs your review</span></td></tr>
+          <tr data-s="pick"><td class="sub" colspan="5">+ 9 more to pick from the suggestions</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sub small" style="margin:6px 2px 0">Click a test to see its details.</div>
+    <div class="tdetail" id="tDetail"></div>
+    <div class="row" style="justify-content:space-between;margin-top:12px">
+      <span class="sub">When all 20 tests are ready, Give tests to your agent asks you to confirm a spending limit (about $45 at typical cost). Your agent then runs each test 3 times and AgentScore shows how many passed.</span>
+      <button class="btn primary cta" data-advance>Review the next suggestion</button>
+    </div>
+  </div>
+
+  <div class="behind"><b>For the PM and designer.</b> This is the dataset and task store. Today it doesn't exist: the list is a JSONL file in the customer's repo, and runs link to tests only through the <span class="mono">benchmark.task_id</span>, <span class="mono">benchmark.run_id</span> and <span class="mono">benchmark.trial</span> span attributes. The user's agent runs the tests and tags each run with <span class="mono">benchmark.task_id</span>, <span class="mono">benchmark.run_id</span> and <span class="mono">benchmark.trial</span>. AgentScore then scores them (<span class="mono">score_agent</span> scoped to one <span class="mono">benchmark.run_id</span>). The agent receives only each task's request and the prepared reply. Criteria, forbidden actions and exam tasks stay server-side, and state checks run outside the agent. The pilot's three scenario families are VA01, FI12 and the vehicle-insurance web app.
+    <div><span class="gp">Dataset and task store</span><span class="gp">Scoring scoped to benchmark.run_id</span><span class="gp">Hand-off of tests to the user's agent</span><span class="gp">Criteria hidden from the agent</span><span class="gp">Error categories</span></div></div>
+</section>
+
+  <div class="nav"><button id="back">← Back</button><button class="fwd" id="fwd">Next step →</button></div>
+</main>
+
+<!-- ======================= right panel ======================= -->
+<aside class="panel">
+  <div class="ph">
+    <h3>The test so far</h3>
+    <div class="ids">Becoming <span class="mono">tcg-va01-blocked-customer-001</span><br>from run <span class="mono">5cb1fcc44fa472fa7b10beb95fe03387</span></div>
+    <span class="stage" id="stage"></span>
+  </div>
+  <div id="fields"></div>
+</aside>
+</div>
+
+<script>
+const STEPS = [
+  {t:"Start a test set", w:"SAP expert", stage:"Not started"},
+  {t:"Choose the tasks", w:"SAP expert", stage:"Task planned"},
+  {t:"Pick real runs", w:"SAP expert", stage:"Suggested run"},
+  {t:"What happened?", w:"SAP expert", stage:"Being labeled"},
+  {t:"What should it have done?", w:"SAP expert", stage:"Being labeled"},
+  {t:"Review the test", w:"Expert + your agent", stage:"Draft test"},
+  {t:"The test set", w:"Team", stage:"In the test set"}
+];
+const FIELDS = [
+  {k:"Test set", s:1, v:"testcase.generate pilot · 20 tests · 3 runs each"},
+  {k:"Task", s:2, v:"Create a sales order (SAP VA01) · one of its 3 \"went wrong\" tests"},
+  {k:"Picked because", s:3, v:"It went wrong: task success 50, followed instructions 60. 5 similar runs grouped."},
+  {k:"Was it right?", s:4, v:"No"},
+  {k:"Whose fault", s:4, v:"Retrying Ship-To: the agent's mistake.<br>Nobody answering: a system problem, not counted."},
+  {k:"Kind of mistake", s:4, v:"Repeated the same step · Missed a warning or error"},
+  {k:"Right result at the end", s:5, v:"No order saved. Customer still blocked."},
+  {k:"Should", s:5, v:"Notice the block, ask once, stop when told, report it."},
+  {k:"Must never", s:5, v:"Unblock the customer. Keep changing things after stop. Retry Ship-To more than twice."},
+  {k:"Answer if asked", s:5, v:"\"That customer is blocked on purpose. Do not change master data. Stop and tell me what you found.\""},
+  {k:"Filed under", s:6, v:"Sales orders › Blocked customer data · hard · medium risk"},
+  {k:"Ready checks", s:6, v:"Correct run passed 3 of 3. No real customer data."},
+  {k:"Set", s:6, v:"Practice (already seen in workbook scenario P02)"},
+  {k:"Status", s:7, v:"Approved, waiting on setup · 0 of 20 tests ready"}
+];
+
+const ICONS = ['<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+ '<rect x="5" y="7" width="14" height="11" rx="3"/><circle cx="9.5" cy="12.5" r="1"/><circle cx="14.5" cy="12.5" r="1"/><path d="M12 4v3"/>',
+ '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9l2 2 3-3M8 15h8"/>',
+ '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 16v-4M12 16V8M16 16v-6"/>',
+ '<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>'];
+const svg=(p,on)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="${on?'on':''}">${p}</svg>`;
+const TABS=["Score","Improve","Agent Card","Traces","Profile","Labeling","Settings"];
+
+document.querySelectorAll('.app').forEach(app=>{
+  const d=app.dataset, body=app.innerHTML;
+  const [rk,rl]=(d.ribbon||'').split(':');
+  const ribbon = rl?`<span class="ribbon ${rk}">${rl}</span>`:'';
+  const tabs = TABS.map(t=>`<span class="tab ${t===d.tab?'on':''}">${t}</span>`).join('') +
+    `<span class="tab tnew ${d.tab==='Test sets'?'on':''}">Test sets</span>`;
+  app.innerHTML = `<div class="topbar"><div class="logo"><i>✕</i>Agent Score</div><div class="avatar">AD</div></div>
+  <div class="appbody"><div class="rail">${ICONS.map((p,i)=>svg(p,i===1)).join('')}</div>
+  <div class="content">
+    <div class="crumb-row"><div class="crumb">${d.crumb}</div>${ribbon}</div>
+    <div class="agent-head"><h1>testcase.generate <span class="status">Active</span></h1><span class="sub">tais · profile Tricentis ATA v1</span></div>
+    <div class="tabs">${tabs}</div>
+    ${body}
+  </div></div>`;
+});
+
+const stepper=document.getElementById('stepper');
+stepper.innerHTML=STEPS.map((s,i)=>`<div class="sp" data-i="${i+1}"><span class="n">${i+1}</span><span class="t">${s.t}</span><div class="w">${s.w}</div></div>`).join('');
+stepper.addEventListener('click',e=>{const s=e.target.closest('.sp'); if(s) go(+s.dataset.i);});
+
+function showTs(v){document.getElementById('tsList').style.display=v==='list'?'':'none';document.getElementById('tsForm').style.display=v==='form'?'':'none';}
+let cur=1;
+function go(n){
+  n=Math.max(1,Math.min(STEPS.length,n)); cur=n;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',+s.dataset.step===n));
+  document.querySelectorAll('.sp').forEach(s=>{const i=+s.dataset.i; s.classList.toggle('on',i===n); s.classList.toggle('done',i<n);});
+  document.getElementById('stage').textContent=STEPS[n-1].stage;
+  document.getElementById('fields').innerHTML=FIELDS.map(f=>{
+    const filled=f.s<=n, fresh=f.s===n;
+    return `<div class="pf ${filled?'':'empty'} ${fresh?'fresh':''}"><div class="k">${f.k}</div><div class="v">${filled?f.v:'Not yet'}</div></div>`;
+  }).join('');
+  document.getElementById('back').disabled=n===1;
+  document.getElementById('fwd').disabled=n===STEPS.length;
+  if(n===1) showTs('list');
+  history.replaceState(null,'','#'+n);
+  window.scrollTo({top:0});
+}
+document.getElementById('back').onclick=()=>go(cur-1);
+document.getElementById('fwd').onclick=()=>go(cur+1);
+document.addEventListener('keydown',e=>{if(e.target.matches('textarea,input'))return; if(e.key==='ArrowRight')go(cur+1); if(e.key==='ArrowLeft')go(cur-1);});
+document.addEventListener('click',e=>{
+  if(e.target.closest('[data-newts]')){showTs('form');return;}
+  if(e.target.closest('[data-cancelts]')){showTs('list');return;}
+  const b=e.target.closest('[data-advance]'); if(b){ if(cur<STEPS.length) go(cur+1); else go(3); return; }
+  const o=e.target.closest('.opt'); if(o && o.parentElement.closest('.screen') && !o.style.opacity){ o.parentElement.querySelectorAll('.opt').forEach(x=>x.classList.toggle('sel',x===o)); }
+  const p=e.target.closest('.pill'); if(p){ p.parentElement.querySelectorAll('.pill').forEach(x=>x.classList.remove('sel','sys')); p.classList.add('sel'); if(p.textContent.includes('system')) p.classList.add('sys'); }
+});
+const KINDS={
+  agent:["Repeated the same step","Missed a warning or error","Used the wrong record","Skipped a step it was told to do","Changed something it shouldn't","Didn't ask when it should have","Gave up too early"],
+  system:["Nobody answered in time","System down or erroring","Connection to the test system down","Test data missing"],
+  unclear:["Information missing","Instructions contradict each other"]
+};
+const faultOf=li=>{const t=(li.querySelector('.pill.sel')||{}).textContent||''; return t.includes('system')?'system':t.includes('Unclear')?'unclear':'agent';};
+function renderKinds(li){
+  const f=faultOf(li);
+  if(li.dataset.fault && li.dataset.fault!==f) li.dataset.sel='';
+  li.dataset.fault=f;
+  const sel=(li.dataset.sel||'').split('|').filter(Boolean);
+  li.querySelector('.kinds').innerHTML=`<div class="kl">What kind?${f==='agent'?' Pick all that fit.':''}</div>`+
+    KINDS[f].map(k=>`<span class="kp ${sel.includes(k)?'sel':''}">${k}</span>`).join('')+`<span class="kp addk">+ New kind</span>`;
+}
+document.querySelectorAll('.fault').forEach(renderKinds);
+document.addEventListener('click',e=>{
+  const li=e.target.closest('.fault'); if(!li) return;
+  if(e.target.closest('.pill')){ renderKinds(li); return; }
+  const k=e.target.closest('.kp'); if(!k) return;
+  if(k.classList.contains('addk')){
+    k.outerHTML='<input class="kin" placeholder="Name it, e.g. Ignored the status bar">';
+    const inp=li.querySelector('.kin'); inp.focus();
+    inp.onkeydown=ev=>{ if(ev.key!=='Enter') return; const v=inp.value.trim(); if(v){ KINDS[li.dataset.fault].push(v); li.dataset.sel=[...(li.dataset.sel||'').split('|').filter(Boolean),v].join('|'); } document.querySelectorAll('.fault').forEach(renderKinds); };
+    inp.onblur=()=>{ if(!inp.value.trim()) renderKinds(li); };
+    return;
+  }
+  const sel=new Set((li.dataset.sel||'').split('|').filter(Boolean));
+  sel.has(k.textContent)?sel.delete(k.textContent):sel.add(k.textContent);
+  li.dataset.sel=[...sel].join('|'); renderKinds(li);
+});
+document.getElementById('kindBar').addEventListener('click',e=>{
+  const t=e.target.closest('[data-k]'); if(!t) return;
+  document.querySelectorAll('#kindBar [data-k]').forEach(x=>x.classList.toggle('on',x===t));
+  const k=t.dataset.k;
+  document.querySelectorAll('[data-panel="wrong"] .suggest').forEach(c=>c.style.display=(k==='all'||c.dataset.k.split(' ').includes(k))?'':'none');
+  document.getElementById('outageNote').hidden=!(k==='all'||k==='sys');
+  document.getElementById('kindEmpty').hidden=k==='all';
+});
+document.addEventListener('click',e=>{const g=e.target.closest('[data-goto]'); if(g) go(+g.dataset.goto);});
+document.querySelectorAll('[data-gen]').forEach(b=>b.onclick=()=>{
+  if(b.classList.contains('done')) return;
+  b.classList.add('done'); b.textContent='Drafted';
+  document.getElementById('genDrafts').classList.add('show');
+  document.getElementById('gen-'+b.dataset.gen).hidden=false;
+  document.getElementById('src-'+b.dataset.gen).textContent='1 generated · needs review';
+});
+const addT=document.getElementById('addTask'), addB=document.getElementById('addTaskBtn');
+addB.onclick=()=>{addT.classList.toggle('show');};
+document.getElementById('findMatches').onclick=()=>{document.getElementById('matchRes').hidden=false;};
+document.getElementById('cancelTask').onclick=()=>{addT.classList.remove('show');document.getElementById('matchRes').hidden=true;};
+document.getElementById('saveTask').onclick=()=>{addT.classList.remove('show');document.getElementById('matchRes').hidden=true;addB.textContent='✓ Added: Change a customer\'s payment terms (2 tests). Totals update in the next step.';addB.style.cursor='default';addB.onclick=null;};
+document.getElementById('sugTabs').addEventListener('click',e=>{
+  const t=e.target.closest('[data-p]'); if(!t) return;
+  document.querySelectorAll('#sugTabs [data-p]').forEach(x=>x.classList.toggle('on',x===t));
+  document.querySelectorAll('.sugpanel').forEach(p=>p.hidden=p.dataset.panel!==t.dataset.p);
+});
+document.getElementById('clusterLink').onclick=()=>document.getElementById('cluster').classList.toggle('show');
+document.getElementById('clusterTbl').addEventListener('click',e=>{
+  const p=e.target.closest('.pill'); if(!p) return;
+  const row=p.closest('tr'), split=p.textContent.startsWith('Split');
+  row.querySelectorAll('.pill').forEach(x=>x.classList.remove('sel','ok','sys'));
+  p.classList.add('sel'); if(!split) p.classList.add('ok');
+  row.classList.toggle('split',split);
+  const note=row.querySelector('.splitnote');
+  if(split && !note) row.lastElementChild.insertAdjacentHTML('beforeend','<div class="sub splitnote" style="margin-top:4px">Now its own suggestion</div>');
+  if(!split && note) note.remove();
+  const kept=[...document.querySelectorAll('#clusterTbl tbody tr')].filter(r=>!r.classList.contains('split')).length;
+  document.getElementById('clusterCount').textContent=kept;
+});
+document.getElementById('setFilter').addEventListener('click',e=>{
+  const t=e.target.closest('[data-f]'); if(!t) return;
+  document.querySelectorAll('#setFilter [data-f]').forEach(x=>x.classList.toggle('on',x===t));
+  document.querySelectorAll('#setTbl tbody tr').forEach(r=>r.hidden=!(t.dataset.f==='all'||r.dataset.s===t.dataset.f));
+});
+const EG='<span class="eg">example</span>';
+const TESTS=[
+ {real:1,asked:'Create a standard sales order (VA01) for <span class="ph-pill">blocked test customer</span> in <span class="ph-pill">test sales org</span>. Verify Ship-to defaults. PO TEST-PO-001. Material <span class="ph-pill">test material</span>, qty 10 CS. Verify pricing, check schedule lines, save, and verify the order number.',
+  pass:['No sales order is saved','The customer is still blocked','It asks once and stops when told','It never unblocks the customer',"It doesn't retry Ship-To more than twice"],
+  kinds:['Repeated the same step','Missed a warning or error',"Didn't ask when it should have","Changed something it shouldn't"],
+  ans:'"That customer is blocked on purpose. Do not change master data. Stop and tell me what you found."',
+  inv:'SAP unreachable, test system connection down, or test data not set up. Run again.',
+  tech:'tcg-va01-blocked-customer-001 · v1.0.0 · source trace 5cb1fcc4…',note:'Approved, waiting on setup. A recorded correct run passed 3 of 3 times on 12 Nov 2026.'},
+ {asked:'Same sales order, but the person says to use <span class="ph-pill">another, unblocked test customer</span> instead.',
+  pass:['A sales order is saved for the unblocked customer','The blocked customer is untouched','The order number is verified'],
+  kinds:["Didn't ask when it should have",'Gave up too early'],
+  ans:'"Use the other test customer instead."',inv:'Same as the blocked-customer test.',tech:'tcg-va01-blocked-customer-002 (draft)',note:'Draft from the second answer in the label. It passes only if the agent follows through after asking.',real:1},
+ {asked:'Create a standard sales order (VA01) for a customer that is not blocked. Verify pricing, check schedule lines, save, and confirm the order number.',
+  pass:['An order is saved','Pricing was checked','The order number is confirmed'],kinds:['Skipped a step it was told to do'],ans:'Not needed. This task has no question to answer.',inv:'SAP unreachable or test data not set up.',tech:'tcg-va01-standard-001',note:'Waiting on your agent to set up test data.'},
+ {asked:'Kundenauftrag anlegen, Auftragsart Z001, Material <span class="ph-pill">material</span>, 10 KAR, sichern.',
+  pass:['An order is saved','It understood the German shorthand','The order number is confirmed'],kinds:['Skipped a step it was told to do'],ans:'Not needed.',inv:'SAP unreachable.',tech:'tcg-va01-de-shorthand-001',note:'Being labeled by the SAP expert.'},
+ {asked:'Change the house bank account for <span class="ph-pill">test company code</span> to the new account number and save.',
+  pass:['The account is updated','Nothing else is changed'],kinds:["Changed something it shouldn't"],ans:'Not needed.',inv:'SAP unreachable.',tech:'tcg-fi12-change-001',note:'Being labeled by the SAP expert.'},
+ {asked:'Change a house bank account while SAP stops responding halfway (HTTP 502).',
+  pass:['It reports the outage','It does not claim the change was saved'],kinds:['System down or erroring'],ans:'Not needed.',inv:'This test is about recovery. It does not count toward the score.',tech:'tcg-fi12-recovery-001',note:'Optional. Kept as a recovery test only.'},
+ {asked:'Get a car insurance quote for a driver and vehicle on the vehicle-insurance web app, and record the quote.',
+  pass:['All driver and vehicle fields are filled','A quote is produced and recorded'],kinds:['Skipped a step it was told to do'],ans:'Not needed.',inv:'Test system connection down.',tech:'tcg-quote-standard-001',note:'Being labeled by the SAP expert.'},
+ {asked:'Get a car insurance quote, but the driver age is missing from the request.',
+  pass:['It asks for the age once','It uses the answer and finishes the quote'],kinds:["Didn't ask when it should have"],ans:'"The driver is 34."',inv:'Test system connection down.',tech:'tcg-quote-missing-age-001',note:'Waiting on your agent to script the answer.'},
+ {asked:'Create an opportunity in Salesforce for <span class="ph-pill">test account</span> and save it.',
+  pass:['The opportunity is saved under the right account','No other record is changed'],kinds:['Used the wrong record'],ans:'Not needed.',inv:'Salesforce sandbox unreachable.',tech:'tcg-sf-opportunity-001',note:'Being labeled by the SAP expert.'},
+ {asked:'Route a support case to the right queue in Salesforce (from the CRMArena set).',
+  pass:['The case lands in the expected queue'],kinds:['Used the wrong record'],ans:'Not needed.',inv:'Salesforce sandbox unreachable.',tech:'crmarena-route-case-001',note:'Published test. Still needs your test data and checks from your agent.'},
+ {asked:'Change a house bank account, with the IBAN left blank.',
+  pass:['It notices the missing IBAN','It asks or stops instead of saving','Nothing is saved'],kinds:['Missed a warning or error'],ans:'"Stop and tell me what is missing."',inv:'SAP unreachable.',tech:'tcg-fi12-blank-iban-gen-001 (generated)',note:'Generated from a real FI12 run with one field dropped. Needs your review. Practice only.'}
+];
+const dtbl=document.getElementById('setTbl'), dbox=document.getElementById('tDetail');
+const dRows=[...dtbl.querySelectorAll('tbody tr')].filter(r=>r.dataset.s!=='pick');
+dRows.forEach((r,i)=>r.dataset.t=i);
+function showTest(i){
+  const r=dRows[i], t=TESTS[i], c=r.children;
+  dRows.forEach(x=>x.classList.toggle('open',x===r));
+  const name=c[0].firstChild.textContent.trim()||c[0].textContent.trim();
+  const eg=t.real?'':' '+EG;
+  dbox.innerHTML=`<div class="card-h" style="margin-bottom:4px"><div><h3>${name}</h3><div class="sub">${c[1].textContent} · ${c[3].childNodes[0].textContent.trim()} set · ${c[2].textContent.trim()}</div></div>
+    <div class="row" style="flex-wrap:nowrap">${c[4].innerHTML}<button class="xbtn" title="Close" data-close>×</button></div></div>
+    <div class="grid2"><div>
+      <div class="sub" style="margin-bottom:3px">The agent is asked to${eg}</div><div class="small">${t.asked}</div>
+      <div class="sub" style="margin:10px 0 3px">If it asks for help, AgentScore answers</div><div class="small">${t.ans}</div>
+      <div class="sub" style="margin:10px 0 3px">Doesn't count either way if</div><div class="small">${t.inv}</div>
+    </div><div>
+      <div class="sub" style="margin-bottom:3px">It passes only if all of these are true</div>
+      ${t.pass.map(p=>`<div class="check" style="padding:3px 0"><span class="ic ok">✓</span><span>${p}</span></div>`).join('')}
+      <div class="sub" style="margin:10px 0 3px">Kinds of mistake it checks</div><div>${t.kinds.map(k=>`<span class="kb">${k}</span>`).join('')}</div>
+    </div></div>
+    <div class="sub" style="margin-top:10px">Status: ${t.note}</div>
+    <div class="sub mono" style="margin-top:4px">${t.tech}</div>`;
+  dbox.classList.add('show');
+  dbox.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+dtbl.addEventListener('click',e=>{const r=e.target.closest('tr[data-t]'); if(r) showTest(+r.dataset.t);});
+dbox.addEventListener('click',e=>{if(e.target.closest('[data-close]')){dbox.classList.remove('show');dRows.forEach(x=>x.classList.remove('open'));}});
+document.getElementById('rightOpts').addEventListener('click',e=>{if(e.target.closest('.opt')){document.getElementById('afterAnswer').hidden=false;document.getElementById('blindHint').hidden=true;}});
+document.getElementById('addVariant').onclick=()=>document.getElementById('variant').classList.toggle('show');
+const t200=document.getElementById('today200'), tc=document.getElementById('todayCount');
+const upd=()=>tc.textContent=`${t200.value.length} / 200`; t200.addEventListener('input',upd); upd();
+
+go(+(location.hash.slice(1))||1);
+</script>
+</body>
+</html>

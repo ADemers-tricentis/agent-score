@@ -41,8 +41,11 @@ is written to Jira unless the user approves the drafts in Phase 4.
   Epic-story link is the `parent` field. See `agentscore-kanban-sync` for the
   full board conventions (statuses, Team field format, spike representation).
 - **Ranking inputs (read what is relevant, don't read everything):**
-  customer demand in `docs/feedback/Customer Feedback Log.md` and
-  `docs/feedback/External Interest.md`, and the Labs graduation criteria
+  customer demand in `docs/feedback/Customer Feedback Log.md` and the
+  external-interest snapshot `docs/feedback/External Interest (generated).md`
+  (read-only, rewritten by the interest-funnel app after every change; if it
+  is missing, read `docs/feedback/External Interest.md`, which is where the
+  snapshot goes after cutover), and the Labs graduation criteria
   (see the memory note on Ignite to Activate graduation). Use these to justify
   placement, and cite which one drove a call.
 - **Writing style:** no em dashes anywhere in output or files. Use a hyphen.

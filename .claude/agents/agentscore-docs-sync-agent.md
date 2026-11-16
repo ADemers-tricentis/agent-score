@@ -5,7 +5,7 @@ description: >-
   merged on Tricentis-AI/agent-score since the last sync, walks the live
   onboarding at agent-score.ai.tricentis.com in an
   already-signed-in Playwright browser, records every discrepancy against the
-  docs in agent-score-marketing/docs-src/DOCS-DRIFT-LOG.md, applies the
+  docs in product-documentation/docs-src/DOCS-DRIFT-LOG.md, applies the
   docs-should-update fixes, updates the CHANGELOG, bumps the version, and
   rebuilds docs/index.html. Leaves everything uncommitted and unpushed so the
   user reviews the diff and the drift log before a docs build ships. Use when
@@ -29,20 +29,20 @@ All paths are relative to the repo root,
 
 ## Files
 
-- **Docs source:** `agent-score-marketing/docs-src/`, a Vite + React app.
+- **Docs source:** `product-documentation/docs-src/`, a Vite + React app.
   - `src/content/*.tsx`: one component per doc page (the prose).
   - `src/nav.ts`: sidebar table of contents. New pages register here.
   - `src/content/index.ts`: slug-to-component map. New pages register here too.
   - `src/assets/*.png`: screenshots, inlined into the build.
   - `src/components/`: shared page chrome and diagrams.
-- **Published output:** `agent-score-marketing/docs/index.html`, a single
+- **Published output:** `product-documentation/docs/index.html`, a single
   static file produced by `pnpm run build`. Pushing it triggers the deploy,
   which is why you never push.
-- **Drift log:** `agent-score-marketing/docs-src/DOCS-DRIFT-LOG.md`. Dated
+- **Drift log:** `product-documentation/docs-src/DOCS-DRIFT-LOG.md`. Dated
   sections, newest first, directly under the header and its `---` rule.
-- **Changelog:** `agent-score-marketing/docs-src/CHANGELOG.md` (Keep a
+- **Changelog:** `product-documentation/docs-src/CHANGELOG.md` (Keep a
   Changelog style). Create it if missing.
-- **Change log:** `agent-score-marketing/docs-src/DOCS-CHANGE-LOG.md`. Exact
+- **Change log:** `product-documentation/docs-src/DOCS-CHANGE-LOG.md`. Exact
   reader-facing edits, newest first. Create it if missing. Write an entry
   whenever you edit a doc page. Say what the page said before and what it
   says now, file by file. Skip it when you edit no pages. Separate from the
@@ -51,10 +51,11 @@ All paths are relative to the repo root,
   One ISO-8601 timestamp, gitignored. The path predates this agent; keep
   using it so earlier runs' PR windows aren't re-scanned. If missing, use 14
   days before today.
-- **Config:** `agent-score-marketing/docs-src/.env`, if present. Only
+- **Config:** `product-documentation/docs-src/.env`, if present. Only
   `AGENT_SCORE_SITE_URL` is read (default
-  `https://agent-score.ai.tricentis.com`). Never read a
-  password or token from it.
+  `https://agent-score.ai.tricentis.com`). Audit production; if the value
+  points at staging (`.stg.`), ignore it and use the production URL. Never
+  read a password or token from it.
 
 ## Untrusted content
 
@@ -139,10 +140,11 @@ exact text with `inner_text("body")` and screenshot (`full_page=True`) every
 screen the docs also show, to compare against `src/assets/*.png`. Save
 screenshots to the scratchpad unless one becomes a docs asset in step 6.
 
-Product notes: `/agents` is the fleet (cards are buttons with
-`data-testid="agent-card-<id>"`). Agent detail is
-`/tenants/<tenantId>/agents/<agentId>` with tabs Score / Agent Card /
-Profile / Activity. `/settings` is the Account page. A fresh detail page
+Product notes: `/agents` is the fleet ("My Agents"): a table whose rows are
+`data-testid="agent-row-<agentId>"` and open the agent on click. Agent
+detail is `/tenants/<tenantId>/agents/<agentId>` with tabs Score / Improve /
+Agent Card / Traces / Profile / Labeling / Settings; activity is on the
+Profile tab. `/settings` is the Account page. A fresh detail page
 sometimes renders "Something went wrong"; `reload()` fixes it. Open agents
 across several tenants to cover the full profile catalog and dimension list.
 
@@ -203,7 +205,7 @@ this when you edit no pages.
 Then build:
 
 ```bash
-cd agent-score-marketing/docs-src
+cd product-documentation/docs-src
 pnpm install   # only if node_modules is missing
 pnpm run build
 ```
