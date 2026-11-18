@@ -425,7 +425,12 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--primary); outli
       <button type="button" data-advice="ready">Advice ready</button>
     </span>
     <span id="threadbar" class="barbit">
-      <span>Preview thread</span>
+      <span>Preview path</span>
+      <button type="button" data-thread-scenario="built">Built myself</button>
+      <button type="button" data-thread-scenario="platform">Platform, not supported</button>
+      <button type="button" data-thread-scenario="demo">Demo agent</button>
+      <button type="button" data-thread-scenario="returning">Returning user</button>
+      <span>Thread</span>
       <button type="button" data-thread="next">Next message</button>
       <button type="button" id="ask-evals" data-thread="ask">Ask about evals</button>
       <button type="button" data-thread="reset">Restart thread</button>
@@ -595,6 +600,7 @@ function fresh() {
     traceFrom: "",
     threadStep: 1,
     threadAsked: false,
+    threadScenario: "built",
     previewName: false,
     open: { details: false, trouble: false },
   };
@@ -1219,58 +1225,101 @@ function bubble(who, html, note, you) {
   return `<div class="msg${you ? " you" : ""}"><div class="who">${who}</div><div class="bubble">${html}</div>${note ? `<p class="revnote"><strong>Reviewer note.</strong> ${note}</p>` : ""}</div>`;
 }
 
-function threadPage() {
+const THREAD_MAX = { built: 8, platform: 6, demo: 8, returning: 4 };
+
+function threadScript(kind) {
   const name = esc(agentName());
-  const blocks = [
-    bubble("Coding agent", `<p>Here is what I think this agent is. Name: ${name}. What it's for: ${esc(agentDesc())}. Is that right, or what should I change?</p>`, "Instead of the name and description popup. Calls check_agent_connection, reads the agent's code, and submits both. Next action: confirm, or say what to change."),
+  const desc = esc(agentDesc());
+  const ask = (html, note) => ["Coding agent", html, note || "", false];
+  const you = (text) => ["You", `<p>${text}</p>`, "", true];
+  const where = ask(`<p>Agent Score is connected. Where does your agent live?</p><p style="margin-top:8px">1. I built it myself (it is in this project)<br>2. It runs on a platform</p>`, "Step 3a. Asked only when the answer is not already recorded from the web flow. Next action: reply 1 or 2.");
+  const naming = ask(`<p>Here is what I think this agent is. Name: ${name}. What it's for: ${desc}. Is that right, or what should I change?</p>`, "Step 8, the name and description popup. It read the agent's code and submitted both. Next action: confirm, or say what to change.");
+  const waiting = ask(`<p>${name} is set up. Nothing from ${name} yet. Restart ${name} if it was running, then use it the way you already do. A score needs about 20 real requests. A hello or a made-up request does not count.</p><p style="margin-top:8px">No traffic yet? Say "demo" and I will run a demo agent for you, so you can see what a score looks like while you wait.</p>`, "Step 8, the waiting page and its demo card. The demo is offered once, here. Next action: use the agent, or say demo.");
+  if (kind === "built") {
+    return [
+      where,
+      you("1"),
+      naming,
+      you("Yes, that's right."),
+      waiting,
+      ask(`<p>12 of about 20 real requests to ${name}. Keep using it the way you already do. A hello or a made-up request does not count.</p>`, "Step 9. It keeps calling check_agent_connection and posts a new line whenever the count rises. Next action: keep using the agent. If the session ends first, ask how it is going. It picks up from here."),
+      ask(`<p>Agent Score has enough to go on. It is analyzing ${name}, writing the evaluations, and then scoring it. I'll post the score here when it's ready.</p><p style="margin-top:8px">Want to see what evals were chosen and why? Ask me: "Show me what evals were chosen for ${name} and why."</p>`, "Step 10, the enough popup. Next action, optional: ask that question. The answer comes from get_profile_fit, then it waits on get_scorecard."),
+      ask(`<p>${name} scored 66 out of 100. Verdict: Needs work.</p><p style="margin-top:8px">Paste this here, or in a new session in this project, to get the top recommendation as a change to your project:</p><div style="margin-top:10px">${code("thread-improve", improvePaste())}</div>`, "Steps 11 and 12, the Score tab, the Improve button and the Improve tab. request_improvement_advice stands in for the Improve click. Next action: paste it."),
+    ];
+  }
+  if (kind === "platform") {
+    return [
+      where,
+      you("2"),
+      ask(`<p>Which platform?</p><p style="margin-top:8px">1. Microsoft Copilot Studio<br>2. Amazon Bedrock<br>3. Google Vertex AI<br>4. Salesforce Agentforce<br>5. n8n<br>6. Dify<br>7. Another platform (tell me its name)</p>`, "Step 3b. Next action: reply with a number, or a name for Another platform."),
+      you("5"),
+      ask(`<p>n8n isn't supported yet. I've noted your interest and we'll come back to you.</p><p style="margin-top:8px">In the meantime, I can set up an agent that lives in this project. Want to do that?</p>`, "Step 3b, the not-supported state. It logs the pick as demand data with a new MCP tool (register_platform_interest). Only the build-it-myself branch is offered, as on the web. Next action: reply yes."),
+      you("Yes, set up the one in this project."),
+    ];
+  }
+  if (kind === "demo") {
+    return [
+      waiting,
+      you("demo"),
+      ask(`<p>Running the demo agent. I pulled it, ran it with 20 automated requests that include deliberate mistakes, and sent the traces to Agent Score. 20 of 20 arrived. Scoring now.</p>`, "The demo prompt, steps 1 and 2. The person can also paste the web demo prompt instead of saying demo. Next action: none, it keeps going."),
+      ask(`<p>flight-booking-demo scored 66 out of 100. Verdict: Needs work.</p>`, "The demo prompt, step 2. The demo agent is marked Demo and excluded from the fleet."),
+      ask(`<p>Top recommendation: never book a trip through a blocked country. In one conversation, the agent booked a customer from Boston to Delhi with a stop in a blocked country. This is the edit I would make:</p><pre class="code" style="margin-top:10px">- if route.cheapest: book(route)\n+ if route.cheapest and not route.uses_blocked_country(): book(route)</pre><p style="margin-top:10px">Apply it?</p>`, "The demo prompt, step 3. It waits for the person's go-ahead. Next action: approve."),
+      you("Yes, apply it."),
+      ask(`<p>Applied. I ran the agent again and scored it.</p><p style="margin-top:8px">Before: 66, Needs work. After: 82, Ship. The blocked-country failure is fixed.</p>`, "The demo prompt, step 4. Before and after reported in the thread."),
+      ask(`<p>That is the demo. Want to set up your own agent now?</p>`, "Handoff. Yes continues at the naming step (step 8). Next action: reply yes."),
+    ];
+  }
+  return [
+    you("Use agent-score to check my AgentScore connection."),
+    ask(`<p>Connected. ${name} is sending traces and has scored 66 out of 100 (Needs work). The last trace arrived a few minutes ago.</p><p style="margin-top:8px">What would you like to do?<br>1. Get the top improvement recommendation as a change to this project<br>2. Set up another agent<br>3. Try the demo agent</p>`, "The already-connected state. Same answer as the connected Home card. Next action: reply 1, 2 or 3."),
+    you("1"),
+    ask(`<p>Reading the latest improvement advice for ${name}. The top recommendation is: check the refund window before saying a refund was issued. In one conversation, the agent told a customer their refund was issued for an order placed 47 days ago.</p><p style="margin-top:8px">I would make the edit in this project. Tell me when to apply it.</p>`, "The step 12 hand-off, from a returning session. Next action: approve."),
   ];
-  if (state.threadStep === 1) {
-    blocks.push(`<div class="msg you"><div class="who">You</div><div class="bubble"><label class="label" for="thread-name">Name (edit it, or confirm)</label><input id="thread-name" class="textfield" value="${name}" autocomplete="off" /><div class="actions" style="margin-top:10px"><button class="btn contained" type="button" data-thread-name>Confirm</button></div></div></div>`);
+}
+
+function threadPage() {
+  const kind = state.threadScenario;
+  const script = threadScript(kind);
+  const shown = script.slice(0, state.threadStep);
+  const blocks = shown.map(([who, html, note, isYou]) => bubble(who, html, note, isYou));
+  if (kind === "built" && state.threadAsked && state.threadStep >= 7) {
+    const name = esc(agentName());
+    blocks.splice(7, 0,
+      bubble("You", `<p>Show me what evals were chosen for ${name} and why.</p>`, "", true),
+      bubble("Coding agent", `<p>${esc(profileAnswer())}</p>`, "Then it goes back to waiting for the score."));
   }
-  if (state.threadStep >= 2) {
-    blocks.push(bubble("You", `<p>Yes, that's right.</p>`, "", true));
-    blocks.push(bubble("Coding agent", `<p>${name} is set up. Nothing from ${name} yet. Restart ${name} if it was running, then use it the way you already do. A score needs about 20 real requests. A hello or a made-up request does not count.</p>`, "Instead of the paste box and the waiting page. It does what that paste asks, under this name. Next action: use the agent."));
-  }
-  if (state.threadStep >= 3) {
-    blocks.push(bubble("Coding agent", `<p>12 of about 20 real requests to ${name}. Keep using it the way you already do. A hello or a made-up request does not count.</p>`, "Instead of the progress page. It keeps calling check_agent_connection and posts a new line whenever the count rises. Next action: keep using the agent. If the session ends first, ask how it is going. It picks up from here."));
-  }
-  if (state.threadStep >= 4) {
-    blocks.push(bubble("Coding agent", `<p>Agent Score has enough to go on. It is analyzing ${name}, writing the evaluations, and then scoring it. I'll post the score here when it's ready.</p><p style="margin-top:8px">Want to see what evals were chosen and why? Ask me: "Show me what evals were chosen for ${name} and why."</p>`, "Instead of the enough popup. Next action, optional: ask that question. The answer comes from get_profile_fit, then it waits on get_scorecard."));
-  }
-  if (state.threadAsked) {
-    blocks.push(bubble("You", `<p>Show me what evals were chosen for ${name} and why.</p>`, "", true));
-    blocks.push(bubble("Coding agent", `<p>${esc(profileAnswer())}</p>`, "Then it goes back to waiting for the score."));
-  }
-  if (state.threadStep >= 5) {
-    blocks.push(bubble("Coding agent", `<p>${name} scored 66 out of 100. Verdict: Needs work.</p><p style="margin-top:8px">Paste this here, or in a new session in this project, to get the top recommendation as a change to your project:</p><div style="margin-top:10px">${code("thread-improve", improvePaste())}</div>`, "Instead of the Score tab, the Improve button, and the Improve tab. request_improvement_advice stands in for the Improve click. Next action: paste it. The paste block is the step 12 block, word for word."));
-  }
+  const names = { built: "Built it myself", platform: "Platform, not supported", demo: "Demo agent", returning: "Returning user" };
   return `
     ${pageHead("chat", "Coding agent")}
     <div class="content">
-      <div class="banner">This thread replaces the web screens in steps 8–12. It is not an Agent Score page. A person on the web path gets these same updates, and either side can be closed. Steps 1–7 still happen in the web app. When the coding agent cannot sign in by itself, the person still clicks Allow in the browser.</div>
+      <div class="banner"><strong>${names[kind]}.</strong> The thread follows the same path as the web screens, step for step. It is not an Agent Score page. A person on the web path gets these same updates, and either side can be closed. Steps 1–7 (sign in and connect) still happen in the web app. When the coding agent cannot sign in by itself, the person still clicks Allow in the browser.</div>
       <div class="thread">${blocks.join("")}</div>
       <div class="card" style="margin-top:8px"><div class="cc plain">
         <h2>Change to the MCP server's onboarding guidance</h2>
         <p>Today, step 6 of agent-score://docs/onboard-your-agent ends:</p>
         <p>${inline("The developer follows the agent's progress in the Agent Score app; nothing more is needed from you.")}</p>
         <p>Replace that sentence with:</p>
-        ${code("mcp-guidance", `Do not stop here, and do not send the developer to the Agent Score app. Stay in this thread and follow the agent until it has a score.
-Keep calling check_agent_connection with agent_name and wait_seconds 25. Each time traces.accepted rises, tell the developer how many of about 20 real requests have arrived, and to keep using the agent the way they already do.
-At about 20, tell the developer Agent Score has enough to go on and is scoring the agent. If they ask what evals were chosen and why, answer from get_profile_fit.
-Call get_scorecard until it shows a score and verdict. Report both, call request_improvement_advice for the latest scored run, and show the developer the improvement paste block below, word for word.
-If this session ends first, pick up from the same point the next time the developer asks.`)}
+        ${code("mcp-guidance", GUIDANCE_TEXT)}
         <p style="margin-top:12px">The resource then carries the step 12 paste block, word for word.</p>
         ${code("mcp-paste", improvePaste())}
-        <h2 style="margin-top:20px">Name and description</h2>
-        <p>The same resource should tell the coding agent to propose the name and description itself, in the web path and in this thread:</p>
-        ${code("mcp-name", `Before you set up tracing, read this project's agent code and work out what the agent does.
-Pick a short, friendly name a teammate would recognise. Do not use a function, module or file name (for example not testcase.generate).
-Write a one or two sentence description of what the agent is for.
-Submit both to Agent Score, then show the developer what you submitted and ask them to confirm or change it.`)}
+        <h2 style="margin-top:20px">Demo agent steps</h2>
+        <p>The resource carries the same demo prompt as the web popup, so either route runs the same steps:</p>
+        ${code("mcp-demo", demoPaste())}
+        <h2 style="margin-top:20px">What the MCP needs that it may not have</h2>
+        <p>A tool to log a platform pick as demand data (register_platform_interest, new). A way to store the agent's description, if update_agent_settings does not take one. A way to mark the demo agent as Demo and exclude it from the fleet.</p>
         <p class="fine" style="margin-top:12px">The limit in step 5 of the resource, "Do not poll indefinitely", stays. It covers confirming setup when no trace is ever accepted, not following progress after setup works.</p>
       </div></div>
     </div>`;
 }
+
+const GUIDANCE_TEXT = `Do not stop here, and do not send the developer to the Agent Score app. Stay in this thread and follow the agent until it has a score.
+Before you name the agent, if the developer has not said where it lives, ask: built by them in this project, or on a platform. For a platform, list Microsoft Copilot Studio, Amazon Bedrock, Google Vertex AI, Salesforce Agentforce, n8n, Dify and Another platform. Whatever they pick, tell them it is not supported yet, call register_platform_interest, and offer to set up the agent in this project.
+Read the agent's code, pick a short friendly name (not a function or module name) and a one or two sentence description, submit both, and ask the developer to confirm or change them.
+Keep calling check_agent_connection with agent_name and wait_seconds 25. Each time traces.accepted rises, tell the developer how many of about 20 real requests have arrived, and to keep using the agent the way they already do.
+While you wait for traces, offer the demo agent once. If the developer says demo, follow the demo steps below.
+At about 20, tell the developer Agent Score has enough to go on and is scoring the agent. If they ask what evals were chosen and why, answer from get_profile_fit.
+Call get_scorecard until it shows a score and verdict. Report both, call request_improvement_advice for the latest scored run, and show the developer the improvement paste block below, word for word.
+If this session ends first, pick up from the same point the next time the developer asks. When the developer asks you to check the connection and an agent is already connected, report its score and offer: the top recommendation, another agent, or the demo agent.`;
 
 function wizardDialog() {
   if (state.wizard === "intro") {
@@ -1437,7 +1486,7 @@ function enoughDialog() {
 
 function hint() {
   const named = state.previewName ? " Preview filled the name checkout-agent." : "";
-  if (state.screen === "thread") return "MCP-only path. The thread replaces steps 8–12." + named;
+  if (state.screen === "thread") return "MCP path. The thread follows the web path step for step, from step 3a to step 12." + named;
   if (state.popup === "name") return "Step 8. The connection is in. The coding agent proposes a name and description, the user confirms, then My Agents / that name opens.";
   if (state.wizard === "intro") return "Step 3. Connect on Integrations opens this popup.";
   if (state.wizard === "where") return "Step 3a. Where does the agent live? Picking an option moves on; the options are not shown again.";
@@ -1464,7 +1513,7 @@ function hint() {
 }
 
 function viewKey() {
-  return [state.screen, state.wizard, state.popup, state.phase, state.tab, state.client, state.mode, state.advice, state.threadStep, state.threadAsked, state.setup, state.agentName, state.trace, state.nameStage, state.where, state.platform, state.connected].join("|");
+  return [state.screen, state.wizard, state.popup, state.phase, state.tab, state.client, state.mode, state.advice, state.threadStep, state.threadAsked, state.threadScenario, state.setup, state.agentName, state.trace, state.nameStage, state.where, state.platform, state.connected].join("|");
 }
 
 function render() {
@@ -1480,7 +1529,7 @@ function render() {
   main.scrollTop = top;
   const modal = document.getElementById("modal");
   modal.innerHTML = state.wizard ? wizardDialog() : state.popup === "name" ? nameDialog() : state.popup === "enough" ? enoughDialog() : state.popup === "demo" ? demoDialog() : "";
-  const focus = modal.querySelector("#agent-name, #thread-name, #platform-other");
+  const focus = modal.querySelector("#agent-name, #platform-other");
   if (focus && !keep) focus.focus();
 
   const jump = currentJump();
@@ -1511,9 +1560,12 @@ function render() {
   const threadbar = document.getElementById("threadbar");
   threadbar.classList.toggle("on", state.screen === "thread");
   const next = threadbar.querySelector('[data-thread="next"]');
-  if (next) next.disabled = state.threadStep >= 5;
+  if (next) next.disabled = state.threadStep >= THREAD_MAX[state.threadScenario];
   const ask = document.getElementById("ask-evals");
-  if (ask) ask.disabled = state.threadStep < 4 || state.threadAsked;
+  if (ask) ask.disabled = state.threadScenario !== "built" || state.threadStep < 7 || state.threadAsked;
+  threadbar.querySelectorAll("[data-thread-scenario]").forEach((el) => {
+    el.setAttribute("aria-pressed", state.threadScenario === el.getAttribute("data-thread-scenario") ? "true" : "false");
+  });
   document.getElementById("hint").textContent = hint();
   const railName = state.screen === "agent" || state.screen === "agents" ? "agents" : state.screen === "integrations" || state.wizard ? "integrations" : state.screen === "home" ? "home" : "";
   document.querySelectorAll(".rail [data-jump]").forEach((el) => {
@@ -1695,16 +1747,6 @@ function submitName() {
   render();
 }
 
-function submitThreadName() {
-  const input = document.getElementById("thread-name");
-  const value = input ? input.value.trim() : "";
-  if (!value) return;
-  state.agentName = value;
-  state.previewName = false;
-  state.threadStep = Math.max(state.threadStep, 2);
-  render();
-}
-
 function openImprove() {
   if (state.phase !== "scored") return;
   if (state.advice === "none") state.advice = "generating";
@@ -1780,6 +1822,62 @@ document.body.addEventListener("click", (event) => {
     return;
   }
   if (el.dataset.startDemo !== undefined) return startDemo();
+  if (el.dataset.nameStage) {
+    state.nameStage = el.dataset.nameStage;
+    state.nameError = false;
+    if (state.nameStage === "confirm") {
+      if (!state.agentName.trim()) state.agentName = "checkout-agent";
+      if (!state.agentDesc.trim()) state.agentDesc = "Helps customers with refunds, cancellations and order questions.";
+      state.previewName = false;
+    }
+    render();
+    return;
+  }
+  if (el.dataset.pickMode) return finishMode(el.dataset.pickMode);
+  if (el.dataset.closeWizard !== undefined || el.hasAttribute("data-close-wizard")) {
+    state.wizard = null;
+    render();
+    return;
+  }
+  if (el.dataset.closePopup !== undefined || el.hasAttribute("data-close-popup")) {
+    state.popup = null;
+    render();
+    return;
+  }
+  if (el.dataset.submitName !== undefined || el.hasAttribute("data-submit-name")) return submitName();
+  if (el.dataset.copy) {
+    const text = COPY[el.dataset.copy] || "";
+    if (navigator.clipboard && text) navigator.clipboard.writeText(text).catch(() => {});
+    state.copied = el.dataset.copy;
+    render();
+    return;
+  }
+  if (el.dataset.client) {
+    state.client = el.dataset.client;
+    if (!allowsAgent()) state.mode = "self";
+    state.cursorOpened = false;
+    state.copied = "";
+    render();
+    return;
+  }
+  if (el.dataset.mode) {
+    if (el.dataset.mode === "agent" && !allowsAgent()) return;
+    state.mode = el.dataset.mode;
+    state.copied = "";
+    render();
+    return;
+  }
+  if (el.dataset.codexWhere) {
+    state.codexWhere = el.dataset.codexWhere;
+    state.copied = "";
+    render();
+    return;
+  }
+  if (el.dataset.addCursor !== undefined || el.hasAttribute("data-add-cursor")) {
+    state.cursorOpened = true;
+    render();
+    return;
+  }
   if (el.dataset.openAgent !== undefined || el.hasAttribute("data-open-agent")) {
     if (!agentName()) return;
     state.screen = "agent";
@@ -1827,14 +1925,22 @@ document.body.addEventListener("click", (event) => {
     render();
     return;
   }
+  if (el.dataset.threadScenario) {
+    state.threadScenario = el.dataset.threadScenario;
+    state.threadStep = 1;
+    state.threadAsked = false;
+    state.screen = "thread";
+    render();
+    return;
+  }
   if (el.dataset.thread === "next") {
     ensureName();
-    state.threadStep = Math.min(5, state.threadStep + 1);
+    state.threadStep = Math.min(THREAD_MAX[state.threadScenario], state.threadStep + 1);
     render();
     return;
   }
   if (el.dataset.thread === "ask") {
-    if (state.threadStep < 4 || state.threadAsked) return;
+    if (state.threadScenario !== "built" || state.threadStep < 7 || state.threadAsked) return;
     state.threadAsked = true;
     render();
     return;
@@ -1864,10 +1970,6 @@ document.body.addEventListener("keydown", (event) => {
   if (event.key === "Enter" && event.target.id === "agent-name") {
     event.preventDefault();
     submitName();
-  }
-  if (event.key === "Enter" && event.target.id === "thread-name") {
-    event.preventDefault();
-    submitThreadName();
   }
   if (event.key === "Escape") {
     if (state.popup) {

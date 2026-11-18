@@ -309,40 +309,57 @@
 
     The paste box shows as soon as the tab opens, even while advice is still generating, because the coding agent waits for it. Copying it is the person's only next action. The coding agent reads the advice with `get_improvement_advice`, waits on a generation that is still running with `get_job`, and proposes the change in the project already open.
 
-## MCP-only path (proposed)
+## MCP path (proposed)
 
-Some people never come back to the web app once their coding agent is signed in. Using only the MCP is a full path, not a fallback: the coding agent's thread replaces the web screens in steps 8–12, and the coding agent never hands the person off to the web app. The thread is not an Agent Score page. A person on the web path gets these same updates, and either side can be closed. The thread ends with the same paste block as step 12, word for word.
+A person can onboard entirely through their coding agent, or through the web app, or switch between them. The MCP path is a full path, not a fallback: the coding agent's thread follows the web path step for step and never hands the person off to the web app. The thread is not an Agent Score page. A person on the web path gets these same updates, and either side can be closed. The thread ends with the same paste block as step 12.
 
-They still do steps 1–7 in the web app as written. When the coding agent cannot sign in by itself, the person still clicks Allow in the browser, as in their client's "Sign in" step.
+They still do steps 1 to 7 in the web app as written (sign in and connect the coding agent). When the coding agent cannot sign in by itself, the person still clicks Allow in the browser, as in their client's "Sign in" step. Everything after that happens in the thread. The mock shows four paths, switchable in its top bar (`Preview path`).
 
-Web screens this person skips:
-- Step 8: the naming popup, and the My Agents/{{agent-name}} page with its paste box and `Waiting for real requests`.
-- Step 9: the `Request received. Keep using your agent.` page, its progress bar and its status-check paste box.
-- Step 10: the `Agent Score has enough to go on.` popup, including its evals link and its "what this agent is for" paste box, and the Score tab.
-- Step 11: the `Improve` button.
-- Step 12: the Improve tab and its Copy button.
+Each web step has a thread equivalent. Every message from the coding agent ends with one next action for the person.
 
-In the thread, each message from the coding agent ends with one next action for the person:
+| Web step | In the thread |
+|---|---|
+| 3a, where does your agent live | The coding agent asks it, unless the web flow already recorded the answer. |
+| 3b, which platform, and not supported yet | It lists the platforms. Any pick gets the not-supported message and offers the agent in this project. |
+| 8, name and description popup | It reads the code, submits a name and description, and asks the person to confirm. |
+| 8, waiting page and demo card | It says it is set up and waiting for requests, and offers the demo once. |
+| 9, progress | It posts a line whenever the count rises. |
+| 10, enough popup | It says Agent Score has enough to go on. |
+| 11 and 12, Score tab, Improve button, Improve tab | It reports the score, requests the advice, and shows the step 12 paste block. |
+| Demo popup | The person says `demo`, or pastes the web demo prompt. It runs the same steps in the thread. |
+| Already-connected state | The person asks it to check the connection. It reports the score and offers three next actions. |
 
-1. Instead of the name and description popup in step 8. Once sign-in finishes and the person is back in the thread, the coding agent checks the connection with `check_agent_connection`. With no agent sending traces yet, it reads the agent's code, picks a short friendly name (not a function or module name) and a one or two sentence description, submits both to Agent Score, and asks:
+### Path 1: built it myself
+
+1. **Where does it live (step 3a).** Asked only when the answer is not already recorded.
+
+    `Agent Score is connected. Where does your agent live?`
+    `1. I built it myself (it is in this project)`
+    `2. It runs on a platform`
+
+    Next action: reply 1 or 2.
+
+2. **Name and description (step 8).** Once the person is back in the thread, the coding agent checks the connection with `check_agent_connection`. With no agent sending traces yet, it reads the agent's code, picks a short friendly name (not a function or module name) and a one or two sentence description, submits both to Agent Score, and asks:
 
     `Here is what I think this agent is. Name: {{agent-name}}. What it's for: {{agent-description}}. Is that right, or what should I change?`
 
     Next action: confirm, or say what to change. The confirmed name is {{agent-name}} from here on.
 
-2. Instead of the paste box and waiting page in step 8. The coding agent does what the step 8 paste asks, under {{agent-name}}, then says:
+3. **Waiting (step 8).** The coding agent sets up tracing under {{agent-name}} if it is not set up, then says:
 
     `{{agent-name}} is set up. Nothing from {{agent-name}} yet. Restart {{agent-name}} if it was running, then use it the way you already do. A score needs about 20 real requests. A hello or a made-up request does not count.`
 
-    Next action: use the agent.
+    `No traffic yet? Say "demo" and I will run a demo agent for you, so you can see what a score looks like while you wait.`
 
-3. Instead of step 9. The coding agent keeps watching in the same thread. It calls `check_agent_connection` for {{agent-name}}, waiting on the server each time, and posts a new line whenever the count rises:
+    The demo is offered once, here. Next action: use the agent, or say demo.
+
+4. **Progress (step 9).** The coding agent keeps watching in the same thread. It calls `check_agent_connection` for {{agent-name}}, waiting on the server each time, and posts a new line whenever the count rises:
 
     `12 of about 20 real requests to {{agent-name}}. Keep using it the way you already do. A hello or a made-up request does not count.`
 
     Next action: keep using the agent. If the coding agent's session ends before the score, the person asks in the thread how it is going, and the coding agent picks up from where it left off.
 
-4. Instead of the popup in step 10. Once {{agent-name}} has about 20 real requests:
+5. **Enough (step 10).** Once {{agent-name}} has about 20 real requests:
 
     `Agent Score has enough to go on. It is analyzing {{agent-name}}, writing the evaluations, and then scoring it. I'll post the score here when it's ready.`
 
@@ -358,7 +375,7 @@ In the thread, each message from the coding agent ends with one next action for 
     Refund eligibility. Threshold 0.90. Weight 20.
     ```
 
-5. Instead of the Score tab and steps 11–12. Once `get_scorecard` returns a score and verdict, the coding agent calls `request_improvement_advice` for the latest scored run, which stands in for the `Improve` click, and says:
+6. **Score and improve (steps 11 and 12).** Once `get_scorecard` returns a score and verdict, the coding agent calls `request_improvement_advice` for the latest scored run, which stands in for the `Improve` click, and says:
 
     `{{agent-name}} scored 66 out of 100. Verdict: Needs work.`
 
@@ -368,34 +385,54 @@ In the thread, each message from the coding agent ends with one next action for 
 
     Next action: paste it.
 
+### Path 2: platform, not supported
+
+Steps 1 and 2 of path 1 up to the platform pick, then:
+
+1. After `2. It runs on a platform`, the coding agent asks `Which platform?` and lists the same seven options as step 3b. Next action: reply with a number, or a name for `Another platform`.
+2. For any pick: `{{platform}} isn't supported yet. I've noted your interest and we'll come back to you.` then `In the meantime, I can set up an agent that lives in this project. Want to do that?` It logs the pick as demand data with a new MCP tool, `register_platform_interest`. As on the web, only the build-it-myself branch is offered. Next action: reply yes.
+3. It continues at the name and description step of path 1.
+
+### Path 3: demo agent
+
+The person says `demo` while waiting, from the already-connected state, or pastes the web demo prompt. The coding agent runs the same four steps as the web popup, in the thread:
+
+1. `Running the demo agent. I pulled it, ran it with 20 automated requests that include deliberate mistakes, and sent the traces to Agent Score. 20 of 20 arrived. Scoring now.`
+2. `flight-booking-demo scored 66 out of 100. Verdict: Needs work.`
+3. It reads the improvement advice, states the top recommendation and what happened in one conversation, shows the edit it would make, and asks `Apply it?` Next action: approve.
+4. After approval it applies the edit, runs the agent again, scores it again, and reports `Before: 66, Needs work. After: 82, Ship.`
+5. It ends with `That is the demo. Want to set up your own agent now?` Yes continues at the name and description step.
+
+The demo agent is marked Demo and excluded from the fleet.
+
+### Path 4: returning user
+
+The person asks `Use agent-score to check my AgentScore connection.` and an agent is already connected. The coding agent reports `Connected. {{agent-name}} is sending traces and has scored 66 out of 100 (Needs work). The last trace arrived a few minutes ago.` and offers: 1, the top improvement recommendation as a change to this project; 2, set up another agent; 3, try the demo agent. This is the thread version of the already-connected state.
+
 ### Change to the MCP server's onboarding guidance (proposed)
 
-Today the MCP server tells the coding agent to stop once traces arrive. Step 6 of `agent-score://docs/onboard-your-agent` ends: "The developer follows the agent's progress in the Agent Score app; nothing more is needed from you." With that sentence in place, the MCP-only path cannot happen.
+Today the MCP server tells the coding agent to stop once traces arrive. Step 6 of `agent-score://docs/onboard-your-agent` ends: "The developer follows the agent's progress in the Agent Score app; nothing more is needed from you." With that sentence in place, the MCP path cannot happen.
 
 Replace that sentence with:
 
 ```
 Do not stop here, and do not send the developer to the Agent Score app. Stay in this thread and follow the agent until it has a score.
+Before you name the agent, if the developer has not said where it lives, ask: built by them in this project, or on a platform. For a platform, list Microsoft Copilot Studio, Amazon Bedrock, Google Vertex AI, Salesforce Agentforce, n8n, Dify and Another platform. Whatever they pick, tell them it is not supported yet, call register_platform_interest, and offer to set up the agent in this project.
+Read the agent's code, pick a short friendly name (not a function or module name) and a one or two sentence description, submit both, and ask the developer to confirm or change them.
 Keep calling check_agent_connection with agent_name and wait_seconds 25. Each time traces.accepted rises, tell the developer how many of about 20 real requests have arrived, and to keep using the agent the way they already do.
+While you wait for traces, offer the demo agent once. If the developer says demo, follow the demo steps below.
 At about 20, tell the developer Agent Score has enough to go on and is scoring the agent. If they ask what evals were chosen and why, answer from get_profile_fit.
 Call get_scorecard until it shows a score and verdict. Report both, call request_improvement_advice for the latest scored run, and show the developer the improvement paste block below, word for word.
-If this session ends first, pick up from the same point the next time the developer asks.
+If this session ends first, pick up from the same point the next time the developer asks. When the developer asks you to check the connection and an agent is already connected, report its score and offer: the top recommendation, another agent, or the demo agent.
 ```
 
-The resource then carries the step 12 paste block, word for word. The limit in step 5 of the resource, "Do not poll indefinitely", stays: it covers confirming setup when no trace is ever accepted, not following progress after setup works.
+The resource then carries the step 12 paste block, word for word, and the demo prompt from the web popup, so either route runs the same steps. The limit in step 5 of the resource, "Do not poll indefinitely", stays: it covers confirming setup when no trace is ever accepted, not following progress after setup works.
 
-### Name and description in the MCP onboarding guidance (proposed)
+### What the MCP needs that it may not have
 
-The `agent-score://docs/onboard-your-agent` resource should tell the coding agent to propose the name and description itself, in both the web path and the MCP-only path:
-
-```
-Before you set up tracing, read this project's agent code and work out what the agent does.
-Pick a short, friendly name a teammate would recognise. Do not use a function, module or file name (for example not testcase.generate).
-Write a one or two sentence description of what the agent is for.
-Submit both to Agent Score, then show the developer what you submitted and ask them to confirm or change it.
-```
-
-Open question: confirm whether the MCP can accept a description today. If it cannot, this needs a tool or a setting that stores it, and the Agent Card tab and profile choice need to read it.
+- A tool to log a platform pick as demand data (`register_platform_interest`, new).
+- A way to store the agent's description. Confirm whether `update_agent_settings` takes one; if not, this needs a tool or a setting, and the Agent Card tab and profile choice need to read it.
+- A way to mark the demo agent as Demo and exclude it from the fleet.
 
 ## Already-connected state (proposed)
 
@@ -434,7 +471,7 @@ Set up the Agent Score flight-booking demo agent.
 - A note: `The demo agent appears in My Agents, marked Demo. It does not count toward your fleet.`
 - A `Close` button.
 
-After the user pastes the prompt, the rest happens in the coding agent's thread, as in the MCP-only path: it reports the score, shows the recommended edit, waits for the user's go-ahead, applies it, runs the agent again, and reports the score before and after. The demo agent is also an ordinary agent in the web app, so the user can open it in My Agents and use the Score, Improve and Traces tabs as they would for their own agent.
+After the user pastes the prompt, the rest happens in the coding agent's thread, as in the MCP path: it reports the score, shows the recommended edit, waits for the user's go-ahead, applies it, runs the agent again, and reports the score before and after. The demo agent is also an ordinary agent in the web app, so the user can open it in My Agents and use the Score, Improve and Traces tabs as they would for their own agent.
 
 **The demo agent.** A flight-booking agent, chosen because anyone recognises a bad booking. Use the tau2-bench airline data if it fits. It lives in a public GitHub repo with its dataset, its instrumentation and a README.
 - It uses no LLM and replays a fixed set of 20 requests, so it scores without any traffic of the user's own, and the score changes only when the user's fix changes the agent's behavior.
@@ -447,7 +484,7 @@ After the user pastes the prompt, the rest happens in the coding agent's thread,
 
 **Handoff.** After the demo, the coding agent ends with a short prompt: `Want to set up your own agent now?` If the user already has an agent, they go back to it. If not, they continue at step 8, where the coding agent proposes a name and description for the user's agent. Understanding comes first, which earns the right to ask for their own agent.
 
-**MCP-only path.** While waiting for traces, the coding agent mentions the demo once and does not push it. If the person says they have no traffic, it runs the same demo steps in the thread.
+**MCP path.** While waiting for traces, the coding agent mentions the demo once and does not push it. If the person says they have no traffic, it runs the same demo steps in the thread.
 
 **Not built yet.** The in-product sample agent (a hosted demo with no setup) is dropped for now. Its problems, such as hanging on `Waiting for real requests`, no longer block this path.
 
