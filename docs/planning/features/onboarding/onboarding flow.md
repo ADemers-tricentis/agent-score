@@ -6,22 +6,45 @@
     - A `Connect` button. It opens the Integrations page for the MCP with the Connect popup from step 3 already open.
 
     Before setup starts, the Integrations page itself, titled `Integrations`, shows one card, `Connect a coding agent (MCP)`, with a `Connect` button that opens the same popup.
+
+    **Proposed:** once a coding agent is connected, the Home card and the Integrations card change to a connected state (see "Already-connected state (proposed)").
 3. The Connect popup is titled `Connect` and has a close button. It shows:
     AgentScore scores an agent you already run and tells you whether it can ship. Your coding agent does the setup.
     1. Connect the coding agent you already use to AgentScore via MCP
     2. Use the agent as you normally would
     3. Come back to read its score and verdict, along with improvement steps
 
-    A `Continue` button takes them to step 4.
-    The close button, here and on the popups in steps 4 and 5, closes the popup and leaves the user on the Integrations page.
-4. The next popup is titled `Which coding agent are you using?`, has a close button, and gives five choices:
+    These three lines are the whole popup. Keep the copy this short; do not add paragraphs.
+
+    A `Continue` button takes them to step 3a.
+    The close button, here and on the popups in steps 3a, 4 and 5, closes the popup and leaves the user on the Integrations page.
+3a. **Proposed.** The next popup is titled `Where does your agent live?`, has a close button, and gives two choices:
+    1. I built it myself (me or my team)
+    2. It runs on a platform
+
+    It has `Back` (to step 3). There is no `Continue`: picking a choice goes straight to the next popup, and these two options are not shown again.
+    - `I built it myself` goes to step 4.
+    - `It runs on a platform` goes to step 3b.
+3b. **Proposed.** The popup is titled `Which platform?`, has a close button, and shows a list of platforms, one pick at a time:
+    - Microsoft Copilot Studio
+    - Amazon Bedrock
+    - Google Vertex AI
+    - Salesforce Agentforce
+    - n8n
+    - Dify
+    - Another platform (with a text box for its name)
+
+    It has `Back` (to step 3a) and `Continue`. `Continue` stays disabled until a platform is picked, and for `Another platform` until a name is typed. The list is a starting set; it should be easy to extend. Platform integrations are not built yet, so every platform currently ends in the "not supported yet" state below.
+    - **Not supported yet.** After a platform is picked and `Continue` is pressed, the popup shows: `{{platform}} isn't supported yet. We've noted your interest and we'll come back to you.` Below it, one button: `Connect an agent I built myself` (goes to step 4). The demo agent is not offered here, because the user is not connected yet. The selection, with the user's tenant and the platform name (including free text from `Another platform`), is logged as demand data.
+    - When a platform is supported, its pick will lead to that platform's own setup instead of the "not supported yet" state.
+4. The next popup is titled `Which coding agent are you using?`, is shown only on the `I built it myself` branch, has a close button, and gives five choices:
     1. Claude code
     2. Cursor
     3. Codex
     4. Claude desktop
     5. Another client
 
-    It has `Back` (to step 3) and `Continue`. `Continue` stays disabled until a choice is picked. Claude desktop and Another client skip step 5 and go straight to their "set it up myself" instructions in step 6.
+    It has `Back` (to step 3a) and `Continue`. `Continue` stays disabled until a choice is picked. Claude desktop and Another client skip step 5 and go straight to their "set it up myself" instructions in step 6.
 5. The next popup is titled with the chosen client's name, has a close button, and gives two options:
     1. Have my coding agent set it up
     2. Set it up myself (advanced)
@@ -174,12 +197,30 @@
         - Claude apps: disconnect the connector in Customize → Connectors.
         - Codex: `codex mcp logout agent-score` from a terminal.
     These stop the client using its sign-in. To revoke it everywhere, ask your Tosca Cloud administrator to end your sessions.
-8. As soon as the connection is detected, a popup opens over the Integrations page:
-    - Title: `Connection detected. Name your agent.`, with a close button.
-    - A text box labeled `What do you want to name your agent?`
-    - A `Submit` button. Pressing Enter in the text box also submits. Submitting an empty name shows `Enter a name.` under the text box.
+8. As soon as the connection is detected, a popup opens over the Integrations page. **Proposed:** the user no longer types the name; their coding agent proposes it. The popup has two states.
 
-    Once the user submits a name, we take them to My Agents/{{agent-name}}.
+    **State 1, waiting for the proposal:**
+    - Title: `Connection detected. Let your coding agent introduce your agent.`, with a close button.
+    - `Paste the following into your coding agent. It will read your agent's code and suggest a name and a short description:`
+    - A code box and a Copy button, containing:
+
+    ```
+    Use agent-score to register the agent in this project.
+    Read the agent's code and work out what it does. Pick a short, friendly name a teammate would recognise, not a function or module name. Write a one or two sentence description of what the agent is for.
+    Submit the name and description to agent-score, then tell me what you submitted.
+    ```
+    - A hourglass line, `Waiting for your coding agent.`
+    - A link, `I'll name it myself`, which switches to the manual state below.
+
+    **State 2, confirm the proposal.** When the proposal arrives, the popup updates on its own:
+    - Title: `Is this your agent?`
+    - `Here is what your coding agent thinks it is.`
+    - Two editable fields, pre-filled: `Name` and `What it's for`.
+    - A `Confirm` button. Pressing Enter in the name field also confirms. Confirming with an empty name shows `Enter a name.` under the field.
+
+    **Manual state.** `I'll name it myself` shows the old form: a text box labeled `What do you want to name your agent?` and a `Submit` button, with the same `Enter a name.` validation. The description is optional here.
+
+    Once the user confirms or submits, we take them to My Agents/{{agent-name}}. The confirmed name and description are what the rest of the flow uses, and `What it's for` is shown on the Agent Card tab and used when Agent Score chooses the profile.
 
     The agent page, here and in steps 9–12, has:
     - A breadcrumb: `My Agents / {{agent-name}}`.
@@ -198,8 +239,10 @@
     `Paste the following into your coding agent. It will update your current agent to properly send traces to AgentScore:`
 
     ```
-    Set this agent up to send its traces to Agent Score. Name it {{agent-name}}.
+    Use agent-score to check my AgentScore connection.
     ```
+
+    - **Proposed:** below that card, a second card: `No traffic yet? See what a score looks like on a demo agent while you wait.` with a `Try a demo agent` button. It opens the demo path (see "Demo agent path (proposed)"). The same card sits under the status-check card in step 9.
 
 9. Once the first trace is received, the setup paste box from step 8 goes away and we show, with the same hourglass icon:
     - `Request received. Keep using your agent.`
@@ -281,11 +324,11 @@ Web screens this person skips:
 
 In the thread, each message from the coding agent ends with one next action for the person:
 
-1. Instead of the naming popup in step 8. Once sign-in finishes and the person is back in the thread, the coding agent checks the connection with `check_agent_connection`. With no agent sending traces yet, it asks:
+1. Instead of the name and description popup in step 8. Once sign-in finishes and the person is back in the thread, the coding agent checks the connection with `check_agent_connection`. With no agent sending traces yet, it reads the agent's code, picks a short friendly name (not a function or module name) and a one or two sentence description, submits both to Agent Score, and asks:
 
-    `What should Agent Score call this agent?`
+    `Here is what I think this agent is. Name: {{agent-name}}. What it's for: {{agent-description}}. Is that right, or what should I change?`
 
-    Next action: type a name. That name is {{agent-name}} from here on.
+    Next action: confirm, or say what to change. The confirmed name is {{agent-name}} from here on.
 
 2. Instead of the paste box and waiting page in step 8. The coding agent does what the step 8 paste asks, under {{agent-name}}, then says:
 
@@ -340,3 +383,80 @@ If this session ends first, pick up from the same point the next time the develo
 ```
 
 The resource then carries the step 12 paste block, word for word. The limit in step 5 of the resource, "Do not poll indefinitely", stays: it covers confirming setup when no trace is ever accepted, not following progress after setup works.
+
+### Name and description in the MCP onboarding guidance (proposed)
+
+The `agent-score://docs/onboard-your-agent` resource should tell the coding agent to propose the name and description itself, in both the web path and the MCP-only path:
+
+```
+Before you set up tracing, read this project's agent code and work out what the agent does.
+Pick a short, friendly name a teammate would recognise. Do not use a function, module or file name (for example not testcase.generate).
+Write a one or two sentence description of what the agent is for.
+Submit both to Agent Score, then show the developer what you submitted and ask them to confirm or change it.
+```
+
+Open question: confirm whether the MCP can accept a description today. If it cannot, this needs a tool or a setting that stores it, and the Agent Card tab and profile choice need to read it.
+
+## Already-connected state (proposed)
+
+A returning user, or one who forgot what they connected, cannot re-run or review the connection today. Once a coding agent is connected:
+
+- The Home card changes from `Connect the coding agent you already use` to `Your coding agent is connected`, with the client name, the time of the last trace, a `View agents` button, and a `Try a demo agent` link.
+- The Integrations card shows the same details, plus:
+    - The client's setup instructions from step 6, collapsed under `Setup instructions`.
+    - A `Connect another coding agent` button, which reopens step 3a.
+    - A `Check connection` paste box: `Use agent-score to check my agent connection.`
+- The Connection details and Troubleshooting sections from step 7 stay available.
+- For demos and testing, a way to reset the connected state (for example a staging-only `Start over` action) so the first-run flow can be shown again.
+
+## Demo agent path (proposed)
+
+The biggest friction is getting traffic and data from the user's own agent. The demo path lets someone see what Agent Score does, including the fix and the before and after, without any traffic of their own. The goal is that they understand the product's value, not that they get value from the demo agent. It is offered only after they have connected a coding agent.
+
+**There is no demo page in the product.** The demo is one paste prompt, and the user's coding agent does all of it.
+
+**Entry points.** The demo is offered only once a coding agent is connected:
+- **Steps 8 and 9, the card on the agent page.** `No traffic yet? See what a score looks like on a demo agent while you wait. Your coding agent runs it for you.` with a `Try a demo agent` button. This is the main entry, because the wait for about 20 real requests is where users stall.
+- **The connected Home card.** `Try a demo agent`, for people who come back later.
+- It is not offered before the user connects, including in the "not supported yet" state in step 3a.
+
+**What the user sees.** `Try a demo agent` opens a popup titled `Try a demo agent`:
+- `Paste the following into your coding agent. It pulls a flight-booking demo agent, runs it with 20 automated requests that include deliberate mistakes, scores it, applies a fix, and scores it again, so you can see the before and after.`
+- A code box and a Copy button, containing:
+
+```
+Set up the Agent Score flight-booking demo agent.
+1. Pull the demo agent from {{demo-repo-url}} and run it. It replays 20 automated requests, with some mistakes built in, and sends the traces to Agent Score.
+2. Use agent-score to check that the traces arrived, then start scoring the agent and tell me the score.
+3. Use agent-score to read the improvement advice. Take the top recommendation, show me the edit you would make, and wait for my go-ahead before you apply it.
+4. After I approve it, run the agent again and score it again. Tell me the score before and after.
+```
+- A note: `The demo agent appears in My Agents, marked Demo. It does not count toward your fleet.`
+- A `Close` button.
+
+After the user pastes the prompt, the rest happens in the coding agent's thread, as in the MCP-only path: it reports the score, shows the recommended edit, waits for the user's go-ahead, applies it, runs the agent again, and reports the score before and after. The demo agent is also an ordinary agent in the web app, so the user can open it in My Agents and use the Score, Improve and Traces tabs as they would for their own agent.
+
+**The demo agent.** A flight-booking agent, chosen because anyone recognises a bad booking. Use the tau2-bench airline data if it fits. It lives in a public GitHub repo with its dataset, its instrumentation and a README.
+- It uses no LLM and replays a fixed set of 20 requests, so it scores without any traffic of the user's own, and the score changes only when the user's fix changes the agent's behavior.
+- It has seeded failures on both sides. Accuracy criteria: books the flight with the fewest legs, handles the changeover well. Never-do rules: no flights through certain countries, no layovers under about 30 minutes, no mixing airlines on a single trip.
+- Each seeded failure has one small, obvious code fix, and each maps to one recommendation. The first recommendation should be easy for a coding agent to fix correctly.
+- To start over, delete the folder and pull the repo again. A `fixed` branch holds the finished fix for anyone whose edit goes wrong.
+- The demo agent is marked `Demo` in My Agents and is excluded from real fleet counts and scores, as other example agents are.
+
+**Before and after.** Each scoring run is a run of the demo agent, so the first and second run appear in its run history. Score history per run exists in the MCP (`list_runs`); how the web app should show two runs side by side is still to be confirmed. The coding agent also reports both scores in its thread.
+
+**Handoff.** After the demo, the coding agent ends with a short prompt: `Want to set up your own agent now?` If the user already has an agent, they go back to it. If not, they continue at step 8, where the coding agent proposes a name and description for the user's agent. Understanding comes first, which earns the right to ask for their own agent.
+
+**MCP-only path.** While waiting for traces, the coding agent mentions the demo once and does not push it. If the person says they have no traffic, it runs the same demo steps in the thread.
+
+**Not built yet.** The in-product sample agent (a hosted demo with no setup) is dropped for now. Its problems, such as hanging on `Waiting for real requests`, no longer block this path.
+
+## Instrumentation (proposed)
+
+Add events for the new branches. They belong in [AgentScore-Beta-Metrics-Instrumentation.md](../../../documentation/AgentScore-Beta-Metrics-Instrumentation.md) once agreed:
+
+- Where-it-lives choice: `built myself` or `platform`.
+- Platform selected, with the platform name and whether it is supported. Free-text `Another platform` entries are logged as entered.
+- Demo agent: prompt opened (from the waiting screen or from Home), first run scored, second run scored, and the score change between the two. Whether the user set up their own agent afterwards.
+- Name and description: proposed by the coding agent, edited by the user, or entered manually.
+- Time from sign-in to first score, split by demo and own agent.

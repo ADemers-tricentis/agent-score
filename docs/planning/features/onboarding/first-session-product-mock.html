@@ -392,6 +392,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--primary); outli
     <span id="hint"></span>
     <button type="button" data-jump="home">Home</button>
     <button type="button" data-jump="wizard">Connect popup</button>
+    <button type="button" data-jump="where">Where it lives</button>
     <button type="button" data-jump="detect">Connection detected</button>
     <button type="button" data-jump="waiting">Waiting</button>
     <button type="button" data-jump="partial">12 of 20</button>
@@ -399,6 +400,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--primary); outli
     <button type="button" data-jump="score">Score</button>
     <button type="button" data-jump="improve">Improve</button>
     <button type="button" data-jump="thread">MCP thread</button>
+    <button type="button" data-jump="demo">Demo agent</button>
     <button type="button" data-jump="start">Start over</button>
     <span id="clientbar" class="barbit">
       <span>Preview client</span>
@@ -410,6 +412,12 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--primary); outli
       <span>Preview setup</span>
       <button type="button" data-mode="agent">Have my coding agent set it up</button>
       <button type="button" data-mode="self">Set it up myself</button>
+    </span>
+    <span id="namebar" class="barbit">
+      <span>Preview name step</span>
+      <button type="button" data-name-stage="waiting">Waiting for coding agent</button>
+      <button type="button" data-name-stage="confirm">Proposal arrives</button>
+      <button type="button" data-name-stage="manual">Name it myself</button>
     </span>
     <span id="advicebar" class="barbit">
       <span>Preview advice</span>
@@ -482,19 +490,19 @@ const CODEX_PLACES = [
   ["cli", "Codex CLI"],
 ];
 
-const PARTS = [
+const PARTS_STD = [
   ["Task completion", 60, 50],
   ["Tool use", 70, 30],
   ["Refund eligibility", 75, 20],
 ];
 
-const EVALS = [
+const EVALS_STD = [
   ["Task completion", "0.80", "50"],
   ["Tool use", "0.70", "30"],
   ["Refund eligibility", "0.90", "20"],
 ];
 
-const ADVICE = [
+const ADVICE_STD = [
   {
     rank: "high",
     title: "Check the refund window before saying a refund was issued",
@@ -521,7 +529,7 @@ const ADVICE = [
   },
 ];
 
-const TRACES = {
+const TRACES_STD = {
   "4f8c2a91b7e0": {
     when: "11/11/2026, 1:42:10 PM",
     steps: [
@@ -548,6 +556,19 @@ const TRACES = {
   },
 };
 
+let PARTS = PARTS_STD, EVALS = EVALS_STD, ADVICE = ADVICE_STD, TRACES = TRACES_STD;
+function useData() {}
+
+const PLATFORMS = [
+  "Microsoft Copilot Studio",
+  "Amazon Bedrock",
+  "Google Vertex AI",
+  "Salesforce Agentforce",
+  "n8n",
+  "Dify",
+  "Another platform",
+];
+
 function fresh() {
   return {
     screen: "home",
@@ -557,7 +578,13 @@ function fresh() {
     client: "",
     mode: "agent",
     agentName: "",
+    agentDesc: "",
     nameError: false,
+    nameStage: "waiting",
+    where: "",
+    platform: "",
+    platformOther: "",
+    connected: false,
     phase: "waiting",
     tab: "score",
     advice: "none",
@@ -625,8 +652,16 @@ Use the URL as given, including everything after the ?. Do not add headers, toke
 The file is outside this project; ask me to approve the change if needed.
 Then tell me to restart Codex and authenticate agent-score.`;
 }
+function agentDesc() {
+  return state.agentDesc.trim() || "Helps customers with refunds, cancellations and order questions.";
+}
+function introPaste() {
+  return `Use agent-score to register the agent in this project.
+Read the agent's code and work out what it does. Pick a short, friendly name a teammate would recognise, not a function or module name. Write a one or two sentence description of what the agent is for.
+Submit the name and description to agent-score, then tell me what you submitted.`;
+}
 function setupPaste() {
-  return `Set this agent up to send its traces to Agent Score. Name it ${agentName()}.`;
+  return `Use agent-score to check my AgentScore connection.`;
 }
 function purposePaste() {
   return `Use agent-score to tell me what ${agentName()} is for.`;
@@ -813,6 +848,31 @@ function modeLabel() {
 }
 
 function integrationsPage() {
+  if (state.connected && state.setup && state.client) {
+    const chosen = clientById(state.client);
+    return `
+      ${pageHead("integrations", "Integrations")}
+      <div class="content">
+        <div class="card"><div class="cc plain">
+          <div class="chiprow" style="margin-bottom:12px">
+            <span class="chip success">Connected</span>
+            <span class="chip outline">${esc(chosen.label)}</span>
+            <span class="chip info">${esc(modeLabel())}</span>
+          </div>
+          <h2 style="margin-top:0">Your coding agent is connected</h2>
+          <p>${esc(chosen.label)} is connected. Last trace received a few minutes ago.</p>
+          <p><button class="btn outlined" type="button" data-wizard-at="where">Connect another coding agent</button></p>
+          <p style="margin-top:16px">Check the connection at any time. Paste this into your coding agent:</p>
+          ${code("check-prompt", "Use agent-score to check my agent connection.")}
+          <details class="section" style="margin-top:16px">
+            <summary>${icon("chevronRight", 20)}<h2>Setup instructions</h2></summary>
+            <div style="padding:0 4px 8px">${effectiveMode() === "agent" ? agentInstructions() : selfInstructions()}</div>
+          </details>
+          ${connectionDetails()}
+          ${troubleshooting()}
+        </div></div>
+      </div>`;
+  }
   if (!state.setup || !state.client) {
     return `
       ${pageHead("integrations", "Integrations")}
@@ -843,6 +903,25 @@ function integrationsPage() {
 }
 
 function homePage() {
+  if (state.connected) {
+    const label = clientById(state.client)?.label || "Claude code";
+    return `
+      ${pageHead("home", "Home")}
+      <div class="content">
+        <div class="card" style="max-width:720px">
+          <div class="cc">
+            <span class="chip success">Connected</span>
+            <h2 style="margin-top:16px">Your coding agent is connected</h2>
+            <p style="margin:0 0 16px">${esc(label)} is connected. Last trace received a few minutes ago.</p>
+            <div class="chiprow">
+              <button class="btn contained" type="button" data-jump="agents">View agents</button>
+              <button class="btn text" type="button" data-wizard-at="where">Connect another coding agent</button>
+              <button class="btn text" type="button" data-start-demo>Try a demo agent</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }
   return `
     ${pageHead("home", "Home")}
     <div class="content">
@@ -857,28 +936,33 @@ function homePage() {
     </div>`;
 }
 
-function statusChip() {
-  if (state.phase === "scored") return `<span class="chip success">Scored</span>`;
-  if (state.phase === "enough") return `<span class="chip info">20 of about 20</span>`;
-  if (state.phase === "partial") return `<span class="chip neutral">12 of about 20</span>`;
+function statusChip(phase = state.phase) {
+  if (phase === "scored") return `<span class="chip success">Scored</span>`;
+  if (phase === "enough") return `<span class="chip info">20 of about 20</span>`;
+  if (phase === "partial") return `<span class="chip neutral">12 of about 20</span>`;
   return `<span class="chip neutral">Waiting for real requests</span>`;
 }
 
 function agentsPage() {
-  const name = agentName();
-  const row = name ? `
+  const ownName = agentName();
+  const score = (phase) => phase !== "scored" ? "—" : `<span style="display:inline-flex;gap:8px;align-items:center"><span>66</span><span class="pill warning">Needs work</span></span>`;
+  let rows = "";
+  if (ownName) {
+    rows += `
     <tr class="row" data-open-agent>
-      <td><button class="agentlink" type="button" data-open-agent>${esc(name)}</button></td>
-      <td>${statusChip()}</td>
-      <td>${state.phase === "scored" ? `<span style="display:inline-flex;gap:8px;align-items:center"><span>66</span><span class="pill warning">Needs work</span></span>` : "—"}</td>
-    </tr>` : `<tr><td colspan="3" style="color:var(--text2)">No agents yet.</td></tr>`;
+      <td><button class="agentlink" type="button" data-open-agent>${esc(ownName)}</button></td>
+      <td>${statusChip(state.phase)}</td>
+      <td>${score(state.phase)}</td>
+    </tr>`;
+  }
+  if (!rows) rows = `<tr><td colspan="3" style="color:var(--text2)">No agents yet.</td></tr>`;
   return `
     ${pageHead("agents", "My Agents")}
     <div class="content">
       <div class="card">
         <table>
           <thead><tr><th>Agent</th><th>Status</th><th>Score</th></tr></thead>
-          <tbody>${row}</tbody>
+          <tbody>${rows}</tbody>
         </table>
       </div>
     </div>`;
@@ -897,6 +981,14 @@ function statusCard() {
     </div></div>`;
 }
 
+function demoPromptCard() {
+  return `
+    <div class="card" style="max-width:720px;margin-top:16px"><div class="cc plain">
+      <p><strong>No traffic yet?</strong> See what a score looks like on a demo agent while you wait. Your coding agent runs it for you.</p>
+      <p><button class="btn outlined" type="button" data-start-demo>Try a demo agent</button></p>
+    </div></div>`;
+}
+
 function waitingBody() {
   const name = esc(agentName());
   return `
@@ -908,7 +1000,8 @@ function waitingBody() {
     <div class="card" style="max-width:720px"><div class="cc plain">
       <p>Paste the following into your coding agent. It will update your current agent to properly send traces to AgentScore:</p>
       ${code("trace-prompt", setupPaste())}
-    </div></div>`;
+    </div></div>
+    ${demoPromptCard()}`;
 }
 
 function partialBody() {
@@ -920,7 +1013,8 @@ function partialBody() {
       <p class="body">12 of about 20 real requests to ${name}. Keep using it the way you already do. A hello or a made-up request does not count. You can close this page; the score will be on ${name} in My Agents.</p>
       ${progress(12)}
     </div>
-    ${statusCard()}`;
+    ${statusCard()}
+    ${demoPromptCard()}`;
 }
 
 function enoughBody() {
@@ -941,7 +1035,9 @@ function enoughBody() {
 
 function scoreBody() {
   const circ = 2 * Math.PI * 58;
-  const dash = (circ * 0.66).toFixed(1);
+  const after = false;
+  const total = 66;
+  const dash = (circ * total / 100).toFixed(1);
   const rows = PARTS.map(([label, score, weight]) => `
     <div class="dimrow static">
       <span class="n">${label}</span>
@@ -956,23 +1052,23 @@ function scoreBody() {
         <div class="gauge" aria-hidden="true">
           <svg width="132" height="132" viewBox="0 0 132 132">
             <circle cx="66" cy="66" r="58" fill="none" stroke="hsl(240,5%,92%)" stroke-width="12"/>
-            <circle cx="66" cy="66" r="58" fill="none" stroke="hsl(23,80%,45%)" stroke-width="12"
+            <circle cx="66" cy="66" r="58" fill="none" stroke="${after ? "hsl(122,50%,35%)" : "hsl(23,80%,45%)"}" stroke-width="12"
               stroke-dasharray="${dash} ${circ.toFixed(1)}" stroke-linecap="butt"/>
           </svg>
-          <div class="num"><b>66</b><span>/ 100</span></div>
+          <div class="num"><b>${total}</b><span>/ 100</span></div>
         </div>
         <div>
           <div class="chiprow">
-            <span class="pill warning">Needs work</span>
+            <span class="pill ${after ? "success" : "warning"}">${after ? "Ship" : "Needs work"}</span>
             <button class="btn contained newctl" type="button" data-improve>${icon("improve", 18)}Improve</button>
           </div>
-          <p class="fine" style="margin-top:12px">66 out of 100. Needs work is 55 to 69.</p>
+          <p class="fine" style="margin-top:12px">${total} out of 100. ${after ? "Ship is 80 and above." : "Needs work is 55 to 69."}</p>
         </div>
       </div>
     </div></div>
     <div class="card"><div class="cc">
       <h2>Score breakdown</h2>
-      <p class="caption" style="margin:0 0 8px">These three parts weight to 66.</p>
+      <p class="caption" style="margin:0 0 8px">These three parts weight to ${total}.</p>
       ${rows}
     </div></div>`;
 }
@@ -1126,13 +1222,13 @@ function bubble(who, html, note, you) {
 function threadPage() {
   const name = esc(agentName());
   const blocks = [
-    bubble("Coding agent", `<p>What should Agent Score call this agent?</p>`, "Instead of the naming popup. Calls check_agent_connection. Nothing is sending traces yet. Next action: type a name."),
+    bubble("Coding agent", `<p>Here is what I think this agent is. Name: ${name}. What it's for: ${esc(agentDesc())}. Is that right, or what should I change?</p>`, "Instead of the name and description popup. Calls check_agent_connection, reads the agent's code, and submits both. Next action: confirm, or say what to change."),
   ];
   if (state.threadStep === 1) {
-    blocks.push(`<div class="msg you"><div class="who">You</div><div class="bubble"><label class="label" for="thread-name">Name</label><input id="thread-name" class="textfield" value="${name}" autocomplete="off" /><div class="actions" style="margin-top:10px"><button class="btn contained" type="button" data-thread-name>Send</button></div></div></div>`);
+    blocks.push(`<div class="msg you"><div class="who">You</div><div class="bubble"><label class="label" for="thread-name">Name (edit it, or confirm)</label><input id="thread-name" class="textfield" value="${name}" autocomplete="off" /><div class="actions" style="margin-top:10px"><button class="btn contained" type="button" data-thread-name>Confirm</button></div></div></div>`);
   }
   if (state.threadStep >= 2) {
-    blocks.push(bubble("You", `<p>${name}</p>`, "", true));
+    blocks.push(bubble("You", `<p>Yes, that's right.</p>`, "", true));
     blocks.push(bubble("Coding agent", `<p>${name} is set up. Nothing from ${name} yet. Restart ${name} if it was running, then use it the way you already do. A score needs about 20 real requests. A hello or a made-up request does not count.</p>`, "Instead of the paste box and the waiting page. It does what that paste asks, under this name. Next action: use the agent."));
   }
   if (state.threadStep >= 3) {
@@ -1165,6 +1261,12 @@ Call get_scorecard until it shows a score and verdict. Report both, call request
 If this session ends first, pick up from the same point the next time the developer asks.`)}
         <p style="margin-top:12px">The resource then carries the step 12 paste block, word for word.</p>
         ${code("mcp-paste", improvePaste())}
+        <h2 style="margin-top:20px">Name and description</h2>
+        <p>The same resource should tell the coding agent to propose the name and description itself, in the web path and in this thread:</p>
+        ${code("mcp-name", `Before you set up tracing, read this project's agent code and work out what the agent does.
+Pick a short, friendly name a teammate would recognise. Do not use a function, module or file name (for example not testcase.generate).
+Write a one or two sentence description of what the agent is for.
+Submit both to Agent Score, then show the developer what you submitted and ask them to confirm or change it.`)}
         <p class="fine" style="margin-top:12px">The limit in step 5 of the resource, "Do not poll indefinitely", stays. It covers confirming setup when no trace is ever accepted, not following progress after setup works.</p>
       </div></div>
     </div>`;
@@ -1186,6 +1288,51 @@ function wizardDialog() {
         <div class="da"><button class="btn contained" type="button" data-wizard-next>Continue</button></div>
       </div></div>`;
   }
+  if (state.wizard === "where") {
+    return `
+      <div class="backdrop"><div class="dialog narrow" role="dialog" aria-modal="true" aria-labelledby="where-title">
+        <div class="dt"><h2 id="where-title">Where does your agent live?</h2><button class="iconbtn" type="button" aria-label="Close" data-close-wizard>${icon("close", 20)}</button></div>
+        <div class="dc">
+          <div class="stackcards">
+            <button type="button" class="radiocard" data-pick-where="built"><span class="dot"></span>I built it myself (me or my team)</button>
+            <button type="button" class="radiocard" data-pick-where="platform"><span class="dot"></span>It runs on a platform</button>
+          </div>
+        </div>
+        <div class="da"><button class="btn text left" type="button" data-wizard-at="intro">Back</button></div>
+      </div></div>`;
+  }
+  if (state.wizard === "platform") {
+    const list = PLATFORMS.map((item) => `<button type="button" class="radiocard" data-pick-platform="${esc(item)}" aria-pressed="${state.platform === item}"><span class="dot"></span>${esc(item)}</button>`).join("");
+    let more = "";
+    if (state.platform === "Another platform") {
+      more = `<label class="label" for="platform-other" style="display:block;margin-top:12px">Which platform?</label><input id="platform-other" class="textfield" value="${esc(state.platformOther)}" autocomplete="off" />`;
+    }
+    const ready = state.platform && (state.platform !== "Another platform" || state.platformOther.trim());
+    return `
+      <div class="backdrop"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="platform-title">
+        <div class="dt"><h2 id="platform-title">Which platform?</h2><button class="iconbtn" type="button" aria-label="Close" data-close-wizard>${icon("close", 20)}</button></div>
+        <div class="dc"><div class="radiocards">${list}</div>${more}</div>
+        <div class="da">
+          <button class="btn text left" type="button" data-wizard-at="where">Back</button>
+          <button class="btn contained" type="button" data-wizard-next ${ready ? "" : "disabled"}>Continue</button>
+        </div>
+      </div></div>`;
+  }
+  if (state.wizard === "unsupported") {
+    const which = state.platform === "Another platform" ? (state.platformOther.trim() || "That platform") : state.platform;
+    return `
+      <div class="backdrop"><div class="dialog narrow" role="dialog" aria-modal="true" aria-labelledby="unsupported-title">
+        <div class="dt"><h2 id="unsupported-title">${esc(which)} isn't supported yet</h2><button class="iconbtn" type="button" aria-label="Close" data-close-wizard>${icon("close", 20)}</button></div>
+        <div class="dc">
+          <p>We've noted your interest and we'll come back to you.</p>
+          <p class="fine" style="margin-top:12px">Mock note. This pick is logged as demand data: tenant tais, platform ${esc(which)}.</p>
+        </div>
+        <div class="da">
+          <button class="btn text left" type="button" data-wizard-at="platform">Back</button>
+          <button class="btn contained" type="button" data-where-built>Connect an agent I built myself</button>
+        </div>
+      </div></div>`;
+  }
   if (state.wizard === "client") {
     const cards = CLIENTS.map((item) => `<button type="button" class="radiocard" data-pick-client="${item.id}" aria-pressed="${state.client === item.id}"><span class="dot"></span>${item.label}</button>`).join("");
     return `
@@ -1193,7 +1340,7 @@ function wizardDialog() {
         <div class="dt"><h2 id="client-title">Which coding agent are you using?</h2><button class="iconbtn" type="button" aria-label="Close" data-close-wizard>${icon("close", 20)}</button></div>
         <div class="dc"><div class="radiocards">${cards}</div></div>
         <div class="da">
-          <button class="btn text left" type="button" data-wizard-at="intro">Back</button>
+          <button class="btn text left" type="button" data-wizard-at="where">Back</button>
           <button class="btn contained" type="button" data-wizard-next ${state.client ? "" : "disabled"}>Continue</button>
         </div>
       </div></div>`;
@@ -1215,15 +1362,66 @@ function wizardDialog() {
 }
 
 function nameDialog() {
+  const close = `<button class="iconbtn" type="button" aria-label="Close" data-close-popup>${icon("close", 20)}</button>`;
+  if (state.nameStage === "waiting") {
+    return `
+      <div class="backdrop"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="name-title">
+        <div class="dt"><h2 id="name-title">Connection detected. Let your coding agent introduce your agent.</h2>${close}</div>
+        <div class="dc">
+          <p>Paste the following into your coding agent. It will read your agent's code and suggest a name and a short description:</p>
+          ${code("intro-prompt", introPaste())}
+          <p class="fine" style="margin-top:12px">Waiting for your coding agent.</p>
+        </div>
+        <div class="da"><button class="btn text" type="button" data-name-stage="manual">I'll name it myself</button></div>
+      </div></div>`;
+  }
+  if (state.nameStage === "confirm") {
+    return `
+      <div class="backdrop"><div class="dialog narrow" role="dialog" aria-modal="true" aria-labelledby="name-title">
+        <div class="dt"><h2 id="name-title">Is this your agent?</h2>${close}</div>
+        <div class="dc">
+          <p>Here is what your coding agent thinks it is.</p>
+          <label class="label" for="agent-name" style="display:block;margin-top:12px">Name</label>
+          <input id="agent-name" class="textfield" value="${esc(state.agentName)}" autocomplete="off" />
+          ${state.nameError ? `<p class="helper">Enter a name.</p>` : ""}
+          <label class="label" for="agent-desc" style="display:block;margin-top:12px">What it's for</label>
+          <input id="agent-desc" class="textfield" value="${esc(state.agentDesc)}" autocomplete="off" />
+        </div>
+        <div class="da"><button class="btn contained" type="button" data-submit-name>Confirm</button></div>
+      </div></div>`;
+  }
   return `
     <div class="backdrop"><div class="dialog narrow" role="dialog" aria-modal="true" aria-labelledby="name-title">
-      <div class="dt"><h2 id="name-title">Connection detected. Name your agent.</h2><button class="iconbtn" type="button" aria-label="Close" data-close-popup>${icon("close", 20)}</button></div>
+      <div class="dt"><h2 id="name-title">Connection detected. Name your agent.</h2>${close}</div>
       <div class="dc">
         <label class="label" for="agent-name">What do you want to name your agent?</label>
         <input id="agent-name" class="textfield" value="${esc(state.agentName)}" autocomplete="off" />
         ${state.nameError ? `<p class="helper">Enter a name.</p>` : ""}
+        <label class="label" for="agent-desc" style="display:block;margin-top:12px">What is it for? (optional)</label>
+        <input id="agent-desc" class="textfield" value="${esc(state.agentDesc)}" autocomplete="off" />
       </div>
       <div class="da"><button class="btn contained" type="button" data-submit-name>Submit</button></div>
+    </div></div>`;
+}
+
+function demoPaste() {
+  return `Set up the Agent Score flight-booking demo agent.
+1. Pull the demo agent from {{demo-repo-url}} and run it. It replays 20 automated requests, with some mistakes built in, and sends the traces to Agent Score.
+2. Use agent-score to check that the traces arrived, then start scoring the agent and tell me the score.
+3. Use agent-score to read the improvement advice. Take the top recommendation, show me the edit you would make, and wait for my go-ahead before you apply it.
+4. After I approve it, run the agent again and score it again. Tell me the score before and after.`;
+}
+
+function demoDialog() {
+  return `
+    <div class="backdrop"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="demo-title">
+      <div class="dt"><h2 id="demo-title">Try a demo agent</h2><button class="iconbtn" type="button" aria-label="Close" data-close-popup>${icon("close", 20)}</button></div>
+      <div class="dc">
+        <p>Paste the following into your coding agent. It pulls a flight-booking demo agent, runs it with 20 automated requests that include deliberate mistakes, scores it, applies a fix, and scores it again, so you can see the before and after.</p>
+        ${code("demo-prompt", demoPaste())}
+        <p class="fine" style="margin-top:12px">The demo agent appears in My Agents, marked Demo. It does not count toward your fleet.</p>
+      </div>
+      <div class="da"><button class="btn contained" type="button" data-close-popup>Close</button></div>
     </div></div>`;
 }
 
@@ -1240,10 +1438,16 @@ function enoughDialog() {
 function hint() {
   const named = state.previewName ? " Preview filled the name checkout-agent." : "";
   if (state.screen === "thread") return "MCP-only path. The thread replaces steps 8–12." + named;
-  if (state.popup === "name") return "Step 8. The connection is in. Ask for a name, then open My Agents / that name.";
+  if (state.popup === "name") return "Step 8. The connection is in. The coding agent proposes a name and description, the user confirms, then My Agents / that name opens.";
   if (state.wizard === "intro") return "Step 3. Connect on Integrations opens this popup.";
+  if (state.wizard === "where") return "Step 3a. Where does the agent live? Picking an option moves on; the options are not shown again.";
+  if (state.wizard === "platform") return "Step 3b. Which platform? Every platform ends in a not-supported message and is logged as demand.";
+  if (state.wizard === "unsupported") return "Step 3a. Platform not supported yet. Offer the build-it-myself branch.";
+  if (state.popup === "demo") return "Demo agent. One paste prompt: the coding agent pulls the agent, sends 20 traces with mistakes, scores it, applies a fix and scores it again.";
   if (state.wizard === "client") return "Step 4. Five clients. Claude desktop and Another client skip the next choice.";
   if (state.wizard === "mode") return "Step 5. Have the coding agent set it up, or set it up yourself.";
+  if (state.connected && state.screen === "home") return "Already-connected state. The Home card shows the connection instead of Connect.";
+  if (state.connected && state.screen === "integrations") return "Already-connected state. Connection summary, check paste, collapsed setup instructions, details and troubleshooting.";
   if (state.screen === "home") return "Steps 1–2. Signed in with a Tosca Cloud account. Connect opens the Connect popup on Integrations.";
   if (state.screen === "integrations" && state.setup) return "Steps 6–7. Instructions, then connection details and troubleshooting. Connection detected opens the name popup.";
   if (state.screen === "integrations") return "Integrations for MCP. Connect opens the popup.";
@@ -1260,11 +1464,12 @@ function hint() {
 }
 
 function viewKey() {
-  return [state.screen, state.wizard, state.popup, state.phase, state.tab, state.client, state.mode, state.advice, state.threadStep, state.threadAsked, state.setup, state.agentName, state.trace].join("|");
+  return [state.screen, state.wizard, state.popup, state.phase, state.tab, state.client, state.mode, state.advice, state.threadStep, state.threadAsked, state.setup, state.agentName, state.trace, state.nameStage, state.where, state.platform, state.connected].join("|");
 }
 
 function render() {
   COPY = {};
+  useData();
   const key = viewKey();
   const main = document.getElementById("main");
   const keep = key === lastKey;
@@ -1274,8 +1479,8 @@ function render() {
   main.innerHTML = (pages[state.screen] || homePage)();
   main.scrollTop = top;
   const modal = document.getElementById("modal");
-  modal.innerHTML = state.wizard ? wizardDialog() : state.popup === "name" ? nameDialog() : state.popup === "enough" ? enoughDialog() : "";
-  const focus = modal.querySelector("#agent-name, #thread-name");
+  modal.innerHTML = state.wizard ? wizardDialog() : state.popup === "name" ? nameDialog() : state.popup === "enough" ? enoughDialog() : state.popup === "demo" ? demoDialog() : "";
+  const focus = modal.querySelector("#agent-name, #thread-name, #platform-other");
   if (focus && !keep) focus.focus();
 
   const jump = currentJump();
@@ -1292,6 +1497,11 @@ function render() {
     const allowed = allowsAgent() || mode === "self";
     el.disabled = !allowed;
     el.setAttribute("aria-pressed", effectiveMode() === mode ? "true" : "false");
+  });
+  const namebar = document.getElementById("namebar");
+  namebar.classList.toggle("on", state.popup === "name");
+  namebar.querySelectorAll("[data-name-stage]").forEach((el) => {
+    el.setAttribute("aria-pressed", state.nameStage === el.getAttribute("data-name-stage") ? "true" : "false");
   });
   const advicebar = document.getElementById("advicebar");
   advicebar.classList.toggle("on", state.screen === "agent" && state.phase === "scored" && !state.popup);
@@ -1314,6 +1524,7 @@ function render() {
 
 function currentJump() {
   if (state.popup === "name") return "detect";
+  if (state.wizard === "where" || state.wizard === "platform" || state.wizard === "unsupported") return "where";
   if (state.wizard) return "wizard";
   if (state.screen === "thread") return "thread";
   if (state.screen === "agent" && state.tab === "improve") return "improve";
@@ -1339,6 +1550,7 @@ function showInstructions() {
 
 function goAgent(phase, tab) {
   ensureName();
+  state.connected = true;
   state.screen = "agent";
   state.phase = phase;
   state.tab = tab || "score";
@@ -1346,8 +1558,23 @@ function goAgent(phase, tab) {
   if (phase !== "enough") state.popup = null;
 }
 
+function startDemo() {
+  state.connected = true;
+  state.wizard = null;
+  state.popup = "demo";
+  render();
+}
+
 function jump(to) {
   state.nameError = false;
+  if (to === "demo") return startDemo();
+  if (to === "where") {
+    state.screen = "integrations";
+    state.popup = null;
+    state.wizard = "where";
+    render();
+    return;
+  }
   if (to === "start") {
     Object.assign(state, fresh());
     lastKey = "";
@@ -1384,6 +1611,8 @@ function jump(to) {
   }
   if (to === "detect") {
     showInstructions();
+    state.connected = false;
+    state.nameStage = "waiting";
     state.popup = "name";
     render();
     return;
@@ -1412,7 +1641,12 @@ function jump(to) {
 
 function wizardNext() {
   if (state.wizard === "intro") {
-    state.wizard = "client";
+    state.wizard = "where";
+    render();
+    return;
+  }
+  if (state.wizard === "platform") {
+    if (state.platform) state.wizard = "unsupported";
     render();
     return;
   }
@@ -1448,9 +1682,12 @@ function submitName() {
     render();
     return;
   }
+  const descInput = document.getElementById("agent-desc");
+  state.agentDesc = descInput ? descInput.value.trim() : state.agentDesc;
   state.agentName = value;
   state.previewName = false;
   state.nameError = false;
+  state.connected = true;
   state.popup = null;
   state.phase = "waiting";
   state.tab = "score";
@@ -1520,52 +1757,29 @@ document.body.addEventListener("click", (event) => {
     render();
     return;
   }
-  if (el.dataset.pickMode) return finishMode(el.dataset.pickMode);
-  if (el.dataset.closeWizard !== undefined || el.hasAttribute("data-close-wizard")) {
-    state.wizard = null;
+  if (el.dataset.pickWhere) {
+    state.where = el.dataset.pickWhere;
+    if (state.where === "built") {
+      state.platform = "";
+      state.wizard = "client";
+    } else {
+      state.wizard = "platform";
+    }
     render();
     return;
   }
-  if (el.dataset.closePopup !== undefined || el.hasAttribute("data-close-popup")) {
-    state.popup = null;
+  if (el.dataset.pickPlatform) {
+    state.platform = el.dataset.pickPlatform;
     render();
     return;
   }
-  if (el.dataset.submitName !== undefined || el.hasAttribute("data-submit-name")) return submitName();
-  if (el.dataset.threadName !== undefined || el.hasAttribute("data-thread-name")) return submitThreadName();
-  if (el.dataset.copy) {
-    const text = COPY[el.dataset.copy] || "";
-    if (navigator.clipboard && text) navigator.clipboard.writeText(text).catch(() => {});
-    state.copied = el.dataset.copy;
+  if (el.dataset.whereBuilt !== undefined) {
+    state.where = "built";
+    state.wizard = "client";
     render();
     return;
   }
-  if (el.dataset.client) {
-    state.client = el.dataset.client;
-    if (!allowsAgent()) state.mode = "self";
-    state.cursorOpened = false;
-    state.copied = "";
-    render();
-    return;
-  }
-  if (el.dataset.mode) {
-    if (el.dataset.mode === "agent" && !allowsAgent()) return;
-    state.mode = el.dataset.mode;
-    state.copied = "";
-    render();
-    return;
-  }
-  if (el.dataset.codexWhere) {
-    state.codexWhere = el.dataset.codexWhere;
-    state.copied = "";
-    render();
-    return;
-  }
-  if (el.dataset.addCursor !== undefined || el.hasAttribute("data-add-cursor")) {
-    state.cursorOpened = true;
-    render();
-    return;
-  }
+  if (el.dataset.startDemo !== undefined) return startDemo();
   if (el.dataset.openAgent !== undefined || el.hasAttribute("data-open-agent")) {
     if (!agentName()) return;
     state.screen = "agent";
@@ -1637,6 +1851,14 @@ document.addEventListener("toggle", (event) => {
   const name = event.target.dataset?.section;
   if (name) state.open[name] = event.target.open;
 }, true);
+
+document.body.addEventListener("input", (event) => {
+  if (event.target.id === "platform-other") {
+    state.platformOther = event.target.value;
+    const next = document.querySelector("[data-wizard-next]");
+    if (next) next.disabled = !state.platformOther.trim();
+  }
+});
 
 document.body.addEventListener("keydown", (event) => {
   if (event.key === "Enter" && event.target.id === "agent-name") {
