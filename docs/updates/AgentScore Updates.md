@@ -1,3 +1,39 @@
+## November 23, 2026 Update
+
+### A guided path from connecting your coding agent to your first score
+- Home shows a setup card until your own agent is scored. It names each step, including where you are stuck.
+- When your coding agent connects, Integrations offers to name your agent. You can also create an agent before its first trace arrives.
+- Each agent now has a display name you can edit and a trace name that stays fixed once traces arrive. Your agent page shows "Waiting for real requests", then progress toward the first score, then the score.
+- Advice starts on its own after your first score, once per agent. A credit shortfall does not use up that start.
+
+### A quality gate for every agent
+- Each agent has a gate that is open, closed, not enough data, or not configured, always with a reason.
+- You choose the conditions: a share of flagged traces (including any single trace), a floor on the latest run, or a drop from the previous revision. Templates cover privacy, security, and safety.
+- A single critical failure no longer disappears into an average. Traces that fail a condition are flagged and filterable, and acknowledging a flag or overriding the gate needs a reason.
+- The gate is a signal only. It blocks nothing, and your existing verdict is unchanged. Your coding agent can read it through nine new tools.
+
+### Clearer screens and names
+- Integrations separates Coding assistants from Trace ingestion, with one recommended setup per client.
+- The coding-agent consent page is easier to read. It explains the broad grant before the settings and keeps credit and credential impacts visible on mobile.
+- Your own checks and dimensions no longer show an internal ID prefix, and run headings read "Answer relevancy" instead of "answer_relevancy".
+- Profile editing keeps identity and check selection visible and tucks away advanced tuning. Usage drilldown keeps the exact reporting window.
+- Lists, including your agents and the check catalog, now sort in one stable order, so pages no longer repeat or skip rows.
+
+### Traces from more tools score properly
+- Tool calls from AI Workspace agents now carry their arguments and results, so step-efficiency checks no longer score them 0.
+- A trace cut off at the storage size limit is marked as cut off and is no longer scored as if it were complete.
+- Traces up to 16 MiB are now scored. Larger ones were previously skipped.
+- Calls to GPT-5.6 models and the newer Claude models are now priced, including when the provider reports a dated model name.
+
+### Fixes
+- Quality gate tools no longer fail on every call from a coding agent.
+- A burst of traces with no account identity can no longer block other senders from sending traces.
+
+### Coming next
+- Cutting agent tracing over to push directly from internal agents instead of pulling from Better Stack
+- Promoting the API gateway build and the firewall change so the coding-agent connection works in production
+- Advice written in plain language with verified links back to the trace
+
 ## October 30, 2026 Update
 
 ### Choose what your coding agent is allowed to do
