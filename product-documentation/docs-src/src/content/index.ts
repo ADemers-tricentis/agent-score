@@ -16,6 +16,7 @@ import ScoringOverTime from "./ScoringOverTime";
 import Traces from "./Traces";
 import Improve from "./Improve";
 import Labeling from "./Labeling";
+import QualityGate from "./QualityGate";
 import Glossary from "./Glossary";
 
 export const pages: Record<string, ComponentType> = {
@@ -36,5 +37,6 @@ export const pages: Record<string, ComponentType> = {
   traces: Traces,
   improve: Improve,
   labeling: Labeling,
+  "quality-gate": QualityGate,
   glossary: Glossary,
 };

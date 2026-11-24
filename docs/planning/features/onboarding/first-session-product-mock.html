@@ -571,6 +571,7 @@ const PLATFORMS = [
   "Salesforce Agentforce",
   "n8n",
   "Dify",
+  "SAP Joule",
   "Another platform",
 ];
 
@@ -583,7 +584,6 @@ function fresh() {
     client: "",
     mode: "agent",
     agentName: "",
-    agentDesc: "",
     nameError: false,
     nameStage: "waiting",
     where: "",
@@ -658,13 +658,10 @@ Use the URL as given, including everything after the ?. Do not add headers, toke
 The file is outside this project; ask me to approve the change if needed.
 Then tell me to restart Codex and authenticate agent-score.`;
 }
-function agentDesc() {
-  return state.agentDesc.trim() || "Helps customers with refunds, cancellations and order questions.";
-}
 function introPaste() {
   return `Use agent-score to register the agent in this project.
-Read the agent's code and work out what it does. Pick a short, friendly name a teammate would recognise, not a function or module name. Write a one or two sentence description of what the agent is for.
-Submit the name and description to agent-score, then tell me what you submitted.`;
+Read the agent's code and work out what it does. Pick a short, friendly name a teammate would recognise, not a function or module name.
+Submit the name to agent-score, then tell me what you submitted.`;
 }
 function setupPaste() {
   return `Use agent-score to check my AgentScore connection.`;
@@ -1229,11 +1226,10 @@ const THREAD_MAX = { built: 8, platform: 6, demo: 8, returning: 4 };
 
 function threadScript(kind) {
   const name = esc(agentName());
-  const desc = esc(agentDesc());
   const ask = (html, note) => ["Coding agent", html, note || "", false];
   const you = (text) => ["You", `<p>${text}</p>`, "", true];
   const where = ask(`<p>Agent Score is connected. Where does your agent live?</p><p style="margin-top:8px">1. I built it myself (it is in this project)<br>2. It runs on a platform</p>`, "Step 3a. Asked only when the answer is not already recorded from the web flow. Next action: reply 1 or 2.");
-  const naming = ask(`<p>Here is what I think this agent is. Name: ${name}. What it's for: ${desc}. Is that right, or what should I change?</p>`, "Step 8, the name and description popup. It read the agent's code and submitted both. Next action: confirm, or say what to change.");
+  const naming = ask(`<p>I'd call this agent ${name}. Is that right, or what should I change?</p>`, "Step 8, the name popup. It read the agent's code and submitted a name. Next action: confirm, or say what to change.");
   const waiting = ask(`<p>${name} is set up. Nothing from ${name} yet. Restart ${name} if it was running, then use it the way you already do. A score needs about 20 real requests. A hello or a made-up request does not count.</p><p style="margin-top:8px">No traffic yet? Say "demo" and I will run a demo agent for you, so you can see what a score looks like while you wait.</p>`, "Step 8, the waiting page and its demo card. The demo is offered once, here. Next action: use the agent, or say demo.");
   if (kind === "built") {
     return [
@@ -1251,7 +1247,7 @@ function threadScript(kind) {
     return [
       where,
       you("2"),
-      ask(`<p>Which platform?</p><p style="margin-top:8px">1. Microsoft Copilot Studio<br>2. Amazon Bedrock<br>3. Google Vertex AI<br>4. Salesforce Agentforce<br>5. n8n<br>6. Dify<br>7. Another platform (tell me its name)</p>`, "Step 3b. Next action: reply with a number, or a name for Another platform."),
+      ask(`<p>Which platform?</p><p style="margin-top:8px">1. Microsoft Copilot Studio<br>2. Amazon Bedrock<br>3. Google Vertex AI<br>4. Salesforce Agentforce<br>5. n8n<br>6. Dify<br>7. SAP Joule<br>8. Another platform (tell me its name)</p>`, "Step 3b. Next action: reply with a number, or a name for Another platform."),
       you("5"),
       ask(`<p>n8n isn't supported yet. I've noted your interest and we'll come back to you.</p><p style="margin-top:8px">In the meantime, I can set up an agent that lives in this project. Want to do that?</p>`, "Step 3b, the not-supported state. It logs the pick as demand data with a new MCP tool (register_platform_interest). Only the build-it-myself branch is offered, as on the web. Next action: reply yes."),
       you("Yes, set up the one in this project."),
@@ -1306,15 +1302,15 @@ function threadPage() {
         <p>The resource carries the same demo prompt as the web popup, so either route runs the same steps:</p>
         ${code("mcp-demo", demoPaste())}
         <h2 style="margin-top:20px">What the MCP needs that it may not have</h2>
-        <p>A tool to log a platform pick as demand data (register_platform_interest, new). A way to store the agent's description, if update_agent_settings does not take one. A way to mark the demo agent as Demo and exclude it from the fleet.</p>
+        <p>A tool to log a platform pick as demand data (register_platform_interest, new).  A way to mark the demo agent as Demo and exclude it from the fleet.</p>
         <p class="fine" style="margin-top:12px">The limit in step 5 of the resource, "Do not poll indefinitely", stays. It covers confirming setup when no trace is ever accepted, not following progress after setup works.</p>
       </div></div>
     </div>`;
 }
 
 const GUIDANCE_TEXT = `Do not stop here, and do not send the developer to the Agent Score app. Stay in this thread and follow the agent until it has a score.
-Before you name the agent, if the developer has not said where it lives, ask: built by them in this project, or on a platform. For a platform, list Microsoft Copilot Studio, Amazon Bedrock, Google Vertex AI, Salesforce Agentforce, n8n, Dify and Another platform. Whatever they pick, tell them it is not supported yet, call register_platform_interest, and offer to set up the agent in this project.
-Read the agent's code, pick a short friendly name (not a function or module name) and a one or two sentence description, submit both, and ask the developer to confirm or change them.
+Before you name the agent, if the developer has not said where it lives, ask: built by them in this project, or on a platform. For a platform, list Microsoft Copilot Studio, Amazon Bedrock, Google Vertex AI, Salesforce Agentforce, n8n, Dify, SAP Joule and Another platform. Whatever they pick, tell them it is not supported yet, call register_platform_interest, and offer to set up the agent in this project.
+Read the agent's code, pick a short friendly name (not a function or module name), submit it, and ask the developer to confirm or change it.
 Keep calling check_agent_connection with agent_name and wait_seconds 25. Each time traces.accepted rises, tell the developer how many of about 20 real requests have arrived, and to keep using the agent the way they already do.
 While you wait for traces, offer the demo agent once. If the developer says demo, follow the demo steps below.
 At about 20, tell the developer Agent Score has enough to go on and is scoring the agent. If they ask what evals were chosen and why, answer from get_profile_fit.
@@ -1417,7 +1413,7 @@ function nameDialog() {
       <div class="backdrop"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="name-title">
         <div class="dt"><h2 id="name-title">Connection detected. Let your coding agent introduce your agent.</h2>${close}</div>
         <div class="dc">
-          <p>Paste the following into your coding agent. It will read your agent's code and suggest a name and a short description:</p>
+          <p>Paste the following into your coding agent. It will read your agent's code and suggest a name:</p>
           ${code("intro-prompt", introPaste())}
           <p class="fine" style="margin-top:12px">Waiting for your coding agent.</p>
         </div>
@@ -1429,12 +1425,10 @@ function nameDialog() {
       <div class="backdrop"><div class="dialog narrow" role="dialog" aria-modal="true" aria-labelledby="name-title">
         <div class="dt"><h2 id="name-title">Is this your agent?</h2>${close}</div>
         <div class="dc">
-          <p>Here is what your coding agent thinks it is.</p>
+          <p>Here is the name your coding agent suggests.</p>
           <label class="label" for="agent-name" style="display:block;margin-top:12px">Name</label>
           <input id="agent-name" class="textfield" value="${esc(state.agentName)}" autocomplete="off" />
           ${state.nameError ? `<p class="helper">Enter a name.</p>` : ""}
-          <label class="label" for="agent-desc" style="display:block;margin-top:12px">What it's for</label>
-          <input id="agent-desc" class="textfield" value="${esc(state.agentDesc)}" autocomplete="off" />
         </div>
         <div class="da"><button class="btn contained" type="button" data-submit-name>Confirm</button></div>
       </div></div>`;
@@ -1446,8 +1440,6 @@ function nameDialog() {
         <label class="label" for="agent-name">What do you want to name your agent?</label>
         <input id="agent-name" class="textfield" value="${esc(state.agentName)}" autocomplete="off" />
         ${state.nameError ? `<p class="helper">Enter a name.</p>` : ""}
-        <label class="label" for="agent-desc" style="display:block;margin-top:12px">What is it for? (optional)</label>
-        <input id="agent-desc" class="textfield" value="${esc(state.agentDesc)}" autocomplete="off" />
       </div>
       <div class="da"><button class="btn contained" type="button" data-submit-name>Submit</button></div>
     </div></div>`;
@@ -1487,7 +1479,7 @@ function enoughDialog() {
 function hint() {
   const named = state.previewName ? " Preview filled the name checkout-agent." : "";
   if (state.screen === "thread") return "MCP path. The thread follows the web path step for step, from step 3a to step 12." + named;
-  if (state.popup === "name") return "Step 8. The connection is in. The coding agent proposes a name and description, the user confirms, then My Agents / that name opens.";
+  if (state.popup === "name") return "Step 8. The connection is in. The coding agent proposes a name, the user confirms, then My Agents / that name opens.";
   if (state.wizard === "intro") return "Step 3. Connect on Integrations opens this popup.";
   if (state.wizard === "where") return "Step 3a. Where does the agent live? Picking an option moves on; the options are not shown again.";
   if (state.wizard === "platform") return "Step 3b. Which platform? Every platform ends in a not-supported message and is logged as demand.";
@@ -1734,8 +1726,6 @@ function submitName() {
     render();
     return;
   }
-  const descInput = document.getElementById("agent-desc");
-  state.agentDesc = descInput ? descInput.value.trim() : state.agentDesc;
   state.agentName = value;
   state.previewName = false;
   state.nameError = false;
@@ -1827,7 +1817,6 @@ document.body.addEventListener("click", (event) => {
     state.nameError = false;
     if (state.nameStage === "confirm") {
       if (!state.agentName.trim()) state.agentName = "checkout-agent";
-      if (!state.agentDesc.trim()) state.agentDesc = "Helps customers with refunds, cancellations and order questions.";
       state.previewName = false;
     }
     render();

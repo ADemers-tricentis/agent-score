@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AgentScore entry flow: Labs and direct link</title>
+<style>
+  html, body { margin: 0; background: #f4f6fa; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif; display: flex; justify-content: center; padding: 32px 16px; }
+  .wrap { width: 100%; max-width: 1280px; }
+  h1 { font-size: 22px; color: #1f2937; margin: 0 0 4px; }
+  p.sub { margin: 0 0 18px; color: #64748b; font-size: 14px; }
+  svg { width: 100%; height: auto; display: block; background: #fff; border-radius: 16px; box-shadow: 0 1px 3px rgba(15,23,42,.08), 0 8px 24px rgba(15,23,42,.06); }
+  text { font-family: inherit; fill: #1f2937; font-size: 15px; text-anchor: middle; }
+  .lane { font-size: 11px; font-weight: 700; letter-spacing: .12em; fill: #94a3b8; text-anchor: start; }
+  .chip text { font-size: 12px; font-weight: 700; }
+  .edge { fill: none; stroke: #64748b; stroke-width: 2; }
+  .yes { stroke: #16a34a; }
+  .no { stroke: #dc2626; }
+  .term { fill: #d9f4ee; stroke: #0f9d8a; stroke-width: 2; }
+  .step { fill: #e8f0ff; stroke: #2f6fed; stroke-width: 2; }
+  .dec  { fill: #fff8e6; stroke: #d98a00; stroke-width: 2; }
+  .open { fill: #fde7f3; stroke: #d6409f; stroke-width: 2; stroke-dasharray: 6 4; }
+  .tag { font-size: 10px; font-weight: 700; letter-spacing: .08em; fill: #d6409f; }
+  .legend text { font-size: 12px; fill: #64748b; text-anchor: start; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>AgentScore entry flow</h1>
+<p class="sub">How a user arrives from Labs or a direct link, and what happens to their account and tenant.</p>
+
+<svg viewBox="0 0 1280 830" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AgentScore entry flow from Labs and direct link">
+  <defs>
+    <filter id="sh" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity=".12"/>
+    </filter>
+    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+    <marker id="ahy" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/></marker>
+    <marker id="ahn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker>
+  </defs>
+
+  <!-- Lanes -->
+  <rect x="20" y="30" width="1240" height="165" rx="14" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text class="lane" x="40" y="54">LABS LEAD CAPTURE</text>
+  <rect x="20" y="215" width="1240" height="545" rx="14" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text class="lane" x="40" y="240">SIGN-IN AND TENANT ROUTING</text>
+
+  <!-- Edges -->
+  <path class="edge" d="M210,127 H270" marker-end="url(#ah)"/>
+  <path class="edge" d="M460,127 H540" marker-end="url(#ah)"/>
+  <path class="edge" d="M740,127 H820" marker-end="url(#ah)"/>
+  <path class="edge" d="M1050,127 H1160 V265" marker-end="url(#ah)"/>
+  <path class="edge" d="M365,167 V232" marker-end="url(#ah)"/>
+  <path class="edge" d="M210,297 H265" marker-end="url(#ah)"/>
+  <path class="edge yes" d="M465,297 H540" marker-end="url(#ahy)"/>
+  <path class="edge yes" d="M740,297 H820" marker-end="url(#ahy)"/>
+  <path class="edge no" d="M365,362 V480" marker-end="url(#ahn)"/>
+  <path class="edge no" d="M640,362 V480" marker-end="url(#ahn)"/>
+  <path class="edge" d="M750,520 H935 V337" marker-end="url(#ah)"/>
+  <path class="edge" d="M365,560 V685 H535" marker-end="url(#ah)"/>
+  <path class="edge" d="M745,685 H935 V520"/>
+  <path class="edge" d="M1050,297 H1090" marker-end="url(#ah)"/>
+
+  <!-- Edge labels -->
+  <g class="chip">
+    <rect x="488" y="285" width="42" height="24" rx="12" fill="#e7f6ec" stroke="#16a34a"/><text x="509" y="302" style="fill:#15803d">Yes</text>
+    <rect x="758" y="285" width="42" height="24" rx="12" fill="#e7f6ec" stroke="#16a34a"/><text x="779" y="302" style="fill:#15803d">Yes</text>
+    <rect x="347" y="409" width="36" height="24" rx="12" fill="#fdecec" stroke="#dc2626"/><text x="365" y="426" style="fill:#b91c1c">No</text>
+    <rect x="622" y="409" width="36" height="24" rx="12" fill="#fdecec" stroke="#dc2626"/><text x="640" y="426" style="fill:#b91c1c">No</text>
+  </g>
+
+  <!-- Nodes: top lane -->
+  <g filter="url(#sh)">
+    <rect class="term" x="40" y="95" width="170" height="64" rx="32"/>
+    <rect class="step" x="270" y="87" width="190" height="80" rx="12"/>
+    <rect class="step" x="540" y="87" width="200" height="80" rx="12"/>
+    <rect class="step" x="820" y="77" width="230" height="100" rx="12"/>
+  </g>
+  <text x="125" y="123">User starts</text><text x="125" y="143">from Labs</text>
+  <text x="365" y="123">Fills out form</text><text x="365" y="143">for AgentScore</text>
+  <text x="640" y="123">Ping me/update DB</text><text x="640" y="143">with user info</text>
+  <text x="935" y="112">Auto send email</text><text x="935" y="132">explaining AgentScore</text><text x="935" y="152">and provide my contact info</text>
+
+  <!-- Nodes: routing lane -->
+  <g filter="url(#sh)">
+    <rect class="term" x="40" y="265" width="170" height="64" rx="32"/>
+    <polygon class="dec" points="365,232 465,297 365,362 265,297"/>
+    <polygon class="dec" points="640,232 740,297 640,362 540,297"/>
+    <rect class="step" x="820" y="257" width="230" height="80" rx="12"/>
+    <rect class="term" x="1090" y="265" width="140" height="64" rx="32"/>
+    <rect class="step" x="255" y="480" width="220" height="80" rx="12"/>
+    <rect class="step" x="530" y="480" width="220" height="80" rx="12"/>
+    <polygon class="open" points="560,650 760,650 730,720 530,720"/>
+  </g>
+  <text x="125" y="293">Direct link to</text><text x="125" y="313">AgentScore</text>
+  <text x="365" y="293">User has</text><text x="365" y="313">Tosca account?</text>
+  <text x="640" y="293">Existing AgentScore</text><text x="640" y="313">tenant?</text>
+  <text x="935" y="293">User signs in and is shown</text><text x="935" y="313">normal onboarding</text>
+  <text x="1160" y="302">Profit?</text>
+  <text x="365" y="516">Redirect to Tosca</text><text x="365" y="536">trial/allow Tosca signup</text>
+  <text x="640" y="516">Auto create new tenant</text><text x="640" y="536">and provision 500 credits</text>
+  <text class="tag" x="645" y="670">OPEN QUESTION</text>
+  <text x="645" y="696">What happens here?</text>
+
+  <!-- Legend -->
+  <g class="legend">
+    <rect class="term" x="40" y="785" width="34" height="18" rx="9"/><text x="82" y="799">Start / end</text>
+    <rect class="step" x="190" y="785" width="34" height="18" rx="5"/><text x="232" y="799">Step</text>
+    <polygon class="dec" points="300,794 312,783 324,794 312,805"/><text x="332" y="799">Decision</text>
+    <polygon class="open" points="430,785 464,785 458,803 424,803"/><text x="472" y="799">Open question</text>
+  </g>
+</svg>
+</div>
+</body>
+</html>

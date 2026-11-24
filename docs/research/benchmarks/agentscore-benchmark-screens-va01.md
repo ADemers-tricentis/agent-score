@@ -39,10 +39,12 @@ A panel beside every screen, "The test so far," shows the test's ID, its source 
 
 **On screen: the New test set form**
 
+- **Intro:** "A test set is a list of real tasks, each with a known right answer. AgentScore has your agent do them and checks the results, so you can tell whether it does your work correctly and whether a new release made it better or worse."
+
 - **Where should tests come from?**
-  - Your agent's own recorded runs.
-  - Published tests from your industry: "We found public test sets for desktop, browser and Salesforce work: OSWorld, WindowsAgentArena, WebArena, WorkArena and CRMArena. None covers SAP sales orders, so those tests come from your own runs."
-  - Generated variations of your tasks: "Only where a task has too few real runs. At most 1 in 4 tests, never in the exam, and you approve each one."
+  - Your agent's own recorded runs: "Real requests your agent has already handled. AgentScore picks a mix of runs that went well, went wrong, and were unusual, so the tests reflect your actual work, including the hard cases."
+  - Published tests from your industry: "Public test sets that researchers built for similar work, so you can compare your agent to a known standard. We found sets for desktop, browser and Salesforce work (OSWorld, WindowsAgentArena, WebArena, WorkArena, CRMArena). None covers SAP sales orders, so none are used here and every test comes from your own runs."
+  - Generated variations of your tasks: "Changed copies of a real task (different customer, product or amount), added only when a task has too few real runs to test properly. They are capped at 1 in 4 tests, never used in the exam, and nothing is included until you approve it."
 
 - **Defaults line:** "Checks each release · 20 tests to start · each test runs 3 times. Change in settings." Purpose, size and trials are defaults, not questions. The expert can change them later.
 
@@ -74,11 +76,24 @@ A panel beside every screen, "The test so far," shows the test's ID, its source 
 - **+ Add a task the list missed.** Opens an "Add a task" card under the table:
   - **What is the task called?** "Change a customer's payment terms" (example).
   - **Write one request for it, the way a user would ask.** "Names and numbers are hidden before AgentScore uses it."
-  - **Look for matching runs** searches the agent's runs. The result (example) says "6 runs look like this task," about 1% of runs, 4 went fine, 1 went wrong, 1 unusual, reviewed in the next step like the other tasks. It also says no published test set covers it. If no runs match, AgentScore says so and offers to generate drafts from the request, each needing approval.
+  - **Look for matching runs** searches the agent's runs. The result (example) says "6 runs look like this task," about 1% of runs, 4 went fine, 1 went wrong, 1 unusual, reviewed in the next step like the other tasks. It also says no published test set covers it.
+  - **When no runs match:** the result card says "No runs look like this task. Your agent hasn't done this yet, or it words it differently. Try rewording the request, or build tests from your request instead." It also says no published test set covers it, and that tests from the request are for practice: "Nothing real backs them, so they are not used to judge a release. Each one is marked 'Draft from your request', and you approve it first. This task has no judged tests yet. After your agent has run it, you can add a real run." Buttons: **Cancel**, **Reword the request** (returns to the request box), and **Generate drafts from my request** (opens Generated drafts). **Add to the plan** stays unavailable until at least one draft is approved, so a task never sits in the plan with no tests behind it.
+  - **Few matches (open question):** with only one or two matching runs, show the normal card plus a warning that tests for this task may be thin, with generated drafts as an option.
   - **How many tests for this task?** 2. **Add to the plan** puts the task in the list. **Cancel** closes the card.
-- **Generate** opens a "Generated drafts" card, and each draft needs the expert's review:
+- **Generate** opens a "Generated drafts" card, and each draft needs the expert's review. Each draft shows what the agent is asked, what a correct result looks like, and a collapsed example path. Without the expected outcome the expert would be approving a title, because a draft has no real run behind it.
   - "Change a house bank account, IBAN left blank." Made from a real FI12 run by dropping a field. Practice only.
+    - **Request:** "Change the IBAN on the house bank account for bank key [bank] and leave the IBAN blank."
+    - **A correct result:** nothing is saved, and the agent tells the user the IBAN is missing. **It must:** report the missing IBAN and stop. **It must never:** make up an IBAN, or save without one.
+    - **One way to do it** (collapsed): open FI12, select the house bank and account, clear the IBAN, save and read the error, tell the user. An example path, not the only correct one.
   - "Car insurance quote for a driver under 18." Made by changing one value the site should refuse. Practice only, and dropped if the agent passes it 3 of 3 with no effort.
+    - **Request:** "Get me a car insurance quote for a driver aged 17."
+    - **A correct result:** the site refuses to quote, and the agent tells the user why. **It must:** report the refusal. **It must never:** change the age to get a quote.
+    - **One way to do it** (collapsed): open the quote form, enter age 17, submit, read the refusal, tell the user.
+- **What the expert does with each draft** (three buttons per draft):
+  - **Approve:** the draft joins the plan for that task, the Generated count goes up, and the draft shows "Approved · added to the plan". It still goes through the ready check on its own test page (screen 6), like any other test.
+  - **Edit:** the request and the correct result become editable (request, correct result, It must, It must never). **Done editing** saves it and tags the draft "Edited by you". The ready check runs again on the edited version, because the earlier correct run proved the old wording, not the new one. Editing an approved draft keeps it approved and sends it back through that check.
+  - **Reject:** the draft is dimmed and its slot is freed (the Generated count drops if it was approved). The expert can **Undo** or **Generate another**. An optional reason, such as "Couldn't happen", would help AgentScore learn what unrealistic means for this agent (not drawn in the mock).
+  - Open question: whether an edited draft has to be re-approved. The doc assumes it goes back through the ready check but stays approved for the plan.
 - **Totals:** 16 from your runs · 2 published (CRMArena, still needing this customer's test data and checks) · 2 generated of 5 allowed. "No more than 1 in 4 tests, never in the exam."
 
 **Action:** Find runs for these tasks.
@@ -181,6 +196,13 @@ The note is saved with the label. When the expert finishes, an LLM reads it and 
   4. **If the agent asks you for help, what would you say?** Shown only when the agent can ask a person. "That customer is blocked on purpose. Do not change master data. Stop and tell me what you found."
      - **+ Add another answer (makes a second test):** "Use customer [another, unblocked test customer] instead." It passes only if the order is saved for that customer.
   5. **Why?** (optional) The block is intentional test data.
+- **What a correct run looks like** (proposed, collapsed by default; example: order to cash, 15 steps, tagged **AI draft**). AgentScore writes the steps from the recorded run, and the expert marks how much each matters. A table of Step, Action, Expected result and **Counts as**. The agent never sees the steps: it only gets the request, and the steps are used to check its work. Questions 1 to 4 are enough for most tests, so the table is only needed for a long task.
+  - **Which steps to show.** A run that went wrong contains wrong steps. The expert's answers to questions 1 to 3 define what is right, so the table lists only the steps the expert keeps.
+  - **Counts as** has three values. **Must happen:** the run fails without it, however the agent gets there, in any order that works. **Context only:** kept for reading, not checked. **Final check:** the last step's expected result, which becomes question 1 (here: order, delivery, goods issue and billing all Completed).
+  - A vague expected result (for example "Order saved." with nothing to check) is flagged so the expert can add the value to look for.
+  - **Values carried forward:** a value a step stores for later (sales order, delivery and billing numbers) is found by searching for a reference AgentScore adds to the test's records (here Customer Reference `BENCH-P01-E`), so checks look at the order this run created and not an older one. Your agent's test setup has to set it. This is a to-do for your agent.
+  - **+ Also test with a shorter request (makes a second test):** the second test gives the agent only the goal and a few values instead of the full walkthrough, and checks the same things. The less detail the request gives, the harder the test.
+  - **Generated drafts and tasks with no matching run:** the table is open by default, every row is tagged AI draft, and the expert must confirm the Must happen steps before "Add to the plan" unlocks. Steps written from the request alone have nothing real behind them, so they carry the most risk.
 
 **This page is generic.** The four questions are the same for every agent type and never mention a particular system. Only the suggested answers change, and AgentScore fills them in from the agent type and Agent Card. SAP is just this example. For a Q&A agent, question 1 reads as "the answer includes the right facts" and question 4 is hidden, since it has nothing to ask. For a browser agent, question 1 might be "the booking is confirmed on the page."
 
@@ -211,6 +233,7 @@ The note is saved with the label. When the expert finishes, an LLM reads it and 
   - **Task:** Create a sales order (SAP VA01).
   - **Category:** Sales orders › Blocked customer data.
   - **Difficulty and risk:** hard, medium risk.
+  - **Detail in the request** (tests with steps only): full walkthrough. A shorter version (goal and key values) is also tested.
   - **Kinds of mistake it checks:** repeated the same step, missed a warning or error, didn't ask when it should have, and changed something it shouldn't. "The first two are what went wrong in the run. The other two come from your 'should' and 'must never' answers."
 - **It passes only if all of these are true:**
   - No sales order is saved.
@@ -219,6 +242,7 @@ The note is saved with the label. When the expert finishes, an LLM reads it and 
   - It never unblocks the customer.
   - It doesn't retry Ship-To more than twice.
   - It completes the steps before the block: opens the sales order screen and enters the order type, sales organisation and customer. Skipping pricing, schedule lines and saving is fine. Scored automatically, and it only counts toward pass once the automatic score agrees with the expert's judgment on past runs.
+  - Tests with steps (example): it reaches every step marked "Must happen", in any order that works, and the final check holds. Steps marked "Context only" are not checked.
   - "How fast it gets there is reported but doesn't decide pass or fail."
 - **Doesn't count either way if:** SAP can't be reached, the test system connection is down, or the test data couldn't be set up. "We run it again instead."
 - **Is it ready?**

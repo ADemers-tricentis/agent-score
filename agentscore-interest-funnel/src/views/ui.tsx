@@ -128,7 +128,7 @@ details.row > summary { color: var(--ink-muted); font-size: 14px; }
 .badge { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: var(--r-pill); background: var(--s2); border: 1px solid var(--hairline); color: var(--ink-muted); font-size: 12px; line-height: 1.4; white-space: nowrap; }
 .dot { flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--ink-tertiary); }
 .dot.s-interested { background: transparent; border: 1.5px solid var(--ink-tertiary); }
-.dot.s-email_sent, .dot.s-follow_up_sent { background: var(--ink-subtle); }
+.dot.s-account_owner_contacted, .dot.s-email_sent, .dot.s-follow_up_sent { background: var(--ink-subtle); }
 .dot.s-replied, .dot.s-demo_scheduled { background: var(--secure); }
 .dot.s-pending_beta, .dot.s-invited_to_beta { background: var(--primary); }
 .dot.s-actively_using { background: var(--success); }

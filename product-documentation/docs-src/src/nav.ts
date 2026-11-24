@@ -113,6 +113,11 @@ export const nav: NavSection[] = [
         title: "Labeling",
         blurb: "Human review that turns judgment into reference evidence.",
       },
+      {
+        slug: "quality-gate",
+        title: "Quality Gate",
+        blurb: "Your own pass/fail line: open, closed, or not enough data.",
+      },
     ],
   },
   {

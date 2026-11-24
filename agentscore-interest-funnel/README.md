@@ -20,7 +20,7 @@ Pages: Funnel (current and cumulative counts, click a number to drill down), Lea
 
 ## Stage rules
 
-- Eight funnel stages: Interested, Email sent, Follow-up sent, Replied, Demo scheduled, Pending beta, Invited to beta, Actively using. Two exit states, Not a fit and Do not email, are outside the funnel.
+- Nine funnel stages: Interested, Reached out to account owner, Email sent, Follow-up sent, Replied, Demo scheduled, Pending beta, Invited to beta, Actively using. Two exit states, Not a fit and Do not email, are outside the funnel.
 - Each company's stage history is a list of events. Current = the latest event. Cumulative = companies at that stage or any later one. Nobody edits counts.
 - Touchpoints (intro email, follow-up, reply, demo, beta invite, sign-in) only move a company forward.
 - Moving a company backwards, or out of an exit state, needs a reason, which is saved. The sync agent is never allowed to move a company backwards.

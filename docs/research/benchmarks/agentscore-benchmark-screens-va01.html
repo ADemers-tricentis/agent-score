@@ -202,6 +202,12 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
 .src.pub{border-color:#c4b5fd;color:#5b3fc4}
 .btn.gen{font-size:11.5px;padding:2px 9px;border:1px dashed #a78bfa;color:#5b3fc4;background:#faf8ff;margin-left:4px}
 .btn.gen.done{border-style:solid;opacity:.7;cursor:default}
+.draftact{display:flex;align-items:center;gap:6px;margin-top:8px}
+.draftact .dstat{margin-right:auto}
+.btn.gen2{font-size:12px;padding:3px 12px}
+.ed[contenteditable=true]{outline:2px solid #a78bfa;border-radius:6px;padding:4px 6px;background:#fff}
+.li.rejected{opacity:.55}
+.li.rejected .ed,.li.rejected details{display:none}
 .taskchips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
 .taskchips span{border:1px solid var(--line);border-radius:7px;padding:4px 10px;font-size:12px;background:#fff}
 .taskchips span.on{border-color:var(--blue);background:var(--info-bg)}
@@ -263,7 +269,7 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
     <p>The expert wants a fixed set of tests to run before every release, so they can see whether a new version of the agent got better or worse. They answer one question, where the tests should come from, and AgentScore sets up the rest.</p>
   </div>
 
-  <div class="app" id="tsList" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / <b>Test sets</b>" data-ribbon="new:Proposed page">
+  <div class="app" id="tsList" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / <b>Test sets</b>">
     <div class="row" style="justify-content:space-between;margin-bottom:12px">
       <div><h3 style="font-size:17px;margin:0">Test sets</h3><div class="sub">Fixed lists of tests you run against this agent. Start a new one, or open one you already have.</div></div>
       <button class="btn primary" data-newts>New test set</button>
@@ -279,17 +285,17 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
     <div class="sub small" style="margin:8px 2px 0">With no test sets yet, this page shows only the New test set button. Pressing it opens the New test set form.</div>
   </div>
 
-  <div class="app" id="tsForm" style="display:none" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / Test sets / <b>New test set</b>" data-ribbon="new:Proposed page">
+  <div class="app" id="tsForm" style="display:none" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / Test sets / <b>New test set</b>">
     <div style="max-width:720px">
       <h3 style="font-size:17px;margin:0 0 4px">New test set</h3>
-      <div class="sub" style="margin-bottom:16px">A test set is a list of real tasks for your agent, each with a clear right answer.</div>
+      <div class="sub" style="margin-bottom:16px">A test set is a list of real tasks, each with a known right answer. AgentScore has your agent do them and checks the results, so you can tell whether it does your work correctly and whether a new release made it better or worse.</div>
 
       <div class="card prop" style="margin-top:20px">
-        <span class="ptag">Proposed · Catalog of published benchmarks</span>
+        <span class="ptag">Catalog of published benchmarks</span>
         <div class="q" style="margin:0"><div class="ql">Where should tests come from?</div>
-          <div class="li"><span class="ic ok">✓</span><div><b>Your agent's own recorded runs</b><br><span class="sub">AgentScore suggests runs that went well, went wrong, or were unusual.</span></div></div>
-          <div class="li"><span class="ic n">i</span><div><b>Published tests from your industry</b><br><span class="sub">We found public test sets for desktop, browser and Salesforce work: OSWorld, WindowsAgentArena, WebArena, WorkArena and CRMArena. None covers SAP sales orders, so those tests come from your own runs.</span></div></div>
-          <div class="li"><span class="ic ok">✓</span><div><b>Generated variations of your tasks</b><br><span class="sub">Only where a task has too few real runs. At most 1 in 4 tests, never in the exam, and you approve each one.</span></div></div>
+          <div class="li"><span class="ic ok">✓</span><div><b>Your agent's own recorded runs</b><br><span class="sub">Real requests your agent has already handled. AgentScore picks a mix of runs that went well, went wrong, and were unusual, so the tests reflect your actual work, including the hard cases.</span></div></div>
+          <div class="li"><span class="ic n">i</span><div><b>Published tests from your industry</b><br><span class="sub">Public test sets that researchers built for similar work, so you can compare your agent to a known standard. We found sets for desktop, browser and Salesforce work (OSWorld, WindowsAgentArena, WebArena, WorkArena, CRMArena). None covers SAP sales orders, so none are used here and every test comes from your own runs.</span></div></div>
+          <div class="li"><span class="ic ok">✓</span><div><b>Generated variations of your tasks</b><br><span class="sub">Changed copies of a real task (different customer, product or amount), added only when a task has too few real runs to test properly. They are capped at 1 in 4 tests, never used in the exam, and nothing is included until you approve it.</span></div></div>
         </div>
       </div>
 
@@ -310,7 +316,7 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
     <p>The test set is built task by task. AgentScore read the agent's runs and found the jobs it actually does. The expert checks the list, and AgentScore plans how many tests each task gets and where each test will come from: a real run, a published test, or a generated variation of a real one.</p>
   </div>
 
-  <div class="app" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / Test sets / <b>testcase.generate pilot</b>" data-ribbon="new:Proposed page">
+  <div class="app" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / Test sets / <b>testcase.generate pilot</b>">
     <div class="row" style="justify-content:space-between;margin-bottom:12px">
       <div><h3 style="font-size:17px;margin:0">Tasks this agent does</h3><div class="sub">Found by grouping the requests in the agent's runs · 20 tests planned · names and numbers in requests hidden</div></div>
       <span class="sub">Share of runs and test counts are examples <span class="eg">example</span></span>
@@ -359,7 +365,7 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
 
     <div class="drawer" id="addTask">
       <div class="card prop" style="margin:0">
-        <span class="ptag">Proposed</span>
+        
         <div class="card-h"><h3>Add a task</h3><span class="sub">For a job the agent does that the list above doesn't show</span></div>
         <div class="q"><div class="ql">What is the task called?</div>
           <div class="input" style="max-width:420px">Change a customer's payment terms <span class="eg">example</span></div></div>
@@ -367,6 +373,14 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
           <div class="help">Names and numbers are hidden before AgentScore uses it.</div>
           <div class="input">Change the payment terms for customer <span class="ph-pill">customer</span> to net 30 and save.</div></div>
         <button class="btn soft" id="findMatches">Look for matching runs</button>
+        <span class="sub" style="margin-left:10px">Mock only: show the result as <u id="showFound">runs found</u> · <u id="showNone">no match</u></span>
+        <div id="matchNone" hidden style="margin-top:14px">
+          <div class="li"><span class="ic n">i</span><div><b>No runs look like this task</b><br><span class="sub">Your agent hasn't done this yet, or it words it differently. Try rewording the request, or build tests from your request instead.</span></div></div>
+          <div class="li"><span class="ic n">i</span><div><b>No published test set covers this task</b><br><span class="sub">So the tests for this task can only come from your request.</span></div></div>
+          <div class="li"><span class="ic n">i</span><div><b>Tests from your request are for practice</b><br><span class="sub">Nothing real backs them, so they are not used to judge a release. Each one is marked "Draft from your request", and you approve it first. This task has no judged tests yet. After your agent has run it, you can add a real run.</span></div></div>
+          <div class="btns"><button class="btn" id="cancelTaskNone">Cancel</button><button class="btn" id="rewordTask">Reword the request</button><button class="btn primary" id="genFromRequest">Generate drafts from my request</button></div>
+          <div class="sub" style="margin-top:6px;text-align:right">Add to the plan unlocks once you approve at least one draft.</div>
+        </div>
         <div id="matchRes" hidden style="margin-top:14px">
           <div class="li"><span class="ic ok">✓</span><div><b>6 runs look like this task</b> <span class="eg">example</span><br><span class="sub">About 1% of the agent's runs. 4 went fine, 1 went wrong, 1 was unusual. You review them in the next step, like the other tasks.</span></div></div>
           <div class="li"><span class="ic n">i</span><div><b>No published test set covers this task</b><br><span class="sub">So all tests come from your own runs. If a task has no runs at all, AgentScore says so and offers to generate drafts from your request. You approve each one.</span></div></div>
@@ -379,18 +393,24 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
 
     <div class="drawer" id="genDrafts">
       <div class="card prop" style="margin:0">
-        <span class="ptag">Proposed</span>
+        
         <div class="card-h"><h3>Generated drafts</h3><span class="badge warn">Need your review</span></div>
         <div class="sub" style="margin-bottom:8px">Each one is a real task with one thing changed. You approve it only if it could really happen.</div>
-        <div class="li" id="gen-fi12" hidden><span class="ic n">✎</span><div><b>Change a house bank account, IBAN left blank</b> <span class="eg">example</span><br><span class="sub">Made from a real FI12 run by dropping a field. Practice only.</span></div></div>
-        <div class="li" id="gen-quote" hidden><span class="ic n">✎</span><div><b>Car insurance quote for a driver under 18</b> <span class="eg">example</span><br><span class="sub">Made from a real quote run by changing one value the site should refuse. Practice only. Dropped if the agent passes it 3 of 3 with no effort.</span></div></div>
+        <div class="li" id="gen-fi12" hidden><span class="ic n">✎</span><div><b>Change a house bank account, IBAN left blank</b> <span class="eg">example</span><br><span class="sub">Made from a real FI12 run by dropping a field. Practice only.</span>
+          <div class="sub ed" style="margin-top:6px"><b>Request:</b> "Change the IBAN on the house bank account for bank key <span class="ph-pill">bank</span> and leave the IBAN blank."</div>
+          <div class="sub ed" style="margin-top:4px"><b>A correct result:</b> Nothing is saved, and the agent tells the user the IBAN is missing.<br><b>It must:</b> report the missing IBAN and stop.<br><b>It must never:</b> make up an IBAN, or save without one.</div>
+          <details><summary>One way to do it</summary><div class="sub">Open FI12 · select the house bank and account · clear the IBAN · save and read the error · tell the user. One example path, not the only correct one.</div></details><div class="draftact"><span class="dstat sub"></span><button class="btn primary gen2" data-act="approve">Approve</button><button class="btn gen2" data-act="edit">Edit</button><button class="btn gen2" data-act="reject">Reject</button></div></div></div>
+        <div class="li" id="gen-quote" hidden><span class="ic n">✎</span><div><b>Car insurance quote for a driver under 18</b> <span class="eg">example</span><br><span class="sub">Made from a real quote run by changing one value the site should refuse. Practice only. Dropped if the agent passes it 3 of 3 with no effort.</span>
+          <div class="sub ed" style="margin-top:6px"><b>Request:</b> "Get me a car insurance quote for a driver aged 17."</div>
+          <div class="sub ed" style="margin-top:4px"><b>A correct result:</b> The site refuses to quote, and the agent tells the user why.<br><b>It must:</b> report the refusal.<br><b>It must never:</b> change the age to get a quote.</div>
+          <details><summary>One way to do it</summary><div class="sub">Open the quote form · enter age 17 · submit · read the refusal message · tell the user. One example path, not the only correct one.</div></details><div class="draftact"><span class="dstat sub"></span><button class="btn primary gen2" data-act="approve">Approve</button><button class="btn gen2" data-act="edit">Edit</button><button class="btn gen2" data-act="reject">Reject</button></div></div></div>
       </div>
     </div>
 
     <div class="grid2" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:12px">
       <div class="card"><div class="sub">From your runs</div><div class="big">16</div><div class="sub">AgentScore suggests the runs in the next step <span class="eg">example</span></div></div>
       <div class="card"><div class="sub">Published</div><div class="big">2</div><div class="sub">CRMArena. They still need your test data and checks. <span class="eg">example</span></div></div>
-      <div class="card"><div class="sub">Generated</div><div class="big">2 <span class="sub" style="font-size:14px">of 5 allowed</span></div><div class="bar" style="margin-top:6px"><i style="width:40%;background:#c4b5fd"></i></div><div class="sub" style="margin-top:4px">No more than 1 in 4 tests, never in the exam <span class="eg">example</span></div></div>
+      <div class="card"><div class="sub">Generated</div><div class="big"><span id="genCount">2</span> <span class="sub" style="font-size:14px">of 5 allowed</span></div><div class="bar" style="margin-top:6px"><i id="genBar" style="width:40%;background:#c4b5fd"></i></div><div class="sub" style="margin-top:4px">No more than 1 in 4 tests, never in the exam <span class="eg">example</span></div></div>
     </div>
 
     <div class="row" style="justify-content:space-between;margin-top:6px">
@@ -411,7 +431,7 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
     <p>For every task in the plan, AgentScore looks through the agent's recent runs and suggests ones worth turning into tests. It groups near-identical runs so the expert reviews each situation once. This one stands out: a sales order where the agent got stuck.</p>
   </div>
 
-  <div class="app" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / Test sets / <b>testcase.generate pilot</b>" data-ribbon="new:Proposed page">
+  <div class="app" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / Test sets / <b>testcase.generate pilot</b>">
     <div class="row" style="justify-content:space-between;margin-bottom:12px">
       <div><h3 style="font-size:17px;margin:0">testcase.generate pilot</h3><div class="sub">0 of 20 tests · suggestions from the agent's latest scored runs · pool target 60 runs</div></div>
     </div>
@@ -549,10 +569,10 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
       <span class="sub">About 8 min each</span>
     </div>
 
-    <div class="card prop" style="padding:10px 14px;margin-top:6px"><span class="ptag">Proposed</span><div class="small"><b>Answer first. Run 8 of your first 10.</b> For these, our scores and guesses stay hidden until you say whether the agent did the right thing. After the first 10, we show our guess up front to save you time.</div></div>
+    <div class="card prop" style="padding:10px 14px;margin-top:6px"><div class="small"><b>Answer first. Run 8 of your first 10.</b> For these, our scores and guesses stay hidden until you say whether the agent did the right thing. After the first 10, we show our guess up front to save you time.</div></div>
 
     <div class="card prop" style="padding:12px 14px;margin-top:6px">
-      <span class="ptag">Proposed</span>
+      
       <div class="row" style="justify-content:space-between">
         <div class="small"><b>This week: 7 of 45 labeled</b> <span class="eg">example</span> · 2 of the 12 "agent got it wrong" labels you need</div>
         <span class="sub">Your time left this week: about 5 hours <span class="eg">example</span></span>
@@ -600,7 +620,7 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
 
         <div id="afterAnswer" hidden>
         <div class="card prop">
-          <span class="ptag">Proposed</span>
+          
           <div class="q" style="margin:0"><div class="ql">What went wrong, and whose fault was it?</div>
             <div class="help">Our first guesses are selected and tagged <span class="badge n">AI guess</span>. Check them against the steps on the left, and change them if they're wrong. Problems with the system never count against the agent.</div>
             <div class="li fault" style="display:block" data-sel="Repeated the same step|Missed a warning or error">
@@ -617,7 +637,7 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
           </div>
         </div>
         <div class="card prop">
-          <span class="ptag">Proposed</span>
+          
           <div class="q" style="margin:0"><div class="ql">Anything else about what went wrong? <span class="sub" style="font-weight:400">Optional</span></div>
             <div class="help">Write it your own way. AgentScore reads it when you finish and suggests where it belongs. Please don't paste names, numbers or passwords.</div>
             <textarea class="input" rows="3">It should have stopped at the first warning. Also nobody ever answered it. I think the test system's chat isn't hooked up.</textarea>
@@ -651,7 +671,7 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
     </div>
 
     <div class="card prop" style="margin-top:22px">
-      <span class="ptag">Proposed · replaces the box above</span>
+      <span class="ptag">Replaces the box above</span>
       <div class="help" style="margin-bottom:6px">Lines tagged <span class="badge n">AI draft</span> were written by AgentScore from this run. Check each one, and change anything that isn't how you'd judge it.</div>
 
       <div class="q"><div class="ql">1. When it's done right, what should be true at the end? <span class="badge n">AI draft</span></div>
@@ -687,6 +707,28 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
         <div class="input">The block is intentional test data.</div></div>
     </div>
 
+    <div class="card prop" style="margin-top:22px">
+      <span class="ptag">Written by AgentScore from the run</span>
+      <details>
+      <summary style="cursor:pointer"><b style="font-size:15px">What a correct run looks like</b> <span class="eg">example</span> <span class="badge n">AI draft</span> <span class="sub">Order to cash · 15 steps · show</span></summary>
+      <div class="help" style="margin:8px 0">AgentScore wrote these steps from the recorded run. Mark how much each one matters. The agent never sees them. It only gets the request, and the steps are used to check its work. Your answers to questions 1 to 4 are enough for most tests, so you only need this for a long task like this one.</div>
+      <table class="tbl">
+        <thead><tr><th style="width:5%">Step</th><th style="width:34%">Action</th><th style="width:34%">Expected result</th><th>Counts as</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Start VA01</td><td>Screen 'Create Sales Documents' is displayed</td><td><span class="kb">Context only</span></td></tr>
+          <tr><td>6</td><td>Save the order</td><td>Status bar shows the order has been saved. Value kept as <span class="mono">SO_NUMBER</span></td><td><span class="kb">Must happen</span></td></tr>
+          <tr><td>9</td><td>Create the delivery from the sales order</td><td>Success message. Value kept as <span class="mono">DELIVERY_NUMBER</span></td><td><span class="kb">Must happen</span></td></tr>
+          <tr><td>14</td><td>Create the billing document</td><td>Billing document is created. Value kept as <span class="mono">BILLING_NUMBER</span></td><td><span class="kb">Must happen</span></td></tr>
+          <tr><td>15</td><td>Check the document flow in VA03</td><td>Order, delivery, goods issue and billing are all Completed</td><td><span class="kb">Final check</span> <span class="sub">becomes question 1</span></td></tr>
+        </tbody>
+      </table>
+      <div class="sub" style="margin-top:6px">Showing 5 of 15 steps. <b>Must happen</b>: the run fails without it, however the agent gets there. <b>Context only</b>: kept for reading, not checked. A vague expected result, like "Order saved." with nothing to check, is flagged so you can add the value to look for.</div>
+      <div class="li" style="margin-top:8px"><span class="ic n">i</span><div><b>Values carried forward</b><br><span class="sub">Sales order, delivery and billing document numbers are found by searching for a reference AgentScore adds to the test's records (here Customer Reference <span class="mono">BENCH-P01-E</span>), so the checks look at the order this run created and not an older one. Your agent's test setup has to set it.</span></div></div>
+      <span class="add">+ Also test with a shorter request (makes a second test)</span>
+      <div class="sub" style="margin-top:4px">The second test gives the agent only the goal and a few values instead of the full walkthrough. It checks the same things. The less detail the request gives, the harder the test.</div>
+      </details>
+    </div>
+
     <div class="btns"><button class="btn">Back</button><button class="btn primary cta" data-advance>Save label</button></div>
   </div>
 
@@ -702,7 +744,7 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
     <p>AgentScore turns the label into a test, written back in plain language. The expert checks it reads right and approves. The technical setup goes to your agent as a to-do, and the details stay folded away.</p>
   </div>
 
-  <div class="app" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / Test sets / testcase.generate pilot / <b>Sales order for a blocked customer</b>" data-ribbon="new:Proposed page">
+  <div class="app" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / Test sets / testcase.generate pilot / <b>Sales order for a blocked customer</b>">
     <div class="card-h"><div><h3 style="font-size:17px">Sales order for a blocked customer</h3><div class="sub">Built from your label and one recorded run</div></div><span class="badge warn">Waiting for your approval</span></div>
 
     <div class="grid2">
@@ -724,7 +766,7 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
 
       <div>
         <div class="card prop">
-          <span class="ptag">Proposed</span>
+          
           <div class="card-h" style="margin-bottom:4px"><div class="sub">From your note <span class="eg">example</span></div><span class="badge n">AI suggestion</span></div>
           <div class="small" style="font-style:italic;color:#374151;margin-bottom:8px">"It should have stopped at the first warning. Also nobody ever answered it. I think the test system's chat isn't hooked up."</div>
           <div class="li"><span class="ic ok">✓</span><div><b>Matches a kind you already picked</b><br><span class="sub">Missed a warning or error</span></div></div>
@@ -733,12 +775,13 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
           <div class="sub" style="margin-top:6px">Your note is kept with the label. It never changes a label or a score by itself.</div>
         </div>
         <div class="card prop">
-          <span class="ptag">Proposed</span>
+          
           <div class="sub" style="margin-bottom:6px">How it's filed</div>
           <div class="small" style="display:grid;grid-template-columns:150px 1fr;gap:4px 10px">
             <span class="sub">Task</span><span>Create a sales order (SAP VA01)</span>
             <span class="sub">Category</span><span>Sales orders › Blocked customer data</span>
             <span class="sub">Difficulty · risk</span><span>Hard · medium risk</span>
+            <span class="sub">Detail in the request <span class="eg">tests with steps</span></span><span>Full walkthrough. A shorter version (goal and key values) is also tested.</span>
             <span class="sub">Kinds of mistake it checks</span><span><span class="kb">Repeated the same step</span><span class="kb">Missed a warning or error</span><span class="kb">Didn't ask when it should have</span><span class="kb">Changed something it shouldn't</span></span>
           </div>
           <div class="sub" style="margin-top:6px">The first two are what went wrong in the run. The other two come from your "should" and "must never" answers.</div>
@@ -751,6 +794,7 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
           <div class="check"><span class="ic ok">✓</span><span>It never unblocks the customer</span></div>
           <div class="check"><span class="ic ok">✓</span><span>It doesn't retry Ship-To more than twice</span></div>
           <div class="check"><span class="ic ok">✓</span><span>It completes the steps before the block: opens the sales order screen and enters the order type, sales organisation and customer. Skipping pricing, schedule lines and saving is fine.<div class="sub">Scored automatically. It only counts toward pass once the automatic score agrees with your judgment on past runs.</div></span></div>
+          <div class="check"><span class="ic n">+</span><span><b>Tests with steps:</b> it reaches every step marked "Must happen", in any order that works, and the final check holds. Steps marked "Context only" are not checked. <span class="eg">example</span></span></div>
           <div class="sub" style="margin-top:4px">How fast it gets there is reported but doesn't decide pass or fail.</div>
         </div>
         <div class="card">
@@ -803,12 +847,12 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
     <p>The new test is approved and waiting on setup. The page shows how far along the set is, what kinds of runs it still needs, and how far along each task is. The second answer from the label is waiting as a draft.</p>
   </div>
 
-  <div class="app" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / Test sets / <b>testcase.generate pilot</b>" data-ribbon="new:Proposed page">
+  <div class="app" data-agent data-tab="Test sets" data-crumb="My Agents / testcase.generate / Test sets / <b>testcase.generate pilot</b>">
     <div class="card-h"><div><h3 style="font-size:17px">testcase.generate pilot</h3><div class="sub">Check each release · each test runs 3 times</div></div>
       <button class="btn" disabled title="Available when 20 tests are ready">Give tests to your agent</button></div>
 
     <div class="card prop">
-      <span class="ptag">Proposed</span>
+      
       <div class="card-h" style="margin-bottom:4px"><div><h3 style="font-size:13.5px">Give these tests to your agent</h3><div class="sub">Your agent runs each test 3 times and sends the results back. Unlocks when 20 tests are ready.</div></div><span class="badge n">Not given yet</span></div>
       <div class="sub" style="margin-bottom:4px">Paste this into your agent, or connect it to AgentScore:</div>
       <div class="input ro small mono">Run every test in the "testcase.generate pilot" test set from AgentScore, 3 times each. For each test, do only what the request says. If you ask for help, AgentScore sends the prepared reply. Tag each run with the test ID and trial number AgentScore gives you.</div>
@@ -835,7 +879,7 @@ details.eng td{padding:4px 6px;border-bottom:1px solid var(--line2);vertical-ali
     </div>
 
     <div class="card prop">
-      <span class="ptag">Proposed</span>
+      
       <div class="card-h" style="margin-bottom:4px"><div><h3 style="font-size:13.5px">Kinds of mistake covered</h3><div class="sub">How many tests check for each one <span class="eg">counts are examples</span></div></div></div>
       <div class="kindgrid">
         <div class="kc"><span>Missed a warning or error</span><b>2</b></div>
@@ -1025,10 +1069,45 @@ document.querySelectorAll('[data-gen]').forEach(b=>b.onclick=()=>{
   document.getElementById('gen-'+b.dataset.gen).hidden=false;
   document.getElementById('src-'+b.dataset.gen).textContent='1 generated · needs review';
 });
+document.getElementById('genDrafts').addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]'); if(!b) return;
+  const li=b.closest('.li'), key=li.id.replace('gen-',''), st=li.querySelector('.dstat');
+  const src=document.getElementById('src-'+key), cnt=document.getElementById('genCount'), bar=document.getElementById('genBar');
+  const setCount=d=>{const n=Math.max(0,+cnt.textContent+d);cnt.textContent=n;bar.style.width=Math.min(100,n/5*100)+'%';};
+  const act=b.dataset.act, ap=li.querySelector('[data-act=approve]'), ed=li.querySelector('[data-act=edit]'), rj=li.querySelector('[data-act=reject]');
+  if(act==='approve'){
+    li.dataset.state='approved'; li.classList.remove('rejected');
+    st.textContent='Approved · added to the plan. It still goes through the ready check on its test page.';
+    ap.hidden=true; if(!li.dataset.counted){li.dataset.counted='1';setCount(1);} src.textContent='1 generated · approved';
+  } else if(act==='edit'){
+    const on=ed.textContent==='Edit';
+    li.querySelectorAll('.ed').forEach(x=>x.contentEditable=on?'true':'false');
+    ed.textContent=on?'Done editing':'Edit';
+    if(!on){ st.textContent=(li.dataset.state==='approved'?'Approved · ':'')+'Edited by you. The ready check runs again on the edited version.'; ap.hidden=false; ap.textContent='Approve'; li.dataset.state=li.dataset.counted?'approved':'edited'; if(li.dataset.counted){ap.hidden=true;} }
+  } else if(act==='reject'){
+    if(li.dataset.counted){delete li.dataset.counted;setCount(-1);}
+    li.dataset.state='rejected'; li.classList.add('rejected');
+    st.innerHTML='Rejected. <u data-act="undo">Undo</u> · <u data-act="regen">Generate another</u>';
+    ap.hidden=true; ed.hidden=true; rj.hidden=true; src.textContent='0 generated · 1 rejected';
+  } else if(act==='undo'){
+    li.dataset.state=''; li.classList.remove('rejected'); st.textContent=''; ap.hidden=false; ed.hidden=false; rj.hidden=false; src.textContent='1 generated · needs review';
+  } else if(act==='regen'){
+    st.textContent='Asked AgentScore for another draft. It will appear here.';
+  }
+});
 const addT=document.getElementById('addTask'), addB=document.getElementById('addTaskBtn');
 addB.onclick=()=>{addT.classList.toggle('show');};
-document.getElementById('findMatches').onclick=()=>{document.getElementById('matchRes').hidden=false;};
-document.getElementById('cancelTask').onclick=()=>{addT.classList.remove('show');document.getElementById('matchRes').hidden=true;};
+const mFound=document.getElementById('matchRes'), mNone=document.getElementById('matchNone');
+const showMatch=none=>{mFound.hidden=none;mNone.hidden=!none;};
+let matchMode=false;
+document.getElementById('findMatches').onclick=()=>showMatch(matchMode);
+document.getElementById('showFound').onclick=()=>{matchMode=false;showMatch(false);};
+document.getElementById('showNone').onclick=()=>{matchMode=true;showMatch(true);};
+const closeAdd=()=>{addT.classList.remove('show');mFound.hidden=true;mNone.hidden=true;};
+document.getElementById('cancelTask').onclick=closeAdd;
+document.getElementById('cancelTaskNone').onclick=closeAdd;
+document.getElementById('rewordTask').onclick=()=>{mNone.hidden=true;};
+document.getElementById('genFromRequest').onclick=()=>{document.getElementById('genDrafts').classList.add('show');};
 document.getElementById('saveTask').onclick=()=>{addT.classList.remove('show');document.getElementById('matchRes').hidden=true;addB.textContent='✓ Added: Change a customer\'s payment terms (2 tests). Totals update in the next step.';addB.style.cursor='default';addB.onclick=null;};
 document.getElementById('sugTabs').addEventListener('click',e=>{
   const t=e.target.closest('[data-p]'); if(!t) return;

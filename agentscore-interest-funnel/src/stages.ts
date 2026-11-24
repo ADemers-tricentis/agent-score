@@ -1,5 +1,6 @@
 export const FUNNEL_STAGES = [
   { id: "interested", label: "Interested" },
+  { id: "account_owner_contacted", label: "Reached out to account owner" },
   { id: "email_sent", label: "Email sent" },
   { id: "follow_up_sent", label: "Follow-up sent" },
   { id: "replied", label: "Replied" },
@@ -43,6 +44,7 @@ export function parseStageLabel(text: string): { stage: Stage; rest: string } | 
   const t = text.trim();
   const candidates: [RegExp, Stage][] = [
     [/^interested/i, "interested"],
+    [/^(reached out to account owner|account owner (contacted|reached out))/i, "account_owner_contacted"],
     [/^email sent/i, "email_sent"],
     [/^follow-?up sent/i, "follow_up_sent"],
     [/^replied/i, "replied"],
@@ -67,6 +69,7 @@ export function parseStageLabel(text: string): { stage: Stage; rest: string } | 
 
 /** The funnel stage a contact touchpoint implies. Touchpoints only ever move a company forward. */
 export const TOUCHPOINT_STAGE: Record<string, FunnelStage | undefined> = {
+  account_owner_reached_out: "account_owner_contacted",
   intro_email: "email_sent",
   follow_up: "follow_up_sent",
   reply_received: "replied",

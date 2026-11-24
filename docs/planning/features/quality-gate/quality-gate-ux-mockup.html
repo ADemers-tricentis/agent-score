@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Quality Gate - UX changes mockup</title>
+<style>
+  :root{
+    --blue:#2f6db5; --blue-d:#245a97; --blue-bg:#eef4fb;
+    --red:#c62828; --red-bg:#fbeceb; --red-bd:#f0c4c1;
+    --green:#2e7d32; --green-bg:#eaf4ea; --green-bd:#c3e0c4;
+    --amber:#9a6700; --amber-bg:#fff6e0;
+    --grey:#5f6670; --grey-bg:#f3f4f6; --bd:#e2e5e9; --text:#1d232b;
+    --note:#7a4dd8; --note-bg:#f4effd;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;color:var(--text);background:#fafbfc}
+  .top{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--bd);background:#fff}
+  .logo{font-weight:600;color:var(--blue);font-size:18px;display:flex;gap:8px;align-items:center}
+  .logo b{background:var(--blue);color:#fff;border-radius:4px;padding:0 6px}
+  .layout{display:grid;grid-template-columns:230px 1fr 300px;min-height:calc(100vh - 49px)}
+  nav.screens{border-right:1px solid var(--bd);background:#fff;padding:16px 10px}
+  nav.screens h4{margin:0 8px 8px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--grey)}
+  nav.screens button{display:block;width:100%;text-align:left;border:0;background:none;padding:8px 10px;border-radius:6px;font:inherit;cursor:pointer;color:var(--text)}
+  nav.screens button:hover{background:var(--grey-bg)}
+  nav.screens button.on{background:var(--blue-bg);color:var(--blue);font-weight:600}
+  nav.screens .n{display:inline-block;width:20px;color:var(--grey)}
+  main{padding:20px 28px;overflow:auto}
+  aside{border-left:1px solid var(--bd);background:#fff;padding:18px}
+  aside h3{margin:0 0 4px;font-size:15px}
+  aside p.sub{margin:0 0 12px;color:var(--grey);font-size:12px}
+  aside ol{padding-left:0;margin:0;list-style:none}
+  aside li{margin-bottom:10px}
+  aside li b{display:block}
+  aside li span{color:var(--grey);font-size:12px}
+  .crumb{color:var(--grey);font-size:13px}
+  .ahead{display:flex;align-items:center;gap:10px;margin:4px 0 2px;flex-wrap:wrap}
+  .ahead h1{margin:0;font-size:24px;font-weight:500}
+  .meta{color:var(--grey);font-size:13px;margin-bottom:12px}
+  .chip{display:inline-block;border-radius:4px;padding:1px 8px;font-size:12.5px;white-space:nowrap}
+  .c-green{background:var(--green-bg);color:var(--green)}
+  .c-red{background:var(--red-bg);color:var(--red)}
+  .c-amber{background:var(--amber-bg);color:var(--amber)}
+  .c-grey{background:var(--grey-bg);color:var(--grey)}
+  .c-out{border:1px solid var(--bd);color:var(--text)}
+  .c-blue{background:var(--blue-bg);color:var(--blue)}
+  .tabs{display:flex;gap:22px;border-bottom:1px solid var(--bd);margin-bottom:16px}
+  .tabs span{padding:8px 2px;color:var(--grey)}
+  .tabs span.on{color:var(--blue);border-bottom:2px solid var(--blue);font-weight:500}
+  .banner{border:1px solid var(--bd);border-radius:6px;padding:14px 16px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+  .banner h2{margin:0 0 2px;font-size:19px;font-weight:500}
+  .banner p{margin:2px 0;color:#39414b}
+  .banner small{color:var(--grey)}
+  .b-grey{background:var(--grey-bg)}
+  .b-green{background:var(--green-bg);border-color:var(--green-bd)}
+  .b-red{background:var(--red-bg);border-color:var(--red-bd)}
+  .b-wait{background:#f6f8fa}
+  .actions{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap}
+  .btn{border:1px solid var(--bd);background:#fff;border-radius:4px;padding:6px 12px;font:inherit;cursor:default;color:var(--blue);white-space:nowrap}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+  .btn.link{border:0;background:none;padding:6px 4px;color:var(--grey);text-decoration:underline}
+  .btn.sm{padding:3px 9px;font-size:13px}
+  .card{background:#fff;border:1px solid var(--bd);border-radius:6px;padding:16px;margin-bottom:16px}
+  .card h3{margin:0 0 10px;font-size:16px;font-weight:500}
+  table{width:100%;border-collapse:collapse}
+  th{font-weight:500;color:var(--grey);text-align:left;font-size:12.5px;padding:8px;border-bottom:1px solid var(--bd)}
+  td{padding:10px 8px;border-bottom:1px solid var(--bd);vertical-align:top}
+  td .sub{display:block;color:var(--grey);font-size:12px;margin-top:3px}
+  tr.muted td{color:var(--grey)}
+  a{color:var(--blue)}
+  .cap{color:var(--grey);font-size:12px;margin-top:8px}
+  .callout{border-radius:6px;padding:10px 12px;margin:8px 0;font-size:13.5px}
+  .callout.info{background:var(--blue-bg);color:#1f4b7d}
+  .callout.warn{background:var(--amber-bg);color:#6b4a00}
+  .mark{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--note);color:#fff;font-size:11px;font-weight:700;margin-left:4px;vertical-align:middle;flex:none}
+  body.nomarks .mark{display:none}
+  .toggle{font-size:12px;color:var(--grey);display:flex;gap:6px;align-items:center}
+  .dims{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  .dim{border:1px solid var(--bd);border-radius:6px;padding:10px}
+  .dim .v{font-size:22px}
+  .dim.bad{border-color:var(--red-bd);background:var(--red-bg)}
+  .score{display:flex;gap:28px;align-items:center}
+  .score .big{font-size:40px;font-weight:300}
+  .menu{position:relative;display:inline-block}
+  .menu .pop{position:absolute;right:0;top:36px;width:380px;background:#fff;border:1px solid var(--bd);border-radius:6px;box-shadow:0 6px 20px rgba(0,0,0,.12);z-index:3}
+  .pop .it{padding:10px 14px;border-bottom:1px solid var(--bd)}
+  .pop .it:last-child{border-bottom:0}
+  .pop .it b{display:flex;justify-content:space-between}
+  .pop .it span:not(.mark){display:block;color:var(--grey);font-size:12.5px}
+  .pop .it.dis{background:#fafafa}
+  .pop .it.dis b{color:var(--grey)}
+  .dialog{max-width:620px;margin:0 auto;background:#fff;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.18);padding:22px 24px}
+  .dialog h2{margin:0 0 14px;font-weight:500}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:12.5px;color:var(--grey);margin-bottom:4px}
+  .input{border:1px solid #c9ced4;border-radius:4px;padding:8px 10px;background:#fff}
+  .help{font-size:12px;color:var(--grey);margin-top:4px}
+  .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .seg div{border:1px solid #c9ced4;border-radius:6px;padding:10px;font-size:13px}
+  .seg div.on{border-color:var(--blue);background:var(--blue-bg)}
+  .seg div b{display:block;font-size:13.5px}
+  .preview{background:var(--grey-bg);border-radius:6px;padding:10px 12px}
+  .preview small{color:var(--grey)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .split{display:grid;grid-template-columns:300px 1fr;gap:16px}
+  .spans{background:#fff;border:1px solid var(--bd);border-radius:6px;padding:10px;font-size:13px;color:#39414b}
+  .spans div{padding:6px 4px;border-bottom:1px solid #f0f1f3}
+  .spans div.hl{background:#fff3f2;border-left:3px solid var(--red);padding-left:6px}
+  .hist li{margin-bottom:12px;list-style:none}
+  .hist{padding:0;margin:0}
+  .hist .t{font-weight:600}
+  .hist .m{color:var(--grey);font-size:12px}
+  .screen{display:none}
+  .screen.on{display:block}
+  code{background:var(--grey-bg);padding:0 4px;border-radius:3px;font-size:12.5px}
+  .toast{background:#2b3138;color:#fff;border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:13.5px;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+  .spin{display:inline-block;width:14px;height:14px;border:2px solid #9bb9e0;border-top-color:var(--blue);border-radius:50%}
+  .term{background:#1e1f22;color:#d8dadf;border-radius:8px;padding:16px 18px;font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;max-width:900px}
+  .term .u{color:#fff;margin:6px 0}
+  .term .t{color:#8fa1b3;margin:6px 0}
+  .term .a{margin:6px 0 12px 14px;font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif;font-size:14px;color:#e6e8eb}
+  .term code{background:#33363b;color:#e6e8eb}
+  .json{background:#f6f8fa;border-radius:6px;padding:12px;font-size:12px;overflow:auto;margin:0}
+  .json .add{background:#e6f4ea;color:#1e5e2a}
+  nav.screens h5{margin:14px 8px 4px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--grey)}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="logo"><b>X</b> Agent Score <span class="chip c-blue" style="margin-left:8px">Mockup: Quality Gate UX changes</span></div>
+  <label class="toggle"><input type="checkbox" id="marks" checked> Show change markers</label>
+</div>
+<div class="layout">
+  <nav class="screens" id="nav"></nav>
+  <main id="main">
+
+<!-- 1. SCORE TAB NUDGE -->
+<section class="screen" data-title="Score tab: why a gate" data-group="Discover" data-agent="agent_execution" data-chip="none">
+  <div class="card">
+    <div class="score">
+      <div><span class="big">79.1</span> <span style="color:var(--grey)">/ 100</span></div>
+      <div><span class="chip c-amber" style="font-size:14px">Ship with note</span><div class="meta" style="margin:4px 0 0">79 out of 100. Ship with note is 70 to 84.</div></div>
+    </div>
+    <div class="callout warn" style="margin-top:14px;display:flex;justify-content:space-between;gap:12px;align-items:center">
+      <div><b>Correctness is 0, but the overall verdict is Ship with note.</b><br>
+      The verdict averages all five areas, so one area can fail without changing it. A quality gate warns you when a single area you care about drops too low.<span class="mark">1</span></div>
+      <span class="btn primary">Watch Correctness</span>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Where the score comes from</h3>
+    <div class="dims">
+      <div class="dim"><div class="v">97</div>Agentic Tool Use</div>
+      <div class="dim bad"><div class="v" style="color:var(--red)">0</div>Correctness</div>
+      <div class="dim"><div class="v">99</div>Groundedness</div>
+      <div class="dim"><div class="v">100</div>Relevance</div>
+      <div class="dim"><div class="v">100</div>Safety</div>
+    </div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Explain the gate where the problem shows up</b><span>When one area is far below the rest, the Score tab says so and offers a one-click rule. This is the "why do I need a gate if I already have a score?" answer, using the agent's own numbers.</span></li>
+    <li><b>Button pre-fills the rule</b><span>"Watch Correctness" opens Add rule with a Correctness minimum already set, using the profile's pass mark.</span></li>
+  </script>
+</section>
+
+<!-- 2. NO GATE -->
+<section class="screen" data-title="No rules yet" data-group="Discover" data-agent="agent_tools_exec" data-chip="none">
+  <div class="banner b-grey">
+    <div>
+      <h2>No rules yet</h2>
+      <p>Your score averages everything, so one bad area or one bad answer barely moves it. Rules let you say what must never slip, and the gate tells you plainly when it does.<span class="mark">1</span></p>
+      <p><b>Suggested for this agent:</b> Correctness is 63, the lowest of its five areas. <a href="#">Add "Correctness stays at 70 or above"</a><span class="mark">2</span></p>
+      <small>The gate is a warning, not a blocker. It never stops your agent or changes the score.</small><span class="mark">3</span>
+    </div>
+    <div class="actions">
+      <span class="btn">Start from a template ▾</span>
+      <span class="btn primary">Add rule</span>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Rules</h3>
+    <p style="color:var(--grey);text-align:center;margin:28px 0">No rules yet. Add one, or start from a template.</p>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Say why, in the banner</b><span>The reason for a gate was only in the docs.</span></li>
+    <li><b>2. One suggested rule from the agent's own scores</b><span>The persona doesn't have to know which eval or threshold matters.</span></li>
+    <li><b>3. "Warning, not a blocker" up front</b><span>Moved from a caption under the table into the banner.</span></li>
+    <li><b>Override is hidden when it can't be used</b><span>It only appears when the gate is closed.</span></li>
+    <li><b>"Conditions" is now "Rules"</b><span>Plainer word; used everywhere, including the chip.</span></li>
+  </script>
+</section>
+
+<!-- 3. TEMPLATE MENU -->
+<section class="screen" data-title="Template menu" data-group="Set up" data-agent="agent_tools_exec" data-chip="none">
+  <div class="banner b-grey" style="min-height:330px">
+    <div>
+      <h2>No rules yet</h2>
+      <p>Your score averages everything, so one bad area or one bad answer barely moves it.</p>
+    </div>
+    <div class="actions">
+      <div class="menu">
+        <span class="btn">Start from a template ▴</span>
+        <div class="pop">
+          <div class="it dis"><b>Privacy <span class="chip c-grey">None of 1 rule applies</span></b><span>Fails if any answer leaks personal data (PII leakage below 80).</span><span style="color:var(--amber)">This agent isn't scored on PII leakage, so this template would check nothing.</span><span class="mark">1</span></div>
+          <div class="it dis"><b>Security <span class="chip c-grey">None of 2 rules apply</span></b><span>Misuse on any answer; role violations on more than 5% of answers.</span></div>
+          <div class="it dis"><b>Safety <span class="chip c-grey">None of 3 rules apply</span></b><span>Toxicity or non-advice on any answer; bias on more than 5%.</span></div>
+          <div class="it"><b>Built from this agent's profile <span class="chip c-green">3 rules</span></b><span>Correctness at 70+, Security Findings on any answer, Agent-Fault Task Success below 70 on more than 5%.</span><span class="mark">2</span></div>
+        </div>
+      </div>
+      <span class="btn primary">Add rule</span>
+    </div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Show what each template checks and whether it applies</b><span>Live today: applying Privacy on agent_tools_exec said "1 added" but the banner kept saying "No gate configured". None of the 6 template evals are in this agent's profile.</span></li>
+    <li><b>2. A template that always fits</b><span>Built from the evals the agent is actually scored on. Bigger change than copy; optional.</span></li>
+    <li><b>If they apply one anyway</b><span>Toast: "Added Privacy, but this agent isn't scored on PII leakage, so the rule can't check anything yet."</span></li>
+  </script>
+</section>
+
+<!-- 4. ADD RULE DIALOG -->
+<section class="screen" data-title="Add rule" data-group="Set up" data-agent="agent_tools_exec" data-chip="none">
+  <div class="dialog">
+    <h2>Add rule</h2>
+    <div class="field">
+      <label>What should close the gate?<span class="mark">1</span></label>
+      <div class="seg">
+        <div><b>Individual bad answers</b>Close if answers score too low on one check</div>
+        <div class="on"><b>An area drops too low</b>Close if a score falls below a minimum</div>
+        <div><b>Got worse after a change</b>Close if a score drops after you change the agent</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Which score?</label>
+      <div class="input">Correctness <span style="color:var(--grey)">· currently 63</span> ▾</div>
+      <div class="help">Lists the five areas and 11 checks this agent is scored on, each with its current score.<span class="mark">2</span></div>
+    </div>
+    <div class="field">
+      <label>Close the gate when it falls below</label>
+      <div class="input">70</div>
+      <div class="help">Pre-filled with this agent's own pass mark for Correctness. Scores use the 0-100 scale.<span class="mark">3</span></div>
+    </div>
+    <details class="field" open>
+      <summary style="cursor:pointer;color:var(--blue)">How much data before it decides</summary>
+      <div class="input" style="margin-top:6px">10 scored answers</div>
+      <div class="help">Until then the gate shows "Waiting for data". 10 is the default; most agents reach it within a day.<span class="mark">4</span></div>
+    </details>
+    <div class="preview">
+      <small>The gate will close if</small><br>
+      <b>Correctness falls below 70 in the latest scoring run.</b> Right now it's 63, so it would close straight away.<span class="mark">5</span>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+      <span class="btn link" style="text-decoration:none;color:var(--blue)">Cancel</span>
+      <span class="btn primary">Save rule</span><span class="mark">6</span>
+    </div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Plain question instead of "Kind" and "Checks"</b><span>Areas (dimensions) are reachable in one step, not only through "Score floor".</span></li>
+    <li><b>2. One picker, with current scores</b><span>No tenant-prefixed slugs. Shows a loading state, never "No results." while loading.</span></li>
+    <li><b>3. Default from the profile</b><span>Today it's always 80, though this profile's pass marks run from 50 to 100.</span></li>
+    <li><b>4. Minimum evidence renamed and given a stated default</b><span>Collapsed by default for most users; open here to show the copy.</span></li>
+    <li><b>5. Preview says what would happen now</b><span>Uses current data so the user can sanity-check the threshold.</span></li>
+    <li><b>6. "Save rule" instead of "Save and re-evaluate"</b><span>"Re-evaluate" read as "rescore", which costs credits.</span></li>
+    <li><b>Default time window</b><span>"Individual bad answers" rules default to Last 30 days, not Current revision.</span></li>
+  </script>
+</section>
+
+<!-- 5. OPEN -->
+<section class="screen" data-title="Gate open" data-group="Read the gate" data-agent="agent_tools_exec" data-chip="open">
+  <div class="banner b-green">
+    <div>
+      <h2>Gate open</h2>
+      <p>Safety stays at 70 or above (now 100). Checked 20 scored answers.<span class="mark">1</span></p>
+      <p style="color:var(--amber)">1 rule can't run on this agent: Privacy (PII leakage) isn't scored for it. <a href="#">Remove it</a><span class="mark">2</span></p>
+      <small>Last checked 11/23/2026, 12:10 PM</small>
+    </div>
+    <div class="actions"><span class="btn">Start from a template ▾</span><span class="btn primary">Add rule</span></div>
+  </div>
+  <div class="card">
+    <h3>Rules</h3>
+    <table>
+      <tr><th style="width:38%">Rule</th><th>State</th><th>Now</th><th>Answers checked</th><th></th></tr>
+      <tr><td>Safety stays at 70 or above<span class="sub">Latest scoring run · This agent</span></td><td><span class="chip c-green">Passing</span></td><td>100</td><td>20</td><td>⋮</td></tr>
+      <tr class="muted"><td>Privacy: no answer leaks personal data<span class="sub">PII leakage below 80 on any answer · last 30 days · Template</span></td><td><span class="chip c-grey">Can't run</span><span class="sub">This agent isn't scored on PII leakage.</span></td><td>-</td><td>-</td><td><a href="#">Remove</a></td></tr>
+    </table>
+    <div class="cap">Only a sample of answers is scored. The gate is a warning: it never blocks your agent or changes the score.</div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Name what passed</b><span>Was "All 1 applicable conditions pass."</span></li>
+    <li><b>2. Surface rules that check nothing</b><span>Was silent: the gate read Open with no hint that the Privacy rule could never run.</span></li>
+    <li><b>"Not applicable" becomes "Can't run" with a Remove action</b><span>Dead end turned into a next step.</span></li>
+    <li><b>Rule text reads as a sentence</b><span>"Safety stays at 70 or above" rather than "Safety below 70 · latest complete run".</span></li>
+  </script>
+</section>
+
+<!-- 6. WAITING FOR DATA -->
+<section class="screen" data-title="Waiting for data" data-group="Read the gate" data-agent="agent_tools_exec" data-chip="wait">
+  <div class="banner b-wait">
+    <div>
+      <h2>Waiting for data</h2>
+      <p><b>Nothing has failed.</b> 1 rule needs more scored answers before it can decide.<span class="mark">1</span></p>
+      <p>Faithfulness: 38 of 1,000 answers so far. At the current rate (about 6 a day) that's over 5 months. <a href="#">Lower to 30</a><span class="mark">2</span></p>
+      <small>Last checked 11/23/2026, 12:11 PM</small>
+    </div>
+    <div class="actions"><span class="btn">Start from a template ▾</span><span class="btn primary">Add rule</span></div>
+  </div>
+  <div class="card">
+    <h3>Rules</h3>
+    <table>
+      <tr><th style="width:38%">Rule</th><th>State</th><th>Now</th><th>Answers checked</th><th></th></tr>
+      <tr><td>Safety stays at 70 or above<span class="sub">Latest scoring run</span></td><td><span class="chip c-green">Passing</span></td><td>100</td><td>20</td><td>⋮</td></tr>
+      <tr><td>No answer scores below 70 on Faithfulness<span class="sub">Last 30 days</span></td><td><span class="chip c-grey">Waiting · 38 of 1,000</span><span class="mark">3</span></td><td>0 low so far</td><td>38</td><td>⋮</td></tr>
+    </table>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Lead with "Nothing has failed"</b><span>Neutral grey instead of amber, so it doesn't read as a warning.</span></li>
+    <li><b>2. Say when, and offer a fix if it's unrealistic</b><span>Live today: "Needs 1000 scored traces, 38 so far." with no sense of how long that takes.</span></li>
+    <li><b>3. Progress in the chip</b><span>"Waiting · 38 of 1,000" instead of "Not enough data", which reads like a failure.</span></li>
+  </script>
+</section>
+
+<!-- 7. CLOSED -->
+<section class="screen" data-title="Gate closed" data-group="Read the gate" data-agent="agent_tools_exec" data-chip="closed">
+  <div class="banner b-red">
+    <div>
+      <h2>Gate closed</h2>
+      <p><b>Failing: no answer scores below 70 on Agent-Fault Task Success.</b> 4 of 39 answers did (lowest: 0).<span class="mark">1</span></p>
+      <p><a href="#">See the 4 answers</a> · <a href="#">Get advice on fixing this</a><span class="mark">2</span></p>
+      <small>This is a warning, not a block. Your agent keeps running and its score is unchanged.<span class="mark">3</span> · Last checked 11/23/2026, 12:12 PM</small>
+    </div>
+    <div class="actions"><span class="btn primary">Add rule</span><span class="btn link">Accept the risk…</span><span class="mark">4</span></div>
+  </div>
+  <div class="card">
+    <h3>Rules</h3>
+    <table>
+      <tr><th style="width:38%">Rule</th><th>State</th><th>Now</th><th>Answers checked</th><th></th></tr>
+      <tr><td><b>No answer scores below 70 on Agent-Fault Task Success</b><span class="sub">Last 30 days</span></td><td><span class="chip c-red">Failing</span></td><td>4 low (10%)</td><td>39</td><td><a href="#">See answers</a> · <a href="#">Get advice</a></td></tr>
+      <tr><td>Correctness stays at 70 or above<span class="sub">Latest scoring run</span></td><td><span class="chip c-red">Failing</span></td><td>63</td><td>40</td><td><a href="#">See lowest answers</a> · <a href="#">Get advice</a><span class="mark">5</span></td></tr>
+      <tr><td>Safety stays at 70 or above<span class="sub">Latest scoring run</span></td><td><span class="chip c-green">Passing</span></td><td>100</td><td>20</td><td>⋮</td></tr>
+    </table>
+  </div>
+  <div class="card" style="border-style:dashed">
+    <h3 style="font-size:14px;color:var(--grey)">Elsewhere: Score and Improve tabs<span class="mark">6</span></h3>
+    <div style="display:flex;gap:12px;align-items:center"><span style="font-size:28px;font-weight:300">89.1</span><span class="chip c-green">Ship</span><span class="chip c-red">Gate closed: 2 rules failing</span><a href="#">Why?</a></div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Name the failing rule and the evidence</b><span>Was "1 of 3 applicable conditions is failing."</span></li>
+    <li><b>2. Next steps in the banner</b><span>Answers and advice, one click each.</span></li>
+    <li><b>3. "Not a block" where it's needed</b><span>Was a caption under the table.</span></li>
+    <li><b>4. Override renamed and downplayed</b><span>"Accept the risk…" says what it means. Same dialog and reason requirement as today.</span></li>
+    <li><b>5. Floor rules get links too</b><span>Today only "Flagged traces" rules get "View flagged traces". A failing floor is a dead end.</span></li>
+    <li><b>6. Verdict and gate side by side</b><span>Live today: Improve says "Ship. 89 out of 100" with no mention of the closed gate.</span></li>
+  </script>
+</section>
+
+<!-- 8. FLAGGED ANSWER -->
+<section class="screen" data-title="Flagged answer" data-group="Act on a closed gate" data-agent="agent_tools_exec" data-chip="closed">
+  <div class="split">
+    <div class="spans">
+      <div>POST · 17.20s</div>
+      <div>ChatbotAgentGraph · agent</div>
+      <div>chat_node · chain</div>
+      <div class="hl">a2a_skill_t1_agent_automate_test_case · failed</div>
+      <div>agent_tools_exec · agent</div>
+      <div class="hl">final response · stopped</div>
+    </div>
+    <div class="card">
+      <h3>Why the gate flagged this answer</h3>
+      <p style="margin:0 0 6px"><span class="chip c-red">Agent-Fault Task Success: 0</span> <span style="color:var(--grey);font-size:12.5px">needs 70 · scored 11/23/2026</span><span class="mark">1</span></p>
+      <p style="margin:10px 0">The user asked to update an existing test case, changing Order Type from OR to ZOR. The agent called <code>a2a_skill_t1_agent_automate_test_case</code>, which is an automation tool, not an edit. <a href="#">That call failed</a> because no test outline exists. Edit tools such as <code>toscacloud_tosca_teststep_edit</code> were available. The agent never tried them, reported it couldn't do the update, and <a href="#">stopped</a>.<span class="mark">2</span></p>
+      <div class="callout info"><b>What to change:</b> make sure the agent picks the edit tools for "update" requests. <a href="#">Get detailed advice</a> · <a href="#">Copy as a prompt for your coding agent</a><span class="mark">3</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+        <span class="cap" style="margin:0">Wrong call by the judge? Mark it as a false alarm and it counts as passing for this rule only. This can't be undone.<span class="mark">4</span></span>
+        <span class="btn sm">Mark as false alarm</span>
+      </div>
+    </div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Score with its target, date only</b><span>Drops "Scored by run 01M83SZ4N8SCPZT32HHRT2A5D5".</span></li>
+    <li><b>2. The judge's reason stays, with linked steps</b><span>The reason is the best part of today's flow. Span IDs (e779120ef0bea3d8) become links that select the step on the left.</span></li>
+    <li><b>3. A route to the fix</b><span>Today the only action is "Acknowledge as false alarm".</span></li>
+    <li><b>4. Acknowledge copy fixed</b><span>Today's caption ("the trace still counts toward the share") contradicts the dialog. Irreversibility is now stated.</span></li>
+  </script>
+</section>
+
+<!-- 9. HISTORY -->
+<section class="screen" data-title="History" data-group="Manage" data-agent="agent_tools_exec" data-chip="none">
+  <div class="card">
+    <h3>History</h3>
+    <ul class="hist">
+      <li><span class="t">Rule removed: No answer scores below 70 on Agent-Fault Task Success</span><span class="mark">1</span><div class="m">11/23/2026, 12:14 PM · a.demers@tricentis.com · app</div></li>
+      <li><span class="t">Gate closed</span><div class="m">11/23/2026, 12:12 PM · after a rule was added</div>Failing: No answer scores below 70 on Agent-Fault Task Success. Lowest answer: <a href="#">da44742f…</a> (0)</li>
+      <li><span class="t">Rule added: No answer scores below 70 on Agent-Fault Task Success</span><div class="m">11/23/2026, 12:12 PM · a.demers@tricentis.com · app</div></li>
+      <li><span class="t">Template applied: Privacy</span><span class="mark">2</span><div class="m">11/23/2026, 12:10 PM · a.demers@tricentis.com · app</div>1 rule added. It can't run on this agent (not scored on PII leakage).</li>
+    </ul>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Keep names after a rule is deleted</b><span>Live today, after cleanup: "An eval below 70 on any single trace" and "failing: a condition".</span></li>
+    <li><b>2. Cause only when it adds something</b><span>Today every entry ends "after a condition changed", even "Template applied".</span></li>
+  </script>
+</section>
+
+
+<!-- ===== DISCOVER: AGENTS LIST ===== -->
+<section class="screen" data-title="Agents list" data-group="Discover" data-agent="" data-chip="none" data-nohead="1">
+  <h1 style="font-weight:500;margin:0 0 4px">My Agents</h1>
+  <div class="meta">Monitor and improve every agent across your tenants.</div>
+  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+    <span class="input" style="padding:5px 10px">All tenants ▾</span><span class="input" style="padding:5px 10px">All statuses ▾</span>
+    <span class="input" style="padding:5px 10px">Gate: any ▾</span>
+    <span class="chip c-out" style="padding:5px 10px">Closed (1)</span><span class="chip c-out" style="padding:5px 10px">Waiting (0)</span><span class="chip c-out" style="padding:5px 10px">Open (0)</span><span class="chip c-out" style="padding:5px 10px">No rules (60)</span><span class="mark">1</span>
+  </div>
+  <div class="card" style="padding:0">
+    <table>
+      <tr><th style="padding-left:16px">Agent</th><th>Score</th><th>Verdict</th><th>Quality gate</th></tr>
+      <tr><td style="padding-left:16px">agent_tools_exec<span class="sub">tais · Tricentis service</span></td><td>89.1</td><td><span class="chip c-green">Ship</span></td><td><span class="chip c-red">Closed</span><span class="sub">Agent-Fault Task Success: 4 low answers</span><span class="mark">2</span></td></tr>
+      <tr><td style="padding-left:16px">agent_execution<span class="sub">tais · Tricentis service</span></td><td>79.1</td><td><span class="chip c-amber">Ship with note</span></td><td><span class="chip c-grey">No rules</span><span class="sub"><a href="#">Correctness is 0. Add a rule</a></span><span class="mark">3</span></td></tr>
+      <tr><td style="padding-left:16px">agent_tools_prep<span class="sub">tais · Tricentis service</span></td><td>78.7</td><td><span class="chip c-amber">Ship with note</span></td><td><span class="chip c-grey">No rules</span><span class="sub"><a href="#">Correctness is 10. Add a rule</a></span></td></tr>
+      <tr><td style="padding-left:16px">chatbotagentgraph<span class="sub">tais · Tricentis service</span></td><td>86.3</td><td><span class="chip c-green">Ship</span></td><td><span class="chip c-grey">No rules</span></td></tr>
+    </table>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Counts on the gate filter</b><span>Today it's a plain dropdown (Closed / Not enough data / Open / No gate). Counts show where to look first.</span></li>
+    <li><b>2. Say what's failing in the list</b><span>The persona sees which rule failed without opening the agent.</span></li>
+    <li><b>3. Suggest a rule where it matters</b><span>Only on agents with one area far below the rest, so it isn't noise on every row.</span></li>
+  </script>
+</section>
+
+<!-- ===== SET UP: TEMPLATE APPLIED ===== -->
+<section class="screen" data-title="Template applied" data-group="Set up" data-agent="agent_tools_exec" data-chip="none">
+  <div class="toast"><b>Privacy added, but it can't check anything yet.</b> This agent isn't scored on PII leakage. <a href="#" style="color:#cfe0ff">Undo</a><span class="mark">1</span></div>
+  <div class="banner b-grey">
+    <div>
+      <h2>No rules can run yet</h2>
+      <p>You have 1 rule, but this agent isn't scored on the check it needs.<span class="mark">2</span></p>
+      <p><b>To fix:</b> <a href="#">remove it</a>, or <a href="#">add PII leakage to this agent's scoring profile</a>. Or add a rule on something this agent is scored on, like <a href="#">Correctness (now 63)</a>.<span class="mark">3</span></p>
+    </div>
+    <div class="actions"><span class="btn">Start from a template ▾</span><span class="btn primary">Add rule</span></div>
+  </div>
+  <div class="card">
+    <h3>Rules</h3>
+    <table>
+      <tr><th style="width:42%">Rule</th><th>State</th><th>Now</th><th>Answers checked</th><th></th></tr>
+      <tr class="muted"><td>Privacy: no answer leaks personal data<span class="sub">PII leakage below 80 on any answer · last 30 days · From template</span></td><td><span class="chip c-grey">Can't run</span><span class="sub">Not scored on PII leakage</span></td><td>-</td><td>-</td><td><a href="#">Remove</a></td></tr>
+    </table>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Honest toast, with Undo</b><span>Live today: "Template applied: 1 added, 0 already there", and nothing else.</span></li>
+    <li><b>2. A distinct state for "rules exist, none can run"</b><span>Live today this reads "No gate configured. Add a condition or apply a template…", right after you applied one.</span></li>
+    <li><b>3. Three ways out</b><span>Remove, fix the profile, or pick something the agent is scored on.</span></li>
+  </script>
+</section>
+
+<!-- ===== SET UP: BAD ANSWERS RULE ===== -->
+<section class="screen" data-title="Add rule: bad answers" data-group="Set up" data-agent="agent_tools_exec" data-chip="none">
+  <div class="dialog">
+    <h2>Add rule</h2>
+    <div class="field">
+      <label>What should close the gate?</label>
+      <div class="seg">
+        <div class="on"><b>Individual bad answers</b>Close if answers score too low on one check</div>
+        <div><b>An area drops too low</b>Close if a score falls below a minimum</div>
+        <div><b>Got worse after a change</b>Close if a score drops after you change the agent</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Which check?</label>
+      <div class="input">Agent-Fault Task Success <span style="color:var(--grey)">· Correctness · 4 of 39 answers below its pass mark</span> ▾</div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>An answer is bad if it scores below</label><div class="input">70</div><div class="help">This agent's pass mark for this check.</div></div>
+      <div class="field"><label>Look at answers from the</label><div class="input">Last 30 days ▾</div><div class="help">Or: last N answers, or since your last change.<span class="mark">1</span></div></div>
+    </div>
+    <div class="field">
+      <label>Close the gate when<span class="mark">2</span></label>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label style="color:var(--text);font-size:14px"><input type="radio" checked> Any single answer is bad <span style="color:var(--grey)">(strictest: for things that must never happen)</span></label>
+        <label style="color:var(--text);font-size:14px"><input type="radio"> More than <span class="input" style="display:inline-block;padding:1px 8px;width:50px">5</span> % of answers are bad <span style="color:var(--grey)">(for occasional slips you can live with)</span></label>
+      </div>
+    </div>
+    <div class="preview">
+      <small>The gate will close if</small><br>
+      <b>any answer in the last 30 days scores below 70 on Agent-Fault Task Success.</b> Right now 4 of 39 do, so it would close straight away. <a href="#">See them</a><span class="mark">3</span>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px"><span class="btn link" style="text-decoration:none;color:var(--blue)">Cancel</span><span class="btn primary">Save rule</span></div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Last 30 days by default</b><span>Today the default is "Current revision", which the persona won't know.</span></li>
+    <li><b>2. Radio choice with guidance</b><span>Replaces a checkbox plus a disabled "Or fail when more than this share is flagged (%)" field. Says when to use each.</span></li>
+    <li><b>3. Live preview against real data</b><span>Lets them see the threshold is sensible before saving.</span></li>
+    <li><b>Check picker shows how it's doing now</b><span>Instead of a bare name over a tenant-prefixed slug.</span></li>
+  </script>
+</section>
+
+<!-- ===== SET UP: GOT WORSE RULE ===== -->
+<section class="screen" data-title="Add rule: got worse" data-group="Set up" data-agent="agent_tools_exec" data-chip="none">
+  <div class="dialog">
+    <h2>Add rule</h2>
+    <div class="field">
+      <label>What should close the gate?</label>
+      <div class="seg">
+        <div><b>Individual bad answers</b>Close if answers score too low on one check</div>
+        <div><b>An area drops too low</b>Close if a score falls below a minimum</div>
+        <div class="on"><b>Got worse after a change</b>Close if a score drops after you change the agent</div>
+      </div>
+    </div>
+    <div class="field"><label>Which score?</label><div class="input">Overall score <span style="color:var(--grey)">· now 89.1</span> ▾</div></div>
+    <div class="field"><label>Close the gate when it drops by more than</label><div class="input">5 points</div></div>
+    <div class="callout info"><b>How "after a change" works.</b> Each time you change your agent (new prompt, model or tools), mark it as a new version on the Improve tab. This rule compares the new version's score with the one before.<span class="mark">1</span><br>
+      <span style="color:var(--grey)">You haven't marked a version yet, so this rule will wait until you do.</span> <a href="#">Mark a version now</a><span class="mark">2</span></div>
+    <div class="preview"><small>The gate will close if</small><br><b>the overall score drops more than 5 points from the previous version.</b></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px"><span class="btn link" style="text-decoration:none;color:var(--blue)">Cancel</span><span class="btn primary">Save rule</span></div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Explain "revision" in plain words, at the moment it matters</b><span>Today the kind is "Drop from previous revision" and the only explanation is in a docs tip.</span></li>
+    <li><b>2. Say up front that it will wait</b><span>Today the rule saves, then shows "There is no earlier revision to compare with."</span></li>
+    <li><b>"Revision" becomes "version"</b><span>Plainer for this persona; used across the gate.</span></li>
+  </script>
+</section>
+
+<!-- ===== READ: ACCEPTED RISK (OVERRIDDEN) ===== -->
+<section class="screen" data-title="Open: risk accepted" data-group="Read the gate" data-agent="agent_tools_exec" data-chip="accepted">
+  <div class="banner b-green" style="border-style:dashed">
+    <div>
+      <h2>Gate open: risk accepted</h2>
+      <p><b>a.demers@tricentis.com accepted 1 failing rule</b> on 11/23/2026: "Known issue with update requests, fix scheduled for next sprint."<span class="mark">1</span></p>
+      <p>Accepted: no answer scores below 70 on Agent-Fault Task Success (4 low answers).</p>
+      <small>This ends on its own if another rule fails, you mark a new version, or anyone changes a rule.<span class="mark">2</span></small>
+    </div>
+    <div class="actions"><span class="btn">End now</span><span class="btn primary">Add rule</span><span class="mark">3</span></div>
+  </div>
+  <div class="card">
+    <h3>Rules</h3>
+    <table>
+      <tr><th style="width:42%">Rule</th><th>State</th><th>Now</th><th>Answers checked</th><th></th></tr>
+      <tr><td>No answer scores below 70 on Agent-Fault Task Success<span class="sub">Last 30 days</span></td><td><span class="chip c-red">Failing</span> <span class="chip c-grey">Risk accepted</span></td><td>4 low (10%)</td><td>39</td><td><a href="#">See answers</a></td></tr>
+      <tr><td>Safety stays at 70 or above<span class="sub">Latest scoring run</span></td><td><span class="chip c-green">Passing</span></td><td>100</td><td>20</td><td>⋮</td></tr>
+    </table>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Who, when and why, up top</b><span>Same data as today's override banner, in plainer words.</span></li>
+    <li><b>2. When it ends</b><span>Kept from today's copy, reworded ("revision" becomes "version").</span></li>
+    <li><b>3. "End now"</b><span>New: today an override can only end through a rule change or new version.</span></li>
+    <li><b>Failing row stays honest</b><span>Shows "Failing" plus "Risk accepted", so nobody mistakes it for a pass.</span></li>
+    <li><b>Dashed green border</b><span>Open, but visibly not a clean open.</span></li>
+  </script>
+</section>
+
+<!-- ===== READ: UPDATING / CHECK FAILED ===== -->
+<section class="screen" data-title="Updating / check failed" data-group="Read the gate" data-agent="agent_tools_exec" data-chip="closed">
+  <div class="callout info" style="display:flex;gap:8px;align-items:center"><span class="spin"></span> New scores just arrived. Re-checking your rules, this takes a few seconds.<span class="mark">1</span></div>
+  <div class="callout warn"><b>We couldn't re-check your rules just now.</b> What you see is from 11/23/2026, 12:12 PM. We'll try again automatically. <span style="color:var(--grey)">Code: evaluation_timeout</span><span class="mark">2</span></div>
+  <div class="banner b-red">
+    <div>
+      <h2>Gate closed</h2>
+      <p><b>Failing: no answer scores below 70 on Agent-Fault Task Success.</b> 4 of 39 answers did (lowest: 0).</p>
+      <p><a href="#">See the 4 answers</a> · <a href="#">Get advice on fixing this</a></p>
+      <small>This is a warning, not a block. Your agent keeps running and its score is unchanged.</small>
+    </div>
+    <div class="actions"><span class="btn primary">Add rule</span><span class="btn link">Accept the risk…</span></div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Updating</b><span>Today: "Updating", followed by "new scoring results arrived and the gate is being re-evaluated." Reworded for this persona.</span></li>
+    <li><b>2. Check failed</b><span>Today: "The last gate evaluation failed (code)." Leads with what it means for them; the code is kept but de-emphasised.</span></li>
+    <li><b>Both shown together here for review</b><span>In the product they'd rarely appear at once.</span></li>
+  </script>
+</section>
+
+<!-- ===== ACT: FLAGGED ANSWERS LIST ===== -->
+<section class="screen" data-title="Flagged answers list" data-group="Act on a closed gate" data-agent="agent_tools_exec" data-chip="closed">
+  <div class="callout info" style="display:flex;justify-content:space-between;align-items:center">
+    <span>Showing the <b>4 answers</b> that failed <b>"No answer scores below 70 on Agent-Fault Task Success"</b>, last 30 days.<span class="mark">1</span></span>
+    <a href="#">Show all answers</a>
+  </div>
+  <div class="card" style="padding:0">
+    <table>
+      <tr><th style="padding-left:16px;width:46%">What the user asked<span class="mark">2</span></th><th>When</th><th>Score on this check</th><th>Why it failed</th></tr>
+      <tr><td style="padding-left:16px">"Update the test case: change Order Type from OR to ZOR"<span class="sub">Trace da44742f…</span></td><td>Nov 20</td><td><span class="chip c-red">0</span></td><td>Used an automation tool instead of the edit tools, then gave up.<span class="mark">3</span></td></tr>
+      <tr><td style="padding-left:16px">"Automate the manual test case Create Sales Order"<span class="sub">Trace 7c1e09ab…</span></td><td>Nov 19</td><td><span class="chip c-red">50</span></td><td>Stopped before the last step without saying why.</td></tr>
+      <tr><td style="padding-left:16px">"Generate test steps for goods receipt"<span class="sub">Trace 3f88d210…</span></td><td>Nov 18</td><td><span class="chip c-red">50</span></td><td>Asked the user a question it could have answered itself.</td></tr>
+      <tr><td style="padding-left:16px">"Link the qTest case to Tosca"<span class="sub">Trace 91b0c4e7…</span></td><td>Nov 11</td><td><span class="chip c-red">50</span></td><td>qTest wasn't connected; the agent didn't tell the user.</td></tr>
+    </table>
+  </div>
+  <div class="callout info"><b>Common thread:</b> 3 of 4 stopped early instead of finishing or explaining. <a href="#">Get advice on this pattern</a><span class="mark">4</span></div>
+  <script type="text/notes">
+    <li><b>1. Say which rule this list is for</b><span>Today: a "Flagged only" checkbox, a condition picker, and "Applied range: 2026-10-24T18:12:38.758000Z – …".</span></li>
+    <li><b>2. Lead with the user's request, not the span name</b><span>Live today rows read "Authenticating user with Okta" and "POST", with Execution "success".</span></li>
+    <li><b>3. One-line reason per row</b><span>A short version of the judge's reason, so they can scan without opening each trace.</span></li>
+    <li><b>4. Pattern across flags</b><span>Bigger change: a short summary across the flagged answers, linking to advice.</span></li>
+    <li><b>Illustrative data</b><span>Row 1 is from the live trace; rows 2-4 requests and reasons are made up to show the layout.</span></li>
+  </script>
+</section>
+
+<!-- ===== ACT: ACCEPT THE RISK DIALOG ===== -->
+<section class="screen" data-title="Accept the risk" data-group="Act on a closed gate" data-agent="agent_tools_exec" data-chip="closed">
+  <div class="dialog">
+    <h2>Accept the risk and open the gate?</h2>
+    <p style="margin-top:0">Use this when you know about a failure and have decided it's OK for now. Your agent isn't blocked either way: this only changes what the gate shows.<span class="mark">1</span></p>
+    <div class="callout warn"><b>You're accepting:</b><br>No answer scores below 70 on Agent-Fault Task Success (4 low answers, lowest 0)</div>
+    <div class="field">
+      <label>Why is this OK for now? (required, shown to everyone)<span class="mark">2</span></label>
+      <div class="input" style="min-height:64px;color:var(--grey)">e.g. Known issue with update requests, fix scheduled for next sprint.</div>
+      <div class="help">0 / 1000</div>
+    </div>
+    <p class="cap">The gate goes back to closed on its own if another rule fails, you mark a new version, or anyone changes a rule.</p>
+    <div class="callout info" style="font-size:13px">Not sure? <a href="#">Look at the 4 answers first</a> or <a href="#">get advice</a>.<span class="mark">3</span></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px"><span class="btn link" style="text-decoration:none;color:var(--blue)">Cancel</span><span class="btn primary" style="background:var(--red);border-color:var(--red)">Accept the risk</span></div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Say when to use it, and that nothing is blocked</b><span>Today: "Override the closed gate" with no guidance on when it's appropriate.</span></li>
+    <li><b>2. Reason prompt with an example</b><span>Today the field is labelled only "Reason (required)".</span></li>
+    <li><b>3. A way back to the fix</b><span>Nudges toward fixing over overriding, without blocking it.</span></li>
+    <li><b>Organization rules</b><span>If an organization rule is failing, this dialog is replaced by "Only Tricentis can accept this risk" (today's behaviour, kept).</span></li>
+  </script>
+</section>
+
+<!-- ===== ACT: FALSE ALARM DIALOG ===== -->
+<section class="screen" data-title="Mark as false alarm" data-group="Act on a closed gate" data-agent="agent_tools_exec" data-chip="closed">
+  <div class="dialog">
+    <h2>Mark this answer as a false alarm?</h2>
+    <p style="margin-top:0">Do this only if the judge got it wrong and the answer was actually fine.<span class="mark">1</span></p>
+    <div class="preview" style="margin-bottom:12px"><small>The judge said</small><br>"The agent called an automation tool, not an edit… Edit tools were available. The agent never tried them, reported it couldn't do the update, and stopped."</div>
+    <div class="field">
+      <label>Why was the judge wrong? (required, shown to everyone)</label>
+      <div class="input" style="min-height:64px;color:var(--grey)">e.g. Edits weren't allowed on this test case, so stopping was correct.</div>
+    </div>
+    <ul style="margin:0 0 8px;padding-left:18px;font-size:13.5px">
+      <li>This answer will count as <b>passing</b> for "No answer scores below 70 on Agent-Fault Task Success" only.<span class="mark">2</span></li>
+      <li>Its score on the Score tab doesn't change.</li>
+      <li><b>This can't be undone.</b><span class="mark">3</span></li>
+    </ul>
+    <div class="callout info" style="font-size:13px">If the judge is often wrong on this check, <a href="#">label a few answers</a> so it learns, instead of marking each one.<span class="mark">4</span></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px"><span class="btn link" style="text-decoration:none;color:var(--blue)">Cancel</span><span class="btn primary">Mark as false alarm</span></div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. When to use it</b><span>Today the button is "Acknowledge as false alarm" with no guidance.</span></li>
+    <li><b>2. Correct effect, in one sentence</b><span>Today the panel caption says "the trace still counts toward the share", which reads as the opposite.</span></li>
+    <li><b>3. Irreversibility stated</b><span>In the docs today, but not in the dialog.</span></li>
+    <li><b>4. Point repeat cases at labelling</b><span>Uses the existing Labeling tab, so false alarms improve the judge.</span></li>
+  </script>
+</section>
+
+<!-- ===== ACT: AFTER FALSE ALARM ===== -->
+<section class="screen" data-title="After a false alarm" data-group="Act on a closed gate" data-agent="agent_tools_exec" data-chip="closed">
+  <div class="toast"><b>Marked as a false alarm.</b> 3 low answers left on this rule.<span class="mark">1</span></div>
+  <div class="card">
+    <h3>Rules</h3>
+    <table>
+      <tr><th style="width:42%">Rule</th><th>State</th><th>Now</th><th>Answers checked</th><th></th></tr>
+      <tr><td>No answer scores below 70 on Agent-Fault Task Success<span class="sub">Last 30 days</span></td><td><span class="chip c-red">Failing</span></td><td>3 low of 39 (8%)<span class="sub">+1 marked as false alarm</span><span class="mark">2</span></td><td>39</td><td><a href="#">See answers</a></td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>Why the gate flagged this answer</h3>
+    <p style="margin:0"><span class="chip c-grey">Marked as false alarm</span> by a.demers@tricentis.com on 11/23/2026: "Edits weren't allowed on this test case, so stopping was correct."<span class="mark">3</span></p>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Toast says what changed</b><span>Today: "Flag acknowledged".</span></li>
+    <li><b>2. Numbers add up</b><span>Today: "4 flagged (7.7%), 1 acknowledged", where the 4 includes the acknowledged one but the % doesn't.</span></li>
+    <li><b>3. Who and why on the trace</b><span>Kept from today, with "Acknowledged" renamed.</span></li>
+  </script>
+</section>
+
+<!-- ===== MANAGE: EDIT RULE ===== -->
+<section class="screen" data-title="Edit rule" data-group="Manage" data-agent="agent_tools_exec" data-chip="closed">
+  <div class="dialog">
+    <h2>Edit rule</h2>
+    <div class="preview" style="margin-bottom:14px"><small>Checks</small><br><b>Individual bad answers on Agent-Fault Task Success</b><br>
+      <span style="font-size:12.5px;color:var(--grey)">To check something else, <a href="#">duplicate this rule</a> and change it.</span><span class="mark">1</span></div>
+    <div class="row2">
+      <div class="field"><label>An answer is bad if it scores below</label><div class="input">60</div><div class="help">Was 70. This agent's pass mark is 70.<span class="mark">2</span></div></div>
+      <div class="field"><label>Look at answers from the</label><div class="input">Last 30 days ▾</div></div>
+    </div>
+    <div class="field"><label>Close the gate when</label><div style="font-size:14px"><input type="radio" checked> Any single answer is bad &nbsp; <input type="radio"> More than __ % are bad</div></div>
+    <div class="callout warn" style="font-size:13px"><b>What this changes:</b> 1 answer is still below 60, so the gate stays closed. Saving also ends the accepted risk on this gate.<span class="mark">3</span></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px"><span class="btn link" style="text-decoration:none;color:var(--blue)">Cancel</span><span class="btn primary">Save changes</span></div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. "Duplicate" instead of "delete and recreate"</b><span>Today: "Kind and target cannot change after a condition is created. Delete it and add a new one instead."</span></li>
+    <li><b>2. Show the old value and the pass mark</b><span>Helps them notice when they're loosening a rule below the agent's own standard.</span></li>
+    <li><b>3. Before/after effect</b><span>Says whether the gate will change and that an accepted risk ends, before they save.</span></li>
+  </script>
+</section>
+
+<!-- ===== MANAGE: REMOVE RULE ===== -->
+<section class="screen" data-title="Remove rule" data-group="Manage" data-agent="agent_tools_exec" data-chip="closed">
+  <div class="dialog" style="max-width:520px">
+    <h2>Remove this rule?</h2>
+    <p style="margin-top:0"><b>No answer scores below 70 on Agent-Fault Task Success</b></p>
+    <div class="callout warn" style="font-size:13px">This is the only failing rule. Removing it will <b>open the gate</b>, but the 4 low answers are still there.<span class="mark">1</span> <a href="#">See them first</a></div>
+    <p class="cap">The removal stays in History with its name, so others can see what was checked before.<span class="mark">2</span></p>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px"><span class="btn link" style="text-decoration:none;color:var(--blue)">Cancel</span><span class="btn primary" style="background:var(--red);border-color:var(--red)">Remove rule</span></div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Say what removing does to the gate</b><span>Removing the failing rule is a quiet way to "fix" a closed gate. Make that visible.</span></li>
+    <li><b>2. History keeps the name</b><span>Live today, after deletes: "An eval below 70 on any single trace", "failing: a condition".</span></li>
+  </script>
+</section>
+
+<!-- ===== MANAGE: ORGANIZATION RULE ===== -->
+<section class="screen" data-title="Organization rule" data-group="Manage" data-agent="agent_tools_exec" data-chip="closed">
+  <div class="card">
+    <h3>Rules</h3>
+    <table>
+      <tr><th style="width:42%">Rule</th><th>Set by</th><th>State</th><th>Now</th><th></th></tr>
+      <tr><td>No answer leaks a customer's personal data<span class="sub">PII leakage below 90 on any answer · last 30 days</span></td><td><span class="chip c-blue">Your organization</span><span class="mark">1</span></td><td><span class="chip c-red">Failing</span></td><td>1 low</td><td><a href="#">See answer</a><span class="sub">Can't be changed here. <a href="#">Who to ask</a></span><span class="mark">2</span></td></tr>
+      <tr><td>Safety stays at 70 or above<span class="sub">Latest scoring run</span></td><td><span class="chip c-out">You</span></td><td><span class="chip c-green">Passing</span></td><td>100</td><td>⋮</td></tr>
+    </table>
+    <div class="cap">Organization rules apply to every agent in tais. Only Tricentis can change them, mark their flags as false alarms, or accept their risk.</div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. "Your organization" instead of "Organization · read-only"</b><span>Says who set it in their terms.</span></li>
+    <li><b>2. Say who to ask</b><span>Today: "Set by Tricentis on your request", with no route to change it. The flag panel says "only Tricentis can acknowledge this flag".</span></li>
+    <li><b>Illustrative data</b><span>No organization rules exist on tais today.</span></li>
+  </script>
+</section>
+
+<!-- ===== EDGE: NO PROFILE YET ===== -->
+<section class="screen" data-title="Agent not scored yet" data-group="Edge cases" data-agent="agentscore-docs-sync" data-chip="none">
+  <div class="banner b-grey">
+    <div>
+      <h2>Rules start after the first score</h2>
+      <p>This agent has sent 14 of the 20 traces it needs before it can be scored. Once it's scored, you can add rules here.<span class="mark">1</span></p>
+      <div style="background:#e3e6ea;border-radius:4px;height:8px;width:320px;margin:8px 0"><div style="background:var(--blue);height:8px;border-radius:4px;width:70%"></div></div>
+      <small>Want to plan ahead? <a href="#">See which checks this kind of agent is usually scored on</a></small>
+    </div>
+    <div class="actions"><span class="btn primary" style="opacity:.5">Add rule</span></div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Say why setup isn't possible yet</b><span>Today the dialog opens and shows: "This agent has no scoring profile yet, so a condition on an eval or dimension would never decide. Adopt a profile first."</span></li>
+    <li><b>Progress from real data</b><span>agentscore-docs-sync: 14 of 20 traces captured (live MCP).</span></li>
+  </script>
+</section>
+
+<!-- ===== EDGE: LOAD ERROR ===== -->
+<section class="screen" data-title="Gate can't load" data-group="Edge cases" data-agent="agent_tools_exec" data-chip="unknown">
+  <div class="banner b-grey">
+    <div>
+      <h2>We couldn't load the gate</h2>
+      <p>Your rules and their history are safe. This is usually temporary.<span class="mark">1</span></p>
+      <small>Code: gate_unavailable</small>
+    </div>
+    <div class="actions"><span class="btn primary">Try again</span></div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Reassure first</b><span>Today: "The quality gate could not be loaded" plus the raw error message.</span></li>
+    <li><b>Header chip</b><span>Shows "Gate: unknown" instead of disappearing, so the absence isn't read as "no rules".</span></li>
+  </script>
+</section>
+
+<!-- ===== CODING AGENT ===== -->
+<section class="screen" data-title="Coding agent: is it safe?" data-group="Coding agent (MCP)" data-agent="" data-nohead="1">
+  <h1 style="font-weight:500;margin:0 0 4px">In your coding agent</h1>
+  <div class="meta">What the persona sees when they ask their coding agent (Claude Code, Cursor…) about the gate. The agent's answer is driven by what the MCP tools return.</div>
+  <div class="term">
+    <div class="u">&gt; is agent_tools_exec safe to ship?</div>
+    <div class="t">⏺ agent-score · get_quality_gate(agent_tools_exec)</div>
+    <div class="a"><b>Not yet. The quality gate is closed.</b> The score is 89.1 (Ship), but one of your rules is failing:<span class="mark">1</span><br><br>
+    &nbsp;&nbsp;✗ <b>No answer scores below 70 on Agent-Fault Task Success</b>: 4 of the last 39 answers did (lowest 0).<br>
+    &nbsp;&nbsp;✓ Safety stays at 70 or above: 100.<br>
+    &nbsp;&nbsp;– Privacy: can't run, this agent isn't scored on PII leakage.<span class="mark">2</span><br><br>
+    The worst one: asked to change an Order Type, the agent picked the automation tool instead of <code>toscacloud_tosca_teststep_edit</code> and gave up.<br><br>
+    Nothing is blocked: you can still deploy. Want me to (a) look at the other 3 answers, (b) get improvement advice, or (c) draft a fix to the tool-routing prompt?<span class="mark">3</span></div>
+    <div class="u">&gt; b</div>
+    <div class="t">⏺ agent-score · list_quality_gate_flags · get_improvement_advice</div>
+    <div class="a">…</div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Gate and verdict together</b><span>The tool result should say "closed" next to the verdict, so the coding agent doesn't answer "Ship" from the scorecard alone.</span></li>
+    <li><b>2. Rules that can't run are called out</b><span>Same template problem as in the app.</span></li>
+    <li><b>3. Next steps come from the tool result</b><span>A <code>next</code> hint on failing rules points the coding agent at list_quality_gate_flags and get_improvement_advice. See the next screen.</span></li>
+  </script>
+</section>
+
+<section class="screen" data-title="MCP tool changes" data-group="Coding agent (MCP)" data-agent="" data-nohead="1">
+  <h1 style="font-weight:500;margin:0 0 4px">MCP tool changes</h1>
+  <div class="meta">Proposed additions to what the tools return, so the coding agent can give the answer on the previous screen.</div>
+  <div class="row2">
+    <div class="card"><h3>get_quality_gate (excerpt)</h3>
+<pre class="json">{
+  "state": "closed",
+  <span class="add">"summary": "Closed: 1 rule failing. Nothing is blocked.",</span>
+  <span class="add">"verdict": "ship",</span>
+  "conditions": [{
+    "kind": "share",
+    <span class="add">"label": "No answer scores below 70 on
+              Agent-Fault Task Success",</span>
+    "result": { "state": "failing", "flagged": 4, "checked": 39 },
+    <span class="add">"next": ["list_quality_gate_flags",
+             "get_improvement_advice"]</span>
+  }, {
+    "kind": "share",
+    "result": { "state": "not_applicable" },
+    <span class="add">"label": "Privacy: no answer leaks personal data",
+    "fix": "Agent is not scored on pii_leakage."</span>
+  }],
+  "templates": [{
+    "slug": "privacy",
+    <span class="add">"rules": [{"eval": "pii_leakage", "fails_on": "any answer"}],
+    "applicable_rules": 0</span>
+  }]
+}</pre><span class="mark">1</span></div>
+    <div class="card"><h3>Other tool changes</h3>
+      <ul style="padding-left:18px;margin:0">
+        <li><b>create_gate_condition</b>: when <code>trace_threshold</code> is left out, use the profile's pass mark for that eval, and say so in the result.<span class="mark">2</span></li>
+        <li><b>New: list_gate_targets(agent)</b>: the evals and dimensions this agent is scored on, with their IDs, current scores and pass marks. Saves a list_catalog plus get_profile_fit round trip.<span class="mark">3</span></li>
+        <li><b>apply_gate_template</b>: return <code>applicable_rules</code> and a warning when it's 0.</li>
+        <li><b>Descriptions</b>: mention the app's labels ("Individual bad answers", "An area drops too low", "Got worse after a change") so the coding agent uses the same words as the screen.<span class="mark">4</span></li>
+        <li><b>list_quality_gate_history</b>: keep rule labels on deleted rules.</li>
+      </ul>
+    </div>
+  </div>
+  <script type="text/notes">
+    <li><b>1. Plain labels and next steps in the result</b><span>Today the result has kind/target/thresholds, but no sentence the coding agent can repeat, and nothing pointing to the next tool.</span></li>
+    <li><b>2. Same default as the app</b><span>So MCP and web setups behave the same.</span></li>
+    <li><b>3. Agent-scoped targets</b><span>The web picker already filters to the profile; MCP has no equivalent today.</span></li>
+    <li><b>4. Shared vocabulary</b><span>Today the tools say share/floor/drop and population.</span></li>
+  </script>
+</section>
+
+  </main>
+  <aside>
+    <h3>What changed on this screen</h3>
+    <p class="sub">Numbers match the purple markers. Data is from the live walkthrough of agent_tools_exec and agent_execution on 2026-11-23.</p>
+    <ol id="notes"></ol>
+  </aside>
+</div>
+<script>
+  const ORDER=["Discover","Set up","Read the gate","Act on a closed gate","Manage","Edge cases","Coding agent (MCP)"];
+  const main=document.getElementById('main');
+  const screens=[...document.querySelectorAll('.screen')].sort((a,b)=>ORDER.indexOf(a.dataset.group)-ORDER.indexOf(b.dataset.group));
+  screens.forEach(s=>main.appendChild(s));
+  const nav=document.getElementById('nav'), notes=document.getElementById('notes');
+  const chips={none:'<span class="chip c-grey">No rules yet</span>',open:'<span class="chip c-green">Gate open · 20 checked</span>',accepted:'<span class="chip c-green" style="border:1px dashed var(--green)">Gate open: risk accepted</span>',wait:'<span class="chip c-grey">Waiting for data · 20-38 checked</span>',closed:'<span class="chip c-red">Gate closed · 20-40 checked</span>',unknown:'<span class="chip c-grey">Gate: unknown</span>'};
+  const tabFor=s=>s.dataset.title.startsWith('Score')?'Score':['Flagged answer','Flagged answers list','After a false alarm','Mark as false alarm'].includes(s.dataset.title)?'Traces':'Quality gate';
+  let group=null;
+  screens.forEach((s,i)=>{
+    if(!s.dataset.nohead){
+      const head=document.createElement('div');
+      head.innerHTML=`<div class="crumb">My Agents / ${s.dataset.agent}</div>
+        <div class="ahead"><h1>${s.dataset.agent}</h1><span style="color:var(--green)">● Active</span><span class="chip c-green">Scored</span>${chips[s.dataset.chip]||''}</div>
+        <div class="meta">tais · chatbot-agent-service</div>
+        <div class="tabs">${['Score','Quality gate','Improve','Agent Card','Traces','Profile','Labeling','Settings'].map(t=>`<span class="${t===tabFor(s)?'on':''}">${t}</span>`).join('')}</div>`;
+      s.prepend(head);
+    }
+    if(s.dataset.group!==group){group=s.dataset.group;const h=document.createElement('h5');h.textContent=group;nav.appendChild(h);}
+    const b=document.createElement('button');
+    b.innerHTML=`<span class="n">${i+1}</span>${s.dataset.title}`;
+    b.onclick=()=>show(i); nav.appendChild(b);
+  });
+  function show(i){
+    screens.forEach((s,j)=>s.classList.toggle('on',i===j));
+    [...nav.querySelectorAll('button')].forEach((b,j)=>b.classList.toggle('on',i===j));
+    notes.innerHTML=screens[i].querySelector('script[type="text/notes"]').innerHTML;
+    history.replaceState(null,'','#'+(i+1)); main.scrollTop=0;
+  }
+  document.getElementById('marks').onchange=e=>document.body.classList.toggle('nomarks',!e.target.checked);
+  show(Math.max(0,Math.min(screens.length,(parseInt(location.hash.slice(1))||1))-1));
+</script>
+</body>
+</html>

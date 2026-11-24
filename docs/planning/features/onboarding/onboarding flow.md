@@ -32,6 +32,7 @@
     - Salesforce Agentforce
     - n8n
     - Dify
+    - SAP Joule
     - Another platform (with a text box for its name)
 
     It has `Back` (to step 3a) and `Continue`. `Continue` stays disabled until a platform is picked, and for `Another platform` until a name is typed. The list is a starting set; it should be easy to extend. Platform integrations are not built yet, so every platform currently ends in the "not supported yet" state below.
@@ -201,13 +202,13 @@
 
     **State 1, waiting for the proposal:**
     - Title: `Connection detected. Let your coding agent introduce your agent.`, with a close button.
-    - `Paste the following into your coding agent. It will read your agent's code and suggest a name and a short description:`
+    - `Paste the following into your coding agent. It will read your agent's code and suggest a name:`
     - A code box and a Copy button, containing:
 
     ```
     Use agent-score to register the agent in this project.
-    Read the agent's code and work out what it does. Pick a short, friendly name a teammate would recognise, not a function or module name. Write a one or two sentence description of what the agent is for.
-    Submit the name and description to agent-score, then tell me what you submitted.
+    Read the agent's code and work out what it does. Pick a short, friendly name a teammate would recognise, not a function or module name.
+    Submit the name to agent-score, then tell me what you submitted.
     ```
     - A hourglass line, `Waiting for your coding agent.`
     - A link, `I'll name it myself`, which switches to the manual state below.
@@ -215,12 +216,12 @@
     **State 2, confirm the proposal.** When the proposal arrives, the popup updates on its own:
     - Title: `Is this your agent?`
     - `Here is what your coding agent thinks it is.`
-    - Two editable fields, pre-filled: `Name` and `What it's for`.
+    - One editable field, pre-filled: `Name`.
     - A `Confirm` button. Pressing Enter in the name field also confirms. Confirming with an empty name shows `Enter a name.` under the field.
 
-    **Manual state.** `I'll name it myself` shows the old form: a text box labeled `What do you want to name your agent?` and a `Submit` button, with the same `Enter a name.` validation. The description is optional here.
+    **Manual state.** `I'll name it myself` shows the old form: a text box labeled `What do you want to name your agent?` and a `Submit` button, with the same `Enter a name.` validation.
 
-    Once the user confirms or submits, we take them to My Agents/{{agent-name}}. The confirmed name and description are what the rest of the flow uses, and `What it's for` is shown on the Agent Card tab and used when Agent Score chooses the profile.
+    Once the user confirms or submits, we take them to My Agents/{{agent-name}}. The confirmed name is what the rest of the flow uses.
 
     The agent page, here and in steps 9–12, has:
     - A breadcrumb: `My Agents / {{agent-name}}`.
@@ -321,7 +322,7 @@ Each web step has a thread equivalent. Every message from the coding agent ends 
 |---|---|
 | 3a, where does your agent live | The coding agent asks it, unless the web flow already recorded the answer. |
 | 3b, which platform, and not supported yet | It lists the platforms. Any pick gets the not-supported message and offers the agent in this project. |
-| 8, name and description popup | It reads the code, submits a name and description, and asks the person to confirm. |
+| 8, name popup | It reads the code, submits a name, and asks the person to confirm. |
 | 8, waiting page and demo card | It says it is set up and waiting for requests, and offers the demo once. |
 | 9, progress | It posts a line whenever the count rises. |
 | 10, enough popup | It says Agent Score has enough to go on. |
@@ -339,9 +340,9 @@ Each web step has a thread equivalent. Every message from the coding agent ends 
 
     Next action: reply 1 or 2.
 
-2. **Name and description (step 8).** Once the person is back in the thread, the coding agent checks the connection with `check_agent_connection`. With no agent sending traces yet, it reads the agent's code, picks a short friendly name (not a function or module name) and a one or two sentence description, submits both to Agent Score, and asks:
+2. **Name (step 8).** Once the person is back in the thread, the coding agent checks the connection with `check_agent_connection`. With no agent sending traces yet, it reads the agent's code, picks a short friendly name (not a function or module name), submits it to Agent Score, and asks:
 
-    `Here is what I think this agent is. Name: {{agent-name}}. What it's for: {{agent-description}}. Is that right, or what should I change?`
+    `I'd call this agent {{agent-name}}. Is that right, or what should I change?`
 
     Next action: confirm, or say what to change. The confirmed name is {{agent-name}} from here on.
 
@@ -389,9 +390,9 @@ Each web step has a thread equivalent. Every message from the coding agent ends 
 
 Steps 1 and 2 of path 1 up to the platform pick, then:
 
-1. After `2. It runs on a platform`, the coding agent asks `Which platform?` and lists the same seven options as step 3b. Next action: reply with a number, or a name for `Another platform`.
+1. After `2. It runs on a platform`, the coding agent asks `Which platform?` and lists the same eight options as step 3b. Next action: reply with a number, or a name for `Another platform`.
 2. For any pick: `{{platform}} isn't supported yet. I've noted your interest and we'll come back to you.` then `In the meantime, I can set up an agent that lives in this project. Want to do that?` It logs the pick as demand data with a new MCP tool, `register_platform_interest`. As on the web, only the build-it-myself branch is offered. Next action: reply yes.
-3. It continues at the name and description step of path 1.
+3. It continues at the name step of path 1.
 
 ### Path 3: demo agent
 
@@ -401,7 +402,7 @@ The person says `demo` while waiting, from the already-connected state, or paste
 2. `flight-booking-demo scored 66 out of 100. Verdict: Needs work.`
 3. It reads the improvement advice, states the top recommendation and what happened in one conversation, shows the edit it would make, and asks `Apply it?` Next action: approve.
 4. After approval it applies the edit, runs the agent again, scores it again, and reports `Before: 66, Needs work. After: 82, Ship.`
-5. It ends with `That is the demo. Want to set up your own agent now?` Yes continues at the name and description step.
+5. It ends with `That is the demo. Want to set up your own agent now?` Yes continues at the name step.
 
 The demo agent is marked Demo and excluded from the fleet.
 
@@ -417,8 +418,8 @@ Replace that sentence with:
 
 ```
 Do not stop here, and do not send the developer to the Agent Score app. Stay in this thread and follow the agent until it has a score.
-Before you name the agent, if the developer has not said where it lives, ask: built by them in this project, or on a platform. For a platform, list Microsoft Copilot Studio, Amazon Bedrock, Google Vertex AI, Salesforce Agentforce, n8n, Dify and Another platform. Whatever they pick, tell them it is not supported yet, call register_platform_interest, and offer to set up the agent in this project.
-Read the agent's code, pick a short friendly name (not a function or module name) and a one or two sentence description, submit both, and ask the developer to confirm or change them.
+Before you name the agent, if the developer has not said where it lives, ask: built by them in this project, or on a platform. For a platform, list Microsoft Copilot Studio, Amazon Bedrock, Google Vertex AI, Salesforce Agentforce, n8n, Dify, SAP Joule and Another platform. Whatever they pick, tell them it is not supported yet, call register_platform_interest, and offer to set up the agent in this project.
+Read the agent's code, pick a short friendly name (not a function or module name), submit it, and ask the developer to confirm or change it.
 Keep calling check_agent_connection with agent_name and wait_seconds 25. Each time traces.accepted rises, tell the developer how many of about 20 real requests have arrived, and to keep using the agent the way they already do.
 While you wait for traces, offer the demo agent once. If the developer says demo, follow the demo steps below.
 At about 20, tell the developer Agent Score has enough to go on and is scoring the agent. If they ask what evals were chosen and why, answer from get_profile_fit.
@@ -431,7 +432,6 @@ The resource then carries the step 12 paste block, word for word, and the demo p
 ### What the MCP needs that it may not have
 
 - A tool to log a platform pick as demand data (`register_platform_interest`, new).
-- A way to store the agent's description. Confirm whether `update_agent_settings` takes one; if not, this needs a tool or a setting, and the Agent Card tab and profile choice need to read it.
 - A way to mark the demo agent as Demo and exclude it from the fleet.
 
 ## Already-connected state (proposed)
@@ -482,7 +482,7 @@ After the user pastes the prompt, the rest happens in the coding agent's thread,
 
 **Before and after.** Each scoring run is a run of the demo agent, so the first and second run appear in its run history. Score history per run exists in the MCP (`list_runs`); how the web app should show two runs side by side is still to be confirmed. The coding agent also reports both scores in its thread.
 
-**Handoff.** After the demo, the coding agent ends with a short prompt: `Want to set up your own agent now?` If the user already has an agent, they go back to it. If not, they continue at step 8, where the coding agent proposes a name and description for the user's agent. Understanding comes first, which earns the right to ask for their own agent.
+**Handoff.** After the demo, the coding agent ends with a short prompt: `Want to set up your own agent now?` If the user already has an agent, they go back to it. If not, they continue at step 8, where the coding agent proposes a name for the user's agent. Understanding comes first, which earns the right to ask for their own agent.
 
 **MCP path.** While waiting for traces, the coding agent mentions the demo once and does not push it. If the person says they have no traffic, it runs the same demo steps in the thread.
 
@@ -495,5 +495,5 @@ Add events for the new branches. They belong in [AgentScore-Beta-Metrics-Instrum
 - Where-it-lives choice: `built myself` or `platform`.
 - Platform selected, with the platform name and whether it is supported. Free-text `Another platform` entries are logged as entered.
 - Demo agent: prompt opened (from the waiting screen or from Home), first run scored, second run scored, and the score change between the two. Whether the user set up their own agent afterwards.
-- Name and description: proposed by the coding agent, edited by the user, or entered manually.
+- Name: proposed by the coding agent, edited by the user, or entered manually.
 - Time from sign-in to first score, split by demo and own agent.
